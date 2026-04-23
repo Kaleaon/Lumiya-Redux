@@ -14,6 +14,8 @@ import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
+import com.lumiyaviewer.lumiya.render.backend.RenderBackend;
+import com.lumiyaviewer.lumiya.render.backend.RenderBackendFactory;
 import com.lumiyaviewer.lumiya.render.drawable.DrawableFaceTexture;
 import com.lumiyaviewer.lumiya.render.caps.GpuCapabilities;
 import com.lumiyaviewer.lumiya.render.glres.GLAsyncLoadQueue;
@@ -95,6 +97,7 @@ public class RenderContext {
     public final Quad quad;
     public final QuadProgram quadProgram;
     public final RawShaderProgram rawShaderProgram;
+    public final RenderBackend renderBackend;
     public final RiggedMeshProgram riggedMeshProgram;
     private final RiggedMeshProgram30 riggedMeshProgram30;
     private final RiggedMeshProgram30 riggedMeshProgramOpaque30;
@@ -272,8 +275,10 @@ public class RenderContext {
         } else {
             this.boundingBox = new BoundingBox(this);
         }
-        this.windlightSky = z3 ? new WindlightSky(this) : null;
-        if (z2) {
+        this.windlightSky = z2 ? new WindlightSky(this) : null;
+        this.renderBackend = RenderBackendFactory.createBackend();
+        this.renderBackend.onContextInitialized(this);
+        if (z6) {
             this.crosshairTexture = GLLoadedTexture.loadFromAssets(this, LumiyaApp.getContext(), "misc/crosshair.png");
         } else {
             this.crosshairTexture = null;
@@ -343,8 +348,8 @@ public class RenderContext {
     }
 
     private void initPrimProgram(PrimProgram primProgram, boolean z) {
-        GLES20.glUseProgram(primProgram.getHandle());
-        GLES20.glUniform1i(primProgram.sTexture, 0);
+        this.renderBackend.useProgram(primProgram.getHandle());
+        this.renderBackend.setUniform1i(primProgram.sTexture, 0);
         primProgram.SetupLighting(this, z ? this.windlightPreset : null);
     }
 
@@ -384,7 +389,7 @@ public class RenderContext {
             if (GLDraw) {
                 return;
             }
-            GLES20.glBindTexture(3553, 0);
+            this.renderBackend.unbindTexture2D();
         }
     }
 
@@ -406,8 +411,8 @@ public class RenderContext {
         this.currentRiggedMeshProgram = null;
         this.curPrimProgram = null;
         GLES30.glBindVertexArray(0);
-        GLES20.glBindTexture(3553, 0);
-        GLES20.glUseProgram(0);
+        this.renderBackend.unbindTexture2D();
+        this.renderBackend.useProgram(0);
         clearRiggingMeshData();
         clearFaceTexture();
     }
@@ -532,7 +537,7 @@ public class RenderContext {
 
     public void glObjScaleApplyVector(int i) {
         if (this.hasGL20) {
-            GLES20.glUniform4f(i, this.scaleX, this.scaleY, this.scaleZ, 1.0f);
+            this.renderBackend.setUniform4f(i, this.scaleX, this.scaleY, this.scaleZ, 1.0f);
         }
     }
 
@@ -647,7 +652,7 @@ public class RenderContext {
         clearRiggingMeshData();
         clearFaceTexture();
         this.curPrimProgram = this.currentRiggedMeshProgram;
-        GLES20.glUseProgram(this.currentRiggedMeshProgram.getHandle());
+        this.renderBackend.useProgram(this.currentRiggedMeshProgram.getHandle());
         glModelApplyMatrix(this.currentRiggedMeshProgram.uMVPMatrix);
         glObjWorldApplyMatrix(this.currentRiggedMeshProgram.uObjWorldMatrix);
         glObjScaleApplyVector(this.currentRiggedMeshProgram.uObjCoordScale);
