@@ -1,0 +1,8 @@
+// Top-level build file. Per-module configuration lives in app/build.gradle.
+plugins {
+    id 'com.android.application' version '8.7.3' apply false
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
+}
