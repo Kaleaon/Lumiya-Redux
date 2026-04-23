@@ -14,6 +14,8 @@ android {
     namespace 'com.lumiyaviewer.lumiya'
     compileSdk 34
 
+    def javaCompatVersion = JavaVersion.VERSION_1_8
+
     defaultConfig {
         applicationId 'com.lumiyaviewer.lumiya'
         minSdk 26            // cleanup baseline: API 26+ only (notification channels,
@@ -46,12 +48,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility javaCompatVersion
+        targetCompatibility javaCompatVersion
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = javaCompatVersion.toString()
     }
 
     // The decompilation holds a lot of raw types, unchecked casts, and dead
@@ -85,12 +87,12 @@ android {
 def kotlinPreferredPackageRoots = [
     'com/lumiyaviewer/lumiya/vr/runtime',
     'com/lumiyaviewer/lumiya/repository',
-    'com/lumiyaviewer/lumiya/ui/features'
+    'com/lumiyaviewer/lumiya/data'
 ]
 
 tasks.register('enforceKotlinFirstPackages') {
     group = 'verification'
-    description = 'Prevents new Java sources in packages that are Kotlin-first for gradual migration.'
+    description = 'Static check that prevents new Java sources in packages declared Kotlin-first for modernization.'
 
     doLast {
         def kotlinPreferredJavaFiles = fileTree("$projectDir/src/main/java") {
@@ -99,7 +101,7 @@ tasks.register('enforceKotlinFirstPackages') {
 
         def trackedJavaFiles = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'ls-files', 'src/main/java'
+            commandLine 'git', 'ls-tree', '-r', '--name-only', 'HEAD', 'src/main/java'
             standardOutput = trackedJavaFiles
         }
 
@@ -116,7 +118,7 @@ tasks.register('enforceKotlinFirstPackages') {
 
         if (!newJavaFilesInKotlinRoots.isEmpty()) {
             throw new GradleException(
-                "Kotlin-first package policy violation. Convert new files in ${kotlinPreferredPackageRoots} to .kt (existing Java stays until touched). " +
+                "Kotlin-first package policy violation. New files in ${kotlinPreferredPackageRoots} must be Kotlin (.kt). Existing Java files remain allowed until they are touched for feature/bug work. " +
                     "Found new Java files: ${newJavaFilesInKotlinRoots*.absolutePath}"
             )
         }
@@ -124,6 +126,10 @@ tasks.register('enforceKotlinFirstPackages') {
 }
 
 tasks.named('check').configure {
+    dependsOn(tasks.named('enforceKotlinFirstPackages'))
+}
+
+tasks.named('lint').configure {
     dependsOn(tasks.named('enforceKotlinFirstPackages'))
 }
 

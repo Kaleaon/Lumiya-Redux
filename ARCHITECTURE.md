@@ -145,6 +145,10 @@ except for the few that are no longer distributed:
 
 For modernization work in protocol packages, use `docs/protocol_migration_conformance.md` as the required safety checklist. It maps LLSD/inventory classes to official `secondlife/viewer` and `secondlife/python-llsd` references, defines Room-entity annotation expectations for protocol-derived storage, and documents the conformance scripts run in CI.
 
+## Kotlin modernization guardrails
+
+Use `docs/kotlin-migration-plan.md` for Kotlin adoption boundaries. It defines the touch-only Java conversion rule and marks VR abstraction, repository, and new data-layer package roots as Kotlin-first for all newly created classes.
+
 ## Development tips
 
 - The project is built against `compileSdk 34`, `minSdk 26`, `targetSdk 34`.
