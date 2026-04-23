@@ -58,12 +58,12 @@ public class ParcelDisableObjects extends SLMessage {
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
         packInt(byteBuffer, this.ParcelData_Field.ReturnType);
         byteBuffer.put((byte) this.TaskIDs_Fields.size());
-        Iterator<T> it = this.TaskIDs_Fields.iterator();
+        Iterator<?> it = this.TaskIDs_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((TaskIDs) it.next()).TaskID);
         }
         byteBuffer.put((byte) this.OwnerIDs_Fields.size());
-        Iterator<T> it2 = this.OwnerIDs_Fields.iterator();
+        Iterator<?> it2 = this.OwnerIDs_Fields.iterator();
         while (it2.hasNext()) {
             packUUID(byteBuffer, ((OwnerIDs) it2.next()).OwnerID);
         }

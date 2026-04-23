@@ -53,7 +53,7 @@ public class GroupVoteHistoryItemReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.HistoryItemData_Field.TerseDateID.length + 17 + 1 + this.HistoryItemData_Field.StartDateTime.length + 1 + this.HistoryItemData_Field.EndDateTime.length + 16 + 1 + this.HistoryItemData_Field.VoteType.length + 1 + this.HistoryItemData_Field.VoteResult.length + 4 + 4 + 2 + this.HistoryItemData_Field.ProposalText.length + 56 + 1;
-        Iterator<T> it = this.VoteItem_Fields.iterator();
+        Iterator<?> it = this.VoteItem_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {

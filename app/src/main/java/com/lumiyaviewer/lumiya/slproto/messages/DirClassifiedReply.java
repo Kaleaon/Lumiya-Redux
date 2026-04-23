@@ -44,7 +44,7 @@ public class DirClassifiedReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 37;
-        Iterator<T> it = this.QueryReplies_Fields.iterator();
+        Iterator<?> it = this.QueryReplies_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {
@@ -76,7 +76,7 @@ public class DirClassifiedReply extends SLMessage {
             packInt(byteBuffer, queryReplies.PriceForListing);
         }
         byteBuffer.put((byte) this.StatusData_Fields.size());
-        Iterator<T> it = this.StatusData_Fields.iterator();
+        Iterator<?> it = this.StatusData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((StatusData) it.next()).Status);
         }

@@ -30,7 +30,7 @@ public class SystemMessage extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 32 + 4 + 1;
-        Iterator<T> it = this.ParamList_Fields.iterator();
+        Iterator<?> it = this.ParamList_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {
@@ -54,7 +54,7 @@ public class SystemMessage extends SLMessage {
         packUUID(byteBuffer, this.MethodData_Field.Invoice);
         packFixed(byteBuffer, this.MethodData_Field.Digest, 32);
         byteBuffer.put((byte) this.ParamList_Fields.size());
-        Iterator<T> it = this.ParamList_Fields.iterator();
+        Iterator<?> it = this.ParamList_Fields.iterator();
         while (it.hasNext()) {
             packVariable(byteBuffer, ((ParamList) it.next()).Parameter, 1);
         }

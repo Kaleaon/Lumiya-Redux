@@ -90,7 +90,7 @@ public class ChildAgentUpdate extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.AgentData_Field.Throttles.length + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.length + 16 + 1 + 1 + (this.GroupData_Fields.size() * 25) + 1 + (this.AnimationData_Fields.size() * 32) + 1 + (this.GranterBlock_Fields.size() * 16) + 1;
-        Iterator<T> it = this.NVPairData_Fields.iterator();
+        Iterator<?> it = this.NVPairData_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {
@@ -146,17 +146,17 @@ public class ChildAgentUpdate extends SLMessage {
             packUUID(byteBuffer, animationData.ObjectID);
         }
         byteBuffer.put((byte) this.GranterBlock_Fields.size());
-        Iterator<T> it = this.GranterBlock_Fields.iterator();
+        Iterator<?> it = this.GranterBlock_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((GranterBlock) it.next()).GranterID);
         }
         byteBuffer.put((byte) this.NVPairData_Fields.size());
-        Iterator<T> it2 = this.NVPairData_Fields.iterator();
+        Iterator<?> it2 = this.NVPairData_Fields.iterator();
         while (it2.hasNext()) {
             packVariable(byteBuffer, ((NVPairData) it2.next()).NVPairs, 2);
         }
         byteBuffer.put((byte) this.VisualParam_Fields.size());
-        Iterator<T> it3 = this.VisualParam_Fields.iterator();
+        Iterator<?> it3 = this.VisualParam_Fields.iterator();
         while (it3.hasNext()) {
             packByte(byteBuffer, (byte) ((VisualParam) it3.next()).ParamValue);
         }
@@ -166,7 +166,7 @@ public class ChildAgentUpdate extends SLMessage {
             packByte(byteBuffer, (byte) agentAccess.AgentMaxAccess);
         }
         byteBuffer.put((byte) this.AgentInfo_Fields.size());
-        Iterator<T> it4 = this.AgentInfo_Fields.iterator();
+        Iterator<?> it4 = this.AgentInfo_Fields.iterator();
         while (it4.hasNext()) {
             packInt(byteBuffer, ((AgentInfo) it4.next()).Flags);
         }

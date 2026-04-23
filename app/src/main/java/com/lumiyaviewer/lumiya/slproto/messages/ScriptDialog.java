@@ -39,7 +39,7 @@ public class ScriptDialog extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.Data_Field.FirstName.length + 17 + 1 + this.Data_Field.LastName.length + 1 + this.Data_Field.ObjectName.length + 2 + this.Data_Field.Message.length + 4 + 16 + 4 + 1;
-        Iterator<T> it = this.Buttons_Fields.iterator();
+        Iterator<?> it = this.Buttons_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {
@@ -67,12 +67,12 @@ public class ScriptDialog extends SLMessage {
         packInt(byteBuffer, this.Data_Field.ChatChannel);
         packUUID(byteBuffer, this.Data_Field.ImageID);
         byteBuffer.put((byte) this.Buttons_Fields.size());
-        Iterator<T> it = this.Buttons_Fields.iterator();
+        Iterator<?> it = this.Buttons_Fields.iterator();
         while (it.hasNext()) {
             packVariable(byteBuffer, ((Buttons) it.next()).ButtonLabel, 1);
         }
         byteBuffer.put((byte) this.OwnerData_Fields.size());
-        Iterator<T> it2 = this.OwnerData_Fields.iterator();
+        Iterator<?> it2 = this.OwnerData_Fields.iterator();
         while (it2.hasNext()) {
             packUUID(byteBuffer, ((OwnerData) it2.next()).OwnerID);
         }

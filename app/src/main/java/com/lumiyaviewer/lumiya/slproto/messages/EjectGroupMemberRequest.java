@@ -51,7 +51,7 @@ public class EjectGroupMemberRequest extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
         byteBuffer.put((byte) this.EjectData_Fields.size());
-        Iterator<T> it = this.EjectData_Fields.iterator();
+        Iterator<?> it = this.EjectData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((EjectData) it.next()).EjecteeID);
         }

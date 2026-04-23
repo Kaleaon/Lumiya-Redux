@@ -35,7 +35,7 @@ public class OnlineNotification extends SLMessage {
         byteBuffer.put((byte) 1);
         byteBuffer.put((byte) 66);
         byteBuffer.put((byte) this.AgentBlock_Fields.size());
-        Iterator<T> it = this.AgentBlock_Fields.iterator();
+        Iterator<?> it = this.AgentBlock_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((AgentBlock) it.next()).AgentID);
         }

@@ -81,7 +81,7 @@ public class WorldSurfaceView extends GLSurfaceView {
         if (this.wantGL20) {
             setEGLContextClientVersion(2);
         }
-        if (Build.VERSION.SDK_INT >= 11 && this.wantGL20) {
+        if (this.wantGL20) {
             setPreserveEGLContextOnPause(true);
         }
         this.renderer = new WorldViewRenderer(this.mHandler, this.wantGL20, userManager, applyDimension);

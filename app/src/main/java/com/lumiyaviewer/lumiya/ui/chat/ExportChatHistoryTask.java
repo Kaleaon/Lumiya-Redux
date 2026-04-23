@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
@@ -97,7 +96,7 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                 if (isCancelled()) {
                     return null;
                 }
-                File file2 = new File(Environment.getExternalStoragePublicDirectory(Build.VERSION.SDK_INT >= 19 ? Environment.DIRECTORY_DOCUMENTS : Environment.DIRECTORY_DOWNLOADS), "Lumiya");
+                File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Lumiya");
                 File file3 = new File(file2, "Chat Logs");
                 File file4 = new File(file3, sanitizeName(this.gotChatterName.get()) + ".txt");
                 DateFormat dateTimeInstance = DateFormat.getDateTimeInstance(3, 3);

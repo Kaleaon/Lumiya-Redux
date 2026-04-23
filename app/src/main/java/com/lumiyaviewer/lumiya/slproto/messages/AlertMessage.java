@@ -28,7 +28,7 @@ public class AlertMessage extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.AlertData_Field.Message.length + 1 + 4 + 1;
-        Iterator<T> it = this.AlertInfo_Fields.iterator();
+        Iterator<?> it = this.AlertInfo_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {

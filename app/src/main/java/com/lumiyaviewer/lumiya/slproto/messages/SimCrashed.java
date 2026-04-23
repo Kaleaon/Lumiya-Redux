@@ -44,7 +44,7 @@ public class SimCrashed extends SLMessage {
         packInt(byteBuffer, this.Data_Field.RegionX);
         packInt(byteBuffer, this.Data_Field.RegionY);
         byteBuffer.put((byte) this.Users_Fields.size());
-        Iterator<T> it = this.Users_Fields.iterator();
+        Iterator<?> it = this.Users_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((Users) it.next()).AgentID);
         }

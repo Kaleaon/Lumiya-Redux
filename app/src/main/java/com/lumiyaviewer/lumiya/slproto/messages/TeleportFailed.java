@@ -30,7 +30,7 @@ public class TeleportFailed extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.Info_Field.Reason.length + 17 + 4 + 1;
-        Iterator<T> it = this.AlertInfo_Fields.iterator();
+        Iterator<?> it = this.AlertInfo_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {

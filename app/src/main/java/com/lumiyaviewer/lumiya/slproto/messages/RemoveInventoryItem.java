@@ -45,7 +45,7 @@ public class RemoveInventoryItem extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.InventoryData_Fields.size());
-        Iterator<T> it = this.InventoryData_Fields.iterator();
+        Iterator<?> it = this.InventoryData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((InventoryData) it.next()).ItemID);
         }

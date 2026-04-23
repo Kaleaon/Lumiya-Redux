@@ -46,7 +46,7 @@ public class ObjectExportSelected extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.RequestID);
         packShort(byteBuffer, (short) this.AgentData_Field.VolumeDetail);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((ObjectData) it.next()).ObjectID);
         }

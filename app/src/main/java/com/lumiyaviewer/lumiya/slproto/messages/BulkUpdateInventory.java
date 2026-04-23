@@ -60,7 +60,7 @@ public class BulkUpdateInventory extends SLMessage {
     public int CalcPayloadSize() {
         int i;
         int i2 = 37;
-        Iterator<T> it = this.FolderData_Fields.iterator();
+        Iterator<?> it = this.FolderData_Fields.iterator();
         while (true) {
             i = i2;
             if (!it.hasNext()) {
@@ -69,7 +69,7 @@ public class BulkUpdateInventory extends SLMessage {
             i2 = ((FolderData) it.next()).Name.length + 34 + i;
         }
         int i3 = i + 1;
-        Iterator<T> it2 = this.ItemData_Fields.iterator();
+        Iterator<?> it2 = this.ItemData_Fields.iterator();
         while (true) {
             int i4 = i3;
             if (!it2.hasNext()) {

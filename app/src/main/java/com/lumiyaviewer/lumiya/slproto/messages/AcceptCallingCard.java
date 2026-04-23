@@ -51,7 +51,7 @@ public class AcceptCallingCard extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.TransactionBlock_Field.TransactionID);
         byteBuffer.put((byte) this.FolderData_Fields.size());
-        Iterator<T> it = this.FolderData_Fields.iterator();
+        Iterator<?> it = this.FolderData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((FolderData) it.next()).FolderID);
         }

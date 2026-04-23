@@ -34,7 +34,7 @@ public class PacketAck extends SLMessage {
         byteBuffer.put((byte) -1);
         byteBuffer.put((byte) -5);
         byteBuffer.put((byte) this.Packets_Fields.size());
-        Iterator<T> it = this.Packets_Fields.iterator();
+        Iterator<?> it = this.Packets_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((Packets) it.next()).ID);
         }

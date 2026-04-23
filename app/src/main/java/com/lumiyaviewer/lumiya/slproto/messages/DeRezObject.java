@@ -61,7 +61,7 @@ public class DeRezObject extends SLMessage {
         packByte(byteBuffer, (byte) this.AgentBlock_Field.PacketCount);
         packByte(byteBuffer, (byte) this.AgentBlock_Field.PacketNumber);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ObjectLocalID);
         }

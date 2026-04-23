@@ -281,8 +281,9 @@ public final class CodedInputByteBufferNano {
     public long readRawVarint64() throws IOException {
         long j = 0;
         for (int i = 0; i < 64; i += 7) {
-            j |= (r3 & Ascii.DEL) << i;
-            if ((readRawByte() & 128) == 0) {
+            byte readRawByte = readRawByte();
+            j |= (long) ((readRawByte & Ascii.DEL) << i);
+            if ((readRawByte & 128) == 0) {
                 return j;
             }
         }

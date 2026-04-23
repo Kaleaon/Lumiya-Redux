@@ -29,7 +29,7 @@ public class RegionPresenceResponse extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 5;
-        Iterator<T> it = this.RegionData_Fields.iterator();
+        Iterator<?> it = this.RegionData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

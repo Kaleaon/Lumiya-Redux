@@ -22,7 +22,7 @@ public class ScriptDataReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 5;
-        Iterator<T> it = this.DataBlock_Fields.iterator();
+        Iterator<?> it = this.DataBlock_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

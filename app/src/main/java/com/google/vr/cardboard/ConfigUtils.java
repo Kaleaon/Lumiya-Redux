@@ -62,39 +62,18 @@ public class ConfigUtils {
     }
 
     private static <T extends MessageNano> T readFromExternalStorage(Class<T> cls, String str, int i, boolean z) {
-        BufferedInputStream bufferedInputStream;
         try {
-            try {
-                bufferedInputStream = new BufferedInputStream(new FileInputStream(getConfigFile(str)));
-                try {
-                    T t = (T) readFromInputStream(cls, bufferedInputStream, i);
-                    try {
-                        bufferedInputStream.close();
-                    } catch (IOException e) {
-                    }
-                    return t;
-                } catch (Throwable th) {
-                    th = th;
-                    if (bufferedInputStream != null) {
-                        try {
-                            bufferedInputStream.close();
-                        } catch (IOException e2) {
-                        }
-                    }
-                    throw th;
-                }
-            } catch (Throwable th2) {
-                th = th2;
-                bufferedInputStream = null;
+            try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(getConfigFile(str)))) {
+                return (T) readFromInputStream(cls, bufferedInputStream, i);
             }
-        } catch (FileNotFoundException e3) {
+        } catch (FileNotFoundException e) {
             if (z) {
                 String str2 = TAG;
                 String valueOf = String.valueOf(e3);
                 Log.d(str2, new StringBuilder(String.valueOf(valueOf).length() + 39).append("Parameters file not found for reading: ").append(valueOf).toString());
             }
             return null;
-        } catch (IllegalStateException e4) {
+        } catch (IllegalStateException e) {
             String str3 = TAG;
             String valueOf2 = String.valueOf(e4);
             Log.w(str3, new StringBuilder(String.valueOf(valueOf2).length() + 26).append("Error reading parameters: ").append(valueOf2).toString());
@@ -129,17 +108,17 @@ public class ConfigUtils {
             String valueOf = String.valueOf(e.toString());
             Log.w(str, valueOf.length() == 0 ? new String("Error parsing protocol buffer: ") : "Error parsing protocol buffer: ".concat(valueOf));
             return null;
-        } catch (IOException e2) {
+        } catch (IOException e) {
             String str2 = TAG;
             String valueOf2 = String.valueOf(e2.toString());
             Log.w(str2, valueOf2.length() == 0 ? new String("Error reading parameters: ") : "Error reading parameters: ".concat(valueOf2));
             return null;
-        } catch (IllegalAccessException e3) {
+        } catch (IllegalAccessException e) {
             String str3 = TAG;
             String valueOf3 = String.valueOf(e3.toString());
             Log.w(str3, valueOf3.length() == 0 ? new String("Error accessing parameter type: ") : "Error accessing parameter type: ".concat(valueOf3));
             return null;
-        } catch (InstantiationException e4) {
+        } catch (InstantiationException e) {
             String str4 = TAG;
             String valueOf4 = String.valueOf(e4.toString());
             Log.w(str4, valueOf4.length() == 0 ? new String("Error creating parameters: ") : "Error creating parameters: ".concat(valueOf4));
@@ -188,70 +167,21 @@ public class ConfigUtils {
         return writeToExternalStorage;
     }
 
-    /* JADX WARN: Not initialized variable reg: 1, insn: 0x0089: MOVE (r2 I:??[OBJECT, ARRAY]) = (r1 I:??[OBJECT, ARRAY]), block:B:36:0x0089 */
     private static boolean writeToExternalStorage(MessageNano messageNano, String str, int i) {
-        BufferedOutputStream bufferedOutputStream;
-        BufferedOutputStream bufferedOutputStream2;
-        BufferedOutputStream bufferedOutputStream3 = null;
         try {
-            try {
-                try {
-                    bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(getConfigFile(str)));
-                } catch (Throwable th) {
-                    th = th;
-                    bufferedOutputStream3 = bufferedOutputStream2;
-                    if (bufferedOutputStream3 != null) {
-                        try {
-                            bufferedOutputStream3.close();
-                        } catch (IOException e) {
-                        }
-                    }
-                    throw th;
-                }
-            } catch (FileNotFoundException e2) {
-                e = e2;
-                bufferedOutputStream = null;
-            } catch (IllegalStateException e3) {
-                e = e3;
+            try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(getConfigFile(str)))) {
+                return writeToOutputStream(messageNano, bufferedOutputStream, i);
             }
-            try {
-                boolean writeToOutputStream = writeToOutputStream(messageNano, bufferedOutputStream, i);
-                try {
-                    bufferedOutputStream.close();
-                    return writeToOutputStream;
-                } catch (IOException e4) {
-                    return writeToOutputStream;
-                }
-            } catch (FileNotFoundException e5) {
-                e = e5;
-                String str2 = TAG;
-                String valueOf = String.valueOf(e);
-                Log.e(str2, new StringBuilder(String.valueOf(valueOf).length() + 39).append("Parameters file not found for writing: ").append(valueOf).toString());
-                if (bufferedOutputStream != null) {
-                    try {
-                        bufferedOutputStream.close();
-                    } catch (IOException e6) {
-                    }
-                    return false;
-                }
-                return false;
-            } catch (IllegalStateException e7) {
-                e = e7;
-                bufferedOutputStream3 = bufferedOutputStream;
-                String str3 = TAG;
-                String valueOf2 = String.valueOf(e);
-                Log.w(str3, new StringBuilder(String.valueOf(valueOf2).length() + 26).append("Error writing parameters: ").append(valueOf2).toString());
-                if (bufferedOutputStream3 != null) {
-                    try {
-                        bufferedOutputStream3.close();
-                    } catch (IOException e8) {
-                    }
-                    return false;
-                }
-                return false;
-            }
-        } catch (Throwable th2) {
-            th = th2;
+        } catch (FileNotFoundException e) {
+            String str2 = TAG;
+            String valueOf = String.valueOf(e);
+            Log.e(str2, new StringBuilder(String.valueOf(valueOf).length() + 39).append("Parameters file not found for writing: ").append(valueOf).toString());
+            return false;
+        } catch (IllegalStateException e) {
+            String str3 = TAG;
+            String valueOf2 = String.valueOf(e2);
+            Log.w(str3, new StringBuilder(String.valueOf(valueOf2).length() + 26).append("Error writing parameters: ").append(valueOf2).toString());
+            return false;
         }
     }
 

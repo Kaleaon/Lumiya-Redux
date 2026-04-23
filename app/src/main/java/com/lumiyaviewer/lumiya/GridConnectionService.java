@@ -56,7 +56,6 @@ import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatFragmentActivityFactory;
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.ConnectedActivity;
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
-import com.lumiyaviewer.lumiya.ui.notify.DummyNotificationChannelManager;
 import com.lumiyaviewer.lumiya.ui.notify.NotificationChannels;
 import com.lumiyaviewer.lumiya.ui.notify.OnlineNotificationInfo;
 import com.lumiyaviewer.lumiya.ui.settings.NotificationSettings;
@@ -391,10 +390,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
 
     private void showUnreadNotification(UnreadNotifications unreadNotifications) {
         NotificationChannels notificationChannels = NotificationChannels.getInstance();
-        if (!notificationChannels.useNotificationGroups()) {
-            showUnreadNotificationSingle(unreadNotifications.merge(), R.id.unread_notify_id, DummyNotificationChannelManager.DEFAULT_NOTIFICATION_CHANNEL, null, true, null);
-            return;
-        }
         if (notificationChannels.areNotificationsSystemControlled()) {
             unreadNotifications = unreadNotifications.filter(notificationChannels.getEnabledTypes(this));
         }

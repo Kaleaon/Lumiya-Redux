@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.common;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;

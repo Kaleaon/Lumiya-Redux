@@ -59,7 +59,7 @@ public abstract class ExtendableMessageNano<M extends ExtendableMessageNano<M>> 
                 this.unknownFieldData = null;
             }
         }
-        return this;
+        return (M) this;
     }
 
     protected final boolean storeUnknownField(CodedInputByteBufferNano codedInputByteBufferNano, int i) throws IOException {

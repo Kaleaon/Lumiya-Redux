@@ -74,7 +74,7 @@ public class ModifyLand extends SLMessage {
             packFloat(byteBuffer, parcelData.North);
         }
         byteBuffer.put((byte) this.ModifyBlockExtended_Fields.size());
-        Iterator<T> it = this.ModifyBlockExtended_Fields.iterator();
+        Iterator<?> it = this.ModifyBlockExtended_Fields.iterator();
         while (it.hasNext()) {
             packFloat(byteBuffer, ((ModifyBlockExtended) it.next()).BrushSize);
         }

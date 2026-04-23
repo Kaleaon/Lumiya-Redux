@@ -96,7 +96,7 @@ public class RegionInfo extends SLMessage {
         packInt(byteBuffer, this.RegionInfo2_Field.HardMaxAgents);
         packInt(byteBuffer, this.RegionInfo2_Field.HardMaxObjects);
         byteBuffer.put((byte) this.RegionInfo3_Fields.size());
-        Iterator<T> it = this.RegionInfo3_Fields.iterator();
+        Iterator<?> it = this.RegionInfo3_Fields.iterator();
         while (it.hasNext()) {
             packLong(byteBuffer, ((RegionInfo3) it.next()).RegionFlagsExtended);
         }
