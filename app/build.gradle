@@ -15,8 +15,9 @@ android {
 
     defaultConfig {
         applicationId 'com.lumiyaviewer.lumiya'
-        minSdk 21            // raised from the shipped 14: GVR 1.200.0 needs 19+,
-                             // and modern AndroidX needs 21+
+        minSdk 26            // cleanup baseline: API 26+ only (notification channels,
+                             // scoped runtime behavior, and removal of pre-Oreo
+                             // compatibility branches)
         targetSdk 34
         versionCode 66
         versionName '3.4.2'

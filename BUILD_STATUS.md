@@ -4,6 +4,8 @@ Snapshot taken against `./gradlew :app:assembleDebug`, AGP 8.7.3, Gradle
 8.10.2, JDK 21, Android SDK 34, on the `claude/reverse-engineer-apk-zBeon`
 branch at the commit that introduces this file.
 
+Current SDK window in this branch: `minSdk 26`, `targetSdk 34`, `compileSdk 34`.
+
 ## What works
 
 | Stage | Status |

@@ -24,3 +24,12 @@ shipped `lumiya3.4.2.apk` and rebuilds from there.
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) to navigate the code and
 [`BUILD_STATUS.md`](BUILD_STATUS.md) for the last-mile cleanup list.
+
+## Android support window
+
+- **Minimum supported Android version:** 8.0 (API 26)
+- **Target Android version:** 14 (API 34)
+
+The min SDK is intentionally set to API 26 so cleanup passes can remove
+pre-Oreo compatibility code (especially notification-channel fallbacks and
+other low-API branches) without behavior drift between supported devices.
