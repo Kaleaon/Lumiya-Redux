@@ -14,6 +14,8 @@ android {
     namespace 'com.lumiyaviewer.lumiya'
     compileSdk 34
 
+    def javaCompatVersion = JavaVersion.VERSION_1_8
+
     defaultConfig {
         applicationId 'com.lumiyaviewer.lumiya'
         minSdk 26            // cleanup baseline: API 26+ only (notification channels,
@@ -46,12 +48,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility javaCompatVersion
+        targetCompatibility javaCompatVersion
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = javaCompatVersion.toString()
     }
 
     // The decompilation holds a lot of raw types, unchecked casts, and dead
@@ -73,8 +75,9 @@ android {
         }
     }
 
-    // Keep the shipped native libs (librawbuf.so, libopenjpeg.so) in
-    // src/main/jniLibs/<abi>/. libgvr.so is now supplied by the GVR AAR.
+    // Keep the shipped native libs (librawbuf.so, libopenjpeg.so, libgvr.so)
+    // in src/main/jniLibs/<abi>/. Cleanup gate: remove libgvr.so only after
+    // Cardboard/OpenXR parity lands and rollout confidence is confirmed.
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
@@ -85,12 +88,12 @@ android {
 def kotlinPreferredPackageRoots = [
     'com/lumiyaviewer/lumiya/vr/runtime',
     'com/lumiyaviewer/lumiya/repository',
-    'com/lumiyaviewer/lumiya/ui/features'
+    'com/lumiyaviewer/lumiya/data'
 ]
 
 tasks.register('enforceKotlinFirstPackages') {
     group = 'verification'
-    description = 'Prevents new Java sources in packages that are Kotlin-first for gradual migration.'
+    description = 'Static check that prevents new Java sources in packages declared Kotlin-first for modernization.'
 
     doLast {
         def kotlinPreferredJavaFiles = fileTree("$projectDir/src/main/java") {
@@ -99,7 +102,7 @@ tasks.register('enforceKotlinFirstPackages') {
 
         def trackedJavaFiles = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'ls-files', 'src/main/java'
+            commandLine 'git', 'ls-tree', '-r', '--name-only', 'HEAD', 'src/main/java'
             standardOutput = trackedJavaFiles
         }
 
@@ -116,7 +119,7 @@ tasks.register('enforceKotlinFirstPackages') {
 
         if (!newJavaFilesInKotlinRoots.isEmpty()) {
             throw new GradleException(
-                "Kotlin-first package policy violation. Convert new files in ${kotlinPreferredPackageRoots} to .kt (existing Java stays until touched). " +
+                "Kotlin-first package policy violation. New files in ${kotlinPreferredPackageRoots} must be Kotlin (.kt). Existing Java files remain allowed until they are touched for feature/bug work. " +
                     "Found new Java files: ${newJavaFilesInKotlinRoots*.absolutePath}"
             )
         }
@@ -124,6 +127,10 @@ tasks.register('enforceKotlinFirstPackages') {
 }
 
 tasks.named('check').configure {
+    dependsOn(tasks.named('enforceKotlinFirstPackages'))
+}
+
+tasks.named('lint').configure {
     dependsOn(tasks.named('enforceKotlinFirstPackages'))
 }
 
@@ -183,6 +190,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // ── Room (parallel persistence migration) ──
+    // Target end-state persistence runtime.
     implementation 'androidx.room:room-runtime:2.6.1'
     annotationProcessor 'androidx.room:room-compiler:2.6.1'
 
@@ -192,6 +200,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.17.5'
 
     // ── greenDAO ──
+    // Transitional dependency. Remove after Room migration reaches full
+    // entity/query parity and schema migration validation is complete.
     // 2.2.1 preserves the legacy `de.greenrobot.dao.*` package that the
     // decompilation imports. (3.x renamed the runtime to
     // `org.greenrobot.greendao`, which would require a find-replace across
@@ -201,7 +211,8 @@ dependencies {
     // ── ButterKnife ──
     // Deprecated but still on Maven; 10.2.3 is the last release and works
     // with AndroidX. We run the annotation processor against the decompiled
-    // @BindView etc. in ~36 Lumiya UI files.
+    // @BindView etc. in ~36 Lumiya UI files. Replace in touched UI files
+    // opportunistically with ViewBinding-first modernization.
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
@@ -236,12 +247,14 @@ dependencies {
     // their Maven repo in 2021. The decompiled GVR Java sources therefore
     // remain in-tree under com/google/vr/ and com/google/vrtoolkit/, and
     // libgvr.so is shipped in src/main/jniLibs/<abi>/.
+    // Cleanup gate: remove these in-tree packages and libgvr.so only after
+    // Cardboard/OpenXR parity + rollout confidence.
     // Long-term migration target: the open-source Google Cardboard SDK
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
 
     // ── Protobuf ──
     // No direct Lumiya imports, but the GVR SDK pulls it in transitively;
-    // pinning a version avoids a resolution conflict.
+    // pinning a version avoids a resolution conflict. Remove with GVR stack.
     implementation 'com.google.protobuf:protobuf-javalite:3.25.1'
 }

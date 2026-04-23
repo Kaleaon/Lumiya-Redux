@@ -11,6 +11,8 @@ REQUIRED_SNIPPETS = [
     "LLSD",
     "Inventory",
     "Room entity",
+    "docs/llsd_edge_case_conformance.md",
+    "docs/protocol_model_mapping.md",
 ]
 
 

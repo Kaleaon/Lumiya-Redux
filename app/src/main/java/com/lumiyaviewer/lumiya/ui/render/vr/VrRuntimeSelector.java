@@ -42,5 +42,6 @@ public final class VrRuntimeSelector {
 
     public static void putRuntime(Intent intent, String runtimeId) {
         intent.putExtra(EXTRA_RUNTIME_ID, runtimeId);
+        intent.putExtra(VrIntentContract.EXTRA_VR_RUNTIME, OpenXrRuntime.ID.equalsIgnoreCase(runtimeId) ? VrIntentContract.VR_RUNTIME_OPENXR : VrIntentContract.VR_RUNTIME_CARDBOARD);
     }
 }

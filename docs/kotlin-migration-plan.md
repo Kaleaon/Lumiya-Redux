@@ -24,12 +24,17 @@ Rationale: repository APIs are shared dependencies; Kotlin data classes and exte
 Kotlin-first package root:
 - `com.lumiyaviewer.lumiya.repository`
 
-### 3) UI leaf features (third)
-Rationale: migrate isolated screens/components before touching shared UI scaffolding.
+### 3) New data layer expansion (third)
+Rationale: new Room-backed entities/DAOs and adapters should start Kotlin-first while legacy ORM paths stay stable.
 
 Kotlin-first package root:
-- `com.lumiyaviewer.lumiya.ui.features`
+- `com.lumiyaviewer.lumiya.data`
 
 ## Enforcement
 - Gradle `check` runs `enforceKotlinFirstPackages`, which fails if `.java` files are present in Kotlin-first roots.
 - This enforces Kotlin-by-default only for selected package roots and leaves the rest of the Java tree untouched.
+
+## Conversion boundaries
+- **Touch-only conversion rule:** existing Java files are not mass-converted; convert only when the file is already being modified for feature/bug work and the change can be validated in the same PR.
+- **Boundary rule:** modernization workstreams (VR abstraction, repositories, new data layer) create new classes in Kotlin by default.
+- **Out-of-scope for this policy:** legacy packages outside the Kotlin-first roots can remain Java until they are explicitly scheduled for migration.
