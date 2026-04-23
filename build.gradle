@@ -7,3 +7,15 @@ plugins {
 tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
 }
+
+
+subprojects {
+    plugins.withId('org.jetbrains.kotlin.android') {
+        kotlin {
+            // Keep Kotlin compilation bytecode/toolchain aligned with the app's
+            // Java 8 compatibility baseline while migration is in progress.
+            jvmToolchain(8)
+        }
+    }
+}
+
