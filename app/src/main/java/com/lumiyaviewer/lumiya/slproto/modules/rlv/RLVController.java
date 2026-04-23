@@ -207,7 +207,7 @@ public class RLVController extends SLModule {
             if (!str.startsWith("/")) {
                 Set<String> targetsForRestriction = this.restrictions.getTargetsForRestriction(RLVRestrictionType.redirchat);
                 if (targetsForRestriction != null) {
-                    Iterator<T> it = targetsForRestriction.iterator();
+                    Iterator<RLVControllerTarget> it = targetsForRestriction.iterator();
                     while (it.hasNext()) {
                         try {
                             int parseInt = Integer.parseInt((String) it.next());

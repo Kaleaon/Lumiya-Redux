@@ -182,7 +182,7 @@ public class MeshData {
                                     for (int i11 = 0; i11 < 3; i11++) {
                                         fArr4[i11] = fArr3[(i9 * 16) + 12 + i11];
                                     }
-                                    enumMap.put((EnumMap) sLSkeletonBoneID2, (SLSkeletonBoneID) fArr4);
+                                    enumMap.put(sLSkeletonBoneID2, fArr4);
                                 }
                             }
                         }
@@ -241,7 +241,7 @@ public class MeshData {
         if (this.jointTranslations != null) {
             EnumMap<SLSkeletonBoneID, float[]> enumMap = meshJointTranslations.jointTranslations;
             for (Map.Entry<SLSkeletonBoneID, float[]> entry : this.jointTranslations.entrySet()) {
-                enumMap.put((EnumMap<SLSkeletonBoneID, float[]>) entry.getKey(), (SLSkeletonBoneID) entry.getValue());
+                enumMap.put(entry.getKey(), entry.getValue());
             }
         }
     }

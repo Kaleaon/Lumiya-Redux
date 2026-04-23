@@ -44,11 +44,11 @@ public class AvatarAnimationState implements ResourceConsumer {
 
         void getRunningAnimations(ImmutableList.Builder<AvatarRunningSequence> builder, Collection<AvatarRunningAnimation> collection) {
             if (this.runningAnimation != null) {
-                builder.add((ImmutableList.Builder<AvatarRunningSequence>) this.runningAnimation);
+                builder.add(this.runningAnimation);
                 this.runningAnimation.getRunningAnimations(collection);
             }
             if (this.stoppingAnimation != null) {
-                builder.add((ImmutableList.Builder<AvatarRunningSequence>) this.stoppingAnimation);
+                builder.add(this.stoppingAnimation);
                 this.stoppingAnimation.getRunningAnimations(collection);
             }
         }

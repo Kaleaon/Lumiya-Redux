@@ -118,7 +118,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         }
         this.bakingThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.baker.-$Lambda$qb61PwDoxRPFEOdyYwns3UfUTbM
             private final /* synthetic */ void $m$0() {
-                ((BakeProcess) this).m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0();
+                BakeProcess.this.m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0();
             }
 
             @Override // java.lang.Runnable

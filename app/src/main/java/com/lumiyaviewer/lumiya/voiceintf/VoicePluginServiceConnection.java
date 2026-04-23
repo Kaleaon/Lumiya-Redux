@@ -329,7 +329,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         this.voiceChannels.forcePut(userChatterID, voiceRinging.voiceChannelInfo);
         this.ringingChatterNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA.1
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                ((VoicePluginServiceConnection) this).m914x2afa1cbb((VoiceRinging) voiceRinging, chatterNameRetriever);
+                VoicePluginServiceConnection.this.m914x2afa1cbb((VoiceRinging) voiceRinging, chatterNameRetriever);
             }
 
             @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -409,7 +409,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     public void disconnect() {
         this.mainThreadHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA
             private final /* synthetic */ void $m$0() {
-                ((VoicePluginServiceConnection) this).m915x2afbf316();
+                VoicePluginServiceConnection.this.m915x2afbf316();
             }
 
             @Override // java.lang.Runnable

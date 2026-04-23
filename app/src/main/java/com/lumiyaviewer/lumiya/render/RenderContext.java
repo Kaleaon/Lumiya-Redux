@@ -173,13 +173,13 @@ public class RenderContext {
         }
         if (z3) {
             GPUDetection gPUDetection = new GPUDetection(this.glRenderer);
-            Debug.AlwaysPrintf("Detected GPU family '%s', version '%s', numeric version %d", gPUDetection.detectedFamily.or((Optional<String>) EnvironmentCompat.MEDIA_UNKNOWN), gPUDetection.detectedVersion.or((Optional<String>) EnvironmentCompat.MEDIA_UNKNOWN), Integer.valueOf(gPUDetection.detectedNumericVersion));
+            Debug.AlwaysPrintf("Detected GPU family '%s', version '%s', numeric version %d", gPUDetection.detectedFamily.or(EnvironmentCompat.MEDIA_UNKNOWN), gPUDetection.detectedVersion.or(EnvironmentCompat.MEDIA_UNKNOWN), Integer.valueOf(gPUDetection.detectedNumericVersion));
             HashMap hashMap = new HashMap();
             hashMap.put("__NUM_BASE_JOINTS__", Integer.toString(26));
             hashMap.put("__NUM_BASE_BONE_VECTORS__", Integer.toString(156));
             hashMap.put("__MAX_RIGGED_MESH_BONES__", Integer.toString(SLSkeletonBoneID.VALUES.length + 47));
             hashMap.put("__MAX_RIGGED_MESH_JOINTS__", Integer.toString(MeshData.MAX_RIGGED_MESH_JOINTS));
-            if (gPUDetection.detectedFamily.or((Optional<String>) "").equals(GPUDetection.GPU_FAMILY_ADRENO)) {
+            if (gPUDetection.detectedFamily.or("").equals(GPUDetection.GPU_FAMILY_ADRENO)) {
                 hashMap.put("__ADRENO__", "");
                 if (gpuCapabilities.quirkDisableEs3Shaders) {
                     z3 = false;
@@ -278,7 +278,7 @@ public class RenderContext {
         this.windlightSky = z2 ? new WindlightSky(this) : null;
         this.renderBackend = RenderBackendFactory.createBackend();
         this.renderBackend.onContextInitialized(this);
-        if (z6) {
+        if (z5) {
             this.crosshairTexture = GLLoadedTexture.loadFromAssets(this, LumiyaApp.getContext(), "misc/crosshair.png");
         } else {
             this.crosshairTexture = null;

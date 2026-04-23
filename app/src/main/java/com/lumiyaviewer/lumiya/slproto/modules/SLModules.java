@@ -168,21 +168,21 @@ public class SLModules {
     }
 
     public void HandleCircuitReady() {
-        Iterator<T> it = this.modules.iterator();
+        Iterator<SLModule> it = this.modules.iterator();
         while (it.hasNext()) {
             ((SLModule) it.next()).HandleCircuitReady();
         }
     }
 
     public void HandleCloseCircuit() {
-        Iterator<T> it = this.modules.iterator();
+        Iterator<SLModule> it = this.modules.iterator();
         while (it.hasNext()) {
             ((SLModule) it.next()).HandleCloseCircuit();
         }
     }
 
     public void HandleGlobalOptionsChange() {
-        Iterator<T> it = this.modules.iterator();
+        Iterator<SLModule> it = this.modules.iterator();
         while (it.hasNext()) {
             ((SLModule) it.next()).HandleGlobalOptionsChange();
         }

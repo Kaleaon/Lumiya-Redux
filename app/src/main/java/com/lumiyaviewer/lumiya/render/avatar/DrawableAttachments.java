@@ -40,7 +40,7 @@ class DrawableAttachments {
             for (Integer num : multimap.keySet()) {
                 for (DrawableObject drawableObject : multimap.get(num)) {
                     if (drawableObject.isRiggedMesh()) {
-                        builder2.add((ImmutableList.Builder) drawableObject);
+                        builder2.add(drawableObject);
                     } else {
                         builder.put(num, drawableObject);
                     }
@@ -58,9 +58,9 @@ class DrawableAttachments {
         ImmutableList.Builder builder2 = ImmutableList.builder();
         builder2.addAll((Iterable) drawableAttachments.rigged);
         for (Integer num : drawableAttachments.nonRigged.keySet()) {
-            for (DrawableObject drawableObject : drawableAttachments.nonRigged.get((ImmutableMultimap<Integer, DrawableObject>) num)) {
+            for (DrawableObject drawableObject : drawableAttachments.nonRigged.get(num)) {
                 if (drawableObject.isRiggedMesh()) {
-                    builder2.add((ImmutableList.Builder) drawableObject);
+                    builder2.add(drawableObject);
                 } else {
                     builder.put(num, drawableObject);
                 }
@@ -117,7 +117,7 @@ class DrawableAttachments {
             float[] attachmentMatrix = avatarSkeleton.getAttachmentMatrix(num.intValue());
             if (attachmentMatrix != null) {
                 renderContext.glObjWorldPushAndMultMatrixf(attachmentMatrix, 0);
-                for (DrawableObject drawableObject : this.nonRigged.get((ImmutableMultimap<Integer, DrawableObject>) num)) {
+                for (DrawableObject drawableObject : this.nonRigged.get(num)) {
                     if (drawableObject.isRiggedMesh()) {
                         z3 = true;
                     } else {

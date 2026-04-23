@@ -22,7 +22,7 @@ public class SLSkeleton {
     }
 
     protected void applyJointTranslations(MeshJointTranslations meshJointTranslations) {
-        Iterator<T> it = this.bones.entrySet().iterator();
+        Iterator<Map.Entry<SLSkeletonBoneID, SLSkeletonBone>> it = this.bones.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
             float[] fArr = meshJointTranslations.jointTranslations.get(entry.getKey());

@@ -18,13 +18,13 @@ public class MyAvatarTreeNode extends InlineList<DrawListEntry> {
 
     @Override // com.lumiyaviewer.lumiya.utils.InlineList
     public void addEntry(DrawListEntry drawListEntry) {
-        super.addEntry((MyAvatarTreeNode) drawListEntry);
+        super.addEntry(drawListEntry);
         this.spatialTree.setDrawListChanged();
     }
 
     @Override // com.lumiyaviewer.lumiya.utils.InlineList
     public void removeEntry(DrawListEntry drawListEntry) {
-        super.removeEntry((MyAvatarTreeNode) drawListEntry);
+        super.removeEntry(drawListEntry);
         this.spatialTree.setDrawListChanged();
     }
 

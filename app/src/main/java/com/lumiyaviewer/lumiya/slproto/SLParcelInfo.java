@@ -282,7 +282,7 @@ public class SLParcelInfo {
                             if (!sLObjectInfo2.nameKnown) {
                                 sLAgentCircuit.RequestObjectName(sLObjectInfo2);
                             }
-                            builder.add((ImmutableList.Builder) sLObjectInfo2);
+                            builder.add(sLObjectInfo2);
                         }
                     }
                 } catch (NoSuchElementException e) {
@@ -295,7 +295,7 @@ public class SLParcelInfo {
 
     public synchronized void initSpatialIndex() {
         try {
-            Iterator<T> it = this.rootObjects.values().iterator();
+            Iterator<SLObjectInfo> it = this.rootObjects.values().iterator();
             while (it.hasNext()) {
                 ((SLObjectInfo) it.next()).updateSpatialIndex(true);
             }

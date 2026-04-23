@@ -11,7 +11,7 @@ import java.util.UUID;
 public class SLTextureFetchRequest implements HasPriority {
 
     /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f130comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
+    private static /* synthetic */ int[] f130comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
     public AvatarTextureFaceIndex avatarFaceIndex;
     public UUID avatarUUID;
     public final File destFile;

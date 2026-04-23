@@ -59,7 +59,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.Collection
     public boolean addAll(Collection<? extends T> collection) {
         boolean z = false;
-        Iterator<T> it = collection.iterator();
+        Iterator<?> it = collection.iterator();
         while (it.hasNext()) {
             z |= add(it.next());
         }
@@ -94,7 +94,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         boolean z = true;
         try {
-            Iterator<T> it = collection.iterator();
+            Iterator<?> it = collection.iterator();
             while (true) {
                 if (!it.hasNext()) {
                     break;
@@ -301,7 +301,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.Collection
     public boolean removeAll(Collection<?> collection) {
         boolean z = false;
-        Iterator<T> it = collection.iterator();
+        Iterator<?> it = collection.iterator();
         while (it.hasNext()) {
             z |= remove(it.next());
         }

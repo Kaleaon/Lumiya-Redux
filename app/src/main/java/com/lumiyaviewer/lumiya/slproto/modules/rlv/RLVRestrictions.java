@@ -19,7 +19,7 @@ public class RLVRestrictions {
     private static class RLVRestrictionList {
 
         /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f127x829a01e5 = null;
+        private static /* synthetic */ int[] f127x829a01e5 = null;
         private Map<String, HashSet<UUID>> restMap;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */

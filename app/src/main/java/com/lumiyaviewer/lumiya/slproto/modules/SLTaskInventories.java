@@ -72,7 +72,7 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
                     }
                 } else if (nextToken.equalsIgnoreCase("inv_item")) {
                     simpleStringParser.getIntToken(DELIM_EOL);
-                    builder.add((ImmutableList.Builder) SLInventoryEntry.parseString(simpleStringParser));
+                    builder.add(SLInventoryEntry.parseString(simpleStringParser));
                 }
             }
             return new SLTaskInventory(builder.build());

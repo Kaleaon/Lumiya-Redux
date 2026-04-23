@@ -137,9 +137,4 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
     protected ResourceRequest<TerrainPatchInfo, OpenJPEG> CreateNewRequest(TerrainPatchInfo terrainPatchInfo, ResourceManager<TerrainPatchInfo, OpenJPEG> resourceManager) {
         return new TerrainTextureRequest(terrainPatchInfo, resourceManager);
     }
-
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
-    protected /* bridge */ /* synthetic */ ResourceRequest CreateNewRequest(Object obj, ResourceManager resourceManager) {
-        return CreateNewRequest((TerrainPatchInfo) obj, (ResourceManager<TerrainPatchInfo, OpenJPEG>) resourceManager);
-    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class BakeLayer {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f64x335e3db9 = null;
+    private static /* synthetic */ int[] f64x335e3db9 = null;
     public int fixedColor;
     public SLAvatarGlobalColor globalColor;
     public boolean hasFixedColor;

@@ -145,7 +145,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         if (currentTimeMillis >= this.lastCheckForStalls + 1000) {
             this.lastCheckForStalls = currentTimeMillis;
             try {
-                Iterator<T> it = this.udpTransfers.entrySet().iterator();
+                Iterator<Map.Entry<Integer, SLTextureFetchRequest>> it = this.udpTransfers.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry entry = (Map.Entry) it.next();
                     if (!((TextureUDPTransfer) entry.getValue()).hasStalled() || ((TextureUDPTransfer) entry.getValue()).RetryTransfer(this.agentCircuit, this.circuitInfo)) {

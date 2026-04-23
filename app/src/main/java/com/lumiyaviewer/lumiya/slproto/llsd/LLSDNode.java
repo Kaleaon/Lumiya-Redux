@@ -184,10 +184,10 @@ public abstract class LLSDNode {
         } catch (IOException e) {
             throw new LLSDXMLException("Input stream error");
         } catch (XmlPullParserException e) {
-            Debug.Log("XmlPullParserException: " + e2.getMessage());
-            e2.printStackTrace();
+            Debug.Log("XmlPullParserException: " + e.getMessage());
+            e.printStackTrace();
             LLSDXMLException lLSDXMLException = new LLSDXMLException("Malformed XML");
-            lLSDXMLException.initCause(e2);
+            lLSDXMLException.initCause(e);
             throw lLSDXMLException;
         }
     }

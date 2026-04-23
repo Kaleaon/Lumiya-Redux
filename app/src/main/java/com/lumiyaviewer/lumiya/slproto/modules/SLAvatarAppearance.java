@@ -192,26 +192,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         this.inventory = sLInventory;
         this.parcelInfo = sLAgentCircuit.getGridConnection().parcelInfo;
         this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
-        this.currentOutfitFolder = new SubscriptionData<>(sLAgentCircuit, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$Jp5Too8LbDpaKzeYKjkvQvC1hZo
-            private final /* synthetic */ void $m$0(Object obj) {
-                ((SLAvatarAppearance) this).m210x65ecce27((InventoryEntryList) obj);
-            }
-
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-            public final void onData(Object obj) {
-                $m$0(obj);
-            }
-        });
-        this.findCofFolder = new SubscriptionData<>(sLAgentCircuit, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$Jp5Too8LbDpaKzeYKjkvQvC1hZo.1
-            private final /* synthetic */ void $m$0(Object obj) {
-                ((SLAvatarAppearance) this).m211x65ecce28((InventoryEntryList) obj);
-            }
-
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-            public final void onData(Object obj) {
-                $m$0(obj);
-            }
-        });
+        this.currentOutfitFolder = new SubscriptionData<>(sLAgentCircuit, obj -> m210x65ecce27((InventoryEntryList) obj));
+        this.findCofFolder = new SubscriptionData<>(sLAgentCircuit, obj -> m211x65ecce28((InventoryEntryList) obj));
         if (this.userManager != null) {
             this.wornItemsResultHandler = this.userManager.wornItems().attachRequestHandler(this.wornItemsRequestHandler);
         } else {
@@ -441,7 +423,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 this.inventory.LinkInventoryItem(folder, sLWearable2.itemID, SLInventoryType.IT_WEARABLE.getTypeCode(), SLAssetType.AT_LINK.getTypeCode(), sLWearable2.getName(), "");
                 z = true;
             }
-            for (Map.Entry entry : hashMap2.entrySet()) {
+            for (Object entryObj : hashMap2.entrySet()) {
+                Map.Entry entry = (Map.Entry) entryObj;
                 Debug.Printf("Update COF: adding attachment %s, name = '%s'", entry.getKey(), entry.getValue());
                 this.inventory.LinkInventoryItem(folder, (UUID) entry.getKey(), SLInventoryType.IT_OBJECT.getTypeCode(), SLAssetType.AT_LINK.getTypeCode(), (String) entry.getValue(), "");
                 z = true;
@@ -548,7 +531,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
         this.serverSideAppearanceUpdateTask = GenericHTTPExecutor.getInstance().submit(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$Jp5Too8LbDpaKzeYKjkvQvC1hZo.2
             private final /* synthetic */ void $m$0() {
-                ((SLAvatarAppearance) this).m212x366f8fcf(i, (String) str);
+                m212x366f8fcf(i, (String) str);
             }
 
             @Override // java.lang.Runnable
@@ -582,7 +565,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z5 = false;
         RLVController rLVController = this.agentCircuit.getModules().rlvController;
         HashBasedTable create = HashBasedTable.create(this.wornWearables);
-        Iterator<T> it = list.iterator();
+        Iterator<AvatarAppearance.WearableData> it = list.iterator();
         while (true) {
             z2 = z5;
             if (!it.hasNext()) {
@@ -596,7 +579,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 } else if (isBodyPart) {
                     if (!rLVController.canTakeItemOff(byCode)) {
                         boolean z6 = false;
-                        Iterator<T> it2 = create.row(byCode).keySet().iterator();
+                        Iterator<UUID> it2 = create.row(byCode).keySet().iterator();
                         while (true) {
                             z4 = z6;
                             if (!it2.hasNext()) {
@@ -618,7 +601,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                         hashSet.remove(resolveLink.assetUUID);
                         Iterator it3 = hashSet.iterator();
                         while (it3.hasNext()) {
-                            SLWearable remove = create.remove(byCode, (UUID) it3.next());
+                            SLWearable remove = (SLWearable) create.remove(byCode, (UUID) it3.next());
                             if (remove != null) {
                                 remove.dispose();
                             }
@@ -749,7 +732,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 iArr[i] = round;
             }
         }
-        Iterator<T> it = this.wornWearables.values().iterator();
+        Iterator<SLWearable> it = this.wornWearables.values().iterator();
         while (it.hasNext()) {
             SLWearableData wearableData = ((SLWearable) it.next()).getWearableData();
             if (wearableData != null) {
@@ -799,18 +782,18 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
     public ImmutableList<WornItem> getWornItems() {
         SLObjectAvatarInfo agentAvatar;
         ImmutableList.Builder builder = ImmutableList.builder();
-        Iterator<T> it = this.wornWearables.cellSet().iterator();
+        Iterator<Table.Cell<SLWearableType, UUID, SLWearable>> it = this.wornWearables.cellSet().iterator();
         while (it.hasNext()) {
             Table.Cell cell = (Table.Cell) it.next();
             SLWearable sLWearable = (SLWearable) cell.getValue();
             if (sLWearable != null) {
-                builder.add((ImmutableList.Builder) new WornItem((SLWearableType) cell.getRowKey(), 0, (UUID) cell.getColumnKey(), sLWearable.getName(), 0, false));
+                builder.add(new WornItem((SLWearableType) cell.getRowKey(), 0, (UUID) cell.getColumnKey(), sLWearable.getName(), 0, false));
             }
         }
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
                 for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                    builder.add((ImmutableList.Builder) new WornItem(null, sLObjectInfo.attachmentID, sLObjectInfo.getId(), sLObjectInfo.getName(), sLObjectInfo.localID, sLObjectInfo.isTouchable()));
+                    builder.add(new WornItem(null, sLObjectInfo.attachmentID, sLObjectInfo.getId(), sLObjectInfo.getName(), sLObjectInfo.localID, sLObjectInfo.isTouchable()));
                 }
             } catch (NoSuchElementException e) {
                 Debug.Warning(e);
@@ -1026,7 +1009,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         RLVController rLVController = this.agentCircuit.getModules().rlvController;
         HashSet hashSet = new HashSet();
         Table<SLWearableType, UUID, SLWearable> create = HashBasedTable.create(this.wornWearables);
-        Iterator<T> it2 = list.iterator();
+        Iterator<SLInventoryEntry> it2 = list.iterator();
         while (true) {
             z5 = z9;
             if (!it2.hasNext()) {
@@ -1084,7 +1067,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             z6 = z5;
             for (SLWearableType sLWearableType : SLWearableType.valuesCustom()) {
                 if (!sLWearableType.isBodyPart() && rLVController.canTakeItemOff(sLWearableType)) {
-                    Map<C, V> row = create.row(sLWearableType);
+                    Map<UUID, SLWearable> row = create.row(sLWearableType);
                     HashSet hashSet3 = new HashSet();
                     for (UUID uuid4 : row.keySet()) {
                         if (!hashSet.contains(uuid4)) {
@@ -1220,7 +1203,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
         Debug.Log("AvatarAppearance: AgentWearablesUpdate: wearing now: " + hashSet.size() + " ids");
         HashSet hashSet2 = new HashSet();
-        for (UUID uuid : create.columnKeySet()) {
+        for (Object uuidObj : create.columnKeySet()) {
+            UUID uuid = (UUID) uuidObj;
             if (!hashSet.contains(uuid)) {
                 hashSet2.add(uuid);
             }
@@ -1228,7 +1212,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         Iterator it = hashSet2.iterator();
         while (it.hasNext()) {
             Map<SLWearableType, SLWearable> column = create.column((UUID) it.next());
-            Iterator<T> it2 = column.values().iterator();
+            Iterator<SLWearable> it2 = column.values().iterator();
             while (it2.hasNext()) {
                 ((SLWearable) it2.next()).dispose();
             }

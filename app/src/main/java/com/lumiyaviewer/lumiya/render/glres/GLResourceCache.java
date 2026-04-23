@@ -73,10 +73,10 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
         /* JADX WARN: Multi-variable type inference failed */
         @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
         public void OnResourceReady(Object obj, boolean z) {
-            if (obj != 0) {
+            if (obj != null) {
                 try {
                     synchronized (this) {
-                        this.rawResource = obj;
+                        this.rawResource = (Raw) obj;
                         this.finalResult = !z;
                     }
                     GLResourceCache.this.loadQueue.add(this);

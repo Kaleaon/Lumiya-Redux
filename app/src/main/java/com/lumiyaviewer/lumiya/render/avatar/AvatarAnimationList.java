@@ -21,9 +21,9 @@ class AvatarAnimationList {
     AvatarAnimationList(Collection<AvatarAnimationState> collection) {
         ArrayList arrayList = new ArrayList(collection.size());
         ImmutableList.Builder<AvatarRunningSequence> builder = ImmutableList.builder();
-        Iterator<T> it = collection.iterator();
+        Iterator<AvatarAnimationState> it = collection.iterator();
         while (it.hasNext()) {
-            ((AvatarAnimationState) it.next()).getRunningAnimations(builder, arrayList);
+            it.next().getRunningAnimations(builder, arrayList);
         }
         Collections.sort(arrayList);
         this.sequences = builder.build();

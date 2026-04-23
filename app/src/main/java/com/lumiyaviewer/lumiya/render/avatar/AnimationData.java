@@ -299,7 +299,7 @@ public class AnimationData {
             return this.outPoint > this.inPoint ? this.inPoint + ((f - this.inPoint) % (this.outPoint - this.inPoint)) : this.inPoint;
         }
         if (this.outPoint > this.inPoint) {
-            f3 = ((f - f2) - (((float) Math.floor((r0 - this.inPoint) / (this.outPoint - this.inPoint))) * (this.outPoint - this.inPoint))) + f2;
+            f3 = ((f - f2) - (((float) Math.floor((f - this.inPoint) / (this.outPoint - this.inPoint))) * (this.outPoint - this.inPoint))) + f2;
         } else {
             f3 = this.outPoint + f2;
         }
@@ -361,7 +361,7 @@ public class AnimationData {
         Debug.Printf("Animation: creating anims: %d anims", Integer.valueOf(size));
         ImmutableList.Builder builder = ImmutableList.builder();
         for (int i = 0; i < size; i++) {
-            builder.add((ImmutableList.Builder) new AvatarRunningAnimation(avatarRunningSequence, this.jointSets.valueAt(i)));
+            builder.add(new AvatarRunningAnimation(avatarRunningSequence, this.jointSets.valueAt(i)));
         }
         return builder.build();
     }

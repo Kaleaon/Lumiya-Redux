@@ -174,7 +174,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             file2 = (File) it.next();
             Debug.Printf("Cache: checking cache location %s", file2);
             if (isCacheDirectoryWriteable(file2)) {
-                builder.add((ImmutableList.Builder) file2);
+                builder.add(file2);
                 if (file != null) {
                     if (string.isEmpty()) {
                         file2 = file;

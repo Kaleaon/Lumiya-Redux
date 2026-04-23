@@ -38,7 +38,7 @@ public class SpatialObjectIndex {
     private volatile FrustrumInfo frustrumInfo = null;
     private volatile FrustrumPlanes frustrumPlanes = null;
     private final DrawListUpdateTask drawListUpdateTask = new DrawListUpdateTask(this, null);
-    private final ObjectsUpdateTask objectsUpdateTask = new ObjectsUpdateTask(this, 0 == true ? 1 : 0);
+    private final ObjectsUpdateTask objectsUpdateTask = new ObjectsUpdateTask();
     private final Runnable terrainUpdate = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.spatial.SpatialObjectIndex.1
         @Override // java.lang.Runnable
         public void run() {
