@@ -45,6 +45,14 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
     public int typeDefault;
     public UUID uuid;
     public int version;
+    // Protocol-derived schema notes (for Room migration and regression review):
+    // - parent_id / parentUUID_* / uuid_* map to inventory hierarchy identity
+    //   from secondlife/viewer indra/llinventory and InventoryData blocks in
+    //   UpdateInventoryItem/CreateInventoryItem message definitions.
+    // - invType / assetType / typeDefault map to LLInventoryType + LLAssetType.
+    // - flags / creationDate / description map to InventoryData metadata fields.
+    // - _blobField packs agent/asset/creator/owner/group UUIDs, permission masks,
+    //   and sale info from message_template inventory update payloads.
     protected static final String[] fieldNames = {"_id", "parent_id", "uuid_high", "uuid_low", "parentUUID_high", "parentUUID_low", "name", "isFolder", "typeDefault", "version", "sessionID_high", "sessionID_low", "fetchFailed", "description", "flags", "invType", "assetType", "creationDate", "_blobField"};
     public static final Parcelable.Creator<InventoryEntryDBObject> CREATOR = new Parcelable.Creator<InventoryEntryDBObject>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryEntryDBObject.1
         /* JADX WARN: Can't rename method to resolve collision */
