@@ -50,6 +50,12 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
                 return null;
             }
             try {
+                 if (!cursor.moveToFirst()) {
+                    String str3 = TAG;
+                    String valueOf2 = String.valueOf(uri);
+                    Log.e(str3, new StringBuilder(String.valueOf(valueOf2).length() + 50).append("Invalid params result from ContentProvider query: ").append(valueOf2).toString());
+                    return null;
+                }
                 byte[] blob = cursor.getBlob(0);
                 if (blob == null) {
                     return null;

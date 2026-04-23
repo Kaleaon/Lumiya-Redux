@@ -34,57 +34,46 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
         void onTransactionClicked(MoneyTransaction moneyTransaction);
     }
 
-    class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TransactionViewHolder_ViewBinding implements Unbinder {
+        private TransactionViewHolder target;
 
-        @BindView(R.id.amountTextView)
-        TextView amountTextView;
-        private Calendar calendar;
-        private final ChatterNameDisplayer chatterNameDisplayer;
-
-        @BindView(R.id.finalBalanceTextView)
-        TextView finalBalanceTextView;
-        private MoneyTransaction moneyTransaction;
-
-        @BindView(R.id.timeStampTextView)
-        TextView timestampTextView;
-
-        @BindView(R.id.user_name)
-        TextView userName;
-
-        @BindView(R.id.userPicView)
-        ChatterPicView userPicView;
-
-        TransactionViewHolder(View view) {
-            super(view);
-            this.chatterNameDisplayer = new ChatterNameDisplayer();
-            ButterKnife.bind(this, view);
-            this.chatterNameDisplayer.bindViews(this.userName, this.userPicView);
-            view.setOnClickListener(this);
-            this.calendar = Calendar.getInstance();
+        @UiThread
+        public TransactionViewHolder_ViewBinding(TransactionViewHolder transactionViewHolder, View view) {
+            this.target = transactionViewHolder;
+            transactionViewHolder.userName = (TextView) Utils.findRequiredViewAsType(view, R.id.user_name, "field 'userName'", TextView.class);
+            transactionViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
+            transactionViewHolder.timestampTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.timeStampTextView, "field 'timestampTextView'", TextView.class);
+            transactionViewHolder.amountTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.amountTextView, "field 'amountTextView'", TextView.class);
+            transactionViewHolder.finalBalanceTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.finalBalanceTextView, "field 'finalBalanceTextView'", TextView.class);
         }
 
-        @SuppressLint({"DefaultLocale", "SetTextI18n"})
-        void bindToData(MoneyTransaction moneyTransaction) {
-            this.moneyTransaction = moneyTransaction;
-            this.chatterNameDisplayer.setChatterID(ChatterID.getUserChatterID(TransactionLogAdapter.this.agentUUID, moneyTransaction.getAgentUUID()));
-            this.amountTextView.setText(TransactionLogAdapter.this.context.getString(R.string.transaction_amount_format, Integer.valueOf(moneyTransaction.getTransactionAmount())));
-            this.finalBalanceTextView.setText(TransactionLogAdapter.this.context.getString(R.string.transaction_balance_amount, Integer.valueOf(moneyTransaction.getNewBalance())));
-            this.calendar.setTime(moneyTransaction.getTimestamp());
-            this.timestampTextView.setText(DateUtils.getRelativeTimeSpanString(TransactionLogAdapter.this.context, this.calendar.getTimeInMillis(), false));
-        }
-
-        @Override // android.view.View.OnClickListener
-        public void onClick(View view) {
-            if (TransactionLogAdapter.this.onTransactionClickListener == null || this.moneyTransaction == null) {
-                return;
+        @Override // butterknife.Unbinder
+        @CallSuper
+        public void unbind() {
+            TransactionViewHolder transactionViewHolder = this.target;
+            if (transactionViewHolder == null) {
+                throw new IllegalStateException("Bindings already cleared.");
             }
-            TransactionLogAdapter.this.onTransactionClickListener.onTransactionClicked(this.moneyTransaction);
+            this.target = null;
+            transactionViewHolder.userName = null;
+            transactionViewHolder.userPicView = null;
+            transactionViewHolder.timestampTextView = null;
+            transactionViewHolder.amountTextView = null;
+            transactionViewHolder.finalBalanceTextView = null;
         }
+    }
 
-        void onRecycled() {
-            this.chatterNameDisplayer.setChatterID(null);
-            this.moneyTransaction = null;
-        }
+
+    UUID getAgentUUID() {
+        return this.agentUUID;
+    }
+
+    Context getContext() {
+        return this.context;
+    }
+
+    OnTransactionClickListener getOnTransactionClickListener() {
+        return this.onTransactionClickListener;
     }
 
     TransactionLogAdapter(Context context, UUID uuid, OnTransactionClickListener onTransactionClickListener) {
@@ -121,7 +110,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     public TransactionViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new TransactionViewHolder(this.inflater.inflate(R.layout.transaction_log_item, viewGroup, false));
+        return new TransactionViewHolder(this, this.inflater.inflate(R.layout.transaction_log_item, viewGroup, false));
     }
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter

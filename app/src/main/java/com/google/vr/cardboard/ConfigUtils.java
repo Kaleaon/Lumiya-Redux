@@ -69,14 +69,16 @@ public class ConfigUtils {
         } catch (FileNotFoundException e) {
             if (z) {
                 String str2 = TAG;
-                String valueOf = String.valueOf(e3);
+                String valueOf = String.valueOf(e);
                 Log.d(str2, new StringBuilder(String.valueOf(valueOf).length() + 39).append("Parameters file not found for reading: ").append(valueOf).toString());
             }
             return null;
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException e2) {
             String str3 = TAG;
-            String valueOf2 = String.valueOf(e4);
+            String valueOf2 = String.valueOf(e2);
             Log.w(str3, new StringBuilder(String.valueOf(valueOf2).length() + 26).append("Error reading parameters: ").append(valueOf2).toString());
+            return null;
+        } catch (IOException unused) {
             return null;
         }
     }
@@ -168,19 +170,19 @@ public class ConfigUtils {
     }
 
     private static boolean writeToExternalStorage(MessageNano messageNano, String str, int i) {
-        try {
-            try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(getConfigFile(str)))) {
-                return writeToOutputStream(messageNano, bufferedOutputStream, i);
-            }
+        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(getConfigFile(str)))) {
+            return writeToOutputStream(messageNano, bufferedOutputStream, i);
         } catch (FileNotFoundException e) {
             String str2 = TAG;
             String valueOf = String.valueOf(e);
             Log.e(str2, new StringBuilder(String.valueOf(valueOf).length() + 39).append("Parameters file not found for writing: ").append(valueOf).toString());
             return false;
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException e2) {
             String str3 = TAG;
             String valueOf2 = String.valueOf(e2);
             Log.w(str3, new StringBuilder(String.valueOf(valueOf2).length() + 26).append("Error writing parameters: ").append(valueOf2).toString());
+            return false;
+        } catch (IOException unused) {
             return false;
         }
     }

@@ -111,13 +111,13 @@ public class ChatterNameRetriever {
             return;
         }
         if (this.chatterID.getChatterType() == ChatterID.ChatterType.Local) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), this.executor, this::m272x6559d93c);
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), this.executor, currentLocationInfo -> m272x6559d93c(currentLocationInfo));
             return;
         }
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
-            this.subscription = userManager.getUserNames().subscribe(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, this::m273x6559d93d);
+            this.subscription = userManager.getUserNames().subscribe(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, userName -> m273x6559d93d(userName));
         } else if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
-            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, this::m274x6559d93e);
+            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, groupProfileReply -> m274x6559d93e(groupProfileReply));
         } else {
             this.subscription = null;
         }

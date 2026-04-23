@@ -34,82 +34,38 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
         void onSearchResultClicked(SearchGridResult searchGridResult);
     }
 
-    class SearchViewHolder extends RecyclerView.ViewHolder implements ChatterNameRetriever.OnChatterNameUpdated, View.OnClickListener {
-        private ChatterNameRetriever chatterNameRetriever;
+    public class SearchViewHolder_ViewBinding implements Unbinder {
+        private SearchViewHolder target;
 
-        @BindView(R.id.result_item_name)
-        TextView resultItemName;
-
-        @BindView(R.id.result_member_count)
-        TextView resultMemberCount;
-        private SearchGridResult searchGridResult;
-
-        @BindView(R.id.userPicView)
-        ChatterPicView userPicView;
-
-        SearchViewHolder(View view) {
-            super(view);
-            this.chatterNameRetriever = null;
-            ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
+        @UiThread
+        public SearchViewHolder_ViewBinding(SearchViewHolder searchViewHolder, View view) {
+            this.target = searchViewHolder;
+            searchViewHolder.resultItemName = (TextView) Utils.findRequiredViewAsType(view, R.id.result_item_name, "field 'resultItemName'", TextView.class);
+            searchViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
+            searchViewHolder.resultMemberCount = (TextView) Utils.findRequiredViewAsType(view, R.id.result_member_count, "field 'resultMemberCount'", TextView.class);
         }
 
-        @SuppressLint({"DefaultLocale", "SetTextI18n"})
-        void bindToData(SearchGridResult searchGridResult) {
-            this.searchGridResult = searchGridResult;
-            this.resultItemName.setText(searchGridResult.getItemName());
-            if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
-                Integer memberCount = searchGridResult.getMemberCount();
-                this.resultMemberCount.setVisibility(0);
-                this.resultMemberCount.setText(Integer.toString(memberCount != null ? memberCount.intValue() : 0));
-            } else {
-                this.resultMemberCount.setVisibility(8);
+        @Override // butterknife.Unbinder
+        @CallSuper
+        public void unbind() {
+            SearchViewHolder searchViewHolder = this.target;
+            if (searchViewHolder == null) {
+                throw new IllegalStateException("Bindings already cleared.");
             }
-            if (this.chatterNameRetriever != null) {
-                this.chatterNameRetriever.dispose();
-                this.chatterNameRetriever = null;
-            }
-            if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
-                this.userPicView.setChatterID(ChatterID.getGroupChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID()), searchGridResult.getItemName());
-                this.userPicView.setVisibility(0);
-            } else {
-                if (searchGridResult.getItemType() != SearchGridQuery.SearchType.People.ordinal()) {
-                    this.userPicView.setVisibility(8);
-                    return;
-                }
-                ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID());
-                this.userPicView.setChatterID(userChatterID, searchGridResult.getItemName());
-                this.userPicView.setVisibility(0);
-                this.chatterNameRetriever = new ChatterNameRetriever(userChatterID, this, UIThreadExecutor.getInstance(), false);
-                this.chatterNameRetriever.subscribe();
-            }
+            this.target = null;
+            searchViewHolder.resultItemName = null;
+            searchViewHolder.userPicView = null;
+            searchViewHolder.resultMemberCount = null;
         }
+    }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
-        public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
-            String resolvedName;
-            if (chatterNameRetriever != this.chatterNameRetriever || (resolvedName = chatterNameRetriever.getResolvedName()) == null) {
-                return;
-            }
-            this.resultItemName.setText(resolvedName);
-        }
 
-        @Override // android.view.View.OnClickListener
-        public void onClick(View view) {
-            if (SearchGridAdapter.this.onSearchResultClickListener == null || this.searchGridResult == null) {
-                return;
-            }
-            SearchGridAdapter.this.onSearchResultClickListener.onSearchResultClicked(this.searchGridResult);
-        }
+    UUID getAgentUUID() {
+        return this.agentUUID;
+    }
 
-        void onRecycled() {
-            this.userPicView.setChatterID(null, null);
-            if (this.chatterNameRetriever != null) {
-                this.chatterNameRetriever.dispose();
-                this.chatterNameRetriever = null;
-            }
-            this.searchGridResult = null;
-        }
+    OnSearchResultClickListener getOnSearchResultClickListener() {
+        return this.onSearchResultClickListener;
     }
 
     SearchGridAdapter(Context context, UUID uuid, OnSearchResultClickListener onSearchResultClickListener) {
@@ -146,7 +102,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     public SearchViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new SearchViewHolder(this.inflater.inflate(R.layout.search_result_item, viewGroup, false));
+        return new SearchViewHolder(this, this.inflater.inflate(R.layout.search_result_item, viewGroup, false));
     }
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter

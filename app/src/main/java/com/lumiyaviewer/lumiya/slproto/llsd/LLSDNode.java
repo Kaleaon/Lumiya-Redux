@@ -38,7 +38,7 @@ import org.xmlpull.v1.XmlSerializer;
 public abstract class LLSDNode {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f114x653d09df = null;
+    private static /* synthetic */ int[] f114x653d09df = null;
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
     private static /* synthetic */ int[] m205x70385c83() {
@@ -161,27 +161,8 @@ public abstract class LLSDNode {
     }
 
     public static LLSDNode fromBinaryFile(File file) throws LLSDXMLException {
-        DataInputStream dataInputStream;
-        try {
-            try {
-                dataInputStream = new DataInputStream(new FileInputStream(file));
-            } catch (Throwable th) {
-                th = th;
-                dataInputStream = null;
-            }
-            try {
-                LLSDNode fromBinary = fromBinary(dataInputStream);
-                if (dataInputStream != null) {
-                    dataInputStream.close();
-                }
-                return fromBinary;
-            } catch (Throwable th2) {
-                th = th2;
-                if (dataInputStream != null) {
-                    dataInputStream.close();
-                }
-                throw th;
-            }
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
+            return fromBinary(dataInputStream);
         } catch (IOException e) {
             LLSDXMLException lLSDXMLException = new LLSDXMLException(e.getMessage());
             lLSDXMLException.initCause(e);

@@ -36,22 +36,6 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
     private final Context context;
     private ProgressDialog progressDialog = null;
 
-    protected static class UploadImageResult {
-
-        @Nullable
-        public final String errorMessage;
-        public final boolean success;
-
-        private UploadImageResult(boolean z, @Nullable String str) {
-            this.success = z;
-            this.errorMessage = str;
-        }
-
-        /* synthetic */ UploadImageResult(boolean z, String str, UploadImageResult uploadImageResult) {
-            this(z, str);
-        }
-    }
-
     public UploadImageAsyncTask(Context context, UUID uuid) {
         this.context = context;
         this.agentUUID = uuid;
@@ -184,7 +168,7 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
             i++;
             z2 = z;
         }
-        return new UploadImageResult(z2, str2, null);
+        return new UploadImageResult(z2, str2);
     }
 
     /* JADX INFO: Access modifiers changed from: protected */
