@@ -181,7 +181,7 @@ public class SLSearch extends SLModule {
     private void updateSearchResults(SearchGridResultDao searchGridResultDao, SearchGridQuery searchGridQuery) {
         if (this.searchResultHandler != null) {
             this.searchResultHandler.onResultData(searchGridQuery, searchGridResultDao.queryBuilder().where(SearchGridResultDao.Properties.SearchUUID.eq(searchGridQuery.searchUUID()), new WhereCondition[0]).orderAsc(SearchGridResultDao.Properties.LevensteinDistance).listLazyUncached());
-            searchGridResultDao.queryBuilder().where(SearchGridResultDao.Properties.SearchUUID.notEq(searchGridQuery.searchUUID()), new WhereCondition[0]).buildDelete().executeDeleteWithoutDetachingEntities();
+            this.userManager.getSearchManager().getSearchRepository().deleteOtherQueries(searchGridQuery.searchUUID());
         }
     }
 
@@ -196,7 +196,7 @@ public class SLSearch extends SLModule {
         for (DirGroupsReply.QueryReplies queryReplies : dirGroupsReply.QueryReplies_Fields) {
             if (!queryReplies.GroupID.equals(UUIDPool.ZeroUUID)) {
                 String stringFromVariableOEM = SLMessage.stringFromVariableOEM(queryReplies.GroupName);
-                searchGridResultDao.insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.Groups.ordinal(), queryReplies.GroupID, stringFromVariableOEM, LevensteinDistance.computeLevensteinDistance(stringFromVariableOEM, searchGridQuery.searchText()), Integer.valueOf(queryReplies.Members)));
+                this.userManager.getSearchManager().getSearchRepository().insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.Groups.ordinal(), queryReplies.GroupID, stringFromVariableOEM, LevensteinDistance.computeLevensteinDistance(stringFromVariableOEM, searchGridQuery.searchText()), Integer.valueOf(queryReplies.Members)));
             }
         }
         updateSearchResults(searchGridResultDao, searchGridQuery);
@@ -214,7 +214,7 @@ public class SLSearch extends SLModule {
             UUID uuid2 = queryReplies.AgentID;
             if (uuid2.getLeastSignificantBits() != 0 || uuid2.getMostSignificantBits() != 0) {
                 String str = SLMessage.stringFromVariableOEM(queryReplies.FirstName) + " " + SLMessage.stringFromVariableOEM(queryReplies.LastName);
-                searchGridResultDao.insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.People.ordinal(), uuid2, str, LevensteinDistance.computeLevensteinDistance(str, searchGridQuery.searchText()), 0));
+                this.userManager.getSearchManager().getSearchRepository().insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.People.ordinal(), uuid2, str, LevensteinDistance.computeLevensteinDistance(str, searchGridQuery.searchText()), 0));
             }
         }
         updateSearchResults(searchGridResultDao, searchGridQuery);
@@ -231,7 +231,7 @@ public class SLSearch extends SLModule {
                 for (DirPlacesReply.QueryReplies queryReplies : dirPlacesReply.QueryReplies_Fields) {
                     if (!queryReplies.ParcelID.equals(UUIDPool.ZeroUUID)) {
                         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(queryReplies.Name);
-                        searchGridResultDao.insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.Places.ordinal(), queryReplies.ParcelID, stringFromVariableOEM, LevensteinDistance.computeLevensteinDistance(stringFromVariableOEM, searchGridQuery.searchText()), 0));
+                        this.userManager.getSearchManager().getSearchRepository().insert(new SearchGridResult(null, uuid, SearchGridQuery.SearchType.Places.ordinal(), queryReplies.ParcelID, stringFromVariableOEM, LevensteinDistance.computeLevensteinDistance(stringFromVariableOEM, searchGridQuery.searchText()), 0));
                     }
                 }
                 updateSearchResults(searchGridResultDao, searchGridQuery);

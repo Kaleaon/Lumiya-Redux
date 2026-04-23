@@ -1,6 +1,9 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
+import com.lumiyaviewer.lumiya.dao.DaoManager;
 import com.lumiyaviewer.lumiya.dao.DaoSession;
+import com.lumiyaviewer.lumiya.data.repository.SearchGridResultRepositoryAdapter;
+import com.lumiyaviewer.lumiya.data.room.LumiyaRoomDatabase;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.dao.SearchGridResultDao;
 import com.lumiyaviewer.lumiya.react.DisposeHandler;
@@ -15,10 +18,13 @@ public class SearchManager {
     private final Executor dbExecutor;
     private final SearchGridResultDao searchGridResultDao;
     private final SubscriptionPool<SearchGridQuery, LazyList<SearchGridResult>> searchResults = new SubscriptionPool<>();
+    private final SearchGridResultRepositoryAdapter searchRepository;
 
     public SearchManager(@Nonnull UserManager userManager, @Nonnull DaoSession daoSession) {
         this.dbExecutor = userManager.getDatabaseExecutor();
         this.searchGridResultDao = daoSession.getSearchGridResultDao();
+        LumiyaRoomDatabase roomDb = DaoManager.getRoomDatabase(daoSession);
+        this.searchRepository = new SearchGridResultRepositoryAdapter(this.searchGridResultDao, roomDb != null ? roomDb.searchGridResultDao() : null);
         this.searchResults.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bhNr-B7VMDi5fNhRKl1Wi5s6H9k
             private final /* synthetic */ void $m$0(Object obj) {
                 SearchManager.m360x60619dda((LazyList) obj);
@@ -41,6 +47,10 @@ public class SearchManager {
 
     public SearchGridResultDao getSearchGridResultDao() {
         return this.searchGridResultDao;
+    }
+
+    public SearchGridResultRepositoryAdapter getSearchRepository() {
+        return this.searchRepository;
     }
 
     public SubscriptionPool<SearchGridQuery, LazyList<SearchGridResult>> searchResults() {
