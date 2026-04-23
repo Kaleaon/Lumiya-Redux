@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.NFC" />
+    <!-- Required on Android 13+ (API 33) to display IM / friend / teleport-offer notifications. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
     <!-- Keep VR-related features optional so OpenXR/Cardboard-capable devices are not filtered out. -->
     <uses-feature android:name="android.software.vr.mode" android:required="false" />

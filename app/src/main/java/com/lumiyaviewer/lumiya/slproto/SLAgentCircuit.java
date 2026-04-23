@@ -2016,7 +2016,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
         LLVector3 position = this.modules.avatarControl.getAgentPosition().getPosition();
         try {
-            return String.format("http://maps.secondlife.com/secondlife/%s/%d/%d/%d", URLEncoder.encode(this.regionName, "UTF-8"), Integer.valueOf((int) position.x), Integer.valueOf((int) position.y), Integer.valueOf((int) position.z));
+            return String.format("https://maps.secondlife.com/secondlife/%s/%d/%d/%d", URLEncoder.encode(this.regionName, "UTF-8"), Integer.valueOf((int) position.x), Integer.valueOf((int) position.y), Integer.valueOf((int) position.z));
         } catch (UnsupportedEncodingException e) {
             return null;
         }

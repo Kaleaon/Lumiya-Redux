@@ -41,7 +41,19 @@ public class SLCaps {
         HomeLocation,
         ProvisionVoiceAccountRequest,
         ParcelVoiceInfoRequest,
-        ChatSessionRequest;
+        ChatSessionRequest,
+        // Modern caps requested by the simulator-side capability exchange.
+        // Unsupported caps silently remain null; call sites guard on this.
+        // See docs/secondlife_apk_2026_analysis.md for evidence.
+        ViewerAsset,
+        SimulatorFeatures,
+        AgentProfile,
+        MapLayer,
+        ReadOfflineMsgs,
+        MeshUploadFlag,
+        RenderMaterials,
+        GetObjectCost,
+        GetObjectPhysicsData;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         public static SLCapability[] valuesCustom() {
