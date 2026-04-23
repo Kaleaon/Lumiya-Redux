@@ -14,6 +14,7 @@ import android.os.Handler;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
+import com.lumiyaviewer.lumiya.render.backend.filament.FilamentBackendRuntime;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatar;
@@ -78,6 +79,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     private final int fontSize;
     private long lastFrameTime;
     private final boolean requestGL20;
+    private final boolean requestAngle;
+    private final GlobalOptions.RenderEngine preferredRenderEngine;
     private final Handler stateHandler;
     private final SynchronousExecutor renderThreadExecutor = new SynchronousExecutor();
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(this.renderThreadExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.render.-$Lambda$8oUVvA5ObkigeJxIgo2HrzT6_jA
@@ -131,6 +134,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     private int[] Framebuffers = null;
     private int[] Renderbuffers = null;
     private int[] Colorbuffers = null;
+    private final FilamentBackendRuntime filamentBackendRuntime = new FilamentBackendRuntime();
+    private volatile boolean filamentBackendEnabled = false;
     private HeadTransformCompat headTransformCompat = null;
     private final int[] systemFramebuffer = new int[1];
     private final Runnable initSpatialIndexRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.-$Lambda$8oUVvA5ObkigeJxIgo2HrzT6_jA.1
@@ -155,6 +160,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.stateHandler = handler;
         this.requestGL20 = z;
         this.fontSize = i;
+        this.requestAngle = GlobalOptions.getInstance().getRequestAngle();
+        this.preferredRenderEngine = GlobalOptions.getInstance().getRenderEngine();
         this.agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID());
     }
 
@@ -318,6 +325,9 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     @Override // android.opengl.GLSurfaceView.EGLContextFactory
     public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
         Debug.Printf("EGL: createContext called.", new Object[0]);
+        if (this.requestAngle) {
+            Debug.AlwaysPrintf("EGL: ANGLE requested via settings. Device support is validated at runtime.", new Object[0]);
+        }
         if (this.requestGL20 && Build.VERSION.SDK_INT >= 18) {
             Debug.Printf("EGL: trying to create 3.0 context.", new Object[0]);
             EGLContext eglCreateContext = egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
@@ -713,6 +723,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                     setIsFlinging(this.avatarControl.getAgentAndCameraPosition(renderContext.myAviPosition, this.cameraParams));
                 }
             }
+            if (this.filamentBackendEnabled) {
+                this.filamentBackendRuntime.getCameraSyncBridge().syncFrom(this.cameraParams);
+                this.filamentBackendRuntime.sampleRuntimeStability();
+            }
             renderContext.frameCamera.set(this.cameraParams.getPosition());
             if (headTransformCompat != null) {
                 renderContext.glModelMultMatrixf(headTransformCompat.headTransformMatrix, 0);
@@ -764,6 +778,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
 
     public void onRendererShutdown() {
         PrimComputeExecutor.getInstance().resume();
+        this.filamentBackendEnabled = false;
         SpatialIndex.getInstance().DisableObjectIndex(this);
         RenderContext andSet = this.renderContext.getAndSet(null);
         if (andSet != null) {
@@ -910,6 +925,19 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             z2 = z5;
         }
         Debug.Printf("Renderer: VBO support %s, GL11 %s, GL30 %s", Boolean.valueOf(z2), Boolean.valueOf(z4), Boolean.valueOf(this.createdGL30));
+        if (this.preferredRenderEngine == GlobalOptions.RenderEngine.filament_experimental) {
+            try {
+                this.filamentBackendRuntime.initialize(this.requestAngle, false);
+                this.filamentBackendEnabled = true;
+                Debug.AlwaysPrintf("Renderer: Filament experimental backend requested and initialized.", new Object[0]);
+            } catch (Exception e) {
+                this.filamentBackendEnabled = false;
+                this.filamentBackendRuntime.reportStartupFallback(this.requestAngle);
+                Debug.Warning(new RuntimeException("Renderer: Filament init failed, falling back to legacy GLES path.", e));
+            }
+        } else {
+            this.filamentBackendEnabled = false;
+        }
         RenderContext renderContext = new RenderContext(eGLConfig, glGetString2, this.createdGL30, this.requestGL20, z4, z2, this.avatarCountLimit, GlobalOptions.getInstance().getTerrainTextures(), this.fontSize, z, this);
         Debug.AlwaysPrintf("Renderer: created context, GL30 %b, GL20 %b", Boolean.valueOf(renderContext.hasGL30), Boolean.valueOf(renderContext.hasGL20));
         if (renderContext.hasGL20) {
