@@ -21,7 +21,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /* loaded from: classes.dex */
-public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAdapter.TransactionViewHolder> {
+public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 
@@ -33,36 +33,6 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
     interface OnTransactionClickListener {
         void onTransactionClicked(MoneyTransaction moneyTransaction);
     }
-
-    public class TransactionViewHolder_ViewBinding implements Unbinder {
-        private TransactionViewHolder target;
-
-        @UiThread
-        public TransactionViewHolder_ViewBinding(TransactionViewHolder transactionViewHolder, View view) {
-            this.target = transactionViewHolder;
-            transactionViewHolder.userName = (TextView) Utils.findRequiredViewAsType(view, R.id.user_name, "field 'userName'", TextView.class);
-            transactionViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
-            transactionViewHolder.timestampTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.timeStampTextView, "field 'timestampTextView'", TextView.class);
-            transactionViewHolder.amountTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.amountTextView, "field 'amountTextView'", TextView.class);
-            transactionViewHolder.finalBalanceTextView = (TextView) Utils.findRequiredViewAsType(view, R.id.finalBalanceTextView, "field 'finalBalanceTextView'", TextView.class);
-        }
-
-        @Override // butterknife.Unbinder
-        @CallSuper
-        public void unbind() {
-            TransactionViewHolder transactionViewHolder = this.target;
-            if (transactionViewHolder == null) {
-                throw new IllegalStateException("Bindings already cleared.");
-            }
-            this.target = null;
-            transactionViewHolder.userName = null;
-            transactionViewHolder.userPicView = null;
-            transactionViewHolder.timestampTextView = null;
-            transactionViewHolder.amountTextView = null;
-            transactionViewHolder.finalBalanceTextView = null;
-        }
-    }
-
 
     UUID getAgentUUID() {
         return this.agentUUID;

@@ -21,7 +21,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /* loaded from: classes.dex */
-class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder> {
+class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 
@@ -33,32 +33,6 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
     interface OnSearchResultClickListener {
         void onSearchResultClicked(SearchGridResult searchGridResult);
     }
-
-    public class SearchViewHolder_ViewBinding implements Unbinder {
-        private SearchViewHolder target;
-
-        @UiThread
-        public SearchViewHolder_ViewBinding(SearchViewHolder searchViewHolder, View view) {
-            this.target = searchViewHolder;
-            searchViewHolder.resultItemName = (TextView) Utils.findRequiredViewAsType(view, R.id.result_item_name, "field 'resultItemName'", TextView.class);
-            searchViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
-            searchViewHolder.resultMemberCount = (TextView) Utils.findRequiredViewAsType(view, R.id.result_member_count, "field 'resultMemberCount'", TextView.class);
-        }
-
-        @Override // butterknife.Unbinder
-        @CallSuper
-        public void unbind() {
-            SearchViewHolder searchViewHolder = this.target;
-            if (searchViewHolder == null) {
-                throw new IllegalStateException("Bindings already cleared.");
-            }
-            this.target = null;
-            searchViewHolder.resultItemName = null;
-            searchViewHolder.userPicView = null;
-            searchViewHolder.resultMemberCount = null;
-        }
-    }
-
 
     UUID getAgentUUID() {
         return this.agentUUID;
