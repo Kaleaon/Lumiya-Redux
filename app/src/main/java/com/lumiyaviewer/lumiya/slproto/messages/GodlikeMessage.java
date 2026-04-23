@@ -37,7 +37,7 @@ public class GodlikeMessage extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 52 + 1;
-        Iterator<T> it = this.ParamList_Fields.iterator();
+        Iterator<?> it = this.ParamList_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {
@@ -63,7 +63,7 @@ public class GodlikeMessage extends SLMessage {
         packVariable(byteBuffer, this.MethodData_Field.Method, 1);
         packUUID(byteBuffer, this.MethodData_Field.Invoice);
         byteBuffer.put((byte) this.ParamList_Fields.size());
-        Iterator<T> it = this.ParamList_Fields.iterator();
+        Iterator<?> it = this.ParamList_Fields.iterator();
         while (it.hasNext()) {
             packVariable(byteBuffer, ((ParamList) it.next()).Parameter, 1);
         }

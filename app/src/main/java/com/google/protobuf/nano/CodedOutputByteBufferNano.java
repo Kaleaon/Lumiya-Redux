@@ -276,10 +276,11 @@ public final class CodedOutputByteBufferNano {
         int length = charSequence.length();
         int i5 = i + i2;
         while (i4 < length && i4 + i < i5) {
-            if (charSequence.charAt(i4) >= 128) {
+            char charAt = charSequence.charAt(i4);
+            if (charAt >= 128) {
                 break;
             }
-            bArr[i + i4] = (byte) r1;
+            bArr[i + i4] = (byte) charAt;
             i4++;
         }
         if (i4 == length) {

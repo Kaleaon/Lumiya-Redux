@@ -49,7 +49,7 @@ public class FetchInventoryReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 21;
-        Iterator<T> it = this.InventoryData_Fields.iterator();
+        Iterator<?> it = this.InventoryData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

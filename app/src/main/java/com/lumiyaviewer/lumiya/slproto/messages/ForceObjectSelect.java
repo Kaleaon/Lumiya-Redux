@@ -41,7 +41,7 @@ public class ForceObjectSelect extends SLMessage {
         byteBuffer.put((byte) -51);
         packBoolean(byteBuffer, this.Header_Field.ResetList);
         byteBuffer.put((byte) this.Data_Fields.size());
-        Iterator<T> it = this.Data_Fields.iterator();
+        Iterator<?> it = this.Data_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((Data) it.next()).LocalID);
         }

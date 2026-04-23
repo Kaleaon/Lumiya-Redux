@@ -35,7 +35,7 @@ public class UUIDNameRequest extends SLMessage {
         byteBuffer.put((byte) 0);
         byteBuffer.put((byte) -21);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
-        Iterator<T> it = this.UUIDNameBlock_Fields.iterator();
+        Iterator<?> it = this.UUIDNameBlock_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((UUIDNameBlock) it.next()).ID);
         }

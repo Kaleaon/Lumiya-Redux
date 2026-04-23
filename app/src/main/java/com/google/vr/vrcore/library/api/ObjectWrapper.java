@@ -18,7 +18,7 @@ public final class ObjectWrapper<T> extends IObjectWrapper.Stub {
 
     public static <T> T unwrap(IObjectWrapper iObjectWrapper, Class<T> cls) {
         if (iObjectWrapper instanceof ObjectWrapper) {
-            return ((ObjectWrapper) iObjectWrapper).wrappedObject;
+            return (T) ((ObjectWrapper) iObjectWrapper).wrappedObject;
         }
         IBinder asBinder = iObjectWrapper.asBinder();
         Field[] declaredFields = asBinder.getClass().getDeclaredFields();

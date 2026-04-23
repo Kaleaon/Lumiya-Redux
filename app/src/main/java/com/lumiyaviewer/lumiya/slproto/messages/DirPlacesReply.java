@@ -42,7 +42,7 @@ public class DirPlacesReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int size = (this.QueryData_Fields.size() * 16) + 21 + 1;
-        Iterator<T> it = this.QueryReplies_Fields.iterator();
+        Iterator<?> it = this.QueryReplies_Fields.iterator();
         while (true) {
             int i = size;
             if (!it.hasNext()) {
@@ -64,7 +64,7 @@ public class DirPlacesReply extends SLMessage {
         byteBuffer.put((byte) 35);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         byteBuffer.put((byte) this.QueryData_Fields.size());
-        Iterator<T> it = this.QueryData_Fields.iterator();
+        Iterator<?> it = this.QueryData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((QueryData) it.next()).QueryID);
         }
@@ -77,7 +77,7 @@ public class DirPlacesReply extends SLMessage {
             packFloat(byteBuffer, queryReplies.Dwell);
         }
         byteBuffer.put((byte) this.StatusData_Fields.size());
-        Iterator<T> it2 = this.StatusData_Fields.iterator();
+        Iterator<?> it2 = this.StatusData_Fields.iterator();
         while (it2.hasNext()) {
             packInt(byteBuffer, ((StatusData) it2.next()).Status);
         }

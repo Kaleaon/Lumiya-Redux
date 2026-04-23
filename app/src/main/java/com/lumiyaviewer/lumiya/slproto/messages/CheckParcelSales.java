@@ -34,7 +34,7 @@ public class CheckParcelSales extends SLMessage {
         byteBuffer.put((byte) 0);
         byteBuffer.put((byte) -31);
         byteBuffer.put((byte) this.RegionData_Fields.size());
-        Iterator<T> it = this.RegionData_Fields.iterator();
+        Iterator<?> it = this.RegionData_Fields.iterator();
         while (it.hasNext()) {
             packLong(byteBuffer, ((RegionData) it.next()).RegionHandle);
         }

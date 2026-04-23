@@ -32,7 +32,7 @@ public class AgentCachedTextureResponse extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 41;
-        Iterator<T> it = this.WearableData_Fields.iterator();
+        Iterator<?> it = this.WearableData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

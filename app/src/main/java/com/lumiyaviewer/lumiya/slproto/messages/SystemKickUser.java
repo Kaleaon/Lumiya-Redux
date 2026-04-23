@@ -35,7 +35,7 @@ public class SystemKickUser extends SLMessage {
         byteBuffer.put((byte) 0);
         byteBuffer.put((byte) -90);
         byteBuffer.put((byte) this.AgentInfo_Fields.size());
-        Iterator<T> it = this.AgentInfo_Fields.iterator();
+        Iterator<?> it = this.AgentInfo_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((AgentInfo) it.next()).AgentID);
         }

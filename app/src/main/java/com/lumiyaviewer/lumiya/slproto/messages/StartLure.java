@@ -53,7 +53,7 @@ public class StartLure extends SLMessage {
         packByte(byteBuffer, (byte) this.Info_Field.LureType);
         packVariable(byteBuffer, this.Info_Field.Message, 1);
         byteBuffer.put((byte) this.TargetData_Fields.size());
-        Iterator<T> it = this.TargetData_Fields.iterator();
+        Iterator<?> it = this.TargetData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((TargetData) it.next()).TargetID);
         }

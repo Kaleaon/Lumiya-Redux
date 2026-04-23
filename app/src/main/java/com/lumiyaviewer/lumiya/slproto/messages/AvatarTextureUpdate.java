@@ -36,7 +36,7 @@ public class AvatarTextureUpdate extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 22;
-        Iterator<T> it = this.WearableData_Fields.iterator();
+        Iterator<?> it = this.WearableData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {
@@ -65,7 +65,7 @@ public class AvatarTextureUpdate extends SLMessage {
             packVariable(byteBuffer, wearableData.HostName, 1);
         }
         byteBuffer.put((byte) this.TextureData_Fields.size());
-        Iterator<T> it = this.TextureData_Fields.iterator();
+        Iterator<?> it = this.TextureData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((TextureData) it.next()).TextureID);
         }
