@@ -225,14 +225,14 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         intent.putExtra(PARCEL_DATA_KEY, this.parcelData);
         intent.putExtra(StreamingMediaService.MEDIA_URL_KEY, this.parcelData.getMediaURL());
         intent.putExtra(StreamingMediaService.LOCATION_NAME_KEY, this.parcelData.getName());
-        getContext().startService(intent);
+        StreamingMediaService.startServiceCompat(getContext(), intent);
     }
 
     @OnClick({R.id.parcel_media_stop_button})
     public void onParcelMediaStop() {
         Intent intent = new Intent(getContext(), (Class<?>) StreamingMediaService.class);
         intent.setAction("com.lumiyaviewer.lumiya.ACTION_STOP_MEDIA");
-        getContext().startService(intent);
+        StreamingMediaService.startServiceCompat(getContext(), intent);
     }
 
     @OnClick({R.id.parcel_set_home_button})

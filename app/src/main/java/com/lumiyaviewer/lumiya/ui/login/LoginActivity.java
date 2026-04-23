@@ -155,7 +155,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         intent.putExtra("start_location", loginStartLocation);
         intent.putExtra("login_url", selectedGrid.getLoginURL());
         intent.putExtra("grid_name", selectedGrid.getGridName());
-        startService(intent);
+        GridConnectionService.startServiceCompat(this, intent);
         showProgressView(true);
         ((TextView) findViewById(R.id.connect_status_text)).setText(R.string.status_logging_in);
     }
