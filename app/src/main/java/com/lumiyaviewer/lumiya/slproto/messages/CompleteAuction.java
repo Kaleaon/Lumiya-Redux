@@ -35,7 +35,7 @@ public class CompleteAuction extends SLMessage {
         byteBuffer.put((byte) 0);
         byteBuffer.put((byte) -25);
         byteBuffer.put((byte) this.ParcelData_Fields.size());
-        Iterator<T> it = this.ParcelData_Fields.iterator();
+        Iterator<?> it = this.ParcelData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((ParcelData) it.next()).ParcelID);
         }

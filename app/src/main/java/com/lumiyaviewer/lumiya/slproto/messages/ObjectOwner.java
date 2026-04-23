@@ -55,7 +55,7 @@ public class ObjectOwner extends SLMessage {
         packUUID(byteBuffer, this.HeaderData_Field.OwnerID);
         packUUID(byteBuffer, this.HeaderData_Field.GroupID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ObjectLocalID);
         }

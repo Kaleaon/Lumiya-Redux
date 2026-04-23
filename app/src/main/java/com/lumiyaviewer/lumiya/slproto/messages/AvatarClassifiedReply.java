@@ -30,7 +30,7 @@ public class AvatarClassifiedReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 37;
-        Iterator<T> it = this.Data_Fields.iterator();
+        Iterator<?> it = this.Data_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

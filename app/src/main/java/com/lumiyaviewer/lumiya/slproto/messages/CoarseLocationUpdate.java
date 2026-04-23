@@ -56,7 +56,7 @@ public class CoarseLocationUpdate extends SLMessage {
         packShort(byteBuffer, (short) this.Index_Field.You);
         packShort(byteBuffer, (short) this.Index_Field.Prey);
         byteBuffer.put((byte) this.AgentData_Fields.size());
-        Iterator<T> it = this.AgentData_Fields.iterator();
+        Iterator<?> it = this.AgentData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((AgentData) it.next()).AgentID);
         }

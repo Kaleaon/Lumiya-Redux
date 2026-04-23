@@ -28,7 +28,7 @@ public class NameValuePair extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 21;
-        Iterator<T> it = this.NameValueData_Fields.iterator();
+        Iterator<?> it = this.NameValueData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {
@@ -50,7 +50,7 @@ public class NameValuePair extends SLMessage {
         byteBuffer.put((byte) 73);
         packUUID(byteBuffer, this.TaskData_Field.ID);
         byteBuffer.put((byte) this.NameValueData_Fields.size());
-        Iterator<T> it = this.NameValueData_Fields.iterator();
+        Iterator<?> it = this.NameValueData_Fields.iterator();
         while (it.hasNext()) {
             packVariable(byteBuffer, ((NameValueData) it.next()).NVPair, 2);
         }

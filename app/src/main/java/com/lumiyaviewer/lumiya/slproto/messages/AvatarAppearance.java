@@ -58,7 +58,7 @@ public class AvatarAppearance extends SLMessage {
         packBoolean(byteBuffer, this.Sender_Field.IsTrial);
         packVariable(byteBuffer, this.ObjectData_Field.TextureEntry, 2);
         byteBuffer.put((byte) this.VisualParam_Fields.size());
-        Iterator<T> it = this.VisualParam_Fields.iterator();
+        Iterator<?> it = this.VisualParam_Fields.iterator();
         while (it.hasNext()) {
             packByte(byteBuffer, (byte) ((VisualParam) it.next()).ParamValue);
         }

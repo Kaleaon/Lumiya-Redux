@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.notify;
 
 import android.content.Context;
-import android.os.Build;
 import androidx.fragment.app.Fragment;
 import com.google.common.collect.ImmutableSet;
 import com.lumiyaviewer.lumiya.R;
@@ -77,11 +76,7 @@ public class NotificationChannels {
     }
 
     private NotificationChannels() {
-        if (Build.VERSION.SDK_INT < 26) {
-            this.channelManager = new DummyNotificationChannelManager();
-        } else {
-            this.channelManager = new OreoNotificationChannelManager();
-        }
+        this.channelManager = new OreoNotificationChannelManager();
     }
 
     /* synthetic */ NotificationChannels(NotificationChannels notificationChannels) {

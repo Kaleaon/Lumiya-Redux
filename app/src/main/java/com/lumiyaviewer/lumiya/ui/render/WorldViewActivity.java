@@ -344,12 +344,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private final Runnable buttonsRestoreTask = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.4
         @Override // java.lang.Runnable
         public void run() {
-            if (Build.VERSION.SDK_INT >= 11) {
-                if (WorldViewActivity.this.buttonsFadeAnimator != null) {
-                    WorldViewActivity.this.buttonsFadeAnimator.cancel();
-                }
-                WorldViewActivity.this.insetsBackground.setAlpha(1.0f);
+            if (WorldViewActivity.this.buttonsFadeAnimator != null) {
+                WorldViewActivity.this.buttonsFadeAnimator.cancel();
             }
+            WorldViewActivity.this.insetsBackground.setAlpha(1.0f);
         }
     };
     private final View.OnTouchListener worldViewTouchListener = new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.5
@@ -812,7 +810,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     public void startFadingButtons() {
-        if (Build.VERSION.SDK_INT < 11 || this.buttonsFadeAnimator == null) {
+        if (this.buttonsFadeAnimator == null) {
             return;
         }
         this.buttonsFadeAnimator.start();

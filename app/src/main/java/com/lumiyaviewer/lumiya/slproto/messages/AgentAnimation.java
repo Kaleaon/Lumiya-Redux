@@ -35,7 +35,7 @@ public class AgentAnimation extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int size = (this.AnimationList_Fields.size() * 17) + 34 + 1;
-        Iterator<T> it = this.PhysicalAvatarEventList_Fields.iterator();
+        Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
         while (true) {
             int i = size;
             if (!it.hasNext()) {
@@ -61,7 +61,7 @@ public class AgentAnimation extends SLMessage {
             packBoolean(byteBuffer, animationList.StartAnim);
         }
         byteBuffer.put((byte) this.PhysicalAvatarEventList_Fields.size());
-        Iterator<T> it = this.PhysicalAvatarEventList_Fields.iterator();
+        Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
         while (it.hasNext()) {
             packVariable(byteBuffer, ((PhysicalAvatarEventList) it.next()).TypeData, 1);
         }

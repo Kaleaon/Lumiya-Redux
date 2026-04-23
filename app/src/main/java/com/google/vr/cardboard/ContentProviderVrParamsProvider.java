@@ -43,14 +43,14 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
     private <T extends MessageNano> T readParams(T t, Uri uri, String str) {
         try {
             Cursor cursor = this.client.query(uri, null, str, null, null);
-            if (cursor == null) {
+            if (cursor == null || !cursor.moveToFirst()) {
                 String str2 = TAG;
                 String valueOf = String.valueOf(uri);
                 Log.e(str2, new StringBuilder(String.valueOf(valueOf).length() + 50).append("Invalid params result from ContentProvider query: ").append(valueOf).toString());
                 return null;
             }
             try {
-                if (!cursor.moveToFirst()) {
+                 if (!cursor.moveToFirst()) {
                     String str3 = TAG;
                     String valueOf2 = String.valueOf(uri);
                     Log.e(str3, new StringBuilder(String.valueOf(valueOf2).length() + 50).append("Invalid params result from ContentProvider query: ").append(valueOf2).toString());
@@ -84,7 +84,7 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
         } catch (RemoteException e) {
             Log.e(TAG, "Failed to write params to ContentProvider", e);
             return false;
-        } catch (SecurityException e2) {
+        } catch (SecurityException e) {
             Log.e(TAG, "Insufficient permissions to write params to ContentProvider", e2);
             return false;
         }

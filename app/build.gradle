@@ -7,6 +7,7 @@
 
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -15,8 +16,9 @@ android {
 
     defaultConfig {
         applicationId 'com.lumiyaviewer.lumiya'
-        minSdk 21            // raised from the shipped 14: GVR 1.200.0 needs 19+,
-                             // and modern AndroidX needs 21+
+        minSdk 26            // cleanup baseline: API 26+ only (notification channels,
+                             // scoped runtime behavior, and removal of pre-Oreo
+                             // compatibility branches)
         targetSdk 34
         versionCode 66
         versionName '3.4.2'
@@ -48,17 +50,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     // The decompilation holds a lot of raw types, unchecked casts, and dead
     // symbols that jadx couldn't erase. Don't block builds on them.
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
     }
-    compileOptions {
-        // silence javac lint on the decompiled tree
-        // (replaced below with explicit suppression in tasks.withType)
-    }
-
     packagingOptions {
         resources.excludes += [
             'META-INF/DEPENDENCIES',
@@ -79,6 +80,51 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
+}
+
+def kotlinPreferredPackageRoots = [
+    'com/lumiyaviewer/lumiya/vr/runtime',
+    'com/lumiyaviewer/lumiya/repository',
+    'com/lumiyaviewer/lumiya/ui/features'
+]
+
+tasks.register('enforceKotlinFirstPackages') {
+    group = 'verification'
+    description = 'Prevents new Java sources in packages that are Kotlin-first for gradual migration.'
+
+    doLast {
+        def kotlinPreferredJavaFiles = fileTree("$projectDir/src/main/java") {
+            include kotlinPreferredPackageRoots.collect { "${it}/**/*.java" }
+        }
+
+        def trackedJavaFiles = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'ls-files', 'src/main/java'
+            standardOutput = trackedJavaFiles
+        }
+
+        def trackedJavaPathSet = trackedJavaFiles
+            .toString('UTF-8')
+            .readLines()
+            .findAll { it.endsWith('.java') }
+            .toSet()
+
+        def newJavaFilesInKotlinRoots = kotlinPreferredJavaFiles.files.findAll { file ->
+            def repoRelativePath = project.relativePath(file)
+            !trackedJavaPathSet.contains(repoRelativePath)
+        }
+
+        if (!newJavaFilesInKotlinRoots.isEmpty()) {
+            throw new GradleException(
+                "Kotlin-first package policy violation. Convert new files in ${kotlinPreferredPackageRoots} to .kt (existing Java stays until touched). " +
+                    "Found new Java files: ${newJavaFilesInKotlinRoots*.absolutePath}"
+            )
+        }
+    }
+}
+
+tasks.named('check').configure {
+    dependsOn(tasks.named('enforceKotlinFirstPackages'))
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -115,6 +161,9 @@ tasks.withType(JavaCompile).configureEach {
 //  the remap (android.support → androidx).
 // -------------------------------------------------------------------------
 dependencies {
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.9.25')
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+
     // ── AndroidX (replaces every `android.support.*` and `android.arch.*`
     //    import in the decompilation; Jetifier rewrites the imports.)
     implementation 'androidx.appcompat:appcompat:1.6.1'

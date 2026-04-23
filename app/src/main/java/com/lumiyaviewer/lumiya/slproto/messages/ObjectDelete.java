@@ -46,7 +46,7 @@ public class ObjectDelete extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.AgentData_Field.Force);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ObjectLocalID);
         }

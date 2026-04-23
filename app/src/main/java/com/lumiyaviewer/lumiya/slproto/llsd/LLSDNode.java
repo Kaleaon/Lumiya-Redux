@@ -52,7 +52,7 @@ public abstract class LLSDNode {
         }
         try {
             iArr[LLSDContentTypeDetector.LLSDContentType.llsdXML.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
+        } catch (NoSuchFieldError e) {
         }
         f114x653d09df = iArr;
         return iArr;
@@ -183,7 +183,7 @@ public abstract class LLSDNode {
             return parseNode;
         } catch (IOException e) {
             throw new LLSDXMLException("Input stream error");
-        } catch (XmlPullParserException e2) {
+        } catch (XmlPullParserException e) {
             Debug.Log("XmlPullParserException: " + e2.getMessage());
             e2.printStackTrace();
             LLSDXMLException lLSDXMLException = new LLSDXMLException("Malformed XML");

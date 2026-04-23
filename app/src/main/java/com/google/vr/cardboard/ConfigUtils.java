@@ -110,17 +110,17 @@ public class ConfigUtils {
             String valueOf = String.valueOf(e.toString());
             Log.w(str, valueOf.length() == 0 ? new String("Error parsing protocol buffer: ") : "Error parsing protocol buffer: ".concat(valueOf));
             return null;
-        } catch (IOException e2) {
+        } catch (IOException e) {
             String str2 = TAG;
             String valueOf2 = String.valueOf(e2.toString());
             Log.w(str2, valueOf2.length() == 0 ? new String("Error reading parameters: ") : "Error reading parameters: ".concat(valueOf2));
             return null;
-        } catch (IllegalAccessException e3) {
+        } catch (IllegalAccessException e) {
             String str3 = TAG;
             String valueOf3 = String.valueOf(e3.toString());
             Log.w(str3, valueOf3.length() == 0 ? new String("Error accessing parameter type: ") : "Error accessing parameter type: ".concat(valueOf3));
             return null;
-        } catch (InstantiationException e4) {
+        } catch (InstantiationException e) {
             String str4 = TAG;
             String valueOf4 = String.valueOf(e4.toString());
             Log.w(str4, valueOf4.length() == 0 ? new String("Error creating parameters: ") : "Error creating parameters: ".concat(valueOf4));

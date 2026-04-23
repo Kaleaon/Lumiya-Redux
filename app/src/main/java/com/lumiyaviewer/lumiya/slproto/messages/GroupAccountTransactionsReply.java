@@ -42,7 +42,7 @@ public class GroupAccountTransactionsReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int length = this.MoneyData_Field.StartDate.length + 25 + 36 + 1;
-        Iterator<T> it = this.HistoryData_Fields.iterator();
+        Iterator<?> it = this.HistoryData_Fields.iterator();
         while (true) {
             int i = length;
             if (!it.hasNext()) {

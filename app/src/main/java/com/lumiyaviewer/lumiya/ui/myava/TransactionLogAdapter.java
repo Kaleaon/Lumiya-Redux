@@ -2,8 +2,6 @@ package com.lumiyaviewer.lumiya.ui.myava;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.CallSuper;
-import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -12,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import butterknife.internal.Utils;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
@@ -25,7 +21,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /* loaded from: classes.dex */
-public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
+public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAdapter.TransactionViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 

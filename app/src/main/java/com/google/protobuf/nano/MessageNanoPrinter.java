@@ -95,7 +95,7 @@ public final class MessageNanoPrinter {
                     return;
                 }
                 String deCamelCaseify = deCamelCaseify(str);
-                for (Map.Entry entry : ((Map) obj).entrySet()) {
+                for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
                     stringBuffer2.append(stringBuffer).append(deCamelCaseify).append(" <\n");
                     int length = stringBuffer.length();
                     stringBuffer.append(INDENT);

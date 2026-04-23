@@ -63,7 +63,7 @@ public class HeadTransform {
         }
         float[] fArr2 = this.headView;
         if (fArr2[0] + fArr2[5] + fArr2[10] >= 0.0f) {
-            float sqrt = (float) Math.sqrt(r0 + 1.0f);
+            float sqrt = (float) Math.sqrt((fArr2[0] + fArr2[5] + fArr2[10]) + 1.0f);
             f4 = 0.5f * sqrt;
             float f5 = 0.5f / sqrt;
             f2 = (fArr2[9] - fArr2[6]) * f5;

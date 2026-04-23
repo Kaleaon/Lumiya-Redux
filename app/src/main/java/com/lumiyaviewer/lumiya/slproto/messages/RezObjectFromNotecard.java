@@ -85,7 +85,7 @@ public class RezObjectFromNotecard extends SLMessage {
         packUUID(byteBuffer, this.NotecardData_Field.NotecardItemID);
         packUUID(byteBuffer, this.NotecardData_Field.ObjectID);
         byteBuffer.put((byte) this.InventoryData_Fields.size());
-        Iterator<T> it = this.InventoryData_Fields.iterator();
+        Iterator<?> it = this.InventoryData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((InventoryData) it.next()).ItemID);
         }

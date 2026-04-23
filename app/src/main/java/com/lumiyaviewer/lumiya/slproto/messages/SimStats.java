@@ -65,7 +65,7 @@ public class SimStats extends SLMessage {
         }
         packInt(byteBuffer, this.PidStat_Field.PID);
         byteBuffer.put((byte) this.RegionInfo_Fields.size());
-        Iterator<T> it = this.RegionInfo_Fields.iterator();
+        Iterator<?> it = this.RegionInfo_Fields.iterator();
         while (it.hasNext()) {
             packLong(byteBuffer, ((RegionInfo) it.next()).RegionFlagsExtended);
         }

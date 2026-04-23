@@ -2,8 +2,6 @@ package com.lumiyaviewer.lumiya.ui.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.CallSuper;
-import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import butterknife.internal.Utils;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
@@ -25,7 +21,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 /* loaded from: classes.dex */
-class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
+class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 

@@ -50,12 +50,12 @@ public class RemoveInventoryObjects extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.FolderData_Fields.size());
-        Iterator<T> it = this.FolderData_Fields.iterator();
+        Iterator<?> it = this.FolderData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((FolderData) it.next()).FolderID);
         }
         byteBuffer.put((byte) this.ItemData_Fields.size());
-        Iterator<T> it2 = this.ItemData_Fields.iterator();
+        Iterator<?> it2 = this.ItemData_Fields.iterator();
         while (it2.hasNext()) {
             packUUID(byteBuffer, ((ItemData) it2.next()).ItemID);
         }

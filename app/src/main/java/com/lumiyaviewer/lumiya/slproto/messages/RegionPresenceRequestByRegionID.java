@@ -36,7 +36,7 @@ public class RegionPresenceRequestByRegionID extends SLMessage {
         byteBuffer.put((byte) 0);
         byteBuffer.put(Ascii.SO);
         byteBuffer.put((byte) this.RegionData_Fields.size());
-        Iterator<T> it = this.RegionData_Fields.iterator();
+        Iterator<?> it = this.RegionData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((RegionData) it.next()).RegionID);
         }

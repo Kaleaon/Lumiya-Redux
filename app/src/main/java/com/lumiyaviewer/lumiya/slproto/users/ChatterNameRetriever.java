@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.dao.UserName;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
-import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.messages.GroupProfileReply;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;

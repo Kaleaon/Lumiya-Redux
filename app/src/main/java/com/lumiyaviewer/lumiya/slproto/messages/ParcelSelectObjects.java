@@ -53,7 +53,7 @@ public class ParcelSelectObjects extends SLMessage {
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
         packInt(byteBuffer, this.ParcelData_Field.ReturnType);
         byteBuffer.put((byte) this.ReturnIDs_Fields.size());
-        Iterator<T> it = this.ReturnIDs_Fields.iterator();
+        Iterator<?> it = this.ReturnIDs_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((ReturnIDs) it.next()).ReturnID);
         }

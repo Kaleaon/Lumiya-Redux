@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f150xb1d54699 = null;
+    private static /* synthetic */ int[] f150xb1d54699 = null;
 
     @Nonnull
     public final UUID agentUUID;

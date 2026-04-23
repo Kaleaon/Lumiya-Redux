@@ -42,7 +42,7 @@ public class MergeParcel extends SLMessage {
         byteBuffer.put((byte) -33);
         packUUID(byteBuffer, this.MasterParcelData_Field.MasterID);
         byteBuffer.put((byte) this.SlaveParcelData_Fields.size());
-        Iterator<T> it = this.SlaveParcelData_Fields.iterator();
+        Iterator<?> it = this.SlaveParcelData_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((SlaveParcelData) it.next()).SlaveID);
         }

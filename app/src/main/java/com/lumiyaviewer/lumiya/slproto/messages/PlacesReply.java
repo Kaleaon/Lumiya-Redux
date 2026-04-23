@@ -48,7 +48,7 @@ public class PlacesReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 53;
-        Iterator<T> it = this.QueryData_Fields.iterator();
+        Iterator<?> it = this.QueryData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

@@ -45,7 +45,7 @@ public class GroupActiveProposalItemReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 57;
-        Iterator<T> it = this.ProposalData_Fields.iterator();
+        Iterator<?> it = this.ProposalData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {
