@@ -143,7 +143,8 @@ except for the few that are no longer distributed:
 
 ## Development tips
 
-- The project is built against `compileSdk 34`, `minSdk 21`, `targetSdk 34`. Minimum was raised from the shipped `14` because AndroidX requires 21 and GVR requires 19.
+- The project is built against `compileSdk 34`, `minSdk 26`, `targetSdk 34`.
+- Minimum SDK is intentionally pinned to Android 8.0 (API 26): this lets us remove legacy pre-Oreo compatibility branches and rely on framework notification channels/runtime behavior consistently across the app.
 - Release builds currently run with `minifyEnabled false` so stack traces stay readable. When you turn R8 back on, use `proguard-rules.pro` to keep classes reflected on by greenDAO, ButterKnife, JNI, and the Second Life JSON/LLSD types.
 - Run with `./gradlew :app:assembleDebug`. See `BUILD_STATUS.md` for the known set of remaining decomp artefacts.
 - For Second Life protocol debugging, keep `recovered/reference/message_template.msg` open in a split pane — the message classes under `slproto/messages/` are 1:1 with the blocks in that file.
