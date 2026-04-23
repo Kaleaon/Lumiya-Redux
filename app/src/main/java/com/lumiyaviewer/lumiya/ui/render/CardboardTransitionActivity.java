@@ -51,7 +51,9 @@ public class CardboardTransitionActivity extends AppCompatActivity {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_CardboardTransitionActivity_1411, reason: not valid java name */
     /* synthetic */ void m796x33a6fc46() {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getIntent());
-        Intent intent = new Intent(this, (Class<?>) CardboardActivity.class);
+        Intent intent = new Intent();
+        intent.setClassName(this, VrIntentContract.ALIAS_VR_ACTIVITY_CLASS);
+        intent.putExtra(VrIntentContract.EXTRA_VR_RUNTIME, VrIntentContract.sanitizeRuntime(getIntent().getStringExtra(VrIntentContract.EXTRA_VR_RUNTIME)));
         ActivityUtils.setActiveAgentID(intent, activeAgentID);
         intent.addFlags(16777216);
         startActivity(intent);

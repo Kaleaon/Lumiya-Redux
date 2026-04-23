@@ -6,6 +6,7 @@
     <uses-permission-sdk-23 android:name="android.permission.RECORD_AUDIO" />
     <uses-permission-sdk-23 android:name="android.permission.NFC" />
     <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
+    <!-- Keep VR-related features optional so OpenXR/Cardboard-capable devices are not filtered out. -->
     <uses-feature android:name="android.software.vr.mode" android:required="false" />
     <uses-feature android:name="android.hardware.vr.high_performance" android:required="false" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -23,13 +24,15 @@
         <activity android:label="Lumiya Viewer settings" android:name="com.lumiyaviewer.lumiya.ui.settings.SettingsActivity" android:exported="false" />
         <activity android:label="Lumiya Viewer: Streaming media" android:name="com.lumiyaviewer.lumiya.ui.media.StreamingMediaActivity" android:theme="@style/Theme.AppCompat.Dialog" android:exported="false" />
         <activity android:label="World View" android:name="com.lumiyaviewer.lumiya.ui.render.WorldViewActivity" android:theme="@style/Theme.Lumiya.NoActionBar" android:exported="false" />
-        <activity android:enableVrMode="@string/gvr_vr_mode_component" android:label="VR View" android:name="com.lumiyaviewer.lumiya.ui.render.CardboardActivity" android:screenOrientation="landscape" android:theme="@style/Theme.Lumiya.NoActionBar" android:exported="true">
+        <activity android:enableVrMode="@string/gvr_vr_mode_component" android:label="VR View" android:name="com.lumiyaviewer.lumiya.ui.render.CardboardActivity" android:screenOrientation="landscape" android:theme="@style/Theme.Lumiya.NoActionBar" android:exported="true" />
+        <activity-alias android:label="VR View" android:name="com.lumiyaviewer.lumiya.ui.render.VrActivity" android:targetActivity="com.lumiyaviewer.lumiya.ui.render.CardboardActivity" android:exported="true">
             <intent-filter>
+                <action android:name="com.lumiyaviewer.lumiya.ui.render.VrActivity" />
                 <action android:name="com.lumiyaviewer.lumiya.ui.render.CardboardActivity" />
                 <category android:name="com.google.intent.category.CARDBOARD" />
                 <category android:name="com.google.intent.category.DAYDREAM" />
             </intent-filter>
-        </activity>
+        </activity-alias>
         <activity android:label="VR View" android:name="com.lumiyaviewer.lumiya.ui.render.CardboardTransitionActivity" android:theme="@style/Theme.Lumiya.NoActionBar" android:exported="false" />
         <activity android:label="Minimap" android:name="com.lumiyaviewer.lumiya.ui.minimap.MinimapActivity" android:exported="false" />
         <activity android:label="Notecard" android:name="com.lumiyaviewer.lumiya.ui.inventory.NotecardEditActivity" android:exported="false" />
