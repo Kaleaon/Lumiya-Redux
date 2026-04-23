@@ -141,6 +141,10 @@ except for the few that are no longer distributed:
 | **Google VR SDK** | Shipped in-tree at `com/google/vr/` and `com/google/vrtoolkit/` plus `jniLibs/*/libgvr.so`. Google retired the SDK in 2019 and removed the Maven artefacts in 2021. Long-term replacement is the open [Google Cardboard SDK](https://github.com/googlevr/cardboard), which requires rewriting `CardboardActivity`. |
 | **protobuf-nano** | Shipped in-tree at `com/google/protobuf/nano/`. protobuf-javanano was discontinued. Only the GVR code uses it, so it lives and dies with the GVR migration. |
 
+## Protocol modernization guardrails
+
+For modernization work in protocol packages, use `docs/protocol_migration_conformance.md` as the required safety checklist. It maps LLSD/inventory classes to official `secondlife/viewer` and `secondlife/python-llsd` references, defines Room-entity annotation expectations for protocol-derived storage, and documents the conformance scripts run in CI.
+
 ## Development tips
 
 - The project is built against `compileSdk 34`, `minSdk 26`, `targetSdk 34`.

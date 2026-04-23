@@ -1,0 +1,33 @@
+name: Protocol Conformance
+
+on:
+  pull_request:
+    paths:
+      - 'app/src/main/java/com/lumiyaviewer/lumiya/slproto/**'
+      - 'app/src/main/java/com/lumiyaviewer/lumiya/orm/**'
+      - 'recovered/reference/message_template.msg'
+      - 'tools/protocol/**'
+      - 'docs/protocol_migration_conformance.md'
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'app/src/main/java/com/lumiyaviewer/lumiya/slproto/**'
+      - 'app/src/main/java/com/lumiyaviewer/lumiya/orm/**'
+      - 'recovered/reference/message_template.msg'
+      - 'tools/protocol/**'
+      - 'docs/protocol_migration_conformance.md'
+
+jobs:
+  protocol-conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run protocol conformance checks
+        run: tools/protocol/run_conformance.sh
