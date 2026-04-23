@@ -24,6 +24,9 @@ public class SLCaps {
     }
 
     public enum SLCapability {
+        // Caps actively used by Lumiya call sites. Preserve the order of
+        // the original set so that any serialized form keyed by ordinal
+        // (none today, but defensively) stays stable.
         EventQueueGet,
         GetTexture,
         UploadBakedTexture,
@@ -42,18 +45,113 @@ public class SLCaps {
         ProvisionVoiceAccountRequest,
         ParcelVoiceInfoRequest,
         ChatSessionRequest,
-        // Modern caps requested by the simulator-side capability exchange.
-        // Unsupported caps silently remain null; call sites guard on this.
-        // See docs/secondlife_apk_2026_analysis.md for evidence.
-        ViewerAsset,
-        SimulatorFeatures,
+
+        // Canonical cap names requested by the upstream Second Life viewer
+        // in LLViewerRegionImpl::buildCapabilityNames
+        // (secondlife/viewer: indra/newview/llviewerregion.cpp) plus the
+        // AIS inventory caps (InventoryAPIv3, LibraryAPIv3) appended via
+        // AISAPI::getCapNames. Unsupported caps return null from
+        // getCapability; every Lumiya call site already guards on that.
+        // Listed alphabetically; duplicates with the active set above are
+        // intentionally omitted.
+        // See docs/secondlife_apk_2026_analysis.md.
+        AbuseCategories,
+        AcceptFriendship,
+        AcceptGroupInvite,
+        AgentExperiences,
+        AgentPreferences,
         AgentProfile,
-        MapLayer,
-        ReadOfflineMsgs,
-        MeshUploadFlag,
-        RenderMaterials,
+        AgentState,
+        AttachmentResources,
+        AvatarPickerSearch,
+        AvatarRenderInfo,
+        CharacterProperties,
+        CreateInventoryCategory,
+        DeclineFriendship,
+        DeclineGroupInvite,
+        DirectDelivery,
+        DispatchRegionInfo,
+        EnvironmentSettings,
+        EstateAccess,
+        EstateChangeInfo,
+        ExperiencePreferences,
+        ExperienceQuery,
+        ExtEnvironment,
+        FetchInventory2,
+        FetchLib2,
+        FetchLibDescendents2,
+        FindExperienceByName,
+        GetAdminExperiences,
+        GetCreatorExperiences,
+        GetExperienceInfo,
+        GetExperiences,
+        GetMetadata,
         GetObjectCost,
-        GetObjectPhysicsData;
+        GetObjectPhysicsData,
+        GroupAPIv1,
+        GroupExperiences,
+        GroupProposalBallot,
+        IncrementCOFVersion,
+        InterestList,
+        InventoryAPIv3,
+        InventoryThumbnailUpload,
+        IsExperienceAdmin,
+        IsExperienceContributor,
+        LSLSyntax,
+        LandResources,
+        LibraryAPIv3,
+        MapLayer,
+        MapLayerGod,
+        MeshUploadFlag,
+        ModifyMaterialParams,
+        ModifyRegion,
+        NavMeshGenerationStatus,
+        ObjectAnimation,
+        ObjectMedia,
+        ObjectMediaNavigate,
+        ObjectNavMeshProperties,
+        ParcelPropertiesUpdate,
+        ProductInfoRequest,
+        ReadOfflineMsgs,
+        RegionExperiences,
+        RegionObjects,
+        RegionSchedule,
+        RemoteParcelRequest,
+        RenderMaterials,
+        RequestTaskInventory,
+        RequestTextureDownload,
+        ResourceCostSelected,
+        RetrieveNavMeshSrc,
+        SearchStatRequest,
+        SearchStatTracking,
+        SendPostcard,
+        SendUserReport,
+        SendUserReportWithScreenshot,
+        ServerReleaseNotes,
+        SetDisplayName,
+        SimConsoleAsync,
+        SimulatorFeatures,
+        StartGroupProposal,
+        TerrainNavMeshProperties,
+        TextureStats,
+        UntrustedSimulatorMessage,
+        UpdateAgentInformation,
+        UpdateAgentLanguage,
+        UpdateExperience,
+        UpdateGestureAgentInventory,
+        UpdateGestureTaskInventory,
+        UpdateMaterialAgentInventory,
+        UpdateMaterialTaskInventory,
+        UpdateSettingsAgentInventory,
+        UpdateSettingsTaskInventory,
+        UploadAgentProfileImage,
+        UserInfo,
+        ViewerAsset,
+        ViewerBenefits,
+        ViewerMetrics,
+        ViewerStartAuction,
+        ViewerStats,
+        VoiceSignalingRequest;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         public static SLCapability[] valuesCustom() {

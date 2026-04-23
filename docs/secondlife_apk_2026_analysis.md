@@ -107,6 +107,25 @@ drop-in substitute when a CAP is unavailable.
   SLURL maps endpoint. Used by Lumiya for `getAgentSLURL`; note the first-party
   app always uses HTTPS here.
 
+## Upstream cross-reference: `secondlife/viewer`
+
+The APK surfaces endpoint strings and manifest facts; the open-source viewer
+at https://github.com/secondlife/viewer supplies the normative protocol
+surface. Two files anchor this audit:
+
+- `indra/newview/llviewerregion.cpp` — `LLViewerRegionImpl::buildCapabilityNames`
+  is the authoritative list of per-region capability names a client requests.
+  At the time of writing it enumerates 96 capability identifiers; every one
+  is a bare protocol string sent in the seed-cap LLSD POST.
+- `indra/newview/llaisapi.cpp` — `AISAPI::getCapNames` contributes the two
+  AIS v3 inventory cap names (`InventoryAPIv3`, `LibraryAPIv3`).
+
+Lumiya's `SLCapability` enum is kept in sync with that union. The first
+section preserves the legacy CAPs Lumiya's code calls today; the second
+section adds the full upstream canonical set, alphabetised. All call sites
+already guard on `getCapability(...) == null`, so additions are
+backwards-compatible and cost only extra entries in the LLSD request body.
+
 ## Consequences for Lumiya Redux
 
 The audit produces three directly actionable fixes:
@@ -114,14 +133,11 @@ The audit produces three directly actionable fixes:
 1. **Capability enumeration (`slproto/caps/SLCaps.java`).** The first-party
    client drives many flows (asset fetch, simulator feature negotiation,
    profiles, maps, offline IMs, PBR materials) off per-region capabilities
-   whose CAP names are stable SL protocol. Lumiya's `SLCapability` enum only
-   lists a subset of what modern simulators advertise. Extend the enum with
-   the generally-available modern CAPs that Lumiya will need as protocol
-   modernization rolls in: `ViewerAsset`, `SimulatorFeatures`, `AgentProfile`,
-   `MapLayer`, `ReadOfflineMsgs`, `MeshUploadFlag`, `RenderMaterials`,
-   `GetObjectCost`, `GetObjectPhysicsData`. They are opt-in — unsupported
-   CAPs continue to return `null` from `getCapability`, which is already
-   handled by all call sites.
+   whose CAP names are stable SL protocol. Expand Lumiya's `SLCapability`
+   enum to the full upstream canonical set drawn from
+   `LLViewerRegionImpl::buildCapabilityNames` (plus AIS caps). Unsupported
+   CAPs return `null` from `getCapability`, which every call site already
+   handles, so this is backwards-compatible.
 
 2. **Maps SLURL scheme (`slproto/SLAgentCircuit.java:getAgentSLURL`).** The
    first-party SL 2026 client emits `https://maps.secondlife.com/...` URLs;
@@ -133,6 +149,38 @@ The audit produces three directly actionable fixes:
    declares `android.permission.POST_NOTIFICATIONS`. Lumiya Redux targets
    API 34 and uses notifications for IM / friend online / teleport offers, so
    it must declare this permission to actually display them on Android 13+.
+
+## Known protocol gap: `SLAuth.SendLoginRequest`
+
+`app/src/main/java/com/lumiyaviewer/lumiya/slproto/auth/SLAuth.java` still
+ships with the recovered `SendLoginRequest` method body replaced by a JADX
+"Method dump skipped" stub that throws `UnsupportedOperationException`.
+Login therefore cannot actually succeed against any grid until this method
+is reconstructed.
+
+The reply parser (`SLAuthReply.java`) is intact and tells us exactly which
+XMLRPC reply fields the client must elicit from the server: `session_id`,
+`secure_session_id`, `agent_id`, `circuit_code`, `sim_ip`, `sim_port`,
+`seed_capability`, `login`, `next_url`, `next_method`, `message`,
+`agent_appearance_service`, `inventory-root`, `buddy-list`.
+
+Reconstruction reference in upstream `secondlife/viewer`:
+
+- `indra/newview/llstartup.cpp` — builds the `login_to_simulator` XMLRPC
+  method call and the struct of login parameters, and drives the `options`
+  LLSD array that selects which reply sections the server returns (the
+  field names consumed by `SLAuthReply` — `inventory-root`, `buddy-list` —
+  must appear in that `options` array).
+- Password hashing already lives in `SLAuth.getPasswordHash`: MD5 of the
+  first 16 chars of the plaintext, prefixed `$1$`. This matches the
+  upstream `LLPasswordHash` semantics.
+
+Reconstructing `SendLoginRequest` is the single highest-leverage protocol
+fix remaining; it is intentionally scoped out of this patch because it is a
+non-trivial implementation and deserves its own PR with test coverage
+against at least one grid's login endpoint.
+
+## Out-of-scope first-party endpoints
 
 The remaining endpoints (mobile manager login, Jupiter CDN, update/GDPR/
 Freshdesk services) are first-party infrastructure and not expected to be
