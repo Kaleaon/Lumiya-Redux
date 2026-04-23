@@ -361,17 +361,17 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         GLES20.glDisable(2929);
         GLES20.glDisable(2884);
         GLES20.glEnable(3042);
-        GLES20.glUseProgram(renderContext.rawShaderProgram.getHandle());
+        renderContext.renderBackend.useProgram(renderContext.rawShaderProgram.getHandle());
         GLES20.glActiveTexture(33984);
         renderContext.crosshairTexture.GLDraw();
-        GLES20.glUniform1i(renderContext.rawShaderProgram.textureSampler, 0);
+        renderContext.renderBackend.setUniform1i(renderContext.rawShaderProgram.textureSampler, 0);
         android.opengl.Matrix.setIdentityM(this.extTextureMatrix, 0);
-        GLES20.glUniformMatrix4fv(renderContext.rawShaderProgram.vTextureTransformMatrix, 1, false, this.extTextureMatrix, 0);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.rawShaderProgram.vTextureTransformMatrix, this.extTextureMatrix, 0);
         android.opengl.Matrix.translateM(this.extTextureMatrix, 0, 0.0f, 0.0f, -1.9f);
         android.opengl.Matrix.translateM(this.extTextureMatrix, 16, this.extTextureMatrix, 0, -f2, 0.0f, 0.0f);
         android.opengl.Matrix.scaleM(this.extTextureMatrix, 16, f, f, 1.0f);
         android.opengl.Matrix.multiplyMM(this.extTextureMatrix, 32, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), this.extTextureMatrix, 16);
-        GLES20.glUniformMatrix4fv(renderContext.rawShaderProgram.uMVPMatrix, 1, false, this.extTextureMatrix, 32);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.rawShaderProgram.uMVPMatrix, this.extTextureMatrix, 32);
         renderContext.quad.DrawSingleQuadShader(renderContext, renderContext.rawShaderProgram.vPosition, renderContext.rawShaderProgram.vTexCoord);
     }
 
@@ -384,11 +384,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         GLES20.glDisable(2929);
         GLES20.glDisable(2884);
         GLES20.glEnable(3042);
-        GLES20.glUseProgram(renderContext.extTextureProgram.getHandle());
+        renderContext.renderBackend.useProgram(renderContext.extTextureProgram.getHandle());
         GLES20.glActiveTexture(33984);
         gLExternalTexture.bind();
-        GLES20.glUniform1i(renderContext.extTextureProgram.textureSampler, 0);
-        GLES20.glUniformMatrix4fv(renderContext.extTextureProgram.vTextureTransformMatrix, 1, false, fArr, 0);
+        renderContext.renderBackend.setUniform1i(renderContext.extTextureProgram.textureSampler, 0);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.extTextureProgram.vTextureTransformMatrix, fArr, 0);
         android.opengl.Matrix.setIdentityM(this.extTextureMatrix, 0);
         android.opengl.Matrix.rotateM(this.extTextureMatrix, 0, -f2, 1.0f, 0.0f, 0.0f);
         android.opengl.Matrix.rotateM(this.extTextureMatrix, 0, -f3, 0.0f, 1.0f, 0.0f);
@@ -400,7 +400,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         android.opengl.Matrix.multiplyMV(this.extTextureResultVector, 0, this.extTextureMatrix, 48, this.extTextureHitVector, 0);
         fArr2[i] = this.extTextureResultVector[0];
         fArr2[i + 1] = this.extTextureResultVector[1];
-        GLES20.glUniformMatrix4fv(renderContext.extTextureProgram.uMVPMatrix, 1, false, this.extTextureMatrix, 32);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.extTextureProgram.uMVPMatrix, this.extTextureMatrix, 32);
         renderContext.quad.DrawSingleQuadShader(renderContext, renderContext.extTextureProgram.vPosition, renderContext.extTextureProgram.vTexCoord);
     }
 
@@ -452,6 +452,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 renderContext.glModelRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
                 renderContext.glModelTranslatef(-renderContext.frameCamera.x, -renderContext.frameCamera.y, -renderContext.frameCamera.z);
             }
+            renderContext.renderBackend.beginFrame(renderContext);
             if (renderContext.hasGL20) {
                 if (renderContext.useFXAA && this.Framebuffers != null && this.Colorbuffers != null) {
                     this.systemFramebuffer[0] = 0;
@@ -492,6 +493,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             }
             if (this.parcelInfo == null || (!z)) {
                 GLES20.glBindFramebuffer(36160, this.systemFramebuffer[0]);
+                renderContext.renderBackend.endFrame(renderContext);
                 return;
             }
             try {
@@ -644,7 +646,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 }
                 GLES20.glDisable(2929);
                 GLES20.glDisable(3042);
-                GLES20.glUseProgram(renderContext.fxaaProgram.getHandle());
+                renderContext.renderBackend.useProgram(renderContext.fxaaProgram.getHandle());
                 GLES20.glBindTexture(3553, this.Colorbuffers[0]);
                 GLES20.glActiveTexture(33985);
                 GLES20.glBindTexture(3553, this.Colorbuffers[1]);
@@ -655,6 +657,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 GLES20.glActiveTexture(33984);
                 renderContext.quad.DrawSingleQuadShader(renderContext, renderContext.fxaaProgram.vPosition, renderContext.fxaaProgram.vTexCoord);
             }
+            renderContext.renderBackend.endFrame(renderContext);
         }
     }
 
@@ -836,7 +839,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 GLES20.glBindTexture(3553, this.Colorbuffers[0]);
                 GLES20.glFramebufferRenderbuffer(36160, 36096, 36161, this.Renderbuffers[0]);
                 GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.Colorbuffers[0], 0);
-                GLES20.glUseProgram(renderContext.fxaaProgram.getHandle());
+                renderContext.renderBackend.useProgram(renderContext.fxaaProgram.getHandle());
                 GLES20.glUniform1i(renderContext.fxaaProgram.textureSampler, 0);
                 GLES20.glUniform1i(renderContext.fxaaProgram.noAAtextureSampler, 1);
                 GLES20.glUniform2f(renderContext.fxaaProgram.texcoordOffset, 1.0f / i, 1.0f / i2);

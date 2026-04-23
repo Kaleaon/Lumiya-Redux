@@ -1,8 +1,6 @@
 package com.lumiyaviewer.lumiya.render.drawable;
 
 import android.annotation.TargetApi;
-import android.opengl.GLES10;
-import android.opengl.GLES11;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import androidx.core.view.ViewCompat;
@@ -111,56 +109,19 @@ public class DrawablePrim {
         }
         boolean z2 = false;
         if (!z) {
-            if (renderContext.hasGL20) {
-                GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - ((i2 >> 0) & 255)) / 255.0f, (255 - ((i2 >> 8) & 255)) / 255.0f, (255 - ((i2 >> 16) & 255)) / 255.0f, (255 - ((i2 >> 24) & 255)) / 255.0f);
-            } else {
-                GLES10.glColor4f((255 - ((i2 >> 0) & 255)) / 255.0f, (255 - ((i2 >> 8) & 255)) / 255.0f, (255 - ((i2 >> 16) & 255)) / 255.0f, (255 - ((i2 >> 24) & 255)) / 255.0f);
-            }
+            renderContext.renderBackend.setMaterialColor(renderContext, i2, false);
             if (drawableFaceTexture != null && drawableFaceTexture.GLDraw(renderContext)) {
                 z2 = true;
             }
-        } else if (renderContext.hasGL20) {
-            GLES20.glUniform4f(renderContext.curPrimProgram.vColor, 1.0f, 0.0f, 0.0f, 0.6f);
         } else {
-            GLES10.glColor4f(1.0f, 0.0f, 0.0f, 0.6f);
+            renderContext.renderBackend.setMaterialColor(renderContext, i2, true);
         }
         if (z2 != this.drawingTextureEnabled || this.firstFace) {
-            if (renderContext.hasGL20) {
-                if (z2) {
-                    renderContext.curPrimProgram.setTextureEnabled(true);
-                } else {
-                    GLES20.glBindTexture(3553, 0);
-                    renderContext.curPrimProgram.setTextureEnabled(false);
-                }
-            } else if (z2) {
-                GLES10.glEnable(3553);
-                GLES10.glEnableClientState(32888);
-            } else {
-                GLES10.glDisable(3553);
-                GLES10.glDisableClientState(32888);
-            }
+            renderContext.renderBackend.setTextureEnabled(renderContext, z2);
             this.drawingTextureEnabled = z2;
             this.firstFace = false;
         }
-        if (renderContext.hasGL20) {
-            GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, fArr, i3);
-            if (i == -1) {
-                drawableGeometry.GLDrawAll20(renderContext);
-            } else {
-                drawableGeometry.GLDrawFace20(renderContext, i);
-            }
-        } else {
-            GLES11.glMatrixMode(5890);
-            GLES11.glPushMatrix();
-            GLES11.glLoadMatrixf(fArr, i3);
-            if (i == -1) {
-                drawableGeometry.GLDrawAll10(renderContext);
-            } else {
-                drawableGeometry.GLDrawFace10(renderContext, i, gLLoadableBuffer);
-            }
-            GLES11.glPopMatrix();
-            GLES11.glMatrixMode(5888);
-        }
+        renderContext.renderBackend.submitMeshDraw(renderContext, drawableGeometry, i, gLLoadableBuffer, fArr, i3);
         return faceRenderMask;
     }
 
@@ -169,9 +130,9 @@ public class DrawablePrim {
         if ((faceRenderMask & i4) == 0) {
             return faceRenderMask;
         }
-        GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - ((i2 >> 0) & 255)) / 255.0f, (255 - ((i2 >> 8) & 255)) / 255.0f, (255 - ((i2 >> 16) & 255)) / 255.0f, (255 - ((i2 >> 24) & 255)) / 255.0f);
+        renderContext.renderBackend.setMaterialColor(renderContext, i2, false);
         renderContext.bindFaceTexture(drawableFaceTexture);
-        GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, fArr, i3);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, fArr, i3);
         if (i == -1) {
             drawableGeometry.GLDrawAll20(renderContext);
         } else {
@@ -213,13 +174,13 @@ public class DrawablePrim {
         if (renderContext.hasGL20) {
             float[] matrices = primFlexibleInfo != null ? primFlexibleInfo.getMatrices() : null;
             renderContext.curPrimProgram = (this.isRiggedMesh && this.riggingFitsGL20) ? renderContext.riggedMeshProgram : matrices != null ? renderContext.flexiPrimProgram : renderContext.primProgram;
-            GLES20.glUseProgram(renderContext.curPrimProgram.getHandle());
+            renderContext.renderBackend.useProgram(renderContext.curPrimProgram.getHandle());
             renderContext.glModelApplyMatrix(renderContext.curPrimProgram.uMVPMatrix);
             renderContext.glObjWorldApplyMatrix(renderContext.curPrimProgram.uObjWorldMatrix);
             renderContext.glObjScaleApplyVector(renderContext.curPrimProgram.uObjCoordScale);
             if (matrices != null && (renderContext.curPrimProgram instanceof FlexiPrimProgram)) {
                 FlexiPrimProgram flexiPrimProgram = (FlexiPrimProgram) renderContext.curPrimProgram;
-                GLES20.glUniform1i(flexiPrimProgram.uNumSectionMatrices, matrices.length / 16);
+                renderContext.renderBackend.setUniform1i(flexiPrimProgram.uNumSectionMatrices, matrices.length / 16);
                 GLES20.glUniformMatrix4fv(flexiPrimProgram.uSectionMatrices, matrices.length / 16, false, matrices, 0);
             }
             GLBindBuffers10 = drawableGeometry.GLBindBuffers20(renderContext);
@@ -250,13 +211,13 @@ public class DrawablePrim {
         PrimProgram primProgram = (this.isRiggedMesh && this.riggingFitsGL20) ? renderContext.riggedMeshProgram : matrices != null ? z2 ? renderContext.flexiPrimOpaqueProgram : renderContext.flexiPrimProgram : z2 ? renderContext.primOpaqueProgram : renderContext.primProgram;
         if (renderContext.curPrimProgram != primProgram) {
             renderContext.curPrimProgram = primProgram;
-            GLES20.glUseProgram(renderContext.curPrimProgram.getHandle());
+            renderContext.renderBackend.useProgram(renderContext.curPrimProgram.getHandle());
             renderContext.glModelApplyMatrix(renderContext.curPrimProgram.uMVPMatrix);
         }
         renderContext.glObjWorldApplyMatrix(renderContext.curPrimProgram.uObjWorldMatrix);
         renderContext.glObjScaleApplyVector(renderContext.curPrimProgram.uObjCoordScale);
         if (matrices != null) {
-            GLES20.glUniform1i(renderContext.flexiPrimProgram.uNumSectionMatrices, matrices.length / 16);
+            renderContext.renderBackend.setUniform1i(renderContext.flexiPrimProgram.uNumSectionMatrices, matrices.length / 16);
             GLES20.glUniformMatrix4fv(renderContext.flexiPrimProgram.uSectionMatrices, matrices.length / 16, false, matrices, 0);
         }
         drawableGeometry.GLBindBuffers20(renderContext);
@@ -289,9 +250,9 @@ public class DrawablePrim {
                     drawableGeometry.GLBindBuffersRigged30(renderContext);
                     z = true;
                 }
-                GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - ((i4 >> 0) & 255)) / 255.0f, (255 - ((i4 >> 8) & 255)) / 255.0f, (255 - ((i4 >> 16) & 255)) / 255.0f, (255 - ((i4 >> 24) & 255)) / 255.0f);
+                renderContext.renderBackend.setMaterialColor(renderContext, i4, false);
                 renderContext.bindFaceTexture(drawableFaceTexture);
-                GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, this.FaceUVMatrices, i3 * 16);
+                renderContext.renderBackend.setUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, this.FaceUVMatrices, i3 * 16);
                 drawableGeometry.GLDrawRiggedFace30(renderContext, i3);
             }
         }
