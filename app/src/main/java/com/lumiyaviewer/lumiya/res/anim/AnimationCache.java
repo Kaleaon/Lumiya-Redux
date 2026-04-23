@@ -191,12 +191,10 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
                 try {
                     byteArrayInputStream.close();
                 } catch (IOException e) {
-                    e = e;
                     Debug.Warning(e);
-                    completeRequest(animationData);
                 }
             } catch (IOException e2) {
-                e = e2;
+                Debug.Warning(e2);
                 animationData = null;
             }
             completeRequest(animationData);

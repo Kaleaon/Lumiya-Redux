@@ -120,7 +120,6 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                                         }
                                     }
                                 } catch (Throwable th) {
-                                    th = th;
                                     if (lazyList != null) {
                                         lazyList.close();
                                     }
@@ -138,11 +137,11 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                             }
                             file = file4;
                         } catch (Throwable th2) {
-                            th = th2;
+                            Debug.Warning(th2);
                             lazyList = null;
                         }
                     } catch (Throwable th3) {
-                        th = th3;
+                        Debug.Warning(th3);
                         fileOutputStream = null;
                         lazyList = null;
                     }

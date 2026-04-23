@@ -285,11 +285,10 @@ public class DetailsActivity extends ConnectedActivity {
         setTitle(str);
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
     public boolean setCurrentDetailsArguments(Class<? extends Fragment> cls, Bundle bundle) {
         Fragment findFragmentById;
         FragmentManager supportFragmentManager = getSupportFragmentManager();
-        if (supportFragmentManager == null || (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) == 0 || !cls.isInstance(findFragmentById) || !(findFragmentById instanceof ReloadableFragment) || findFragmentById.getArguments() == null) {
+        if (supportFragmentManager == null || (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) == null || !cls.isInstance(findFragmentById) || !(findFragmentById instanceof ReloadableFragment) || findFragmentById.getArguments() == null) {
             return false;
         }
         ((ReloadableFragment) findFragmentById).setFragmentArgs(getIntent(), bundle);
@@ -302,10 +301,8 @@ public class DetailsActivity extends ConnectedActivity {
         updateTitle();
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
     @Nullable
     public Fragment showDetailsFragment(Class<? extends Fragment> cls, Intent intent, Bundle bundle) {
-        Fragment newInstance;
         Debug.Printf("DetailsActivity: fragmentClass %s, intent %s, arguments %s", cls.toString(), intent, bundle);
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         if (supportFragmentManager == null) {
@@ -314,12 +311,12 @@ public class DetailsActivity extends ConnectedActivity {
         boolean isRootDetailsFragment = isRootDetailsFragment(cls);
         Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.details);
         Debug.Printf("DetailsActivity: isRootFragment %b existing fragment: %s", Boolean.valueOf(isRootDetailsFragment), findFragmentById);
-        if (findFragmentById != 0) {
+        if (findFragmentById != null) {
             Debug.Printf("DetailsActivity: is good instance: %b", Boolean.valueOf(cls.isInstance(findFragmentById)));
             Debug.Printf("DetailsActivity: is reloadable: %b", Boolean.valueOf(findFragmentById instanceof ReloadableFragment));
             Debug.Printf("DetailsActivity: has arguments: %b", findFragmentById.getArguments());
         }
-        if (findFragmentById != 0 && findFragmentById.isVisible() && cls.isInstance(findFragmentById) && (findFragmentById instanceof ReloadableFragment) && findFragmentById.getArguments() != null) {
+        if (findFragmentById != null && findFragmentById.isVisible() && cls.isInstance(findFragmentById) && (findFragmentById instanceof ReloadableFragment) && findFragmentById.getArguments() != null) {
             ((ReloadableFragment) findFragmentById).setFragmentArgs(intent, bundle);
             invalidateOptionsMenu();
             return findFragmentById;
@@ -330,11 +327,7 @@ public class DetailsActivity extends ConnectedActivity {
             addDetailsToStack(supportFragmentManager);
         }
         try {
-            newInstance = cls.newInstance();
-        } catch (Exception e) {
-            e = e;
-        }
-        try {
+            Fragment newInstance = cls.newInstance();
             if (newInstance instanceof ReloadableFragment) {
                 newInstance.setArguments(new Bundle());
                 ((ReloadableFragment) newInstance).setFragmentArgs(intent, bundle);
@@ -343,84 +336,37 @@ public class DetailsActivity extends ConnectedActivity {
             }
             replaceDetailsFragment(supportFragmentManager, newInstance);
             return newInstance;
-        } catch (Exception e2) {
-            findFragmentById = newInstance;
-            e = e2;
+        } catch (Exception e) {
             Debug.Warning(e);
             return findFragmentById;
         }
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:15:0x007c  */
-    /* JADX WARN: Removed duplicated region for block: B:18:? A[RETURN, SYNTHETIC] */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
     protected void updateTitle() {
-        /*
-            r7 = this;
-            r6 = 2
-            r2 = 1
-            r3 = 0
-            androidx.fragment.app.FragmentManager r0 = r7.getSupportFragmentManager()
-            if (r0 == 0) goto L82
-            r1 = 2131755284(0x7f100114, float:1.9141443E38)
-            androidx.fragment.app.Fragment r1 = r0.findFragmentById(r1)
-            java.lang.String r0 = "updateTitle: detailsFragment %s"
-            java.lang.Object[] r4 = new java.lang.Object[r2]
-            r4[r3] = r1
-            com.lumiyaviewer.lumiya.Debug.Printf(r0, r4)
-            boolean r0 = r1 instanceof com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
-            if (r0 == 0) goto L82
-            java.lang.String r0 = "updateTitle: detailsFragment added %b hidden %b detached %b"
-            r4 = 3
-            java.lang.Object[] r4 = new java.lang.Object[r4]
-            boolean r5 = r1.isAdded()
-            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r5)
-            r4[r3] = r5
-            boolean r5 = r1.isHidden()
-            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r5)
-            r4[r2] = r5
-            boolean r5 = r1.isDetached()
-            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r5)
-            r4[r6] = r5
-            com.lumiyaviewer.lumiya.Debug.Printf(r0, r4)
-            boolean r0 = r1.isAdded()
-            if (r0 == 0) goto L80
-            boolean r0 = r1.isHidden()
-            r0 = r0 ^ 1
-            if (r0 == 0) goto L80
-            boolean r0 = r1.isDetached()
-            r0 = r0 ^ 1
-            if (r0 == 0) goto L82
-            r0 = r1
-            com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle r0 = (com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle) r0
-            java.lang.String r0 = r0.getTitle()
-            com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle r1 = (com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle) r1
-            java.lang.String r1 = r1.getSubTitle()
-            java.lang.String r4 = "updateTitle: got title '%s', subtitle '%s'"
-            java.lang.Object[] r5 = new java.lang.Object[r6]
-            r5[r3] = r0
-            r5[r2] = r1
-            com.lumiyaviewer.lumiya.Debug.Printf(r4, r5)
-            if (r0 == 0) goto L82
-            r7.setActivityTitle(r0, r1)
-            r0 = r2
-        L7a:
-            if (r0 != 0) goto L7f
-            r7.updateTitleNoDetails()
-        L7f:
-            return
-        L80:
-            r0 = r3
-            goto L7a
-        L82:
-            r0 = r3
-            goto L7a
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.ui.common.DetailsActivity.updateTitle():void");
+        boolean handled = false;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            Fragment detailsFragment = fragmentManager.findFragmentById(R.id.details);
+            Debug.Printf("updateTitle: detailsFragment %s", detailsFragment);
+            if (detailsFragment instanceof FragmentHasTitle) {
+                Debug.Printf("updateTitle: detailsFragment added %b hidden %b detached %b",
+                        Boolean.valueOf(detailsFragment.isAdded()),
+                        Boolean.valueOf(detailsFragment.isHidden()),
+                        Boolean.valueOf(detailsFragment.isDetached()));
+                if (detailsFragment.isAdded() && !detailsFragment.isHidden() && !detailsFragment.isDetached()) {
+                    String title = ((FragmentHasTitle) detailsFragment).getTitle();
+                    String subTitle = ((FragmentHasTitle) detailsFragment).getSubTitle();
+                    Debug.Printf("updateTitle: got title '%s', subtitle '%s'", title, subTitle);
+                    if (title != null) {
+                        setActivityTitle(title, subTitle);
+                        handled = true;
+                    }
+                }
+            }
+        }
+        if (!handled) {
+            updateTitleNoDetails();
+        }
     }
 
     protected void updateTitleNoDetails() {
