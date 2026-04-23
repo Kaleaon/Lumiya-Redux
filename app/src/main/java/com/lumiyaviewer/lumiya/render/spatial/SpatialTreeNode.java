@@ -210,7 +210,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
             shrinkBoundingBox();
             return;
         }
-        super.addEntry((SpatialTreeNode) drawListEntry);
+        super.addEntry(drawListEntry);
         enlargeForBoundingBox(z, drawListEntry.boundingBox);
         if (z || z2) {
             this.spatialTree.setTreeWalkNeeded();
@@ -271,7 +271,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
 
     @Override // com.lumiyaviewer.lumiya.utils.InlineList
     public void removeEntry(DrawListEntry drawListEntry) {
-        super.removeEntry((SpatialTreeNode) drawListEntry);
+        super.removeEntry(drawListEntry);
         if (this.depthBin != -1) {
             this.spatialTree.setDrawListChanged();
         }

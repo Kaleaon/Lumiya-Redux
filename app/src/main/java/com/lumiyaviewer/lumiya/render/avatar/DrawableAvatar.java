@@ -93,26 +93,8 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         this.pelvisTranslateZ = 0.0f;
         this.localAviWorldMatrix = new float[16];
         this.jointMatrixUpdated = false;
-        this.updateAttachmentsRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.avatar.-$Lambda$0R0mXpfMxrM5lCygN3JijOMDexU
-            private final /* synthetic */ void $m$0() {
-                ((DrawableAvatar) this).m62com_lumiyaviewer_lumiya_render_avatar_DrawableAvatarmthref0();
-            }
-
-            @Override // java.lang.Runnable
-            public final void run() {
-                $m$0();
-            }
-        };
-        this.shapeParamsUpdate = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.avatar.-$Lambda$0R0mXpfMxrM5lCygN3JijOMDexU.1
-            private final /* synthetic */ void $m$0() {
-                ((DrawableAvatar) this).m63x3d2f5f87();
-            }
-
-            @Override // java.lang.Runnable
-            public final void run() {
-                $m$0();
-            }
-        };
+        this.updateAttachmentsRunnable = this::m62com_lumiyaviewer_lumiya_render_avatar_DrawableAvatarmthref0;
+        this.shapeParamsUpdate = this::m63x3d2f5f87;
         SLBaseAvatar sLBaseAvatar = SLBaseAvatar.getInstance();
         for (MeshIndex meshIndex : MeshIndex.VALUES) {
             this.parts.put(meshIndex, new DrawableAvatarPart(uuid2, sLBaseAvatar.getMeshEntry(meshIndex).textureFaceIndex, sLBaseAvatar.getMeshEntry(meshIndex).polyMesh, drawableStore.hasGL20));
@@ -393,7 +375,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         float f4 = iArr[3] - f2;
         renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
         renderContext.glObjWorldTranslatef(this.pelvisTranslateX, this.pelvisTranslateY, this.pelvisTranslateZ);
-        Iterator<T> it = avatarSkeleton.bones.values().iterator();
+        Iterator<SLSkeletonBone> it = avatarSkeleton.bones.values().iterator();
         while (true) {
             if (!it.hasNext()) {
                 objectIntersectInfo = null;
@@ -453,7 +435,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
     }
 
     void UpdateTextures(AvatarTextures avatarTextures) {
-        Iterator<T> it = this.parts.entrySet().iterator();
+        Iterator<Map.Entry<MeshIndex, DrawableAvatarPart>> it = this.parts.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
             ((DrawableAvatarPart) entry.getValue()).setTexture(this.drawableStore.glTextureCache, avatarTextures.getTexture(((DrawableAvatarPart) entry.getValue()).getFaceIndex()));
@@ -472,7 +454,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         if (avatarShapeParams != null) {
             Debug.Printf("Avatar: shapeParamsUpdate: %d rigged meshes", Integer.valueOf(this.riggedMeshes.size()));
             MeshJointTranslations meshJointTranslations = new MeshJointTranslations();
-            Iterator<T> it = this.riggedMeshes.iterator();
+            Iterator<DrawableObject> it = this.riggedMeshes.iterator();
             while (true) {
                 z = z2;
                 if (!it.hasNext()) {
@@ -484,7 +466,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
             }
             AvatarSkeleton avatarSkeleton = new AvatarSkeleton(avatarShapeParams, meshJointTranslations, z);
             this.updatedSkeleton.set(avatarSkeleton);
-            Iterator<T> it2 = this.parts.entrySet().iterator();
+            Iterator<Map.Entry<MeshIndex, DrawableAvatarPart>> it2 = this.parts.entrySet().iterator();
             while (it2.hasNext()) {
                 Map.Entry entry = (Map.Entry) it2.next();
                 ((DrawableAvatarPart) entry.getValue()).setPartMorphParams(avatarSkeleton.getMorphParams((MeshIndex) entry.getKey()));

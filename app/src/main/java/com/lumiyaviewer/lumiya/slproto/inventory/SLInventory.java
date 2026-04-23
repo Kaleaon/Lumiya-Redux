@@ -246,7 +246,7 @@ public class SLInventory extends SLModule {
         this.searchProcessResultHandler = this.userManager.getInventoryManager().getSearchProcessRequestSource().attachRequestHandler(new AsyncRequestHandler(this.dbExecutor, this.searchRequestHandler));
         this.nextFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs
             private final /* synthetic */ void $m$0(Object obj) {
-                ((SLInventory) this).m184com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref0((SLInventoryEntry) obj);
+                SLInventory.this.m184com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref0((SLInventoryEntry) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -255,7 +255,7 @@ public class SLInventory extends SLModule {
             }
         }, new Subscription.OnError() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.2
             private final /* synthetic */ void $m$0(Throwable th) {
-                ((SLInventory) this).m185com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref1(th);
+                SLInventory.this.m185com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref1(th);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
@@ -266,7 +266,7 @@ public class SLInventory extends SLModule {
         if (this.rootFolderFetchNeeded) {
             this.rootFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.1
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ((SLInventory) this).m186com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref2((SLInventoryEntry) obj);
+                    SLInventory.this.m186com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref2((SLInventoryEntry) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -386,7 +386,7 @@ public class SLInventory extends SLModule {
     public void StartUploadingNotecardContents(final SLInventoryEntry sLInventoryEntry, @Nullable final UUID uuid, final boolean z, final byte[] bArr, final OnNotecardUpdatedListener onNotecardUpdatedListener) {
         GenericHTTPExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.9
             private final /* synthetic */ void $m$0() {
-                ((SLInventory) this).m190x8292c7bb((SLInventoryEntry) sLInventoryEntry, (byte[]) bArr, (UUID) uuid, z, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener);
+                SLInventory.this.m190x8292c7bb((SLInventoryEntry) sLInventoryEntry, (byte[]) bArr, (UUID) uuid, z, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener);
             }
 
             @Override // java.lang.Runnable
@@ -577,7 +577,7 @@ public class SLInventory extends SLModule {
     public void CopyInventoryFromNotecard(final UUID uuid, final UUID uuid2, final UUID uuid3, @Nullable final Runnable runnable) {
         GenericHTTPExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.5
             private final /* synthetic */ void $m$0() {
-                ((SLInventory) this).m193x829dc330((UUID) uuid, (UUID) uuid2, (UUID) uuid3, (Runnable) runnable);
+                SLInventory.this.m193x829dc330((UUID) uuid, (UUID) uuid2, (UUID) uuid3, (Runnable) runnable);
             }
 
             @Override // java.lang.Runnable
@@ -609,7 +609,7 @@ public class SLInventory extends SLModule {
             final ImmutableSet copyOf = ImmutableSet.copyOf((Collection) set);
             this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.6
                 private final /* synthetic */ void $m$0() {
-                    ((SLInventory) this).m194x829e9985((String) str, (ImmutableSet) copyOf, i, (Function) function);
+                    SLInventory.this.m194x829e9985((String) str, (ImmutableSet) copyOf, i, (Function) function);
                 }
 
                 @Override // java.lang.Runnable
@@ -1047,7 +1047,7 @@ public class SLInventory extends SLModule {
         if (!sLInventoryEntry.isFolder) {
             DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.3
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    ((SLInventory) this).m188x827623db((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
+                    SLInventory.this.m188x827623db((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
@@ -1111,7 +1111,7 @@ public class SLInventory extends SLModule {
             Debug.Printf("Notecard: Creating new inventory entry.", new Object[0]);
             DoCreateInventoryItem(uuid, z ? SLAssetType.AT_LSL_TEXT.getTypeCode() : SLAssetType.AT_NOTECARD.getTypeCode(), z ? SLInventoryType.IT_LSL.getTypeCode() : SLInventoryType.IT_NOTECARD.getTypeCode(), str, str2, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.7
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    ((SLInventory) this).m191x82934f61(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
+                    SLInventory.this.m191x82934f61(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
@@ -1134,7 +1134,7 @@ public class SLInventory extends SLModule {
             Debug.Printf("Notecard: Updating existing inventory entry %s", sLInventoryEntry.uuid);
             DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.8
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    ((SLInventory) this).m192x829d436f(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
+                    SLInventory.this.m192x829d436f(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
@@ -1150,7 +1150,7 @@ public class SLInventory extends SLModule {
             this.db.saveEntry(sLInventoryEntry);
             DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.4
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    ((SLInventory) this).m189x82901fe6((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
+                    SLInventory.this.m189x82901fe6((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
@@ -1295,7 +1295,7 @@ public class SLInventory extends SLModule {
         if (this.dbExecutor != null) {
             this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.10
                 private final /* synthetic */ void $m$0() {
-                    ((SLInventory) this).m187x8264e904(j, (UUID) uuid, z, z2);
+                    SLInventory.this.m187x8264e904(j, (UUID) uuid, z, z2);
                 }
 
                 @Override // java.lang.Runnable

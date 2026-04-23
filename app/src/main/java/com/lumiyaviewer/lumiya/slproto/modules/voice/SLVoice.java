@@ -79,7 +79,7 @@ public class SLVoice extends SLModule {
         this.requestedGroupChats = Collections.synchronizedSet(new HashSet());
         this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY
             private final /* synthetic */ void $m$0(Object obj) {
-                ((SLVoice) this).m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0((Boolean) obj);
+                SLVoice.this.m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0((Boolean) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -154,7 +154,7 @@ public class SLVoice extends SLModule {
             }
             new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.2
                 private final /* synthetic */ void $m$0(LLSDNode lLSDNode2) {
-                    ((SLVoice) this).m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode2);
+                    SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -282,7 +282,7 @@ public class SLVoice extends SLModule {
             if (this.capURL != null) {
                 new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.1
                     private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                        ((SLVoice) this).m261com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref1(lLSDNode);
+                        SLVoice.this.m261com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref1(lLSDNode);
                     }
 
                     @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -344,7 +344,7 @@ public class SLVoice extends SLModule {
     public void onVoiceChannelStatus(final VoiceChannelStatus voiceChannelStatus) {
         this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.5
             private final /* synthetic */ void $m$0() {
-                ((SLVoice) this).m266x4b47941e((VoiceChannelStatus) voiceChannelStatus);
+                SLVoice.this.m266x4b47941e((VoiceChannelStatus) voiceChannelStatus);
             }
 
             @Override // java.lang.Runnable
@@ -357,7 +357,7 @@ public class SLVoice extends SLModule {
     public void onVoiceLoginStatus(final VoicePluginServiceConnection voicePluginServiceConnection, final VoiceLoginStatus voiceLoginStatus) {
         this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.6
             private final /* synthetic */ void $m$0() {
-                ((SLVoice) this).m265x4b47856f((VoiceLoginStatus) voiceLoginStatus, (VoicePluginServiceConnection) voicePluginServiceConnection);
+                SLVoice.this.m265x4b47856f((VoiceLoginStatus) voiceLoginStatus, (VoicePluginServiceConnection) voicePluginServiceConnection);
             }
 
             @Override // java.lang.Runnable
@@ -373,7 +373,7 @@ public class SLVoice extends SLModule {
         }
         new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.3
             private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                ((SLVoice) this).m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(lLSDNode);
+                SLVoice.this.m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(lLSDNode);
             }
 
             @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -395,7 +395,7 @@ public class SLVoice extends SLModule {
         if (z) {
             new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.7
                 private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                    ((SLVoice) this).m264x4b46af5c(i, lLSDNode);
+                    SLVoice.this.m264x4b46af5c(i, lLSDNode);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -427,7 +427,7 @@ public class SLVoice extends SLModule {
     public void updateVoiceEnabledStatus() {
         UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.4
             private final /* synthetic */ void $m$0() {
-                ((SLVoice) this).m267xd924b13a();
+                SLVoice.this.m267xd924b13a();
             }
 
             @Override // java.lang.Runnable

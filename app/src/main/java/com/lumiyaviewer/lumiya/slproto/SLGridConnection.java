@@ -26,7 +26,7 @@ import java.util.UUID;
 public class SLGridConnection extends SLConnection {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f62x8f75539 = null;
+    private static /* synthetic */ int[] f62x8f75539 = null;
     private static final String DEFAULT_SYSTEM_ACCOUNT = "Second Life";
     private static boolean autoresponseEnabled = false;
     private static String autoresponseText = "";
@@ -283,9 +283,9 @@ public class SLGridConnection extends SLConnection {
             this.capEventQueue = null;
         }
         TextureCache.getInstance().setFetcher(null);
-        Iterator<T> it = this.tempCircuits.values().iterator();
+        Iterator<SLTempCircuit> it = this.tempCircuits.values().iterator();
         while (it.hasNext()) {
-            ((SLTempCircuit) it.next()).CloseCircuit();
+            it.next().CloseCircuit();
         }
         this.tempCircuits.clear();
         setConnectionState(ConnectionState.Idle);

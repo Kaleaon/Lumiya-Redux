@@ -36,7 +36,7 @@ public class InlineList<T extends InlineListEntry<T>> {
                 this.first = t2;
             }
             if (t2 != null) {
-                t2.setPrev(prev);
+                t2.setPrev((T) prev);
             }
             t.setPrev(null);
             t.setNext(null);

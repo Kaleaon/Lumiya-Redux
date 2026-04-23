@@ -55,7 +55,7 @@ class WeakRequestSet<T> {
         synchronized (this.lock) {
             remove = this.requests.remove(t);
         }
-        Iterator<T> it = remove.iterator();
+        Iterator<WeakReference<Object>> it = remove.iterator();
         while (it.hasNext()) {
             Object obj = ((WeakReference) it.next()).get();
             if (obj != null && (obj instanceof RequestCompleteListener)) {

@@ -94,7 +94,7 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
             return false;
         }
         String str2 = this.caps.getCapability(SLCaps.SLCapability.GetDisplayNames) + "/";
-        Iterator<T> it = uUIDsToFetch.iterator();
+        Iterator<UUID> it = uUIDsToFetch.iterator();
         boolean z = true;
         while (true) {
             str = str2;

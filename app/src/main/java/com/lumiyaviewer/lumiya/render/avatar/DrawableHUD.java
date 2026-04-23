@@ -103,7 +103,7 @@ public class DrawableHUD {
             renderContext.glModelScalef(1.0f, f6, f6);
         }
         renderContext.glModelTranslatef(-this.minPos.x, (-f4) + f2, (-f5) + f3);
-        Iterator<T> it = this.hudObjects.iterator();
+        Iterator<DrawableObject> it = this.hudObjects.iterator();
         while (true) {
             objectIntersectInfo = objectIntersectInfo2;
             if (!it.hasNext()) {
