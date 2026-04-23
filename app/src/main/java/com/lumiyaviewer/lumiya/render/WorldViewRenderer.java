@@ -211,13 +211,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 try {
                     objectIntersectInfo = tryPickObject(renderContext, f, f2, (DrawableObject) it.next(), objectIntersectInfo);
                 } catch (Exception e) {
-                    e = e;
                     Debug.Warning(e);
-                    if (objectIntersectInfo != null) {
-                        return;
-                    } else {
-                        return;
-                    }
+                    return;
                 }
             }
             Iterator<DrawableAvatar> it2 = this.currentDrawList.avatars.iterator();

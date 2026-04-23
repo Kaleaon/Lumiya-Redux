@@ -142,82 +142,43 @@ public class LLQuaternion {
         return new LLQuaternion(lLQuaternion.x + ((lLQuaternion2.x - lLQuaternion.x) * f), lLQuaternion.y + ((lLQuaternion2.y - lLQuaternion.y) * f), lLQuaternion.z + ((lLQuaternion2.z - lLQuaternion.z) * f), lLQuaternion.w + ((lLQuaternion2.w - lLQuaternion.w) * f));
     }
 
-    /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-    /* JADX WARN: Code restructure failed: missing block: B:3:0x004a, code lost:
-    
-        return r4;
-     */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public static com.lumiyaviewer.lumiya.slproto.types.LLQuaternion mayaQ(float r8, float r9, float r10, com.lumiyaviewer.lumiya.slproto.types.LLQuaternion.Order r11) {
-        /*
-            r7 = 1065353216(0x3f800000, float:1.0)
-            r6 = 1016003125(0x3c8efa35, float:0.017453292)
-            r5 = 0
-            com.lumiyaviewer.lumiya.slproto.types.LLQuaternion r0 = new com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
-            r0.<init>()
-            com.lumiyaviewer.lumiya.slproto.types.LLQuaternion r1 = new com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
-            r1.<init>()
-            com.lumiyaviewer.lumiya.slproto.types.LLQuaternion r2 = new com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
-            r2.<init>()
-            float r3 = r8 * r6
-            com.lumiyaviewer.lumiya.slproto.types.LLVector3 r4 = new com.lumiyaviewer.lumiya.slproto.types.LLVector3
-            r4.<init>(r7, r5, r5)
-            r0.setQuat(r3, r4)
-            float r3 = r9 * r6
-            com.lumiyaviewer.lumiya.slproto.types.LLVector3 r4 = new com.lumiyaviewer.lumiya.slproto.types.LLVector3
-            r4.<init>(r5, r7, r5)
-            r1.setQuat(r3, r4)
-            float r3 = r10 * r6
-            com.lumiyaviewer.lumiya.slproto.types.LLVector3 r4 = new com.lumiyaviewer.lumiya.slproto.types.LLVector3
-            r4.<init>(r5, r5, r7)
-            r2.setQuat(r3, r4)
-            com.lumiyaviewer.lumiya.slproto.types.LLQuaternion r3 = new com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
-            r3.<init>()
-            com.lumiyaviewer.lumiya.slproto.types.LLQuaternion r4 = new com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
-            r4.<init>()
-            int[] r5 = m268xd25893a5()
-            int r6 = r11.ordinal()
-            r5 = r5[r6]
-            switch(r5) {
-                case 1: goto L4b;
-                case 2: goto L60;
-                case 3: goto L67;
-                case 4: goto L52;
-                case 5: goto L59;
-                case 6: goto L6e;
-                default: goto L4a;
-            }
-        L4a:
-            return r4
-        L4b:
-            r3.setMul(r0, r1)
-            r4.setMul(r3, r2)
-            goto L4a
-        L52:
-            r3.setMul(r1, r2)
-            r4.setMul(r3, r0)
-            goto L4a
-        L59:
-            r3.setMul(r2, r0)
-            r4.setMul(r3, r1)
-            goto L4a
-        L60:
-            r3.setMul(r0, r2)
-            r4.setMul(r3, r1)
-            goto L4a
-        L67:
-            r3.setMul(r1, r0)
-            r4.setMul(r3, r2)
-            goto L4a
-        L6e:
-            r3.setMul(r2, r1)
-            r4.setMul(r3, r0)
-            goto L4a
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.types.LLQuaternion.mayaQ(float, float, float, com.lumiyaviewer.lumiya.slproto.types.LLQuaternion$Order):com.lumiyaviewer.lumiya.slproto.types.LLQuaternion");
+    public static LLQuaternion mayaQ(float xRot, float yRot, float zRot, Order order) {
+        final float DEG_TO_RAD = 0.017453292f;
+        LLQuaternion xQ = new LLQuaternion();
+        LLQuaternion yQ = new LLQuaternion();
+        LLQuaternion zQ = new LLQuaternion();
+        xQ.setQuat(xRot * DEG_TO_RAD, new LLVector3(1.0f, 0.0f, 0.0f));
+        yQ.setQuat(yRot * DEG_TO_RAD, new LLVector3(0.0f, 1.0f, 0.0f));
+        zQ.setQuat(zRot * DEG_TO_RAD, new LLVector3(0.0f, 0.0f, 1.0f));
+        LLQuaternion tmp = new LLQuaternion();
+        LLQuaternion ret = new LLQuaternion();
+        switch (order) {
+            case XYZ:
+                tmp.setMul(xQ, yQ);
+                ret.setMul(tmp, zQ);
+                break;
+            case YZX:
+                tmp.setMul(yQ, zQ);
+                ret.setMul(tmp, xQ);
+                break;
+            case ZXY:
+                tmp.setMul(zQ, xQ);
+                ret.setMul(tmp, yQ);
+                break;
+            case XZY:
+                tmp.setMul(xQ, zQ);
+                ret.setMul(tmp, yQ);
+                break;
+            case YXZ:
+                tmp.setMul(yQ, xQ);
+                ret.setMul(tmp, zQ);
+                break;
+            case ZYX:
+                tmp.setMul(zQ, yQ);
+                ret.setMul(tmp, xQ);
+                break;
+        }
+        return ret;
     }
 
     public static LLQuaternion parseFloatVec3(ByteBuffer byteBuffer) {

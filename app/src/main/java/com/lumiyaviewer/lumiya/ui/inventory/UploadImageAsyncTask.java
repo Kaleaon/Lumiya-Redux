@@ -46,7 +46,7 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
     public UploadImageResult doInBackground(UploadImageParams... uploadImageParamsArr) {
         Bitmap createScaledBitmap;
         boolean z;
-        String str;
+        String str = null;
         boolean z2 = true;
         String str2 = null;
         int length = uploadImageParamsArr.length;
@@ -109,49 +109,25 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
                             LLSDNode parseXML = LLSDNode.parseXML(execute.body().byteStream(), null);
                             Debug.Log("upload reply: " + parseXML.serializeToXML());
                             try {
-                                try {
-                                    if (parseXML.keyExists("error")) {
-                                        LLSDNode byKey = parseXML.byKey("error");
-                                        if (!byKey.keyExists("message")) {
-                                            str = str2;
-                                            z = z2;
-                                        } else if (byKey.keyExists("success") && !byKey.byKey("success").asBoolean()) {
-                                            String asString = byKey.byKey("message").asString();
-                                            z = false;
-                                            str = asString;
-                                        }
-                                        userManager.getInventoryManager().requestFolderUpdate(uploadImageParams.folderID);
-                                        execute.close();
-                                        str2 = str;
+                                z = z2;
+                                if (parseXML.keyExists("error")) {
+                                    LLSDNode byKey = parseXML.byKey("error");
+                                    if (byKey.keyExists("message")
+                                            && byKey.keyExists("success")
+                                            && !byKey.byKey("success").asBoolean()) {
+                                        str = byKey.byKey("message").asString();
+                                        z = false;
                                     }
-                                    execute.close();
-                                    str2 = str;
-                                } catch (LLSDException e) {
-                                    e = e;
-                                    str2 = str;
-                                    Debug.Warning(e);
-                                    z = false;
-                                    i++;
-                                    z2 = z;
-                                } catch (IOException e2) {
-                                    e = e2;
-                                    str2 = str;
-                                    Debug.Warning(e);
-                                    z = false;
-                                    i++;
-                                    z2 = z;
                                 }
-                                userManager.getInventoryManager().requestFolderUpdate(uploadImageParams.folderID);
-                            } catch (Throwable th) {
-                                th = th;
-                                execute.close();
-                                throw th;
+                                str2 = str;
+                            } catch (LLSDException e) {
+                                str2 = str;
+                                Debug.Warning(e);
+                                z = false;
                             }
-                            str = str2;
-                            z = z2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            str = str2;
+                            userManager.getInventoryManager().requestFolderUpdate(uploadImageParams.folderID);
+                        } finally {
+                            execute.close();
                         }
                     } else {
                         z = false;
@@ -161,9 +137,11 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
                 }
                 createTempFile.delete();
             } catch (LLSDException e3) {
-                e = e3;
+                Debug.Warning(e3);
+                z = false;
             } catch (IOException e4) {
-                e = e4;
+                Debug.Warning(e4);
+                z = false;
             }
             i++;
             z2 = z;

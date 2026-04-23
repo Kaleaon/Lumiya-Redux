@@ -147,27 +147,23 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return showDetailsFragment;
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
     @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
     protected void updateTitleNoDetails() {
-        boolean z;
+        boolean handled = false;
         Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);
-        if (findFragmentById != 0 && (findFragmentById instanceof FragmentHasTitle) && findFragmentById.isAdded()) {
-            if (!findFragmentById.isDetached()) {
-                String title = ((FragmentHasTitle) findFragmentById).getTitle();
-                String subTitle = ((FragmentHasTitle) findFragmentById).getSubTitle();
-                if (title != null) {
-                    z = true;
-                    setActivityTitle(title, subTitle);
-                }
+        if (findFragmentById != null
+                && (findFragmentById instanceof FragmentHasTitle)
+                && findFragmentById.isAdded()
+                && !findFragmentById.isDetached()) {
+            String title = ((FragmentHasTitle) findFragmentById).getTitle();
+            String subTitle = ((FragmentHasTitle) findFragmentById).getSubTitle();
+            if (title != null) {
+                setActivityTitle(title, subTitle);
+                handled = true;
             }
-            z = false;
-        } else {
-            z = false;
         }
-        if (z) {
-            return;
+        if (!handled) {
+            super.updateTitleNoDetails();
         }
-        super.updateTitleNoDetails();
     }
 }
