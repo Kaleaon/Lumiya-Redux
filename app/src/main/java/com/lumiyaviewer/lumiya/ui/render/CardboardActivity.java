@@ -42,15 +42,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.AtomicDouble;
-import com.google.vr.cardboard.FullscreenMode;
-import com.google.vr.sdk.base.AndroidCompat;
-import com.google.vr.sdk.base.Eye;
-import com.google.vr.sdk.base.GvrView;
-import com.google.vr.sdk.base.HeadTransform;
-import com.google.vr.sdk.base.Viewport;
-import com.google.vr.sdk.controller.Controller;
-import com.google.vr.sdk.controller.ControllerManager;
-import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.R;
@@ -86,6 +77,12 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 import com.lumiyaviewer.lumiya.ui.render.CardboardActivity;
 import com.lumiyaviewer.lumiya.ui.render.CardboardControlsPlaceholder;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrEye;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrInputState;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrPose;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntime;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntimeSelector;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrSession;
 import com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import java.util.ArrayList;
@@ -173,13 +170,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
 
     @BindView(R.id.cardboard_ims)
     LinearLayout chatsOverlayLayout;
-    private Controller controller;
-    private ControllerManager controllerManager;
+    private VrSession vrSession;
+    private VrRuntime vrRuntime;
 
     @BindView(R.id.dialogQuestionText)
     TextView dialogQuestionText;
-    private FullscreenMode fullscreenMode;
-    private GvrView gvrView;
 
     @BindView(R.id.move_buttons_layout)
     ViewGroup moveButtonsLayout;
@@ -214,8 +209,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
 
     @BindView(R.id.cardboard_yesno_text)
     TextView yesNoText;
-    private final GvrView.StereoRenderer stereoRenderer = new WorldStereoRenderer();
-    private final ScreenOnFlagHelper screenOnFlagHelper = new ScreenOnFlagHelper(this);
+    private final VrSession.Renderer stereoRenderer = new WorldStereoRenderer();
     private boolean isResumed = false;
     private final AtomicBoolean viewDrawPosted = new AtomicBoolean(false);
     private boolean voiceEnabled = false;
@@ -586,20 +580,20 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             $m$0(view);
         }
     };
-    private final ControllerManager.EventListener controllerManagerEventListener = new ControllerManager.EventListener() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.6
-        @Override // com.google.vr.sdk.controller.ControllerManager.EventListener
+    private final VrSession.Listener vrSessionListener = new VrSession.Listener() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.6
+        @Override
         public void onApiStatusChanged(int i) {
             Debug.Printf("Cardboard: controller API status: %d", Integer.valueOf(i));
         }
 
-        @Override // com.google.vr.sdk.controller.ControllerManager.EventListener
+        @Override
         public void onRecentered() {
-            if (CardboardActivity.this.gvrView != null) {
-                CardboardActivity.this.gvrView.recenterHeadTracker();
+            if (CardboardActivity.this.vrSession != null) {
+                CardboardActivity.this.vrSession.recenterHeadTracker();
             }
         }
     };
-    private final Controller.EventListener controllerEventListener = new AnonymousClass7();
+    private final VrSession.InputListener vrInputListener = new AnonymousClass7();
 
     /* renamed from: com.lumiyaviewer.lumiya.ui.render.CardboardActivity$5, reason: invalid class name */
     class AnonymousClass5 {
@@ -629,7 +623,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     /* renamed from: com.lumiyaviewer.lumiya.ui.render.CardboardActivity$7, reason: invalid class name */
-    class AnonymousClass7 extends Controller.EventListener {
+    class AnonymousClass7 implements VrSession.InputListener {
         private boolean appButtonPressed = false;
 
         @Nullable
@@ -670,22 +664,19 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             CardboardActivity.this.handleMoveControl(moveControl, 0.0f);
         }
 
-        @Override // com.google.vr.sdk.controller.Controller.EventListener
+        @Override
         public void onConnectionStateChanged(int i) {
-            super.onConnectionStateChanged(i);
             Object[] objArr = new Object[1];
             objArr[0] = i == 3 ? "connected" : "disconnected";
             Debug.Printf("Cardboard: Daydream controller is now %s", objArr);
             CardboardActivity.this.controllerConnectionState.set(i);
         }
 
-        @Override // com.google.vr.sdk.controller.Controller.EventListener
-        public void onUpdate() {
+        @Override
+        public void onInputUpdated(VrInputState inputState) {
             final MoveControl moveControl;
             final float f = 0.0f;
-            super.onUpdate();
-            CardboardActivity.this.controller.update();
-            if (CardboardActivity.this.controller.appButtonState && (!this.appButtonPressed)) {
+            if (inputState.isAppButtonPressed() && (!this.appButtonPressed)) {
                 CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.20
                     private final /* synthetic */ void $m$0() {
                         ((CardboardActivity.AnonymousClass7) this).m787xb2042f3a();
@@ -696,7 +687,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                         $m$0();
                     }
                 });
-            } else if (!CardboardActivity.this.controller.appButtonState && this.appButtonPressed) {
+            } else if (!inputState.isAppButtonPressed() && this.appButtonPressed) {
                 CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.21
                     private final /* synthetic */ void $m$0() {
                         ((CardboardActivity.AnonymousClass7) this).m788xb2043377();
@@ -708,8 +699,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                     }
                 });
             }
-            this.appButtonPressed = CardboardActivity.this.controller.appButtonState;
-            if (!CardboardActivity.this.controller.isTouching) {
+            this.appButtonPressed = inputState.isAppButtonPressed();
+            if (!inputState.isTouching()) {
                 if (this.activeMoveControl != null) {
                     final MoveControl moveControl2 = this.activeMoveControl;
                     CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.28
@@ -727,8 +718,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 }
                 return;
             }
-            float f2 = (CardboardActivity.this.controller.touch.x * 2.0f) - 1.0f;
-            float f3 = -((CardboardActivity.this.controller.touch.y * 2.0f) - 1.0f);
+            float f2 = (inputState.getTouchX() * 2.0f) - 1.0f;
+            float f3 = -((inputState.getTouchY() * 2.0f) - 1.0f);
             if (Math.abs(f2) < 0.5f) {
                 f2 = 0.0f;
             }
@@ -818,7 +809,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    class WorldStereoRenderer implements GvrView.StereoRenderer {
+    class WorldStereoRenderer implements VrSession.Renderer {
         private static final float TURN_DEGREES = 35.0f;
         private static final float TURN_DEGREES_PER_MS = 0.02f;
         private static final float YAW_AVERAGE_FACTOR = 1.0E-4f;
@@ -854,30 +845,29 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             CardboardActivity.this.draw2DUI();
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
-        public void onDrawEye(Eye eye) {
+        @Override
+        public void onDrawEye(VrEye eye) {
             int type = eye.getType();
-            float f = (type == 1 ? -0.5f : 0.5f) * this.eyeSeparation;
+            float f = (type == VrEye.TYPE_LEFT ? -0.5f : 0.5f) * this.eyeSeparation;
             for (int i = 0; i < 4; i++) {
                 this.eyeOffset[i] = this.headTransformCompat.rightVector[i] * f;
             }
-            eye.getViewport().getAsArray(this.eyeViewport, 0);
-            eye.getEyeView();
-            int i2 = type == 1 ? 0 : 1;
-            if (CardboardActivity.this.renderSettings != null && (!this.eyeProjectionValid[i2] || eye.getProjectionChanged())) {
+            eye.getViewport(this.eyeViewport, 0);
+            int i2 = type == VrEye.TYPE_LEFT ? 0 : 1;
+            if (CardboardActivity.this.renderSettings != null && (!this.eyeProjectionValid[i2] || eye.isProjectionChanged())) {
                 System.arraycopy(eye.getPerspective(0.5f, CardboardActivity.this.renderSettings.drawDistance), 0, this.eyeProjection, i2 * 16, 16);
             }
             CardboardActivity.this.renderer.onDrawFrame(null, this.headTransformCompat, this.eyeOffset, this.eyeViewport, null, null, 0);
             if (this.externalTexture != null) {
-                CardboardActivity.this.renderer.drawExternalTexture(this.externalTexture, this.extTextureMatrixUV, f, this.headTransformCompat.pitchDegrees, this.headTransformCompat.useButtonsYaw, CardboardActivity.controlDrawSizeFactor, 1.125f, this.eyeHitTests, type == 1 ? 0 : 2);
+                CardboardActivity.this.renderer.drawExternalTexture(this.externalTexture, this.extTextureMatrixUV, f, this.headTransformCompat.pitchDegrees, this.headTransformCompat.useButtonsYaw, CardboardActivity.controlDrawSizeFactor, 1.125f, this.eyeHitTests, type == VrEye.TYPE_LEFT ? 0 : 2);
                 if (this.crosshairVisible) {
                     CardboardActivity.this.renderer.drawCrosshair(CardboardActivity.crosshairSize, f);
                 }
             }
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
-        public void onFinishFrame(Viewport viewport) {
+        @Override
+        public void onFinishFrame() {
             CardboardActivity.this.renderer.onFinishFrame();
             if (this.externalTexture != null) {
                 float f = (this.eyeHitTests[0] + this.eyeHitTests[2]) / 2.0f;
@@ -903,8 +893,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             }
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
-        public void onNewFrame(HeadTransform headTransform) {
+        @Override
+        public void onNewFrame(VrPose headTransform) {
             SLAvatarControl sLAvatarControl = (SLAvatarControl) CardboardActivity.this.avatarControl.get();
             long uptimeMillis = SystemClock.uptimeMillis();
             headTransform.getQuaternion(this.headTransformCompat.rotationQuat, 0);
@@ -989,14 +979,14 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             }
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
+        @Override
         public void onRendererShutdown() {
             this.externalTexture.release();
             this.externalTexture = null;
             CardboardActivity.this.renderer.onRendererShutdown();
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
+        @Override
         public void onSurfaceChanged(int i, int i2) {
             this.viewportWidth = i;
             this.viewportHeight = i2;
@@ -1005,7 +995,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 this.externalTexture.release();
             }
             this.externalTexture = new GLExternalTexture((int) (i * 1.0f), ((int) (i2 * CardboardActivity.controlSizeFactorY)) + CardboardActivity.this.voiceViewHeightAllowance);
-            this.eyeSeparation = CardboardActivity.this.gvrView.getInterpupillaryDistance();
+            this.eyeSeparation = CardboardActivity.this.vrSession != null ? CardboardActivity.this.vrSession.getInterpupillaryDistance() : 0.0f;
             this.headTransformCompat.neutralYawValid = false;
             CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.23
                 private final /* synthetic */ void $m$0() {
@@ -1019,7 +1009,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             });
         }
 
-        @Override // com.google.vr.sdk.base.GvrView.StereoRenderer
+        @Override
         public void onSurfaceCreated(EGLConfig eGLConfig) {
             CardboardActivity.this.renderer.onSurfaceCreated(null, eGLConfig, true);
         }
@@ -1763,15 +1753,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         super.onCreate(bundle);
         requestWindowFeature(1);
         getWindow().setFlags(1024, 1024);
-        this.fullscreenMode = new FullscreenMode(getWindow());
         setContentView(R.layout.cardboard_layout);
         this.userManager = ActivityUtils.getUserManager(getIntent());
         if (this.userManager == null) {
             finish();
             return;
         }
-        AndroidCompat.trySetVrModeEnabled(this, true);
-        AndroidCompat.setSustainedPerformanceMode(this, true);
         this.renderSettings = new RenderSettings(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
         this.stateHandler = new Handler();
         Debug.Printf("Cardboard: creating VR view", new Object[0]);
@@ -1794,14 +1781,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.renderer.setDrawDistance(this.renderSettings.drawDistance);
         this.renderer.setAvatarCountLimit(this.renderSettings.avatarCountLimit);
         this.renderer.setForcedTime(globalOptions.getForceDaylightTime(), globalOptions.getForceDaylightHour());
-        this.gvrView = new GvrView(this);
-        this.gvrView.setDistortionCorrectionEnabled(true);
-        this.gvrView.setAsyncReprojectionEnabled(true);
-        this.gvrView.setRenderer(this.stereoRenderer);
-        this.controllerManager = new ControllerManager(this, this.controllerManagerEventListener);
-        Debug.Printf("Cardboard: has magnet: %b", Boolean.valueOf(this.gvrView.getGvrViewerParams().getHasMagnet()));
-        ((FrameLayout) findViewById(R.id.vr_view_placeholder)).addView(this.gvrView, new FrameLayout.LayoutParams(-1, -1));
-        this.gvrView.setOnCardboardTriggerListener(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.24
+        this.vrRuntime = VrRuntimeSelector.selectRuntime(this, getIntent());
+        this.vrSession = this.vrRuntime.createSession(this, this.vrSessionListener);
+        this.vrSession.setRenderer(this.stereoRenderer);
+        this.vrSession.setInputListener(this.vrInputListener);
+        Debug.Printf("Cardboard: runtime=%s has magnet: %b", this.vrRuntime.getRuntimeId(), Boolean.valueOf(this.vrSession.hasMagnet()));
+        ((FrameLayout) findViewById(R.id.vr_view_placeholder)).addView(this.vrSession.getView(), new FrameLayout.LayoutParams(-1, -1));
+        this.vrSession.setOnTriggerListener(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.24
             private final /* synthetic */ void $m$0() {
                 ((CardboardActivity) this).m769com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref13();
             }
@@ -1859,7 +1845,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 $m$0();
             }
         });
-        this.gvrView.setOnTouchListener(new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.7
+        this.vrSession.setOnTouchListener(new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.7
             private final /* synthetic */ boolean $m$0(View view2, MotionEvent motionEvent) {
                 return ((CardboardActivity) this).m770com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref14(view2, motionEvent);
             }
@@ -1873,10 +1859,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
 
     @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
     protected void onDestroy() {
-        if (this.gvrView != null) {
-            this.gvrView.setOnCardboardTriggerListener(null);
-            this.gvrView.shutdown();
-            this.gvrView = null;
+        if (this.vrSession != null) {
+            this.vrSession.onDestroy();
+            this.vrSession = null;
         }
         super.onDestroy();
     }
@@ -2000,21 +1985,18 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
         this.isResumed = false;
         updateDrawingEnabled();
-        if (this.gvrView != null) {
-            this.gvrView.onPause();
+        if (this.vrSession != null) {
+            this.vrSession.onPause();
         }
-        this.screenOnFlagHelper.stop();
         super.onPause();
     }
 
     @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
     protected void onResume() {
         super.onResume();
-        if (this.gvrView != null) {
-            this.gvrView.onResume();
+        if (this.vrSession != null) {
+            this.vrSession.onResume();
         }
-        this.fullscreenMode.goFullscreen();
-        this.screenOnFlagHelper.start();
         if (this.speechRecognizer == null) {
             if (SpeechRecognizer.isRecognitionAvailable(this)) {
                 Debug.Printf("Cardboard: speech recognition is available", new Object[0]);
@@ -2094,10 +2076,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     protected void onStart() {
         super.onStart();
         this.voiceEnabled = GlobalOptions.getInstance().getVoiceEnabled();
-        this.controllerManager.start();
-        this.controller = this.controllerManager.getController();
-        if (this.controller != null) {
-            this.controller.setEventListener(this.controllerEventListener);
+        if (this.vrSession != null) {
+            this.vrSession.onStart();
         }
         if (this.userManager != null) {
             this.agentCircuit.subscribe(UserManager.agentCircuits(), this.userManager.getUserID());
@@ -2120,7 +2100,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.agentCircuit.unsubscribe();
         this.voiceStatusView.setChatterID(null);
         this.keypadActive.set(false);
-        this.controllerManager.stop();
+        if (this.vrSession != null) {
+            this.vrSession.onStop();
+        }
         super.onStop();
     }
 
@@ -2132,7 +2114,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     @Override // android.app.Activity, android.view.Window.Callback
     public void onWindowFocusChanged(boolean z) {
         super.onWindowFocusChanged(z);
-        this.fullscreenMode.onWindowFocusChanged(z);
     }
 
     @OnClick({R.id.cardboard_yes_button})
