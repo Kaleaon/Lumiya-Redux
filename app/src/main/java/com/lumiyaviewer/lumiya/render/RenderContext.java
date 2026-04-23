@@ -15,6 +15,7 @@ import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
 import com.lumiyaviewer.lumiya.render.drawable.DrawableFaceTexture;
+import com.lumiyaviewer.lumiya.render.caps.GpuCapabilities;
 import com.lumiyaviewer.lumiya.render.glres.GLAsyncLoadQueue;
 import com.lumiyaviewer.lumiya.render.glres.GLLoadQueue;
 import com.lumiyaviewer.lumiya.render.glres.GLQuery;
@@ -82,6 +83,7 @@ public class RenderContext {
     public final FlexiPrimProgram flexiPrimProgram;
     public final FXAAProgram fxaaProgram;
     private final String glRenderer;
+    public final GpuCapabilities gpuCapabilities;
     public final GLResourceManager glResourceManager;
     public final boolean hasGL11;
     public final boolean hasGL20;
@@ -148,27 +150,26 @@ public class RenderContext {
         }
     }
 
-    public RenderContext(EGLConfig eGLConfig, String str, boolean z, boolean z2, boolean z3, boolean z4, int i, boolean z5, int i2, boolean z6, Object obj) {
+    public RenderContext(EGLConfig eGLConfig, GpuCapabilities gpuCapabilities, int i, boolean z, int i2, boolean z2, Object obj) {
         boolean z7;
         boolean z8;
         Shaders30 shaders30;
-        this.glRenderer = Strings.nullToEmpty(str);
-        this.hasGL20 = !z2 ? z : true;
-        this.hasGL11 = z3;
-        this.hasVBO = z4;
-        if (z2 || z) {
-            z4 = true;
-        } else if (!z3) {
-            z4 = false;
-        }
-        this.useVBO = z4;
-        if (z2) {
+        this.gpuCapabilities = gpuCapabilities;
+        this.glRenderer = Strings.nullToEmpty(gpuCapabilities.glRenderer);
+        boolean z3 = gpuCapabilities.selectedTier != GpuCapabilities.CompatibilityTier.TIER_C;
+        boolean z4 = gpuCapabilities.reportsEs11;
+        boolean z5 = gpuCapabilities.supportsVbo;
+        this.hasGL20 = z3;
+        this.hasGL11 = z4;
+        this.hasVBO = z5;
+        this.useVBO = z3 || gpuCapabilities.supportsEs3 || (z4 && z5);
+        if (z3) {
             this.useFXAA = GlobalOptions.getInstance().getUseFXAA();
         } else {
             this.useFXAA = false;
         }
-        if (z2) {
-            GPUDetection gPUDetection = new GPUDetection(str);
+        if (z3) {
+            GPUDetection gPUDetection = new GPUDetection(this.glRenderer);
             Debug.AlwaysPrintf("Detected GPU family '%s', version '%s', numeric version %d", gPUDetection.detectedFamily.or((Optional<String>) EnvironmentCompat.MEDIA_UNKNOWN), gPUDetection.detectedVersion.or((Optional<String>) EnvironmentCompat.MEDIA_UNKNOWN), Integer.valueOf(gPUDetection.detectedNumericVersion));
             HashMap hashMap = new HashMap();
             hashMap.put("__NUM_BASE_JOINTS__", Integer.toString(26));
@@ -177,8 +178,8 @@ public class RenderContext {
             hashMap.put("__MAX_RIGGED_MESH_JOINTS__", Integer.toString(MeshData.MAX_RIGGED_MESH_JOINTS));
             if (gPUDetection.detectedFamily.or((Optional<String>) "").equals(GPUDetection.GPU_FAMILY_ADRENO)) {
                 hashMap.put("__ADRENO__", "");
-                if (gPUDetection.detectedNumericVersion != -1 && gPUDetection.detectedNumericVersion < 330) {
-                    z = false;
+                if (gpuCapabilities.quirkDisableEs3Shaders) {
+                    z3 = false;
                 }
             }
             ShaderPreprocessor shaderPreprocessor = new ShaderPreprocessor(hashMap);
@@ -197,7 +198,7 @@ public class RenderContext {
             }
             this.quadProgram = new QuadProgram();
             this.starsProgram = new StarsProgram();
-            if (z6) {
+            if (z2) {
                 this.extTextureProgram = new RawShaderProgram(true);
                 this.rawShaderProgram = new RawShaderProgram(false);
             } else {
@@ -213,7 +214,7 @@ public class RenderContext {
                 z8 = true;
             }
             Debug.AlwaysPrintf("Renderer: Shaders compiled, errors: %b.", Boolean.valueOf(z8));
-            if (z) {
+            if (z3) {
                 try {
                     shaders30 = new Shaders30(shaderPreprocessor, null);
                 } catch (ShaderCompileException e2) {
@@ -231,7 +232,7 @@ public class RenderContext {
                     this.riggedMeshProgram30 = null;
                     this.riggedMeshProgramOpaque30 = null;
                     this.boundingBoxProgram = null;
-                    z = false;
+                    z3 = false;
                     z7 = z8;
                 }
             } else {
@@ -259,20 +260,20 @@ public class RenderContext {
             this.rawShaderProgram = null;
             z7 = false;
         }
-        this.hasGL30 = z;
+        this.hasGL30 = z3;
         this.shaderCompileErrors = z7;
         this.quad = new Quad();
         this.glResourceManager = new GLResourceManager();
         this.windlightPreset = new WindlightPreset();
         this.loadQueue = createLoadQueue(eGLConfig);
-        this.drawableStore = new DrawableStore(this.loadQueue, z2, i, z5, i2, obj);
-        if (z7 || !z) {
+        this.drawableStore = new DrawableStore(this.loadQueue, z3, i, z, i2, obj);
+        if (z7 || !z3) {
             this.boundingBox = null;
         } else {
             this.boundingBox = new BoundingBox(this);
         }
-        this.windlightSky = z2 ? new WindlightSky(this) : null;
-        if (z6) {
+        this.windlightSky = z3 ? new WindlightSky(this) : null;
+        if (z2) {
             this.crosshairTexture = GLLoadedTexture.loadFromAssets(this, LumiyaApp.getContext(), "misc/crosshair.png");
         } else {
             this.crosshairTexture = null;
@@ -307,7 +308,7 @@ public class RenderContext {
 
     private GLLoadQueue createLoadQueue(EGLConfig eGLConfig) {
         Debug.Printf("TexLoad: creating load queue.", new Object[0]);
-        if (this.hasGL20 && (!this.glRenderer.toLowerCase().contains("tegra"))) {
+        if (this.hasGL20 && !this.gpuCapabilities.quirkDisableAsyncLoadQueue) {
             EGL egl = EGLContext.getEGL();
             if (egl instanceof EGL10) {
                 EGL10 egl10 = (EGL10) egl;

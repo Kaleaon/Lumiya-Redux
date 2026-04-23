@@ -7,9 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.opengl.GLES10;
 import android.opengl.GLES20;
-import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Handler;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
@@ -19,6 +17,7 @@ import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatar;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatarStub;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableHUD;
+import com.lumiyaviewer.lumiya.render.caps.GpuCapabilities;
 import com.lumiyaviewer.lumiya.render.glres.textures.GLExternalTexture;
 import com.lumiyaviewer.lumiya.render.picking.IntersectPickable;
 import com.lumiyaviewer.lumiya.render.picking.ObjectIntersectInfo;
@@ -128,6 +127,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     private boolean hoverTextEnableHUDs = true;
     private boolean hoverTextEnableObjects = false;
     private boolean createdGL30 = false;
+    @Nullable
+    private GpuCapabilities gpuCapabilities = null;
     private int[] Framebuffers = null;
     private int[] Renderbuffers = null;
     private int[] Colorbuffers = null;
@@ -318,7 +319,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     @Override // android.opengl.GLSurfaceView.EGLContextFactory
     public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
         Debug.Printf("EGL: createContext called.", new Object[0]);
-        if (this.requestGL20 && Build.VERSION.SDK_INT >= 18) {
+        if (GpuCapabilities.shouldAttemptEs3Context(this.requestGL20)) {
             Debug.Printf("EGL: trying to create 3.0 context.", new Object[0]);
             EGLContext eglCreateContext = egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
             if (eglCreateContext != null && eglCreateContext != EGL10.EGL_NO_CONTEXT) {
@@ -876,41 +877,14 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig, boolean z) {
-        boolean z2;
         TextureMemoryTracker.setActiveRenderer(this);
         this.drawingEnabled.set(true);
         this.firstFrameCount.set(1);
         PrimComputeExecutor.getInstance().resume();
-        String glGetString = GLES10.glGetString(7936);
-        String glGetString2 = GLES10.glGetString(7937);
-        String glGetString3 = GLES10.glGetString(7938);
-        String glGetString4 = GLES10.glGetString(7939);
-        if (this.createdGL30) {
-            int[] iArr = new int[1];
-            GLES30.glGetIntegerv(33307, iArr, 0);
-            Debug.Printf("Renderer: Reported major version: %d", Integer.valueOf(iArr[0]));
-            if (iArr[0] < 3) {
-                this.createdGL30 = false;
-            }
-        }
-        Debug.Printf("Renderer: glVendor '%s', glRenderer '%s'", glGetString, glGetString2);
-        Debug.Log("Renderer: version = '" + glGetString3 + "', extensions = '" + glGetString4 + "', thread id = " + Thread.currentThread().getId());
-        boolean z3 = this.createdGL30;
-        boolean z4 = this.createdGL30;
-        boolean z5 = z3;
-        for (String str : glGetString4.split(" ")) {
-            if (str.equals("GL_ARB_vertex_buffer_object")) {
-                z5 = true;
-            }
-        }
-        if (glGetString3.contains("1.1")) {
-            z4 = true;
-            z2 = true;
-        } else {
-            z2 = z5;
-        }
-        Debug.Printf("Renderer: VBO support %s, GL11 %s, GL30 %s", Boolean.valueOf(z2), Boolean.valueOf(z4), Boolean.valueOf(this.createdGL30));
-        RenderContext renderContext = new RenderContext(eGLConfig, glGetString2, this.createdGL30, this.requestGL20, z4, z2, this.avatarCountLimit, GlobalOptions.getInstance().getTerrainTextures(), this.fontSize, z, this);
+        this.gpuCapabilities = GpuCapabilities.probe(this.requestGL20, this.createdGL30);
+        this.createdGL30 = this.gpuCapabilities.supportsEs3;
+        Debug.Printf("Renderer: VBO support %s, GL11 %s, GL30 %s, tier %s", Boolean.valueOf(this.gpuCapabilities.supportsVbo), Boolean.valueOf(this.gpuCapabilities.reportsEs11), Boolean.valueOf(this.gpuCapabilities.supportsEs3), this.gpuCapabilities.selectedTier);
+        RenderContext renderContext = new RenderContext(eGLConfig, this.gpuCapabilities, this.avatarCountLimit, GlobalOptions.getInstance().getTerrainTextures(), this.fontSize, z, this);
         Debug.AlwaysPrintf("Renderer: created context, GL30 %b, GL20 %b", Boolean.valueOf(renderContext.hasGL30), Boolean.valueOf(renderContext.hasGL20));
         if (renderContext.hasGL20) {
             if (renderContext.getShaderCompileErrors()) {
