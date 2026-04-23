@@ -12,7 +12,7 @@ public class AudioIntentReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
             Intent intent2 = new Intent(context, (Class<?>) StreamingMediaService.class);
             intent2.setAction("com.lumiyaviewer.lumiya.ACTION_STOP_MEDIA");
-            context.startService(intent2);
+            StreamingMediaService.startServiceCompat(context, intent2);
         }
     }
 }

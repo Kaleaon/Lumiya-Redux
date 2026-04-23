@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.media.AudioIntentReceiver;
 import com.lumiyaviewer.lumiya.media.AudioManagerWrapper;
@@ -43,6 +44,10 @@ public class StreamingMediaService extends Service {
     private UUID lastActiveAgentUUID = null;
     private ParcelData lastParcelData = null;
     private final AudioFocusChangeHandler mHandler = new AudioFocusChangeHandler(this, null);
+
+    public static void startServiceCompat(Context context, Intent intent) {
+        ContextCompat.startForegroundService(context, intent);
+    }
 
     private static class AudioFocusChangeHandler extends Handler {
         private final WeakReference<StreamingMediaService> streamingMediaService;
@@ -157,7 +162,7 @@ public class StreamingMediaService extends Service {
         intent.putExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY, parcelData);
         intent.putExtra(MEDIA_URL_KEY, mediaURL);
         intent.putExtra(LOCATION_NAME_KEY, parcelData.getName());
-        context.startService(intent);
+        startServiceCompat(context, intent);
     }
 
     @Override // android.app.Service

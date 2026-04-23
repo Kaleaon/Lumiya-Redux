@@ -19,7 +19,7 @@ public class StreamingMediaActivity extends AppCompatActivity implements View.On
                 Intent intent = new Intent(getIntent());
                 intent.setAction("com.lumiyaviewer.lumiya.ACTION_STOP_MEDIA");
                 intent.setClass(this, StreamingMediaService.class);
-                startService(intent);
+                StreamingMediaService.startServiceCompat(this, intent);
                 finish();
                 break;
         }

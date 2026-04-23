@@ -637,32 +637,30 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     public void enableHover(final OnHoverListenerCompat onHoverListenerCompat) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            this.hoverEnabled = true;
-            View.OnHoverListener onHoverListener = new View.OnHoverListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8
-                private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-                    return VoiceStatusView.m876lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_6407((OnHoverListenerCompat) onHoverListenerCompat, view, motionEvent);
-                }
-
-                @Override // android.view.View.OnHoverListener
-                public final boolean onHover(View view, MotionEvent motionEvent) {
-                    return $m$0(view, motionEvent);
-                }
-            };
-            int applyDimension = (int) TypedValue.applyDimension(1, 14.0f, getResources().getDisplayMetrics());
-            TypedArray obtainStyledAttributes = getContext().obtainStyledAttributes(new int[]{R.attr.buttonShapeMoveControl});
-            for (ImageButton imageButton : new ImageButton[]{this.voiceAnswerButton, this.voiceTerminateButton, this.voiceMicOnButton, this.voiceMicOffButton}) {
-                imageButton.setOnHoverListener(onHoverListener);
-                if (imageButton == this.voiceMicOnButton) {
-                    imageButton.setBackground(getContext().getDrawable(R.drawable.fab_shape_move_control_green));
-                } else {
-                    imageButton.setBackground(obtainStyledAttributes.getDrawable(0));
-                }
-                imageButton.setPadding(applyDimension, applyDimension, applyDimension, applyDimension);
-                imageButton.setAlpha(0.5f);
+        this.hoverEnabled = true;
+        View.OnHoverListener onHoverListener = new View.OnHoverListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8
+            private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
+                return VoiceStatusView.m876lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_6407((OnHoverListenerCompat) onHoverListenerCompat, view, motionEvent);
             }
-            obtainStyledAttributes.recycle();
+
+            @Override // android.view.View.OnHoverListener
+            public final boolean onHover(View view, MotionEvent motionEvent) {
+                return $m$0(view, motionEvent);
+            }
+        };
+        int applyDimension = (int) TypedValue.applyDimension(1, 14.0f, getResources().getDisplayMetrics());
+        TypedArray obtainStyledAttributes = getContext().obtainStyledAttributes(new int[]{R.attr.buttonShapeMoveControl});
+        for (ImageButton imageButton : new ImageButton[]{this.voiceAnswerButton, this.voiceTerminateButton, this.voiceMicOnButton, this.voiceMicOffButton}) {
+            imageButton.setOnHoverListener(onHoverListener);
+            if (imageButton == this.voiceMicOnButton) {
+                imageButton.setBackground(getContext().getDrawable(R.drawable.fab_shape_move_control_green));
+            } else {
+                imageButton.setBackground(obtainStyledAttributes.getDrawable(0));
+            }
+            imageButton.setPadding(applyDimension, applyDimension, applyDimension, applyDimension);
+            imageButton.setAlpha(0.5f);
         }
+        obtainStyledAttributes.recycle();
     }
 
     public void hideBackground() {

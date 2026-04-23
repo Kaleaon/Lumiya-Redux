@@ -6,6 +6,8 @@ branch at the commit that introduces this file.
 
 Current SDK window in this branch: `minSdk 26`, `targetSdk 34`, `compileSdk 34`.
 
+API-floor cleanup note: API 21–25 compatibility codepaths are being removed in favor of API 26+ behavior (foreground-service starts, Oreo notification resources/channels, and post-Lollipop ABI detection only).
+
 ## What works
 
 | Stage | Status |

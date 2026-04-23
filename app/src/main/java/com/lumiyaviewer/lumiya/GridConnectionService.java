@@ -21,6 +21,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.vr.cardboard.TransitionView;
@@ -140,6 +141,10 @@ public class GridConnectionService extends Service implements SharedPreferences.
             }
         }
     };
+
+    public static void startServiceCompat(Context context, Intent intent) {
+        ContextCompat.startForegroundService(context, intent);
+    }
     private final BroadcastReceiver cloudPluginInstalledReceiver = new BroadcastReceiver() { // from class: com.lumiyaviewer.lumiya.GridConnectionService.2
         @Override // android.content.BroadcastReceiver
         public void onReceive(Context context, Intent intent) {

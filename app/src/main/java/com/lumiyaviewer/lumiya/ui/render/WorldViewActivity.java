@@ -1388,7 +1388,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem findItem = menu.findItem(R.id.item_cardboard_view);
         if (findItem != null) {
-            findItem.setVisible(Build.VERSION.SDK_INT >= 23);
+            findItem.setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
     }

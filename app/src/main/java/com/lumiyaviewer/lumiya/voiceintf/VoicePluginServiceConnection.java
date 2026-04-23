@@ -224,7 +224,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     }
 
     public static boolean isPluginSupported() {
-        String[] strArr = Build.VERSION.SDK_INT >= 21 ? Build.SUPPORTED_ABIS : new String[]{Build.CPU_ABI, Build.CPU_ABI2};
+        String[] strArr = Build.SUPPORTED_ABIS;
         if (strArr == null) {
             return false;
         }
