@@ -19,6 +19,8 @@ import com.lumiyaviewer.lumiya.dao.UserDao;
 import com.lumiyaviewer.lumiya.dao.UserName;
 import com.lumiyaviewer.lumiya.dao.UserPic;
 import com.lumiyaviewer.lumiya.dao.UserPicDao;
+import com.lumiyaviewer.lumiya.data.repository.UserPicRepositoryAdapter;
+import com.lumiyaviewer.lumiya.data.room.LumiyaRoomDatabase;
 import com.lumiyaviewer.lumiya.eventbus.EventBus;
 import com.lumiyaviewer.lumiya.react.OpportunisticExecutor;
 import com.lumiyaviewer.lumiya.react.RateLimitRequestHandler;
@@ -140,6 +142,7 @@ public class UserManager {
 
     @Nonnull
     private final UserPicDao userPicDao;
+    private final UserPicRepositoryAdapter userPicRepository;
     private static final Object lock = new Object();
     private static final Map<UUID, UserManager> userManagers = new WeakHashMap();
     private static final SubscriptionDataPool<UUID, SLAgentCircuit> activeAgentCircuitsPool = new SubscriptionDataPool().setCanContainNulls(true);
@@ -210,6 +213,8 @@ public class UserManager {
         this.userDao = userDaoSession.getUserDao();
         this.userPicDao = userDaoSession.getUserPicDao();
         this.chatMessageDao = userDaoSession.getChatMessageDao();
+        LumiyaRoomDatabase roomDb = DaoManager.getRoomDatabase(userDaoSession);
+        this.userPicRepository = new UserPicRepositoryAdapter(this.userPicDao, roomDb != null ? roomDb.userPicDao() : null);
         this.chatterDao = userDaoSession.getChatterDao();
         this.avatarPicks = new SLMessageResponseCacher<>(userDaoSession, this.dbExecutor, "AvatarPicks");
         this.avatarPickInfos = new SLMessageResponseCacher<>(userDaoSession, this.dbExecutor, "AvatarPickInfos");
@@ -635,7 +640,7 @@ public class UserManager {
                     unique.setUuid(uuid.toString());
                 }
                 unique.setBitmap(bArr);
-                this.userPicDao.insertOrReplace(unique);
+                this.userPicRepository.insertOrReplace(unique);
             }
         }
     }
