@@ -49,6 +49,8 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
     private boolean renderClouds = true;
     private boolean forceDaylightTime = false;
     private float forceDaylightHour = 0.5f;
+    private RenderEngine renderEngine = RenderEngine.legacy_gles;
+    private boolean requestAngle = false;
     private boolean cloudSyncEnabled = false;
     private boolean voiceEnabled = false;
 
@@ -88,6 +90,11 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
         public String getLODName() {
             return this.lodName;
         }
+    }
+
+    public enum RenderEngine {
+        legacy_gles,
+        filament_experimental
     }
 
     public static GlobalOptions getInstance() {
@@ -301,6 +308,14 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
         return this.renderClouds;
     }
 
+    public RenderEngine getRenderEngine() {
+        return this.renderEngine;
+    }
+
+    public boolean getRequestAngle() {
+        return this.requestAngle;
+    }
+
     public boolean getShowTimestamps() {
         return this.showTimestamps;
     }
@@ -427,6 +442,12 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
         this.advancedRendering = sharedPreferences.getBoolean("advanced_rendering", true);
         this.useFXAA = sharedPreferences.getBoolean("fxaa_enable", false);
         this.renderClouds = sharedPreferences.getBoolean("clouds_enable", true);
+        try {
+            this.renderEngine = RenderEngine.valueOf(sharedPreferences.getString("render_engine", RenderEngine.legacy_gles.name()));
+        } catch (Exception e5) {
+            this.renderEngine = RenderEngine.legacy_gles;
+        }
+        this.requestAngle = sharedPreferences.getBoolean("request_angle", false);
         String string2 = sharedPreferences.getString("render_time_of_day", "sim");
         if (string2.equalsIgnoreCase("sim")) {
             this.forceDaylightTime = false;
@@ -435,7 +456,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             try {
                 this.forceDaylightTime = true;
                 this.forceDaylightHour = Float.parseFloat(string2);
-            } catch (Exception e5) {
+            } catch (Exception e6) {
                 this.forceDaylightTime = false;
                 this.forceDaylightHour = 0.5f;
             }

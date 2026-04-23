@@ -137,6 +137,14 @@
         <item>lowest</item>
         <item>disabled</item>
     </string-array>
+    <string-array name="pref_render_engine">
+        <item>Legacy GLES</item>
+        <item>Filament Experimental</item>
+    </string-array>
+    <string-array name="pref_render_engine_values">
+        <item>legacy_gles</item>
+        <item>filament_experimental</item>
+    </string-array>
     <string-array name="pref_texture_memory_limit">
         <item>32 Mb</item>
         <item>64 Mb</item>
