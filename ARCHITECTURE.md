@@ -133,13 +133,19 @@ except for the few that are no longer distributed:
 | --- | --- |
 | AndroidX / Material Components | Maven — latest stable (`androidx.*`, `com.google.android.material:*`). The decompiled `android.support.*` imports were rewritten to their AndroidX equivalents by `tools/migrate_androidx.py`. |
 | OkHttp 3.14.9 + Okio 1.17.5 | Maven Central. The APK shipped 3.5.0; 3.14.9 is the last API-compatible 3.x release. |
-| greenDAO 2.1.0 | Maven Central. Still the legacy `de.greenrobot` coordinate; greenDAO 3.x would require renaming imports to `org.greenrobot.greendao`. |
-| ButterKnife 10.2.3 | Maven Central. Deprecated but final release. Works with AndroidX. JPMS opens needed for JDK 17+ — see `app/build.gradle`. |
+| greenDAO 2.1.0 | Maven Central. Transitional dependency while Room migration is in progress. Remove once Room is authoritative for all active entities/queries and migrations are validated end-to-end. |
+| ButterKnife 10.2.3 | Maven Central. Deprecated but final release. Transitional dependency: replace touched UI files with ViewBinding (preferred) or modern alternatives opportunistically; remove compiler/runtime after last consumer is migrated. |
 | Gson 2.10.1, Guava 32.1.3-android, JSR-305 3.0.2 | Maven Central. |
 | PagerSlidingTabStrip 1.0.1, nineoldandroids 2.4.0 | Maven Central. Kept at their last released versions. |
 | **PhotoView** | Shipped in-tree at `uk/co/senab/photoview/` because no reliable Maven drop-in preserves the legacy package. Migration target: `com.github.chrisbanes:PhotoView:2.3.0` + rewrite of the one consumer (`TextureViewFragment`). |
-| **Google VR SDK** | Shipped in-tree at `com/google/vr/` and `com/google/vrtoolkit/` plus `jniLibs/*/libgvr.so`. Google retired the SDK in 2019 and removed the Maven artefacts in 2021. Long-term replacement is the open [Google Cardboard SDK](https://github.com/googlevr/cardboard), which requires rewriting `CardboardActivity`. |
-| **protobuf-nano** | Shipped in-tree at `com/google/protobuf/nano/`. protobuf-javanano was discontinued. Only the GVR code uses it, so it lives and dies with the GVR migration. |
+| **Google VR SDK** | Shipped in-tree at `com/google/vr/` and `com/google/vrtoolkit/` plus `jniLibs/*/libgvr.so`. Google retired the SDK in 2019 and removed the Maven artefacts in 2021. Keep only until Cardboard/OpenXR replacement reaches parity and rollout confidence gates are met; then remove in-tree packages + `libgvr.so`. |
+| **protobuf-nano** | Shipped in-tree at `com/google/protobuf/nano/`. protobuf-javanano was discontinued. Only the GVR stack uses it, so remove with the GVR teardown after parity/rollout confidence is established. |
+
+### Dependency cleanup gates (post-functional migrations)
+
+- **GVR teardown gate:** remove `com/google/vr/**`, `com/google/vrtoolkit/**`, `com/google/protobuf/nano/**`, and `jniLibs/*/libgvr.so` only after Cardboard/OpenXR parity is verified and staged rollout health is stable.
+- **Persistence teardown gate:** remove greenDAO runtime + generated DAO surface only after Room migration completion (entities, queries, schema migration tests).
+- **UI modernization gate:** replace ButterKnife in files touched by feature/fix work using ViewBinding-first opportunistic cleanup; avoid all-at-once rewrites unless explicitly scheduled.
 
 ## Protocol modernization guardrails
 

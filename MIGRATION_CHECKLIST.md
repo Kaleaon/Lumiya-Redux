@@ -21,3 +21,18 @@
 - [x] `com/lumiyaviewer/lumiya/ui/myava/TransactionLogAdapter.java` — resolved nested holder generic reference and removed embedded ButterKnife generated binding artifact.
 - [x] `com/lumiyaviewer/lumiya/ui/inventory/UploadImageAsyncTask.java` — qualified nested result generic type in AsyncTask signature.
 - [x] `com/lumiyaviewer/lumiya/slproto/messages/*.java` — normalized common decompiler artifacts (`Iterator<T>` and catch-variable rebinding cleanup) for message parser set.
+
+## Post-migration cleanup phase (only after functional parity + rollout confidence)
+- [ ] **VR decommission sequencing**
+  - [ ] Confirm Cardboard/OpenXR replacement reaches feature parity with existing GVR flows (`CardboardActivity`, stereo rendering, head tracking, input, lifecycle resilience).
+  - [ ] Complete staged rollout validation (crash-free sessions, ANR rate, user feedback, perf baselines) before deleting legacy runtime.
+  - [ ] Remove in-tree GVR/protobuf-nano sources (`com/google/vr/**`, `com/google/vrtoolkit/**`, `com/google/protobuf/nano/**`) and packaged `src/main/jniLibs/*/libgvr.so`.
+- [ ] **Persistence cleanup sequencing**
+  - [ ] Finish Room migration for all active entities/queries and validate schema migrations + downgrade/upgrade behavior.
+  - [ ] Remove greenDAO runtime/dependencies and generated DAO surface (`de.greenrobot:greendao`, `dao/`, remaining `orm/` artifacts tied to greenDAO only) once Room is authoritative.
+- [ ] **UI cleanup sequencing**
+  - [ ] For every touched ButterKnife-backed UI file, opportunistically replace field injection and click bindings with ViewBinding (preferred) or another modern equivalent when ViewBinding is not a good fit.
+  - [ ] Keep replacement incremental per-screen to reduce regression surface; avoid mass rewrites without functional changes.
+- [ ] **Documentation and build comments**
+  - [ ] Keep `ARCHITECTURE.md` dependency lifecycle notes aligned with migration status.
+  - [ ] Keep `app/build.gradle` dependency comments aligned so build-time intent and cleanup gates are explicit.

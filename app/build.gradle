@@ -75,8 +75,9 @@ android {
         }
     }
 
-    // Keep the shipped native libs (librawbuf.so, libopenjpeg.so) in
-    // src/main/jniLibs/<abi>/. libgvr.so is now supplied by the GVR AAR.
+    // Keep the shipped native libs (librawbuf.so, libopenjpeg.so, libgvr.so)
+    // in src/main/jniLibs/<abi>/. Cleanup gate: remove libgvr.so only after
+    // Cardboard/OpenXR parity lands and rollout confidence is confirmed.
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
@@ -189,6 +190,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // ── Room (parallel persistence migration) ──
+    // Target end-state persistence runtime.
     implementation 'androidx.room:room-runtime:2.6.1'
     annotationProcessor 'androidx.room:room-compiler:2.6.1'
 
@@ -198,6 +200,8 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.17.5'
 
     // ── greenDAO ──
+    // Transitional dependency. Remove after Room migration reaches full
+    // entity/query parity and schema migration validation is complete.
     // 2.2.1 preserves the legacy `de.greenrobot.dao.*` package that the
     // decompilation imports. (3.x renamed the runtime to
     // `org.greenrobot.greendao`, which would require a find-replace across
@@ -207,7 +211,8 @@ dependencies {
     // ── ButterKnife ──
     // Deprecated but still on Maven; 10.2.3 is the last release and works
     // with AndroidX. We run the annotation processor against the decompiled
-    // @BindView etc. in ~36 Lumiya UI files.
+    // @BindView etc. in ~36 Lumiya UI files. Replace in touched UI files
+    // opportunistically with ViewBinding-first modernization.
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
@@ -242,12 +247,14 @@ dependencies {
     // their Maven repo in 2021. The decompiled GVR Java sources therefore
     // remain in-tree under com/google/vr/ and com/google/vrtoolkit/, and
     // libgvr.so is shipped in src/main/jniLibs/<abi>/.
+    // Cleanup gate: remove these in-tree packages and libgvr.so only after
+    // Cardboard/OpenXR parity + rollout confidence.
     // Long-term migration target: the open-source Google Cardboard SDK
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
 
     // ── Protobuf ──
     // No direct Lumiya imports, but the GVR SDK pulls it in transitively;
-    // pinning a version avoids a resolution conflict.
+    // pinning a version avoids a resolution conflict. Remove with GVR stack.
     implementation 'com.google.protobuf:protobuf-javalite:3.25.1'
 }
