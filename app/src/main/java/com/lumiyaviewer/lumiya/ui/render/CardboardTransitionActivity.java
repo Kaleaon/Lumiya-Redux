@@ -9,6 +9,8 @@ import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.render.TextureMemoryTracker;
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
+import com.lumiyaviewer.lumiya.ui.render.vr.CardboardRuntime;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntimeSelector;
 import java.util.UUID;
 
 /* loaded from: classes.dex */
@@ -55,6 +57,8 @@ public class CardboardTransitionActivity extends AppCompatActivity {
         intent.setClassName(this, VrIntentContract.ALIAS_VR_ACTIVITY_CLASS);
         intent.putExtra(VrIntentContract.EXTRA_VR_RUNTIME, VrIntentContract.sanitizeRuntime(getIntent().getStringExtra(VrIntentContract.EXTRA_VR_RUNTIME)));
         ActivityUtils.setActiveAgentID(intent, activeAgentID);
+        String runtimeId = getIntent().getStringExtra(VrRuntimeSelector.EXTRA_RUNTIME_ID);
+        VrRuntimeSelector.putRuntime(intent, runtimeId != null ? runtimeId : CardboardRuntime.ID);
         intent.addFlags(16777216);
         startActivity(intent);
         finish();

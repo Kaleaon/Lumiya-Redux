@@ -80,6 +80,8 @@ import com.lumiyaviewer.lumiya.ui.chat.ContactsFragment;
 import com.lumiyaviewer.lumiya.ui.chat.profiles.UserProfileFragment;
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntime;
+import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntimeSelector;
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
 import com.lumiyaviewer.lumiya.ui.common.ScriptDialogHandler;
 import com.lumiyaviewer.lumiya.ui.objects.ObjectDetailsFragment;
@@ -803,6 +805,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             Intent intent = new Intent(this, (Class<?>) CardboardTransitionActivity.class);
             intent.putExtra(VrIntentContract.EXTRA_VR_RUNTIME, VrIntentContract.sanitizeRuntime(str));
             ActivityUtils.setActiveAgentID(intent, this.userManager.getUserID());
+            VrRuntime selectedRuntime = VrRuntimeSelector.selectRuntime(this, intent);
+            VrRuntimeSelector.putRuntime(intent, selectedRuntime.getRuntimeId());
+            Debug.Printf("VR metrics: WorldViewActivity launching runtime=%s", selectedRuntime.getRuntimeId());
             intent.addFlags(16777216);
             startActivity(intent);
         }
