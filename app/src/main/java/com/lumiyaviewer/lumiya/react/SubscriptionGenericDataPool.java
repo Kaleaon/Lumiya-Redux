@@ -47,9 +47,9 @@ public abstract class SubscriptionGenericDataPool<K, T> implements Subscribable<
             subscriptions = subscriptions2.getSubscriptions(true);
         }
         if (subscriptions != null) {
-            Iterator<T> it = subscriptions.iterator();
+            Iterator<Subscription<K, T>> it = subscriptions.iterator();
             while (it.hasNext()) {
-                invokeSubscription((Subscription) it.next(), t, th);
+                invokeSubscription(it.next(), t, th);
             }
         }
     }

@@ -175,7 +175,7 @@ public class SLCircuit extends SLMessageHandler {
 
     @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
     public void HandlePacketAck(PacketAck packetAck) {
-        Iterator<T> it = packetAck.Packets_Fields.iterator();
+        Iterator<?> it = packetAck.Packets_Fields.iterator();
         while (it.hasNext()) {
             ProcessReceivedAck(((PacketAck.Packets) it.next()).ID);
         }
@@ -190,7 +190,7 @@ public class SLCircuit extends SLMessageHandler {
 
     protected void InvokeProcessIdle() {
         ProcessIdle();
-        Iterator<T> it = this.idleHandlers.iterator();
+        Iterator<?> it = this.idleHandlers.iterator();
         while (it.hasNext()) {
             ((SLIdleHandler) it.next()).ProcessIdle();
         }

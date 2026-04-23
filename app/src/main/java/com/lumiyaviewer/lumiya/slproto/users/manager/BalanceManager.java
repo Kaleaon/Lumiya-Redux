@@ -91,7 +91,7 @@ public class BalanceManager {
     public void clearMoneyTransactions() {
         this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$xo_DO1h0hLJizWUYkWN5MuOY-xk.1
             private final /* synthetic */ void $m$0() {
-                ((BalanceManager) this).m297x44e1c14d();
+                BalanceManager.this.m297x44e1c14d();
             }
 
             @Override // java.lang.Runnable

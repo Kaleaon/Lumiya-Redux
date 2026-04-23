@@ -90,7 +90,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             sQLiteStatement.bindString(7, senderUUID.toString());
         }
         if (chatMessage.getSenderType() != null) {
-            sQLiteStatement.bindLong(8, r0.intValue());
+            sQLiteStatement.bindLong(8, chatMessage.getSenderType().intValue());
         }
         String senderName = chatMessage.getSenderName();
         if (senderName != null) {
@@ -106,10 +106,10 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         }
         sQLiteStatement.bindLong(12, chatMessage.getMessageType());
         if (chatMessage.getEventState() != null) {
-            sQLiteStatement.bindLong(13, r0.intValue());
+            sQLiteStatement.bindLong(13, chatMessage.getEventState().intValue());
         }
         if (chatMessage.getOrigIMType() != null) {
-            sQLiteStatement.bindLong(14, r0.intValue());
+            sQLiteStatement.bindLong(14, chatMessage.getOrigIMType().intValue());
         }
         UUID sessionID = chatMessage.getSessionID();
         if (sessionID != null) {
@@ -124,16 +124,16 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             sQLiteStatement.bindString(17, itemName);
         }
         if (chatMessage.getAssetType() != null) {
-            sQLiteStatement.bindLong(18, r0.intValue());
+            sQLiteStatement.bindLong(18, chatMessage.getAssetType().intValue());
         }
         if (chatMessage.getTransactionAmount() != null) {
-            sQLiteStatement.bindLong(19, r0.intValue());
+            sQLiteStatement.bindLong(19, chatMessage.getTransactionAmount().intValue());
         }
         if (chatMessage.getNewBalance() != null) {
-            sQLiteStatement.bindLong(20, r0.intValue());
+            sQLiteStatement.bindLong(20, chatMessage.getNewBalance().intValue());
         }
         if (chatMessage.getChatChannel() != null) {
-            sQLiteStatement.bindLong(21, r0.intValue());
+            sQLiteStatement.bindLong(21, chatMessage.getChatChannel().intValue());
         }
         Boolean dialogIgnored = chatMessage.getDialogIgnored();
         if (dialogIgnored != null) {
@@ -152,7 +152,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             sQLiteStatement.bindString(25, objectName);
         }
         if (chatMessage.getQuestionMask() != null) {
-            sQLiteStatement.bindLong(26, r0.intValue());
+            sQLiteStatement.bindLong(26, chatMessage.getQuestionMask().intValue());
         }
         byte[] dialogButtons = chatMessage.getDialogButtons();
         if (dialogButtons != null) {
@@ -163,7 +163,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
             sQLiteStatement.bindString(28, dialogSelectedOption);
         }
         if (chatMessage.getTextBoxButtonIndex() != null) {
-            sQLiteStatement.bindLong(29, r0.intValue());
+            sQLiteStatement.bindLong(29, chatMessage.getTextBoxButtonIndex().intValue());
         }
         sQLiteStatement.bindLong(30, chatMessage.getSyncedToGoogleDrive() ? 1L : 0L);
     }

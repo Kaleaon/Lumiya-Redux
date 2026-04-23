@@ -385,7 +385,7 @@ public class SLMinimap extends SLModule {
 
     public List<ChatterID> getNearbyChatterList() {
         ArrayList arrayList = new ArrayList(this.userPositions.size());
-        Iterator<T> it = this.userPositions.values().iterator();
+        Iterator<?> it = this.userPositions.values().iterator();
         while (it.hasNext()) {
             arrayList.add(((UserLocation) it.next()).chatterID);
         }
@@ -395,7 +395,7 @@ public class SLMinimap extends SLModule {
     public void requestUpdateAvatarParcelData() {
         this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$eaDiotW55nmaHN5_b1ikeJpLLsk
             private final /* synthetic */ void $m$0() {
-                ((SLMinimap) this).m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0();
+                SLMinimap.this.m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0();
             }
 
             @Override // java.lang.Runnable

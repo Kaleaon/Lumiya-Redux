@@ -29,23 +29,12 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
         LumiyaRoomDatabase roomDb = DaoManager.getRoomDatabase(daoSession);
         this.cachedResponseRepository = new CachedResponseRepositoryAdapter(daoSession.getCachedResponseDao(), roomDb != null ? roomDb.cachedResponseDao() : null);
         this.keyPrefix = str;
-        this.pool.setCacheInvalidateHandler(new Refreshable() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$Tb8OaRVtYXRJ6N6ca7skHX1PNws
-            private final /* synthetic */ void $m$0(Object obj) {
-                ((ResponseCacher) this).m277xf8190129(obj);
-            }
-
-            @Override // com.lumiyaviewer.lumiya.react.Refreshable
-            public final void requestUpdate(Object obj) {
-                $m$0(obj);
-            }
-        }, executor);
+        this.pool.setCacheInvalidateHandler(this::m277xf8190129, executor);
         this.requestHandler = new RateLimitRequestHandler<>(new RequestProcessor<KeyType, MessageType, MessageType>(this.pool, executor) { // from class: com.lumiyaviewer.lumiya.slproto.users.ResponseCacher.1
             @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
             protected boolean isRequestComplete(@Nonnull KeyType keytype, MessageType messagetype) {
-                if (ResponseCacher.this.cachedResponseRepository.load(ResponseCacher.this.getKeyString(keytype)) != null) {
-                    return !r0.getMustRevalidate();
-                }
-                return false;
+                CachedResponse cached = ResponseCacher.this.cachedResponseRepository.load(ResponseCacher.this.getKeyString(keytype));
+                return cached != null && !cached.getMustRevalidate();
             }
 
             @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
@@ -87,7 +76,7 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_ResponseCacher_1058, reason: not valid java name */
     /* synthetic */ void m277xf8190129(Object obj) {
-        CachedResponse load = this.cachedResponseRepository.load(getKeyString(obj));
+        CachedResponse load = this.cachedResponseRepository.load(getKeyString((KeyType) obj));
         if (load != null) {
             load.setMustRevalidate(true);
             this.cachedResponseRepository.update(load);

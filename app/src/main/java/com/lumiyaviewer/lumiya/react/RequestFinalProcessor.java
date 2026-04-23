@@ -27,9 +27,9 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestFinalProcessor_673, reason: not valid java name */
     /* synthetic */ void m34lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_673(Object obj) {
         try {
-            this.resultHandler.onResultData(obj, processRequest(obj));
+            this.resultHandler.onResultData((K) obj, processRequest((K) obj));
         } catch (Throwable th) {
-            this.resultHandler.onResultError(obj, th);
+            this.resultHandler.onResultError((K) obj, th);
         }
     }
 
@@ -38,7 +38,7 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$psFcS6-5kKyuCZBH4SbOZwtpXG8
                 private final /* synthetic */ void $m$0() {
-                    ((RequestFinalProcessor) this).m34lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_673(k);
+                    RequestFinalProcessor.this.m34lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_673(k);
                 }
 
                 @Override // java.lang.Runnable
@@ -60,7 +60,7 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$psFcS6-5kKyuCZBH4SbOZwtpXG8.1
                 private final /* synthetic */ void $m$0() {
-                    ((RequestFinalProcessor) this).m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(k);
+                    RequestFinalProcessor.this.m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(k);
                 }
 
                 @Override // java.lang.Runnable

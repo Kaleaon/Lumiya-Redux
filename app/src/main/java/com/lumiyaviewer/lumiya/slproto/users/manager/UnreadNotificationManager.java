@@ -137,7 +137,7 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
                 unreadMessageSource = null;
             } else {
                 HashMap hashMap = new HashMap();
-                Iterator<T> it = this.chatterSources.entrySet().iterator();
+                Iterator<?> it = this.chatterSources.entrySet().iterator();
                 while (true) {
                     i2 = i5;
                     i3 = i4;
@@ -222,7 +222,7 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
                     if (unreadMessagesCount > i7) {
                         unreadMessagesCount = i7;
                     }
-                    Iterator<T> it2 = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
+                    Iterator<?> it2 = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
                     while (it2.hasNext()) {
                         SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject((ChatMessage) it2.next(), this.userManager.getUserID());
                         if (loadFromDatabaseObject != null) {

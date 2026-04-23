@@ -522,7 +522,7 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         if (this.assetType == SLAssetType.AT_LINK.getTypeCode()) {
             if (this.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
                 if (table != null) {
-                    Iterator<T> it = table.cellSet().iterator();
+                    Iterator<?> it = table.cellSet().iterator();
                     while (it.hasNext()) {
                         Table.Cell cell = (Table.Cell) it.next();
                         SLWearableType sLWearableType = (SLWearableType) cell.getRowKey();

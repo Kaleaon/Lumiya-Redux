@@ -35,7 +35,7 @@ public class ObjectsManager {
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create();
     private final MultipleChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new MultipleChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4
         private final /* synthetic */ void $m$0(MultipleChatterNameRetriever multipleChatterNameRetriever) {
-            ((ObjectsManager) this).m357x8e849dac(multipleChatterNameRetriever);
+            ObjectsManager.this.m357x8e849dac(multipleChatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.MultipleChatterNameRetriever.OnChatterNameUpdated
@@ -105,7 +105,7 @@ public class ObjectsManager {
             if (activeAgentCircuit != null) {
                 activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.1
                     private final /* synthetic */ void $m$0() {
-                        ((ObjectsManager.AnonymousClass2) this).m358xd130cea5((SLAgentCircuit) activeAgentCircuit, (Integer) num);
+                        AnonymousClass2.this.m358xd130cea5((SLAgentCircuit) activeAgentCircuit, (Integer) num);
                     }
 
                     @Override // java.lang.Runnable
@@ -141,7 +141,7 @@ public class ObjectsManager {
             if (activeAgentCircuit != null) {
                 activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.2
                     private final /* synthetic */ void $m$0() {
-                        ((ObjectsManager.AnonymousClass3) this).m359xd2e617a5((SLAgentCircuit) activeAgentCircuit, (UUID) uuid);
+                        AnonymousClass3.this.m359xd2e617a5((SLAgentCircuit) activeAgentCircuit, (UUID) uuid);
                     }
 
                     @Override // java.lang.Runnable
