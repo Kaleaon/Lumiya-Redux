@@ -65,7 +65,7 @@ public class GodUpdateRegionInfo extends SLMessage {
         packInt(byteBuffer, this.RegionInfo_Field.RedirectGridX);
         packInt(byteBuffer, this.RegionInfo_Field.RedirectGridY);
         byteBuffer.put((byte) this.RegionInfo2_Fields.size());
-        Iterator<T> it = this.RegionInfo2_Fields.iterator();
+        Iterator<?> it = this.RegionInfo2_Fields.iterator();
         while (it.hasNext()) {
             packLong(byteBuffer, ((RegionInfo2) it.next()).RegionFlagsExtended);
         }

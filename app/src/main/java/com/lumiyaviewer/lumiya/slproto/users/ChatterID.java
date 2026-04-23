@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.dao.Chatter;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.GridConnectionManager;
@@ -25,7 +24,7 @@ import javax.annotation.Nullable;
 public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f150xb1d54699 = null;
+    private static /* synthetic */ int[] f150xb1d54699 = null;
 
     @Nonnull
     public final UUID agentUUID;
@@ -94,16 +93,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
         public Subscription getPictureID(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull final OnChatterPictureIDListener onChatterPictureIDListener) {
-            return userManager.getCachedGroupProfiles().getPool().subscribe((Subscribable) this.uuid, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$0dEDWURupJXcv_HDGgfxSQl02DE
-                private final /* synthetic */ void $m$0(Object obj) {
-                    ((ChatterID.OnChatterPictureIDListener) onChatterPictureIDListener).onChatterPictureID(((GroupProfileReply) obj).GroupData_Field.InsigniaID);
-                }
-
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-                public final void onData(Object obj) {
-                    $m$0(obj);
-                }
-            });
+            return userManager.getCachedGroupProfiles().getPool().subscribe(this.uuid, UIThreadExecutor.getInstance(), groupProfileReply -> onChatterPictureIDListener.onChatterPictureID(groupProfileReply.GroupData_Field.InsigniaID));
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
@@ -242,16 +232,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
         public Subscription getPictureID(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull final OnChatterPictureIDListener onChatterPictureIDListener) {
-            return userManager.getAvatarProperties().getPool().subscribe((Subscribable) this.uuid, executor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$0dEDWURupJXcv_HDGgfxSQl02DE.1
-                private final /* synthetic */ void $m$0(Object obj) {
-                    ((ChatterID.OnChatterPictureIDListener) onChatterPictureIDListener).onChatterPictureID(((AvatarPropertiesReply) obj).PropertiesData_Field.ImageID);
-                }
-
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-                public final void onData(Object obj) {
-                    $m$0(obj);
-                }
-            });
+            return userManager.getAvatarProperties().getPool().subscribe(this.uuid, executor, avatarPropertiesReply -> onChatterPictureIDListener.onChatterPictureID(avatarPropertiesReply.PropertiesData_Field.ImageID));
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID

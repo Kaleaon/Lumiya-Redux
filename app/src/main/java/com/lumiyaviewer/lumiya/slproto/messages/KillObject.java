@@ -32,7 +32,7 @@ public class KillObject extends SLMessage {
     public void PackPayload(ByteBuffer byteBuffer) {
         byteBuffer.put((byte) 16);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ID);
         }

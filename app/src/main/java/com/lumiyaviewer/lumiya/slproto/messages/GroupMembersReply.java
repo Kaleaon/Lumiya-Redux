@@ -41,7 +41,7 @@ public class GroupMembersReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 57;
-        Iterator<T> it = this.MemberData_Fields.iterator();
+        Iterator<?> it = this.MemberData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

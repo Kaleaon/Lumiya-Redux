@@ -37,7 +37,7 @@ public class LandStatReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 17;
-        Iterator<T> it = this.ReportData_Fields.iterator();
+        Iterator<?> it = this.ReportData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

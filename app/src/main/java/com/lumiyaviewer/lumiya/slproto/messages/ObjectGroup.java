@@ -46,7 +46,7 @@ public class ObjectGroup extends SLMessage {
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ObjectLocalID);
         }

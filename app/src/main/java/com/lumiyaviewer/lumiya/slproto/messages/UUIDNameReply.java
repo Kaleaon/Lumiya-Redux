@@ -24,7 +24,7 @@ public class UUIDNameReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 5;
-        Iterator<T> it = this.UUIDNameBlock_Fields.iterator();
+        Iterator<?> it = this.UUIDNameBlock_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

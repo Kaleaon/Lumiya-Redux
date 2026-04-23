@@ -40,7 +40,7 @@ public class AvatarAnimation extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int size = (this.AnimationList_Fields.size() * 20) + 18 + 1 + (this.AnimationSourceList_Fields.size() * 16) + 1;
-        Iterator<T> it = this.PhysicalAvatarEventList_Fields.iterator();
+        Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
         while (true) {
             int i = size;
             if (!it.hasNext()) {
@@ -65,12 +65,12 @@ public class AvatarAnimation extends SLMessage {
             packInt(byteBuffer, animationList.AnimSequenceID);
         }
         byteBuffer.put((byte) this.AnimationSourceList_Fields.size());
-        Iterator<T> it = this.AnimationSourceList_Fields.iterator();
+        Iterator<?> it = this.AnimationSourceList_Fields.iterator();
         while (it.hasNext()) {
             packUUID(byteBuffer, ((AnimationSourceList) it.next()).ObjectID);
         }
         byteBuffer.put((byte) this.PhysicalAvatarEventList_Fields.size());
-        Iterator<T> it2 = this.PhysicalAvatarEventList_Fields.iterator();
+        Iterator<?> it2 = this.PhysicalAvatarEventList_Fields.iterator();
         while (it2.hasNext()) {
             packVariable(byteBuffer, ((PhysicalAvatarEventList) it2.next()).TypeData, 1);
         }

@@ -32,7 +32,7 @@ public class GroupTitlesReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 53;
-        Iterator<T> it = this.GroupData_Fields.iterator();
+        Iterator<?> it = this.GroupData_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

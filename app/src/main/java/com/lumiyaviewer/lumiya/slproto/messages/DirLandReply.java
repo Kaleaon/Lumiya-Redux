@@ -39,7 +39,7 @@ public class DirLandReply extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public int CalcPayloadSize() {
         int i = 37;
-        Iterator<T> it = this.QueryReplies_Fields.iterator();
+        Iterator<?> it = this.QueryReplies_Fields.iterator();
         while (true) {
             int i2 = i;
             if (!it.hasNext()) {

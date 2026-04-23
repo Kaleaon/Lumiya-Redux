@@ -50,7 +50,7 @@ public class TelehubInfo extends SLMessage {
         packLLVector3(byteBuffer, this.TelehubBlock_Field.TelehubPos);
         packLLQuaternion(byteBuffer, this.TelehubBlock_Field.TelehubRot);
         byteBuffer.put((byte) this.SpawnPointBlock_Fields.size());
-        Iterator<T> it = this.SpawnPointBlock_Fields.iterator();
+        Iterator<?> it = this.SpawnPointBlock_Fields.iterator();
         while (it.hasNext()) {
             packLLVector3(byteBuffer, ((SpawnPointBlock) it.next()).SpawnPointPos);
         }

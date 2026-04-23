@@ -56,7 +56,7 @@ public class ObjectDuplicate extends SLMessage {
         packLLVector3(byteBuffer, this.SharedData_Field.Offset);
         packInt(byteBuffer, this.SharedData_Field.DuplicateFlags);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
-        Iterator<T> it = this.ObjectData_Fields.iterator();
+        Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ObjectData) it.next()).ObjectLocalID);
         }

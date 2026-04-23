@@ -270,9 +270,8 @@ public final class InternalNano {
             } else if (i2 != 11) {
                 obj2 = codedInputByteBufferNano.readPrimitiveField(i2);
             } else {
-                codedInputByteBufferNano.readMessage(obj2);
+                codedInputByteBufferNano.readMessage((MessageNano) obj2);
             }
-            obj = obj;
         }
         codedInputByteBufferNano.checkLastTagWas(0);
         codedInputByteBufferNano.popLimit(pushLimit);
@@ -282,7 +281,7 @@ public final class InternalNano {
         if (obj2 == null) {
             obj2 = primitiveDefaultValue(i2);
         }
-        forMap.put(obj, obj2);
+        forMap.put((K) obj, (V) obj2);
         return forMap;
     }
 

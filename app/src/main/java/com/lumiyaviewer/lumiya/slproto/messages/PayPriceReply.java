@@ -44,7 +44,7 @@ public class PayPriceReply extends SLMessage {
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
         packInt(byteBuffer, this.ObjectData_Field.DefaultPayPrice);
         byteBuffer.put((byte) this.ButtonData_Fields.size());
-        Iterator<T> it = this.ButtonData_Fields.iterator();
+        Iterator<?> it = this.ButtonData_Fields.iterator();
         while (it.hasNext()) {
             packInt(byteBuffer, ((ButtonData) it.next()).PayButton);
         }
