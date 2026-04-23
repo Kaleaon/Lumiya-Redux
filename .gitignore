@@ -1,0 +1,17 @@
+*.apk
+*.dex
+
+# Android / Gradle build outputs
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+out/
+
+# OS / editor
+.DS_Store
+*.swp
+
+/tmp/

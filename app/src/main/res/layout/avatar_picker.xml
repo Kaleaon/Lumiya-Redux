@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:lumiya="http://schemas.android.com/apk/res-auto">
+    <com.astuetz.PagerSlidingTabStrip android:id="@id/avatar_picker_tabs" android:background="?colorPrimary" android:layout_width="fill_parent" android:layout_height="?actionBarSize" lumiya:pstsIndicatorColor="?controlLabelColor" lumiya:pstsShouldExpand="true" lumiya:pstsTabTextColor="?controlLabelColor" />
+    <androidx.viewpager.widget.ViewPager android:id="@id/avatar_picker_pager" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      xmlns:android="http://schemas.android.com/apk/res/android" />
+    <FrameLayout android:id="@id/avatar_picker_extra_content" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:lumiya="http://schemas.android.com/apk/res-auto">
+    <item android:icon="?MenuIconUsers" android:id="@id/item_manage_accounts" android:title="Accounts" lumiya:showAsAction="ifRoom|withText" />
+    <item android:icon="?MenuIconSettings" android:id="@id/item_settings" android:title="Settings" lumiya:showAsAction="ifRoom|withText" />
+    <item android:icon="?MenuIconMinimap" android:id="@id/item_manage_grids" android:title="Grids" />
+    <item android:icon="?MenuIconShowPassword" android:id="@id/item_show_password" android:title="Show password" />
+</menu>

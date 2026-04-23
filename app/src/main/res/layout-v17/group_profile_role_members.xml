@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lumiyaviewer.lumiya.ui.common.LoadingLayout android:id="@id/loading_layout" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="4.0dip" android:layout_marginBottom="4.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@id/swipe_refresh_layout" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <androidx.recyclerview.widget.RecyclerView android:id="@id/group_profile_role_members_list" android:layout_width="fill_parent" android:layout_height="fill_parent" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@id/add_role_member_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="@dimen/fab_button_margin_right" android:layout_marginBottom="@dimen/fab_button_margin_bottom" android:src="@drawable/icon_material_add" android:scaleType="fitCenter" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:contentDescription="@string/add_role_member" android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</com.lumiyaviewer.lumiya.ui.common.LoadingLayout>

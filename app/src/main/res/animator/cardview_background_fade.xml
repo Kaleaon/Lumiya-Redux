@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objectAnimator android:duration="2000" android:valueFrom="?CardViewDefaultBackground" android:valueTo="?CardViewDisabledBackground" android:propertyName="cardBackgroundColor"
+  xmlns:android="http://schemas.android.com/apk/res/android" />
