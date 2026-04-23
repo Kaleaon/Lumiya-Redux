@@ -8,6 +8,8 @@ on:
       - 'recovered/reference/message_template.msg'
       - 'tools/protocol/**'
       - 'docs/protocol_migration_conformance.md'
+      - 'docs/llsd_edge_case_conformance.md'
+      - 'docs/protocol_model_mapping.md'
   push:
     branches: [ main, master ]
     paths:
@@ -16,6 +18,8 @@ on:
       - 'recovered/reference/message_template.msg'
       - 'tools/protocol/**'
       - 'docs/protocol_migration_conformance.md'
+      - 'docs/llsd_edge_case_conformance.md'
+      - 'docs/protocol_model_mapping.md'
 
 jobs:
   protocol-conformance:
