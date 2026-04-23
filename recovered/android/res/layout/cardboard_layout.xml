@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@id/content_frame" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.lumiyaviewer.lumiya.ui.render.CardboardControlsPlaceholder android:id="@id/controls_placeholder" android:layout_width="0.0dip" android:layout_height="0.0dip" />
+    <FrameLayout android:id="@id/vr_view_placeholder" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</FrameLayout>

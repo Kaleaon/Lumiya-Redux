@@ -1,0 +1,69 @@
+.class Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment$1;
+.super Ljava/lang/Object;
+
+# interfaces
+.implements Lcom/lumiyaviewer/lumiya/ui/common/SwipeDismissListViewTouchListener$DismissCallbacks;
+
+
+# annotations
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
+.end annotation
+
+.annotation system Ldalvik/annotation/InnerClass;
+    accessFlags = 0x0
+    name = null
+.end annotation
+
+
+# instance fields
+.field final synthetic this$0:Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;
+
+
+# direct methods
+.method constructor <init>(Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;)V
+    .locals 0
+
+    iput-object p1, p0, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment$1;->this$0:Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public canDismiss(Landroid/widget/ListView;I)Z
+    .locals 1
+
+    const/4 v0, 0x1
+
+    return v0
+.end method
+
+.method public onDismiss(Landroid/widget/ListView;I)V
+    .locals 2
+
+    invoke-virtual {p1}, Landroid/widget/ListView;->getAdapter()Landroid/widget/ListAdapter;
+
+    move-result-object v0
+
+    instance-of v1, v0, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListAdapter;
+
+    if-eqz v1, :cond_0
+
+    check-cast v0, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListAdapter;
+
+    invoke-virtual {v0, p2}, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListAdapter;->getItem(I)Lcom/lumiyaviewer/lumiya/slproto/modules/mutelist/MuteListEntry;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_0
+
+    iget-object v1, p0, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment$1;->this$0:Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;
+
+    invoke-static {v1, v0}, Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;->-wrap0(Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;Lcom/lumiyaviewer/lumiya/slproto/modules/mutelist/MuteListEntry;)V
+
+    :cond_0
+    return-void
+.end method

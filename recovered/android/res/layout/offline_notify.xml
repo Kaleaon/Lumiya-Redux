@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="horizontal" android:id="@id/offline_notify_status_layout" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10.0dip" android:layout_weight="0.0"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ProgressBar android:layout_gravity="center" android:id="@id/offline_notify_reconnect" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="0.0" style="?android:attr/progressBarStyle" />
+    <TextView android:textColor="#ffe08080" android:ellipsize="end" android:gravity="center_vertical" android:layout_gravity="center_vertical" android:id="@id/offline_notify_message" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip" android:layout_weight="1.0" />
+    <Button android:layout_gravity="right|center" android:id="@id/offline_connect_button" android:paddingLeft="10.0dip" android:paddingRight="10.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/offline_connect_button" android:layout_weight="0.0" />
+</LinearLayout>

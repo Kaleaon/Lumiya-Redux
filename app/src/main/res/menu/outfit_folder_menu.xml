@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="?MenuIconWearOutfit" android:id="@id/item_wear" android:title="Wear" android:showAsAction="ifRoom|withText" />
+    <item android:icon="?MenuIconAddToOutfit" android:id="@id/item_add" android:title="Add" android:showAsAction="ifRoom|withText" />
+    <item android:icon="?MenuIconRefresh" android:id="@id/item_rebake" android:title="Rebake" android:showAsAction="ifRoom|withText" />
+</menu>

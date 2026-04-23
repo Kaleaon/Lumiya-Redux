@@ -1,0 +1,194 @@
+// App module for the recovered Lumiya viewer.
+//
+// The decompilation imports the `android.support.*` family by their original
+// 28.0.0 names. Rather than rewrite ~1,300 source files by hand we rely on
+// AndroidX + Jetifier (enabled in the root gradle.properties) to transparently
+// remap those imports to their AndroidX equivalents at compile time.
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.lumiyaviewer.lumiya'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.lumiyaviewer.lumiya'
+        minSdk 21            // raised from the shipped 14: GVR 1.200.0 needs 19+,
+                             // and modern AndroidX needs 21+
+        targetSdk 34
+        versionCode 66
+        versionName '3.4.2'
+
+        // Drop mips / mips64 — Android removed MIPS support in NDK r17 (2018);
+        // the shipped APK included them but modern toolchains cannot rebuild them.
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+        }
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false   // lumiya-3.4.2 shipped without R8/Proguard name
+                                  // obfuscation; preserve that for now so the
+                                  // decompiled→rebuilt stack traces stay readable.
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // The decompilation holds a lot of raw types, unchecked casts, and dead
+    // symbols that jadx couldn't erase. Don't block builds on them.
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    compileOptions {
+        // silence javac lint on the decompiled tree
+        // (replaced below with explicit suppression in tasks.withType)
+    }
+
+    packagingOptions {
+        resources.excludes += [
+            'META-INF/DEPENDENCIES',
+            'META-INF/LICENSE*',
+            'META-INF/NOTICE*',
+            'META-INF/*.kotlin_module',
+            'META-INF/versions/9/OSGI-INF/MANIFEST.MF',
+        ]
+        jniLibs {
+            useLegacyPackaging = true   // Lumiya loads its .so files on old APIs too
+        }
+    }
+
+    // Keep the shipped native libs (librawbuf.so, libopenjpeg.so) in
+    // src/main/jniLibs/<abi>/. libgvr.so is now supplied by the GVR AAR.
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // The decompilation warns on every other line; turn the noise down so
+    // real problems are visible.
+    options.compilerArgs += ['-Xlint:none', '-Xmaxwarns', '10']
+    options.encoding = 'UTF-8'
+
+    // ButterKnife's annotation processor (butterknife-compiler 10.2.3)
+    // uses internal javac APIs that JPMS closed off starting with JDK 16.
+    // Open them back up so the processor can run under modern JDKs.
+    options.forkOptions.jvmArgs += [
+        '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
+        '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
+    ]
+    options.fork = true
+}
+
+// -------------------------------------------------------------------------
+//  Dependencies — modern, Maven-resolved replacements for every third-party
+//  Java package that jadx dumped into the decompilation (and which we have
+//  since deleted from app/src/main/java).
+//
+//  Where the original package name is preserved upstream we pin to that
+//  package's own coordinate; where upstream has renamed, Jetifier handles
+//  the remap (android.support → androidx).
+// -------------------------------------------------------------------------
+dependencies {
+    // ── AndroidX (replaces every `android.support.*` and `android.arch.*`
+    //    import in the decompilation; Jetifier rewrites the imports.)
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.fragment:fragment:1.6.2'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.7'
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // ── Square ──
+    // Last OkHttp 3.x release; API-compatible with the 3.5.0 the APK shipped.
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    implementation 'com.squareup.okio:okio:1.17.5'
+
+    // ── greenDAO ──
+    // 2.2.1 preserves the legacy `de.greenrobot.dao.*` package that the
+    // decompilation imports. (3.x renamed the runtime to
+    // `org.greenrobot.greendao`, which would require a find-replace across
+    // ~80 DAO + ORM files.)
+    implementation 'de.greenrobot:greendao:2.1.0'
+
+    // ── ButterKnife ──
+    // Deprecated but still on Maven; 10.2.3 is the last release and works
+    // with AndroidX. We run the annotation processor against the decompiled
+    // @BindView etc. in ~36 Lumiya UI files.
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    // ── PhotoView ──
+    // The `uk.co.senab.photoview` package was discontinued in 2016 when
+    // chrisbanes renamed to `com.github.chrisbanes.photoview`. No reliable
+    // Maven drop-in exists for the old package name, so the decompiled
+    // PhotoView sources live in-tree under uk/co/senab/photoview/.
+    // Migrate to `com.github.chrisbanes:PhotoView:2.3.0` and rewrite
+    // TextureViewFragment.java to use `PhotoViewAttacher(ImageView)` when
+    // you get to that cleanup.
+
+    // ── PagerSlidingTabStrip ──
+    // Still available on Maven Central under the original coordinate.
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+
+    // ── nineoldandroids ──
+    // Used by exactly one file (SwipeDismissListViewTouchListener) for
+    // ViewPropertyAnimator. Still mirrored on Maven Central.
+    implementation 'com.nineoldandroids:library:2.4.0'
+
+    // ── Google libraries ──
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.guava:guava:32.1.3-android'   // Lumiya uses
+                                                            // guava eventbus,
+                                                            // cache, collect,
+                                                            // io, net, util.
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'   // javax.annotation
+
+    // ── Google VR / Cardboard ──
+    // GVR SDK was deprecated in 2019 and Google removed the artifacts from
+    // their Maven repo in 2021. The decompiled GVR Java sources therefore
+    // remain in-tree under com/google/vr/ and com/google/vrtoolkit/, and
+    // libgvr.so is shipped in src/main/jniLibs/<abi>/.
+    // Long-term migration target: the open-source Google Cardboard SDK
+    // (https://github.com/googlevr/cardboard) — but that's a native-first
+    // rewrite of the VR activities, so it's a separate project.
+
+    // ── Protobuf ──
+    // No direct Lumiya imports, but the GVR SDK pulls it in transitively;
+    // pinning a version avoids a resolution conflict.
+    implementation 'com.google.protobuf:protobuf-javalite:3.25.1'
+}
