@@ -617,13 +617,13 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         beginCountingObjectDeselect();
     }
 
-    private void enterCardboardView() {
+    private void enterVrView() {
         if (ContextCompat.checkSelfPermission(this, "android.permission.RECORD_AUDIO") != 0) {
             Debug.Printf("Cardboard: audio permission not yet granted", new Object[0]);
             ActivityCompat.requestPermissions(this, new String[]{"android.permission.RECORD_AUDIO"}, 100);
         } else {
             Debug.Printf("Cardboard: audio permission already granted", new Object[0]);
-            startCardboardActivity();
+            startVrActivity(VrIntentContract.VR_RUNTIME_CARDBOARD);
         }
     }
 
@@ -798,9 +798,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    private void startCardboardActivity() {
+    private void startVrActivity(String str) {
         if (this.userManager != null) {
             Intent intent = new Intent(this, (Class<?>) CardboardTransitionActivity.class);
+            intent.putExtra(VrIntentContract.EXTRA_VR_RUNTIME, VrIntentContract.sanitizeRuntime(str));
             ActivityUtils.setActiveAgentID(intent, this.userManager.getUserID());
             intent.addFlags(16777216);
             startActivity(intent);
@@ -1336,7 +1337,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 }
                 return true;
             case R.id.item_cardboard_view /* 2131755884 */:
-                enterCardboardView();
+                enterVrView();
                 return true;
             case R.id.item_take_screenshot /* 2131755885 */:
                 takeScreenshot();
@@ -1391,7 +1392,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] iArr) {
         Debug.Printf("Cardboard: onRequestPermissionResult, code %d", Integer.valueOf(i));
         if (i == 100) {
-            startCardboardActivity();
+            startVrActivity(VrIntentContract.VR_RUNTIME_CARDBOARD);
         }
     }
 
