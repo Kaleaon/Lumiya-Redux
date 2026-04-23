@@ -4563,6 +4563,7 @@
 
     invoke-static {v0, v1}, Lcom/lumiyaviewer/lumiya/Debug;->Printf(Ljava/lang/String;[Ljava/lang/Object;)V
 
+    :try_start_0
     new-instance v0, Lcom/lumiyaviewer/lumiya/render/RenderContext;
 
     iget-boolean v3, p0, Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->createdGL30:Z
@@ -4588,6 +4589,57 @@
     move-object v11, p0
 
     invoke-direct/range {v0 .. v11}, Lcom/lumiyaviewer/lumiya/render/RenderContext;-><init>(Ljavax/microedition/khronos/egl/EGLConfig;Ljava/lang/String;ZZZZIZIZLjava/lang/Object;)V
+    :try_end_0
+    .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_0} :catch_2
+
+    goto :goto_rollback_done
+
+    :catch_2
+    move-exception v1
+
+    const-string/jumbo v3, "Renderer startup fatal init error: %s. Rolling back to legacy backend."
+
+    const/4 v4, 0x1
+
+    new-array v4, v4, [Ljava/lang/Object;
+
+    invoke-virtual {v1}, Ljava/lang/RuntimeException;->getMessage()Ljava/lang/String;
+
+    move-result-object v1
+
+    const/4 v7, 0x0
+
+    aput-object v1, v4, v7
+
+    invoke-static {v3, v4}, Lcom/lumiyaviewer/lumiya/Debug;->AlwaysPrintf(Ljava/lang/String;[Ljava/lang/Object;)V
+
+    new-instance v0, Lcom/lumiyaviewer/lumiya/render/RenderContext;
+
+    const/4 v3, 0x0
+
+    const/4 v4, 0x0
+
+    iget v7, p0, Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->avatarCountLimit:I
+
+    invoke-static {}, Lcom/lumiyaviewer/lumiya/GlobalOptions;->getInstance()Lcom/lumiyaviewer/lumiya/GlobalOptions;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Lcom/lumiyaviewer/lumiya/GlobalOptions;->getTerrainTextures()Z
+
+    move-result v8
+
+    iget v9, p0, Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->fontSize:I
+
+    move-object v1, p2
+
+    move/from16 v10, p3
+
+    move-object v11, p0
+
+    invoke-direct/range {v0 .. v11}, Lcom/lumiyaviewer/lumiya/render/RenderContext;-><init>(Ljavax/microedition/khronos/egl/EGLConfig;Ljava/lang/String;ZZZZIZIZLjava/lang/Object;)V
+
+    :goto_rollback_done
 
     const-string/jumbo v1, "Renderer: created context, GL30 %b, GL20 %b"
 
@@ -4612,6 +4664,38 @@
     move-result-object v3
 
     const/4 v4, 0x1
+
+    aput-object v3, v2, v4
+
+    invoke-static {v1, v2}, Lcom/lumiyaviewer/lumiya/Debug;->AlwaysPrintf(Ljava/lang/String;[Ljava/lang/Object;)V
+
+    const-string/jumbo v1, "Renderer startup diagnostics: tier=%s backend=%s fallback=%s"
+
+    const/4 v2, 0x3
+
+    new-array v2, v2, [Ljava/lang/Object;
+
+    invoke-virtual {v0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getDeviceTier()Ljava/lang/String;
+
+    move-result-object v3
+
+    const/4 v4, 0x0
+
+    aput-object v3, v2, v4
+
+    invoke-virtual {v0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getBackendName()Ljava/lang/String;
+
+    move-result-object v3
+
+    const/4 v4, 0x1
+
+    aput-object v3, v2, v4
+
+    invoke-virtual {v0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getStartupFallbackReason()Ljava/lang/String;
+
+    move-result-object v3
+
+    const/4 v4, 0x2
 
     aput-object v3, v2, v4
 

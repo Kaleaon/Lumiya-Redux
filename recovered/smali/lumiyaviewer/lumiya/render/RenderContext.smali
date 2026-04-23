@@ -762,6 +762,38 @@
     iput-object v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->crosshairTexture:Lcom/lumiyaviewer/lumiya/render/glres/textures/GLLoadedTexture;
 
     :goto_a
+    const-string/jumbo v0, "RenderContext startup diagnostics: tier=%s backend=%s fallback=%s"
+
+    const/4 v1, 0x3
+
+    new-array v1, v1, [Ljava/lang/Object;
+
+    invoke-virtual {p0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getDeviceTier()Ljava/lang/String;
+
+    move-result-object v2
+
+    const/4 v3, 0x0
+
+    aput-object v2, v1, v3
+
+    invoke-virtual {p0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getBackendName()Ljava/lang/String;
+
+    move-result-object v2
+
+    const/4 v3, 0x1
+
+    aput-object v2, v1, v3
+
+    invoke-virtual {p0}, Lcom/lumiyaviewer/lumiya/render/RenderContext;->getStartupFallbackReason()Ljava/lang/String;
+
+    move-result-object v2
+
+    const/4 v3, 0x2
+
+    aput-object v2, v1, v3
+
+    invoke-static {v0, v1}, Lcom/lumiyaviewer/lumiya/Debug;->AlwaysPrintf(Ljava/lang/String;[Ljava/lang/Object;)V
+
     return-void
 
     :cond_1
@@ -2285,4 +2317,131 @@
     iget-object v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->riggedMeshProgram30:Lcom/lumiyaviewer/lumiya/render/shaders/RiggedMeshProgram30;
 
     goto :goto_0
+.end method
+
+.method public getBackendName()Ljava/lang/String;
+    .locals 1
+
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL30:Z
+
+    if-eqz v0, :cond_0
+
+    const-string/jumbo v0, "gles30"
+
+    return-object v0
+
+    :cond_0
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL20:Z
+
+    if-eqz v0, :cond_1
+
+    const-string/jumbo v0, "gles20"
+
+    return-object v0
+
+    :cond_1
+    const-string/jumbo v0, "legacy-gles10"
+
+    return-object v0
+.end method
+
+.method public getDeviceTier()Ljava/lang/String;
+    .locals 2
+
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL30:Z
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->glRenderer:Ljava/lang/String;
+
+    const-string/jumbo v1, "Adreno"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_2
+
+    iget-object v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->glRenderer:Ljava/lang/String;
+
+    const-string/jumbo v1, "Immortalis"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    :cond_2
+    const-string/jumbo v0, "high"
+
+    return-object v0
+
+    :cond_0
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL20:Z
+
+    if-eqz v0, :cond_1
+
+    const-string/jumbo v0, "mid"
+
+    return-object v0
+
+    :cond_1
+    const-string/jumbo v0, "low"
+
+    return-object v0
+.end method
+
+.method public getStartupFallbackReason()Ljava/lang/String;
+    .locals 2
+
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL20:Z
+
+    if-nez v0, :cond_0
+
+    const-string/jumbo v0, "gl20_unavailable"
+
+    return-object v0
+
+    :cond_0
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL30:Z
+
+    if-nez v0, :cond_1
+
+    const-string/jumbo v0, "gl30_disabled_or_failed"
+
+    return-object v0
+
+    :cond_1
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->shaderCompileErrors:Z
+
+    if-eqz v0, :cond_2
+
+    const-string/jumbo v0, "shader_compile_errors"
+
+    return-object v0
+
+    :cond_2
+    iget-object v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->glRenderer:Ljava/lang/String;
+
+    const-string/jumbo v1, "Adreno"
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_3
+
+    iget-boolean v0, p0, Lcom/lumiyaviewer/lumiya/render/RenderContext;->hasGL30:Z
+
+    if-nez v0, :cond_3
+
+    const-string/jumbo v0, "adreno_compat_mode"
+
+    return-object v0
+
+    :cond_3
+    const-string/jumbo v0, "none"
+
+    return-object v0
 .end method
