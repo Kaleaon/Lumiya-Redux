@@ -1,0 +1,33 @@
+.class final synthetic Lcom/lumiyaviewer/lumiya/ui/objects/-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8;
+.super Ljava/lang/Object;
+
+# interfaces
+.implements Landroid/content/DialogInterface$OnClickListener;
+
+
+# direct methods
+.method private final synthetic $m$0(Landroid/content/DialogInterface;I)V
+    .locals 0
+
+    invoke-static {p1, p2}, Lcom/lumiyaviewer/lumiya/ui/objects/ObjectDetailsFragment;->lambda$-com_lumiyaviewer_lumiya_ui_objects_ObjectDetailsFragment_24413(Landroid/content/DialogInterface;I)V
+
+    return-void
+.end method
+
+.method public synthetic constructor <init>()V
+    .locals 0
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final onClick(Landroid/content/DialogInterface;I)V
+    .locals 0
+
+    invoke-direct {p0, p1, p2}, Lcom/lumiyaviewer/lumiya/ui/objects/-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8;->$m$0(Landroid/content/DialogInterface;I)V
+
+    return-void
+.end method

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="?MenuIconClose" android:id="@id/item_close" android:title="Close" />
+    <item android:icon="?MenuIconMute" android:id="@id/item_mute" android:title="Mute" />
+    <item android:icon="?MenuIconUnmute" android:id="@id/item_unmute" android:title="Unmute" />
+    <item android:icon="?MenuIconNewNotecard" android:id="@id/item_group_notice" android:title="New notice" />
+    <item android:icon="?MenuIconUsers" android:id="@id/item_contacts" android:title="Contacts" />
+    <item android:icon="?MenuIconChatBubble" android:id="@id/item_recent" android:title="Recent" />
+    <item android:icon="?MenuIconInventory" android:id="@id/item_inventory" android:title="Inventory" />
+    <item android:icon="?MenuIconHeadphones" android:id="@id/item_media" android:title="Media" />
+    <item android:icon="?MenuIconSettings" android:id="@id/item_settings" android:title="Settings" />
+</menu>
