@@ -41,41 +41,6 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterVie
         }
     }};
 
-    private static class NavDrawerActivityItem extends NavDrawerItem {
-        final Class<?> activityClass;
-
-        NavDrawerActivityItem(int i, int i2, int i3, Class<?> cls) {
-            super(i, i2, i3);
-            this.activityClass = cls;
-        }
-
-        @Override // com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.NavDrawerItem
-        public void onClick(Context context) {
-            UUID activeAgentID;
-            Intent intent = new Intent(context, this.activityClass);
-            intent.addFlags(131072);
-            if ((context instanceof Activity) && (activeAgentID = ActivityUtils.getActiveAgentID(((Activity) context).getIntent())) != null) {
-                intent.putExtra("activeAgentUUID", activeAgentID.toString());
-            }
-            context.startActivity(intent);
-        }
-    }
-
-    static class NavDrawerItem {
-        final int iconId;
-        final int itemId;
-        final int labelId;
-
-        NavDrawerItem(int i, int i2, int i3) {
-            this.itemId = i;
-            this.iconId = i2;
-            this.labelId = i3;
-        }
-
-        public void onClick(Context context) {
-        }
-    }
-
     NavDrawerAdapter(Context context) {
         super(context, R.layout.nav_drawer_list_item, items);
     }

@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.dao.UserName;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -113,40 +112,13 @@ public class ChatterNameRetriever {
             return;
         }
         if (this.chatterID.getChatterType() == ChatterID.ChatterType.Local) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe((Subscribable<SubscriptionSingleKey, CurrentLocationInfo>) SubscriptionSingleDataPool.getSingleDataKey(), this.executor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$Tr7QBnh_GnHDqFtHSpMdsLw3Yfs
-                private final /* synthetic */ void $m$0(Object obj) {
-                    ((ChatterNameRetriever) this).m272x6559d93c((CurrentLocationInfo) obj);
-                }
-
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-                public final void onData(Object obj) {
-                    $m$0(obj);
-                }
-            });
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), this.executor, currentLocationInfo -> m272x6559d93c(currentLocationInfo));
             return;
         }
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
-            this.subscription = userManager.getUserNames().subscribe((Subscribable<UUID, UserName>) ((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$Tr7QBnh_GnHDqFtHSpMdsLw3Yfs.1
-                private final /* synthetic */ void $m$0(Object obj) {
-                    ((ChatterNameRetriever) this).m273x6559d93d((UserName) obj);
-                }
-
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-                public final void onData(Object obj) {
-                    $m$0(obj);
-                }
-            });
+            this.subscription = userManager.getUserNames().subscribe(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, userName -> m273x6559d93d(userName));
         } else if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
-            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe((Subscribable) ((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.-$Lambda$Tr7QBnh_GnHDqFtHSpMdsLw3Yfs.2
-                private final /* synthetic */ void $m$0(Object obj) {
-                    ((ChatterNameRetriever) this).m274x6559d93e((GroupProfileReply) obj);
-                }
-
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-                public final void onData(Object obj) {
-                    $m$0(obj);
-                }
-            });
+            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, groupProfileReply -> m274x6559d93e(groupProfileReply));
         } else {
             this.subscription = null;
         }

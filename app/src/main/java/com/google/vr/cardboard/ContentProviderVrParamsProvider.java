@@ -41,57 +41,32 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
     }
 
     private <T extends MessageNano> T readParams(T t, Uri uri, String str) {
-        Cursor cursor;
-        Cursor cursor2 = null;
         try {
-        } catch (Throwable th) {
-            th = th;
-        }
-        try {
-            try {
-                cursor = this.client.query(uri, null, str, null, null);
-                if (cursor != null) {
-                    try {
-                        if (cursor.moveToFirst()) {
-                            byte[] blob = cursor.getBlob(0);
-                            if (blob == null) {
-                                if (cursor != null) {
-                                    cursor.close();
-                                }
-                                return null;
-                            }
-                            T t2 = (T) MessageNano.mergeFrom(t, blob);
-                            if (cursor != null) {
-                                cursor.close();
-                            }
-                            return t2;
-                        }
-                    } catch (CursorIndexOutOfBoundsException | RemoteException | InvalidProtocolBufferNanoException | IllegalArgumentException e) {
-                        e = e;
-                        Log.e(TAG, "Error reading params from ContentProvider", e);
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                        return null;
-                    }
-                }
+            Cursor cursor = this.client.query(uri, null, str, null, null);
+            if (cursor == null) {
                 String str2 = TAG;
                 String valueOf = String.valueOf(uri);
                 Log.e(str2, new StringBuilder(String.valueOf(valueOf).length() + 50).append("Invalid params result from ContentProvider query: ").append(valueOf).toString());
-                if (cursor != null) {
-                    cursor.close();
-                }
                 return null;
-            } catch (CursorIndexOutOfBoundsException | RemoteException | InvalidProtocolBufferNanoException | IllegalArgumentException e2) {
-                e = e2;
-                cursor = null;
             }
-        } catch (Throwable th2) {
-            th = th2;
-            if (0 != 0) {
-                cursor2.close();
+            try {
+                if (!cursor.moveToFirst()) {
+                    String str3 = TAG;
+                    String valueOf2 = String.valueOf(uri);
+                    Log.e(str3, new StringBuilder(String.valueOf(valueOf2).length() + 50).append("Invalid params result from ContentProvider query: ").append(valueOf2).toString());
+                    return null;
+                }
+                byte[] blob = cursor.getBlob(0);
+                if (blob == null) {
+                    return null;
+                }
+                return (T) MessageNano.mergeFrom(t, blob);
+            } finally {
+                cursor.close();
             }
-            throw th;
+        } catch (CursorIndexOutOfBoundsException | RemoteException | InvalidProtocolBufferNanoException | IllegalArgumentException e) {
+            Log.e(TAG, "Error reading params from ContentProvider", e);
+            return null;
         }
     }
 

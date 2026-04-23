@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 public class OpenJPEG implements GLTexture {
 
     /* renamed from: -com-lumiyaviewer-lumiya-openjpeg-OpenJPEG$ImageFormatSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f5x2156f8d4 = null;
+    private static /* synthetic */ int[] f5x2156f8d4 = null;
     private static final int ETC1_BYTES_PER_PIXEL = 888;
     public int bytes_per_pixel;
     public int error_code;

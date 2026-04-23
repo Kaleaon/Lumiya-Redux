@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 public class LLQuaternion {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f143xae1ac4c9 = null;
+    private static /* synthetic */ int[] f143xae1ac4c9 = null;
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     private float[] inverseMatrix;
     private float[] matrix;

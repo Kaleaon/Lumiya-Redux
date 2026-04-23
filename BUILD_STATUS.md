@@ -109,3 +109,39 @@ Because these are all small local edits, the practical workflow is:
 - **Release-build minification** is disabled. Re-enabling R8 will need `-keep` rules for greenDAO entities, ButterKnife-generated view-binding classes, JNI callbacks into `com.lumiyaviewer.rawbuffers.DirectByteBuffer` and `com.lumiyaviewer.lumiya.openjpeg.*`.
 - **MIPS support** was dropped from `abiFilters` because NDK removed MIPS in r17. Not revisiting.
 - **GVR** will keep running from the bundled `libgvr.so`, but the SDK is end-of-life. The clean replacement is the open [Google Cardboard SDK](https://github.com/googlevr/cardboard), at the cost of rewriting `CardboardActivity` and the renderer wiring.
+
+## Baseline stabilization log (2026-04-23)
+
+### Category 1 — lost catch-clause variable artifacts
+- ✅ `com/google/vr/cardboard/ConfigUtils.java`: rewrote decompiled try/catch scaffolding in `readFromExternalStorage` and `writeToExternalStorage` to remove undeclared `e`/`th` assignments.
+- ✅ `com/google/vr/cardboard/ContentProviderVrParamsProvider.java`: rewrote `readParams` cursor lifecycle + catch handling to remove undeclared `e`/`th` assignments.
+- ✅ `com/lumiyaviewer/lumiya/slproto/llsd/LLSDNode.java`: rewrote `fromBinaryFile` around try-with-resources to remove undeclared throwable handoff.
+- ✅ `com/lumiyaviewer/lumiya/slproto/messages/*.java`: scanned for `e = eN` / `th = thN` artifacts; none currently present in this tree.
+
+### Category 2 — lambda desugaring artifacts (`-$Lambda$...`)
+- ✅ `slproto/users/ChatterID.java`: replaced decompiler synthetic anonymous bridge classes with typed lambdas.
+- ✅ `slproto/users/ChatterNameRetriever.java`: replaced decompiler synthetic anonymous bridge classes + invalid casts with typed lambdas.
+
+### Category 3 — synthetic switch-table `final` reassignment
+- ✅ `slproto/llsd/LLSDNode.java`: removed `final` from synthetic switch table field that is assigned in initializer helper.
+- ✅ Additional compile blockers of same pattern fixed in:
+  - `openjpeg/OpenJPEG.java`
+  - `slproto/types/LLQuaternion.java`
+
+### Category 4 — nested forward-reference generic issues
+- ✅ Hoisted nested classes to top-level files:
+  - `ui/common/NavDrawerItem.java`
+  - `ui/common/NavDrawerActivityItem.java`
+  - `ui/search/SearchViewHolder.java`
+  - `ui/myava/TransactionViewHolder.java`
+  - `ui/inventory/UploadImageResult.java`
+- ✅ Updated corresponding adapters/tasks to reference hoisted types.
+
+### Category 5 — one-off fixes from this checklist
+- ✅ `ui/common/UserFunctionsFragment.java`: removed duplicate non-AndroidX `AlertDialog` import.
+- ✅ `google/protobuf/nano/MessageNano.java`: removed invalid `@Override`.
+- ✅ `google/protobuf/nano/ExtendableMessageNano.java`: fixed generic return to `(M) this`.
+- ✅ `google/vr/vrcore/library/api/ObjectWrapper.java`: fixed generic unwrap cast to `(T)`.
+
+### Category 6 — completion tracking
+- ✅ This section is the canonical per-file completion log for downstream Kotlin/Room/VR cleanup tasks.
