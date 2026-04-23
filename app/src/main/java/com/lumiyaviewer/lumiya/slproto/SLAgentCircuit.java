@@ -134,10 +134,10 @@ import javax.annotation.Nullable;
 public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueue.ICapsEventHandler {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f60x94bee140 = null;
+    private static /* synthetic */ int[] f60x94bee140 = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f61xb1d54699 = null;
+    private static /* synthetic */ int[] f61xb1d54699 = null;
     private Subscription agentNameSubscription;
     private boolean agentPaused;
 
@@ -283,7 +283,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             this.userManager.setActiveAgentCircuit(this);
         }
         if (sLTempCircuit != null) {
-            Iterator<T> it = sLTempCircuit.getPendingMessages().iterator();
+            Iterator<?> it = sLTempCircuit.getPendingMessages().iterator();
             while (it.hasNext()) {
                 ((SLMessage) it.next()).Handle(this);
             }
@@ -636,7 +636,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
                 this.objectNamesRequested.put(sLObjectInfo.getId(), sLObjectInfo);
             }
             synchronized (this.gridConn.parcelInfo.objectNamesQueue) {
-                Iterator<T> it = this.gridConn.parcelInfo.objectNamesQueue.values().iterator();
+                Iterator<?> it = this.gridConn.parcelInfo.objectNamesQueue.values().iterator();
                 while (true) {
                     if (!it.hasNext()) {
                         objectSelect = objectSelect2;
@@ -1126,7 +1126,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         boolean z;
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
         boolean z2 = false;
-        Iterator<T> it = killObject.ObjectData_Fields.iterator();
+        Iterator<?> it = killObject.ObjectData_Fields.iterator();
         while (true) {
             z = z2;
             if (!it.hasNext()) {
@@ -1293,7 +1293,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
     public void HandleOfflineNotification(OfflineNotification offlineNotification) {
         ArrayList arrayList = new ArrayList(offlineNotification.AgentBlock_Fields.size());
-        Iterator<T> it = offlineNotification.AgentBlock_Fields.iterator();
+        Iterator<?> it = offlineNotification.AgentBlock_Fields.iterator();
         while (it.hasNext()) {
             arrayList.add(((OfflineNotification.AgentBlock) it.next()).AgentID);
         }
@@ -1303,7 +1303,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
     public void HandleOnlineNotification(OnlineNotification onlineNotification) {
         ArrayList arrayList = new ArrayList(onlineNotification.AgentBlock_Fields.size());
-        Iterator<T> it = onlineNotification.AgentBlock_Fields.iterator();
+        Iterator<?> it = onlineNotification.AgentBlock_Fields.iterator();
         while (it.hasNext()) {
             arrayList.add(((OnlineNotification.AgentBlock) it.next()).AgentID);
         }
@@ -1353,7 +1353,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.isEstateManager = regionHandshake.RegionInfo_Field.IsEstateManager;
         this.agentNameSubscription = this.userManager.getUserNames().subscribe(this.circuitInfo.agentID, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$K1xWCpEh0d4XNuVVYxGUJwEFRxU
             private final /* synthetic */ void $m$0(Object obj) {
-                ((SLAgentCircuit) this).m137lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593((UserName) obj);
+                SLAgentCircuit.this.m137lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593((UserName) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -1373,7 +1373,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         int i = 0;
         if (scriptDialog.Buttons_Fields.size() > 0) {
             String[] strArr2 = new String[scriptDialog.Buttons_Fields.size()];
-            Iterator<T> it = scriptDialog.Buttons_Fields.iterator();
+            Iterator<?> it = scriptDialog.Buttons_Fields.iterator();
             int i2 = 0;
             while (true) {
                 if (!it.hasNext()) {
@@ -1436,7 +1436,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     public void OfferInventoryItem(final UUID uuid, final SLInventoryEntry sLInventoryEntry) {
         this.userManager.getInventoryManager().getExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$K1xWCpEh0d4XNuVVYxGUJwEFRxU.1
             private final /* synthetic */ void $m$0() {
-                ((SLAgentCircuit) this).m138lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024((SLInventoryEntry) sLInventoryEntry, (UUID) uuid);
+                SLAgentCircuit.this.m138lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024((SLInventoryEntry) sLInventoryEntry, (UUID) uuid);
             }
 
             @Override // java.lang.Runnable

@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 public class SyncManager {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f226xb1d54699 = null;
+    private static /* synthetic */ int[] f226xb1d54699 = null;
     private static final int MAX_MESSAGES_PER_BATCH = 100;
 
     @Nonnull
@@ -105,7 +105,7 @@ public class SyncManager {
     public void m371x9b8293ab(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.3
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m370x9b8293aa();
+                SyncManager.this.m370x9b8293aa();
             }
 
             @Override // java.lang.Runnable
@@ -132,7 +132,7 @@ public class SyncManager {
     public void m367x9b8293a7(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.4
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m369x9b8293a9();
+                SyncManager.this.m369x9b8293a9();
             }
 
             @Override // java.lang.Runnable
@@ -167,7 +167,7 @@ public class SyncManager {
             }
             this.chatterNameRetriever = new ChatterNameRetriever(fromDatabaseObject, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.1
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    ((SyncManager) this).m371x9b8293ab(chatterNameRetriever);
+                    SyncManager.this.m371x9b8293ab(chatterNameRetriever);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -198,7 +198,7 @@ public class SyncManager {
         if (this.syncingEnabled.get()) {
             this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.8
                 private final /* synthetic */ void $m$0() {
-                    ((SyncManager) this).m374x1b9f5c8c((ChatterID) chatterID);
+                    SyncManager.this.m374x1b9f5c8c((ChatterID) chatterID);
                 }
 
                 @Override // java.lang.Runnable
@@ -223,7 +223,7 @@ public class SyncManager {
                 if (!this.flushChatters.containsKey(chatterID)) {
                     new ChatterNameRetriever(chatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            ((SyncManager) this).m372x9b8293ac(chatterNameRetriever);
+                            SyncManager.this.m372x9b8293ac(chatterNameRetriever);
                         }
 
                         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -253,7 +253,7 @@ public class SyncManager {
     public void onMessagesFlushed(final ImmutableList<Long> immutableList) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.9
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m376xcf5b7a09((ImmutableList) immutableList);
+                SyncManager.this.m376xcf5b7a09((ImmutableList) immutableList);
             }
 
             @Override // java.lang.Runnable
@@ -266,7 +266,7 @@ public class SyncManager {
     public void onMessagesWritten(final long j) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.10
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m375xcf5b71e5(j);
+                SyncManager.this.m375xcf5b71e5(j);
             }
 
             @Override // java.lang.Runnable
@@ -282,7 +282,7 @@ public class SyncManager {
         this.needsStopSyncing.set(false);
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.5
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m366x9b8293a6();
+                SyncManager.this.m366x9b8293a6();
             }
 
             @Override // java.lang.Runnable
@@ -296,7 +296,7 @@ public class SyncManager {
         Debug.Printf("SyncManager: requested to stop syncing", new Object[0]);
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.6
             private final /* synthetic */ void $m$0() {
-                ((SyncManager) this).m373x1b9f54d0();
+                SyncManager.this.m373x1b9f54d0();
             }
 
             @Override // java.lang.Runnable
@@ -310,7 +310,7 @@ public class SyncManager {
         if (this.syncingEnabled.get()) {
             this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.7
                 private final /* synthetic */ void $m$0() {
-                    ((SyncManager) this).m368x9b8293a8();
+                    SyncManager.this.m368x9b8293a8();
                 }
 
                 @Override // java.lang.Runnable

@@ -24,7 +24,7 @@ import com.lumiyaviewer.lumiya.ui.settings.SettingsActivity;
 import java.util.UUID;
 
 /* loaded from: classes.dex */
-class NavDrawerAdapter extends ArrayAdapter<NavDrawerAdapter.NavDrawerItem> implements AdapterView.OnItemClickListener {
+class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterView.OnItemClickListener {
     private static NavDrawerItem[] items = {new NavDrawerActivityItem(R.id.item_chat, R.attr.MenuIconLocalChatThemed, R.string.nav_chat, ChatNewActivity.class), new NavDrawerActivityItem(R.id.item_3d_view, R.attr.MenuIconWorldViewThemed, R.string.nav_3d_view, WorldViewActivity.class), new NavDrawerActivityItem(R.id.item_objects, R.attr.MenuIconObjectsThemed, R.string.nav_objects, ObjectListNewActivity.class), new NavDrawerActivityItem(R.id.item_inventory, R.attr.MenuIconInventoryThemed, R.string.nav_inventory, InventoryActivity.class), new NavDrawerActivityItem(R.id.item_minimap, R.attr.MenuIconMinimapThemed, R.string.nav_minimap, MinimapActivity.class), new NavDrawerItem(R.id.item_teleport_home, R.attr.MenuIconHomeThemed, R.string.nav_teleport_home) { // from class: com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.1
         @Override // com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.NavDrawerItem
         public void onClick(Context context) {

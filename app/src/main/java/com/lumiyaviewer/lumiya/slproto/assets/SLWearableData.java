@@ -99,7 +99,7 @@ public class SLWearableData {
                             if (split.length < 2) {
                                 throw new WearableFormatException();
                             }
-                            builder.add((ImmutableList.Builder) new WearableParam(Integer.parseInt(split[0]), Float.parseFloat(split[1])));
+                            builder.add(new WearableParam(Integer.parseInt(split[0]), Float.parseFloat(split[1])));
                             i++;
                         }
                         i2 = i;
@@ -122,7 +122,7 @@ public class SLWearableData {
                             if (split2.length < 2) {
                                 throw new WearableFormatException();
                             }
-                            builder2.add((ImmutableList.Builder) new WearableTexture(Integer.parseInt(split2[0]), UUID.fromString(split2[1])));
+                            builder2.add(new WearableTexture(Integer.parseInt(split2[0]), UUID.fromString(split2[1])));
                             i++;
                         }
                         i2 = i;

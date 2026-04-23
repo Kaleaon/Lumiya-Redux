@@ -79,7 +79,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                         if (subscriptionRequestedList.isEmpty()) {
                             this.entries.remove(key);
                             if (this.requestHandler != null) {
-                                this.requestHandler.onRequestCancelled(key);
+                                this.requestHandler.onRequestCancelled((K) key);
                             }
                             disposeOldData(subscriptionRequestedList);
                         }
@@ -97,7 +97,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         if (this.disposeExecutor != null) {
             this.disposeExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$FQ4ueWG6sVQMwgP3YGPP2nbRyFo
                 private final /* synthetic */ void $m$0() {
-                    ((SubscriptionPool) this).m50lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8106(data);
+                    SubscriptionPool.this.m50lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8106(data);
                 }
 
                 @Override // java.lang.Runnable
@@ -129,12 +129,12 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_SubscriptionPool_8106, reason: not valid java name */
     /* synthetic */ void m50lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8106(Object obj) {
-        this.disposeHandler.onDispose(obj);
+        this.disposeHandler.onDispose((T) obj);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_SubscriptionPool_8749, reason: not valid java name */
     /* synthetic */ void m51lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8749(Object obj) {
-        this.cacheInvalidateHandler.requestUpdate(obj);
+        this.cacheInvalidateHandler.requestUpdate((K) obj);
     }
 
     @Override // com.lumiyaviewer.lumiya.react.ResultHandler
@@ -152,9 +152,9 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
             }
         }
         if (list != null) {
-            Iterator<T> it = list.iterator();
+            Iterator<Subscription<K, T>> it = list.iterator();
             while (it.hasNext()) {
-                ((Subscription) it.next()).onData(t);
+                it.next().onData(t);
             }
         }
     }
@@ -174,9 +174,9 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
             }
         }
         if (list != null) {
-            Iterator<T> it = list.iterator();
+            Iterator<Subscription<K, T>> it = list.iterator();
             while (it.hasNext()) {
-                ((Subscription) it.next()).onError(th);
+                it.next().onError(th);
             }
         }
     }
@@ -188,7 +188,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                 if (this.cacheInvalidateExecutor != null) {
                     this.cacheInvalidateExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$FQ4ueWG6sVQMwgP3YGPP2nbRyFo.1
                         private final /* synthetic */ void $m$0() {
-                            ((SubscriptionPool) this).m51lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8749(k);
+                            SubscriptionPool.this.m51lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8749(k);
                         }
 
                         @Override // java.lang.Runnable
@@ -215,11 +215,11 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
     /* JADX WARN: Multi-variable type inference failed */
     public void requestUpdateAll() {
         synchronized (this.lock) {
-            Iterator<T> it = this.entries.entrySet().iterator();
+            Iterator<Map.Entry<K, SubscriptionRequestedList<K, T>>> it = this.entries.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
-                Object key = entry.getKey();
-                SubscriptionRequestedList subscriptionRequestedList = (SubscriptionRequestedList) entry.getValue();
+                Map.Entry<K, SubscriptionRequestedList<K, T>> entry = it.next();
+                K key = entry.getKey();
+                SubscriptionRequestedList<K, T> subscriptionRequestedList = entry.getValue();
                 if (subscriptionRequestedList != null && this.requestHandler != null && (!this.requestOnce || (!subscriptionRequestedList.requested))) {
                     subscriptionRequestedList.requested = true;
                     this.requestHandler.onRequest(key);
@@ -235,11 +235,11 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         RequestHandler<K> requestHandler = this.requestHandler;
         if (requestHandler != null) {
             synchronized (this.lock) {
-                Iterator<T> it = this.entries.entrySet().iterator();
+                Iterator<Map.Entry<K, SubscriptionRequestedList<K, T>>> it = this.entries.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    Object key = entry.getKey();
-                    SubscriptionRequestedList subscriptionRequestedList = (SubscriptionRequestedList) entry.getValue();
+                    Map.Entry<K, SubscriptionRequestedList<K, T>> entry = it.next();
+                    K key = entry.getKey();
+                    SubscriptionRequestedList<K, T> subscriptionRequestedList = entry.getValue();
                     if (subscriptionRequestedList == null || !predicate.apply(key) || (this.requestOnce && !(!subscriptionRequestedList.requested))) {
                         hashSet = hashSet2;
                     } else {
@@ -251,7 +251,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                 }
             }
             if (hashSet2 != null) {
-                Iterator<T> it2 = hashSet2.iterator();
+                Iterator<K> it2 = hashSet2.iterator();
                 while (it2.hasNext()) {
                     requestHandler.onRequest(it2.next());
                 }
@@ -333,7 +333,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                 if (subscriptionRequestedList.isEmpty()) {
                     this.entries.remove(key);
                     if (this.requestHandler != null) {
-                        this.requestHandler.onRequestCancelled(key);
+                        this.requestHandler.onRequestCancelled((K) key);
                     }
                     disposeOldData(subscriptionRequestedList);
                 }

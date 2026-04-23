@@ -12,10 +12,10 @@ tasks.register('clean', Delete) {
 subprojects {
     plugins.withId('org.jetbrains.kotlin.android') {
         kotlin {
-            // Keep Kotlin compilation bytecode/toolchain aligned with the app's
-            // Java 8 compatibility baseline while migration is in progress.
-            jvmToolchain(8)
+            // Compile with whatever JDK Gradle is running on (JDK 17 in CI/dev
+            // images), while still emitting Java 8 bytecode via module-level
+            // kotlinOptions.jvmTarget = "1.8".
+            jvmToolchain(17)
         }
     }
 }
-

@@ -49,10 +49,6 @@ public abstract class ResourceManager<ResourceParams, ResourceType> {
             return ResourceManager.this.CreateNewRequest(resourceparams, ResourceManager.this);
         }
 
-        @Override // com.google.common.cache.CacheLoader
-        public /* bridge */ /* synthetic */ Object load(@Nonnull Object obj) throws Exception {
-            return load((AnonymousClass2) obj);
-        }
     });
     private final Runnable cleanup = new Runnable() { // from class: com.lumiyaviewer.lumiya.res.ResourceManager.3
         @Override // java.lang.Runnable

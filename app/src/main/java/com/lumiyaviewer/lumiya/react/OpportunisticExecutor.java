@@ -22,54 +22,28 @@ public class OpportunisticExecutor implements Executor {
     private final Runnable worker = new Runnable() { // from class: com.lumiyaviewer.lumiya.react.OpportunisticExecutor.1
         @Override // java.lang.Runnable
         public void run() {
-            Runnable runnable;
             while (true) {
                 try {
                     OpportunisticExecutor.this.lock.lock();
-                    while (true) {
-                        runnable = (Runnable) OpportunisticExecutor.this.queue.poll();
-                        if (runnable == null) {
-                            boolean z = false;
-                            while (true) {
-                                if (!OpportunisticExecutor.this.runOnceRunnables.isEmpty()) {
-                                    Iterator it = OpportunisticExecutor.this.runOnceRunnables.iterator();
-                                    if (!it.hasNext()) {
-                                        z = true;
-                                        break;
-                                    }
-                                    Runnable runnable2 = (Runnable) it.next();
-                                    it.remove();
-                                    try {
-                                        OpportunisticExecutor.this.lock.unlock();
-                                        try {
-                                            runnable2.run();
-                                        } catch (Exception e) {
-                                            Debug.Warning(e);
-                                        }
-                                        OpportunisticExecutor.this.lock.lock();
-                                        z = true;
-                                    } catch (Throwable th) {
-                                        OpportunisticExecutor.this.lock.lock();
-                                        throw th;
-                                    }
-                                } else {
-                                    break;
-                                }
-                            }
-                            if (!z) {
-                                OpportunisticExecutor.this.notEmpty.await();
-                            }
-                        } else {
-                            try {
-                                break;
-                            } catch (Exception e2) {
-                                Debug.Warning(e2);
-                            }
+                    Runnable runnable = OpportunisticExecutor.this.queue.poll();
+                    if (runnable == null && !OpportunisticExecutor.this.runOnceRunnables.isEmpty()) {
+                        Iterator<Runnable> it = OpportunisticExecutor.this.runOnceRunnables.iterator();
+                        if (it.hasNext()) {
+                            runnable = it.next();
+                            it.remove();
                         }
-                        Debug.Warning(e2);
+                    }
+                    if (runnable == null) {
+                        OpportunisticExecutor.this.notEmpty.await();
+                        OpportunisticExecutor.this.lock.unlock();
+                        continue;
                     }
                     OpportunisticExecutor.this.lock.unlock();
-                    runnable.run();
+                    try {
+                        runnable.run();
+                    } catch (Exception e) {
+                        Debug.Warning(e);
+                    }
                 } catch (Throwable th2) {
                     OpportunisticExecutor.this.lock.unlock();
                     throw th2;

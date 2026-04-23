@@ -51,7 +51,7 @@ public class SLThreadingCircuit extends SLCircuit implements Executor {
     public void HandleMessage(final SLMessage sLMessage) {
         this.queue.offer(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$YxYPv04qlnFzJCNumOXxffqwZwU
             private final /* synthetic */ void $m$0() {
-                ((SLThreadingCircuit) this).m146lambda$com_lumiyaviewer_lumiya_slproto_SLThreadingCircuit_1833((SLMessage) sLMessage);
+                SLThreadingCircuit.this.m146lambda$com_lumiyaviewer_lumiya_slproto_SLThreadingCircuit_1833((SLMessage) sLMessage);
             }
 
             @Override // java.lang.Runnable

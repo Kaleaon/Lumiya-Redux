@@ -17,16 +17,6 @@ public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends
         super(daoSession, executor, str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
-    public /* bridge */ /* synthetic */ Subscribable getPool() {
-        return super.getPool();
-    }
-
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
-    public /* bridge */ /* synthetic */ RequestSource getRequestSource() {
-        return super.getRequestSource();
-    }
-
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
     public MessageType loadCached(byte[] bArr) {
@@ -39,11 +29,6 @@ public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends
         }
         Debug.Printf("Failed to create message for id 0x%x", Integer.valueOf(DecodeMessageIDGeneric));
         return null;
-    }
-
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher, com.lumiyaviewer.lumiya.react.Refreshable
-    public /* bridge */ /* synthetic */ void requestUpdate(Object obj) {
-        super.requestUpdate(obj);
     }
 
     /* JADX INFO: Access modifiers changed from: protected */

@@ -68,7 +68,7 @@ public class ObjectPopupsManager {
 
     private void notifyCountUpdated() {
         Executor executor;
-        final ObjectPopupListener objectPopupListener = null;
+        ObjectPopupListener objectPopupListener = null;
         synchronized (this.listenerLock) {
             if (this.objectPopupListener != null) {
                 objectPopupListener = this.objectPopupListener.get();
@@ -99,7 +99,7 @@ public class ObjectPopupsManager {
     void addObjectPopup(final SLChatEvent sLChatEvent) {
         Executor executor;
         boolean z = false;
-        final ObjectPopupListener objectPopupListener = null;
+        ObjectPopupListener objectPopupListener = null;
         synchronized (this.listenerLock) {
             if (this.objectPopupListener != null) {
                 objectPopupListener = this.objectPopupListener.get();

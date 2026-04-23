@@ -35,7 +35,7 @@ public class WeakPriorityRequestSet<T> {
                 }
             }
             this.lock.unlock();
-            Iterator<T> it2 = linkedList.iterator();
+            Iterator<?> it2 = linkedList.iterator();
             while (it2.hasNext()) {
                 ((RequestListener) it2.next()).onNewRequest();
             }
@@ -92,7 +92,7 @@ public class WeakPriorityRequestSet<T> {
     public void completeRequest(T t) {
         this.lock.lock();
         try {
-            Iterator<T> it = this.priorityBins.values().iterator();
+            Iterator<?> it = this.priorityBins.values().iterator();
             while (it.hasNext()) {
                 ((WeakRequestSet) it.next()).completeRequest(t);
             }
@@ -106,7 +106,7 @@ public class WeakPriorityRequestSet<T> {
         T t = null;
         this.lock.lock();
         try {
-            Iterator<T> it = this.priorityBins.entrySet().iterator();
+            Iterator<?> it = this.priorityBins.entrySet().iterator();
             while (it.hasNext() && (t = (T) ((WeakRequestSet) ((Map.Entry) it.next()).getValue()).getRequest()) == null) {
             }
             return t;

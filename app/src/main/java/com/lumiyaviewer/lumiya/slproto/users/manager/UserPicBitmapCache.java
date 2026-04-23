@@ -108,10 +108,6 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
     }
 
     @Override // com.lumiyaviewer.lumiya.res.ResourceManager
-    protected /* bridge */ /* synthetic */ ResourceRequest CreateNewRequest(Object obj, ResourceManager resourceManager) {
-        return CreateNewRequest((UUID) obj, (ResourceManager<UUID, Bitmap>) resourceManager);
-    }
-
     protected ResourceRequest<UUID, Bitmap> CreateNewRequest(UUID uuid, ResourceManager<UUID, Bitmap> resourceManager) {
         return new UserPicBitmapRequest(uuid, resourceManager);
     }

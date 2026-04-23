@@ -30,7 +30,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /* loaded from: classes.dex */
-public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, UploadImageAsyncTask.UploadImageResult> {
+public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, UploadImageResult> {
     private static final MediaType MEDIA_TYPE_JP2 = MediaType.parse("image/jp2");
     private final UUID agentUUID;
     private final Context context;
