@@ -46,9 +46,10 @@ public class SLWorldMap extends SLModule {
             double d2 = findAgent.LocationBlock_Fields.get(0).GlobalY;
             if (d != 0.0d || d2 != 0.0d) {
                 int floor = (int) Math.floor(d);
+                int floor3 = (int) Math.floor(d2);
                 int i = floor & 255;
-                int floor2 = ((int) Math.floor(d2)) & 255;
-                long j = ((floor & InputDeviceCompat.SOURCE_ANY) << 32) | (r0 & InputDeviceCompat.SOURCE_ANY & 4294967295L);
+                int floor2 = floor3 & 255;
+                long j = (((long) (floor & InputDeviceCompat.SOURCE_ANY)) << 32) | (((long) (floor3 & InputDeviceCompat.SOURCE_ANY)) & 4294967295L);
                 Debug.Printf("Initiating teleport to regionHandle 0x%x x %d y %d", Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(floor2));
                 this.agentCircuit.TeleportToRegion(j, i, floor2, 0);
             }
@@ -69,7 +70,7 @@ public class SLWorldMap extends SLModule {
             }
             MapBlockReply.Data data = (MapBlockReply.Data) it.next();
             String stringFromVariableOEM = SLMessage.stringFromVariableOEM(data.Name);
-            long j = ((data.X * 256) << 32) | ((data.Y * 256) & 4294967295L);
+            long j = (((long) (data.X * 256)) << 32) | (((long) (data.Y * 256)) & 4294967295L);
             if (this.teleportTargetName == null || !this.teleportTargetName.equalsIgnoreCase(stringFromVariableOEM)) {
                 z3 = z;
             } else if (j != 0) {
