@@ -204,16 +204,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         if (!z || (renderContext = this.renderContext.get()) == null) {
             return;
         }
+        objectIntersectInfo = null;
         try {
             Iterator<DrawableObject> it = this.currentDrawList.objects.iterator();
-            objectIntersectInfo = null;
             while (it.hasNext()) {
-                try {
-                    objectIntersectInfo = tryPickObject(renderContext, f, f2, (DrawableObject) it.next(), objectIntersectInfo);
-                } catch (Exception e) {
-                    Debug.Warning(e);
-                    return;
-                }
+                objectIntersectInfo = tryPickObject(renderContext, f, f2, (DrawableObject) it.next(), objectIntersectInfo);
             }
             Iterator<DrawableAvatar> it2 = this.currentDrawList.avatars.iterator();
             while (it2.hasNext()) {
@@ -221,9 +216,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             }
         } catch (Exception e) {
             Debug.Warning(e);
-            objectIntersectInfo = null;
         }
-        if (objectIntersectInfo != null || handler == null) {
+        if (objectIntersectInfo == null || handler == null) {
             return;
         }
         handler.sendMessage(handler.obtainMessage(1, objectIntersectInfo));
@@ -832,7 +826,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             GLES10.glMatrixMode(5889);
             GLES10.glLoadIdentity();
         }
-        renderContext.aspectRatio = i / i2;
+        renderContext.aspectRatio = ((float) i) / ((float) i2);
         renderContext.FOVAngle = 60.0f;
         float tan = (float) Math.tan((renderContext.FOVAngle * 3.141592653589793d) / 360.0d);
         renderContext.getClass();

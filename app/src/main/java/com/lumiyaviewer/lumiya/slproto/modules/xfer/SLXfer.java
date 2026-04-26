@@ -116,9 +116,9 @@ public class SLXfer {
     }
 
     public void invokeListeners() {
-        Iterator<OnXferReceivedListener> it = this.listeners.iterator();
+        Iterator<XferListenerInvocation> it = this.listeners.iterator();
         while (it.hasNext()) {
-            ((XferListenerInvocation) it.next()).invokeListener(this.fileName, this.receivedData);
+            it.next().invokeListener(this.fileName, this.receivedData);
         }
     }
 

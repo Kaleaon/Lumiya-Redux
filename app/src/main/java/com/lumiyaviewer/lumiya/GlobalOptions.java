@@ -95,6 +95,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
     }
 
     private static long getTotalMemory() {
+        long j = 0;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("/proc/meminfo"), 8192);
             while (true) {
@@ -104,7 +105,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
                 }
                 if (readLine.startsWith("MemTotal:")) {
                     String[] split = readLine.split("\\s+");
-                    r0 = split.length >= 2 ? Long.parseLong(split[1]) : 0L;
+                    j = split.length >= 2 ? Long.parseLong(split[1]) : 0L;
                     for (int i = 0; i < split.length; i++) {
                         Debug.Log("Memory " + i + ":" + split[i]);
                     }
@@ -113,7 +114,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             bufferedReader.close();
         } catch (Exception e) {
         }
-        return r0;
+        return j;
     }
 
     private boolean isCacheDirectoryWriteable(@Nullable File file) {

@@ -83,6 +83,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
     public void HandleImageData(ImageData imageData) {
         SLTextureFetchRequest sLTextureFetchRequest;
         synchronized (this) {
+            sLTextureFetchRequest = null;
             TextureUDPTransfer textureUDPTransfer = this.udpTransfers.get(imageData.ImageID_Field.ID);
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImageData(imageData);
@@ -92,7 +93,6 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
                     RunUDPQueue();
                 }
             }
-            sLTextureFetchRequest = null;
         }
         if (sLTextureFetchRequest == null || sLTextureFetchRequest.onFetchComplete == null) {
             return;
@@ -118,6 +118,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
     public void HandleImagePacket(ImagePacket imagePacket) {
         SLTextureFetchRequest sLTextureFetchRequest;
         synchronized (this) {
+            sLTextureFetchRequest = null;
             TextureUDPTransfer textureUDPTransfer = this.udpTransfers.get(imagePacket.ImageID_Field.ID);
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImagePacket(imagePacket);
@@ -129,7 +130,6 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
                     sLTextureFetchRequest = sLTextureFetchRequest2;
                 }
             }
-            sLTextureFetchRequest = null;
         }
         if (sLTextureFetchRequest == null || sLTextureFetchRequest.onFetchComplete == null) {
             return;
@@ -145,15 +145,15 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         if (currentTimeMillis >= this.lastCheckForStalls + 1000) {
             this.lastCheckForStalls = currentTimeMillis;
             try {
-                Iterator<Map.Entry<Integer, SLTextureFetchRequest>> it = this.udpTransfers.entrySet().iterator();
+                Iterator<Map.Entry<UUID, TextureUDPTransfer>> it = this.udpTransfers.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    if (!((TextureUDPTransfer) entry.getValue()).hasStalled() || ((TextureUDPTransfer) entry.getValue()).RetryTransfer(this.agentCircuit, this.circuitInfo)) {
+                    Map.Entry<UUID, TextureUDPTransfer> entry = it.next();
+                    if (!entry.getValue().hasStalled() || entry.getValue().RetryTransfer(this.agentCircuit, this.circuitInfo)) {
                         hashSet = hashSet2;
                     } else {
-                        Debug.Printf("Cannot retry texture %s", ((UUID) entry.getKey()).toString());
+                        Debug.Printf("Cannot retry texture %s", entry.getKey().toString());
                         HashSet hashSet3 = hashSet2 == null ? new HashSet() : hashSet2;
-                        hashSet3.add((UUID) entry.getKey());
+                        hashSet3.add(entry.getKey());
                         hashSet = hashSet3;
                     }
                     hashSet2 = hashSet;
