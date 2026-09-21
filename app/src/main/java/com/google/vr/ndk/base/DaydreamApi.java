@@ -354,7 +354,7 @@ public class DaydreamApi implements AutoCloseable {
             intent = new Intent();
         }
         final PendingIntent createPendingResult = activity.createPendingResult(i, intent, 1073741824);
-        final Runnable runnable = new Runnable(this) { // from class: com.google.vr.ndk.base.DaydreamApi.7
+        final Runnable runnable = new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.7
             @Override // java.lang.Runnable
             public void run() {
                 try {

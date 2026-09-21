@@ -27,10 +27,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class LLSDStreamingParser {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f115x653d09df = null;
+    private static /* synthetic */ int[] f115x653d09df = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-llsd-LLSDNodeTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = null;
+    private static /* synthetic */ int[] f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = null;
 
     public interface LLSDContentHandler {
         LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException;

@@ -23,7 +23,7 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     }
 
     private void checkConsistency() {
-        Iterator<T> it = this.chunks.iterator();
+        Iterator it = this.chunks.iterator();
         int i = 0;
         while (it.hasNext()) {
             i = ((List) it.next()).size() + i;
@@ -44,7 +44,7 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     private int replaceFoundElement(List<E> list, int i, @Nonnull E e) {
         list.set(i, e);
         int i2 = 0;
-        Iterator<T> it = this.chunks.iterator();
+        Iterator it = this.chunks.iterator();
         while (true) {
             int i3 = i2;
             if (!it.hasNext()) {

@@ -78,10 +78,10 @@ import javax.annotation.Nonnull;
 public class GridConnectionService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f3x3582025 = null;
+    private static /* synthetic */ int[] f3x3582025 = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-utils-LEDActionSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues = null;
+    private static /* synthetic */ int[] f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues = null;
     public static final String LOGIN_ACTION = "com.lumiyaviewer.lumiya.ACTION_LOGIN";
     private static final int REQUEST_CODE_UNREAD_NOTIFY = 2131755072;
     private Subscription<Boolean, UnreadNotifications> unreadNotifySubscription;
@@ -105,7 +105,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private boolean voicePluginReceiverRegistered = false;
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0
         private final /* synthetic */ void $m$0(Object obj) {
-            ((GridConnectionService) this).m17com_lumiyaviewer_lumiya_GridConnectionServicemthref0((CurrentLocationInfo) obj);
+            GridConnectionService.this.m17com_lumiyaviewer_lumiya_GridConnectionServicemthref0((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -173,7 +173,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private VoicePluginServiceConnection voicePluginServiceConnection = null;
     private final ChatterNameRetriever.OnChatterNameUpdated onActiveAgentNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.2
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-            ((GridConnectionService) this).m19lambda$com_lumiyaviewer_lumiya_GridConnectionService_20777(chatterNameRetriever);
+            GridConnectionService.this.m19lambda$com_lumiyaviewer_lumiya_GridConnectionService_20777(chatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -403,7 +403,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
                 return;
             }
             NotificationManager notificationManager = (NotificationManager) getSystemService("notification");
-            Iterator<T> it = this.shownNotificationIds.iterator();
+            Iterator it = this.shownNotificationIds.iterator();
             while (it.hasNext()) {
                 notificationManager.cancel(((Integer) it.next()).intValue());
             }
@@ -473,7 +473,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
         Intent intent = (userManager == null || (captureNotify = userManager.getUnreadNotificationManager().captureNotify(unreadNotificationInfo, createIntent)) == null) ? createIntent : captureNotify;
         if (unreadMessageSource3 != null && unreadNotificationInfo.objectPopupInfo().objectPopupsCount() == 0) {
-            String or = unreadMessageSource3.chatterName().or((Optional<String>) gridName);
+            String or = unreadMessageSource3.chatterName().or(gridName);
             builder.setContentTitle(or);
             if (unreadMessageSource3.unreadMessagesCount() == 1 && unreadMessageSource3.unreadMessages().size() == 1) {
                 builder.setContentText(unreadMessageSource3.unreadMessages().get(0).getPlainTextMessage(this, unreadMessageSource3.chatterID().getUserManager(), true));
@@ -562,7 +562,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
                 str5 = String.format(getString(R.string.unread_messages), Integer.valueOf(unreadNotificationInfo.freshMessagesCount()));
             } else if (unreadNotificationInfo.freshMessagesCount() != 1 || orNull2.unreadMessages().size() <= 0) {
                 String format2 = String.format(getString(R.string.unread_messages), Integer.valueOf(unreadNotificationInfo.freshMessagesCount()));
-                String string = orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Local ? getString(R.string.messages_in_where, new Object[]{orNull2.chatterName().or((Optional<String>) getString(R.string.local_chat_title))}) : orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Group ? getString(R.string.messages_in_where, new Object[]{orNull2.chatterName().or((Optional<String>) getString(R.string.default_group_chat_title))}) : orNull2.chatterName().isPresent() ? String.format(getString(R.string.from_chatter), orNull2.chatterName().orNull()) : null;
+                String string = orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Local ? getString(R.string.messages_in_where, new Object[]{orNull2.chatterName().or(getString(R.string.local_chat_title))}) : orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Group ? getString(R.string.messages_in_where, new Object[]{orNull2.chatterName().or(getString(R.string.default_group_chat_title))}) : orNull2.chatterName().isPresent() ? String.format(getString(R.string.from_chatter), orNull2.chatterName().orNull()) : null;
                 str5 = string != null ? format2 + " " + string : format2;
             } else {
                 str5 = "[" + (orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Local ? getString(R.string.chat_type_ticker_local) : orNull2.chatterID().getChatterType() == ChatterID.ChatterType.Group ? getString(R.string.chat_type_ticker_group) : getString(R.string.chat_type_ticker_im)) + "] " + orNull2.unreadMessages().get(orNull2.unreadMessages().size() - 1).getPlainTextMessage(this, orNull2.chatterID().getUserManager(), false).toString().trim();
@@ -772,9 +772,9 @@ public class GridConnectionService extends Service implements SharedPreferences.
     public void handleConnectEvent(SLLoginResultEvent sLLoginResultEvent) {
         UserManager userManager = UserManager.getUserManager(sLLoginResultEvent.activeAgentUUID);
         if (userManager != null) {
-            this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe((Subscribable<Boolean, UnreadNotifications>) UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.1
+            this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe(UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.1
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ((GridConnectionService) this).m18com_lumiyaviewer_lumiya_GridConnectionServicemthref1((UnreadNotifications) obj);
+                    GridConnectionService.this.m18com_lumiyaviewer_lumiya_GridConnectionServicemthref1((UnreadNotifications) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

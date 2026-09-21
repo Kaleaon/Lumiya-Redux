@@ -22,7 +22,7 @@ class GroupDisplayDataList extends ChatterDisplayDataList {
         ImmutableList.Builder builder = new ImmutableList.Builder();
         Iterator<AvatarGroupList.AvatarGroupEntry> it = avatarGroupList.Groups.values().iterator();
         while (it.hasNext()) {
-            builder.add((ImmutableList.Builder) ChatterID.getGroupChatterID(this.userManager.getUserID(), it.next().GroupID));
+            builder.add(ChatterID.getGroupChatterID(this.userManager.getUserID(), it.next().GroupID));
         }
         return builder.build();
     }

@@ -52,7 +52,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
     private final SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.12
         private final /* synthetic */ void $m$0(Object obj) {
-            ((GroupMainProfileTab) this).m447xa875b11a((SLAgentCircuit) obj);
+            GroupMainProfileTab.this.m447xa875b11a((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -64,7 +64,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
     private ChatterNameRetriever founderNameRetriever = null;
     private final ChatterNameRetriever.OnChatterNameUpdated onFounderNameReady = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.13
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-            ((GroupMainProfileTab) this).m458xd3b61247(chatterNameRetriever);
+            GroupMainProfileTab.this.m458xd3b61247(chatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -126,7 +126,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 }
             }).setPositiveButton(R.string.set_role_dialog_ok, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.17
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i4) {
-                    ((GroupMainProfileTab) this).m457xd3a7efa5((AtomicInteger) atomicInteger, (UUID) uuid, dialogInterface, i4);
+                    GroupMainProfileTab.this.m457xd3a7efa5((AtomicInteger) atomicInteger, (UUID) uuid, dialogInterface, i4);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -154,7 +154,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 ((EditText) inflate.findViewById(R.id.land_contribution_value)).setText(getString(R.string.generic_int_format, Integer.valueOf(avatarGroupEntry.Contribution)));
                 builder.setPositiveButton(R.string.set_land_contribution_ok_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.14
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                        ((GroupMainProfileTab) this).m461xf19a4b2((View) inflate, dialogInterface, i);
+                        GroupMainProfileTab.this.m461xf19a4b2((View) inflate, dialogInterface, i);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener
@@ -214,7 +214,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 }
                 builder.setPositiveButton(R.string.yes_join_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.15
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                        ((GroupMainProfileTab) this).m460xf191a6b((UUID) uuid, dialogInterface, i);
+                        GroupMainProfileTab.this.m460xf191a6b((UUID) uuid, dialogInterface, i);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener
@@ -250,7 +250,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 builder.setTitle(R.string.leave_group_confirm);
                 builder.setPositiveButton(R.string.yes_leave_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.16
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                        ((GroupMainProfileTab) this).m459xf184433((UUID) uuid, dialogInterface, i);
+                        GroupMainProfileTab.this.m459xf184433((UUID) uuid, dialogInterface, i);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener
@@ -359,7 +359,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         ((ImageAssetView) inflate.findViewById(R.id.group_pic_view)).setVerticalFit(true);
         inflate.findViewById(R.id.group_profile_view_founder_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.3
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m448xa875b11b(view);
+                GroupMainProfileTab.this.m448xa875b11b(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -369,7 +369,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.button_copy_group_key).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.4
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m449xa875b11c(view);
+                GroupMainProfileTab.this.m449xa875b11c(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -379,7 +379,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.active_group_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.5
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m450xa875b11d(view);
+                GroupMainProfileTab.this.m450xa875b11d(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -389,7 +389,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.show_in_profile_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.6
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m451xa875b11e(view);
+                GroupMainProfileTab.this.m451xa875b11e(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -399,7 +399,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_change_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.7
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m452xa875b11f(view);
+                GroupMainProfileTab.this.m452xa875b11f(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -409,7 +409,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_profile_contribution_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.8
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m453xa875b120(view);
+                GroupMainProfileTab.this.m453xa875b120(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -419,7 +419,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_join_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.9
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m454xa875b121(view);
+                GroupMainProfileTab.this.m454xa875b121(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -429,7 +429,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_leave_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.10
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m455xa875b122(view);
+                GroupMainProfileTab.this.m455xa875b122(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -439,7 +439,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_invite_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.11
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupMainProfileTab) this).m456xa875b123(view);
+                GroupMainProfileTab.this.m456xa875b123(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -502,7 +502,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 view.findViewById(R.id.group_membership_role).setVisibility(0);
                 String str = avatarGroupEntry.GroupTitle;
                 if (Strings.isNullOrEmpty(str) && this.groupTitles.hasData()) {
-                    Iterator<T> it = this.groupTitles.get().GroupData_Fields.iterator();
+                    Iterator it = this.groupTitles.get().GroupData_Fields.iterator();
                     while (true) {
                         if (!it.hasNext()) {
                             break;

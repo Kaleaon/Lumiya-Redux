@@ -47,7 +47,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
     private boolean wantedShowObjectPopups = false;
     private final View.OnClickListener reconnectButtonListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$Zi2fvFRNZlQXFOmQ50cSiiV_3Qw
         private final /* synthetic */ void $m$0(View view) {
-            ((ConnectedActivity) this).m537lambda$com_lumiyaviewer_lumiya_ui_common_ConnectedActivity_3108(view);
+            ConnectedActivity.this.m537lambda$com_lumiyaviewer_lumiya_ui_common_ConnectedActivity_3108(view);
         }
 
         @Override // android.view.View.OnClickListener

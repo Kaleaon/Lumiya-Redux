@@ -35,7 +35,7 @@ import java.util.UUID;
 public class SearchGridFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, SearchGridAdapter.OnSearchResultClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f584xca68d786 = null;
+    private /* synthetic */ int[] f584xca68d786 = null;
     private SearchGridAdapter adapter;
 
     @BindView(R.id.radiogroup_search_type)
@@ -51,7 +51,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.searchResults).withDataChangedListener(this);
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m861x591f1c2a() {
+    private /* synthetic */ int[] m861x591f1c2a() {
         if (f584xca68d786 != null) {
             return f584xca68d786;
         }

@@ -134,7 +134,7 @@ class VrCoreSdkClient {
             final FadeOverlayView fadeOverlayView = this.fadeOverlayViewWeak.get();
             if (fadeOverlayView != null) {
                 cancelSafeguard(2);
-                fadeOverlayView.post(new Runnable(this) { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.2
+                fadeOverlayView.post(new Runnable() { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.2
                     @Override // java.lang.Runnable
                     public void run() {
                         fadeOverlayView.startFade(i, j);

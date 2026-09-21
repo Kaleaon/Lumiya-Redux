@@ -28,7 +28,7 @@ public abstract class ProfileTextFieldEditFragment extends TextFieldEditFragment
         }
         this.avatarProperties = this.userManager.getAvatarProperties().getPool().subscribe((Subscribable) ((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$6hJe-KPqqQcY7xiCxogddm78oYc
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ProfileTextFieldEditFragment) this).m517x7aa22308((AvatarPropertiesReply) obj);
+                ProfileTextFieldEditFragment.this.m517x7aa22308((AvatarPropertiesReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

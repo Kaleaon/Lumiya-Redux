@@ -14,7 +14,7 @@ import java.util.List;
 public class BakeLayer {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f64x335e3db9 = null;
+    private /* synthetic */ int[] f64x335e3db9 = null;
     public int fixedColor;
     public SLAvatarGlobalColor globalColor;
     public boolean hasFixedColor;
@@ -29,7 +29,7 @@ public class BakeLayer {
     public boolean writeAllChannels;
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m148x403ad495() {
+    private /* synthetic */ int[] m148x403ad495() {
         if (f64x335e3db9 != null) {
             return f64x335e3db9;
         }

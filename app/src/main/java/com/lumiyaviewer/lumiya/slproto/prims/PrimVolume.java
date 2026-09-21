@@ -103,7 +103,7 @@ public class PrimVolume {
             }
             this.VolumeFaces.add(primVolumeFace);
         }
-        Iterator<T> it = this.VolumeFaces.iterator();
+        Iterator it = this.VolumeFaces.iterator();
         while (it.hasNext()) {
             ((PrimVolumeFace) it.next()).create(this);
         }
@@ -142,7 +142,7 @@ public class PrimVolume {
                 this.Mesh.add(i4, this.Path.Path.get(i2).pos);
             }
         }
-        Iterator<T> it = this.Profile.Faces.iterator();
+        Iterator it = this.Profile.Faces.iterator();
         while (it.hasNext()) {
             this.FaceMask = ((PrimProfile.Face) it.next()).FaceID | this.FaceMask;
         }

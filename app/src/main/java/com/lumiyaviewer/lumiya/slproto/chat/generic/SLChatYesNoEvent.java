@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public abstract class SLChatYesNoEvent extends SLChatTextEvent {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f74x99a8895a = null;
+    private /* synthetic */ int[] f74x99a8895a = null;
 
     @Nonnull
     private EventState eventState;
@@ -38,7 +38,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m167xa6852036() {
+    private /* synthetic */ int[] m167xa6852036() {
         if (f74x99a8895a != null) {
             return f74x99a8895a;
         }

@@ -135,7 +135,7 @@ public class GridList {
     }
 
     public int getGridIndex(UUID uuid) {
-        Iterator<T> it = this.predefGrids.iterator();
+        Iterator it = this.predefGrids.iterator();
         int i = 0;
         while (it.hasNext()) {
             if (((GridInfo) it.next()).getGridUUID().equals(uuid)) {
@@ -143,7 +143,7 @@ public class GridList {
             }
             i++;
         }
-        Iterator<T> it2 = this.customGrids.iterator();
+        Iterator it2 = this.customGrids.iterator();
         while (it2.hasNext()) {
             if (((GridInfo) it2.next()).getGridUUID().equals(uuid)) {
                 return i;

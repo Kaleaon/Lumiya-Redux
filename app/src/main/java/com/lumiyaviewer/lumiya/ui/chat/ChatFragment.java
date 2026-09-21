@@ -73,7 +73,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     private MenuItem clearChatHistoryMenuItem = null;
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.2
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatFragment) this).m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0((SLAgentCircuit) obj);
+            ChatFragment.this.m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -83,7 +83,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     });
     private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatFragment) this).m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1((ChatterID) obj);
+            ChatFragment.this.m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1((ChatterID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -93,7 +93,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     });
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.4
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatFragment) this).m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2((VoiceChatInfo) obj);
+            ChatFragment.this.m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2((VoiceChatInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -192,7 +192,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     private void clearChatHistory() {
         new AlertDialog.Builder(getContext()).setMessage(R.string.clear_chat_history_confirm).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((ChatFragment) this).m423lambda$com_lumiyaviewer_lumiya_ui_chat_ChatFragment_22290(dialogInterface, i);
+                ChatFragment.this.m423lambda$com_lumiyaviewer_lumiya_ui_chat_ChatFragment_22290(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

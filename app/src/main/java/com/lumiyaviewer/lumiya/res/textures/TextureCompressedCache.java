@@ -25,16 +25,16 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
     private class TextureFetchRequest extends ResourceRequest<DrawableTextureParams, File> implements Startable, SLTextureFetchRequest.TextureFetchCompleteListener, Runnable, HasPriority {
 
         /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
+        private /* synthetic */ int[] f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
         private static final int MAX_RETRIES = 2;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$render$tex$TextureClass;
+        /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$render$tex$TextureClass;
         private final File compressedFile;
         private volatile SLTextureFetchRequest fetchRequest;
         private volatile Future<?> fetchTask;
         private final SLTextureFetcher fetcher;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m129x8a7b09f7() {
+        private /* synthetic */ int[] m129x8a7b09f7() {
             if (f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
                 return f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
             }

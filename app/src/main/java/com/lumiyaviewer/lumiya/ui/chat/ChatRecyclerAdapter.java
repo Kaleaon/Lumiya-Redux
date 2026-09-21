@@ -36,7 +36,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
     private WeakReference<OnUserPicClickedListener> onUserPicClickedListener = new WeakReference<>(null);
     private final View.OnClickListener userPicClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$aLaDwVKcksSTh8O8aNFE_CFHRQc
         private final /* synthetic */ void $m$0(View view) {
-            ((ChatRecyclerAdapter) this).m425lambda$com_lumiyaviewer_lumiya_ui_chat_ChatRecyclerAdapter_7040(view);
+            ChatRecyclerAdapter.this.m425lambda$com_lumiyaviewer_lumiya_ui_chat_ChatRecyclerAdapter_7040(view);
         }
 
         @Override // android.view.View.OnClickListener

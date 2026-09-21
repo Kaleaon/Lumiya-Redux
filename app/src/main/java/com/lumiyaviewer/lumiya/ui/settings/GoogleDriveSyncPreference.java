@@ -45,7 +45,7 @@ public class GoogleDriveSyncPreference extends CheckBoxPreference {
         }
         new AlertDialog.Builder(getContext()).setTitle(R.string.enable_google_drive).setMessage(getContext().getString(R.string.enable_google_drive_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$GONhG2H9-w043w0Zbd-p0nmAUgQ.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GoogleDriveSyncPreference) this).m863x92031b8a(dialogInterface, i);
+                GoogleDriveSyncPreference.this.m863x92031b8a(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

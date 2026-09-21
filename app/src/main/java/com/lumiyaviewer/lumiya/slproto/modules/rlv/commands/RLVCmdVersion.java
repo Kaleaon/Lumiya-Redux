@@ -10,7 +10,7 @@ import java.util.UUID;
 public class RLVCmdVersion implements RLVCommand {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-rlv-RLVCommandsSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f128x22b61868 = null;
+    private /* synthetic */ int[] f128x22b61868 = null;
     private static final int RLV_VERSION_BUILD = 0;
     private static final int RLV_VERSION_MAJOR = 1;
     private static final int RLV_VERSION_MINOR = 10;
@@ -20,7 +20,7 @@ public class RLVCmdVersion implements RLVCommand {
     private static final int RLVa_VERSION_PATCH = 1;
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-rlv-RLVCommandsSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m242xf254fe0c() {
+    private /* synthetic */ int[] m242xf254fe0c() {
         if (f128x22b61868 != null) {
             return f128x22b61868;
         }

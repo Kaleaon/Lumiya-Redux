@@ -105,7 +105,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     private ChatterNameRetriever partnerNameRetriever = null;
     private final ChatterNameRetriever.OnChatterNameUpdated onPartnerNameReady = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$wqoLfTfjESd1OUBLJEQMKRim4S0
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-            ((UserMainProfileTab) this).m519x9d89034f(chatterNameRetriever);
+            UserMainProfileTab.this.m519x9d89034f(chatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated

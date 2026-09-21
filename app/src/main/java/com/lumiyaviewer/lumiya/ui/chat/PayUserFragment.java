@@ -32,7 +32,7 @@ public class PayUserFragment extends ChatterFragment {
     private final ChatterNameDisplayer chatterNameDisplayer = new ChatterNameDisplayer();
     private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$4LKDzNIyR_gCoOmHf_6XBk4qMJA.1
         private final /* synthetic */ void $m$0(Object obj) {
-            ((PayUserFragment) this).m433com_lumiyaviewer_lumiya_ui_chat_PayUserFragmentmthref0((Integer) obj);
+            PayUserFragment.this.m433com_lumiyaviewer_lumiya_ui_chat_PayUserFragmentmthref0((Integer) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -77,7 +77,7 @@ public class PayUserFragment extends ChatterFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(String.format(getString(R.string.user_pay_confirm), resolvedName, Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$4LKDzNIyR_gCoOmHf_6XBk4qMJA.2
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
-                    ((PayUserFragment) this).m434lambda$com_lumiyaviewer_lumiya_ui_chat_PayUserFragment_3721((ChatterID) chatterID, i, (String) str, dialogInterface, i2);
+                    PayUserFragment.this.m434lambda$com_lumiyaviewer_lumiya_ui_chat_PayUserFragment_3721((ChatterID) chatterID, i, (String) str, dialogInterface, i2);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener

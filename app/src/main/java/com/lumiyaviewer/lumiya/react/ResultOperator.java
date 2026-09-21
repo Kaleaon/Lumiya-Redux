@@ -24,13 +24,13 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_1065, reason: not valid java name */
-    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(Object obj, Throwable th) {
+    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(K obj, Throwable th) {
         this.toHandler.onResultError(obj, th);
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_796, reason: not valid java name */
-    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(Object obj, Object obj2) {
+    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(K obj, Tin obj2) {
         this.toHandler.onResultData(obj, onData(obj2));
     }
 
@@ -41,7 +41,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$rbwdofHzZNihI1HZoTkj8gWFECo
                 private final /* synthetic */ void $m$0() {
-                    ((ResultOperator) this).m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(k, tin);
+                    ResultOperator.this.m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(k, tin);
                 }
 
                 @Override // java.lang.Runnable
@@ -59,7 +59,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$rbwdofHzZNihI1HZoTkj8gWFECo.1
                 private final /* synthetic */ void $m$0() {
-                    ((ResultOperator) this).m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(k, (Throwable) th);
+                    ResultOperator.this.m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(k, (Throwable) th);
                 }
 
                 @Override // java.lang.Runnable

@@ -58,7 +58,7 @@ class SLAvatarParamBuilder {
                             LLSDNode byKey5 = byIndex2.byKey("driven");
                             for (int i4 = 0; i4 < byKey5.getCount(); i4++) {
                                 LLSDNode byIndex3 = byKey5.byIndex(i4);
-                                builder2.add((ImmutableList.Builder) new SLAvatarParams.DrivenParam(byIndex3.byKey("driven_id").asInt(), (float) byIndex3.byKey("min1").asDouble(), (float) byIndex3.byKey("max1").asDouble(), (float) byIndex3.byKey("min2").asDouble(), (float) byIndex3.byKey("max2").asDouble()));
+                                builder2.add(new SLAvatarParams.DrivenParam(byIndex3.byKey("driven_id").asInt(), (float) byIndex3.byKey("min1").asDouble(), (float) byIndex3.byKey("max1").asDouble(), (float) byIndex3.byKey("min2").asDouble(), (float) byIndex3.byKey("max2").asDouble()));
                             }
                             immutableList = builder2.build();
                         }
@@ -75,7 +75,7 @@ class SLAvatarParamBuilder {
                             }
                             immutableMap = Maps.immutableEnumMap(enumMap);
                         }
-                        builder.add((ImmutableList.Builder) new SLAvatarParams.AvatarParam(valueOf, (float) byIndex2.byKey("minValue").asDouble(), (float) byIndex2.byKey("maxValue").asDouble(), (float) byIndex2.byKey("defValue").asDouble(), byIndex2.byKey("morph").asBoolean(), sLAvatarParamColor, sLAvatarParamAlpha, immutableList, immutableMap));
+                        builder.add(new SLAvatarParams.AvatarParam(valueOf, (float) byIndex2.byKey("minValue").asDouble(), (float) byIndex2.byKey("maxValue").asDouble(), (float) byIndex2.byKey("defValue").asDouble(), byIndex2.byKey("morph").asBoolean(), sLAvatarParamColor, sLAvatarParamAlpha, immutableList, immutableMap));
                     }
                     SLAvatarParams.ParamSet paramSet = new SLAvatarParams.ParamSet(byIndex.byKey("setId").asInt(), byIndex.byKey("appearanceIndex").asInt(), SLVisualParamID.valueOf(byIndex.byKey("setName").asString()), builder.build());
                     map.put(Integer.valueOf(paramSet.id), paramSet);

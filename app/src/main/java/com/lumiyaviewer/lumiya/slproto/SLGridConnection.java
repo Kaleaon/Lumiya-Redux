@@ -26,7 +26,7 @@ import java.util.UUID;
 public class SLGridConnection extends SLConnection {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f62x8f75539 = null;
+    private /* synthetic */ int[] f62x8f75539 = null;
     private static final String DEFAULT_SYSTEM_ACCOUNT = "Second Life";
     private static boolean autoresponseEnabled = false;
     private static String autoresponseText = "";
@@ -68,7 +68,7 @@ public class SLGridConnection extends SLConnection {
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m140x1c568815() {
+    private /* synthetic */ int[] m140x1c568815() {
         if (f62x8f75539 != null) {
             return f62x8f75539;
         }

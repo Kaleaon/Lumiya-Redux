@@ -19,11 +19,11 @@ public class RLVRestrictions {
     private static class RLVRestrictionList {
 
         /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] f127x829a01e5 = null;
+        private /* synthetic */ int[] f127x829a01e5 = null;
         private Map<String, HashSet<UUID>> restMap;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m241xbc0b3b89() {
+        private /* synthetic */ int[] m241xbc0b3b89() {
             if (f127x829a01e5 != null) {
                 return f127x829a01e5;
             }
@@ -73,7 +73,7 @@ public class RLVRestrictions {
             if (uuid == null) {
                 return !this.restMap.isEmpty();
             }
-            Iterator<T> it = this.restMap.entrySet().iterator();
+            Iterator it = this.restMap.entrySet().iterator();
             while (it.hasNext()) {
                 if (((HashSet) ((Map.Entry) it.next()).getValue()).contains(uuid)) {
                     return true;
@@ -192,7 +192,7 @@ public class RLVRestrictions {
 
         public void removeAllForObject(UUID uuid) {
             HashSet hashSet = new HashSet();
-            Iterator<T> it = this.restMap.entrySet().iterator();
+            Iterator it = this.restMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
                 ((HashSet) entry.getValue()).remove(uuid);
@@ -233,7 +233,7 @@ public class RLVRestrictions {
     public synchronized List<RLVRestrictionType> getRestrictionsByObject(UUID uuid) {
         LinkedList linkedList;
         linkedList = new LinkedList();
-        Iterator<T> it = this.restrictions.entrySet().iterator();
+        Iterator it = this.restrictions.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
             if (((RLVRestrictionList) entry.getValue()).hasRestrictionsByObject(uuid)) {

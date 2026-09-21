@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRefreshLayout.OnRefreshListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f379xeb9cc37f = null;
+    private /* synthetic */ int[] f379xeb9cc37f = null;
     private final List<Loadable> loadables = new ArrayList();
     private final List<Loadable> optionalLoadables = new ArrayList();
 
@@ -48,7 +48,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m589x4f18d023() {
+    private /* synthetic */ int[] m589x4f18d023() {
         if (f379xeb9cc37f != null) {
             return f379xeb9cc37f;
         }
@@ -75,7 +75,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
 
     public LoadableMonitor(Loadable... loadableArr) {
         Collections.addAll(this.loadables, loadableArr);
-        Iterator<T> it = this.loadables.iterator();
+        Iterator it = this.loadables.iterator();
         while (it.hasNext()) {
             ((Loadable) it.next()).addLoadableStatusListener(this);
         }
@@ -102,7 +102,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
 
     @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable.LoadableStatusListener
     public void onLoadableStatusChange(Loadable loadable, Loadable.Status status) {
-        Iterator<T> it = this.loadables.iterator();
+        Iterator it = this.loadables.iterator();
         boolean z = false;
         boolean z2 = false;
         boolean z3 = false;

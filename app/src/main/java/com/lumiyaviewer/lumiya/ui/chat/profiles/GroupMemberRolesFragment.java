@@ -56,7 +56,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((GroupMemberRolesFragment) this).m469xd12733d2((UUID) obj);
+            GroupMemberRolesFragment.this.m469xd12733d2((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -167,7 +167,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
                             z2 = true;
                         } else {
                             if ((myGroupPowers & 128) != 0 && (groupTitlesReply = (GroupTitlesReply) GroupMemberRolesFragment.this.groupTitles.getData()) != null) {
-                                Iterator<T> it = groupTitlesReply.GroupData_Fields.iterator();
+                                Iterator it = groupTitlesReply.GroupData_Fields.iterator();
                                 while (it.hasNext()) {
                                     if (((GroupTitlesReply.GroupData) it.next()).RoleID.equals(uuid)) {
                                         z2 = true;
@@ -317,7 +317,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GroupMemberRolesFragment) this).m473x6c93268c(dialogInterface, i);
+                GroupMemberRolesFragment.this.m473x6c93268c(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -326,7 +326,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GroupMemberRolesFragment) this).m471x25600606(dialogInterface, i);
+                GroupMemberRolesFragment.this.m471x25600606(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -364,7 +364,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         ((ListView) inflate.findViewById(R.id.member_roles_list)).setAdapter((ListAdapter) this.adapter);
         ((ListView) inflate.findViewById(R.id.member_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.2
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-                ((GroupMemberRolesFragment) this).m472x6c90dd87(adapterView, view, i, j);
+                GroupMemberRolesFragment.this.m472x6c90dd87(adapterView, view, i, j);
             }
 
             @Override // android.widget.AdapterView.OnItemClickListener
@@ -436,7 +436,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         if (this.MemberID != null) {
             this.memberNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.4
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    ((GroupMemberRolesFragment) this).m470xd12733d3(chatterNameRetriever);
+                    GroupMemberRolesFragment.this.m470xd12733d3(chatterNameRetriever);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated

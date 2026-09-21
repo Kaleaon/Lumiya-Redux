@@ -115,7 +115,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         final String str = (String) Optional.fromNullable(Strings.emptyToNull(parcelData.getName())).or((Optional) getString(com.lumiyaviewer.lumiya.R.string.name_loading_title));
         builder.setMessage(getString(com.lumiyaviewer.lumiya.R.string.create_pick_question, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.3
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((UserPicksProfileTab) this).m532xd71354a5((SLAgentCircuit) activeAgentCircuit, (String) str, (ParcelData) parcelData, count, dialogInterface, i);
+                UserPicksProfileTab.this.m532xd71354a5((SLAgentCircuit) activeAgentCircuit, (String) str, (ParcelData) parcelData, count, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -158,7 +158,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         this.picksAdapter = new PicksAdapter(layoutInflater.getContext(), null);
         inflate.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.1
             private final /* synthetic */ void $m$0(View view) {
-                ((UserPicksProfileTab) this).m530xb7c87a2b(view);
+                UserPicksProfileTab.this.m530xb7c87a2b(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -169,7 +169,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.picks_list_view)).setAdapter((ListAdapter) this.picksAdapter);
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.picks_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.2
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-                ((UserPicksProfileTab) this).m531xd7126bce(adapterView, view, i, j);
+                UserPicksProfileTab.this.m531xd7126bce(adapterView, view, i, j);
             }
 
             @Override // android.widget.AdapterView.OnItemClickListener

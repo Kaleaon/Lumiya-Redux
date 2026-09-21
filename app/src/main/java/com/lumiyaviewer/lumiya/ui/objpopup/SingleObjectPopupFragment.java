@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public class SingleObjectPopupFragment extends Fragment {
     private final View.OnClickListener frameClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objpopup.-$Lambda$gmgx9kG_frukRCwYiu6KI4GSv6k
         private final /* synthetic */ void $m$0(View view) {
-            ((SingleObjectPopupFragment) this).m704x1a9dd8df(view);
+            SingleObjectPopupFragment.this.m704x1a9dd8df(view);
         }
 
         @Override // android.view.View.OnClickListener

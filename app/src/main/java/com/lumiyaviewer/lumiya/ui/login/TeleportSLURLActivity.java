@@ -45,7 +45,7 @@ public class TeleportSLURLActivity extends AppCompatActivity implements View.OnC
                 if (!z) {
                     new AlertDialog.Builder(this).setMessage(R.string.teleport_unable).setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$txy91ryZVkviKYu9VXLZHkYSvg0
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                            ((TeleportSLURLActivity) this).m648xe44220a6(dialogInterface, i);
+                            TeleportSLURLActivity.this.m648xe44220a6(dialogInterface, i);
                         }
 
                         @Override // android.content.DialogInterface.OnClickListener

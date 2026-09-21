@@ -19,7 +19,7 @@ class ActiveChattersDisplayDataList extends ChatterDisplayDataList {
     protected List<ChatterID> getChatters() {
         List<Chatter> list = this.userManager.getDaoSession().getChatterDao().queryBuilder().where(ChatterDao.Properties.Active.notEq(false), new WhereCondition[0]).list();
         ArrayList arrayList = new ArrayList(list.size());
-        Iterator<T> it = list.iterator();
+        Iterator it = list.iterator();
         while (it.hasNext()) {
             arrayList.add(ChatterID.fromDatabaseObject(this.userManager.getUserID(), (Chatter) it.next()));
         }

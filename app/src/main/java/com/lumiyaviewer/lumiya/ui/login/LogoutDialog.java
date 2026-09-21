@@ -31,7 +31,7 @@ public class LogoutDialog extends ProgressDialog {
         this.eventBus = EventBus.getInstance();
         this.onDisconnectTimeout = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$Ido4EAnXE9yUsM2nDeFKnyTfU7w
             private final /* synthetic */ void $m$0() {
-                ((LogoutDialog) this).m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
+                LogoutDialog.this.m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
             }
 
             @Override // java.lang.Runnable
@@ -47,7 +47,7 @@ public class LogoutDialog extends ProgressDialog {
         this.eventBus = EventBus.getInstance();
         this.onDisconnectTimeout = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$Ido4EAnXE9yUsM2nDeFKnyTfU7w.1
             private final /* synthetic */ void $m$0() {
-                ((LogoutDialog) this).m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
+                LogoutDialog.this.m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
             }
 
             @Override // java.lang.Runnable

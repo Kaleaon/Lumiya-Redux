@@ -66,7 +66,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
 
     /* renamed from: uk.co.senab.photoview.PhotoViewAttacher$2, reason: invalid class name */
     static /* synthetic */ class AnonymousClass2 {
-        static final /* synthetic */ int[] $SwitchMap$android$widget$ImageView$ScaleType = new int[ImageView.ScaleType.values().length];
+        /* synthetic */ int[] $SwitchMap$android$widget$ImageView$ScaleType = new int[ImageView.ScaleType.values().length];
 
         static {
             try {

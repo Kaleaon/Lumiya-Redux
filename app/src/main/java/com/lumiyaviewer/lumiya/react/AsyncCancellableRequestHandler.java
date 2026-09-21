@@ -25,7 +25,7 @@ public class AsyncCancellableRequestHandler<K> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncCancellableRequestHandler_993, reason: not valid java name */
-    /* synthetic */ void m26x869f759f(Object obj) {
+    /* synthetic */ void m26x869f759f(K obj) {
         try {
             this.baseHandler.onRequest(obj);
             synchronized (this.lock) {
@@ -44,7 +44,7 @@ public class AsyncCancellableRequestHandler<K> implements RequestHandler<K> {
         synchronized (this.lock) {
             this.activeRequests.put(k, this.executor.submit(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$W2IjgG3sQFB-K_ukBg8_XysJz_I
                 private final /* synthetic */ void $m$0() {
-                    ((AsyncCancellableRequestHandler) this).m26x869f759f(k);
+                    AsyncCancellableRequestHandler.this.m26x869f759f(k);
                 }
 
                 @Override // java.lang.Runnable

@@ -29,13 +29,13 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestOperator_1579, reason: not valid java name */
-    /* synthetic */ void m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(Object obj) {
+    /* synthetic */ void m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(K obj) {
         this.toHandler.onRequestCancelled(obj);
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestOperator_996, reason: not valid java name */
-    /* synthetic */ void m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(Object obj) {
+    /* synthetic */ void m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(K obj) {
         T processRequest = processRequest(obj);
         if (processRequest != null) {
             this.resultHandler.onResultData(obj, processRequest);
@@ -49,7 +49,7 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$3htMVvcf7XlS6QCgMv3cESjj4go
                 private final /* synthetic */ void $m$0() {
-                    ((RequestOperator) this).m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(k);
+                    RequestOperator.this.m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(k);
                 }
 
                 @Override // java.lang.Runnable
@@ -72,7 +72,7 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
         if (this.executor != null) {
             this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$3htMVvcf7XlS6QCgMv3cESjj4go.1
                 private final /* synthetic */ void $m$0() {
-                    ((RequestOperator) this).m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(k);
+                    RequestOperator.this.m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(k);
                 }
 
                 @Override // java.lang.Runnable

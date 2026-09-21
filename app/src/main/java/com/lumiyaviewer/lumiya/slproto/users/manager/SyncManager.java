@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 public class SyncManager {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f226xb1d54699 = null;
+    private /* synthetic */ int[] f226xb1d54699 = null;
     private static final int MAX_MESSAGES_PER_BATCH = 100;
 
     @Nonnull
@@ -66,7 +66,7 @@ public class SyncManager {
     private ChatterNameRetriever chatterNameRetriever = null;
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m365x2680ba3d() {
+    private /* synthetic */ int[] m365x2680ba3d() {
         if (f226xb1d54699 != null) {
             return f226xb1d54699;
         }

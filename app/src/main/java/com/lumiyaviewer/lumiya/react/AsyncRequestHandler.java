@@ -18,12 +18,12 @@ public class AsyncRequestHandler<K> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553, reason: not valid java name */
-    /* synthetic */ void m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(Object obj) {
+    /* synthetic */ void m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(K obj) {
         this.baseHandler.onRequest(obj);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690, reason: not valid java name */
-    /* synthetic */ void m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(Object obj) {
+    /* synthetic */ void m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(K obj) {
         this.baseHandler.onRequestCancelled(obj);
     }
 
@@ -31,7 +31,7 @@ public class AsyncRequestHandler<K> implements RequestHandler<K> {
     public void onRequest(@Nonnull final K k) {
         this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$SNlq3T7EFvfEVtJpS5BhPof2E2o
             private final /* synthetic */ void $m$0() {
-                ((AsyncRequestHandler) this).m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(k);
+                AsyncRequestHandler.this.m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(k);
             }
 
             @Override // java.lang.Runnable
@@ -45,7 +45,7 @@ public class AsyncRequestHandler<K> implements RequestHandler<K> {
     public void onRequestCancelled(@Nonnull final K k) {
         this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$SNlq3T7EFvfEVtJpS5BhPof2E2o.1
             private final /* synthetic */ void $m$0() {
-                ((AsyncRequestHandler) this).m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(k);
+                AsyncRequestHandler.this.m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(k);
             }
 
             @Override // java.lang.Runnable

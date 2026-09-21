@@ -62,7 +62,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     private int taskLocalID = 0;
     private final SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk
         private final /* synthetic */ void $m$0(Object obj) {
-            ((NotecardEditActivity) this).m631x5527ee36((AssetData) obj);
+            NotecardEditActivity.this.m631x5527ee36((AssetData) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -72,7 +72,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.1
         private final /* synthetic */ void $m$0(Object obj) {
-            ((NotecardEditActivity) this).m632x5527ee37((SLAgentCircuit) obj);
+            NotecardEditActivity.this.m632x5527ee37((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -183,7 +183,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
                 updateButtonsForMode();
                 sLInventory.UpdateNotecard(this.noteEntry, this.parentFolderUUID, this.isEditingScript, editable, editable2, bArr, this.taskUUID, this.taskLocalID, new SLInventory.OnNotecardUpdatedListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.2
                     private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry, String str) {
-                        ((NotecardEditActivity) this).m635xf7aea699(sLInventoryEntry, str);
+                        NotecardEditActivity.this.m635xf7aea699(sLInventoryEntry, str);
                     }
 
                     @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnNotecardUpdatedListener
@@ -282,7 +282,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     /* synthetic */ void m635xf7aea699(final SLInventoryEntry sLInventoryEntry, final String str) {
         UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.5
             private final /* synthetic */ void $m$0() {
-                ((NotecardEditActivity) this).m636xf7aea771((SLInventoryEntry) sLInventoryEntry, (String) str);
+                NotecardEditActivity.this.m636xf7aea771((SLInventoryEntry) sLInventoryEntry, (String) str);
             }
 
             @Override // java.lang.Runnable
@@ -325,7 +325,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
             builder.setTitle(getString(R.string.attachment_action_title));
             builder.setItems(charSequenceArr, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.3
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                    ((NotecardEditActivity) this).m633xf7ac5d94((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
+                    NotecardEditActivity.this.m633xf7ac5d94((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -341,7 +341,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         builder2.setTitle(getString(R.string.attachment_action_title));
         builder2.setItems(charSequenceArr2, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.4
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((NotecardEditActivity) this).m634xf7acca34((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
+                NotecardEditActivity.this.m634xf7acca34((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

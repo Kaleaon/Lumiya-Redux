@@ -32,7 +32,7 @@ import java.util.UUID;
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f462x282be546 = null;
+    private /* synthetic */ int[] f462x282be546 = null;
 
     @BindView(R.id.my_avatar_name)
     TextView myAvatarName;
@@ -46,7 +46,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     private ChatterNameRetriever myAvatarNameRetriever = null;
     private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$E97LbIKTNF028fQGuPv0gXqIQrc
         private final /* synthetic */ void $m$0(Object obj) {
-            ((MyAvatarFragment) this).m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0((Integer) obj);
+            MyAvatarFragment.this.m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0((Integer) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -58,11 +58,11 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     private class MyAvatarPagesAdapter extends ArrayAdapter<MyAvatarDetailsPages> {
 
         /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f463x282be546 = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$ui$myava$MyAvatarDetailsPages;
+        private /* synthetic */ int[] f463x282be546 = null;
+        /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$ui$myava$MyAvatarDetailsPages;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m665x90cfe3ea() {
+        private /* synthetic */ int[] m665x90cfe3ea() {
             if (f463x282be546 != null) {
                 return f463x282be546;
             }
@@ -111,7 +111,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m663x90cfe3ea() {
+    private /* synthetic */ int[] m663x90cfe3ea() {
         if (f462x282be546 != null) {
             return f462x282be546;
         }

@@ -309,7 +309,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
             if (error != null) {
                 subscription.onError(error);
             } else {
-                T data = subscriptionRequestedList2.getData();
+                T data = (T) subscriptionRequestedList2.getData();
                 if (data != null) {
                     subscription.onData(data);
                 }

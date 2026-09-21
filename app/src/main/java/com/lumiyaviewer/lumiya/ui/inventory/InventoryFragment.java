@@ -71,7 +71,7 @@ import javax.annotation.Nullable;
 public class InventoryFragment extends FragmentWithTitle implements ReloadableFragment {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-inventory-InventoryActivity$SelectActionSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f446x959df7ce = null;
+    private /* synthetic */ int[] f446x959df7ce = null;
     private static final String FOLDER_ID_KEY = "folderID";
     private static final String IS_MASTER_FRAGMENT = "isMasterFragment";
     private static final String IS_SEARCHING_KEY = "isSearching";
@@ -86,7 +86,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     private ImmutableMap<Integer, MenuItem> folderActionMenuItems = ImmutableMap.of();
     private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.6
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m605com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref0((InventoryEntryList) obj);
+            InventoryFragment.this.m605com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref0((InventoryEntryList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -96,7 +96,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, InventoryManager.InventoryClipboardEntry> clipboardEntry = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.7
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m606com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref1((InventoryManager.InventoryClipboardEntry) obj);
+            InventoryFragment.this.m606com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref1((InventoryManager.InventoryClipboardEntry) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -106,7 +106,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.8
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m607com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref2((SLAgentCircuit) obj);
+            InventoryFragment.this.m607com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref2((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -116,7 +116,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.9
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m608com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref3((Boolean) obj);
+            InventoryFragment.this.m608com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref3((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -126,7 +126,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, Boolean> searchRunning = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.10
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m609com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref4((Boolean) obj);
+            InventoryFragment.this.m609com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref4((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -136,7 +136,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.11
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m610com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref5((ImmutableMap) obj);
+            InventoryFragment.this.m610com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref5((ImmutableMap) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -146,7 +146,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.12
         private final /* synthetic */ void $m$0(Object obj) {
-            ((InventoryFragment) this).m611com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref6((Table) obj);
+            InventoryFragment.this.m611com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref6((Table) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -157,7 +157,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.entryList);
     private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.5
         private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-            ((InventoryFragment) this).m614x3694a933(adapterView, view, i, j);
+            InventoryFragment.this.m614x3694a933(adapterView, view, i, j);
         }
 
         @Override // android.widget.AdapterView.OnItemClickListener
@@ -167,7 +167,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     };
     private final View.OnClickListener saveAsClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.4
         private final /* synthetic */ void $m$0(View view) {
-            ((InventoryFragment) this).m616x36a1db7a(view);
+            InventoryFragment.this.m616x36a1db7a(view);
         }
 
         @Override // android.view.View.OnClickListener
@@ -177,7 +177,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     };
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-ui-inventory-InventoryActivity$SelectActionSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m600xe8fd8772() {
+    private /* synthetic */ int[] m600xe8fd8772() {
         if (f446x959df7ce != null) {
             return f446x959df7ce;
         }
@@ -474,7 +474,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(string).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.16
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((InventoryFragment) this).m615x3697e76c((UUID) uuid, (SLInventoryEntry) sLInventoryEntry, (FragmentActivity) activity, dialogInterface, i);
+                InventoryFragment.this.m615x3697e76c((UUID) uuid, (SLInventoryEntry) sLInventoryEntry, (FragmentActivity) activity, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -722,7 +722,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                 final ProgressDialog show = ProgressDialog.show(getContext(), null, getString(R.string.notecard_saving_contents), true, true);
                 data.getModules().inventory.CopyInventoryFromNotecard(this.saveInfo.notecardUUID, this.saveInfo.saveItemUUID, uuid, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.13
                     private final /* synthetic */ void $m$0() {
-                        ((InventoryFragment) this).m617x36a1f2bc((ProgressDialog) show);
+                        InventoryFragment.this.m617x36a1f2bc((ProgressDialog) show);
                     }
 
                     @Override // java.lang.Runnable
@@ -758,7 +758,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     /* synthetic */ void m617x36a1f2bc(final ProgressDialog progressDialog) {
         UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.14
             private final /* synthetic */ void $m$0() {
-                ((InventoryFragment) this).m618x36a1f5df((ProgressDialog) progressDialog);
+                InventoryFragment.this.m618x36a1f5df((ProgressDialog) progressDialog);
             }
 
             @Override // java.lang.Runnable
@@ -820,7 +820,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage(getString(R.string.upload_confirm_question, Integer.valueOf(uploadCost))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.17
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i3) {
-                        ((InventoryFragment) this).m613x3689c76d((String) lastPathSegment, (Bitmap) bitmap, (UserManager) userManager, (UUID) uuid, dialogInterface, i3);
+                        InventoryFragment.this.m613x3689c76d((String) lastPathSegment, (Bitmap) bitmap, (UserManager) userManager, (UUID) uuid, dialogInterface, i3);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener
@@ -923,7 +923,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                 case R.id.inventory_folder_delete_item /* 2131755806 */:
                     this.inventoryFragmentHelper.DeleteInventoryEntry(folder, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.15
                         private final /* synthetic */ void $m$0() {
-                            ((InventoryFragment) this).m612x3687192d((SLInventoryEntry) folder);
+                            InventoryFragment.this.m612x3687192d((SLInventoryEntry) folder);
                         }
 
                         @Override // java.lang.Runnable

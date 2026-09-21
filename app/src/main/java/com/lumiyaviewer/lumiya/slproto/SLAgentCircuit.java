@@ -134,10 +134,10 @@ import javax.annotation.Nullable;
 public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueue.ICapsEventHandler {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f60x94bee140 = null;
+    private /* synthetic */ int[] f60x94bee140 = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f61xb1d54699 = null;
+    private /* synthetic */ int[] f61xb1d54699 = null;
     private Subscription agentNameSubscription;
     private boolean agentPaused;
 
@@ -167,7 +167,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     private final UserManager userManager;
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m133x4d1ccd1c() {
+    private /* synthetic */ int[] m133x4d1ccd1c() {
         if (f60x94bee140 != null) {
             return f60x94bee140;
         }
@@ -217,7 +217,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m134x2680ba3d() {
+    private /* synthetic */ int[] m134x2680ba3d() {
         if (f61xb1d54699 != null) {
             return f61xb1d54699;
         }

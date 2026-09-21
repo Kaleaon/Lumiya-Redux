@@ -63,7 +63,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         boolean z = false;
         try {
-            Iterator<T> it = collection.iterator();
+            Iterator it = collection.iterator();
             while (true) {
                 boolean z2 = z;
                 if (!it.hasNext()) {
@@ -113,7 +113,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         boolean z;
         this.lock.lock();
         try {
-            Iterator<T> it = collection.iterator();
+            Iterator it = collection.iterator();
             while (true) {
                 if (!it.hasNext()) {
                     z = true;
@@ -137,7 +137,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         int i = 0;
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (it.hasNext()) {
                 Queue queue = (Queue) it.next();
                 while (true) {
@@ -161,7 +161,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         int i3 = 0;
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (true) {
                 if (!it.hasNext()) {
                     i2 = i3;
@@ -201,7 +201,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         boolean z;
         this.lock.lock();
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (true) {
                 if (!it.hasNext()) {
                     z = true;
@@ -237,7 +237,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     public T peek() {
         this.lock.lock();
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (it.hasNext()) {
                 Queue<T> queue = (Queue) it.next();
                 if (!queue.isEmpty()) {
@@ -258,7 +258,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     public T poll() {
         this.lock.lock();
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (it.hasNext()) {
                 Iterator it2 = ((Queue) it.next()).iterator();
                 while (it2.hasNext()) {
@@ -344,7 +344,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         boolean z = false;
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (true) {
                 boolean z2 = z;
                 if (!it.hasNext()) {
@@ -362,7 +362,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         int i = 0;
         try {
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             while (true) {
                 int i2 = i;
                 if (!it.hasNext()) {
@@ -397,7 +397,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         try {
             ArrayList<Object[]> arrayList = new ArrayList();
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             int i2 = 0;
             while (it.hasNext()) {
                 Object[] array = ((Queue) it.next()).toArray();
@@ -423,7 +423,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         try {
             ArrayList<Object[]> arrayList = new ArrayList();
-            Iterator<T> it = this.queues.values().iterator();
+            Iterator it = this.queues.values().iterator();
             int i2 = 0;
             while (it.hasNext()) {
                 Object[] array = ((Queue) it.next()).toArray();

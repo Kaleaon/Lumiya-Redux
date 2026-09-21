@@ -193,7 +193,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getActivity().getString(R.string.teleport_parcel_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.search.-$Lambda$5Jqy4HmgAu6T9fnroWh-Zqm3eJE.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((ParcelInfoFragment) this).m858xc965e5a8((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i);
+                ParcelInfoFragment.this.m858xc965e5a8((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

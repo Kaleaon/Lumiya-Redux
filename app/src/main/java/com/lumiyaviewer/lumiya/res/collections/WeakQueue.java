@@ -123,7 +123,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         int i2 = 0;
         try {
-            Iterator<T> it = this.queue.iterator();
+            Iterator it = this.queue.iterator();
             while (it.hasNext() && i2 < i) {
                 T next = it.next();
                 if (next != null) {
@@ -132,7 +132,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
                 }
                 it.remove();
             }
-            Iterator<T> it2 = this.lowPriorityQueue.iterator();
+            Iterator it2 = this.lowPriorityQueue.iterator();
             while (it2.hasNext() && i2 < i) {
                 T next2 = it2.next();
                 if (next2 != null) {
@@ -210,7 +210,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         try {
             if (!this.queue.isEmpty()) {
-                Iterator<T> it = this.queue.iterator();
+                Iterator it = this.queue.iterator();
                 while (it.hasNext()) {
                     T next = it.next();
                     if (next != null) {
@@ -220,7 +220,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
                 }
             }
             if (!this.lowPriorityQueue.isEmpty()) {
-                Iterator<T> it2 = this.lowPriorityQueue.iterator();
+                Iterator it2 = this.lowPriorityQueue.iterator();
                 while (it2.hasNext()) {
                     T next2 = it2.next();
                     if (next2 != null) {

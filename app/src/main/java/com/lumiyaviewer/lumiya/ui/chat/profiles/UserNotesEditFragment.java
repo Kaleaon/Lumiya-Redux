@@ -45,7 +45,7 @@ public class UserNotesEditFragment extends TextFieldEditFragment implements Back
         }
         this.avatarNotesSubscription = this.userManager.getAvatarNotes().getPool().subscribe((Subscribable) ((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$gtFtIPtqrsfNaJBMezEYcryNxGg
             private final /* synthetic */ void $m$0(Object obj) {
-                ((UserNotesEditFragment) this).m520x6c22cc6e((AvatarNotesReply) obj);
+                UserNotesEditFragment.this.m520x6c22cc6e((AvatarNotesReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public abstract class AvatarPickerFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f234x76a4d210 = null;
+    private /* synthetic */ int[] f234x76a4d210 = null;
 
     public class AvatarPickerPagerAdapter extends PagerAdapter {
         private final Context context;
@@ -112,7 +112,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
     }
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m398x55b16b4() {
+    private /* synthetic */ int[] m398x55b16b4() {
         if (f234x76a4d210 != null) {
             return f234x76a4d210;
         }

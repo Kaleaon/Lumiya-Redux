@@ -21,14 +21,14 @@ import javax.annotation.Nullable;
 class MuteListAdapter extends BaseAdapter {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f461xafabc05e = null;
+    private /* synthetic */ int[] f461xafabc05e = null;
     private final LayoutInflater layoutInflater;
 
     @Nonnull
     private ImmutableList<MuteListEntry> muteList = ImmutableList.of();
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m656x1327cd02() {
+    private /* synthetic */ int[] m656x1327cd02() {
         if (f461xafabc05e != null) {
             return f461xafabc05e;
         }

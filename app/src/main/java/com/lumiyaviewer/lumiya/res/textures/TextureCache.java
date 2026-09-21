@@ -43,14 +43,14 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
     private class TextureDecompressRequest extends ResourceRequest<DrawableTextureParams, OpenJPEG> implements ResourceConsumer, Runnable, HasPriority, Startable {
 
         /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$render$tex$TextureClass;
+        private /* synthetic */ int[] f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
+        /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$render$tex$TextureClass;
         private volatile File compressedFile;
         private volatile Future<?> decompressorFuture;
         private volatile boolean lowQualityDone;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m126x8a7b09f7() {
+        private /* synthetic */ int[] m126x8a7b09f7() {
             if (f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
                 return f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
             }

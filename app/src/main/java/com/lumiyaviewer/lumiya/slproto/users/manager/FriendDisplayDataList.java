@@ -22,7 +22,7 @@ class FriendDisplayDataList extends ChatterDisplayDataList {
     protected List<ChatterID> getChatters() {
         List<Friend> list = this.onlineFriends ? this.userManager.getDaoSession().getFriendDao().queryBuilder().where(FriendDao.Properties.IsOnline.eq(true), new WhereCondition[0]).list() : this.userManager.getDaoSession().getFriendDao().loadAll();
         ArrayList arrayList = new ArrayList(list.size());
-        Iterator<T> it = list.iterator();
+        Iterator it = list.iterator();
         while (it.hasNext()) {
             arrayList.add(ChatterID.getUserChatterID(this.userManager.getUserID(), ((Friend) it.next()).getUuid()));
         }
