@@ -78,7 +78,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
     private final OnChatEventListener chatEventListener = new OnChatEventListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.3
         private final /* synthetic */ void $m$0(SLChatEvent sLChatEvent) {
-            ((ObjectDetailsFragment) this).m685xa60fd782(sLChatEvent);
+            ObjectDetailsFragment.this.m685xa60fd782(sLChatEvent);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.OnChatEventListener
@@ -95,7 +95,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.object_buy_confirm), sLObjectProfileData.name().or((Optional<String>) getString(R.string.object_name_loading)), Integer.valueOf(sLObjectProfileData.salePrice()))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.5
+        builder.setMessage(String.format(getString(R.string.object_buy_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(sLObjectProfileData.salePrice()))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.5
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 ObjectDetailsFragment.m681x1bb1c6ad((UserManager) userManager, i, (SLObjectProfileData) sLObjectProfileData, dialogInterface, i2);
             }
@@ -169,7 +169,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.object_pay_confirm), sLObjectProfileData.name().or((Optional<String>) getString(R.string.object_name_loading)), Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.6
+        builder.setMessage(String.format(getString(R.string.object_pay_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.6
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 ObjectDetailsFragment.m683x1bb23eb2((UserManager) userManager, (SLObjectProfileData) sLObjectProfileData, i, dialogInterface, i2);
             }
@@ -270,11 +270,11 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
                 }
                 view.findViewById(R.id.object_sit_button).setVisibility(canSit ? 0 : 8);
                 view.findViewById(R.id.object_stand_button).setVisibility(z ? 0 : 8);
-                ((TextView) view.findViewById(R.id.object_details_name)).setText(sLObjectProfileData.name().or((Optional<String>) getString(R.string.object_name_loading)));
-                ((TextView) view.findViewById(R.id.object_details_desc)).setText(sLObjectProfileData.description().or((Optional<String>) ""));
+                ((TextView) view.findViewById(R.id.object_details_name)).setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
+                ((TextView) view.findViewById(R.id.object_details_desc)).setText(sLObjectProfileData.description().or(""));
                 view.findViewById(R.id.object_owner_card_view).setVisibility(sLObjectProfileData.ownerUUID() != null ? 0 : 8);
                 view.findViewById(R.id.floating_text_card_view).setVisibility(sLObjectProfileData.floatingText().isPresent() ? 0 : 8);
-                ((TextView) view.findViewById(R.id.object_hover_text)).setText(sLObjectProfileData.floatingText().or((Optional<String>) ""));
+                ((TextView) view.findViewById(R.id.object_hover_text)).setText(sLObjectProfileData.floatingText().or(""));
                 view.findViewById(R.id.buy_object_card_view).setVisibility(sLObjectProfileData.saleType() != 0 ? 0 : 8);
                 ((TextView) view.findViewById(R.id.object_buy_details)).setText(getString(R.string.object_buy_price_format, Integer.valueOf(sLObjectProfileData.salePrice())));
                 Integer data2 = this.balanceSubscription.getData();
@@ -372,21 +372,23 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         boolean z;
         boolean z2;
         boolean z3;
+        boolean z4;
         UserManager userManager = getUserManager();
         if (userManager == null || this.objectProfileData == null) {
             z = false;
             z2 = false;
             z3 = false;
+            z4 = false;
         } else if (!this.objectProfileData.isDead()) {
             z3 = userManager.getUserID().equals(this.objectProfileData.ownerUUID());
-            r0 = userManager.getUserID().equals(this.objectProfileData.ownerUUID()) ? this.objectProfileData.isCopyable() : false;
+            z2 = z3 && this.objectProfileData.isCopyable();
             z = userManager.getUserID().equals(this.objectProfileData.ownerUUID());
-            z2 = r0;
-            r0 = true;
+            z4 = true;
         } else {
             z = false;
             z2 = false;
             z3 = false;
+            z4 = false;
         }
         if (this.menuItemObjectTake != null) {
             this.menuItemObjectTake.setVisible(z3);
@@ -398,7 +400,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             this.menuItemObjectDelete.setVisible(z);
         }
         if (this.menuItemObjectBlock != null) {
-            this.menuItemObjectBlock.setVisible(r0);
+            this.menuItemObjectBlock.setVisible(z4);
         }
     }
 

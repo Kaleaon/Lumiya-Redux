@@ -129,36 +129,41 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
                     float yVelocity = this.mVelocityTracker.getYVelocity();
                     float abs = Math.abs(xVelocity);
                     float abs2 = Math.abs(yVelocity);
+                    boolean dismiss;
                     if (this.mSwiping && this.mSwipingX && this.canSwipeRight && rawX > this.mViewWidth / 2) {
+                        dismiss = true;
                         f2 = this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mSwiping && this.mSwipingX && this.canSwipeLeft && rawX < (-(this.mViewWidth / 2))) {
+                        dismiss = true;
                         f2 = -this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mSwiping && this.mSwipingY && this.canSwipeDown && rawY > this.mViewHeight / 2) {
+                        dismiss = true;
                         f = this.mViewHeight;
                         f2 = 0.0f;
                     } else if (this.mSwiping && this.mSwipingY && this.canSwipeUp && rawY < (-(this.mViewHeight / 2))) {
+                        dismiss = true;
                         f = -this.mViewHeight;
                         f2 = 0.0f;
                     } else if (this.mMinFlingVelocity <= abs && abs <= this.mMaxFlingVelocity && abs2 < abs && this.mSwiping && this.mSwipingX) {
-                        r7 = ((xVelocity > 0.0f ? 1 : (xVelocity == 0.0f ? 0 : -1)) < 0) == (rawX < 0.0f) ? xVelocity < 0.0f ? this.canSwipeLeft : this.canSwipeRight : false;
+                        dismiss = (xVelocity < 0.0f) == (rawX < 0.0f) && (xVelocity < 0.0f ? this.canSwipeLeft : this.canSwipeRight);
                         f2 = xVelocity < 0.0f ? -this.mViewWidth : this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mMinFlingVelocity > abs2 || abs2 > this.mMaxFlingVelocity || abs >= abs2 || !this.mSwiping) {
                         f = 0.0f;
                         f2 = 0.0f;
-                        r7 = false;
+                        dismiss = false;
                     } else if (this.mSwipingY) {
-                        r7 = ((yVelocity > 0.0f ? 1 : (yVelocity == 0.0f ? 0 : -1)) < 0) == (rawY < 0.0f) ? yVelocity < 0.0f ? this.canSwipeUp : this.canSwipeDown : false;
+                        dismiss = (yVelocity < 0.0f) == (rawY < 0.0f) && (yVelocity < 0.0f ? this.canSwipeUp : this.canSwipeDown);
                         f = yVelocity < 0.0f ? -this.mViewHeight : this.mViewHeight;
                         f2 = 0.0f;
                     } else {
                         f = 0.0f;
                         f2 = 0.0f;
-                        r7 = false;
+                        dismiss = false;
                     }
-                    if (r7) {
+                    if (dismiss) {
                         this.mView.animate().translationX(f2).translationY(f).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissTouchListener.1
                             @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
                             public void onAnimationEnd(Animator animator) {

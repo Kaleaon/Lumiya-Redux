@@ -23,13 +23,13 @@ public class ChatterListSubscriptionAdapter extends ChatterListSimpleAdapter imp
     public ChatterListSubscriptionAdapter(Context context, UserManager userManager, ChatterListType chatterListType) {
         super(context, userManager);
         this.predicate = null;
-        this.subscription = userManager.getChatterList().getChatterList().subscribe((Subscribable<ChatterListType, ImmutableList<ChatterDisplayData>>) chatterListType, UIThreadExecutor.getInstance(), (Subscription.OnData<ImmutableList<ChatterDisplayData>>) this);
+        this.subscription = userManager.getChatterList().getChatterList().subscribe(chatterListType, UIThreadExecutor.getInstance(), (Subscription.OnData<ImmutableList<ChatterDisplayData>>) this);
     }
 
     public ChatterListSubscriptionAdapter(Context context, UserManager userManager, ChatterListType chatterListType, Predicate<ChatterDisplayData> predicate) {
         super(context, userManager);
         this.predicate = predicate;
-        this.subscription = userManager.getChatterList().getChatterList().subscribe((Subscribable<ChatterListType, ImmutableList<ChatterDisplayData>>) chatterListType, UIThreadExecutor.getInstance(), (Subscription.OnData<ImmutableList<ChatterDisplayData>>) this);
+        this.subscription = userManager.getChatterList().getChatterList().subscribe(chatterListType, UIThreadExecutor.getInstance(), (Subscription.OnData<ImmutableList<ChatterDisplayData>>) this);
     }
 
     @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.BaseAdapter, android.widget.ListAdapter

@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public abstract class AvatarPickerFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f234x76a4d210 = null;
+    private static /* synthetic */ int[] f234x76a4d210 = null;
 
     public class AvatarPickerPagerAdapter extends PagerAdapter {
         private final Context context;

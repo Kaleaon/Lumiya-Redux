@@ -83,7 +83,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
             this.cacheDirs = GlobalOptions.getInstance().getAvailableCacheDirs();
             this.progressDialog = ProgressDialog.show(SettingsFragment.this.getContext(), null, SettingsFragment.this.getString(R.string.clearing_cache), true, true, new DialogInterface.OnCancelListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.3
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface) {
-                    ((SettingsFragment.ClearCacheTask) this).m870x7613bcc1(dialogInterface);
+                    ClearCacheTask.this.m870x7613bcc1(dialogInterface);
                 }
 
                 @Override // android.content.DialogInterface.OnCancelListener
@@ -141,7 +141,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         builder.setTitle(R.string.select_cache_location);
         builder.setSingleChoiceItems(arrayAdapter, i, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.5
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i4) {
-                ((SettingsFragment) this).m868xa86405fa((ImmutableList) availableCacheDirs, (CacheLocationPreference) cacheLocationPreference, (File) baseCacheDir, dialogInterface, i4);
+                SettingsFragment.this.m868xa86405fa((ImmutableList) availableCacheDirs, (CacheLocationPreference) cacheLocationPreference, (File) baseCacheDir, dialogInterface, i4);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -169,7 +169,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         });
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.4
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((SettingsFragment) this).m869xa864df93(dialogInterface, i);
+                SettingsFragment.this.m869xa864df93(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

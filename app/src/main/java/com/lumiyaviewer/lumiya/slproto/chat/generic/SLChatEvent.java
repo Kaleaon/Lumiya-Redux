@@ -62,10 +62,10 @@ import javax.annotation.Nullable;
 public abstract class SLChatEvent implements View.OnLongClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatEvent$ChatMessageTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f72x73d6fc70 = null;
+    private static /* synthetic */ int[] f72x73d6fc70 = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f73xbd9aa5ff = null;
+    private static /* synthetic */ int[] f73xbd9aa5ff = null;
     public static final int CHAT_AUDIBLE_BARELY = 0;
     public static final int CHAT_AUDIBLE_FULLY = 1;
     public static final int CHAT_AUDIBLE_NOT = -1;
@@ -718,7 +718,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         popupMenu.inflate(R.menu.chat_messages_context_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.6
             private final /* synthetic */ boolean $m$0(MenuItem menuItem) {
-                return ((SLChatEvent) this).m160xda67b1b8((Context) context, menuItem);
+                return SLChatEvent.this.m160xda67b1b8((Context) context, menuItem);
             }
 
             @Override // androidx.appcompat.widget.PopupMenu.OnMenuItemClickListener

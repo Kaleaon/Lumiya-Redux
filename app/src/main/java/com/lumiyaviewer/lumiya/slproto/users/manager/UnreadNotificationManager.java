@@ -136,7 +136,7 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
                 arrayList = null;
                 unreadMessageSource = null;
             } else {
-                HashMap hashMap = new HashMap();
+                HashMap<Long, UnreadNotificationInfo.UnreadMessageSource> hashMap = new HashMap<>();
                 Iterator<?> it = this.chatterSources.entrySet().iterator();
                 while (true) {
                     i2 = i5;

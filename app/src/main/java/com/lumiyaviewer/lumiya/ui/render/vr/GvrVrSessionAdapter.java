@@ -17,6 +17,7 @@ final class GvrVrSessionAdapter implements VrSession {
     private final ControllerManager controllerManager;
     private final Controller controller;
     private VrSession.InputListener inputListener;
+    private volatile int controllerConnectionState;
 
     GvrVrSessionAdapter(Activity activity, final String runtimeId, final VrSession.Listener listener, boolean asyncReprojectionEnabled) {
         this.runtimeId = runtimeId;
@@ -40,6 +41,7 @@ final class GvrVrSessionAdapter implements VrSession {
                 @Override
                 public void onConnectionStateChanged(int i) {
                     super.onConnectionStateChanged(i);
+                    GvrVrSessionAdapter.this.controllerConnectionState = i;
                     if (GvrVrSessionAdapter.this.inputListener != null) {
                         GvrVrSessionAdapter.this.inputListener.onConnectionStateChanged(i);
                     }
@@ -53,7 +55,7 @@ final class GvrVrSessionAdapter implements VrSession {
                     }
                     GvrVrSessionAdapter.this.controller.update();
                     if (GvrVrSessionAdapter.this.inputListener != null) {
-                        GvrVrSessionAdapter.this.inputListener.onInputUpdated(new VrInputState(GvrVrSessionAdapter.this.controller.appButtonState, GvrVrSessionAdapter.this.controller.isTouching, GvrVrSessionAdapter.this.controller.touch.x, GvrVrSessionAdapter.this.controller.touch.y, GvrVrSessionAdapter.this.controller.getConnectionState()));
+                        GvrVrSessionAdapter.this.inputListener.onInputUpdated(new VrInputState(GvrVrSessionAdapter.this.controller.appButtonState, GvrVrSessionAdapter.this.controller.isTouching, GvrVrSessionAdapter.this.controller.touch.x, GvrVrSessionAdapter.this.controller.touch.y, GvrVrSessionAdapter.this.controllerConnectionState));
                     }
                 }
             });

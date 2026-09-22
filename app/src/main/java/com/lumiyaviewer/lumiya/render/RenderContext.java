@@ -148,7 +148,7 @@ public class RenderContext {
             this.boundingBoxProgram.Compile(shaderPreprocessor);
         }
 
-        /* synthetic */ Shaders30(ShaderPreprocessor shaderPreprocessor, Shaders30 shaders30) {
+        /* synthetic */ Shaders30(ShaderPreprocessor shaderPreprocessor, Shaders30 shaders30) throws ShaderCompileException {
             this(shaderPreprocessor);
         }
     }

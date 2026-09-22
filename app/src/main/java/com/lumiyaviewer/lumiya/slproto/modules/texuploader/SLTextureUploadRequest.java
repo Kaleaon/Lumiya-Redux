@@ -39,31 +39,22 @@ public class SLTextureUploadRequest implements Runnable {
 
     @Override // java.lang.Runnable
     public void run() {
-        Response execute;
         try {
             String asString = new LLSDXMLRequest().PerformRequest(this.capURL, new LLSDUndefined()).byKey("uploader").asString();
             Debug.Log("TextureUploader: uploader URL = " + asString);
-            execute = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(asString).header(HttpHeaders.ACCEPT, "application/llsd+xml").post(RequestBody.create(MEDIA_TYPE_JP2, this.sourceFile)).build()).execute();
-        } catch (LLSDException e) {
+            try (Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(asString).header(HttpHeaders.ACCEPT, "application/llsd+xml").post(RequestBody.create(MEDIA_TYPE_JP2, this.sourceFile)).build()).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Error code " + response.code());
+                }
+                LLSDNode parseXML = LLSDNode.parseXML(response.body().byteStream(), null);
+                Debug.Log("TextureUploader: LLSD response = " + parseXML.serializeToXML());
+                this.textureID = parseXML.byKey("new_asset").asUUID();
+                if (this.onUploadComplete != null) {
+                    this.onUploadComplete.OnTextureUploadComplete(this);
+                }
+            }
+        } catch (LLSDException | IOException e) {
             Debug.Warning(e);
-        } catch (IOException e2) {
-            Debug.Warning(e2);
-        }
-        if (execute == null) {
-            throw new IOException("Null response");
-        }
-        try {
-            if (!execute.isSuccessful()) {
-                throw new IOException("Error code " + execute.code());
-            }
-            LLSDNode parseXML = LLSDNode.parseXML(execute.body().byteStream(), null);
-            Debug.Log("TextureUploader: LLSD response = " + parseXML.serializeToXML());
-            this.textureID = parseXML.byKey("new_asset").asUUID();
-            if (this.onUploadComplete != null) {
-                this.onUploadComplete.OnTextureUploadComplete(this);
-            }
-        } finally {
-            execute.close();
         }
     }
 

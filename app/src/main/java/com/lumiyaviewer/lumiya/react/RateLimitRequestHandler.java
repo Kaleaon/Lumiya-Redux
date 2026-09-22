@@ -173,18 +173,17 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
     @Override // com.lumiyaviewer.lumiya.react.RequestQueue
     @Nullable
     public K waitForRequest() throws InterruptedException {
-        K next;
         synchronized (this.lock) {
             while (true) {
                 Iterator<K> it = this.pendingRequests.iterator();
                 if (it.hasNext()) {
-                    next = it.next();
+                    K next = it.next();
                     it.remove();
-                } else {
-                    this.lock.wait();
+                    this.requestsInFlight.put(next, System.currentTimeMillis());
+                    return next;
                 }
+                this.lock.wait();
             }
         }
-        return next;
     }
 }

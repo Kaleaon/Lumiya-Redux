@@ -79,7 +79,7 @@ public class TextFieldDialogBuilder {
         builder.setView(frameLayout);
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$PTYOAfnVIwPVEdUoAgskdOeAqDw
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((TextFieldDialogBuilder) this).m559x76be5af0(dialogInterface, i);
+                TextFieldDialogBuilder.this.m559x76be5af0(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -89,7 +89,7 @@ public class TextFieldDialogBuilder {
         });
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$PTYOAfnVIwPVEdUoAgskdOeAqDw.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((TextFieldDialogBuilder) this).m560x76be6297((EditText) editText, dialogInterface, i);
+                TextFieldDialogBuilder.this.m560x76be6297((EditText) editText, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

@@ -60,9 +60,10 @@ public final class InternalNano {
             if (key != null && value != null) {
                 int computeFieldSize = CodedOutputByteBufferNano.computeFieldSize(2, i3, value) + CodedOutputByteBufferNano.computeFieldSize(1, i2, key);
                 i4 = CodedOutputByteBufferNano.computeRawVarint32Size(computeFieldSize) + computeTagSize + computeFieldSize + i5;
+            } else {
+                throw new IllegalStateException("keys and values in maps cannot be null");
             }
         }
-        throw new IllegalStateException("keys and values in maps cannot be null");
     }
 
     public static byte[] copyFromUtf8(String str) {

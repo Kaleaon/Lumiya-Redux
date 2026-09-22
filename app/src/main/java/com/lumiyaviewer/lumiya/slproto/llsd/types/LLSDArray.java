@@ -52,7 +52,7 @@ public class LLSDArray extends LLSDNode {
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(91);
         dataOutputStream.writeInt(this.items.size());
-        Iterator<T> it = this.items.iterator();
+        Iterator<LLSDNode> it = this.items.iterator();
         while (it.hasNext()) {
             ((LLSDNode) it.next()).toBinary(dataOutputStream);
         }
@@ -62,7 +62,7 @@ public class LLSDArray extends LLSDNode {
     @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "array");
-        Iterator<T> it = this.items.iterator();
+        Iterator<LLSDNode> it = this.items.iterator();
         while (it.hasNext()) {
             ((LLSDNode) it.next()).toXML(xmlSerializer);
         }

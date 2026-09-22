@@ -171,7 +171,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setAdapter((ListAdapter) this.adapter);
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$zWKNEqUupU__bUM7E0seQ8xMgmU.1
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-                ((GroupRolesProfileTab) this).m508x3dfd52a4(adapterView, view, i, j);
+                GroupRolesProfileTab.this.m508x3dfd52a4(adapterView, view, i, j);
             }
 
             @Override // android.widget.AdapterView.OnItemClickListener
@@ -181,7 +181,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         });
         inflate.findViewById(R.id.add_new_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$zWKNEqUupU__bUM7E0seQ8xMgmU
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupRolesProfileTab) this).m507x6f5149fc(view);
+                GroupRolesProfileTab.this.m507x6f5149fc(view);
             }
 
             @Override // android.view.View.OnClickListener

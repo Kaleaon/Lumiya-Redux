@@ -104,7 +104,7 @@ public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getString(R.string.join_group_confirm, Integer.valueOf(this.joinFee))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.-$Lambda$hXLxI3fDexZfuKx5RzOoCtsGy3I.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((SLChatGroupInvitationEvent) this).m153x2b58eb32(dialogInterface, i);
+                SLChatGroupInvitationEvent.this.m153x2b58eb32(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

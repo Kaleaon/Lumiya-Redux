@@ -73,15 +73,15 @@ public class SLCapEventQueue implements Runnable {
     @Override // java.lang.Runnable
     public void run() {
         boolean z;
-        LLSDNode PerformRequest;
         Debug.Log("CapEventQueue: working thread starting with capURL = " + this.capURL);
         boolean z2 = false;
         while (!this.threadMustExit) {
             LLSDMap.LLSDMapEntry[] lLSDMapEntryArr = new LLSDMap.LLSDMapEntry[2];
             lLSDMapEntryArr[0] = new LLSDMap.LLSDMapEntry("ack", this.lastEventID != 0 ? new LLSDInt(this.lastEventID) : new LLSDUndefined());
             lLSDMapEntryArr[1] = new LLSDMap.LLSDMapEntry("done", new LLSDBoolean(this.done));
+            LLSDNode response = null;
             try {
-                PerformRequest = this.xmlReq.PerformRequest(this.capURL, new LLSDMap(lLSDMapEntryArr));
+                response = this.xmlReq.PerformRequest(this.capURL, new LLSDMap(lLSDMapEntryArr));
             } catch (LLSDXMLException e) {
                 Debug.Warning(e);
             } catch (FileNotFoundException e2) {
@@ -96,11 +96,14 @@ public class SLCapEventQueue implements Runnable {
                 break;
             }
             try {
-                this.lastEventID = PerformRequest.byKey("id").asInt();
+                if (response == null) {
+                    continue;
+                }
+                this.lastEventID = response.byKey("id").asInt();
                 Debug.Log("CapEventQueue: new lastEventID = " + this.lastEventID);
-                int count = PerformRequest.byKey("events").getCount();
+                int count = response.byKey("events").getCount();
                 for (int i = 0; i < count; i++) {
-                    LLSDNode byIndex = PerformRequest.byKey("events").byIndex(i);
+                    LLSDNode byIndex = response.byKey("events").byIndex(i);
                     String asString = byIndex.byKey("message").asString();
                     LLSDNode byKey = byIndex.byKey("body");
                     Debug.Log("CapEventQueue: event name = " + asString);
@@ -111,7 +114,7 @@ public class SLCapEventQueue implements Runnable {
                     this.nextQueue.add(new CapsEvent(asString, byKey));
                 }
             } catch (LLSDException e5) {
-                Debug.Printf("CapEventQueue: failed to extract id. event was: %s" + PerformRequest.serializeToXML(), new Object[0]);
+                Debug.Printf("CapEventQueue: failed to extract event response", new Object[0]);
                 Debug.Warning(e5);
             }
             if (!this.threadMustExit) {

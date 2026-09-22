@@ -107,7 +107,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setAdapter((ListAdapter) this.groupsAdapter);
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$929W_sYALf9zQuqLbMSJpktRAzI
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-                ((UserGroupsProfileTab) this).m518x4b4ac4f6(adapterView, view, i, j);
+                UserGroupsProfileTab.this.m518x4b4ac4f6(adapterView, view, i, j);
             }
 
             @Override // android.widget.AdapterView.OnItemClickListener

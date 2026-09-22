@@ -62,7 +62,7 @@ public class UserPickFragment extends FragmentWithTitle {
     ImageAssetView userPickImageView;
     private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$pe_zD6dKvPMIxwvN5gLJ2hSMvgo.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((UserPickFragment) this).m525x15b34e8a((PickInfoReply) obj);
+            UserPickFragment.this.m525x15b34e8a((PickInfoReply) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -86,7 +86,7 @@ public class UserPickFragment extends FragmentWithTitle {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.delete_pick_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$pe_zD6dKvPMIxwvN5gLJ2hSMvgo.4
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((UserPickFragment) this).m526xf9701124((UserManager) userManager, (AvatarPickKey) pickKey, dialogInterface, i);
+                UserPickFragment.this.m526xf9701124((UserManager) userManager, (AvatarPickKey) pickKey, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -295,7 +295,7 @@ public class UserPickFragment extends FragmentWithTitle {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.set_pick_location_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$pe_zD6dKvPMIxwvN5gLJ2hSMvgo.7
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((UserPickFragment) this).m528xdec54305((UserManager) userManager, (AvatarPickKey) pickKey, (PickInfoReply) data, dialogInterface, i);
+                UserPickFragment.this.m528xdec54305((UserManager) userManager, (AvatarPickKey) pickKey, (PickInfoReply) data, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -349,7 +349,7 @@ public class UserPickFragment extends FragmentWithTitle {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getActivity().getString(R.string.teleport_pick_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$pe_zD6dKvPMIxwvN5gLJ2hSMvgo.5
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((UserPickFragment) this).m527xdec44802((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i);
+                UserPickFragment.this.m527xdec44802((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

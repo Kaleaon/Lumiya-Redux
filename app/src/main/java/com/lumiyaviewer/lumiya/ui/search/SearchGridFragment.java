@@ -35,7 +35,7 @@ import java.util.UUID;
 public class SearchGridFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, SearchGridAdapter.OnSearchResultClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f584xca68d786 = null;
+    private static /* synthetic */ int[] f584xca68d786 = null;
     private SearchGridAdapter adapter;
 
     @BindView(R.id.radiogroup_search_type)

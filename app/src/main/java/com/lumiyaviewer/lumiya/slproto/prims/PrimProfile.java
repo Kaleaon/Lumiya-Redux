@@ -355,6 +355,7 @@ public class PrimProfile {
                     addCap((short) 1);
                 }
                 int floor = (int) Math.floor(4.0f * f4);
+                squareFaces:
                 while (true) {
                     int i5 = floor;
                     int i6 = i3;
@@ -378,8 +379,8 @@ public class PrimProfile {
                                 }
                                 if (z) {
                                     this.Faces.get(0).Count = this.Total;
-                                    break;
                                 }
+                                break squareFaces;
                             } else {
                                 this.Profile.get(i8).z *= 4.0f;
                                 i7 = i8 + 1;
@@ -423,6 +424,7 @@ public class PrimProfile {
                                     break;
                             }
                         }
+                        break;
                     } else {
                         this.Profile.get(i10).z *= 3.0f;
                         i9 = i10 + 1;

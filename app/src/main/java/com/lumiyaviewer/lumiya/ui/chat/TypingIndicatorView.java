@@ -71,9 +71,9 @@ public class TypingIndicatorView extends ImageView {
             this.subscription = null;
         }
         if ((chatterID instanceof ChatterID.ChatterIDUser) && chatterID.getUserManager() != null) {
-            this.subscription = chatterID.getUserManager().getChatterList().getUserTypingStatus().subscribe((Subscribable<UUID, Boolean>) ((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$XDRgkFjV-FoS0WpW8v6lPNgts7Q
+            this.subscription = chatterID.getUserManager().getChatterList().getUserTypingStatus().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$XDRgkFjV-FoS0WpW8v6lPNgts7Q
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ((TypingIndicatorView) this).m435com_lumiyaviewer_lumiya_ui_chat_TypingIndicatorViewmthref0((Boolean) obj);
+                    TypingIndicatorView.this.m435com_lumiyaviewer_lumiya_ui_chat_TypingIndicatorViewmthref0((Boolean) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

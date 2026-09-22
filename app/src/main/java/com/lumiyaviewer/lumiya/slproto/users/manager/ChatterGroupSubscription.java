@@ -20,7 +20,7 @@ class ChatterGroupSubscription extends ChatterSubscription {
         super(sortedChatterList, chatterIDGroup, userManager);
         this.groupProfileSubscription = userManager.getCachedGroupProfiles().getPool().subscribe(chatterIDGroup.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$eTv5Cj2a9ssR4ZBNRV1Lgb181AY
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ChatterGroupSubscription) this).m299xb0ce45f9((GroupProfileReply) obj);
+                ChatterGroupSubscription.this.m299xb0ce45f9((GroupProfileReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

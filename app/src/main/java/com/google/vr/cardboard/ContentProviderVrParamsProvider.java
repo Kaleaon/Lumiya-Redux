@@ -85,7 +85,7 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
             Log.e(TAG, "Failed to write params to ContentProvider", e);
             return false;
         } catch (SecurityException e) {
-            Log.e(TAG, "Insufficient permissions to write params to ContentProvider", e2);
+            Log.e(TAG, "Insufficient permissions to write params to ContentProvider", e);
             return false;
         }
     }

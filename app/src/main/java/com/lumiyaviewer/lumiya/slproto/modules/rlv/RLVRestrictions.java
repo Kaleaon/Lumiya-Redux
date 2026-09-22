@@ -73,7 +73,7 @@ public class RLVRestrictions {
             if (uuid == null) {
                 return !this.restMap.isEmpty();
             }
-            Iterator<T> it = this.restMap.entrySet().iterator();
+            Iterator<Map.Entry<String, HashSet<UUID>>> it = this.restMap.entrySet().iterator();
             while (it.hasNext()) {
                 if (((HashSet) ((Map.Entry) it.next()).getValue()).contains(uuid)) {
                     return true;
@@ -192,7 +192,7 @@ public class RLVRestrictions {
 
         public void removeAllForObject(UUID uuid) {
             HashSet hashSet = new HashSet();
-            Iterator<T> it = this.restMap.entrySet().iterator();
+            Iterator<Map.Entry<String, HashSet<UUID>>> it = this.restMap.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
                 ((HashSet) entry.getValue()).remove(uuid);
@@ -233,7 +233,7 @@ public class RLVRestrictions {
     public synchronized List<RLVRestrictionType> getRestrictionsByObject(UUID uuid) {
         LinkedList linkedList;
         linkedList = new LinkedList();
-        Iterator<T> it = this.restrictions.entrySet().iterator();
+        Iterator<Map.Entry<RLVRestrictionType, RLVRestrictionList>> it = this.restrictions.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry entry = (Map.Entry) it.next();
             if (((RLVRestrictionList) entry.getValue()).hasRestrictionsByObject(uuid)) {

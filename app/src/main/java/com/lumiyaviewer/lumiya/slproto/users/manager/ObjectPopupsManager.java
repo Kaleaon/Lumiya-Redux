@@ -78,11 +78,12 @@ public class ObjectPopupsManager {
             }
         }
         if (objectPopupListener != null) {
+            final ObjectPopupListener listener = objectPopupListener;
             final int size = this.objectPopups.size();
             if (executor != null) {
                 executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.4
                     private final /* synthetic */ void $m$0() {
-                        ((ObjectPopupsManager.ObjectPopupListener) objectPopupListener).onObjectPopupCountChanged(size);
+                        listener.onObjectPopupCountChanged(size);
                     }
 
                     @Override // java.lang.Runnable
@@ -122,10 +123,11 @@ public class ObjectPopupsManager {
             addObjectPopupInternal(sLChatEvent);
             final int size = this.objectPopups.size();
             if (objectPopupListener != null) {
+                final ObjectPopupListener listener = objectPopupListener;
                 if (executor != null) {
                     executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.3
                         private final /* synthetic */ void $m$0() {
-                            ((ObjectPopupsManager.ObjectPopupListener) objectPopupListener).onObjectPopupCountChanged(size);
+                            listener.onObjectPopupCountChanged(size);
                         }
 
                         @Override // java.lang.Runnable
@@ -138,9 +140,10 @@ public class ObjectPopupsManager {
                 }
             }
         } else if (executor != null) {
+            final ObjectPopupListener listener = objectPopupListener;
             executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.2
                 private final /* synthetic */ void $m$0() {
-                    ((ObjectPopupsManager.ObjectPopupListener) objectPopupListener).onNewObjectPopup((SLChatEvent) sLChatEvent);
+                    listener.onNewObjectPopup(sLChatEvent);
                 }
 
                 @Override // java.lang.Runnable

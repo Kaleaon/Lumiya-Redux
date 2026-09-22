@@ -57,7 +57,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create();
     private final Subscription.OnError onObjectListError = new Subscription.OnError() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$rXtKRyOts6GGB3GxWNYA5oEvU2Y.1
         private final /* synthetic */ void $m$0(Throwable th) {
-            ((ObjectSelectorFragment) this).m692x47832f4(th);
+            ObjectSelectorFragment.this.m692x47832f4(th);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
@@ -67,7 +67,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
     };
     private final Subscription.OnData<ObjectsManager.ObjectDisplayList> onObjectListData = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$rXtKRyOts6GGB3GxWNYA5oEvU2Y
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ObjectSelectorFragment) this).m693x4785519((ObjectsManager.ObjectDisplayList) obj);
+            ObjectSelectorFragment.this.m693x4785519((ObjectsManager.ObjectDisplayList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

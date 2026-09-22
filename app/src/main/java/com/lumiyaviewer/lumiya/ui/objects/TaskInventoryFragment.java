@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 public class TaskInventoryFragment extends FragmentWithTitle {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f501x3332d2fb = null;
+    private static /* synthetic */ int[] f501x3332d2fb = null;
     private static final String OBJECT_LOCAL_ID_KEY = "objectLocalId";
     private static final String OBJECT_UUID_KEY = "objectUUID";
     private Subscription<Integer, SLObjectProfileData> objectProfileSubscription;
@@ -73,7 +73,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
     };
     private final Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((TaskInventoryFragment) this).m699x1db91107((SLObjectProfileData) obj);
+            TaskInventoryFragment.this.m699x1db91107((SLObjectProfileData) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -103,7 +103,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             final ProgressDialog progressDialog = this.val$progressDialog;
             uIThreadExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.4
                 private final /* synthetic */ void $m$0() {
-                    ((TaskInventoryFragment.AnonymousClass2) this).m700x9b244ddf((UserManager) userManager, i, (ProgressDialog) progressDialog, (UUID) uuid);
+                    AnonymousClass2.this.m700x9b244ddf((UserManager) userManager, i, (ProgressDialog) progressDialog, (UUID) uuid);
                 }
 
                 @Override // java.lang.Runnable
@@ -281,7 +281,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.1
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                        ((TaskInventoryFragment) this).m697x992e5209(dialogInterface, i);
+                        TaskInventoryFragment.this.m697x992e5209(dialogInterface, i);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener
@@ -302,7 +302,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
                 return;
             }
         }
-        String or = this.objectProfileData.name().or((Optional<String>) getString(R.string.default_object_contents_folder));
+        String or = this.objectProfileData.name().or(getString(R.string.default_object_contents_folder));
         HashSet hashSet = new HashSet();
         Iterator<SLInventoryEntry> it2 = this.taskInventory.entries.iterator();
         while (it2.hasNext()) {
@@ -374,7 +374,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
     /* synthetic */ void m699x1db91107(SLObjectProfileData sLObjectProfileData) {
         this.objectProfileData = sLObjectProfileData;
         if (this.objectProfileData.name().isPresent()) {
-            setTitle(getString(R.string.object_contents_title), this.objectProfileData.name().or((Optional<String>) getString(R.string.object_name_loading)));
+            setTitle(getString(R.string.object_contents_title), this.objectProfileData.name().or(getString(R.string.object_name_loading)));
         }
     }
 
@@ -398,7 +398,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setEmptyView(inflate.findViewById(android.R.id.empty));
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.2
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
-                ((TaskInventoryFragment) this).m698x1db827b5(adapterView, view, i, j);
+                TaskInventoryFragment.this.m698x1db827b5(adapterView, view, i, j);
             }
 
             @Override // android.widget.AdapterView.OnItemClickListener
@@ -427,8 +427,8 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         UserManager userManager = getUserManager();
         if (userManager != null) {
             int objectLocalID = getObjectLocalID();
-            this.taskInventorySubscription = userManager.getObjectsManager().getObjectTaskInventory().subscribe((Subscribable<Integer, SLTaskInventory>) Integer.valueOf(objectLocalID), UIThreadExecutor.getInstance(), this.onTaskInventoryReceived);
-            this.objectProfileSubscription = userManager.getObjectsManager().getObjectProfile().subscribe((Subscribable<Integer, SLObjectProfileData>) Integer.valueOf(objectLocalID), UIThreadExecutor.getInstance(), this.onObjectProfileData);
+            this.taskInventorySubscription = userManager.getObjectsManager().getObjectTaskInventory().subscribe(Integer.valueOf(objectLocalID), UIThreadExecutor.getInstance(), this.onTaskInventoryReceived);
+            this.objectProfileSubscription = userManager.getObjectsManager().getObjectProfile().subscribe(Integer.valueOf(objectLocalID), UIThreadExecutor.getInstance(), this.onObjectProfileData);
         }
     }
 

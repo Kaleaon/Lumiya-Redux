@@ -462,7 +462,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         });
         findViewById(R.id.whatsnewText).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$U_ZFuxgsYW8weMauiDTqAtaKePI
             private final /* synthetic */ void $m$0() {
-                ((LoginActivity) this).m646lambda$com_lumiyaviewer_lumiya_ui_login_LoginActivity_5985();
+                LoginActivity.this.m646lambda$com_lumiyaviewer_lumiya_ui_login_LoginActivity_5985();
             }
 
             @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -478,10 +478,10 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.login_menu, menu);
         ImmutableList.Builder builder = ImmutableList.builder();
-        builder.add((ImmutableList.Builder) menu.findItem(R.id.item_manage_accounts));
-        builder.add((ImmutableList.Builder) menu.findItem(R.id.item_settings));
-        builder.add((ImmutableList.Builder) menu.findItem(R.id.item_manage_grids));
-        builder.add((ImmutableList.Builder) menu.findItem(R.id.item_show_password));
+        builder.add(menu.findItem(R.id.item_manage_accounts));
+        builder.add(menu.findItem(R.id.item_settings));
+        builder.add(menu.findItem(R.id.item_manage_grids));
+        builder.add(menu.findItem(R.id.item_show_password));
         this.menuItems = builder.build();
         return true;
     }

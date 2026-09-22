@@ -169,7 +169,7 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
                 if (ChunkedListLoader.this.hasBelow || ((Long) identifiable2.getId()).longValue() <= longValue) {
                     z = z2;
                 } else {
-                    ChunkedListLoader.this.items.addElement(identifiable2, ChunkedListLoader.this.windowSize, ChunkedListLoader.this);
+                    ChunkedListLoader.this.items.addElement((E) identifiable2, ChunkedListLoader.this.windowSize, ChunkedListLoader.this);
                     i3++;
                     z = true;
                 }
@@ -195,7 +195,7 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
                 if (identifiable == null) {
                     return;
                 }
-                int replaceElement = ChunkedListLoader.this.items.replaceElement(identifiable, ChunkedListLoader.this.chatMessageComparator);
+                int replaceElement = ChunkedListLoader.this.items.replaceElement((E) identifiable, ChunkedListLoader.this.chatMessageComparator);
                 Debug.Printf("ChunkedListLoader: replace: replacedIndex is %d", Integer.valueOf(replaceElement));
                 if (replaceElement >= 0) {
                     ChunkedListLoader.this.listener.onListItemChanged(replaceElement);

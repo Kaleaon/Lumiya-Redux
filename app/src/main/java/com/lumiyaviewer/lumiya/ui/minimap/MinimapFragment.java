@@ -21,7 +21,7 @@ import java.util.UUID;
 public class MinimapFragment extends Fragment implements MinimapView.OnUserClickListener {
     private final SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM
         private final /* synthetic */ void $m$0(Object obj) {
-            ((MinimapFragment) this).m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0((SLMinimap.MinimapBitmap) obj);
+            MinimapFragment.this.m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0((SLMinimap.MinimapBitmap) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -31,7 +31,7 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
     });
     private final SubscriptionData<SubscriptionSingleKey, SLMinimap.UserLocations> userLocations = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM.1
         private final /* synthetic */ void $m$0(Object obj) {
-            ((MinimapFragment) this).m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1((SLMinimap.UserLocations) obj);
+            MinimapFragment.this.m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1((SLMinimap.UserLocations) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

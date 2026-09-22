@@ -75,7 +75,7 @@ public abstract class UserListFragment extends Fragment {
             ListView listView = (ListView) view.findViewById(R.id.contactList);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$1wR8wJi1e-GgAIYEhals_u5j3nM
                 private final /* synthetic */ void $m$0(AdapterView adapterView, View view2, int i, long j) {
-                    ((UserListFragment) this).m588lambda$com_lumiyaviewer_lumiya_ui_common_UserListFragment_1689(adapterView, view2, i, j);
+                    UserListFragment.this.m588lambda$com_lumiyaviewer_lumiya_ui_common_UserListFragment_1689(adapterView, view2, i, j);
                 }
 
                 @Override // android.widget.AdapterView.OnItemClickListener

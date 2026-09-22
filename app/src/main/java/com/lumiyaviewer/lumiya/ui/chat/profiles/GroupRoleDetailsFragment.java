@@ -71,7 +71,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
     };
     private final View.OnClickListener permCheckboxClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.3
         private final /* synthetic */ void $m$0(View view) {
-            ((GroupRoleDetailsFragment) this).m496x4277c5d5(view);
+            GroupRoleDetailsFragment.this.m496x4277c5d5(view);
         }
 
         @Override // android.view.View.OnClickListener
@@ -144,7 +144,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.6
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GroupRoleDetailsFragment) this).m499x4287a0c8((String) charSequence, (String) charSequence2, (String) charSequence3, selectedPowers, (Runnable) runnable, dialogInterface, i);
+                GroupRoleDetailsFragment.this.m499x4287a0c8((String) charSequence, (String) charSequence2, (String) charSequence3, selectedPowers, (Runnable) runnable, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -169,7 +169,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(getString(R.string.delete_role_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.2
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                    ((GroupRoleDetailsFragment) this).m497x4286a828(dialogInterface, i);
+                    GroupRoleDetailsFragment.this.m497x4286a828(dialogInterface, i);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -363,7 +363,8 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_GroupRoleDetailsFragment_11905, reason: not valid java name */
     /* synthetic */ void m496x4277c5d5(View view) {
-        if ((getMyGroupPowers() & 1024) != 0 ? !(this.groupProfile.getData() != null ? Objects.equal(r0.GroupData_Field.OwnerRole, this.RoleID) : false) : false) {
+        GroupProfileReply profile = this.groupProfile.getData();
+        if ((getMyGroupPowers() & 1024) != 0 && !(profile != null && Objects.equal(profile.GroupData_Field.OwnerRole, this.RoleID))) {
             if (view instanceof Checkable) {
                 ((Checkable) view).toggle();
             }
@@ -424,7 +425,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         }
         askForSavingChanges(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.5
             private final /* synthetic */ void $m$0() {
-                ((GroupRoleDetailsFragment) this).m498x42871ce8();
+                GroupRoleDetailsFragment.this.m498x42871ce8();
             }
 
             @Override // java.lang.Runnable
@@ -464,7 +465,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         createPermEntries(layoutInflater, (ViewGroup) inflate.findViewById(R.id.role_permission_list_layout));
         inflate.findViewById(R.id.button_view_role_members).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.4
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupRoleDetailsFragment) this).m500x12acc68f(view);
+                GroupRoleDetailsFragment.this.m500x12acc68f(view);
             }
 
             @Override // android.view.View.OnClickListener

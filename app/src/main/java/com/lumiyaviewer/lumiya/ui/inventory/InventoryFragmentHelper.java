@@ -127,7 +127,7 @@ public class InventoryFragmentHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getContext().getString(R.string.rez_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.6
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((InventoryFragmentHelper) this).m629x89731ef0((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
+                InventoryFragmentHelper.this.m629x89731ef0((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -189,7 +189,7 @@ public class InventoryFragmentHelper {
         ((Button) dialog.findViewById(R.id.okButton)).setText(R.string.create_folder_button);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.7
             private final /* synthetic */ void $m$0(View view) {
-                ((InventoryFragmentHelper) this).m628x8972353e((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
+                InventoryFragmentHelper.this.m628x8972353e((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -323,7 +323,7 @@ public class InventoryFragmentHelper {
         ((EditText) dialog.findViewById(R.id.itemNameText)).setText(sLInventoryEntry.name);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.8
             private final /* synthetic */ void $m$0(View view) {
-                ((InventoryFragmentHelper) this).m630x8973e911((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
+                InventoryFragmentHelper.this.m630x8973e911((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
             }
 
             @Override // android.view.View.OnClickListener

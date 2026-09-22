@@ -80,13 +80,11 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             }
             ProfileTab profileTab = this.tabs.get(i);
             try {
-                Fragment fragment = (Fragment) profileTab.tabClass.newInstance();
+                Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
                 fragment.setArguments(GroupProfileFragment.makeSelection(GroupProfileFragment.this.chatterID));
                 GroupProfileFragment.this.activeFragments.put(profileTab, new WeakReference(fragment));
                 return fragment;
-            } catch (IllegalAccessException e) {
-                return null;
-            } catch (InstantiationException e2) {
+            } catch (ReflectiveOperationException e) {
                 return null;
             }
         }
@@ -231,7 +229,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         } else if (this.adapter != null) {
             this.adapter.setTabs(null);
         }
-        Iterator<T> it = this.activeFragments.values().iterator();
+        Iterator<?> it = this.activeFragments.values().iterator();
         while (it.hasNext()) {
             ComponentCallbacks componentCallbacks = (Fragment) ((WeakReference) it.next()).get();
             if (componentCallbacks instanceof ReloadableFragment) {

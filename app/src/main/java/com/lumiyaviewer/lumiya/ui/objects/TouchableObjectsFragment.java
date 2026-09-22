@@ -26,7 +26,7 @@ public class TouchableObjectsFragment extends Fragment implements AdapterView.On
     private TouchableObjectListAdapter listAdapter;
     private final SubscriptionData<UUID, ImmutableList<SLObjectInfo>> touchableObjects = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$LilZ3G1QEr_14fK4lPNJzUyzlBg
         private final /* synthetic */ void $m$0(Object obj) {
-            ((TouchableObjectsFragment) this).m701x2ceac41e((ImmutableList) obj);
+            TouchableObjectsFragment.this.m701x2ceac41e((ImmutableList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

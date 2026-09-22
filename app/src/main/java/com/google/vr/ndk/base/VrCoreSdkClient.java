@@ -64,11 +64,12 @@ class VrCoreSdkClient {
                         return;
                     }
                     VrCoreSdkClient.this.daydreamManager.registerListener(VrCoreSdkClient.this.componentName, VrCoreSdkClient.this.daydreamListener);
+                    HeadTrackingState trackingToRestore = null;
                     try {
                         HeadTrackingState headTrackingState = VrCoreSdkClient.this.getHeadTrackingState();
                         int prepareVr = VrCoreSdkClient.this.daydreamManager.prepareVr(VrCoreSdkClient.this.componentName, headTrackingState);
                         if (prepareVr != 2) {
-                            r0 = prepareVr == 0 ? headTrackingState : null;
+                            trackingToRestore = prepareVr == 0 ? headTrackingState : null;
                         } else {
                             Log.e(VrCoreSdkClient.TAG, "Daydream VR preparation failed, closing VR session.");
                             VrCoreSdkClient.this.handlePrepareVrFailed();
@@ -77,7 +78,7 @@ class VrCoreSdkClient {
                         String valueOf = String.valueOf(e);
                         Log.w(VrCoreSdkClient.TAG, new StringBuilder(String.valueOf(valueOf).length() + 61).append("Error while registering listener with the VrCore SDK Service:").append(valueOf).toString());
                     } finally {
-                        VrCoreSdkClient.this.resumeTracking(null);
+                        VrCoreSdkClient.this.resumeTracking(trackingToRestore);
                     }
                 } catch (RemoteException e2) {
                     String valueOf2 = String.valueOf(e2);
@@ -134,7 +135,7 @@ class VrCoreSdkClient {
             final FadeOverlayView fadeOverlayView = this.fadeOverlayViewWeak.get();
             if (fadeOverlayView != null) {
                 cancelSafeguard(2);
-                fadeOverlayView.post(new Runnable(this) { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.2
+                fadeOverlayView.post(new Runnable() { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.2
                     @Override // java.lang.Runnable
                     public void run() {
                         fadeOverlayView.startFade(i, j);
@@ -294,6 +295,7 @@ class VrCoreSdkClient {
         try {
             vrCoreClientApiVersion = VrCoreUtils.getVrCoreClientApiVersion(context);
         } catch (VrCoreNotAvailableException e) {
+            return false;
         }
         if (vrCoreClientApiVersion >= 5) {
             return true;

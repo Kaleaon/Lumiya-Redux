@@ -27,10 +27,10 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class LLSDStreamingParser {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f115x653d09df = null;
+    private static /* synthetic */ int[] f115x653d09df = null;
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-llsd-LLSDNodeTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = null;
+    private static /* synthetic */ int[] f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = null;
 
     public interface LLSDContentHandler {
         LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException;
@@ -193,24 +193,19 @@ public class LLSDStreamingParser {
             byte readByte = dataInputStream.readByte();
             switch (readByte) {
                 case 10:
-                    i2 = i3;
                     continue;
-                    i3 = i2;
                 case 33:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDUndefined());
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 48:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(false));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 49:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(true));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 60:
                     break;
                 case 91:
@@ -224,26 +219,22 @@ public class LLSDStreamingParser {
                         throw new LLSDXMLException("Array terminator expected");
                     }
                     onArrayBegin.onMapEnd(str);
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 98:
                     byte[] bArr = new byte[dataInputStream.readInt()];
                     dataInputStream.readFully(bArr);
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDBinary(bArr));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 100:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDDate(new Date(Math.round(dataInputStream.readDouble() * 1000.0d))));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 105:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDInt(dataInputStream.readInt()));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 108:
                     int readInt2 = dataInputStream.readInt();
                     if (readInt2 == 0) {
@@ -253,14 +244,12 @@ public class LLSDStreamingParser {
                         dataInputStream.readFully(bArr2);
                         lLSDContentHandler.onPrimitiveValue(str, new LLSDURI(SLMessage.stringFromVariableUTF(bArr2)));
                     }
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 114:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDDouble(dataInputStream.readDouble()));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 115:
                     int readInt3 = dataInputStream.readInt();
                     if (readInt3 == 0) {
@@ -270,14 +259,12 @@ public class LLSDStreamingParser {
                         dataInputStream.readFully(bArr3);
                         lLSDContentHandler.onPrimitiveValue(str, new LLSDString(SLMessage.stringFromVariableUTF(bArr3)));
                     }
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case 117:
                     lLSDContentHandler.onPrimitiveValue(str, new LLSDUUID(new UUID(dataInputStream.readLong(), dataInputStream.readLong())));
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 case Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_CHARACTERISTIC_NOT_FOUND /* 123 */:
                     int readInt4 = dataInputStream.readInt();
                     LLSDContentHandler onMapBegin = lLSDContentHandler.onMapBegin(str);
@@ -296,16 +283,14 @@ public class LLSDStreamingParser {
                         throw new LLSDXMLException("Map terminator expected");
                     }
                     onMapBegin.onMapEnd(str);
-                    i2 = i3 - 1;
+                    i3--;
                     continue;
-                    i3 = i2;
                 default:
                     throw new LLSDXMLException("Unknown LLSD element 0x" + Integer.toHexString(readByte));
             }
             while (dataInputStream.readByte() != 62) {
             }
-            i2 = i3;
-            i3 = i2;
+
         }
     }
 

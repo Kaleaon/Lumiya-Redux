@@ -23,7 +23,7 @@ public class LogMessageBatch implements Bundleable {
         if (parcelableArray != null) {
             for (Parcelable parcelable : parcelableArray) {
                 if (parcelable instanceof Bundle) {
-                    builder.add((ImmutableList.Builder) new LogChatMessage((Bundle) parcelable));
+                    builder.add(new LogChatMessage((Bundle) parcelable));
                 }
             }
         }

@@ -23,7 +23,7 @@ abstract class ChatterDisplayDataList {
     private final AtomicBoolean needsRefresh = new AtomicBoolean(false);
     private final Runnable refreshRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n0kmAon3UDOV6Jcsw0ejXq6u0xA
         private final /* synthetic */ void $m$0() {
-            ((ChatterDisplayDataList) this).m298x2aebe54e();
+            ChatterDisplayDataList.this.m298x2aebe54e();
         }
 
         @Override // java.lang.Runnable
@@ -38,7 +38,7 @@ abstract class ChatterDisplayDataList {
     }
 
     private void refreshList() {
-        Iterator<T> it = this.chatterSubscriptions.values().iterator();
+        Iterator<ChatterSubscription> it = this.chatterSubscriptions.values().iterator();
         while (it.hasNext()) {
             ((ChatterSubscription) it.next()).isValid = false;
         }
@@ -70,7 +70,7 @@ abstract class ChatterDisplayDataList {
     }
 
     public void dispose() {
-        Iterator<T> it = this.chatterSubscriptions.values().iterator();
+        Iterator<ChatterSubscription> it = this.chatterSubscriptions.values().iterator();
         while (it.hasNext()) {
             ((ChatterSubscription) it.next()).unsubscribe();
         }

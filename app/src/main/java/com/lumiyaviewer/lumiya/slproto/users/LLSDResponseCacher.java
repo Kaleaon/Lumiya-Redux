@@ -42,11 +42,6 @@ public class LLSDResponseCacher<Key> extends ResponseCacher<Key, LLSDNode> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher, com.lumiyaviewer.lumiya.react.Refreshable
-    public /* bridge */ /* synthetic */ void requestUpdate(Object obj) {
-        super.requestUpdate(obj);
-    }
-
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
     public byte[] storeCached(@Nonnull LLSDNode lLSDNode) {

@@ -23,30 +23,35 @@ public class OpportunisticExecutor implements Executor {
         @Override // java.lang.Runnable
         public void run() {
             while (true) {
+                Runnable runnable;
                 try {
                     OpportunisticExecutor.this.lock.lock();
-                    Runnable runnable = OpportunisticExecutor.this.queue.poll();
-                    if (runnable == null && !OpportunisticExecutor.this.runOnceRunnables.isEmpty()) {
-                        Iterator<Runnable> it = OpportunisticExecutor.this.runOnceRunnables.iterator();
-                        if (it.hasNext()) {
-                            runnable = it.next();
-                            it.remove();
+                    try {
+                        runnable = OpportunisticExecutor.this.queue.poll();
+                        if (runnable == null && !OpportunisticExecutor.this.runOnceRunnables.isEmpty()) {
+                            Iterator<Runnable> it = OpportunisticExecutor.this.runOnceRunnables.iterator();
+                            if (it.hasNext()) {
+                                runnable = it.next();
+                                it.remove();
+                            }
                         }
-                    }
-                    if (runnable == null) {
-                        OpportunisticExecutor.this.notEmpty.await();
+                        while (runnable == null) {
+                            OpportunisticExecutor.this.notEmpty.await();
+                            runnable = OpportunisticExecutor.this.queue.poll();
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    } finally {
                         OpportunisticExecutor.this.lock.unlock();
-                        continue;
                     }
-                    OpportunisticExecutor.this.lock.unlock();
                     try {
                         runnable.run();
                     } catch (Exception e) {
                         Debug.Warning(e);
                     }
-                } catch (Throwable th2) {
-                    OpportunisticExecutor.this.lock.unlock();
-                    throw th2;
+                } catch (Exception e) {
+                    Debug.Warning(e);
                 }
             }
         }

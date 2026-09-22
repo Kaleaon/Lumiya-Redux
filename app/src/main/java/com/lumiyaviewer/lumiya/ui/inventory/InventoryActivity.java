@@ -126,7 +126,7 @@ public class InventoryActivity extends MasterDetailsActivity {
         builder.setTitle(R.string.sort_order_caption);
         builder.setSingleChoiceItems(new CharSequence[]{"Newest first", "Alphabetical"}, sortOrder, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$Tc22ivDU79Y83KauKGybv49CW7A
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((InventoryActivity) this).m599xeedaf4f8(sortOrder, dialogInterface, i);
+                InventoryActivity.this.m599xeedaf4f8(sortOrder, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

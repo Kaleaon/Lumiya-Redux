@@ -60,7 +60,7 @@ public class VoiceEnablePreference extends CheckBoxPreference {
         }
         new AlertDialog.Builder(getContext()).setTitle(R.string.enable_voice).setMessage(getContext().getString(R.string.enable_voice_plugin_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$0TY5QW0tBCNc4BcO-pElkyve9kc.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((VoiceEnablePreference) this).m872xef85dc(dialogInterface, i);
+                VoiceEnablePreference.this.m872xef85dc(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

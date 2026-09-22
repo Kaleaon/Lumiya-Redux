@@ -21,7 +21,7 @@ class ChatterSubscription {
     private final Subscription<ChatterID, VoiceChatInfo> voiceChatInfoSubscription;
     private final Subscription.OnData<VoiceChatInfo> onVoiceStatusChanged = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$x6PlkRNg0xExeA_EUn8oEJWcOq8
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatterSubscription) this).m307x45811332((VoiceChatInfo) obj);
+            ChatterSubscription.this.m307x45811332((VoiceChatInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -31,7 +31,7 @@ class ChatterSubscription {
     };
     private final Subscription.OnData<UnreadMessageInfo> onUnreadCount = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$x6PlkRNg0xExeA_EUn8oEJWcOq8.1
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatterSubscription) this).m308x45811333((UnreadMessageInfo) obj);
+            ChatterSubscription.this.m308x45811333((UnreadMessageInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

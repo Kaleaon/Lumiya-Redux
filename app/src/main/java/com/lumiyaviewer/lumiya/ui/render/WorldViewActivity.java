@@ -247,7 +247,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private boolean isDragging = false;
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0((SLAgentCircuit) obj);
+            WorldViewActivity.this.m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -257,7 +257,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.4
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1((MyAvatarState) obj);
+            WorldViewActivity.this.m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1((MyAvatarState) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -267,7 +267,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.5
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2((SLObjectProfileData) obj);
+            WorldViewActivity.this.m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2((SLObjectProfileData) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -277,7 +277,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.6
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3((CurrentLocationInfo) obj);
+            WorldViewActivity.this.m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -287,7 +287,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.7
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4((ChatterID) obj);
+            WorldViewActivity.this.m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4((ChatterID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -297,7 +297,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.8
         private final /* synthetic */ void $m$0(Object obj) {
-            ((WorldViewActivity) this).m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5((VoiceChatInfo) obj);
+            WorldViewActivity.this.m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5((VoiceChatInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -406,8 +406,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling)) {
                     return;
                 }
-                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(new int[2]);
-                WorldViewActivity.this.mGLView.pickObjectHover(rawX - r2[0], rawY - r2[1]);
+                int[] location = new int[2];
+                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(location);
+                WorldViewActivity.this.mGLView.pickObjectHover(rawX - location[0], rawY - location[1]);
             }
         }
 
@@ -445,8 +446,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             if (WorldViewActivity.this.isDragging) {
                 WorldViewActivity.this.dragSelectorSetRawPosition((int) motionEvent.getRawX(), (int) motionEvent.getRawY());
             } else if (WorldViewActivity.this.displayedHUDid != 0) {
-                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(new int[2]);
-                WorldViewActivity.this.mGLView.touchHUD(motionEvent.getRawX() - r0[0], motionEvent.getRawY() - r0[1]);
+                int[] location = new int[2];
+                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(location);
+                WorldViewActivity.this.mGLView.touchHUD(motionEvent.getRawX() - location[0], motionEvent.getRawY() - location[1]);
             } else {
                 WorldViewActivity.this.handlePickedObject(null);
             }
@@ -506,7 +508,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         public void onChatMessage(final ActiveChattersManager.ChatMessageEvent chatMessageEvent) {
             WorldViewActivity.this.mHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.11
                 private final /* synthetic */ void $m$0() {
-                    ((WorldViewActivity.AnonymousClass1) this).m856xad728e4a((ActiveChattersManager.ChatMessageEvent) chatMessageEvent);
+                    AnonymousClass1.this.m856xad728e4a((ActiveChattersManager.ChatMessageEvent) chatMessageEvent);
                 }
 
                 @Override // java.lang.Runnable
@@ -743,8 +745,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.dragPointerLayout.getLocationOnScreen(iArr);
         int width = iArr[0] + (this.dragPointer.getWidth() / 2) + i;
         int height = iArr[1] + (this.dragPointer.getHeight() / 2) + i2;
-        this.worldViewHolder.getLocationOnScreen(new int[2]);
-        this.mGLView.pickObjectHover(width - r2[0], height - r2[1]);
+        int[] worldLocation = new int[2];
+        this.worldViewHolder.getLocationOnScreen(worldLocation);
+        this.mGLView.pickObjectHover(width - worldLocation[0], height - worldLocation[1]);
     }
 
     private void selectHUDtoDisplay() {
@@ -777,7 +780,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             builder.setTitle(R.string.select_hud_title);
             builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.10
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
-                    ((WorldViewActivity) this).m855x5cf6cbb8((List) arrayList, dialogInterface, i2);
+                    WorldViewActivity.this.m855x5cf6cbb8((List) arrayList, dialogInterface, i2);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -1032,7 +1035,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     }
                     this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.9
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            ((WorldViewActivity) this).m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(chatterNameRetriever);
+                            WorldViewActivity.this.m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(chatterNameRetriever);
                         }
 
                         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -1172,7 +1175,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             this.buttonsFadeAnimator.setDuration(1000L);
             this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.1
                 private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
-                    ((WorldViewActivity) this).m853x5cc8da9f(valueAnimator);
+                    WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
                 }
 
                 @Override // android.animation.ValueAnimator.AnimatorUpdateListener
@@ -1276,7 +1279,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(String.format(getString(R.string.object_buy_confirm), name, Integer.valueOf(this.pickedObject.salePrice))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.2
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                        ((WorldViewActivity) this).m854x5cf47ab6(dialogInterface, i);
+                        WorldViewActivity.this.m854x5cf47ab6(dialogInterface, i);
                     }
 
                     @Override // android.content.DialogInterface.OnClickListener

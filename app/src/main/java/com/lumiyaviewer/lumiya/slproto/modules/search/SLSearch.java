@@ -75,11 +75,10 @@ public class SLSearch extends SLModule {
         this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.search.SLSearch.1
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private static final /* synthetic */ int[] f129xca68d786 = null;
-            final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$slproto$modules$search$SearchGridQuery$SearchType;
+            private /* synthetic */ int[] f129xca68d786 = null;
 
             /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private static /* synthetic */ int[] m248x591f1c2a() {
+            private /* synthetic */ int[] m248x591f1c2a() {
                 if (f129xca68d786 != null) {
                     return f129xca68d786;
                 }
@@ -223,7 +222,7 @@ public class SLSearch extends SLModule {
     @SLMessageHandler
     public void DirPlacesReply(DirPlacesReply dirPlacesReply) {
         SearchGridQuery searchGridQuery = this.currentSearchQuery.get();
-        Iterator<T> it = dirPlacesReply.QueryData_Fields.iterator();
+        Iterator<DirPlacesReply.QueryData> it = dirPlacesReply.QueryData_Fields.iterator();
         while (it.hasNext()) {
             UUID uuid = ((DirPlacesReply.QueryData) it.next()).QueryID;
             if (Objects.equal(searchGridQuery.searchUUID(), uuid) && this.userManager != null && this.searchResultHandler != null) {

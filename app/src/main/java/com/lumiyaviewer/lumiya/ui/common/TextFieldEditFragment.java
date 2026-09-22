@@ -70,7 +70,7 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.2
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((TextFieldEditFragment) this).m567x95fa4f00((String) charSequence, dialogInterface, i);
+                TextFieldEditFragment.this.m567x95fa4f00((String) charSequence, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -79,7 +79,7 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((TextFieldEditFragment) this).m568x95fab3c8(dialogInterface, i);
+                TextFieldEditFragment.this.m568x95fab3c8(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -143,7 +143,7 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage(getString(R.string.discard_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.3
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                            ((TextFieldEditFragment) this).m566x95f8ee07((View) view, dialogInterface, i);
+                            TextFieldEditFragment.this.m566x95f8ee07((View) view, dialogInterface, i);
                         }
 
                         @Override // android.content.DialogInterface.OnClickListener

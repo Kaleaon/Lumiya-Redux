@@ -77,7 +77,7 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.account_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.accounts.-$Lambda$c901yk_brt0jPczBoAMr-Jn1w74.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((ManageAccountsActivity) this).m396xf58c202e((AccountList.AccountInfo) accountInfo, dialogInterface, i);
+                ManageAccountsActivity.this.m396xf58c202e((AccountList.AccountInfo) accountInfo, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

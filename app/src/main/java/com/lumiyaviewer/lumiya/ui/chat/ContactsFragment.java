@@ -56,11 +56,10 @@ public class ContactsFragment extends Fragment {
     private class ContactsPagerAdapter extends FragmentStatePagerAdapter {
 
         /* renamed from: -com-lumiyaviewer-lumiya-ui-chat-ContactsFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f251x6907e542 = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$ui$chat$ContactsFragment$ContactListType;
+        private /* synthetic */ int[] f251x6907e542 = null;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-ui-chat-ContactsFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m430x7c67181e() {
+        private /* synthetic */ int[] m430x7c67181e() {
             if (f251x6907e542 != null) {
                 return f251x6907e542;
             }
@@ -279,9 +278,9 @@ public class ContactsFragment extends Fragment {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         if (userManager != null) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe((Subscribable<SubscriptionSingleKey, CurrentLocationInfo>) SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$zIl8cGSTO94X3h9h2afeKA4NC_s
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$zIl8cGSTO94X3h9h2afeKA4NC_s
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ((ContactsFragment) this).m429com_lumiyaviewer_lumiya_ui_chat_ContactsFragmentmthref0((CurrentLocationInfo) obj);
+                    ContactsFragment.this.m429com_lumiyaviewer_lumiya_ui_chat_ContactsFragmentmthref0((CurrentLocationInfo) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

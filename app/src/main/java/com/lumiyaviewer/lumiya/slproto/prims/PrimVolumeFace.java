@@ -497,16 +497,8 @@ public class PrimVolumeFace {
         LLVector3 lLVector36 = new LLVector3();
         LLVector2 lLVector2 = new LLVector2();
         LLVector2 lLVector22 = new LLVector2();
-        int i7 = 0;
-        while (true) {
-            int i8 = i7;
-            if (i8 >= size2 + 1) {
-                break;
-            }
-            int i9 = 0;
-            while (true) {
-                int i10 = i9;
-                if (i10 < size2 + 1) {
+        for (int i8 = 0; i8 < size2 + 1; i8++) {
+            for (int i10 = 0; i10 < size2 + 1; i10++) {
                     this.vertexArray.LerpPlanarVertex(i6, vertexArray, 0, vertexArray, 1, vertexArray, 3, i8 / size2, i10 / size2, lLVector35, lLVector36, lLVector2, lLVector22);
                     this.vertexArray.getNormals().set(i6, lLVector33);
                     if (i8 == 0 && i10 == 0) {
@@ -516,10 +508,7 @@ public class PrimVolumeFace {
                         vector3Array2.minMaxVector(i6, lLVector3, lLVector32);
                     }
                     i6++;
-                    i9 = i10 + 1;
-                }
             }
-            i7 = i8 + 1;
         }
         this.Center = new LLVector3(lLVector3);
         this.Center.add(lLVector32);

@@ -20,7 +20,7 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
     private static final String AVATAR_PICK_KEY = "avatarPickKey";
     private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$Y7Ne2VWglUcvjFUgJydWWKVgIXM
         private final /* synthetic */ void $m$0(Object obj) {
-            ((PickDescriptionEditFragment) this).m516x9070e529((PickInfoReply) obj);
+            PickDescriptionEditFragment.this.m516x9070e529((PickInfoReply) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

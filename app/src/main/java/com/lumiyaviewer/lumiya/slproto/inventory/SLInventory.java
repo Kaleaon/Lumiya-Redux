@@ -1280,7 +1280,7 @@ public class SLInventory extends SLModule {
             @Nullable
             public Void apply(@Nullable UUID uuid) {
                 if (uuid != null) {
-                    Iterator<E> it = immutableSet.iterator();
+                    Iterator<UUID> it = immutableSet.iterator();
                     while (it.hasNext()) {
                         SLInventory.this.MoveTaskInventory(uuid, i, (UUID) it.next());
                     }

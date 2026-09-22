@@ -32,28 +32,19 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
             this.subscription = RequestForwarder.this.subscribable.subscribe(kdown, RequestForwarder.this.executor, this, this);
         }
 
-        /* synthetic */ DownstreamSubscription(RequestForwarder requestForwarder, Object obj, Object obj2, DownstreamSubscription downstreamSubscription) {
+        /* synthetic */ DownstreamSubscription(RequestForwarder requestForwarder, Kup obj, Kdown obj2, DownstreamSubscription downstreamSubscription) {
             this(obj, obj2);
         }
 
         /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestForwarder$DownstreamSubscription_827, reason: not valid java name */
-        /* synthetic */ void m40x317e7a9e(Object obj) {
+        /* synthetic */ void m40x317e7a9e(Tdown obj) {
             RequestForwarder.this.processResultInternal(this.key, obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
         public void onData(final Tdown tdown) {
             if (RequestForwarder.this.executor != null) {
-                RequestForwarder.this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$swF2K5wPKI2_xA-bWP-XwHVnywU
-                    private final /* synthetic */ void $m$0() {
-                        ((RequestForwarder.DownstreamSubscription) this).m40x317e7a9e(tdown);
-                    }
-
-                    @Override // java.lang.Runnable
-                    public final void run() {
-                        $m$0();
-                    }
-                });
+                RequestForwarder.this.executor.execute(() -> m40x317e7a9e(tdown));
             } else {
                 RequestForwarder.this.processResultInternal(this.key, tdown);
             }
@@ -99,16 +90,7 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
     @Override // com.lumiyaviewer.lumiya.react.RequestHandler
     public void onRequest(@Nonnull final Kup kup) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$swF2K5wPKI2_xA-bWP-XwHVnywU.1
-                private final /* synthetic */ void $m$0() {
-                    ((RequestForwarder) this).m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup);
-                }
-
-                @Override // java.lang.Runnable
-                public final void run() {
-                    $m$0();
-                }
-            });
+            this.executor.execute(() -> m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup));
         } else {
             m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup);
         }

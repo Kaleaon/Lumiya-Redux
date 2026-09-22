@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 class MuteListAdapter extends BaseAdapter {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f461xafabc05e = null;
+    private static /* synthetic */ int[] f461xafabc05e = null;
     private final LayoutInflater layoutInflater;
 
     @Nonnull

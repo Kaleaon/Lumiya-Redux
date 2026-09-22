@@ -122,13 +122,12 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
     private class FolderEntryContentHandler extends LLSDStreamingParser.LLSDDefaultContentHandler {
 
         /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$FolderValueKeySwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f111xb781ade = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$slproto$inventory$SLInventoryHTTPFetchRequest$FolderValueKey;
+        private /* synthetic */ int[] f111xb781ade = null;
         private final DatabaseCommitThread commitThread;
         private final SLInventoryEntry entry = new SLInventoryEntry();
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$FolderValueKeySwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m199x6cbd47ba() {
+        private /* synthetic */ int[] m199x6cbd47ba() {
             if (f111xb781ade != null) {
                 return f111xb781ade;
             }
@@ -281,17 +280,15 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
     private class ItemEntryContentHandler extends LLSDStreamingParser.LLSDDefaultContentHandler {
 
         /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$ItemValueKeySwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f112xeca6ff43 = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$slproto$inventory$SLInventoryHTTPFetchRequest$ItemValueKey;
+        private /* synthetic */ int[] f112xeca6ff43 = null;
         private final DatabaseCommitThread commitThread;
         private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.ItemEntryContentHandler.1
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$PermissionsValueKeySwitchesValues, reason: not valid java name */
-            private static final /* synthetic */ int[] f113xc291c278 = null;
-            final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$slproto$inventory$SLInventoryHTTPFetchRequest$PermissionsValueKey;
+            private /* synthetic */ int[] f113xc291c278 = null;
 
             /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$PermissionsValueKeySwitchesValues, reason: not valid java name */
-            private static /* synthetic */ int[] m202xf1123f1c() {
+            private /* synthetic */ int[] m202xf1123f1c() {
                 if (f113xc291c278 != null) {
                     return f113xc291c278;
                 }
@@ -403,7 +400,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         private final SLInventoryEntry entry = new SLInventoryEntry();
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$ItemValueKeySwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m201x8bc9b31f() {
+        private /* synthetic */ int[] m201x8bc9b31f() {
             if (f112xeca6ff43 != null) {
                 return f112xeca6ff43;
             }

@@ -154,12 +154,13 @@ public class ImageAssetView extends View {
         int height2 = this.imageBitmap.getHeight();
         float max = Math.max(width2 / width, height2 / height);
         int round = Math.round(width2 / max);
+        int scaledHeight = Math.round(height2 / max);
         int i = (width / 2) - (round / 2);
         int round2 = this.alignTop ? 0 : (height / 2) - (Math.round(height2 / max) / 2);
         this.bitmapDestRect.left = i + 1;
         this.bitmapDestRect.top = round2 + 1;
         this.bitmapDestRect.right = (round + i) - 1;
-        this.bitmapDestRect.bottom = (round2 + r7) - 1;
+        this.bitmapDestRect.bottom = (round2 + scaledHeight) - 1;
         if (this.bitmapDestRect.left < 1) {
             this.bitmapDestRect.left = 1;
         }

@@ -149,7 +149,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
     /* renamed from: bakeAppearance, reason: merged with bridge method [inline-methods] */
     public void m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0() {
         Debug.Printf("Baking: Requesting texture data.", new Object[0]);
-        Iterator<T> it = this.wearables.values().iterator();
+        Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         while (it.hasNext()) {
             Iterator it2 = ((List) it.next()).iterator();
             while (it2.hasNext()) {
@@ -211,7 +211,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         for (Map.Entry<Integer, SLAvatarParams.ParamSet> entry : SLAvatarParams.paramByIDs.entrySet()) {
             hashMap.put(entry.getKey(), Float.valueOf(entry.getValue().params.get(0).defValue));
         }
-        Iterator<T> it = table.values().iterator();
+        Iterator<SLWearable> it = table.values().iterator();
         while (it.hasNext()) {
             SLWearableData wearableData = ((SLWearable) it.next()).getWearableData();
             if (wearableData != null) {
@@ -243,7 +243,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
     }
 
     private boolean isTexturesReady() {
-        Iterator<T> it = this.wearables.values().iterator();
+        Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         boolean z = true;
         while (it.hasNext()) {
             Iterator it2 = ((List) it.next()).iterator();
@@ -329,11 +329,11 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
 
     List<OpenJPEG> getLocalTexture(AvatarTextureFaceIndex avatarTextureFaceIndex) throws DefaultTextureException {
         OpenJPEG textureData;
-        Iterator<T> it = this.wearables.values().iterator();
+        Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         boolean z = false;
         LinkedList linkedList = null;
         while (it.hasNext()) {
-            for (WearableTextureData wearableTextureData : (List) it.next()) {
+            for (WearableTextureData wearableTextureData : it.next()) {
                 if (wearableTextureData.getTexture().layer == avatarTextureFaceIndex.ordinal()) {
                     if (wearableTextureData.getTexture().textureID != null && wearableTextureData.getTexture().textureID.equals(DrawableAvatarPart.DEFAULT_AVATAR_TEXTURE)) {
                         z = true;

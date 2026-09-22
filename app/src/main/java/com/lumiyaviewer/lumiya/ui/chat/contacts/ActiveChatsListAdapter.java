@@ -146,9 +146,9 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         this.userManager = userManager;
         this.inflater = LayoutInflater.from(context);
         this.localChatItem = new LocalChatItem(this, ChatterID.getLocalChatterID(userManager.getUserID()), null);
-        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe((Subscribable<ChatterListType, ImmutableList<ChatterDisplayData>>) ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ
+        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ActiveChatsListAdapter) this).m438x73a3bdf5((ImmutableList) obj);
+                ActiveChatsListAdapter.this.m438x73a3bdf5((ImmutableList) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -156,9 +156,9 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
                 $m$0(obj);
             }
         });
-        this.onlineFriendsSubscription = userManager.getChatterList().getChatterList().subscribe((Subscribable<ChatterListType, ImmutableList<ChatterDisplayData>>) ChatterListType.FriendsOnline, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.1
+        this.onlineFriendsSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.FriendsOnline, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.1
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ActiveChatsListAdapter) this).m439x73a3c8f6((ImmutableList) obj);
+                ActiveChatsListAdapter.this.m439x73a3c8f6((ImmutableList) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -167,9 +167,9 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
             }
         });
         Debug.Printf("currentLocationInfo subscribing", new Object[0]);
-        this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe((Subscribable<SubscriptionSingleKey, CurrentLocationInfo>) SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.2
+        this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.2
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ActiveChatsListAdapter) this).m440x73a4270f((CurrentLocationInfo) obj);
+                ActiveChatsListAdapter.this.m440x73a4270f((CurrentLocationInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -177,9 +177,9 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
                 $m$0(obj);
             }
         });
-        this.localChatUnreadCountSubscription = userManager.getChatterList().getActiveChattersManager().getUnreadCounts().subscribe((SubscriptionPool<ChatterID, UnreadMessageInfo>) this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.3
+        this.localChatUnreadCountSubscription = userManager.getChatterList().getActiveChattersManager().getUnreadCounts().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.3
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ActiveChatsListAdapter) this).m441x73a43657((UnreadMessageInfo) obj);
+                ActiveChatsListAdapter.this.m441x73a43657((UnreadMessageInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -187,9 +187,9 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
                 $m$0(obj);
             }
         });
-        this.localVoiceChatSubscription = userManager.getVoiceChatInfo().subscribe((Subscribable<ChatterID, VoiceChatInfo>) this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.4
+        this.localVoiceChatSubscription = userManager.getVoiceChatInfo().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.4
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ActiveChatsListAdapter) this).m442x73a44176((VoiceChatInfo) obj);
+                ActiveChatsListAdapter.this.m442x73a44176((VoiceChatInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
