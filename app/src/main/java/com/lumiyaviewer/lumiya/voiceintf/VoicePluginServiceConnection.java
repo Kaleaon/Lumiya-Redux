@@ -89,11 +89,10 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     private final Handler fromPluginHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection.1
 
         /* renamed from: -com-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f611x5636931c = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$voice$common$VoicePluginMessageType;
+        private /* synthetic */ int[] f611x5636931c = null;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m916xcae206c0() {
+        private /* synthetic */ int[] m916xcae206c0() {
             if (f611x5636931c != null) {
                 return f611x5636931c;
             }
@@ -208,7 +207,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
             notificationManager.cancel(str, 1001);
             this.incomingCallNotificationTags.remove(str);
         } else {
-            Iterator<T> it = this.incomingCallNotificationTags.iterator();
+            Iterator<String> it = this.incomingCallNotificationTags.iterator();
             while (it.hasNext()) {
                 notificationManager.cancel((String) it.next(), 1001);
             }

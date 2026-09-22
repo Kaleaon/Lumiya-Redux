@@ -292,11 +292,11 @@ public final class DrawableGeometry implements GLCleanable {
         this.vertexArrayObject = null;
     }
 
-    final void GLDrawAll10(RenderContext renderContext) {
+    public final void GLDrawAll10(RenderContext renderContext) {
         this.IndexBuffer.DrawElements(renderContext, 4, this.IndexCount, 5123, 0);
     }
 
-    final void GLDrawAll20(RenderContext renderContext) {
+    public final void GLDrawAll20(RenderContext renderContext) {
         if (!renderContext.hasGL30) {
             this.IndexBuffer.DrawElements20(4, this.IndexCount, 5123, 0);
         } else if (this.vertexArrayObject != null) {
@@ -306,7 +306,7 @@ public final class DrawableGeometry implements GLCleanable {
         }
     }
 
-    final void GLDrawFace10(RenderContext renderContext, int i, GLLoadableBuffer gLLoadableBuffer) {
+    public final void GLDrawFace10(RenderContext renderContext, int i, GLLoadableBuffer gLLoadableBuffer) {
         int i2 = i * 3;
         if (!this.facesCombined) {
             gLLoadableBuffer.Bind(renderContext, 32884, 3, 5126, 24, this.FaceVertexStartsCounts[i * 2] * 24);
@@ -316,7 +316,7 @@ public final class DrawableGeometry implements GLCleanable {
         this.IndexBuffer.DrawElements(renderContext, 4, this.FaceIndexStartsCounts[i2 + 2], 5123, this.FaceIndexStartsCounts[i2 + 1] * 2);
     }
 
-    final void GLDrawFace20(RenderContext renderContext, int i) {
+    public final void GLDrawFace20(RenderContext renderContext, int i) {
         int i2 = i * 3;
         if (renderContext.hasGL30) {
             if (this.vertexArrayObject != null) {

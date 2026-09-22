@@ -45,13 +45,13 @@ public class ChatLayoutManager extends LinearLayoutManager {
     public ChatLayoutManager(Context context, int i, boolean z) {
         super(context, i, z);
         this.isFast = false;
-        this.smoothScroller = new SmoothScroller(this, context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.1
+        this.smoothScroller = new SmoothScroller(context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.1
             @Override // com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.SmoothScroller
             protected float getScrollMs() {
                 return ChatLayoutManager.SMOOTH_SCROLL_SPEED;
             }
         };
-        this.fastSmoothScroller = new SmoothScroller(this, context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.2
+        this.fastSmoothScroller = new SmoothScroller(context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.2
             @Override // com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.SmoothScroller
             protected float getScrollMs() {
                 return 20.0f;

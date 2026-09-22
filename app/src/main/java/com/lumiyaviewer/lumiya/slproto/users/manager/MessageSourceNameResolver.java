@@ -70,7 +70,7 @@ public class MessageSourceNameResolver {
         }
 
         public void subscribe() {
-            this.subscription = MessageSourceNameResolver.this.userManager.getUserNames().subscribe((Subscribable<UUID, UserName>) this.userUUID, MessageSourceNameResolver.this.dbExecutor, MessageSourceNameResolver.this.onUserName);
+            this.subscription = MessageSourceNameResolver.this.userManager.getUserNames().subscribe(this.userUUID, MessageSourceNameResolver.this.dbExecutor, MessageSourceNameResolver.this.onUserName);
         }
 
         public void unsubscribe() {

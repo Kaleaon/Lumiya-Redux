@@ -38,7 +38,7 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
     private final AtomicReference<String> gotChatterName = new AtomicReference<>();
     private final ChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$D705oXX7BTh_Xc4P_mIDvS9cOZI
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-            ((ExportChatHistoryTask) this).m431x863366ea(chatterNameRetriever);
+            ExportChatHistoryTask.this.m431x863366ea(chatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -78,7 +78,7 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
     public ExportResult doInBackground(ChatterID... chatterIDArr) {
         ChatterID chatterID;
         UserManager userManager;
-        File file;
+        File file = null;
         FileOutputStream fileOutputStream;
         LazyList<ChatMessage> lazyList;
         if (chatterIDArr.length != 1 || (userManager = (chatterID = chatterIDArr[0]).getUserManager()) == null) {
@@ -145,9 +145,6 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                         fileOutputStream = null;
                         lazyList = null;
                     }
-                } catch (IOException e) {
-                    Debug.Warning(e);
-                    file = null;
                 } catch (SecurityException e2) {
                     Debug.Warning(e2);
                     file = null;

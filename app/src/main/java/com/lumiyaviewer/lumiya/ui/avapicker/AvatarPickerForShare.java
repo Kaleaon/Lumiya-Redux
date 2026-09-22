@@ -43,7 +43,7 @@ public class AvatarPickerForShare extends AvatarPickerFragment {
         }
         this.inventoryFragmentHelper.ConfirmShareInventoryEntry((SLInventoryEntry) arguments.getParcelable(INVENTORY_ENTRY_KEY), chatterID, str, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.avapicker.-$Lambda$GxFBFkg7vdmipTAXKE3eB-6HqSs
             private final /* synthetic */ void $m$0() {
-                ((AvatarPickerForShare) this).m397xf146b8d7();
+                AvatarPickerForShare.this.m397xf146b8d7();
             }
 
             @Override // java.lang.Runnable

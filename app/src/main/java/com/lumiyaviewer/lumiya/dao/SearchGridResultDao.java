@@ -53,8 +53,9 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         sQLiteStatement.bindString(4, searchGridResult.getItemUUID().toString());
         sQLiteStatement.bindString(5, searchGridResult.getItemName());
         sQLiteStatement.bindLong(6, searchGridResult.getLevensteinDistance());
-        if (searchGridResult.getMemberCount() != null) {
-            sQLiteStatement.bindLong(7, r0.intValue());
+        Integer memberCount = searchGridResult.getMemberCount();
+        if (memberCount != null) {
+            sQLiteStatement.bindLong(7, memberCount.intValue());
         }
     }
 

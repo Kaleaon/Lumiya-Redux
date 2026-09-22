@@ -153,7 +153,7 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
     @Override // android.os.AsyncTask
     public void onPostExecute(UploadImageResult uploadImageResult) {
         UUID findSpecialFolder;
-        super.onPostExecute((UploadImageAsyncTask) uploadImageResult);
+        super.onPostExecute(uploadImageResult);
         if (this.progressDialog != null) {
             this.progressDialog.cancel();
             this.progressDialog = null;

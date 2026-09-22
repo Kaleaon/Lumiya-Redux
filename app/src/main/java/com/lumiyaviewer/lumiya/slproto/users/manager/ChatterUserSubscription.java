@@ -26,7 +26,7 @@ class ChatterUserSubscription extends ChatterSubscription {
         super(sortedChatterList, chatterIDUser, userManager);
         this.nameSubscription = userManager.getUserNames().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ChatterUserSubscription) this).m309x593f85a7((UserName) obj);
+                ChatterUserSubscription.this.m309x593f85a7((UserName) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -36,7 +36,7 @@ class ChatterUserSubscription extends ChatterSubscription {
         });
         this.onlineStatusSubscription = userManager.getChatterList().getFriendManager().getOnlineStatus().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o.1
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ChatterUserSubscription) this).m310x593f85a8((Boolean) obj);
+                ChatterUserSubscription.this.m310x593f85a8((Boolean) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -46,7 +46,7 @@ class ChatterUserSubscription extends ChatterSubscription {
         });
         this.distanceSubscription = userManager.getChatterList().getDistanceToUser().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o.2
             private final /* synthetic */ void $m$0(Object obj) {
-                ((ChatterUserSubscription) this).m311x593f85a9((Float) obj);
+                ChatterUserSubscription.this.m311x593f85a9((Float) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

@@ -46,7 +46,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
     RecyclerView userListView;
     private final SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$0SrW7eOJ5Pm_SVTDQOmxGjUXtco
         private final /* synthetic */ void $m$0(Object obj) {
-            ((NearbyPeopleMinimapFragment) this).m655xe5efdfa3((ImmutableList) obj);
+            NearbyPeopleMinimapFragment.this.m655xe5efdfa3((ImmutableList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

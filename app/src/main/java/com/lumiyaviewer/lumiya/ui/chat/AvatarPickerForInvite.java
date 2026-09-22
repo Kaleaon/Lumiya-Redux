@@ -135,7 +135,7 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
         if (groupRoleDataReply != null && groupProfileReply != null) {
             for (GroupRoleDataReply.RoleData roleData : groupRoleDataReply.RoleData_Fields) {
                 if ((z || (z3 && (roleData.RoleID.equals(groupProfileReply.GroupData_Field.OwnerRole) ^ true)) || roleData.RoleID.equals(UUIDPool.ZeroUUID)) ? true : z2 ? hashSet.contains(roleData.RoleID) : false) {
-                    builder.add((ImmutableList.Builder) new RoleEntry(roleData.RoleID, SLMessage.stringFromVariableOEM(roleData.Title), null));
+                    builder.add(new RoleEntry(roleData.RoleID, SLMessage.stringFromVariableOEM(roleData.Title), null));
                 }
             }
         }

@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 public class CloudSyncServiceConnection implements ServiceConnection {
 
     /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-LogSyncStatus$StatusSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f229x7f80e748 = null;
+    private /* synthetic */ int[] f229x7f80e748 = null;
     private static final int REQUIRED_PLUGIN_VERSION = 1;
     private final Context context;
 
@@ -48,11 +48,10 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     private final Handler fromPluginHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.sync.CloudSyncServiceConnection.1
 
         /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-MessageTypeSwitchesValues, reason: not valid java name */
-        private static final /* synthetic */ int[] f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues = null;
-        final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$cloud$common$MessageType;
+        private /* synthetic */ int[] f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues = null;
 
         /* renamed from: -getcom-lumiyaviewer-lumiya-cloud-common-MessageTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m394x26663ee2() {
+        private /* synthetic */ int[] m394x26663ee2() {
             if (f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues != null) {
                 return f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues;
             }
@@ -112,7 +111,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     private final Messenger fromPluginMessenger = new Messenger(this.fromPluginHandler);
 
     /* renamed from: -getcom-lumiyaviewer-lumiya-cloud-common-LogSyncStatus$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m389xe2fcf3ec() {
+    private /* synthetic */ int[] m389xe2fcf3ec() {
         if (f229x7f80e748 != null) {
             return f229x7f80e748;
         }
@@ -194,7 +193,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     public void disconnect() {
         this.mainThreadHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.sync.-$Lambda$WmOOQW2pFqpMpXOyAP45N3kh7mE
             private final /* synthetic */ void $m$0() {
-                ((CloudSyncServiceConnection) this).m393x59c24a30();
+                CloudSyncServiceConnection.this.m393x59c24a30();
             }
 
             @Override // java.lang.Runnable

@@ -176,7 +176,7 @@ public class MinimapView extends View {
         }
         float applyDimension = TypedValue.applyDimension(1, USER_MARK_TOUCH_SLACK, getResources().getDisplayMetrics());
         float f3 = 0.0f;
-        Iterator<T> it = this.userLocations.userPositions.entrySet().iterator();
+        Iterator<?> it = this.userLocations.userPositions.entrySet().iterator();
         while (true) {
             uuid = uuid2;
             float f4 = f3;
@@ -242,7 +242,7 @@ public class MinimapView extends View {
             this.bitmapSrcRect.set(0, 0, this.minimapBitmap.getWidth(), this.minimapBitmap.getHeight());
             canvas.drawBitmap(this.minimapBitmap, this.bitmapSrcRect, this.bitmapDstRect, this.bitmapPaint);
             if (this.userLocations != null) {
-                Iterator<T> it = this.userLocations.userPositions.entrySet().iterator();
+                Iterator<?> it = this.userLocations.userPositions.entrySet().iterator();
                 while (it.hasNext()) {
                     Map.Entry entry = (Map.Entry) it.next();
                     drawUserMark(((SLMinimap.UserLocation) entry.getValue()).location, canvas, this.userMarkPaint, this.bitmapDstRect, false, Float.NaN, Objects.equal(this.selectedUser, entry.getKey()));

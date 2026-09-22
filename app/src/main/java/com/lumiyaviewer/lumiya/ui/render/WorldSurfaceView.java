@@ -172,7 +172,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void setDisplayedHUDid(final int i) {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.3
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m802lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5461(i);
+                WorldSurfaceView.this.m802lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5461(i);
             }
 
             @Override // java.lang.Runnable
@@ -189,7 +189,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void setDrawPickedObject(final SLObjectInfo sLObjectInfo) {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.2
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m805lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5904((SLObjectInfo) sLObjectInfo);
+                WorldSurfaceView.this.m805lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5904((SLObjectInfo) sLObjectInfo);
             }
 
             @Override // java.lang.Runnable
@@ -208,7 +208,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void setHUDOffset(final float f, final float f2) {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.5
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m804lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5758(f, f2);
+                WorldSurfaceView.this.m804lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5758(f, f2);
             }
 
             @Override // java.lang.Runnable
@@ -221,7 +221,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void setHUDScaleFactor(final float f) {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.4
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m803lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5602(f);
+                WorldSurfaceView.this.m803lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5602(f);
             }
 
             @Override // java.lang.Runnable
@@ -240,7 +240,7 @@ public class WorldSurfaceView extends GLSurfaceView {
             this.ownAvatarHidden = z;
             queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.7
                 private final /* synthetic */ void $m$0() {
-                    ((WorldSurfaceView) this).m806lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6157(z);
+                    WorldSurfaceView.this.m806lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6157(z);
                 }
 
                 @Override // java.lang.Runnable
@@ -254,7 +254,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void takeScreenshot() {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.1
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m808lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6612();
+                WorldSurfaceView.this.m808lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6612();
             }
 
             @Override // java.lang.Runnable
@@ -267,7 +267,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     void touchHUD(final float f, final float f2) {
         queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.6
             private final /* synthetic */ void $m$0() {
-                ((WorldSurfaceView) this).m807lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6395(f, f2);
+                WorldSurfaceView.this.m807lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6395(f, f2);
             }
 
             @Override // java.lang.Runnable

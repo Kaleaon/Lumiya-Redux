@@ -24,13 +24,13 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_1065, reason: not valid java name */
-    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(Object obj, Throwable th) {
+    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(K obj, Throwable th) {
         this.toHandler.onResultError(obj, th);
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_796, reason: not valid java name */
-    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(Object obj, Object obj2) {
+    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(K obj, Tin obj2) {
         this.toHandler.onResultData(obj, onData(obj2));
     }
 
@@ -39,16 +39,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
     @Override // com.lumiyaviewer.lumiya.react.ResultHandler
     public void onResultData(@Nonnull final K k, final Tin tin) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$rbwdofHzZNihI1HZoTkj8gWFECo
-                private final /* synthetic */ void $m$0() {
-                    ((ResultOperator) this).m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(k, tin);
-                }
-
-                @Override // java.lang.Runnable
-                public final void run() {
-                    $m$0();
-                }
-            });
+            this.executor.execute(() -> m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(k, tin));
         } else {
             this.toHandler.onResultData(k, onData(tin));
         }
@@ -57,16 +48,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
     @Override // com.lumiyaviewer.lumiya.react.ResultHandler
     public void onResultError(@Nonnull final K k, final Throwable th) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$rbwdofHzZNihI1HZoTkj8gWFECo.1
-                private final /* synthetic */ void $m$0() {
-                    ((ResultOperator) this).m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(k, (Throwable) th);
-                }
-
-                @Override // java.lang.Runnable
-                public final void run() {
-                    $m$0();
-                }
-            });
+            this.executor.execute(() -> m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(k, th));
         } else {
             this.toHandler.onResultError(k, th);
         }

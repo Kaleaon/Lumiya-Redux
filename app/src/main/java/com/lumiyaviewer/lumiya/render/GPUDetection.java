@@ -44,7 +44,7 @@ public class GPUDetection {
         } else {
             this.detectedVersion = Optional.fromNullable(Strings.emptyToNull(matcher.group(1)));
             try {
-                i = Integer.parseInt(this.detectedVersion.or((Optional<String>) ""));
+                i = Integer.parseInt(this.detectedVersion.or(""));
             } catch (NumberFormatException e) {
                 i = -1;
             }

@@ -243,7 +243,7 @@ public class DetailsActivity extends ConnectedActivity {
         super.onRequestPermissionsResult(i, strArr, iArr);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments != null) {
-            Iterator<T> it = fragments.iterator();
+            Iterator<?> it = fragments.iterator();
             while (it.hasNext()) {
                 ((Fragment) it.next()).onRequestPermissionsResult(i, strArr, iArr);
             }

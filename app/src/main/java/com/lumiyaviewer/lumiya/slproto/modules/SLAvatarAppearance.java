@@ -374,8 +374,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         if ((areWearablesReady ? this.cofReady : false) && (data = this.currentOutfitFolder.getData()) != null && (folder = data.getFolder()) != null && this.needUpdateCOF.getAndSet(false)) {
             this.currentCofInventoryVersion = folder.version;
             LinkedList linkedList = new LinkedList();
-            HashMap hashMap = new HashMap();
-            HashMap hashMap2 = new HashMap();
+            HashMap<UUID, SLWearable> hashMap = new HashMap<>();
+            HashMap<UUID, String> hashMap2 = new HashMap<>();
             HashSet hashSet = new HashSet();
             for (SLWearable sLWearable : this.wornWearables.values()) {
                 if (!sLWearable.getIsFailed()) {
@@ -565,7 +565,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z5 = false;
         RLVController rLVController = this.agentCircuit.getModules().rlvController;
         HashBasedTable create = HashBasedTable.create(this.wornWearables);
-        Iterator<AvatarAppearance.WearableData> it = list.iterator();
+        Iterator<SLInventoryEntry> it = list.iterator();
         while (true) {
             z2 = z5;
             if (!it.hasNext()) {

@@ -49,13 +49,11 @@ public class UserProfileFragment extends UserFunctionsFragment {
         public Fragment getItem(int i) {
             ProfileTab profileTab = ProfileTab.valuesCustom()[i];
             try {
-                Fragment fragment = (Fragment) profileTab.tabClass.newInstance();
+                Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
                 fragment.setArguments(UserProfileFragment.makeSelection(UserProfileFragment.this.chatterID));
                 UserProfileFragment.this.activeFragments.put(profileTab, new WeakReference(fragment));
                 return fragment;
-            } catch (IllegalAccessException e) {
-                return null;
-            } catch (InstantiationException e2) {
+            } catch (ReflectiveOperationException e) {
                 return null;
             }
         }
@@ -112,7 +110,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
 
     @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
     protected void onShowUser(@Nullable ChatterID chatterID) {
-        Iterator<T> it = this.activeFragments.values().iterator();
+        Iterator<?> it = this.activeFragments.values().iterator();
         while (it.hasNext()) {
             ComponentCallbacks componentCallbacks = (Fragment) ((WeakReference) it.next()).get();
             if (componentCallbacks instanceof ReloadableFragment) {

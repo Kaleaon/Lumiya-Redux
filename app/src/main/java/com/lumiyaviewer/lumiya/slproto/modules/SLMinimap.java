@@ -212,14 +212,10 @@ public class SLMinimap extends SLModule {
         int length = bArr.length / 64;
         int[] iArr = new int[length * 4 * 64 * 4];
         int i2 = 0;
-        int i3 = 0;
-        while (i3 < length) {
+        for (int i3 = 0; i3 < length; i3++) {
             int i4 = i3 + (parcelOverlay.ParcelData_Field.SequenceID * 16);
-            int i5 = 0;
-            while (true) {
-                int i6 = i5;
-                i = i2;
-                if (i6 < 64) {
+            for (int i6 = 0; i6 < 64; i6++) {
+                    i = i2;
                     int i7 = 0;
                     switch ((byte) (bArr[i] & 15)) {
                         case 0:
@@ -260,28 +256,14 @@ public class SLMinimap extends SLModule {
                         }
                         i7 = Color.rgb(i8, green, blue);
                     }
-                    int i10 = 0;
-                    while (true) {
-                        int i11 = i10;
-                        if (i11 < 4) {
-                            int i12 = ((((length * 4) - 1) - ((i3 * 4) + i11)) * 256) + (i6 * 4);
-                            int i13 = 0;
-                            while (true) {
-                                int i14 = i13;
-                                if (i14 < 4) {
-                                    iArr[i12 + i14] = ((i11 != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (i14 != 0 || i6 == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
-                                    i13 = i14 + 1;
-                                }
-                            }
-                            i10 = i11 + 1;
+                    for (int pixelY = 0; pixelY < 4; pixelY++) {
+                        int rowOffset = ((((length * 4) - 1) - ((i3 * 4) + pixelY)) * 256) + (i6 * 4);
+                        for (int pixelX = 0; pixelX < 4; pixelX++) {
+                            iArr[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || i6 == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
                         }
                     }
                     i2 = i + 1;
-                    i5 = i6 + 1;
-                }
             }
-            i3++;
-            i2 = i;
         }
         this.minimapBitmap = new MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, iArr);
         if (this.userManager != null) {

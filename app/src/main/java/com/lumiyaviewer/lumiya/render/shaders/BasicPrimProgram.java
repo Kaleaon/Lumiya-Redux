@@ -24,7 +24,7 @@ public class BasicPrimProgram extends ShaderProgram {
     }
 
     @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
-    public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) {
+    public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
 

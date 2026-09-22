@@ -70,7 +70,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.clear_transaction_log_message).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$N_xrT8AwWQ2OjPw50fSCa4Lhb58.1
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((TransactionLogFragment) this).m675xf57d8a84(dialogInterface, i);
+                TransactionLogFragment.this.m675xf57d8a84(dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

@@ -49,7 +49,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$TbI0imFFmZKCR9nUgEGSvi-_8Q0.2
         private final /* synthetic */ void $m$0(Object obj) {
-            ((GroupRoleMembersFragment) this).m504x9104b852((UUID) obj);
+            GroupRoleMembersFragment.this.m504x9104b852((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -223,7 +223,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
     public void removeMemberFromRole(final ChatterID.ChatterIDUser chatterIDUser) {
         new AlertDialog.Builder(getContext()).setTitle(R.string.remove_member_from_role_confirm).setPositiveButton(R.string.yes_remove, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$TbI0imFFmZKCR9nUgEGSvi-_8Q0.3
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GroupRoleMembersFragment) this).m505xdf854965((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
+                GroupRoleMembersFragment.this.m505xdf854965((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener
@@ -265,7 +265,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
         ((LoadingLayout) inflate.findViewById(R.id.loading_layout)).setSwipeRefreshLayout((SwipeRefreshLayout) inflate.findViewById(R.id.swipe_refresh_layout));
         inflate.findViewById(R.id.add_role_member_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$TbI0imFFmZKCR9nUgEGSvi-_8Q0.1
             private final /* synthetic */ void $m$0(View view) {
-                ((GroupRoleMembersFragment) this).m506xbce4ac59(view);
+                GroupRoleMembersFragment.this.m506xbce4ac59(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -295,7 +295,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
         if ((256 & myGroupPowers) != 0) {
             this.canAddMembers = true;
         } else if ((128 & myGroupPowers) != 0 && (data = this.groupTitles.getData()) != null) {
-            Iterator<T> it = data.GroupData_Fields.iterator();
+            Iterator<?> it = data.GroupData_Fields.iterator();
             while (true) {
                 if (!it.hasNext()) {
                     z = false;

@@ -100,7 +100,7 @@ public final class SLChatTextBoxDialog extends SLChatDialogEvent {
     public void showDialog(Context context, final UserManager userManager) {
         new TextFieldDialogBuilder(context).setTitle(this.text).setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.-$Lambda$Iyj6QpN-ZLoXueXenKuJvDVzcmI.1
             private final /* synthetic */ void $m$0(String str) {
-                ((SLChatTextBoxDialog) this).m156xe7f9f620((UserManager) userManager, str);
+                SLChatTextBoxDialog.this.m156xe7f9f620((UserManager) userManager, str);
             }
 
             @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder.OnTextEnteredListener
@@ -109,7 +109,7 @@ public final class SLChatTextBoxDialog extends SLChatDialogEvent {
             }
         }).setOnTextCancelledListener(new TextFieldDialogBuilder.OnTextCancelledListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.-$Lambda$Iyj6QpN-ZLoXueXenKuJvDVzcmI
             private final /* synthetic */ void $m$0() {
-                ((SLChatTextBoxDialog) this).m157xe7f9f9c3((UserManager) userManager);
+                SLChatTextBoxDialog.this.m157xe7f9f9c3((UserManager) userManager);
             }
 
             @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder.OnTextCancelledListener

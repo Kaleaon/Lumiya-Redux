@@ -282,7 +282,7 @@ public class SLVoice extends SLModule {
             if (this.capURL != null) {
                 new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.1
                     private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                        SLVoice.this.m261com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref1(lLSDNode);
+                        SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode);
                     }
 
                     @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener

@@ -96,10 +96,11 @@ public class ButteryProgressBar extends View {
             this.mShadow.draw(canvas);
             float floatValue = ((Float) this.mAnimator.getAnimatedValue()).floatValue();
             int width = getWidth() >> (this.mSegmentCount - 1);
+            int viewWidth = getWidth();
             int i = 0;
             while (i < this.mSegmentCount) {
-                float f = floatValue * (r8 >> (i + 1));
-                canvas.drawRect((f + this.mSolidBarDetentWidth) - width, 0.0f, (i == 0 ? r8 + width : 2.0f * f) - width, this.mSolidBarHeight, this.mPaint);
+                float f = floatValue * (viewWidth >> (i + 1));
+                canvas.drawRect((f + this.mSolidBarDetentWidth) - width, 0.0f, (i == 0 ? viewWidth + width : 2.0f * f) - width, this.mSolidBarHeight, this.mPaint);
                 i++;
             }
         }

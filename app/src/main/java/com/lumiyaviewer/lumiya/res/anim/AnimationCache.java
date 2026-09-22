@@ -165,7 +165,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             if (subscription != null) {
                 subscription.unsubscribe();
             }
-            super.completeRequest((DownloadRequest) animationData);
+            super.completeRequest(animationData);
         }
 
         @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
@@ -238,11 +238,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
         return InstanceHolder.Instance;
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
-    protected /* bridge */ /* synthetic */ ResourceRequest CreateNewRequest(Object obj, ResourceManager resourceManager) {
-        return CreateNewRequest((UUID) obj, (ResourceManager<UUID, AnimationData>) resourceManager);
-    }
-
+    @Override
     protected ResourceRequest<UUID, AnimationData> CreateNewRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager) {
         String uuid2 = uuid.toString();
         return this.assetAnimations.contains(uuid2) ? new AssetLoadRequest(uuid, resourceManager, uuid2) : new DownloadRequest(uuid, resourceManager);

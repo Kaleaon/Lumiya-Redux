@@ -110,7 +110,7 @@ public class ObjectPayDialog {
         final PayInfo payInfo = sLObjectProfileData.payInfo();
         if (payInfo != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(context.getString(R.string.object_pay_dialog_caption, sLObjectProfileData.name().or((Optional<String>) context.getString(R.string.name_loading_title))));
+            builder.setTitle(context.getString(R.string.object_pay_dialog_caption, sLObjectProfileData.name().or(context.getString(R.string.name_loading_title))));
             builder.setCancelable(true);
             builder.setView(R.layout.object_pay_dialog);
             final AlertDialog create = builder.create();

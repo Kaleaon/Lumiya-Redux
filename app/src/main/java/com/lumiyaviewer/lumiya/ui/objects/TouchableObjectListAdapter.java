@@ -38,8 +38,9 @@ class TouchableObjectListAdapter extends BaseAdapter {
 
     @Override // android.widget.Adapter
     public long getItemId(int i) {
-        if (getItem(i) != null) {
-            return r0.localID;
+        SLObjectInfo item = getItem(i);
+        if (item != null) {
+            return item.localID;
         }
         return -1L;
     }

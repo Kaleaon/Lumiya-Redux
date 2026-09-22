@@ -81,7 +81,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
     private final SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ParcelPropertiesFragment) this).m512x3c670cfa((Boolean) obj);
+            ParcelPropertiesFragment.this.m512x3c670cfa((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -91,7 +91,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.4
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ParcelPropertiesFragment) this).m513x3c670cfb((SLAgentCircuit) obj);
+            ParcelPropertiesFragment.this.m513x3c670cfb((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -165,7 +165,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     private void updateSimOptions() {
         if (this.unbinder != null) {
             SLAgentCircuit data = this.agentCircuit.getData();
-            this.simRestartCardView.setVisibility(data != null ? data.getIsEstateManager() : false ? 0 : 8);
+            this.simRestartCardView.setVisibility(data != null && data.getIsEstateManager() ? 0 : 8);
         }
     }
 
@@ -240,7 +240,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         if (this.agentCircuit.getData() != null) {
             new AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.2
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                    ((ParcelPropertiesFragment) this).m515x74bdcccf(dialogInterface, i);
+                    ParcelPropertiesFragment.this.m515x74bdcccf(dialogInterface, i);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -266,7 +266,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         if (data != null) {
             new AlertDialog.Builder(getContext()).setMessage(R.string.restart_region_confirm_title).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.5
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                    ((ParcelPropertiesFragment) this).m514x74bd5c0c((SLAgentCircuit) data, dialogInterface, i);
+                    ParcelPropertiesFragment.this.m514x74bd5c0c((SLAgentCircuit) data, dialogInterface, i);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener

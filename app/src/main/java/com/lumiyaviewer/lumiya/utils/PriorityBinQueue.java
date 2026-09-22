@@ -59,7 +59,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.Collection
     public boolean addAll(Collection<? extends T> collection) {
         boolean z = false;
-        Iterator<?> it = collection.iterator();
+        Iterator<? extends T> it = collection.iterator();
         while (it.hasNext()) {
             z |= add(it.next());
         }

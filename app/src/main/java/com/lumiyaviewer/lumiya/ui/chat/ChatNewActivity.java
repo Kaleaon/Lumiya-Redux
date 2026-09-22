@@ -30,7 +30,7 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
     private Subscription<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfoSubscription;
     private final Subscription.OnData<CurrentLocationInfo> onCurrentLocation = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$NRCeOQv-yeRY8P8t9O3BV_sPyX4
         private final /* synthetic */ void $m$0(Object obj) {
-            ((ChatNewActivity) this).m424lambda$com_lumiyaviewer_lumiya_ui_chat_ChatNewActivity_4384((CurrentLocationInfo) obj);
+            ChatNewActivity.this.m424lambda$com_lumiyaviewer_lumiya_ui_chat_ChatNewActivity_4384((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -105,7 +105,7 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
         if (userManager != null) {
-            this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe((Subscribable<SubscriptionSingleKey, CurrentLocationInfo>) SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), this.onCurrentLocation);
+            this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), this.onCurrentLocation);
         }
         Intent intent = getIntent();
         if (intent.hasExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY)) {

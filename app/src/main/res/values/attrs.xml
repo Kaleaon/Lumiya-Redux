@@ -246,4 +246,32 @@
     <attr name="titleTextColor" format="color" />
     <attr name="subtitleTextColor" format="color" />
     <attr name="theme" format="reference" />
+    <declare-styleable name="LoadingLayout">
+        <attr name="withButteryProgressBar" />
+    </declare-styleable>
+    <declare-styleable name="ButteryProgressBar">
+        <attr name="barColor" />
+        <attr name="barHeight" />
+        <attr name="detentWidth" />
+    </declare-styleable>
+    <declare-styleable name="RingtonePreference">
+        <attr name="defaultRawResource" />
+    </declare-styleable>
+    <declare-styleable name="PreferenceSubPage">
+        <attr name="pageResource" />
+        <attr name="pageNotificationDetails" />
+        <attr name="notificationType" />
+    </declare-styleable>
+    <declare-styleable name="DashedSeparatorView">
+        <attr name="dashedSeparatorColor" />
+    </declare-styleable>
+    <declare-styleable name="OnlineIndicatorView">
+        <attr name="onlineIndicatorColor" />
+        <attr name="innerRingThickness" />
+        <attr name="outerRingGap" />
+        <attr name="outerRingThickness" />
+    </declare-styleable>
+    <declare-styleable name="InsetColoringLayout">
+        <attr name="backgroundColor" />
+    </declare-styleable>
     </resources>

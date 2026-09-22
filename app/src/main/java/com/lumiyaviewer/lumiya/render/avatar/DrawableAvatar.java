@@ -201,12 +201,13 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         DrawableObject drawableObject;
         DrawableHUD drawableHUD;
         int i = 0;
-        ArrayListMultimap create = ArrayListMultimap.create();
+        ArrayListMultimap<Integer, DrawableObject> create = ArrayListMultimap.create();
         Set newSetFromMap = Collections.newSetFromMap(new IdentityHashMap());
         int i2 = this.displayedHUDid.get();
         LinkedTreeNode<SLObjectInfo> firstChild = this.avatarObject.treeNode.getFirstChild();
         DrawableHUD drawableHUD2 = null;
         while (firstChild != null) {
+            drawableHUD = drawableHUD2;
             SLObjectInfo dataObject = firstChild.getDataObject();
             if (!dataObject.isDead) {
                 int i3 = dataObject.attachmentID;
@@ -223,10 +224,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
                         }
                     }
                 }
-                firstChild = firstChild.getNextChild();
-                drawableHUD2 = drawableHUD;
             }
-            drawableHUD = drawableHUD2;
             firstChild = firstChild.getNextChild();
             drawableHUD2 = drawableHUD;
         }

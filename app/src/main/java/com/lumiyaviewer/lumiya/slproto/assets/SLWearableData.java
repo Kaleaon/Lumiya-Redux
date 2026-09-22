@@ -87,15 +87,7 @@ public class SLWearableData {
                             if (i >= split3.length) {
                                 throw new WearableFormatException();
                             }
-                            try {
-                                try {
-                                    split = split3[i].trim().split("\\s+");
-                                } catch (WearableFormatException e) {
-                                    Debug.Warning(e);
-                                }
-                            } catch (NumberFormatException e2) {
-                                Debug.Warning(e2);
-                            }
+                            split = split3[i].trim().split("\\s+");
                             if (split.length < 2) {
                                 throw new WearableFormatException();
                             }
@@ -110,15 +102,7 @@ public class SLWearableData {
                             if (i >= split3.length) {
                                 throw new WearableFormatException();
                             }
-                            try {
-                                try {
-                                    split2 = split3[i].trim().split("\\s+");
-                                } catch (WearableFormatException e3) {
-                                    Debug.Warning(e3);
-                                }
-                            } catch (NumberFormatException e4) {
-                                Debug.Warning(e4);
-                            }
+                            split2 = split3[i].trim().split("\\s+");
                             if (split2.length < 2) {
                                 throw new WearableFormatException();
                             }

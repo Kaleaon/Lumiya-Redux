@@ -23,7 +23,7 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     }
 
     private void checkConsistency() {
-        Iterator<T> it = this.chunks.iterator();
+        Iterator<List<E>> it = this.chunks.iterator();
         int i = 0;
         while (it.hasNext()) {
             i = ((List) it.next()).size() + i;
@@ -44,7 +44,7 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     private int replaceFoundElement(List<E> list, int i, @Nonnull E e) {
         list.set(i, e);
         int i2 = 0;
-        Iterator<T> it = this.chunks.iterator();
+        Iterator<List<E>> it = this.chunks.iterator();
         while (true) {
             int i3 = i2;
             if (!it.hasNext()) {
@@ -208,78 +208,13 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     }
 
     public int replaceElement(@Nonnull E e, @Nonnull Comparator<E> comparator) {
-        int i;
-        int i2;
-        char c;
-        if (this.chunks.isEmpty()) {
-            return -1;
-        }
-        char c2 = 0;
-        int size = this.chunks.size() / 2;
-        while (true) {
-            List<E> list = this.chunks.get(size);
-            if (!list.isEmpty()) {
-                E e2 = list.get(0);
-                E e3 = list.get(list.size() - 1);
-                int compare = comparator.compare(e, e2);
-                if (compare == 0) {
-                    return replaceFoundElement(list, 0, e);
-                }
-                if (compare < 0) {
-                    i2 = size - 1;
-                    if (i2 < 0) {
-                        return -1;
-                    }
-                    c = 65535;
-                    size = i2;
-                    c2 = c;
-                } else {
-                    int compare2 = comparator.compare(e, e3);
-                    if (compare2 == 0) {
-                        return replaceFoundElement(list, list.size() - 1, e);
-                    }
-                    if (compare2 <= 0) {
-                        return replaceElementInChunk(list, e, comparator);
-                    }
-                    i = size + 1;
-                    c2 = 1;
-                    if (i >= this.chunks.size()) {
-                        return -1;
-                    }
-                }
-            } else if (c2 < 0) {
-                i = size - 1;
-                if (i < 0) {
-                    return -1;
-                }
-            } else if (c2 > 0) {
-                i = size + 1;
-                if (i >= this.chunks.size()) {
-                    return -1;
-                }
-            } else {
-                int i3 = 0;
-                while (true) {
-                    if (i3 >= this.chunks.size()) {
-                        i = -1;
-                        break;
-                    }
-                    if (!this.chunks.get(i3).isEmpty()) {
-                        i = i3;
-                        break;
-                    }
-                    i3++;
-                }
-                if (i == -1) {
-                    return -1;
-                }
+        for (List<E> chunk : this.chunks) {
+            int index = Collections.binarySearch(chunk, e, comparator);
+            if (index >= 0) {
+                return replaceFoundElement(chunk, index, e);
             }
-            char c3 = c2;
-            i2 = i;
-            c = c3;
-            size = i2;
-            c2 = c;
         }
+        return -1;
     }
 
     @Override // java.util.AbstractCollection, java.util.Collection, java.util.List

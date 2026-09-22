@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 public abstract class ChatMessageSource {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static final /* synthetic */ int[] f151xbd9aa5ff = null;
+    private static /* synthetic */ int[] f151xbd9aa5ff = null;
 
     public enum ChatMessageSourceType {
         Unknown,

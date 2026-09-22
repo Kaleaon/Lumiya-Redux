@@ -128,11 +128,11 @@ public class SLMessageRouter {
     }
 
     public synchronized void unregisterHandler(Object obj) {
-        Iterator<T> it = this.messageHandlers.values().iterator();
+        Iterator<HandlerList> it = this.messageHandlers.values().iterator();
         while (it.hasNext()) {
             ((HandlerList) it.next()).deleteAll(obj);
         }
-        Iterator<T> it2 = this.eventQueueMessageHandlers.values().iterator();
+        Iterator<HandlerList> it2 = this.eventQueueMessageHandlers.values().iterator();
         while (it2.hasNext()) {
             ((HandlerList) it2.next()).deleteAll(obj);
         }

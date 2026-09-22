@@ -132,7 +132,7 @@ public class SyncManager {
     public void m367x9b8293a7(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.4
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m369x9b8293a9();
+                SyncManager.this.m370x9b8293aa();
             }
 
             @Override // java.lang.Runnable
@@ -282,7 +282,7 @@ public class SyncManager {
         this.needsStopSyncing.set(false);
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.5
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m366x9b8293a6();
+                SyncManager.this.m370x9b8293aa();
             }
 
             @Override // java.lang.Runnable
@@ -310,7 +310,7 @@ public class SyncManager {
         if (this.syncingEnabled.get()) {
             this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.7
                 private final /* synthetic */ void $m$0() {
-                    SyncManager.this.m368x9b8293a8();
+                    SyncManager.this.m370x9b8293aa();
                 }
 
                 @Override // java.lang.Runnable

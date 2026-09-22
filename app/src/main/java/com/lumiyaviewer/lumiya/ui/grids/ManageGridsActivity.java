@@ -95,7 +95,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage(getString(R.string.grid_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.grids.-$Lambda$mB53054QosfH2NBejFMOD8VFF4s.1
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                            ((ManageGridsActivity) this).m591x6c23f39d((GridList.GridInfo) gridInfo, dialogInterface, i);
+                            ManageGridsActivity.this.m591x6c23f39d((GridList.GridInfo) gridInfo, dialogInterface, i);
                         }
 
                         @Override // android.content.DialogInterface.OnClickListener

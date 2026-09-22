@@ -18,13 +18,13 @@ API-floor cleanup note: API 21–25 compatibility codepaths are being removed in
 | Resource merge (`mergeDebugResources`) | Passes after stripping ~306 `<attr>` declarations from `res/values/attrs.xml` that duplicate AndroidX / Material attrs. |
 | Resource compile (`processDebugResources`) | Passes. R class is generated correctly. |
 | Source migration | All `android.support.*` / `android.arch.*` imports in the Lumiya Java tree rewritten to their AndroidX equivalents (1,003 occurrences across 305 files). See `tools/migrate_androidx.py`. |
-| Java compile | **Partially failing** — see below. |
+| Java compile | **Passing** — `:app:compileDebugJavaWithJavac` succeeds after APK-guided recovery of the remaining JADX artifacts. |
 | `librawbuf.so`, `libopenjpeg.so`, `libgvr.so` packaging | Works (present under `src/main/jniLibs/<abi>/`). |
 
-## What is still failing
+## Resolved Java compilation blockers
 
-`./gradlew :app:compileDebugJavaWithJavac` reports ~100 errors across ~60
-files. Every remaining error is a jadx-decompilation artefact — none of them
+`./gradlew :app:compileDebugJavaWithJavac` previously reported errors across
+the recovered source tree. They were JADX-decompilation artefacts — none of them
 reflect a missing dependency, misrouted import or structural error in the
 project. Four patterns cover all of them:
 
@@ -149,3 +149,16 @@ Because these are all small local edits, the practical workflow is:
 
 ### Category 6 — completion tracking
 - ✅ This section is the canonical per-file completion log for downstream Kotlin/Room/VR cleanup tasks.
+
+## APK-guided compilation recovery (2026-09-22)
+
+- Downloaded and verified the shared `Lumiya_3.4.2.apk` source artifact, then
+  regenerated a current JADX reference tree for comparison with ambiguous
+  control flow and erased types. Source SHA-256:
+  `cc4bac60dc2df24f5e4e98be293ba4b9061ac237156afab6629793fa2ffc0c5d`.
+- Repaired the remaining synthetic callback, bridge method, switch-table,
+  generic collection, checked-exception, and unreachable-loop artifacts.
+- Restored custom view styleable groups omitted from the reconstructed resource
+  definitions.
+- `:app:compileDebugJavaWithJavac`, `:app:assembleDebug`, and debug unit-test
+  discovery now complete successfully.

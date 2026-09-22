@@ -78,11 +78,10 @@ public class ChatterList {
         new RequestFinalProcessor<ChatterListType, ImmutableList<ChatterDisplayData>>(this.chatterListPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ChatterList.3
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-manager-ChatterListTypeSwitchesValues, reason: not valid java name */
-            private static /* synthetic */ int[] f225x521388d7 = null;
-            final /* synthetic */ int[] $SWITCH_TABLE$com$lumiyaviewer$lumiya$slproto$users$manager$ChatterListType;
+            private /* synthetic */ int[] f225x521388d7 = null;
 
             /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-manager-ChatterListTypeSwitchesValues, reason: not valid java name */
-            private static /* synthetic */ int[] m306x49b0a37b() {
+            private /* synthetic */ int[] m306x49b0a37b() {
                 if (f225x521388d7 != null) {
                     return f225x521388d7;
                 }

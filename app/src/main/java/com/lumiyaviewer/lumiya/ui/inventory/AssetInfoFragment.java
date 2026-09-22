@@ -70,7 +70,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
     private ChatterNameRetriever lastOwnerNameRetriever = null;
     private final ChatterNameRetriever.OnChatterNameUpdated onNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.1
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-            ((AssetInfoFragment) this).m593xc7278eda(chatterNameRetriever);
+            AssetInfoFragment.this.m593xc7278eda(chatterNameRetriever);
         }
 
         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -162,7 +162,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
             dialog.findViewById(R.id.asset_permission_cb_everyone_modify).setEnabled(false);
             dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.3
                 private final /* synthetic */ void $m$0(View view) {
-                    ((AssetInfoFragment) this).m595xc7385836((Dialog) dialog, view);
+                    AssetInfoFragment.this.m595xc7385836((Dialog) dialog, view);
                 }
 
                 @Override // android.view.View.OnClickListener
@@ -491,7 +491,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
                     case R.id.inventory_item_delete_item /* 2131755813 */:
                         this.inventoryFragmentHelper.DeleteInventoryEntry(sLInventoryEntry, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.2
                             private final /* synthetic */ void $m$0() {
-                                ((AssetInfoFragment) this).m594xc73583d8();
+                                AssetInfoFragment.this.m594xc73583d8();
                             }
 
                             @Override // java.lang.Runnable

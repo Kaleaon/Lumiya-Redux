@@ -296,10 +296,10 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         Subscription<K, T> subscription = new Subscription<>(k, this, executor, onData, onError, this.refQueue);
         synchronized (this.lock) {
             boolean z = false;
-            SubscriptionRequestedList subscriptionRequestedList = (SubscriptionRequestedList<K, T>) this.entries.get(k);
-            SubscriptionRequestedList subscriptionRequestedList2 = subscriptionRequestedList;
+            SubscriptionRequestedList<K, T> subscriptionRequestedList = this.entries.get(k);
+            SubscriptionRequestedList<K, T> subscriptionRequestedList2 = subscriptionRequestedList;
             if (subscriptionRequestedList == null) {
-                SubscriptionRequestedList subscriptionRequestedList3 = new SubscriptionRequestedList(null);
+                SubscriptionRequestedList<K, T> subscriptionRequestedList3 = new SubscriptionRequestedList<>(null);
                 this.entries.put(k, subscriptionRequestedList3);
                 z = true;
                 subscriptionRequestedList2 = subscriptionRequestedList3;

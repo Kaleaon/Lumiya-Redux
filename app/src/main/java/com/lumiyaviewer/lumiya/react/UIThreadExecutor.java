@@ -32,16 +32,7 @@ public class UIThreadExecutor implements Executor {
             }
         }
     };
-    private final Runnable queueRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$D7hbGKuty0crHscG-TIL-CtFXqo
-        private final /* synthetic */ void $m$0() {
-            ((UIThreadExecutor) this).m57lambda$com_lumiyaviewer_lumiya_react_UIThreadExecutor_2348();
-        }
-
-        @Override // java.lang.Runnable
-        public final void run() {
-            $m$0();
-        }
-    };
+    private final Runnable queueRunnable = this::m57lambda$com_lumiyaviewer_lumiya_react_UIThreadExecutor_2348;
 
     private static class InstanceHolder {
         private static final UIThreadExecutor Instance = new UIThreadExecutor();

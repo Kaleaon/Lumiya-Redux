@@ -46,7 +46,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
     private static final String ROLE_TO_ADD_KEY = "roleToAdd";
     private final SubscriptionData<UUID, UUID> groupMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.2
         private final /* synthetic */ void $m$0(Object obj) {
-            ((GroupMembersProfileTab) this).m483xe6cc6560((UUID) obj);
+            GroupMembersProfileTab.this.m483xe6cc6560((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -254,7 +254,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         if (uuid != null) {
             new AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.4
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                    ((GroupMembersProfileTab) this).m484xf9973c0c((UUID) uuid, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
+                    GroupMembersProfileTab.this.m484xf9973c0c((UUID) uuid, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
                 }
 
                 @Override // android.content.DialogInterface.OnClickListener
@@ -278,7 +278,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
     public void ejectGroupMember(final ChatterID.ChatterIDUser chatterIDUser) {
         new AlertDialog.Builder(getContext()).setTitle(R.string.eject_member_confirm).setPositiveButton(R.string.yes_eject_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.3
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
-                ((GroupMembersProfileTab) this).m485xf997b3d4((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
+                GroupMembersProfileTab.this.m485xf997b3d4((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
             }
 
             @Override // android.content.DialogInterface.OnClickListener

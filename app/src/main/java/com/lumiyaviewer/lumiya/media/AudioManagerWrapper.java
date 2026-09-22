@@ -27,7 +27,7 @@ public class AudioManagerWrapper implements InvocationHandler {
     private int msgCode;
 
     public AudioManagerWrapper(Context context) {
-        Class<?> cls;
+        Class<?> cls = null;
         this.audioManager = (AudioManager) context.getSystemService("audio");
         try {
             Class<?>[] declaredClasses = this.audioManager.getClass().getDeclaredClasses();
@@ -45,18 +45,18 @@ public class AudioManagerWrapper implements InvocationHandler {
                     i++;
                 }
             }
-        } catch (Exception e) {
+            if (cls == null) {
+                throw new ReflectiveOperationException("Failed to get OnAudioFocusChangeListener interface");
+            }
+            mRequestAudioFocus = AudioManager.class.getMethod("requestAudioFocus", cls, Integer.TYPE, Integer.TYPE);
+            mAbandonAudioFocus = AudioManager.class.getMethod("abandonAudioFocus", cls);
+            this.audioFocusHandler = Proxy.newProxyInstance(cls.getClassLoader(), new Class[]{cls}, this);
+            this.hasAudioFocusAPI = true;
+        } catch (ReflectiveOperationException e) {
             this.hasAudioFocusAPI = false;
             Debug.Log("AudioManagerWrapper: audio focus api not found");
-            e.printStackTrace();
+            Debug.Warning(e);
         }
-        if (cls == null) {
-            throw new Exception("Failed to get OnAudioFocusChangeListener interface");
-        }
-        mRequestAudioFocus = AudioManager.class.getMethod("requestAudioFocus", cls, Integer.TYPE, Integer.TYPE);
-        mAbandonAudioFocus = AudioManager.class.getMethod("abandonAudioFocus", cls);
-        this.audioFocusHandler = Proxy.newProxyInstance(cls.getClassLoader(), new Class[]{cls}, this);
-        this.hasAudioFocusAPI = true;
         Debug.Log("AudioManagerWrapper: has audio focus api = " + this.hasAudioFocusAPI);
     }
 

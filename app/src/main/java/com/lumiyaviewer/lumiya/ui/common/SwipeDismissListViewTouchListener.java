@@ -114,16 +114,12 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 this.mListView.getLocationOnScreen(iArr);
                 int rawX = ((int) motionEvent.getRawX()) - iArr[0];
                 int rawY = ((int) motionEvent.getRawY()) - iArr[1];
-                int i = 0;
-                while (true) {
-                    if (i < childCount) {
-                        View childAt = this.mListView.getChildAt(i);
-                        childAt.getHitRect(rect);
-                        if (rect.contains(rawX, rawY)) {
-                            this.mDownView = childAt;
-                        } else {
-                            i++;
-                        }
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = this.mListView.getChildAt(i);
+                    childAt.getHitRect(rect);
+                    if (rect.contains(rawX, rawY)) {
+                        this.mDownView = childAt;
+                        break;
                     }
                 }
                 if (this.mDownView != null) {

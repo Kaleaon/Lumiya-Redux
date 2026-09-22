@@ -49,19 +49,17 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
             @Override // java.lang.Runnable
             public void run() {
                 while (!SLUserNameFetcher.this.threadMustExit) {
-                    do {
-                        try {
-                        } catch (InterruptedException e) {
-                            return;
-                        }
-                    } while (SLUserNameFetcher.this.FetchSomeNamesOverHTTP());
+                    while (SLUserNameFetcher.this.FetchSomeNamesOverHTTP()) {
+                        // Drain all currently pending names before sleeping.
+                    }
                     SLUserNameFetcher.this.lock.lock();
                     try {
                         SLUserNameFetcher.this.hasNamesToFetch.await();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    } finally {
                         SLUserNameFetcher.this.lock.unlock();
-                    } catch (Throwable th) {
-                        SLUserNameFetcher.this.lock.unlock();
-                        throw th;
                     }
                 }
             }
@@ -102,18 +100,15 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
                 str2 = (z ? str + "?" : str + "&") + "ids=" + ((UUID) it.next()).toString();
                 z = false;
             } else {
-                try {
-                    break;
-                } catch (LLSDXMLException e) {
-                    e.printStackTrace();
-                    lLSDNode = null;
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                    lLSDNode = null;
-                }
+                break;
             }
         }
-        lLSDNode = this.xmlReq.PerformRequest(str, null);
+        try {
+            lLSDNode = this.xmlReq.PerformRequest(str, null);
+        } catch (LLSDXMLException | IOException e) {
+            e.printStackTrace();
+            lLSDNode = null;
+        }
         if (lLSDNode != null) {
             try {
                 if (lLSDNode.keyExists("agents")) {
