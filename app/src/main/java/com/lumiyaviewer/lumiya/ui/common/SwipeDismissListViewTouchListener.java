@@ -4,15 +4,12 @@ import android.R;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Rect;
-import android.os.Build;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,13 +70,8 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     }
 
     public static void restoreViewState(View view) {
-        if (Build.VERSION.SDK_INT >= 11) {
-            view.setAlpha(1.0f);
-            view.setTranslationX(0.0f);
-        } else {
-            ViewHelper.setTranslationX(view, 0.0f);
-            ViewHelper.setAlpha(view, 1.0f);
-        }
+        view.setAlpha(1.0f);
+        view.setTranslationX(0.0f);
     }
 
     public AbsListView.OnScrollListener makeScrollListener() {
@@ -165,25 +157,14 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                         final View view2 = this.mDownView;
                         final int i2 = this.mDownPosition;
                         this.mDismissAnimationRefCount++;
-                        if (Build.VERSION.SDK_INT >= 12) {
-                            this.mDownView.animate().translationX(z2 ? this.mViewWidth : -this.mViewWidth).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.2
-                                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
-                                public void onAnimationEnd(Animator animator) {
-                                    SwipeDismissListViewTouchListener.this.performDismiss(view2, i2);
-                                }
-                            });
-                        } else {
-                            ViewPropertyAnimator.animate(this.mDownView).translationX(z2 ? this.mViewWidth : -this.mViewWidth).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new com.nineoldandroids.animation.AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.3
-                                @Override // com.nineoldandroids.animation.AnimatorListenerAdapter, com.nineoldandroids.animation.Animator.AnimatorListener
-                                public void onAnimationEnd(com.nineoldandroids.animation.Animator animator) {
-                                    SwipeDismissListViewTouchListener.this.performDismiss(view2, i2);
-                                }
-                            });
-                        }
-                    } else if (Build.VERSION.SDK_INT >= 12) {
-                        this.mDownView.animate().translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
+                        this.mDownView.animate().translationX(z2 ? this.mViewWidth : -this.mViewWidth).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.2
+                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                            public void onAnimationEnd(Animator animator) {
+                                SwipeDismissListViewTouchListener.this.performDismiss(view2, i2);
+                            }
+                        });
                     } else {
-                        ViewPropertyAnimator.animate(this.mDownView).translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
+                        this.mDownView.animate().translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
                     }
                     this.mVelocityTracker.recycle();
                     this.mVelocityTracker = null;
@@ -209,13 +190,8 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                         obtain.recycle();
                     }
                     if (this.mSwiping) {
-                        if (Build.VERSION.SDK_INT >= 11) {
-                            this.mDownView.setTranslationX(rawX3 - this.mSwipingSlop);
-                            this.mDownView.setAlpha(Math.max(0.0f, Math.min(1.0f, 1.0f - ((Math.abs(rawX3) * 2.0f) / this.mViewWidth))));
-                        } else {
-                            ViewHelper.setTranslationX(this.mDownView, rawX3 - this.mSwipingSlop);
-                            ViewHelper.setAlpha(this.mDownView, Math.min(1.0f, 1.0f - ((Math.abs(rawX3) * 2.0f) / this.mViewWidth)));
-                        }
+                        this.mDownView.setTranslationX(rawX3 - this.mSwipingSlop);
+                        this.mDownView.setAlpha(Math.max(0.0f, Math.min(1.0f, 1.0f - ((Math.abs(rawX3) * 2.0f) / this.mViewWidth))));
                         return true;
                     }
                 }
@@ -223,11 +199,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
             case 3:
                 if (this.mVelocityTracker != null) {
                     if (this.mDownView != null && this.mSwiping) {
-                        if (Build.VERSION.SDK_INT >= 12) {
-                            this.mDownView.animate().translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
-                        } else {
-                            ViewPropertyAnimator.animate(this.mDownView).translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
-                        }
+                        this.mDownView.animate().translationX(0.0f).alpha(1.0f).setDuration(this.mAnimationTime).setListener(null);
                     }
                     this.mVelocityTracker.recycle();
                     this.mVelocityTracker = null;

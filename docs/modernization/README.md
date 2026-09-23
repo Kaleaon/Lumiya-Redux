@@ -4,6 +4,13 @@ A split-document plan for the full modernization of the Lumiya Android viewer
 into a shippable, Kotlin-first Second Life / OpenSim client. Each file is
 self-contained; read them in order the first time, then use this index.
 
+> **Repository execution note:** several original phase documents describe
+> Linkpoint as the implementation chassis. Current work instead proceeds from
+> the restored Lumiya app in this repository. Use
+> [`execution-roadmap.md`](execution-roadmap.md) for the active milestone order
+> and completion gates; retain the documents below as the detailed product and
+> protocol backlog.
+
 ## How to use this plan
 
 - **Phases are sequential dependencies, not calendar estimates.** A phase
