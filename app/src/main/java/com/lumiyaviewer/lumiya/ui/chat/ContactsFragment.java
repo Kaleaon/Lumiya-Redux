@@ -1,5 +1,8 @@
 package com.lumiyaviewer.lumiya.ui.chat;
 
+import androidx.fragment.app.FragmentActivity;
+import com.google.common.base.Strings;
+
 import android.os.Bundle;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
@@ -164,63 +167,33 @@ public class ContactsFragment extends Fragment {
         To view partially-correct add '--show-bad-code' argument
     */
     private void updateOptionsMenu() {
-        /*
-            r4 = this;
-            r2 = 1
-            r1 = 0
-            com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo r0 = r4.currentLocationInfo
-            if (r0 == 0) goto L57
-            androidx.fragment.app.FragmentActivity r0 = r4.getActivity()
-            boolean r3 = r0 instanceof com.lumiyaviewer.lumiya.ui.common.DetailsActivity
-            if (r3 == 0) goto L57
-            com.lumiyaviewer.lumiya.ui.common.DetailsActivity r0 = (com.lumiyaviewer.lumiya.ui.common.DetailsActivity) r0
-            androidx.fragment.app.Fragment r0 = r0.getCurrentDetailsFragment()
-            if (r0 == 0) goto L18
-            if (r0 != r4) goto L40
-        L18:
-            r0 = r2
-        L19:
-            if (r0 == 0) goto L42
-            android.view.MenuItem r0 = r4.itemLocationDetails
-            if (r0 == 0) goto L24
-            android.view.MenuItem r0 = r4.itemLocationDetails
-            r0.setVisible(r2)
-        L24:
-            com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo r0 = r4.currentLocationInfo
-            com.lumiyaviewer.lumiya.slproto.users.ParcelData r0 = r0.parcelData()
-            if (r0 == 0) goto L55
-            java.lang.String r0 = r0.getMediaURL()
-            boolean r0 = com.google.common.base.Strings.isNullOrEmpty(r0)
-            r0 = r0 ^ 1
-        L36:
-            android.view.MenuItem r1 = r4.itemPlayMedia
-            if (r1 == 0) goto L3f
-            android.view.MenuItem r1 = r4.itemPlayMedia
-            r1.setVisible(r0)
-        L3f:
-            return
-        L40:
-            r0 = r1
-            goto L19
-        L42:
-            android.view.MenuItem r0 = r4.itemLocationDetails
-            if (r0 == 0) goto L4b
-            android.view.MenuItem r0 = r4.itemLocationDetails
-            r0.setVisible(r1)
-        L4b:
-            android.view.MenuItem r0 = r4.itemPlayMedia
-            if (r0 == 0) goto L3f
-            android.view.MenuItem r0 = r4.itemPlayMedia
-            r0.setVisible(r1)
-            goto L3f
-        L55:
-            r0 = r1
-            goto L36
-        L57:
-            r0 = r1
-            goto L19
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.ui.chat.ContactsFragment.updateOptionsMenu():void");
+        boolean z = false;
+        if (this.currentLocationInfo != null) {
+            FragmentActivity activity = getActivity();
+            if (activity instanceof DetailsActivity) {
+                Fragment currentDetailsFragment = ((DetailsActivity) activity).getCurrentDetailsFragment();
+                z = currentDetailsFragment == null || currentDetailsFragment == this;
+            } else {
+                z = false;
+            }
+        }
+        if (!z) {
+            if (this.itemLocationDetails != null) {
+                this.itemLocationDetails.setVisible(false);
+            }
+            if (this.itemPlayMedia != null) {
+                this.itemPlayMedia.setVisible(false);
+                return;
+            }
+            return;
+        }
+        if (this.itemLocationDetails != null) {
+            this.itemLocationDetails.setVisible(true);
+        }
+        boolean z2 = this.currentLocationInfo.parcelData() != null && !Strings.isNullOrEmpty(this.currentLocationInfo.parcelData().getMediaURL());
+        if (this.itemPlayMedia != null) {
+            this.itemPlayMedia.setVisible(z2);
+        }
     }
 
     @Override // androidx.fragment.app.Fragment

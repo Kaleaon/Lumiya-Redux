@@ -1,5 +1,6 @@
 package uk.co.senab.photoview;
 
+import androidx.annotation.Nullable;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -591,81 +592,36 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void onDrag(float r9, float r10) {
-        /*
-            r8 = this;
-            r7 = 2
-            r1 = 1
-            r2 = 0
-            uk.co.senab.photoview.gestures.GestureDetector r0 = r8.mScaleDragDetector
-            boolean r0 = r0.isScaling()
-            if (r0 != 0) goto L26
-            boolean r0 = uk.co.senab.photoview.PhotoViewAttacher.DEBUG
-            if (r0 != 0) goto L27
-        Lf:
-            android.widget.ImageView r0 = r8.getImageView()
-            android.graphics.Matrix r3 = r8.mSuppMatrix
-            r3.postTranslate(r9, r10)
-            r8.checkAndDisplayMatrix()
-            android.view.ViewParent r3 = r0.getParent()
-            boolean r0 = r8.mAllowParentInterceptOnEdge
-            if (r0 != 0) goto L47
-        L23:
-            if (r3 != 0) goto L78
-        L25:
-            return
-        L26:
-            return
-        L27:
-            uk.co.senab.photoview.log.Logger r0 = uk.co.senab.photoview.log.LogManager.getLogger()
-            java.lang.Object[] r3 = new java.lang.Object[r7]
-            java.lang.String r4 = "onDrag: dx: %.2f. dy: %.2f"
-            java.lang.String r5 = "PhotoViewAttacher"
-            java.lang.Float r6 = java.lang.Float.valueOf(r9)
-            r3[r2] = r6
-            java.lang.Float r6 = java.lang.Float.valueOf(r10)
-            r3[r1] = r6
-            java.lang.String r3 = java.lang.String.format(r4, r3)
-            r0.d(r5, r3)
-            goto Lf
-        L47:
-            uk.co.senab.photoview.gestures.GestureDetector r0 = r8.mScaleDragDetector
-            boolean r0 = r0.isScaling()
-            if (r0 != 0) goto L23
-            boolean r0 = r8.mBlockParentIntercept
-            if (r0 != 0) goto L23
-            int r0 = r8.mScrollEdge
-            if (r0 != r7) goto L5d
-        L57:
-            if (r3 == 0) goto L25
-            r3.requestDisallowInterceptTouchEvent(r2)
-            goto L25
-        L5d:
-            int r0 = r8.mScrollEdge
-            if (r0 == 0) goto L6c
-        L61:
-            int r0 = r8.mScrollEdge
-            if (r0 != r1) goto L25
-            r0 = -1082130432(0xffffffffbf800000, float:-1.0)
-            int r0 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r0 > 0) goto L25
-            goto L57
-        L6c:
-            r0 = 1065353216(0x3f800000, float:1.0)
-            int r0 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r0 < 0) goto L76
-            r0 = r1
-        L73:
-            if (r0 != 0) goto L57
-            goto L61
-        L76:
-            r0 = r2
-            goto L73
-        L78:
-            r3.requestDisallowInterceptTouchEvent(r1)
-            goto L25
-        */
-        throw new UnsupportedOperationException("Method not decompiled: uk.co.senab.photoview.PhotoViewAttacher.onDrag(float, float):void");
+     public void onDrag(float f, float f2) {
+        if (this.mScaleDragDetector.isScaling()) {
+            return;
+        }
+        if (DEBUG) {
+            LogManager.getLogger().d(LOG_TAG, String.format("onDrag: dx: %.2f. dy: %.2f", Float.valueOf(f), Float.valueOf(f2)));
+        }
+        ImageView imageView = getImageView();
+        this.mSuppMatrix.postTranslate(f, f2);
+        checkAndDisplayMatrix();
+        ViewParent parent = imageView.getParent();
+        if (!this.mAllowParentInterceptOnEdge || this.mScaleDragDetector.isScaling() || this.mBlockParentIntercept) {
+            if (parent == null) {
+                return;
+            }
+            parent.requestDisallowInterceptTouchEvent(true);
+            return;
+        }
+        if (this.mScrollEdge != 2) {
+            if (this.mScrollEdge == 0) {
+                if (!(f >= 1.0f)) {
+                    if (this.mScrollEdge != 1 || f > -1.0f) {
+                        return;
+                    }
+                }
+            }
+        }
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(false);
+        }
     }
 
     @Override // uk.co.senab.photoview.gestures.OnGestureListener

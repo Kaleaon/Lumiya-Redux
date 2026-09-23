@@ -1,5 +1,7 @@
 package com.lumiyaviewer.lumiya.res.anim;
 
+import java.io.InputStream;
+
 import android.content.res.AssetManager;
 import com.google.common.collect.ImmutableSet;
 import com.lumiyaviewer.lumiya.Debug;
@@ -50,96 +52,20 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             To view partially-correct add '--show-bad-code' argument
         */
         public void run() {
-            /*
-                r6 = this;
-                r2 = 0
-                android.content.res.AssetManager r0 = com.lumiyaviewer.lumiya.LumiyaApp.getAssetManager()
-                if (r0 == 0) goto L87
-                java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                r1.<init>()     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                java.lang.String r3 = "anims/"
-                java.lang.StringBuilder r1 = r1.append(r3)     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                java.lang.String r3 = r6.assetName     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                java.lang.StringBuilder r1 = r1.append(r3)     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                java.lang.String r1 = r1.toString()     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                java.io.InputStream r3 = r0.open(r1)     // Catch: java.io.IOException -> L5c java.lang.Throwable -> L6c
-                if (r3 == 0) goto L85
-                com.lumiyaviewer.lumiya.render.avatar.AnimationData r1 = new com.lumiyaviewer.lumiya.render.avatar.AnimationData     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L7e
-                java.lang.Object r0 = r6.getParams()     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L7e
-                java.util.UUID r0 = (java.util.UUID) r0     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L7e
-                r1.<init>(r0, r3)     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L7e
-                int r0 = r1.getPriority()     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                r2 = 6
-                if (r0 < r2) goto L4e
-                java.lang.String r0 = "Animation: priority %d loaded from asset %s"
-                r2 = 2
-                java.lang.Object[] r2 = new java.lang.Object[r2]     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                int r4 = r1.getPriority()     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                r5 = 0
-                r2[r5] = r4     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                java.lang.String r4 = r6.assetName     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                r5 = 1
-                r2[r5] = r4     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-                com.lumiyaviewer.lumiya.Debug.Printf(r0, r2)     // Catch: java.lang.Throwable -> L79 java.io.IOException -> L82
-            L4e:
-                if (r3 == 0) goto L53
-                r3.close()     // Catch: java.io.IOException -> L57
-            L53:
-                r6.completeRequest(r1)
-                return
-            L57:
-                r0 = move-exception
-                com.lumiyaviewer.lumiya.Debug.Warning(r0)
-                goto L53
-            L5c:
-                r0 = move-exception
-                r1 = r2
-            L5e:
-                com.lumiyaviewer.lumiya.Debug.Warning(r0)     // Catch: java.lang.Throwable -> L7b
-                if (r2 == 0) goto L53
-                r2.close()     // Catch: java.io.IOException -> L67
-                goto L53
-            L67:
-                r0 = move-exception
-                com.lumiyaviewer.lumiya.Debug.Warning(r0)
-                goto L53
-            L6c:
-                r0 = move-exception
-                r3 = r2
-            L6e:
-                if (r3 == 0) goto L73
-                r3.close()     // Catch: java.io.IOException -> L74
-            L73:
-                throw r0
-            L74:
-                r1 = move-exception
-                com.lumiyaviewer.lumiya.Debug.Warning(r1)
-                goto L73
-            L79:
-                r0 = move-exception
-                goto L6e
-            L7b:
-                r0 = move-exception
-                r3 = r2
-                goto L6e
-            L7e:
-                r0 = move-exception
-                r1 = r2
-                r2 = r3
-                goto L5e
-            L82:
-                r0 = move-exception
-                r2 = r3
-                goto L5e
-            L85:
-                r1 = r2
-                goto L4e
-            L87:
-                r1 = r2
-                goto L53
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.res.anim.AnimationCache.AssetLoadRequest.run():void");
+            AnimationData animationData = null;
+            AssetManager assetManager = LumiyaApp.getAssetManager();
+            if (assetManager != null) {
+                try (InputStream input = assetManager.open("anims/" + this.assetName)) {
+                    animationData = new AnimationData(getParams(), input);
+                    if (animationData.getPriority() >= 6) {
+                        Debug.Printf("Animation: priority %d loaded from asset %s",
+                                Integer.valueOf(animationData.getPriority()), this.assetName);
+                    }
+                } catch (IOException exception) {
+                    Debug.Warning(exception);
+                }
+            }
+            completeRequest(animationData);
         }
     }
 

@@ -1,5 +1,15 @@
 package com.lumiyaviewer.lumiya.slproto.inventory;
 
+import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
+import com.lumiyaviewer.lumiya.orm.DBObject;
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDArray;
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDBoolean;
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap;
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDUUID;
+import java.io.IOException;
+import java.util.HashSet;
+
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.https.GenericHTTPExecutor;
 import com.lumiyaviewer.lumiya.slproto.https.LLSDStreamingXMLRequest;
@@ -55,11 +65,42 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             To view partially-correct add '--show-bad-code' argument
         */
         public void run() {
-            /*
-                Method dump skipped, instructions count: 272
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.DatabaseCommitThread.run():void");
+            HashSet<UUID> retainedChildren = new HashSet<>();
+            SQLiteStatement insert = null;
+            SQLiteStatement update = null;
+            boolean transactionOpen = false;
+            boolean success = false;
+            try {
+                insert = SLInventoryEntry.getInsertStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
+                update = SLInventoryEntry.getUpdateStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
+                while (!isInterrupted()) {
+                    SLInventoryEntry entry = this.commitEntryQueue.take();
+                    if (entry == this.stopEntry) {
+                        success = !this.aborted;
+                        break;
+                    }
+                    if (!transactionOpen) {
+                        SLInventoryHTTPFetchRequest.this.db.beginTransaction();
+                        transactionOpen = true;
+                    }
+                    retainedChildren.add(entry.uuid);
+                    entry.updateOrInsert(update, insert);
+                }
+                if (transactionOpen && success) SLInventoryHTTPFetchRequest.this.db.setTransactionSuccessful();
+            } catch (InterruptedException exception) {
+                interrupt();
+            } catch (DBObject.DatabaseBindingException exception) {
+                Debug.Warning(exception);
+            } finally {
+                if (transactionOpen) SLInventoryHTTPFetchRequest.this.db.endTransaction();
+                if (insert != null) insert.close();
+                if (update != null) update.close();
+            }
+            if (success) {
+                Debug.Printf("InvFetch: commit thread successful, calling retainChildren.", new Object[0]);
+                SLInventoryHTTPFetchRequest.this.db.retainChildren(
+                        SLInventoryHTTPFetchRequest.this.folderId, retainedChildren);
+            }
         }
 
         void stopAndWait(boolean z) throws InterruptedException {
@@ -638,11 +679,43 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 To view partially-correct add '--show-bad-code' argument
             */
             public void run() {
-                /*
-                    Method dump skipped, instructions count: 377
-                    To view this dump add '--comments-level debug' option
-                */
-                throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.AnonymousClass1.run():void");
+                boolean success = false;
+                boolean cancelled = false;
+                long started = System.currentTimeMillis();
+                LLSDStreamingXMLRequest request = new LLSDStreamingXMLRequest();
+                LLSDArray folders = new LLSDArray();
+                folders.add(new LLSDMap(
+                        new LLSDMap.LLSDMapEntry("folder_id", new LLSDUUID(SLInventoryHTTPFetchRequest.this.folderUUID)),
+                        new LLSDMap.LLSDMapEntry("fetch_folders", new LLSDBoolean(true)),
+                        new LLSDMap.LLSDMapEntry("fetch_items", new LLSDBoolean(true))));
+                LLSDMap body = new LLSDMap(new LLSDMap.LLSDMapEntry("folders", folders));
+                SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(request);
+                try {
+                    for (int attempt = 0; attempt < 3 && !SLInventoryHTTPFetchRequest.this.isCancelled.get(); attempt++) {
+                        DatabaseCommitThread commitThread = new DatabaseCommitThread(SLInventoryHTTPFetchRequest.this, null);
+                        commitThread.start();
+                        try {
+                            request.PerformRequest(SLInventoryHTTPFetchRequest.this.capURL, body,
+                                    new RootContentHandler(SLInventoryHTTPFetchRequest.this, commitThread, null));
+                            commitThread.stopAndWait(true);
+                            success = true;
+                            break;
+                        } catch (IOException | LLSDXMLException exception) {
+                            Debug.Warning(exception);
+                            commitThread.stopAndWait(false);
+                        }
+                    }
+                } catch (InterruptedException exception) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(null);
+                    cancelled = Thread.currentThread().isInterrupted()
+                            || SLInventoryHTTPFetchRequest.this.isCancelled.get();
+                    Debug.Printf("InventoryFetcher: done processing folder %s: success %s cancelled %b (time %d ms)",
+                            SLInventoryHTTPFetchRequest.this.folderUUID, Boolean.toString(success),
+                            Boolean.valueOf(cancelled), Long.valueOf(System.currentTimeMillis() - started));
+                    SLInventoryHTTPFetchRequest.this.completeFetch(success, cancelled);
+                }
             }
         };
         this.capURL = str;

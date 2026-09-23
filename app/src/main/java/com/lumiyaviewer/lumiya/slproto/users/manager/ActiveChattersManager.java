@@ -1,5 +1,10 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
+import com.google.common.collect.ImmutableList;
+import com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource;
+import com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSourceUser;
+import java.util.Collection;
+
 import com.google.common.base.Objects;
 import com.google.common.eventbus.EventBus;
 import com.lumiyaviewer.lumiya.Debug;
@@ -188,12 +193,170 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void m283x2a96bcb8(com.lumiyaviewer.lumiya.slproto.users.ChatterID r12, final com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent r13, boolean r14) {
-        /*
-            Method dump skipped, instructions count: 502
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.users.manager.ActiveChattersManager.m283x2a96bcb8(com.lumiyaviewer.lumiya.slproto.users.ChatterID, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent, boolean):void");
+    public void m283x2a96bcb8(ChatterID chatterID, final SLChatEvent sLChatEvent, boolean z) {
+        UUID sourceUUID;
+        Chatter chatter;
+        Chatter chatter2;
+        ChatMessage databaseObject;
+        boolean z2 = false;
+        boolean z3 = false;
+        boolean z4 = false;
+        ImmutableList<Map.Entry> immutableListCopyOf;
+        if (sLChatEvent.isObjectPopup()) {
+            this.userManager.getObjectPopupsManager().addObjectPopup(sLChatEvent);
+        } else {
+            ChatMessageSource source = sLChatEvent.getSource();
+            if (source.getSourceType() == ChatMessageSource.ChatMessageSourceType.Object) {
+                synchronized (this.objectMessageListenersLock) {
+                    immutableListCopyOf = !this.objectMessageListeners.isEmpty() ? ImmutableList.copyOf((Collection) this.objectMessageListeners.entrySet()) : null;
+                }
+                if (immutableListCopyOf != null) {
+                    for (Map.Entry entry : immutableListCopyOf) {
+                        final OnChatEventListener onChatEventListener = (OnChatEventListener) entry.getKey();
+                        Executor executor = (Executor) entry.getValue();
+                        if (executor != null) {
+                            executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.2
+                                private final /* synthetic */ void $m$0() {
+                                    ((OnChatEventListener) onChatEventListener).onChatEvent((SLChatEvent) sLChatEvent);
+                                }
+
+                                @Override // java.lang.Runnable
+                                public final void run() {
+                                    $m$0();
+                                }
+                            });
+                        } else {
+                            onChatEventListener.onChatEvent(sLChatEvent);
+                        }
+                    }
+                }
+            }
+            SLAgentCircuit activeAgentCircuit = this.userManager.getActiveAgentCircuit();
+            UUID sessionID = activeAgentCircuit != null ? activeAgentCircuit.getSessionID() : null;
+            synchronized (this.chatEventLock) {
+                if (source.getSourceType() == ChatMessageSource.ChatMessageSourceType.User && (source instanceof ChatMessageSourceUser)) {
+                    UserName userNameLoad = this.userManager.getDaoSession().getUserNameDao().load(source.getSourceUUID());
+                    if (userNameLoad != null) {
+                        ChatMessageSourceUser chatMessageSourceUser = (ChatMessageSourceUser) source;
+                        if (userNameLoad.getDisplayName() != null) {
+                            chatMessageSourceUser.setDisplayName(userNameLoad.getDisplayName());
+                        }
+                        if (userNameLoad.getUserName() != null) {
+                            chatMessageSourceUser.setLegacyName(userNameLoad.getUserName());
+                        }
+                        z4 = userNameLoad.isComplete();
+                        if (z4) {
+                            sourceUUID = source.getSourceUUID();
+                        }
+                        if (!sLChatEvent.opensNewChatter() || chatterID.getChatterType() == ChatterID.ChatterType.Local) {
+                            chatter = null;
+                        } else {
+                            Chatter chatter3 = getChatter(chatterID);
+                            Chatter chatter4 = (chatter3 == null || chatter3.getActive()) ? chatter3 : null;
+                            if (chatter4 == null) {
+                                chatterID = this.localChatterID;
+                                chatter = chatter4;
+                            } else {
+                                chatter = chatter4;
+                            }
+                        }
+                        boolean zContains = this.displayedChatters.contains(chatterID);
+                        if (chatter == null || (chatter = getChatter(chatterID)) != null) {
+                            chatter2 = chatter;
+                        } else {
+                            Chatter chatter5 = new Chatter(null);
+                            chatterID.toDatabaseObject(chatter5);
+                            this.chatterDao.insert(chatter5);
+                            chatter2 = chatter5;
+                        }
+                        if (sessionID != null && (!Objects.equal(sessionID, chatter2.getLastSessionID()))) {
+                            if (chatter2.getLastSessionID() != null) {
+                                makeSessionMark(chatterID, chatter2.getId().longValue());
+                            }
+                            chatter2.setLastSessionID(sessionID);
+                        }
+                        databaseObject = sLChatEvent.getDatabaseObject();
+                        databaseObject.setChatterID(chatter2.getId().longValue());
+                        this.chatMessageDao.insert(databaseObject);
+                        if (!chatter2.getActive() && (!chatter2.getMuted())) {
+                            chatter2.setActive(true);
+                            z2 = true;
+                        }
+                        if (z || zContains) {
+                            z3 = false;
+                        } else {
+                            chatter2.setUnreadCount(chatter2.getUnreadCount() + 1);
+                            z3 = true;
+                        }
+                        chatter2.setLastMessageID(databaseObject.getId());
+                        this.chatterDao.update(chatter2);
+                    }
+                    if (z4) {
+                    }
+                    if (sLChatEvent.opensNewChatter()) {
+                    }
+                    chatter = null;
+                    boolean zContains2 = this.displayedChatters.contains(chatterID);
+                    if (chatter == null) {
+                    }
+                    chatter2 = chatter;
+                    if (sessionID != null) {
+                        if (chatter2.getLastSessionID() != null) {
+                        }
+                        chatter2.setLastSessionID(sessionID);
+                    }
+                    databaseObject = sLChatEvent.getDatabaseObject();
+                    databaseObject.setChatterID(chatter2.getId().longValue());
+                    this.chatMessageDao.insert(databaseObject);
+                    z2 = !chatter2.getActive() ? false : false;
+                    if (z) {
+                    }
+                    z3 = false;
+                    chatter2.setLastMessageID(databaseObject.getId());
+                    this.chatterDao.update(chatter2);
+                }
+                sourceUUID = null;
+                if (sLChatEvent.opensNewChatter()) {
+                }
+                chatter = null;
+                boolean zContains22 = this.displayedChatters.contains(chatterID);
+                if (chatter == null) {
+                }
+                chatter2 = chatter;
+                if (sessionID != null) {
+                }
+                databaseObject = sLChatEvent.getDatabaseObject();
+                databaseObject.setChatterID(chatter2.getId().longValue());
+                this.chatMessageDao.insert(databaseObject);
+                if (!chatter2.getActive()) {
+                }
+                if (z) {
+                }
+                z3 = false;
+                chatter2.setLastMessageID(databaseObject.getId());
+                this.chatterDao.update(chatter2);
+            }
+            if (!chatter2.getMuted() && z3) {
+                this.userManager.getUnreadNotificationManager().addFreshMessage(chatter2);
+                this.chatEventBus.post(new ChatMessageEvent(databaseObject, true, chatter2.getType() == ChatterID.ChatterType.User.ordinal()));
+            }
+            if (sourceUUID != null) {
+                this.messageSourceNameResolver.requestResolve(sourceUUID, databaseObject.getId());
+            }
+            this.unreadCountsPool.requestUpdate(chatterID);
+            if (z2) {
+                this.chatterList.updateList(ChatterListType.Active);
+            }
+            List<ChatMessageLoader> loaders = getLoaders(chatterID);
+            if (loaders != null) {
+                Iterator<ChatMessageLoader> it = loaders.iterator();
+                while (it.hasNext()) {
+                    ((ChatMessageLoader) it.next()).addElement(databaseObject);
+                }
+            }
+        }
+        this.userManager.getSyncManager().syncNewMessages();
+        this.userManager.getUnreadNotificationManager().updateUnreadNotifications();
     }
 
     private void makeSessionMark(@Nonnull ChatterID chatterID, long j) {

@@ -88,102 +88,29 @@ public class RLVRestrictions {
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public boolean isAllowed(com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType.RLVRuleMatchType r6, java.lang.String r7, java.util.UUID r8, java.util.UUID r9) {
-            /*
-                r5 = this;
-                r4 = 1
-                r3 = 0
-                com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType$RLVRuleMatchType r0 = com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance
-                if (r6 != r0) goto L25
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                java.lang.String r1 = ""
-                boolean r0 = r0.containsKey(r1)
-                if (r0 == 0) goto L12
-                return r4
-            L12:
-                java.lang.String r0 = ""
-                boolean r0 = r7.equals(r0)
-                if (r0 != 0) goto L24
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                boolean r0 = r0.containsKey(r7)
-                if (r0 == 0) goto L24
-                return r4
-            L24:
-                return r3
-            L25:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                boolean r0 = r0.isEmpty()
-                if (r0 == 0) goto L2e
-                return r4
-            L2e:
-                int[] r0 = m241xbc0b3b89()
-                int r1 = r6.ordinal()
-                r0 = r0[r1]
-                switch(r0) {
-                    case 1: goto L83;
-                    case 2: goto L3c;
-                    case 3: goto L5a;
-                    default: goto L3b;
+        public boolean isAllowed(RLVRestrictionType.RLVRuleMatchType rLVRuleMatchType, String str, UUID uuid, UUID uuid2) {
+            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance) {
+                if (this.restMap.containsKey("")) {
+                    return true;
                 }
-            L3b:
-                return r4
-            L3c:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                java.lang.String r1 = ""
-                boolean r0 = r0.containsKey(r1)
-                if (r0 == 0) goto L3b
-                java.lang.String r0 = ""
-                boolean r0 = r7.equals(r0)
-                if (r0 != 0) goto L59
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                boolean r0 = r0.containsKey(r7)
-                if (r0 == 0) goto L59
-                return r4
-            L59:
-                return r3
-            L5a:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                boolean r0 = r0.containsKey(r7)
-                if (r0 == 0) goto L63
-                return r3
-            L63:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                java.lang.String r1 = ""
-                boolean r0 = r0.containsKey(r1)
-                if (r0 == 0) goto L3b
-                if (r8 != 0) goto L71
-                return r3
-            L71:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                java.lang.String r1 = ""
-                java.lang.Object r0 = r0.get(r1)
-                java.util.HashSet r0 = (java.util.HashSet) r0
-                boolean r0 = r0.contains(r8)
-                if (r0 == 0) goto L3b
-                return r3
-            L83:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L3b
-                if (r9 != 0) goto L8e
-                return r3
-            L8e:
-                java.util.Map<java.lang.String, java.util.HashSet<java.util.UUID>> r0 = r5.restMap
-                java.util.Collection r0 = r0.values()
-                java.util.Iterator r1 = r0.iterator()
-            L98:
-                boolean r0 = r1.hasNext()
-                if (r0 == 0) goto L3b
-                java.lang.Object r0 = r1.next()
-                java.util.HashSet r0 = (java.util.HashSet) r0
-                int r2 = r0.size()
-                if (r2 != r4) goto Lb0
-                boolean r0 = r0.contains(r9)
-                if (r0 != 0) goto L98
-            Lb0:
-                return r3
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictions.RLVRestrictionList.isAllowed(com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType$RLVRuleMatchType, java.lang.String, java.util.UUID, java.util.UUID):boolean");
+                return !str.equals("") && this.restMap.containsKey(str);
+            }
+            if (this.restMap.isEmpty()) {
+                return true;
+            }
+            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetNoExceptions) {
+                if (uuid2 == null) return false;
+                for (HashSet<UUID> sources : this.restMap.values()) {
+                    if (sources.size() != 1 || !sources.contains(uuid2)) return false;
+                }
+            }
+            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesException
+                    && this.restMap.containsKey("")) {
+                return !str.equals("") && this.restMap.containsKey(str);
+            }
+            if (this.restMap.containsKey(str)) return false;
+            return !this.restMap.containsKey("")
+                    || (uuid != null && !this.restMap.get("").contains(uuid));
         }
 
         public boolean isEmpty() {

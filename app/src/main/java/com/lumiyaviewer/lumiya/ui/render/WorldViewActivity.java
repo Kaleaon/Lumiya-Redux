@@ -886,11 +886,73 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         To view partially-correct add '--show-bad-code' argument
     */
     private void updateObjectPanel() {
-        /*
-            Method dump skipped, instructions count: 614
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.updateObjectPanel():void");
+        int i;
+        int i2;
+        int i3;
+        String strOrNull;
+        MyAvatarState data = this.myAvatarState.getData();
+        SLAgentCircuit data2 = this.agentCircuit.getData();
+        boolean z = data2 != null;
+        boolean zIsSitting = data != null ? data.isSitting() : false;
+        boolean zHasHUDs = data != null ? data.hasHUDs() : false;
+        boolean zIsFlying = data != null ? data.isFlying() : false;
+        boolean zCanStandUp = data2 != null ? data2.getModules().rlvController.canStandUp() : false;
+        boolean zCanSit = data2 != null ? data2.getModules().rlvController.canSit() : false;
+        boolean z2 = this.pickedObject != null;
+        Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(zIsSitting), Boolean.valueOf(zIsFlying), Boolean.valueOf(zHasHUDs), Boolean.valueOf(this.isDragging));
+        this.dragPointerLayout.setVisibility(this.isDragging ? 0 : 4);
+        this.dragPointer.setVisibility(this.isDragging ? 0 : 4);
+        boolean movementControlsVisible = z && !zIsSitting
+                && !(this.camButtonEnabled && this.manualCamMode)
+                && !this.isDragging && !z2;
+        LinearLayout linearLayout = this.flyButtonsLayout;
+        i = movementControlsVisible ? 0 : 8;
+        linearLayout.setVisibility(i);
+        View view = this.moveButtonsLayout;
+        i2 = movementControlsVisible ? 0 : 4;
+        view.setVisibility(i2);
+        this.buttonStandUp.setVisibility((zCanStandUp && zIsSitting && (this.isDragging ^ true)) ? 0 : 8);
+        this.buttonHUD.setVisibility((zHasHUDs && (this.isDragging ^ true) && z) ? 0 : 8);
+        this.buttonFlyDownward.setVisibility(((zIsFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? 0 : 8);
+        ImageButton imageButton = this.buttonStopFlying;
+        i3 = zIsFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
+        imageButton.setVisibility(i3);
+        this.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? 0 : 8);
+        this.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? 0 : 8);
+        if (this.pickedObject == null || (!z)) {
+            this.objectControlsPanel.setVisibility(8);
+            return;
+        }
+        this.objectControlsPanel.setVisibility(0);
+        boolean zIsTouchable = this.pickedObject.isTouchable();
+        if (this.pickedObject.isAvatar()) {
+            zIsTouchable |= this.pickedObject.hasTouchableChildren();
+        }
+        this.objectTouchButton.setVisibility(zIsTouchable ? 0 : 8);
+        boolean zIsAvatar = this.pickedObject.isAvatar();
+        boolean z3 = zIsSitting && this.pickedObject.localID == data.sittingOn();
+        boolean z4 = !zIsAvatar ? !z3 : false;
+        if (zIsAvatar) {
+            z3 = false;
+        }
+        this.objectSitButton.setVisibility((z4 && zCanSit) ? 0 : 8);
+        this.objectStandButton.setVisibility((z3 && zCanStandUp) ? 0 : 8);
+        this.objectChatButton.setVisibility(zIsAvatar ? 0 : 8);
+        this.avatarIconView.setVisibility(zIsAvatar ? 0 : 8);
+        this.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? 0 : 8);
+        if (this.pickedObject.isAvatar()) {
+            strOrNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
+        } else {
+            SLObjectProfileData data3 = this.selectedObjectProfile.getData();
+            strOrNull = (data3 == null || !Objects.equal(data3.objectUUID(), this.pickedObject.getId())) ? null : data3.name().orNull();
+            if (strOrNull == null) {
+                strOrNull = this.pickedObject.name;
+            }
+        }
+        if (strOrNull == null) {
+            strOrNull = getString(R.string.object_name_loading);
+        }
+        this.objectNameTextView.setText(strOrNull);
     }
 
     private void updateSimTimeOverride() {
@@ -1473,116 +1535,57 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public boolean onTouch(android.view.View r7, android.view.MotionEvent r8) {
-        /*
-            r6 = this;
-            r5 = 1112014848(0x42480000, float:50.0)
-            r4 = -1035468800(0xffffffffc2480000, float:-50.0)
-            r3 = 1
-            r2 = 0
-            r1 = 0
-            int r0 = r7.getId()
-            switch(r0) {
-                case 2131755260: goto Lf;
-                case 2131755261: goto L25;
-                case 2131755262: goto L14;
-                case 2131755263: goto L6b;
-                case 2131755756: goto L19;
-                case 2131755757: goto L1f;
-                default: goto Le;
-            }
-        Le:
-            return r2
-        Lf:
-            r0 = 2
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        L14:
-            r0 = 4
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        L19:
-            r0 = 8
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        L1f:
-            r0 = 16
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        L25:
-            boolean r0 = r6.arrowsToTurn
-            if (r0 == 0) goto L65
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            if (r0 == 0) goto Le
-            boolean r0 = r6.manualCamMode
-            if (r0 == 0) goto L4d
-            boolean r0 = r6.camButtonEnabled
-            if (r0 == 0) goto L4d
-            int r0 = r8.getActionMasked()
-            if (r0 != 0) goto L41
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.startCameraManualControl(r5, r1, r1, r1)
-            goto Le
-        L41:
-            int r0 = r8.getActionMasked()
-            if (r0 != r3) goto Le
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.stopCameraManualControl()
-            goto Le
-        L4d:
-            int r0 = r8.getActionMasked()
-            if (r0 != 0) goto L59
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.startTurning(r5)
-            goto Le
-        L59:
-            int r0 = r8.getActionMasked()
-            if (r0 != r3) goto Le
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.stopTurning()
-            goto Le
-        L65:
-            r0 = 32
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        L6b:
-            boolean r0 = r6.arrowsToTurn
-            if (r0 == 0) goto Lae
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            if (r0 == 0) goto Le
-            boolean r0 = r6.manualCamMode
-            if (r0 == 0) goto L94
-            boolean r0 = r6.camButtonEnabled
-            if (r0 == 0) goto L94
-            int r0 = r8.getActionMasked()
-            if (r0 != 0) goto L87
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.startCameraManualControl(r4, r1, r1, r1)
-            goto Le
-        L87:
-            int r0 = r8.getActionMasked()
-            if (r0 != r3) goto Le
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.stopCameraManualControl()
-            goto Le
-        L94:
-            int r0 = r8.getActionMasked()
-            if (r0 != 0) goto La1
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.startTurning(r4)
-            goto Le
-        La1:
-            int r0 = r8.getActionMasked()
-            if (r0 != r3) goto Le
-            com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl r0 = r6.avatarControl
-            r0.stopTurning()
-            goto Le
-        Lae:
-            r0 = 64
-            r6.moveTouchEvent(r0, r8)
-            goto Le
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.onTouch(android.view.View, android.view.MotionEvent):boolean");
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (view.getId()) {
+            case R.id.button_move_forward /* 2131755260 */:
+                moveTouchEvent(2, motionEvent);
+                return false;
+            case R.id.button_turn_left /* 2131755261 */:
+                if (!this.arrowsToTurn) {
+                    moveTouchEvent(32, motionEvent);
+                } else if (this.avatarControl != null) {
+                    if (this.manualCamMode && this.camButtonEnabled) {
+                        if (motionEvent.getActionMasked() == 0) {
+                            this.avatarControl.startCameraManualControl(TURNING_SPEED, 0.0f, 0.0f, 0.0f);
+                        } else if (motionEvent.getActionMasked() == 1) {
+                            this.avatarControl.stopCameraManualControl();
+                        }
+                    } else if (motionEvent.getActionMasked() == 0) {
+                        this.avatarControl.startTurning(TURNING_SPEED);
+                    } else if (motionEvent.getActionMasked() == 1) {
+                        this.avatarControl.stopTurning();
+                    }
+                }
+                return false;
+            case R.id.button_move_backward /* 2131755262 */:
+                moveTouchEvent(4, motionEvent);
+                return false;
+            case R.id.button_turn_right /* 2131755263 */:
+                if (!this.arrowsToTurn) {
+                    moveTouchEvent(64, motionEvent);
+                } else if (this.avatarControl != null) {
+                    if (this.manualCamMode && this.camButtonEnabled) {
+                        if (motionEvent.getActionMasked() == 0) {
+                            this.avatarControl.startCameraManualControl(-50.0f, 0.0f, 0.0f, 0.0f);
+                        } else if (motionEvent.getActionMasked() == 1) {
+                            this.avatarControl.stopCameraManualControl();
+                        }
+                    } else if (motionEvent.getActionMasked() == 0) {
+                        this.avatarControl.startTurning(-50.0f);
+                    } else if (motionEvent.getActionMasked() == 1) {
+                        this.avatarControl.stopTurning();
+                    }
+                }
+                return false;
+            case R.id.button_fly_upward /* 2131755756 */:
+                moveTouchEvent(8, motionEvent);
+                return false;
+            case R.id.button_fly_downward /* 2131755757 */:
+                moveTouchEvent(16, motionEvent);
+                return false;
+            default:
+                return false;
+        }
     }
 
     @Override // android.app.Activity

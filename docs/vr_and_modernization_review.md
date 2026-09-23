@@ -1,5 +1,14 @@
 # Lumiya-Redux — Modernization Review & Cardboard→VR Migration Path
 
+> **Implementation status (2026-09-22):** Runtime selection now treats OpenXR as a real native
+> backend boundary rather than relabelling the bundled Google VR renderer. The app selects OpenXR
+> only when both a conforming Android runtime broker and
+> `com.lumiyaviewer.lumiya.xr.OpenXrSessionFactoryImpl` are installed; otherwise it safely uses the
+> legacy Cardboard session. `auto` is the default so installing the native feature will not require
+> another activity migration. The factory still needs a native OpenXR loader, lifecycle, swapchain,
+> action, and composition implementation before OpenXR can be shipped. Until then, logs and UI must
+> describe the active session as Cardboard—not OpenXR.
+
 Review date: 2026-09-21. Reviewed tree: `claude/cool-thompson-nuw6az` at
 `a2d0ca3`. 1,481 Java files, 0 Kotlin files, AGP 8.7.3 / Gradle 8.10.2 /
 Kotlin 1.9.25, `minSdk 26` / `targetSdk 34` / `compileSdk 34`.

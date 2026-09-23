@@ -1,5 +1,19 @@
 package com.lumiyaviewer.lumiya.res.textures;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.net.HttpHeaders;
+import com.lumiyaviewer.lumiya.slproto.avatar.AvatarTextureFaceIndex;
+import com.lumiyaviewer.lumiya.slproto.https.SLHTTPSConnection;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams;
@@ -125,11 +139,60 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             To view partially-correct add '--show-bad-code' argument
         */
         public void run() {
-            /*
-                Method dump skipped, instructions count: 502
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.res.textures.TextureCompressedCache.TextureFetchRequest.run():void");
+            if (this.fetcher == null) {
+                completeRequest(null);
+                return;
+            }
+            DrawableTextureParams params = getParams();
+            try {
+                String appearanceService = this.fetcher.getAgentAppearanceService();
+                UUID avatarId = params.avatarUUID();
+                AvatarTextureFaceIndex face = params.avatarFaceIndex();
+                URL url;
+                if (appearanceService != null && avatarId != null && face != null) {
+                    if (!appearanceService.endsWith("/")) appearanceService += "/";
+                    url = new URL(appearanceService + "texture/" + avatarId + "/"
+                            + face.getBakedTextureName() + "/" + params.uuid());
+                } else {
+                    url = new URL(this.fetcher.getCapURL() + "/?texture_id=" + params.uuid());
+                }
+                File partial = new File(this.compressedFile.getAbsolutePath() + ".part");
+                File parent = partial.getParentFile();
+                if (parent != null && !parent.exists() && !parent.mkdirs() && !parent.exists()) {
+                    Debug.Log("Cannot create texture cache directory " + parent);
+                    completeRequest(null);
+                    return;
+                }
+                for (int attempt = 0; attempt < MAX_RETRIES && !Thread.currentThread().isInterrupted(); attempt++) {
+                    try (Response response = SLHTTPSConnection.getOkHttpClient().newCall(
+                            new Request.Builder().url(url).header(HttpHeaders.ACCEPT, "image/x-j2c").build()).execute()) {
+                        if (!response.isSuccessful() || response.body() == null) {
+                            throw new IOException("Response code " + response.code());
+                        }
+                        try (InputStream input = response.body().byteStream();
+                             BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(partial))) {
+                            ByteStreams.copy(input, output);
+                        }
+                        synchronized (TextureCompressedCache.this.lock) {
+                            if (!partial.renameTo(this.compressedFile)) {
+                                throw new IOException("Cannot commit texture cache file " + this.compressedFile);
+                            }
+                        }
+                        completeRequest(this.compressedFile);
+                        return;
+                    } catch (IOException exception) {
+                        Debug.Warning(exception);
+                        partial.delete();
+                    }
+                }
+                if (!Thread.currentThread().isInterrupted() && !this.fetchTask.isCancelled()) {
+                    Debug.Log("TextureFetchRequest: HTTP fetch unsuccessful. Trying UDP.");
+                    TextureCompressedCache.this.downloadExecutor.queueRequest(this);
+                }
+            } catch (MalformedURLException exception) {
+                Debug.Warning(exception);
+                completeRequest(null);
+            }
         }
 
         @Override // com.lumiyaviewer.lumiya.res.executors.Startable

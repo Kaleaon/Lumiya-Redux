@@ -1,5 +1,6 @@
 package com.google.vr.ndk.base;
 
+import android.database.Cursor;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -126,99 +127,26 @@ public class DaydreamApi implements AutoCloseable {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public static boolean getDaydreamSetupCompleted(android.content.Context r9) {
-        /*
-            r7 = 1
-            r6 = 0
-            r8 = 0
-            com.google.vr.cardboard.VrParamsProviderFactory$ContentProviderClientHandle r0 = com.google.vr.cardboard.VrParamsProviderFactory.tryToGetContentProviderClientHandle(r9)
-            if (r0 == 0) goto L21
-            java.lang.String r1 = r0.authority
-            java.lang.String r2 = "daydream_setup"
-            android.net.Uri r1 = com.google.vr.cardboard.VrSettingsProviderContract.createUri(r1, r2)
-            android.content.ContentProviderClient r0 = r0.client     // Catch: android.os.RemoteException -> L45 java.lang.SecurityException -> L56 java.lang.Throwable -> L67
-            r2 = 0
-            r3 = 0
-            r4 = 0
-            r5 = 0
-            android.database.Cursor r1 = r0.query(r1, r2, r3, r4, r5)     // Catch: android.os.RemoteException -> L45 java.lang.SecurityException -> L56 java.lang.Throwable -> L67
-            if (r1 != 0) goto L2a
-        L1e:
-            if (r1 != 0) goto L41
-        L20:
-            return r6
-        L21:
-            java.lang.String r0 = com.google.vr.ndk.base.DaydreamApi.TAG
-            java.lang.String r1 = "No ContentProvider available for Daydream setup."
-            android.util.Log.e(r0, r1)
-            return r6
-        L2a:
-            boolean r0 = r1.moveToFirst()     // Catch: java.lang.Throwable -> L70 java.lang.SecurityException -> L72 android.os.RemoteException -> L74
-            if (r0 == 0) goto L1e
-            r0 = 0
-            int r0 = r1.getInt(r0)     // Catch: java.lang.Throwable -> L70 java.lang.SecurityException -> L72 android.os.RemoteException -> L74
-            if (r0 == r7) goto L3b
-            r0 = r6
-        L38:
-            if (r1 != 0) goto L3d
-        L3a:
-            return r0
-        L3b:
-            r0 = r7
-            goto L38
-        L3d:
-            r1.close()
-            goto L3a
-        L41:
-            r1.close()
-            goto L20
-        L45:
-            r0 = move-exception
-            r1 = r8
-        L47:
-            java.lang.String r2 = com.google.vr.ndk.base.DaydreamApi.TAG     // Catch: java.lang.Throwable -> L70
-            java.lang.String r3 = "Failed to read Daydream setup completion from ContentProvider"
-            android.util.Log.e(r2, r3, r0)     // Catch: java.lang.Throwable -> L70
-            if (r1 != 0) goto L52
-        L51:
-            return r6
-        L52:
-            r1.close()
-            goto L51
-        L56:
-            r0 = move-exception
-            r1 = r8
-        L58:
-            java.lang.String r2 = com.google.vr.ndk.base.DaydreamApi.TAG     // Catch: java.lang.Throwable -> L70
-            java.lang.String r3 = "Insufficient permissions to read Daydream setup completion from ContentProvider"
-            android.util.Log.e(r2, r3, r0)     // Catch: java.lang.Throwable -> L70
-            if (r1 != 0) goto L63
-        L62:
-            return r6
-        L63:
-            r1.close()
-            goto L62
-        L67:
-            r0 = move-exception
-            r1 = r8
-        L69:
-            if (r1 != 0) goto L6c
-        L6b:
-            throw r0
-        L6c:
-            r1.close()
-            goto L6b
-        L70:
-            r0 = move-exception
-            goto L69
-        L72:
-            r0 = move-exception
-            goto L58
-        L74:
-            r0 = move-exception
-            goto L47
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.google.vr.ndk.base.DaydreamApi.getDaydreamSetupCompleted(android.content.Context):boolean");
+     public static boolean getDaydreamSetupCompleted(Context context) {
+        VrParamsProviderFactory.ContentProviderClientHandle handle =
+                VrParamsProviderFactory.tryToGetContentProviderClientHandle(context);
+        if (handle == null) {
+            Log.e(TAG, "No ContentProvider available for Daydream setup.");
+            return false;
+        }
+        android.net.Uri uri = VrSettingsProviderContract.createUri(
+                handle.authority, VrSettingsProviderContract.DAYDREAM_SETUP_COMPLETED);
+        try (Cursor cursor = handle.client.query(uri, null, null, null, null)) {
+            return cursor != null && cursor.moveToFirst() && cursor.getInt(0) == 1;
+        } catch (RemoteException exception) {
+            Log.e(TAG, "Failed to read Daydream setup completion from ContentProvider", exception);
+            return false;
+        } catch (SecurityException exception) {
+            Log.e(TAG, "Insufficient permissions to read Daydream setup completion from ContentProvider", exception);
+            return false;
+        } finally {
+            handle.client.release();
+        }
     }
 
     private boolean init() {

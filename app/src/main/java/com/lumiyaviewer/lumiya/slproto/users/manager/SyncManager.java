@@ -7,14 +7,20 @@ import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.cloud.common.LogChatMessage;
+import com.lumiyaviewer.lumiya.cloud.common.LogFlushMessages;
+import com.lumiyaviewer.lumiya.cloud.common.LogMessageBatch;
+import com.lumiyaviewer.lumiya.cloud.common.MessageType;
 import com.lumiyaviewer.lumiya.dao.ChatMessage;
 import com.lumiyaviewer.lumiya.dao.ChatMessageDao;
 import com.lumiyaviewer.lumiya.dao.Chatter;
 import com.lumiyaviewer.lumiya.dao.ChatterDao;
 import com.lumiyaviewer.lumiya.dao.DaoSession;
+import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever;
 import com.lumiyaviewer.lumiya.sync.CloudSyncServiceConnection;
+import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.Query;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -187,11 +193,85 @@ public class SyncManager {
         To view partially-correct add '--show-bad-code' argument
     */
     public void m370x9b8293aa() {
-        /*
-            Method dump skipped, instructions count: 444
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.users.manager.SyncManager.m370x9b8293aa():void");
+        boolean zSendMessage = false;
+        long j;
+        int i;
+        CloudSyncServiceConnection cloudSyncServiceConnection;
+        Chatter chatterLoad;
+        if (!this.syncMessageSent.getAndSet(true)) {
+            if (this.myNameRetriever == null) {
+                this.myNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.2
+                    private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
+                        SyncManager.this.m367x9b8293a7(chatterNameRetriever);
+                    }
+
+                    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                    public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
+                        $m$0(chatterNameRetriever);
+                    }
+                }, this.dbExecutor, true);
+            }
+            String resolvedName = this.myNameRetriever.getResolvedName();
+            if (resolvedName != null) {
+                Query<ChatMessage> queryForCurrentThread = this.messagesQuery.forCurrentThread();
+                queryForCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
+                LazyList<ChatMessage> lazyListListLazy = queryForCurrentThread.listLazy();
+                ImmutableList.Builder builder = ImmutableList.builder();
+                int i2 = 0;
+                long j2 = 0;
+                Iterator<ChatMessage> it = lazyListListLazy.iterator();
+                while (true) {
+                    j = j2;
+                    i = i2;
+                    if (!it.hasNext()) {
+                        break;
+                    }
+                    ChatMessage next = it.next();
+                    SLChatEvent sLChatEventLoadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
+                    if (sLChatEventLoadFromDatabaseObject != null && (chatterLoad = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
+                        String strResolveChatterName = resolveChatterName(chatterLoad);
+                        if (strResolveChatterName == null) {
+                            break;
+                        }
+                        LogChatMessage logChatMessage = new LogChatMessage(chatterLoad.getType(), chatterLoad.getUuid(), next.getId().longValue(), strResolveChatterName, "[" + this.dateFormat.format(next.getTimestamp()) + "] " + sLChatEventLoadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false));
+                        builder.add(logChatMessage);
+                        j = logChatMessage.messageID;
+                        i++;
+                        if (i >= 100) {
+                            break;
+                        }
+                    }
+                    j2 = j;
+                    i2 = i;
+                }
+                lazyListListLazy.close();
+                if (i != 0) {
+                    LogMessageBatch logMessageBatch = new LogMessageBatch(this.userManager.getUserID(), resolvedName, builder.build(), j);
+                    CloudSyncServiceConnection cloudSyncServiceConnection2 = this.syncServiceConnection.get();
+                    zSendMessage = cloudSyncServiceConnection2 != null ? cloudSyncServiceConnection2.sendMessage(MessageType.LogMessageBatch, logMessageBatch) : false;
+                    if (!this.flushChatterNames.isEmpty() && (cloudSyncServiceConnection = this.syncServiceConnection.get()) != null) {
+                        Iterator<String> it2 = this.flushChatterNames.iterator();
+                        if (it2.hasNext()) {
+                            String next2 = it2.next();
+                            it2.remove();
+                            cloudSyncServiceConnection.sendMessage(MessageType.LogFlushMessages, new LogFlushMessages(this.userManager.getUserID(), resolvedName, next2));
+                        }
+                    }
+                }
+            } else {
+                zSendMessage = false;
+            }
+            this.syncMessageSent.set(zSendMessage);
+        }
+        if (this.needsStopSyncing.getAndSet(false)) {
+            this.syncingEnabled.set(false);
+            CloudSyncServiceConnection andSet = this.syncServiceConnection.getAndSet(null);
+            this.syncMessageSent.set(false);
+            if (andSet != null) {
+                andSet.sendMessage(MessageType.LogFlushMessages, new LogFlushMessages(this.userManager.getUserID(), null, null));
+                andSet.disconnect();
+            }
+        }
     }
 
     void flushChatter(final ChatterID chatterID) {

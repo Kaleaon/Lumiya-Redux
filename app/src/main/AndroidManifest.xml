@@ -11,6 +11,11 @@
     <!-- Keep VR-related features optional so OpenXR/Cardboard-capable devices are not filtered out. -->
     <uses-feature android:name="android.software.vr.mode" android:required="false" />
     <uses-feature android:name="android.hardware.vr.high_performance" android:required="false" />
+    <!-- OpenXR Loader for Android discovers installed runtimes through these broker providers. -->
+    <queries>
+        <provider android:authorities="org.khronos.openxr.runtime_broker" />
+        <provider android:authorities="org.khronos.openxr.system_runtime_broker" />
+    </queries>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application android:allowBackup="true" android:fullBackupContent="@xml/backup_rules" android:icon="@mipmap/ic_lumiya_launcher" android:installLocation="auto" android:label="@string/app_name" android:name="com.lumiyaviewer.lumiya.LumiyaApp" android:supportsRtl="true" android:theme="@style/Theme.Lumiya">
         <activity android:clearTaskOnLaunch="true" android:label="@string/app_name" android:launchMode="singleTask" android:name="com.lumiyaviewer.lumiya.ui.login.LoginActivity" android:exported="true">

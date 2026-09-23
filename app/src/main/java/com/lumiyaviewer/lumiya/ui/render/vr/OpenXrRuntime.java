@@ -5,6 +5,18 @@ import com.lumiyaviewer.lumiya.Debug;
 
 public class OpenXrRuntime implements VrRuntime {
     public static final String ID = "openxr";
+    static final String SESSION_FACTORY_CLASS =
+            "com.lumiyaviewer.lumiya.xr.OpenXrSessionFactoryImpl";
+
+    static boolean isBackendInstalled() {
+        try {
+            Class<?> factoryClass = Class.forName(SESSION_FACTORY_CLASS, false,
+                    OpenXrRuntime.class.getClassLoader());
+            return OpenXrSessionFactory.class.isAssignableFrom(factoryClass);
+        } catch (ClassNotFoundException | LinkageError ignored) {
+            return false;
+        }
+    }
 
     @Override
     public String getRuntimeId() {
@@ -13,7 +25,16 @@ public class OpenXrRuntime implements VrRuntime {
 
     @Override
     public VrSession createSession(Activity activity, VrSession.Listener listener) {
-        Debug.Printf("VR runtime: OpenXR bridge session active (head pose + stereo + controller mapping enabled).", new Object[0]);
-        return new GvrVrSessionAdapter(activity, ID, listener, true);
+        try {
+            Class<?> factoryClass = Class.forName(SESSION_FACTORY_CLASS, true,
+                    activity.getClassLoader());
+            OpenXrSessionFactory factory =
+                    (OpenXrSessionFactory) factoryClass.getDeclaredConstructor().newInstance();
+            Debug.Printf("VR runtime: native OpenXR session active", new Object[0]);
+            return factory.createSession(activity, listener);
+        } catch (ReflectiveOperationException | ClassCastException | LinkageError error) {
+            throw new IllegalStateException(
+                    "OpenXR was selected without an installed native session backend", error);
+        }
     }
 }

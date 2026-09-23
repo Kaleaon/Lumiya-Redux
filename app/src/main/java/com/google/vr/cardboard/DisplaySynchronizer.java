@@ -1,5 +1,6 @@
 package com.google.vr.cardboard;
 
+import com.google.common.logging.nano.Vr;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
@@ -48,68 +49,32 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void doFrame(long r8) {
-        /*
-            r7 = this;
-            r1 = 0
-            r7.checkNativeDisplaySynchronizer()
-            int r0 = r7.displayRotationDegrees
-            r2 = -1
-            if (r0 != r2) goto L29
-        L9:
-            android.view.Display r0 = r7.display
-            int r0 = r0.getRotation()
-            switch(r0) {
-                case 0: goto L39;
-                case 1: goto L3c;
-                case 2: goto L41;
-                case 3: goto L46;
-                default: goto L12;
+     public void doFrame(long j) {
+        checkNativeDisplaySynchronizer();
+        if (this.displayRotationDegrees != -1) {
+            if (!(j - this.lastDisplayRotationUpdateTimeNanos <= DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS)) {
+                switch (this.display.getRotation()) {
+                    case 0:
+                        this.displayRotationDegrees = 0;
+                        break;
+                    case 1:
+                        this.displayRotationDegrees = 90;
+                        break;
+                    case 2:
+                        this.displayRotationDegrees = Vr.VREvent.VrCore.ErrorCode.DON_DAYDREAM_APP_NOT_PRESENT;
+                        break;
+                    case 3:
+                        this.displayRotationDegrees = 270;
+                        break;
+                    default:
+                        Log.e(TAG, "Unknown display rotation, defaulting to 0");
+                        this.displayRotationDegrees = 0;
+                        break;
+                }
+                this.lastDisplayRotationUpdateTimeNanos = j;
             }
-        L12:
-            java.lang.String r0 = "DisplaySynchronizer"
-            java.lang.String r2 = "Unknown display rotation, defaulting to 0"
-            android.util.Log.e(r0, r2)
-            r7.displayRotationDegrees = r1
-        L1d:
-            r7.lastDisplayRotationUpdateTimeNanos = r8
-        L1f:
-            long r2 = r7.nativeDisplaySynchronizer
-            int r6 = r7.displayRotationDegrees
-            r1 = r7
-            r4 = r8
-            r1.nativeUpdate(r2, r4, r6)
-            return
-        L29:
-            long r2 = r7.lastDisplayRotationUpdateTimeNanos
-            long r2 = r8 - r2
-            long r4 = com.google.vr.cardboard.DisplaySynchronizer.DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS
-            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 > 0) goto L37
-            r0 = 1
-        L34:
-            if (r0 != 0) goto L1f
-            goto L9
-        L37:
-            r0 = r1
-            goto L34
-        L39:
-            r7.displayRotationDegrees = r1
-            goto L1d
-        L3c:
-            r0 = 90
-            r7.displayRotationDegrees = r0
-            goto L1d
-        L41:
-            r0 = 180(0xb4, float:2.52E-43)
-            r7.displayRotationDegrees = r0
-            goto L1d
-        L46:
-            r0 = 270(0x10e, float:3.78E-43)
-            r7.displayRotationDegrees = r0
-            goto L1d
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.google.vr.cardboard.DisplaySynchronizer.doFrame(long):void");
+        }
+        nativeUpdate(this.nativeDisplaySynchronizer, j, this.displayRotationDegrees);
     }
 
     protected void finalize() throws Throwable {

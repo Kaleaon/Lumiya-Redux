@@ -162,3 +162,22 @@ Because these are all small local edits, the practical workflow is:
   definitions.
 - `:app:compileDebugJavaWithJavac`, `:app:assembleDebug`, and debug unit-test
   discovery now complete successfully.
+
+## Critical runtime recovery (2026-09-22)
+
+- Recovered the remaining Lumiya-owned method bodies from the checksum-verified
+  3.4.2 APK, including login, UDP receive/ACK processing, compressed object
+  updates, inventory commits, texture/animation loading, avatar baking,
+  animated-mesh drawing, minimap/world input, popup/chat synchronization, RLV,
+  and voice notifications.
+- Rebuilt decompiler-damaged cache I/O and inventory transaction cleanup with
+  bounded retries and deterministic resource closure.
+- Repaired `PriorityBinQueue` locking, timed polling, draining, and priority
+  removal behavior; unit tests cover immediate priority polling and bounded
+  drains.
+- `:app:rejectUndecompiledMethods` now prevents `Method not decompiled` stubs
+  from returning to viewer-owned Lumiya and PhotoView sources.
+- One such stub remains inside the bundled, end-of-life Google VR compatibility
+  source (`GvrSurfaceView.GLThread.guardedRun`). It is outside the modern
+  OpenXR backend and is tracked for removal with the legacy GVR stack rather
+  than being treated as a supported XR implementation.

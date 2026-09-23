@@ -24,7 +24,7 @@ public final class VrRuntimeSelector {
             }
         }
         if (requestedId == null) {
-            requestedId = preferences.getString(PREF_VR_RUNTIME, CardboardRuntime.ID);
+            requestedId = preferences.getString(PREF_VR_RUNTIME, VrIntentContract.VR_RUNTIME_AUTO);
         }
 
         boolean openXrAllowed = OpenXrRuntimeCapabilities.shouldUseOpenXr(context, preferences);

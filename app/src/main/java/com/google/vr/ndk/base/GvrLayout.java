@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import com.google.vr.cardboard.ContextUtils;
@@ -127,124 +128,47 @@ public class GvrLayout extends FrameLayout {
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        private void setDisplay(android.view.Display r7) {
-            /*
-                r6 = this;
-                r5 = 0
-                r1 = 0
-                android.app.Presentation r0 = r6.presentation
-                if (r0 != 0) goto L37
-                r0 = r1
-            L7:
-                boolean r2 = r6.hasCurrentPresentationExpired()
-                if (r2 == 0) goto L3e
-            Ld:
-                android.app.Presentation r2 = r6.presentation
-                android.app.Presentation r0 = r6.presentation
-                if (r0 != 0) goto L45
-            L13:
-                android.view.View r0 = r6.view
-                detachViewFromParent(r0)
-                if (r7 != 0) goto L4d
-            L1a:
-                android.widget.FrameLayout r0 = r6.originalParent
-                android.view.View r1 = r6.view
-                r0.addView(r1, r5)
-            L21:
-                com.google.vr.cardboard.DisplaySynchronizer r1 = r6.displaySynchronizer
-                android.app.Presentation r0 = r6.presentation
-                if (r0 != 0) goto Lad
-                android.content.Context r0 = r6.context
-                android.view.Display r0 = com.google.vr.cardboard.DisplayUtils.getDefaultDisplay(r0)
-            L2d:
-                r1.setDisplay(r0)
-                if (r2 != 0) goto Lb5
-            L32:
-                android.app.Presentation r0 = r6.presentation
-                if (r0 != 0) goto Lcb
-            L36:
-                return
-            L37:
-                android.app.Presentation r0 = r6.presentation
-                android.view.Display r0 = r0.getDisplay()
-                goto L7
-            L3e:
-                boolean r0 = com.google.vr.cardboard.DisplayUtils.isSameDisplay(r7, r0)
-                if (r0 == 0) goto Ld
-                return
-            L45:
-                android.app.Presentation r0 = r6.presentation
-                r0.dismiss()
-                r6.presentation = r1
-                goto L13
-            L4d:
-                com.google.vr.ndk.base.GvrLayout$PresentationFactory r0 = com.google.vr.ndk.base.GvrLayout.access$300()
-                if (r0 != 0) goto La2
-                android.app.Presentation r0 = new android.app.Presentation
-                android.content.Context r3 = r6.context
-                r0.<init>(r3, r7)
-            L5a:
-                r6.presentation = r0
-                android.app.Presentation r0 = r6.presentation
-                android.view.View r3 = r6.view
-                android.widget.RelativeLayout$LayoutParams r4 = r6.layout
-                r0.addContentView(r3, r4)
-                android.app.Presentation r0 = r6.presentation     // Catch: android.view.WindowManager.InvalidDisplayException -> L6b
-                r0.show()     // Catch: android.view.WindowManager.InvalidDisplayException -> L6b
-                goto L21
-            L6b:
-                r0 = move-exception
-                java.lang.String r0 = java.lang.String.valueOf(r0)
-                java.lang.String r3 = java.lang.String.valueOf(r0)
-                int r3 = r3.length()
-                int r3 = r3 + 57
-                java.lang.StringBuilder r4 = new java.lang.StringBuilder
-                r4.<init>(r3)
-                java.lang.String r3 = "Attaching Cardboard View to the external display failed: "
-                java.lang.StringBuilder r3 = r4.append(r3)
-                java.lang.StringBuilder r0 = r3.append(r0)
-                java.lang.String r0 = r0.toString()
-                java.lang.String r3 = "GvrLayout"
-                android.util.Log.e(r3, r0)
-                android.app.Presentation r0 = r6.presentation
-                r0.cancel()
-                r6.presentation = r1
-                android.view.View r0 = r6.view
-                detachViewFromParent(r0)
-                goto L1a
-            La2:
-                com.google.vr.ndk.base.GvrLayout$PresentationFactory r0 = com.google.vr.ndk.base.GvrLayout.access$300()
-                android.content.Context r3 = r6.context
-                android.app.Presentation r0 = r0.create(r3, r7)
-                goto L5a
-            Lad:
-                android.app.Presentation r0 = r6.presentation
-                android.view.Display r0 = r0.getDisplay()
-                goto L2d
-            Lb5:
-                java.util.List<com.google.vr.ndk.base.GvrLayout$PresentationListener> r0 = r6.listeners
-                java.util.Iterator r1 = r0.iterator()
-            Lbb:
-                boolean r0 = r1.hasNext()
-                if (r0 == 0) goto L32
-                java.lang.Object r0 = r1.next()
-                com.google.vr.ndk.base.GvrLayout$PresentationListener r0 = (com.google.vr.ndk.base.GvrLayout.PresentationListener) r0
-                r0.onPresentationStopped()
-                goto Lbb
-            Lcb:
-                java.util.List<com.google.vr.ndk.base.GvrLayout$PresentationListener> r0 = r6.listeners
-                java.util.Iterator r1 = r0.iterator()
-            Ld1:
-                boolean r0 = r1.hasNext()
-                if (r0 == 0) goto L36
-                java.lang.Object r0 = r1.next()
-                com.google.vr.ndk.base.GvrLayout$PresentationListener r0 = (com.google.vr.ndk.base.GvrLayout.PresentationListener) r0
-                android.app.Presentation r2 = r6.presentation
-                android.view.Display r2 = r2.getDisplay()
-                r0.onPresentationStarted(r2)
-                goto Ld1
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.google.vr.ndk.base.GvrLayout.PresentationHelper.setDisplay(android.view.Display):void");
+        private void setDisplay(Display display) {
+            Display display2 = this.presentation == null ? null : this.presentation.getDisplay();
+            if (!hasCurrentPresentationExpired() && DisplayUtils.isSameDisplay(display, display2)) {
+                return;
+            }
+            Presentation presentation = this.presentation;
+            if (this.presentation != null) {
+                this.presentation.dismiss();
+                this.presentation = null;
+            }
+            detachViewFromParent(this.view);
+            if (display == null) {
+                this.originalParent.addView(this.view, 0);
+            } else {
+                this.presentation = GvrLayout.sOptionalPresentationFactory == null ? new Presentation(this.context, display) : GvrLayout.sOptionalPresentationFactory.create(this.context, display);
+                this.presentation.addContentView(this.view, this.layout);
+                try {
+                    this.presentation.show();
+                } catch (WindowManager.InvalidDisplayException e) {
+                    String strValueOf = String.valueOf(e);
+                    Log.e(GvrLayout.TAG, new StringBuilder(String.valueOf(strValueOf).length() + 57).append("Attaching Cardboard View to the external display failed: ").append(strValueOf).toString());
+                    this.presentation.cancel();
+                    this.presentation = null;
+                    detachViewFromParent(this.view);
+                    this.originalParent.addView(this.view, 0);
+                }
+            }
+            this.displaySynchronizer.setDisplay(this.presentation == null ? DisplayUtils.getDefaultDisplay(this.context) : this.presentation.getDisplay());
+            if (presentation != null) {
+                Iterator<PresentationListener> it = this.listeners.iterator();
+                while (it.hasNext()) {
+                    it.next().onPresentationStopped();
+                }
+            }
+            if (this.presentation == null) {
+                return;
+            }
+            Iterator<PresentationListener> it2 = this.listeners.iterator();
+            while (it2.hasNext()) {
+                it2.next().onPresentationStarted(this.presentation.getDisplay());
+            }
         }
 
         public void addListener(PresentationListener presentationListener) {
