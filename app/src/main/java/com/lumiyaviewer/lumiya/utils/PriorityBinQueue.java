@@ -69,14 +69,14 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.Collection
     public void clear() {
         this.lock.lock();
-        for (int i = 0; i < this.numBins; i++) {
-            try {
+        try {
+            for (int i = 0; i < this.numBins; i++) {
                 this.queues[i].clear();
-            } finally {
-                this.lock.unlock();
             }
+            this.allItems.clear();
+        } finally {
+            this.lock.unlock();
         }
-        this.allItems.clear();
     }
 
     @Override // java.util.concurrent.BlockingQueue, java.util.Collection
@@ -113,23 +113,36 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.concurrent.BlockingQueue
     public int drainTo(Collection<? super T> collection) {
         this.lock.lock();
-        int i = 0;
-        for (int i2 = 0; i2 < this.numBins; i2++) {
-            try {
+        try {
+            int i = 0;
+            for (int i2 = 0; i2 < this.numBins; i2++) {
                 i += this.queues[i2].size();
                 collection.addAll(this.queues[i2]);
                 this.queues[i2].clear();
-            } finally {
-                this.lock.unlock();
             }
+            this.allItems.clear();
+            return i;
+        } finally {
+            this.lock.unlock();
         }
-        this.allItems.clear();
-        return i;
     }
 
     @Override // java.util.concurrent.BlockingQueue
     public int drainTo(Collection<? super T> collection, int i) {
-        throw new UnsupportedOperationException();
+        if (collection == this) throw new IllegalArgumentException("Cannot drain a queue into itself");
+        this.lock.lock();
+        try {
+            int drained = 0;
+            while (drained < i) {
+                T item = pollLocked();
+                if (item == null) break;
+                collection.add(item);
+                drained++;
+            }
+            return drained;
+        } finally {
+            this.lock.unlock();
+        }
     }
 
     @Override // java.util.Queue
@@ -168,37 +181,23 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
 
     @Override // java.util.Queue
     public T peek() {
-        T next;
         this.lock.lock();
-        for (int i = 0; i < this.numBins; i++) {
-            try {
-                if (!this.queues[i].isEmpty() && (next = this.queues[i].iterator().next()) != null) {
-                    return next;
-                }
-            } finally {
-                this.lock.unlock();
-            }
+        try {
+            for (Set<T> queue : this.queues) if (!queue.isEmpty()) return queue.iterator().next();
+            return null;
+        } finally {
+            this.lock.unlock();
         }
-        return null;
     }
 
     @Override // java.util.Queue
     public T poll() {
-        Iterator<T> it;
-        T next;
         this.lock.lock();
-        for (int i = 0; i < this.numBins; i++) {
-            try {
-                if (!this.queues[i].isEmpty() && (next = (it = this.queues[i].iterator()).next()) != null) {
-                    it.remove();
-                    this.allItems.remove(next);
-                    return next;
-                }
-            } finally {
-                this.lock.unlock();
-            }
+        try {
+            return pollLocked();
+        } finally {
+            this.lock.unlock();
         }
-        return null;
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:12:0x002b, code lost:
@@ -212,56 +211,19 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public T poll(long r8, java.util.concurrent.TimeUnit r10) throws java.lang.InterruptedException {
-        /*
-            r7 = this;
-            r0 = 0
-            r1 = 0
-            java.util.concurrent.locks.Lock r2 = r7.lock
-            r2.lock()
-            java.util.concurrent.locks.Condition r2 = r7.notEmpty     // Catch: java.lang.Throwable -> L57
-            boolean r2 = r2.await(r8, r10)     // Catch: java.lang.Throwable -> L57
-            if (r2 == 0) goto L4e
-        Lf:
-            int r2 = r7.numBins     // Catch: java.lang.Throwable -> L57
-            if (r1 >= r2) goto L4e
-            java.util.Set<T>[] r2 = r7.queues     // Catch: java.lang.Throwable -> L57
-            r2 = r2[r1]     // Catch: java.lang.Throwable -> L57
-            boolean r2 = r2.isEmpty()     // Catch: java.lang.Throwable -> L57
-            if (r2 != 0) goto L54
-            java.util.Set<T>[] r0 = r7.queues     // Catch: java.lang.Throwable -> L57
-            r0 = r0[r1]     // Catch: java.lang.Throwable -> L57
-            java.util.Iterator r2 = r0.iterator()     // Catch: java.lang.Throwable -> L57
-            java.lang.Object r0 = r2.next()     // Catch: java.lang.Throwable -> L57
-            if (r0 == 0) goto L54
-            r2.remove()     // Catch: java.lang.Throwable -> L57
-            java.util.Map<T, java.lang.Integer> r2 = r7.allItems     // Catch: java.lang.Throwable -> L57
-            r2.remove(r0)     // Catch: java.lang.Throwable -> L57
-            java.lang.String r2 = "Thread %s got item with priority %d"
-            r3 = 2
-            java.lang.Object[] r3 = new java.lang.Object[r3]     // Catch: java.lang.Throwable -> L57
-            java.lang.Thread r4 = java.lang.Thread.currentThread()     // Catch: java.lang.Throwable -> L57
-            java.lang.String r4 = r4.getName()     // Catch: java.lang.Throwable -> L57
-            r5 = 0
-            r3[r5] = r4     // Catch: java.lang.Throwable -> L57
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch: java.lang.Throwable -> L57
-            r4 = 1
-            r3[r4] = r1     // Catch: java.lang.Throwable -> L57
-            com.lumiyaviewer.lumiya.Debug.Printf(r2, r3)     // Catch: java.lang.Throwable -> L57
-        L4e:
-            java.util.concurrent.locks.Lock r1 = r7.lock
-            r1.unlock()
-            return r0
-        L54:
-            int r1 = r1 + 1
-            goto Lf
-        L57:
-            r0 = move-exception
-            java.util.concurrent.locks.Lock r1 = r7.lock
-            r1.unlock()
-            throw r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.utils.PriorityBinQueue.poll(long, java.util.concurrent.TimeUnit):java.lang.Object");
+    public T poll(long j, TimeUnit timeUnit) throws InterruptedException {
+        long remaining = timeUnit.toNanos(j);
+        this.lock.lockInterruptibly();
+        try {
+            T item;
+            while ((item = pollLocked()) == null) {
+                if (remaining <= 0L) return null;
+                remaining = this.notEmpty.awaitNanos(remaining);
+            }
+            return item;
+        } finally {
+            this.lock.unlock();
+        }
     }
 
     @Override // java.util.concurrent.BlockingQueue
@@ -286,16 +248,12 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.concurrent.BlockingQueue, java.util.Collection
     public boolean remove(Object obj) {
         this.lock.lock();
-        boolean z = false;
-        for (int i = 0; i < this.numBins; i++) {
-            try {
-                z |= this.queues[i].remove(obj);
-            } finally {
-                this.lock.unlock();
-            }
+        try {
+            Integer bin = this.allItems.remove(obj);
+            return bin != null && this.queues[bin.intValue()].remove(obj);
+        } finally {
+            this.lock.unlock();
         }
-        this.allItems.remove(obj);
-        return z;
     }
 
     @Override // java.util.Collection
@@ -311,52 +269,37 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     @Override // java.util.Collection
     public boolean retainAll(Collection<?> collection) {
         this.lock.lock();
-        boolean z = false;
-        for (int i = 0; i < this.numBins; i++) {
-            try {
+        try {
+            boolean z = false;
+            for (int i = 0; i < this.numBins; i++) {
                 z |= this.queues[i].retainAll(collection);
-            } finally {
-                this.lock.unlock();
             }
+            this.allItems.keySet().retainAll(collection);
+            return z;
+        } finally {
+            this.lock.unlock();
         }
-        this.allItems.keySet().retainAll(collection);
-        return z;
     }
 
     @Override // java.util.Collection
     public int size() {
         this.lock.lock();
-        int i = 0;
-        for (int i2 = 0; i2 < this.numBins; i2++) {
-            try {
-                i += this.queues[i2].size();
-            } finally {
-                this.lock.unlock();
-            }
+        try {
+            return this.allItems.size();
+        } finally {
+            this.lock.unlock();
         }
-        return i;
     }
 
     @Override // java.util.concurrent.BlockingQueue
     public T take() throws InterruptedException {
-        Iterator<T> it;
-        T next;
-        this.lock.lock();
-        while (true) {
-            for (int i = 0; i < this.numBins; i++) {
-                try {
-                    if (!this.queues[i].isEmpty() && (next = (it = this.queues[i].iterator()).next()) != null) {
-                        it.remove();
-                        this.allItems.remove(next);
-                        Debug.Printf("Thread %s got item with priority %d", Thread.currentThread().getName(), Integer.valueOf(i));
-                        return next;
-                    }
-                } finally {
-                    this.lock.unlock();
-                }
-            }
-            Debug.Printf("Thread %s waiting on the queue", Thread.currentThread().getName());
-            this.notEmpty.await();
+        this.lock.lockInterruptibly();
+        try {
+            T item;
+            while ((item = pollLocked()) == null) this.notEmpty.await();
+            return item;
+        } finally {
+            this.lock.unlock();
         }
     }
 
@@ -386,5 +329,18 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         } finally {
             this.lock.unlock();
         }
+    }
+
+    private T pollLocked() {
+        for (int i = 0; i < this.numBins; i++) {
+            Iterator<T> iterator = this.queues[i].iterator();
+            if (iterator.hasNext()) {
+                T item = iterator.next();
+                iterator.remove();
+                this.allItems.remove(item);
+                return item;
+            }
+        }
+        return null;
     }
 }

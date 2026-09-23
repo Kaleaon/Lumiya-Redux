@@ -15,6 +15,7 @@ import com.lumiyaviewer.lumiya.slproto.messages.StartPingCheck;
 import com.lumiyaviewer.lumiya.slproto.modules.SLIdleHandler;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -211,12 +212,37 @@ public class SLCircuit extends SLMessageHandler {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public boolean ProcessReceive() throws java.io.IOException {
-        /*
-            Method dump skipped, instructions count: 270
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.SLCircuit.ProcessReceive():boolean");
+    public boolean ProcessReceive() throws IOException {
+        this.rxBuffer.clear();
+        this.rxBuffer.order(ByteOrder.BIG_ENDIAN);
+        if (this.datagramChannel.read(this.rxBuffer) == 0) return false;
+        this.rxBuffer.flip();
+        this.receivedAcks.clear();
+        SLMessage message = SLMessage.Unpack(this.rxBuffer, this.tempBuffer, this.receivedAcks);
+        if (message == null) {
+            Debug.Log("message discarded!");
+            return true;
+        }
+        this.lastReceivedPacketMillis = SystemClock.elapsedRealtime();
+        this.pingSentCount = 0;
+        boolean duplicate = !(message instanceof PacketAck)
+                && !(message instanceof StartPingCheck)
+                && !(message instanceof CompletePingCheck)
+                && this.handledPackets.contains(Integer.valueOf(message.seqNum));
+        if (!duplicate) {
+            while (this.handledPackets.size() >= 1024) this.handledPackets.poll();
+            this.handledPackets.add(Integer.valueOf(message.seqNum));
+            this.lastReceivedSeqnum = message.seqNum;
+        }
+        for (Integer ack : this.receivedAcks) ProcessReceivedAck(ack.intValue());
+        if (message.isReliable && !this.pendingAcks.contains(Integer.valueOf(message.seqNum))) {
+            this.pendingAcks.add(Integer.valueOf(message.seqNum));
+        }
+        if (!duplicate) {
+            if (message instanceof PacketAck || message instanceof StartPingCheck) message.Handle(this);
+            else HandleMessage(message);
+        }
+        return true;
     }
 
     public void ProcessReceivedAck(int i) {

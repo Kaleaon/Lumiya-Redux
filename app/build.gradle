@@ -129,8 +129,27 @@ tasks.register('enforceKotlinFirstPackages') {
     }
 }
 
+tasks.register('rejectUndecompiledMethods') {
+    group = 'verification'
+    description = 'Fails when viewer-owned source still contains a JADX method-not-decompiled stub.'
+
+    doLast {
+        def offenders = fileTree("$projectDir/src/main/java") {
+            include 'com/lumiyaviewer/lumiya/**/*.java'
+            include 'uk/co/senab/photoview/**/*.java'
+        }.files.findAll { sourceFile ->
+            sourceFile.getText('UTF-8').contains('Method not decompiled')
+        }
+
+        if (!offenders.isEmpty()) {
+            throw new GradleException("Unrecovered production methods: ${offenders*.absolutePath}")
+        }
+    }
+}
+
 tasks.named('check').configure {
     dependsOn(tasks.named('enforceKotlinFirstPackages'))
+    dependsOn(tasks.named('rejectUndecompiledMethods'))
 }
 
 tasks.named('lint').configure {
@@ -260,4 +279,5 @@ dependencies {
     // No direct Lumiya imports, but the GVR SDK pulls it in transitively;
     // pinning a version avoids a resolution conflict. Remove with GVR stack.
     implementation 'com.google.protobuf:protobuf-javalite:3.25.1'
+    testImplementation 'junit:junit:4.13.2'
 }

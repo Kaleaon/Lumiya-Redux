@@ -8,6 +8,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.render.DrawableObject;
+import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.MatrixStack;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatar;
 import com.lumiyaviewer.lumiya.render.spatial.DrawListObjectEntry;
@@ -31,6 +32,7 @@ import com.lumiyaviewer.lumiya.utils.IdentityMatrix;
 import com.lumiyaviewer.lumiya.utils.LinkedTreeNode;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.lang.ref.WeakReference;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -313,12 +315,110 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void ApplyObjectUpdate(com.lumiyaviewer.lumiya.slproto.messages.ObjectUpdateCompressed.ObjectData r13) throws com.lumiyaviewer.lumiya.slproto.objects.UnsupportedObjectTypeException {
-        /*
-            Method dump skipped, instructions count: 442
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo.ApplyObjectUpdate(com.lumiyaviewer.lumiya.slproto.messages.ObjectUpdateCompressed$ObjectData):void");
+    public void ApplyObjectUpdate(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
+        SLTextureEntry sLTextureEntryCreate;
+        String str;
+        this.UpdateFlags = objectData.UpdateFlags;
+        ByteBuffer byteBufferWrap = ByteBuffer.wrap(objectData.Data);
+        byteBufferWrap.order(ByteOrder.BIG_ENDIAN);
+        this.uuid = UUIDPool.setUUID(this.uuid, byteBufferWrap.getLong(), byteBufferWrap.getLong());
+        byteBufferWrap.order(ByteOrder.LITTLE_ENDIAN);
+        this.localID = byteBufferWrap.getInt();
+        byte b = byteBufferWrap.get();
+        if (b != 9) {
+            throw new UnsupportedObjectTypeException(b);
+        }
+        this.attachmentID = attachmentIDFromState(byteBufferWrap.get());
+        byteBufferWrap.position(byteBufferWrap.position() + 4 + 1 + 1);
+        LLVector3 floatVec = LLVector3.parseFloatVec(byteBufferWrap);
+        LLVector3 floatVec2 = LLVector3.parseFloatVec(byteBufferWrap);
+        this.objectCoords.set(1, floatVec);
+        this.objectCoords.set(0, floatVec2);
+        this.rotation = LLQuaternion.parseFloatVec3(byteBufferWrap);
+        int i = byteBufferWrap.getInt();
+        byteBufferWrap.order(ByteOrder.BIG_ENDIAN);
+        long j = byteBufferWrap.getLong();
+        long j2 = byteBufferWrap.getLong();
+        if (this.ownerUUID == null || (j != 0 && j2 != 0)) {
+            this.ownerUUID = UUIDPool.setUUID(this.ownerUUID, j, j2);
+        }
+        byteBufferWrap.order(ByteOrder.LITTLE_ENDIAN);
+        if ((i & 128) != 0) {
+            byteBufferWrap.position(byteBufferWrap.position() + 12);
+        }
+        if ((i & 32) != 0) {
+            this.parentID = byteBufferWrap.getInt();
+        }
+        if ((i & 2) != 0) {
+            byteBufferWrap.position(byteBufferWrap.position() + 1);
+        } else if ((i & 1) != 0) {
+            byteBufferWrap.position(byteBufferWrap.get() + byteBufferWrap.position());
+        }
+        if ((i & 4) != 0) {
+            int iPosition = byteBufferWrap.position();
+            int i2 = 0;
+            while (iPosition + i2 < byteBufferWrap.capacity() && byteBufferWrap.get(iPosition + i2) != 0) {
+                i2++;
+            }
+            if (i2 != 0) {
+                byte[] bArr = new byte[i2];
+                byteBufferWrap.get(bArr, 0, i2);
+                try {
+                    str = new String(bArr, "ISO-8859-1");
+                } catch (UnsupportedEncodingException e) {
+                    str = null;
+                }
+            } else {
+                str = null;
+            }
+            byteBufferWrap.position(i2 + iPosition + 1);
+            applyHoverText(Strings.isNullOrEmpty(str) ? null : HoverText.create(str, byteBufferWrap.getInt()));
+        }
+        if ((i & 512) != 0) {
+            while (byteBufferWrap.get() != 0) {
+            }
+        }
+        if ((i & 8) != 0) {
+            byteBufferWrap.position(byteBufferWrap.position() + 86);
+        }
+        int iPosition2 = byteBufferWrap.position();
+        int i3 = byteBufferWrap.get() & UnsignedBytes.MAX_VALUE;
+        for (int i4 = 0; i4 < i3; i4++) {
+            byteBufferWrap.getShort();
+            byteBufferWrap.position(byteBufferWrap.getInt() + byteBufferWrap.position());
+        }
+        if ((i & 16) != 0) {
+            byteBufferWrap.position(byteBufferWrap.position() + 16);
+            byteBufferWrap.position(byteBufferWrap.position() + 4 + 1 + 4);
+        }
+        if ((i & 256) != 0) {
+            while (byteBufferWrap.get() != 0) {
+            }
+        }
+        PrimVolumeParams primVolumeParamsCreateFromPackedData = PrimVolumeParams.createFromPackedData(byteBufferWrap);
+        try {
+            sLTextureEntryCreate = SLTextureEntry.create(byteBufferWrap, byteBufferWrap.getInt());
+        } catch (Exception e2) {
+            sLTextureEntryCreate = null;
+        }
+        try {
+            onTexturesUpdate(sLTextureEntryCreate);
+        } catch (Exception e3) {
+            Debug.Log("Failed to retrieve textures in compressed update");
+        }
+        if (primVolumeParamsCreateFromPackedData != null) {
+            byteBufferWrap.position(iPosition2);
+            primVolumeParamsCreateFromPackedData.unpackExtraParams(byteBufferWrap);
+        }
+        PrimDrawParams primDrawParams = PrimParamsPool.get(new PrimDrawParams(primVolumeParamsCreateFromPackedData != null ? PrimParamsPool.get(primVolumeParamsCreateFromPackedData) : null, sLTextureEntryCreate));
+        if (!Objects.equal(this.primDrawParams, primDrawParams)) {
+            this.primDrawParams = primDrawParams;
+            DrawableObject drawableObject = getDrawableObject();
+            if (drawableObject != null) {
+                drawableObject.setPrimDrawParams(this.primDrawParams);
+            }
+        }
+        updateSpatialIndex(false);
     }
 
     public void ApplyTerseObjectUpdate(ImprovedTerseObjectUpdate.ObjectData objectData) {

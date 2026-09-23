@@ -10,6 +10,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -288,84 +289,49 @@ public class MinimapView extends View {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public boolean onTouchEvent(android.view.MotionEvent r7) {
-        /*
-            r6 = this;
-            r1 = 1
-            r3 = -1
-            r0 = 0
-            android.view.ScaleGestureDetector r2 = r6.scaleGestureDetector
-            r2.onTouchEvent(r7)
-            int r2 = r7.getActionMasked()
-            switch(r2) {
-                case 0: goto L10;
-                case 1: goto L5a;
-                case 2: goto L2a;
-                case 3: goto L5d;
-                case 4: goto Lf;
-                case 5: goto Lf;
-                case 6: goto L60;
-                default: goto Lf;
-            }
-        Lf:
-            return r1
-        L10:
-            int r0 = r7.getPointerId(r0)
-            r6.activePointerId = r0
-            float r0 = r7.getX()
-            r6.prevTouchX = r0
-            float r0 = r7.getY()
-            r6.prevTouchY = r0
-            float r0 = r6.prevTouchX
-            float r2 = r6.prevTouchY
-            r6.handleTouch(r0, r2)
-            goto Lf
-        L2a:
-            int r0 = r6.activePointerId
-            int r0 = r7.findPointerIndex(r0)
-            float r2 = r7.getX(r0)
-            float r0 = r7.getY(r0)
-            android.view.ScaleGestureDetector r3 = r6.scaleGestureDetector
-            boolean r3 = r3.isInProgress()
-            if (r3 != 0) goto L55
-            float r3 = r6.prevTouchX
-            float r3 = r2 - r3
-            float r4 = r6.prevTouchY
-            float r4 = r0 - r4
-            float r5 = r6.mapOffsetX
-            float r3 = r3 + r5
-            r6.mapOffsetX = r3
-            float r3 = r6.mapOffsetY
-            float r3 = r3 + r4
-            r6.mapOffsetY = r3
-            r6.invalidate()
-        L55:
-            r6.prevTouchX = r2
-            r6.prevTouchY = r0
-            goto Lf
-        L5a:
-            r6.activePointerId = r3
-            goto Lf
-        L5d:
-            r6.activePointerId = r3
-            goto Lf
-        L60:
-            int r2 = r7.getActionIndex()
-            int r3 = r7.getPointerId(r2)
-            int r4 = r6.activePointerId
-            if (r3 != r4) goto Lf
-            if (r2 != 0) goto L6f
-            r0 = r1
-        L6f:
-            float r2 = r7.getX(r0)
-            r6.prevTouchX = r2
-            float r2 = r7.getY(r0)
-            r6.prevTouchY = r2
-            int r0 = r7.getPointerId(r0)
-            r6.activePointerId = r0
-            goto Lf
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.ui.minimap.MinimapView.onTouchEvent(android.view.MotionEvent):boolean");
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        this.scaleGestureDetector.onTouchEvent(motionEvent);
+        switch (motionEvent.getActionMasked()) {
+            case 0:
+                this.activePointerId = motionEvent.getPointerId(0);
+                this.prevTouchX = motionEvent.getX();
+                this.prevTouchY = motionEvent.getY();
+                handleTouch(this.prevTouchX, this.prevTouchY);
+                return true;
+            case 1:
+                this.activePointerId = -1;
+                return true;
+            case 2:
+                int iFindPointerIndex = motionEvent.findPointerIndex(this.activePointerId);
+                float x = motionEvent.getX(iFindPointerIndex);
+                float y = motionEvent.getY(iFindPointerIndex);
+                if (!this.scaleGestureDetector.isInProgress()) {
+                    float f = x - this.prevTouchX;
+                    float f2 = y - this.prevTouchY;
+                    this.mapOffsetX = f + this.mapOffsetX;
+                    this.mapOffsetY += f2;
+                    invalidate();
+                }
+                this.prevTouchX = x;
+                this.prevTouchY = y;
+                return true;
+            case 3:
+                this.activePointerId = -1;
+                return true;
+            case 4:
+            case 5:
+            default:
+                return true;
+            case 6:
+                int actionIndex = motionEvent.getActionIndex();
+                if (motionEvent.getPointerId(actionIndex) == this.activePointerId) {
+                    int i = actionIndex == 0 ? 1 : 0;
+                    this.prevTouchX = motionEvent.getX(i);
+                    this.prevTouchY = motionEvent.getY(i);
+                    this.activePointerId = motionEvent.getPointerId(i);
+                }
+                return true;
+        }
     }
 
     void setMinimapBitmap(@Nullable SLMinimap.MinimapBitmap minimapBitmap) {

@@ -55,7 +55,7 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
             boolean z;
             long j;
             boolean z2;
-            boolean z3;
+            boolean z3 = false;
             long j2;
             boolean z4 = true;
             Debug.Printf("ChatView: processing loadMoreData(), reloadRequested %b", Boolean.valueOf(ChunkedListLoader.this.reloadRequested.get()));
@@ -303,12 +303,111 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void setVisibleRange(int r9, int r10) {
-        /*
-            Method dump skipped, instructions count: 479
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.setVisibleRange(int, int):void");
+    public void setVisibleRange(int i, int i2) {
+        Object obj;
+        boolean z = false;
+        boolean z2 = false;
+        int iRemoveElementsBefore;
+        boolean z3 = false;
+        synchronized (this.lock) {
+            Object[] objArr = new Object[5];
+            objArr[0] = Integer.valueOf(i);
+            objArr[1] = Integer.valueOf(i2);
+            objArr[2] = Integer.valueOf(this.items.size());
+            objArr[3] = (this.loadAboveWanted || this.loadAboveResult != null) ? "no" : "yes";
+            objArr[4] = (this.loadBelowWanted || this.loadBelowResult != null) ? "no" : "yes";
+            Debug.Printf("ChatView: new visible range %d, %d size %d above possible %s below possible %s", objArr);
+        }
+        if (this.items.size() > 0) {
+            if (i <= 0 && this.hasAbove) {
+                synchronized (this.lock) {
+                    if (this.loadAboveWanted || this.loadAboveResult != null) {
+                        z = false;
+                    } else {
+                        this.loadAboveTopmostId = ((Long) this.items.get(0).getId()).longValue();
+                        this.loadAboveWanted = true;
+                        Debug.Printf("ChatView: requesting load above id %d", Long.valueOf(this.loadAboveTopmostId));
+                        z = true;
+                    }
+                }
+            } else if (i > 0) {
+                synchronized (this.lock) {
+                    if (!this.loadAboveWanted) {
+                        z2 = this.loadAboveResult == null;
+                    }
+                }
+                if (!z2 || (iRemoveElementsBefore = this.items.removeElementsBefore(i)) == 0) {
+                    z = false;
+                } else {
+                    this.hasAbove = true;
+                    this.listener.onListItemsRemoved(0, iRemoveElementsBefore);
+                    z = false;
+                }
+            }
+            if (i2 >= this.items.size() - 1 && this.hasBelow) {
+                obj = this.lock;
+                synchronized (obj) {
+                    if (!this.loadBelowWanted && this.loadBelowResult == null) {
+                        this.loadBelowLastId = ((Long) this.items.get(this.items.size() - 1).getId()).longValue();
+                        this.loadBelowWanted = true;
+                        Debug.Printf("ChatView: requesting load below id %d", Long.valueOf(this.loadBelowLastId));
+                        z = true;
+                    }
+                }
+            } else if (i2 >= 0 && i2 < this.items.size() - 1) {
+                synchronized (this.lock) {
+                    if (!this.loadBelowWanted) {
+                        z3 = this.loadBelowResult == null;
+                    }
+                }
+                if (z3) {
+                    int size = this.items.size();
+                    int iRemoveElementsAfter = this.items.removeElementsAfter(i2);
+                    if (iRemoveElementsAfter != 0) {
+                        this.hasBelow = true;
+                        this.listener.onListItemsRemoved(size - iRemoveElementsAfter, iRemoveElementsAfter);
+                    }
+                }
+            }
+        } else if (this.startFromStart) {
+            if (this.hasBelow) {
+                obj = this.lock;
+                synchronized (obj) {
+                    if (this.loadBelowWanted || this.loadBelowResult != null) {
+                        z = false;
+                    } else {
+                        this.loadBelowLastId = 0L;
+                        this.loadBelowWanted = true;
+                        Debug.Printf("ChatView: requesting load below id %d", Long.valueOf(this.loadBelowLastId));
+                        z = true;
+                    }
+                }
+            }
+            z = false;
+        } else {
+            if (this.hasAbove) {
+                obj = this.lock;
+                synchronized (obj) {
+                    if (this.loadAboveWanted || this.loadAboveResult != null) {
+                        z = false;
+                    } else {
+                        this.loadAboveTopmostId = Long.MAX_VALUE;
+                        this.loadAboveWanted = true;
+                        Debug.Printf("ChatView: requesting load above id %d", Long.valueOf(this.loadAboveTopmostId));
+                        z = true;
+                    }
+                }
+            }
+            z = false;
+        }
+        if (z) {
+            if (!this.loadRequested.compareAndSet(false, true)) {
+                Debug.Printf("ChatView: loadMoreData() already requested", new Object[0]);
+            } else {
+                Debug.Printf("ChatView: requesting loadMoreData ()", new Object[0]);
+                this.executor.execute(this.loadMoreData);
+            }
+        }
     }
 
     @Override // java.util.AbstractCollection, java.util.Collection, java.util.List

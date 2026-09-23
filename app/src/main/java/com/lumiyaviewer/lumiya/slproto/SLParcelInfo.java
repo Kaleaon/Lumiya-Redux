@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.spatial.DrawListObjectEntry;
+import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.slproto.messages.AvatarAnimation;
 import com.lumiyaviewer.lumiya.slproto.messages.AvatarAppearance;
 import com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl;
@@ -325,12 +326,96 @@ public class SLParcelInfo {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    boolean killObject(com.lumiyaviewer.lumiya.slproto.SLAgentCircuit r11, int r12) {
-        /*
-            Method dump skipped, instructions count: 286
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.SLParcelInfo.killObject(com.lumiyaviewer.lumiya.slproto.SLAgentCircuit, int):boolean");
+    boolean killObject(SLAgentCircuit sLAgentCircuit, int i) {
+        boolean z = false;
+        boolean z2 = false;
+        boolean z3 = false;
+        boolean z4 = false;
+        LinkedList linkedList;
+        LinkedList<SLObjectInfo> linkedList2 = null;
+        synchronized (this) {
+            UUID uuidRemove = this.uuidsNearby.remove(Integer.valueOf(i));
+            if (uuidRemove != null) {
+                this.objectNamesQueue.remove(uuidRemove);
+                SLObjectInfo sLObjectInfoRemove = this.allObjectsNearby.remove(uuidRemove);
+                if (sLObjectInfoRemove != null) {
+                    sLObjectInfoRemove.isDead = true;
+                    if (sLObjectInfoRemove.parentID == 0) {
+                        this.rootObjects.remove(Integer.valueOf(i));
+                    } else {
+                        UUID uuid = this.uuidsNearby.get(Integer.valueOf(sLObjectInfoRemove.parentID));
+                        SLObjectInfo sLObjectInfo = uuid != null ? this.allObjectsNearby.get(uuid) : null;
+                        if (sLObjectInfo != null) {
+                            sLObjectInfo.removeChild(sLObjectInfoRemove);
+                            if (sLObjectInfo instanceof SLObjectAvatarInfo) {
+                                SLObjectAvatarInfo sLObjectAvatarInfo = (SLObjectAvatarInfo) sLObjectInfo;
+                                if (sLObjectAvatarInfo.isMyAvatar()) {
+                                    sLAgentCircuit.processMyAttachmentUpdate(sLObjectAvatarInfo);
+                                }
+                            }
+                        } else {
+                            LinkedList<SLObjectInfo> linkedList3 = this.orphanObjects.get(Integer.valueOf(sLObjectInfoRemove.parentID));
+                            if (linkedList3 != null) {
+                                linkedList3.remove(sLObjectInfoRemove);
+                                if (linkedList3.isEmpty()) {
+                                    this.orphanObjects.remove(Integer.valueOf(sLObjectInfoRemove.parentID));
+                                }
+                            }
+                        }
+                    }
+                    try {
+                        for (SLObjectInfo sLObjectInfo2 : sLObjectInfoRemove.treeNode) {
+                            if (sLObjectInfo2.isAvatar()) {
+                                if (linkedList2 == null) {
+                                    linkedList2 = new LinkedList();
+                                }
+                                linkedList2.add(sLObjectInfo2);
+                                linkedList = linkedList2;
+                            } else {
+                                killObject(sLAgentCircuit, sLObjectInfo2.localID);
+                                linkedList = linkedList2;
+                            }
+                            linkedList2 = linkedList;
+                        }
+                        if (linkedList2 != null) {
+                            z3 = false;
+                            for (SLObjectInfo sLObjectInfo3 : linkedList2) {
+                                try {
+                                    sLObjectInfoRemove.removeChild(sLObjectInfo3);
+                                    sLObjectInfo3.parentID = 0;
+                                    if ((sLObjectInfo3 instanceof SLObjectAvatarInfo) && ((SLObjectAvatarInfo) sLObjectInfo3).isMyAvatar()) {
+                                        z3 = true;
+                                    }
+                                    this.rootObjects.put(Integer.valueOf(sLObjectInfo3.localID), sLObjectInfo3);
+                                } catch (NoSuchElementException exception) {
+                                    Debug.Warning(exception);
+                                    z4 = z3;
+                                }
+                            }
+                            z4 = z3;
+                        } else {
+                            z4 = false;
+                        }
+                    } catch (NoSuchElementException exception) {
+                        Debug.Warning(exception);
+                        z3 = false;
+                        z4 = false;
+                    }
+                    sLObjectInfoRemove.removeFromSpatialIndex();
+                    z = z4;
+                } else {
+                    z = false;
+                }
+            }
+            z2 = uuidRemove != null;
+        }
+        if (this.userManager != null) {
+            this.userManager.getObjectsManager().requestObjectProfileUpdate(i);
+            if (z) {
+                this.userManager.getObjectsManager().myAvatarState().requestUpdate(SubscriptionSingleKey.Value);
+            }
+        }
+        return z2;
     }
 
     public synchronized void reset(UserManager userManager) {

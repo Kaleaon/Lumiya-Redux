@@ -2,13 +2,17 @@ package com.lumiyaviewer.lumiya.ui.render.vr;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import com.lumiyaviewer.lumiya.Debug;
 
 final class OpenXrRuntimeCapabilities {
+    private static final String OPENXR_RUNTIME_BROKER_AUTHORITY =
+            "org.khronos.openxr.runtime_broker";
+    private static final String OPENXR_SYSTEM_RUNTIME_BROKER_AUTHORITY =
+            "org.khronos.openxr.system_runtime_broker";
     static final String PREF_OPENXR_ENABLED = "pref_vr_openxr_enabled";
     static final String PREF_OPENXR_STAGE = "pref_vr_openxr_stage";
     static final String PREF_OPENXR_ROLLOUT_PERCENT = "pref_vr_openxr_rollout_percent";
@@ -50,9 +54,14 @@ final class OpenXrRuntimeCapabilities {
     }
 
     private static boolean isRuntimeCapable(Context context) {
-        boolean supportsVrMode = Build.VERSION.SDK_INT >= 24;
-        boolean hasVrHighPerformance = context.getPackageManager().hasSystemFeature("android.hardware.vr.high_performance");
-        return supportsVrMode || hasVrHighPerformance;
+        if (!OpenXrRuntime.isBackendInstalled()) {
+            Debug.Printf("VR metrics: native OpenXR session backend is not installed", new Object[0]);
+            return false;
+        }
+
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.resolveContentProvider(OPENXR_RUNTIME_BROKER_AUTHORITY, 0) != null
+                || packageManager.resolveContentProvider(OPENXR_SYSTEM_RUNTIME_BROKER_AUTHORITY, 0) != null;
     }
 
     private static boolean isEligibleForStage(Context context, String stage, int rolloutPercent, boolean forceEnable) {
@@ -80,6 +89,6 @@ final class OpenXrRuntimeCapabilities {
         if (TextUtils.isEmpty(androidId)) {
             return 100;
         }
-        return Math.abs(androidId.hashCode()) % 100;
+        return Math.floorMod(androidId.hashCode(), 100);
     }
 }

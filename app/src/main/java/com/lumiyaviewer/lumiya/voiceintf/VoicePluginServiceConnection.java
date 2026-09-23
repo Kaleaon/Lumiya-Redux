@@ -1,5 +1,14 @@
 package com.lumiyaviewer.lumiya.voiceintf;
 
+import android.app.Notification;
+import androidx.core.app.NotificationCompat;
+import com.lumiyaviewer.lumiya.GridConnectionService;
+import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo;
+import com.lumiyaviewer.lumiya.ui.chat.ChatFragment;
+import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatFragmentActivityFactory;
+import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
+import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -355,12 +364,34 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void showIncomingCallNotification(com.lumiyaviewer.lumiya.voice.common.messages.VoiceRinging r12, java.lang.String r13, com.lumiyaviewer.lumiya.slproto.users.ChatterID r14) {
-        /*
-            Method dump skipped, instructions count: 294
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection.showIncomingCallNotification(com.lumiyaviewer.lumiya.voice.common.messages.VoiceRinging, java.lang.String, com.lumiyaviewer.lumiya.slproto.users.ChatterID):void");
+    private void showIncomingCallNotification(VoiceRinging voiceRinging, String str, ChatterID chatterID) {
+        Intent intentCaptureNotify;
+        Intent intent = new Intent(this.context, (Class<?>) GridConnectionService.class);
+        intent.setAction(ACTION_VOICE_REJECT);
+        intent.setData(voiceRinging.toUri());
+        intent.putExtra(INTENT_EXTRA_RINGING_MESSSAGE, voiceRinging.toBundle());
+        Intent intentCreateIntent = ChatFragmentActivityFactory.getInstance().createIntent(this.context, ChatFragment.makeSelection(chatterID));
+        intentCreateIntent.addFlags(536870912);
+        ActivityUtils.setActiveAgentID(intentCreateIntent, chatterID.agentUUID);
+        intentCaptureNotify = intentCreateIntent;
+        UserManager userManager = this.userManager.get();
+        if (userManager != null) {
+            intentCaptureNotify = userManager.getUnreadNotificationManager().captureNotify(UnreadNotificationInfo.create(userManager.getUserID(), 0, null, null, 1, NotificationType.Private, UnreadNotificationInfo.UnreadMessageSource.create(chatterID, null, null, 0), UnreadNotificationInfo.ObjectPopupNotification.create(0, 0, null)), intentCreateIntent);
+            if (intentCaptureNotify == null) {
+                intentCaptureNotify = intentCreateIntent;
+            }
+        }
+        Intent intent2 = new Intent(this.context, (Class<?>) GridConnectionService.class);
+        intent2.setAction(ACTION_VOICE_ACCEPT);
+        intent2.setData(voiceRinging.toUri());
+        intent2.putExtra(INTENT_EXTRA_RINGING_MESSSAGE, voiceRinging.toBundle());
+        intent2.putExtra("chatterID", chatterID.toBundle());
+        int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        intent2.putExtra(INTENT_EXTRA_OPEN_CHATTER, PendingIntent.getActivity(this.context, 0, intentCaptureNotify, pendingIntentFlags));
+        Notification notificationBuild = new NotificationCompat.Builder(this.context).setSmallIcon(R.drawable.ic_incoming_voice_call).setContentTitle(str).setContentText(this.context.getString(R.string.incoming_voice_call_text)).setDefaults(-1).setPriority(1).setDeleteIntent(PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).setContentIntent(PendingIntent.getActivity(this.context, 0, intentCaptureNotify, pendingIntentFlags)).setAutoCancel(true).addAction(R.drawable.ic_voice_call_accept, this.context.getString(R.string.voice_call_accept), PendingIntent.getService(this.context, 0, intent2, pendingIntentFlags)).addAction(R.drawable.ic_voice_call_reject, this.context.getString(R.string.voice_call_reject), PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).build();
+        String str2 = voiceRinging.voiceChannelInfo.voiceChannelURI;
+        this.incomingCallNotificationTags.add(str2);
+        ((NotificationManager) this.context.getSystemService("notification")).notify(str2, 1001, notificationBuild);
     }
 
     public void acceptCall(Intent intent) {
