@@ -22,6 +22,32 @@ public class OnlineNotificationInfo {
     private final String titleText;
     private final boolean visible;
 
+    /**
+     * Notification used to promote GridConnectionService immediately after Android
+     * starts it as a foreground service. Login setup can perform network work before
+     * an SLGridConnection reaches Connecting, but Android requires promotion first.
+     */
+    public static Notification getStartingNotification(Context context, String gridName) {
+        String content = String.format(
+                context.getResources().getString(R.string.grid_status_connecting), gridName);
+        NotificationCompat.Builder builder = createBuilder(context)
+                .setContentTitle(gridName)
+                .setContentText(content)
+                .setProgress(0, 0, true);
+        return builder.build();
+    }
+
+    private static NotificationCompat.Builder createBuilder(Context context) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
+                NotificationChannels.getInstance().getChannelName(NotificationChannels.Channel.OnlineStatus));
+        return builder.setSmallIcon(R.drawable.ic_online_notify)
+                .setDefaults(0)
+                .setOngoing(true)
+                .setContentIntent(PlatformCompat.getActivity(context, 0,
+                        new Intent(context, (Class<?>) LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setOnlyAlertOnce(true);
+    }
+
     public OnlineNotificationInfo(boolean showNotification, Context context, String userName,
                                   SLGridConnection connection, ChatterNameRetriever nameRetriever,
                                   @androidx.annotation.Nullable CurrentLocationInfo currentLocation) {
@@ -98,8 +124,9 @@ public class OnlineNotificationInfo {
         if (!this.visible) {
             return null;
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannels.getInstance().getChannelName(NotificationChannels.Channel.OnlineStatus));
-        builder.setSmallIcon(R.drawable.ic_online_notify).setContentTitle(this.titleText).setContentText(this.contentText).setDefaults(0).setOngoing(true).setContentIntent(PlatformCompat.getActivity(context, 0, new Intent(context, (Class<?>) LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT)).setOnlyAlertOnce(true);
+        NotificationCompat.Builder builder = createBuilder(context)
+                .setContentTitle(this.titleText)
+                .setContentText(this.contentText);
         if (this.hasProgress) {
             builder.setProgress(0, 0, true);
         }
