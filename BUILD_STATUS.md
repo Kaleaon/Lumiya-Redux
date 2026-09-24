@@ -26,7 +26,7 @@ API-floor cleanup note: API 21–25 compatibility codepaths are being removed in
 | Stage | Status |
 | --- | --- |
 | Gradle configuration | Clean — `settings.gradle` + `build.gradle` resolve, wrapper runs. |
-| Dependency resolution | All Maven coordinates resolve (AndroidX, Material, OkHttp, greenDAO 2.1.0, ButterKnife 10.2.3, Gson, Guava, JSR-305, PagerSlidingTabStrip, nineoldandroids, Protobuf-lite). |
+| Dependency resolution | All Maven coordinates resolve (AndroidX, Material, OkHttp, greenDAO 2.1.0, ButterKnife 10.2.3, Gson, Guava, JSR-305). |
 | Manifest merge (`processDebugMainManifest`) | Passes after: removing `package=` attr, deduping `READ_EXTERNAL_STORAGE`, adding explicit `android:exported` on every `<activity>`. |
 | Resource merge (`mergeDebugResources`) | Passes after stripping ~306 `<attr>` declarations from `res/values/attrs.xml` that duplicate AndroidX / Material attrs. |
 | Resource compile (`processDebugResources`) | Passes. R class is generated correctly. |

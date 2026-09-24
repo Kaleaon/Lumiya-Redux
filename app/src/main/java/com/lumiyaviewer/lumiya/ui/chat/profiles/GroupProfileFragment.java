@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
@@ -172,7 +172,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
                 GroupProfileFragment.this.lastSelectedChatterID = GroupProfileFragment.this.chatterID;
             }
         });
-        ((PagerSlidingTabStrip) inflate.findViewById(R.id.user_profile_tabs)).setViewPager(viewPager);
+        ((TabLayout) inflate.findViewById(R.id.user_profile_tabs)).setupWithViewPager(viewPager);
         this.loadableMonitor.setLoadingLayout((LoadingLayout) inflate.findViewById(R.id.loading_layout), getString(R.string.no_group_selected), getString(R.string.group_profile_fail));
         return inflate;
     }
