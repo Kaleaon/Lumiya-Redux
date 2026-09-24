@@ -38,10 +38,6 @@ public class TextureViewFragment extends StateAwareFragment {
             this.textureReady = new Object();
         }
 
-        /* synthetic */ LoadAssetImageTask(TextureViewFragment textureViewFragment, LoadAssetImageTask loadAssetImageTask) {
-            this();
-        }
-
         @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
@@ -128,7 +124,7 @@ public class TextureViewFragment extends StateAwareFragment {
                 this.loadAssetImageTask.cancel(true);
                 this.loadAssetImageTask = null;
             }
-            this.loadAssetImageTask = new LoadAssetImageTask(this, loadAssetImageTask);
+            this.loadAssetImageTask = new LoadAssetImageTask();
             this.loadAssetImageTask.execute(uuid);
         }
     }

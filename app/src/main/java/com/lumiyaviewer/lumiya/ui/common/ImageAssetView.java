@@ -40,10 +40,6 @@ public class ImageAssetView extends View {
             this.textureReady = new Object();
         }
 
-        /* synthetic */ LoadAssetImageTask(ImageAssetView imageAssetView, LoadAssetImageTask loadAssetImageTask) {
-            this();
-        }
-
         @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
@@ -226,7 +222,7 @@ public class ImageAssetView extends View {
         this.imageBitmap = null;
         if (this.assetID != null) {
             Debug.Printf("requested to view asset ID %s", uuid);
-            this.loadTask = new LoadAssetImageTask(this, loadAssetImageTask);
+            this.loadTask = new LoadAssetImageTask();
             this.loadTask.execute(uuid);
         }
         invalidate();

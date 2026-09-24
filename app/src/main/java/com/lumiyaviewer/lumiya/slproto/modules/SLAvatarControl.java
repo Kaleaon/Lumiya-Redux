@@ -94,11 +94,7 @@ public class SLAvatarControl extends SLModule {
             this.scheduledInterval = i;
         }
 
-        /* synthetic */ AgentUpdateTimerTask(SLAvatarControl sLAvatarControl, int i, AgentUpdateTimerTask agentUpdateTimerTask) {
-            this(i);
-        }
-
-        int getScheduledInterval() {
+            int getScheduledInterval() {
             return this.scheduledInterval;
         }
 
@@ -380,7 +376,7 @@ public class SLAvatarControl extends SLModule {
                     this.agentUpdateTask = null;
                 }
                 if (i2 != 0) {
-                    this.agentUpdateTask = new AgentUpdateTimerTask(this, i2, null);
+                    this.agentUpdateTask = new AgentUpdateTimerTask(i2);
                     timer.schedule(this.agentUpdateTask, i, i2);
                 }
             }

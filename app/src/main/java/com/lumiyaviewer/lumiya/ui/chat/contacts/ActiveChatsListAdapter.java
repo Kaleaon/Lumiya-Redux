@@ -67,10 +67,6 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
             this.chatterID = chatterID;
         }
 
-        /* synthetic */ LocalChatItem(ActiveChatsListAdapter activeChatsListAdapter, ChatterID chatterID, LocalChatItem localChatItem) {
-            this(chatterID);
-        }
-
         @Override
         public void buildView(Context context, ChatterItemViewBuilder chatterItemViewBuilder, UserManager userManager) {
             boolean z = false;
@@ -142,7 +138,7 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         this.context = context;
         this.userManager = userManager;
         this.inflater = LayoutInflater.from(context);
-        this.localChatItem = new LocalChatItem(this, ChatterID.getLocalChatterID(userManager.getUserID()), null);
+        this.localChatItem = new LocalChatItem(ChatterID.getLocalChatterID(userManager.getUserID()));
         this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m438x73a3bdf5((ImmutableList) obj);

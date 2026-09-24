@@ -30,11 +30,7 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
             this.subscription = RequestForwarder.this.subscribable.subscribe(kdown, RequestForwarder.this.executor, this, this);
         }
 
-        /* synthetic */ DownstreamSubscription(RequestForwarder requestForwarder, Kup obj, Kdown obj2, DownstreamSubscription downstreamSubscription) {
-            this(obj, obj2);
-        }
-
-        /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestForwarder$DownstreamSubscription_827, reason: not valid java name */
+            /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestForwarder$DownstreamSubscription_827, reason: not valid java name */
         /* synthetic */ void m40x317e7a9e(Tdown obj) {
             RequestForwarder.this.processResultInternal(this.key, obj);
         }
@@ -68,7 +64,7 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
     /* renamed from: processRequestInternal, reason: merged with bridge method [inline-methods] */
     public void m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(@Nonnull Kup kup) {
         RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription put;
-        RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription downstreamSubscription = new DownstreamSubscription(this, kup, getDownstreamKey(kup), null);
+        RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription downstreamSubscription = new DownstreamSubscription(kup, getDownstreamKey(kup));
         synchronized (this.lock) {
             put = this.subscriptions.put(kup, downstreamSubscription);
         }

@@ -39,10 +39,6 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
             this.renderContext = new AtomicReference<>(renderContext);
         }
 
-        /* synthetic */ EGLLoadThread(GLAsyncLoadQueue gLAsyncLoadQueue, RenderContext renderContext, EGLLoadThread eGLLoadThread) {
-            this(renderContext);
-        }
-
         @Nullable
         private EGLContext createContext() {
             Debug.Printf("TexLoad: create[1]: eglGetError = %d", Integer.valueOf(GLAsyncLoadQueue.this.egl10.eglGetError()));
@@ -131,7 +127,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         if (this.eglBaseContext == null || this.eglBaseContext == EGL10.EGL_NO_CONTEXT) {
             throw new InstantiationException("TexLoad: current context was null");
         }
-        this.thread = new Thread(new EGLLoadThread(this, renderContext, eGLLoadThread), "EGLLoader");
+        this.thread = new Thread(new EGLLoadThread(renderContext), "EGLLoader");
         this.thread.setPriority(4);
         this.thread.start();
         try {

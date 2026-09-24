@@ -60,10 +60,6 @@ public class OpportunisticExecutor implements Executor {
         private RunOnceExecutor() {
         }
 
-        /* synthetic */ RunOnceExecutor(OpportunisticExecutor opportunisticExecutor, RunOnceExecutor runOnceExecutor) {
-            this();
-        }
-
         @Override
         public void execute(@Nonnull Runnable runnable) {
             try {
@@ -103,6 +99,6 @@ public class OpportunisticExecutor implements Executor {
     }
 
     public RunOnceExecutor getRunOnceExecutor() {
-        return new RunOnceExecutor(this, null);
+        return new RunOnceExecutor();
     }
 }

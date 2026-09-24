@@ -103,7 +103,10 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
         }
         try {
             lLSDNode = this.xmlReq.PerformRequest(str, null);
-        } catch (LLSDXMLException | IOException e) {
+        } catch (LLSDXMLException e) {
+            e.printStackTrace();
+            lLSDNode = null;
+        } catch (IOException e) {
             e.printStackTrace();
             lLSDNode = null;
         }

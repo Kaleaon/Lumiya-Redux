@@ -24,7 +24,7 @@ class GLStateBackup {
         private int attributeId;
         private IntBuffer enabled = IntBuffer.allocate(1);
 
-        VertexAttributeState(GLStateBackup gLStateBackup, int i) {
+        VertexAttributeState(int i) {
             this.attributeId = i;
         }
 
@@ -45,7 +45,7 @@ class GLStateBackup {
     }
 
     void addTrackedVertexAttribute(int i) {
-        this.vertexAttributes.add(new VertexAttributeState(this, i));
+        this.vertexAttributes.add(new VertexAttributeState(i));
     }
 
     void clearTrackedVertexAttributes() {

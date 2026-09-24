@@ -87,29 +87,64 @@ public class RLVRestrictions {
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public boolean isAllowed(RLVRestrictionType.RLVRuleMatchType rLVRuleMatchType, String str, UUID uuid, UUID uuid2) {
-            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance) {
+        /**
+         * Whether an action is allowed under this behaviour's restrictions.
+         * restMap maps an option ("" = the behaviour with no option) to the
+         * objects that imposed it.
+         *
+         * @param matchType how options are interpreted for this behaviour
+         * @param option    the option being checked (e.g. an agent UUID string)
+         * @param objectID  object the action concerns (TargetSpecifiesRestriction)
+         * @param sourceID  object asking, for "secure" behaviours (TargetNoExceptions)
+         */
+        public boolean isAllowed(RLVRestrictionType.RLVRuleMatchType matchType, String option, UUID objectID, UUID sourceID) {
+            if (matchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance) {
                 if (this.restMap.containsKey("")) {
                     return true;
                 }
-                return !str.equals("") && this.restMap.containsKey(str);
+                return !option.equals("") && this.restMap.containsKey(option);
             }
             if (this.restMap.isEmpty()) {
                 return true;
             }
-            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetNoExceptions) {
-                if (uuid2 == null) return false;
-                for (HashSet<UUID> sources : this.restMap.values()) {
-                    if (sources.size() != 1 || !sources.contains(uuid2)) return false;
-                }
+            switch (matchType) {
+                case TargetNoExceptions:
+                    // Secure variant: only allowed when every restriction was set
+                    // by the asking object alone.
+                    if (this.restMap.isEmpty()) {
+                        return true;
+                    }
+                    if (sourceID == null) {
+                        return false;
+                    }
+                    for (HashSet<UUID> sources : this.restMap.values()) {
+                        if (sources.size() != 1 || !sources.contains(sourceID)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                case TargetSpecifiesException:
+                    // "" restricts; an option lists an exception to it.
+                    if (!this.restMap.containsKey("")) {
+                        return true;
+                    }
+                    return !option.equals("") && this.restMap.containsKey(option);
+                case TargetSpecifiesRestriction:
+                    // An option restricts that target; "" restricts all but the
+                    // objects that set it.
+                    if (this.restMap.containsKey(option)) {
+                        return false;
+                    }
+                    if (!this.restMap.containsKey("")) {
+                        return true;
+                    }
+                    if (objectID == null) {
+                        return false;
+                    }
+                    return !this.restMap.get("").contains(objectID);
+                default:
+                    return true;
             }
-            if (rLVRuleMatchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesException
-                    && this.restMap.containsKey("")) {
-                return !str.equals("") && this.restMap.containsKey(str);
-            }
-            if (this.restMap.containsKey(str)) return false;
-            return !this.restMap.containsKey("")
-                    || (uuid != null && !this.restMap.get("").contains(uuid));
         }
 
         public boolean isEmpty() {

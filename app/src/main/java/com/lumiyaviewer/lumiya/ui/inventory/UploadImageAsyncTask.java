@@ -27,7 +27,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, UploadImageResult> {
+public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, UploadImageAsyncTask.UploadImageResult> {
     private static final MediaType MEDIA_TYPE_JP2 = MediaType.parse("image/jp2");
     private final UUID agentUUID;
     private final Context context;
@@ -54,139 +54,118 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
         this.agentUUID = uuid;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:83:0x0253  */
+    /**
+     * Upload each picture as a texture through the NewFileAgentInventory
+     * capability (the viewer's LLNewFileResourceUploadInfo flow): request an
+     * uploader URL with the asset/inventory metadata, POST the JPEG-2000 data
+     * to it, and read the LLSD reply. The result reports the last picture's
+     * outcome and the last error message the grid sent.
+     */
     @Override
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-    */
-    public UploadImageResult doInBackground(UploadImageParams... uploadImageParamsArr) throws Throwable {
-        Bitmap bitmapCreateScaledBitmap;
-        boolean z;
-        File fileCreateTempFile;
-        UserManager userManager;
-        SLAgentCircuit activeAgentCircuit;
-        String capability;
-        String str;
-        boolean z2 = true;
-        String str2 = null;
-        int length = uploadImageParamsArr.length;
-        int i = 0;
-        while (i < length) {
-            UploadImageParams uploadImageParams = uploadImageParamsArr[i];
-            Bitmap bitmap = uploadImageParams.bitmap;
+    protected UploadImageResult doInBackground(UploadImageParams... uploads) {
+        boolean success = true;
+        String errorMessage = null;
+        for (UploadImageParams upload : uploads) {
+            Bitmap bitmap = upload.bitmap;
+            // Second Life textures are power-of-two sized, at most 1024 x 1024.
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            int iHighestOneBit = Integer.highestOneBit(width);
-            int iHighestOneBit2 = Integer.highestOneBit(height);
-            if (iHighestOneBit != width) {
-                iHighestOneBit *= 2;
+            int textureWidth = Integer.highestOneBit(width);
+            int textureHeight = Integer.highestOneBit(height);
+            if (textureWidth != width) {
+                textureWidth *= 2;
             }
-            if (iHighestOneBit2 != height) {
-                iHighestOneBit2 *= 2;
+            if (textureHeight != height) {
+                textureHeight *= 2;
             }
-            while (true) {
-                if (iHighestOneBit <= 1024 && iHighestOneBit2 <= 1024) {
-                    break;
-                }
-                iHighestOneBit /= 2;
-                iHighestOneBit2 /= 2;
+            while (textureWidth > 1024 || textureHeight > 1024) {
+                textureWidth /= 2;
+                textureHeight /= 2;
             }
-            if (iHighestOneBit == bitmap.getWidth() && iHighestOneBit2 == bitmap.getHeight()) {
-                bitmapCreateScaledBitmap = bitmap;
+            Bitmap scaled;
+            if (textureWidth == bitmap.getWidth() && textureHeight == bitmap.getHeight()) {
+                scaled = bitmap;
             } else {
-                Debug.Printf("UploadImage: scaled bitmap from %d x %d to %d x %d", Integer.valueOf(bitmap.getWidth()), Integer.valueOf(bitmap.getHeight()), Integer.valueOf(iHighestOneBit), Integer.valueOf(iHighestOneBit2));
-                bitmapCreateScaledBitmap = Bitmap.createScaledBitmap(bitmap, iHighestOneBit, iHighestOneBit2, true);
+                Debug.Printf("UploadImage: scaled bitmap from %d x %d to %d x %d", Integer.valueOf(bitmap.getWidth()), Integer.valueOf(bitmap.getHeight()), Integer.valueOf(textureWidth), Integer.valueOf(textureHeight));
+                scaled = Bitmap.createScaledBitmap(bitmap, textureWidth, textureHeight, true);
             }
-            int width2 = bitmapCreateScaledBitmap.getWidth();
-            int height2 = bitmapCreateScaledBitmap.getHeight();
-            int i2 = bitmapCreateScaledBitmap.hasAlpha() ? 4 : 3;
-            OpenJPEG openJPEG = new OpenJPEG(width2, height2, i2, i2, 0, 0);
-            int[] iArr = new int[width2];
-            for (int i3 = 0; i3 < height2; i3++) {
-                bitmapCreateScaledBitmap.getPixels(iArr, 0, width2, 0, i3, width2, 1);
-                openJPEG.putPixelRow((height2 - 1) - i3, iArr, width2);
+            int scaledWidth = scaled.getWidth();
+            int scaledHeight = scaled.getHeight();
+            int components = scaled.hasAlpha() ? 4 : 3;
+            OpenJPEG encoder = new OpenJPEG(scaledWidth, scaledHeight, components, components, 0, 0);
+            int[] row = new int[scaledWidth];
+            for (int y = 0; y < scaledHeight; y++) {
+                scaled.getPixels(row, 0, scaledWidth, 0, y, scaledWidth, 1);
+                // JPEG-2000 rows are stored bottom-up.
+                encoder.putPixelRow((scaledHeight - 1) - y, row, scaledWidth);
             }
+            File cacheDir = this.context.getCacheDir();
+            boolean uploaded;
             try {
-                fileCreateTempFile = File.createTempFile("uploadtex", "j2k", this.context.getCacheDir());
-                openJPEG.SaveJPEG2K(fileCreateTempFile);
-                userManager = UserManager.getUserManager(uploadImageParams.agentUUID);
-                activeAgentCircuit = userManager != null ? userManager.getActiveAgentCircuit() : null;
-            } catch (LLSDException e) {
-                e = e;
-            } catch (IOException e2) {
-                e = e2;
-            }
-            if (activeAgentCircuit == null || (capability = activeAgentCircuit.getCaps().getCapability(SLCaps.SLCapability.NewFileAgentInventory)) == null) {
-                z = false;
-            } else {
-                LLSDNode lLSDNodePerformRequest = new LLSDXMLRequest().PerformRequest(capability, new LLSDMap(new LLSDMap.LLSDMapEntry("asset_type", new LLSDString("texture")), new LLSDMap.LLSDMapEntry("description", new LLSDString("(No description)")), new LLSDMap.LLSDMapEntry("folder_id", new LLSDUUID(uploadImageParams.folderID)), new LLSDMap.LLSDMapEntry("inventory_type", new LLSDString("texture")), new LLSDMap.LLSDMapEntry("name", new LLSDString(uploadImageParams.name))));
-                if (lLSDNodePerformRequest == null) {
-                    throw new IOException("Upload request refused");
-                }
-                Response responseExecute = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(lLSDNodePerformRequest.byKey("uploader").asString()).header("Accept", "application/llsd+xml").post(RequestBody.create(MEDIA_TYPE_JP2, fileCreateTempFile)).build()).execute();
-                if (responseExecute == null) {
-                    throw new IOException("Null response");
-                }
-                try {
-                    if (!responseExecute.isSuccessful()) {
-                        throw new IOException("Invalid HTTP response");
+                File encodedFile = File.createTempFile("uploadtex", "j2k", cacheDir);
+                encoder.SaveJPEG2K(encodedFile);
+                UserManager userManager = UserManager.getUserManager(upload.agentUUID);
+                SLAgentCircuit agentCircuit = userManager != null ? userManager.getActiveAgentCircuit() : null;
+                String capabilityURL;
+                if (agentCircuit == null) {
+                    uploaded = false;
+                } else if ((capabilityURL = agentCircuit.getCaps().getCapability(SLCaps.SLCapability.NewFileAgentInventory)) == null) {
+                    uploaded = false;
+                } else {
+                    LLSDNode uploadTicket = new LLSDXMLRequest().PerformRequest(capabilityURL, new LLSDMap(
+                            new LLSDMap.LLSDMapEntry("asset_type", new LLSDString("texture")),
+                            new LLSDMap.LLSDMapEntry("description", new LLSDString("(No description)")),
+                            new LLSDMap.LLSDMapEntry("folder_id", new LLSDUUID(upload.folderID)),
+                            new LLSDMap.LLSDMapEntry("inventory_type", new LLSDString("texture")),
+                            new LLSDMap.LLSDMapEntry("name", new LLSDString(upload.name))));
+                    if (uploadTicket == null) {
+                        throw new IOException("Upload request refused");
                     }
-                    LLSDNode xml = LLSDNode.parseXML(responseExecute.body().byteStream(), null);
-                    Debug.Log("upload reply: " + xml.serializeToXML());
-                    if (xml.keyExists("error")) {
-                        LLSDNode lLSDNodeByKey = xml.byKey("error");
-                        if (lLSDNodeByKey.keyExists("message") && lLSDNodeByKey.keyExists("success") && !lLSDNodeByKey.byKey("success").asBoolean()) {
-                            String strAsString = lLSDNodeByKey.byKey("message").asString();
-                            z = false;
-                            str = strAsString;
-                        } else {
-                            str = str2;
-                            z = z2;
+                    String uploaderURL = uploadTicket.byKey("uploader").asString();
+                    Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder()
+                            .url(uploaderURL)
+                            .header("Accept", "application/llsd+xml")
+                            .post(RequestBody.create(MEDIA_TYPE_JP2, encodedFile))
+                            .build()).execute();
+                    if (response == null) {
+                        throw new IOException("Null response");
+                    }
+                    try {
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Invalid HTTP response");
                         }
-                        try {
-                            userManager.getInventoryManager().requestFolderUpdate(uploadImageParams.folderID);
-                            try {
-                                responseExecute.close();
-                                str2 = str;
-                            } catch (LLSDException e3) {
-                                e = e3;
-                                str2 = str;
-                                Debug.Warning(e);
-                                z = false;
-                                i++;
-                                z2 = z;
-                            } catch (IOException e4) {
-                                e = e4;
-                                str2 = str;
-                                Debug.Warning(e);
-                                z = false;
-                                i++;
-                                z2 = z;
+                        LLSDNode reply = LLSDNode.parseXML(response.body().byteStream(), null);
+                        Debug.Log("upload reply: " + reply.serializeToXML());
+                        uploaded = success;
+                        if (reply.keyExists("error")) {
+                            LLSDNode error = reply.byKey("error");
+                            if (error.keyExists("message") && error.keyExists("success") && !error.byKey("success").asBoolean()) {
+                                errorMessage = error.byKey("message").asString();
+                                uploaded = false;
                             }
-                        } catch (Throwable th) {
-                            th = th;
-                            responseExecute.close();
-                            throw th;
                         }
+                        userManager.getInventoryManager().requestFolderUpdate(upload.folderID);
+                    } finally {
+                        response.close();
                     }
-                    i++;
-                    z2 = z;
-                } catch (Throwable th2) {
-                    th = th2;
-                    str = str2;
                 }
+                encodedFile.delete();
+            } catch (IOException e) {
+                Debug.Warning(e);
+                uploaded = false;
+            } catch (LLSDException e) {
+                Debug.Warning(e);
+                uploaded = false;
             }
-            fileCreateTempFile.delete();
-            i++;
-            z2 = z;
+            success = uploaded;
         }
-        return new UploadImageResult(z2, str2, null);
+        return new UploadImageResult(success, errorMessage, null);
     }
 
     @Override
     public void onPostExecute(UploadImageResult uploadImageResult) {
         UUID uuidFindSpecialFolder;
-        super.onPostExecute((UploadImageAsyncTask) uploadImageResult);
+        super.onPostExecute(uploadImageResult);
         if (this.progressDialog != null) {
             this.progressDialog.cancel();
             this.progressDialog = null;

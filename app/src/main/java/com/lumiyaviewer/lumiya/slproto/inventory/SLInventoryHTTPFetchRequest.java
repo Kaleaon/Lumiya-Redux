@@ -44,11 +44,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.aborted = false;
         }
 
-        /* synthetic */ DatabaseCommitThread(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread) {
-            this();
-        }
-
-        void addEntry(SLInventoryEntry sLInventoryEntry) throws InterruptedException {
+            void addEntry(SLInventoryEntry sLInventoryEntry) throws InterruptedException {
             this.commitEntryQueue.put(sLInventoryEntry);
         }
 
@@ -117,10 +113,6 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
 
         private FolderDataContentHandler(DatabaseCommitThread databaseCommitThread) {
             this.commitThread = databaseCommitThread;
-        }
-
-        /* synthetic */ FolderDataContentHandler(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread, FolderDataContentHandler folderDataContentHandler) {
-            this(databaseCommitThread);
         }
 
         @Override
@@ -641,10 +633,6 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread = databaseCommitThread;
         }
 
-        /* synthetic */ RootContentHandler(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread, RootContentHandler rootContentHandler) {
-            this(databaseCommitThread);
-        }
-
         @Override
         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
             return new LLSDStreamingParser.LLSDDefaultContentHandler() {
@@ -653,7 +641,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                     return str2.equals("folders") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
                         @Override
                         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str3) throws LLSDXMLException {
-                            return new FolderDataContentHandler(SLInventoryHTTPFetchRequest.this, RootContentHandler.this.commitThread, null);
+                            return new FolderDataContentHandler(RootContentHandler.this.commitThread);
                         }
                     } : super.onArrayBegin(str2);
                 }
@@ -690,11 +678,11 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(request);
                 try {
                     for (int attempt = 0; attempt < 3 && !SLInventoryHTTPFetchRequest.this.isCancelled.get(); attempt++) {
-                        DatabaseCommitThread commitThread = new DatabaseCommitThread(SLInventoryHTTPFetchRequest.this, null);
+                        DatabaseCommitThread commitThread = new DatabaseCommitThread();
                         commitThread.start();
                         try {
                             request.PerformRequest(SLInventoryHTTPFetchRequest.this.capURL, body,
-                                    new RootContentHandler(SLInventoryHTTPFetchRequest.this, commitThread, null));
+                                    new RootContentHandler(commitThread));
                             commitThread.stopAndWait(true);
                             success = true;
                             break;

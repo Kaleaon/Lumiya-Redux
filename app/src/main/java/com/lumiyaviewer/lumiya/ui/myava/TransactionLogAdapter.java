@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import butterknife.internal.Utils;
@@ -23,7 +22,7 @@ import java.util.Calendar;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
+public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAdapter.TransactionViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 
@@ -37,23 +36,13 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
     }
 
     class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.amountTextView)
         TextView amountTextView;
         private Calendar calendar;
         private final ChatterNameDisplayer chatterNameDisplayer;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.finalBalanceTextView)
         TextView finalBalanceTextView;
         private MoneyTransaction moneyTransaction;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.timeStampTextView)
         TextView timestampTextView;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.user_name)
         TextView userName;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.userPicView)
         ChatterPicView userPicView;
 
         TransactionViewHolder(View view) {
@@ -89,7 +78,12 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         }
     }
 
-    public class TransactionViewHolder_ViewBinding implements Unbinder {
+    /**
+     * ButterKnife binding generated for 3.4.2, kept as source: ButterKnife 10
+     * cannot generate a compilable binding for a nested holder. Binary name
+     * TransactionLogAdapter$TransactionViewHolder_ViewBinding, which ButterKnife.bind() looks up.
+     */
+    public static class TransactionViewHolder_ViewBinding implements Unbinder {
         private TransactionViewHolder target;
 
         @UiThread

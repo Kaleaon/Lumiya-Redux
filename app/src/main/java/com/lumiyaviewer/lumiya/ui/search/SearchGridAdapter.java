@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import butterknife.internal.Utils;
@@ -23,7 +22,7 @@ import de.greenrobot.dao.query.LazyList;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
+class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder> {
     private final UUID agentUUID;
     private final Context context;
 
@@ -38,15 +37,9 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
 
     class SearchViewHolder extends RecyclerView.ViewHolder implements ChatterNameRetriever.OnChatterNameUpdated, View.OnClickListener {
         private ChatterNameRetriever chatterNameRetriever;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.result_item_name)
         TextView resultItemName;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.result_member_count)
         TextView resultMemberCount;
         private SearchGridResult searchGridResult;
-
-        @BindView(com.lumiyaviewer.lumiya.R.id.userPicView)
         ChatterPicView userPicView;
 
         SearchViewHolder(View view) {
@@ -114,7 +107,12 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         }
     }
 
-    public class SearchViewHolder_ViewBinding implements Unbinder {
+    /**
+     * ButterKnife binding generated for 3.4.2, kept as source: ButterKnife 10
+     * cannot generate a compilable binding for a nested holder. Binary name
+     * SearchGridAdapter$SearchViewHolder_ViewBinding, which ButterKnife.bind() looks up.
+     */
+    public static class SearchViewHolder_ViewBinding implements Unbinder {
         private SearchViewHolder target;
 
         @UiThread

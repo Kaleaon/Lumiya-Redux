@@ -6,6 +6,14 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.ArrayList;
 
 public class PrimPath {
+    // Path curve types, indra/llmath/llvolume.h (the high nibble of PathCurve).
+    // The mask must be the unsigned 0xF0: CurveType is a signed Java byte.
+    private static final int LL_PCODE_PATH_MASK = 0xF0;
+    private static final int LL_PCODE_PATH_LINE = 0x10;
+    private static final int LL_PCODE_PATH_CIRCLE = 0x20;
+    private static final int LL_PCODE_PATH_CIRCLE2 = 0x30;
+    private static final int LL_PCODE_PATH_TEST = 0x40;
+
     private static final int MIN_DETAIL_FACES = 6;
     private static float[] tableScale = {1.0f, 1.0f, 1.0f, 0.5f, 0.707107f, 0.53f, 0.525f, 0.5f};
     boolean Open = false;
@@ -116,8 +124,8 @@ public class PrimPath {
         this.Dirty = false;
         this.Path.clear();
         this.Open = true;
-        switch (primPathParams.CurveType & PrimProfileParams.LL_PCODE_HOLE_MASK) {
-            case 16:
+        switch (primPathParams.CurveType & LL_PCODE_PATH_MASK) {
+            case LL_PCODE_PATH_LINE:
             default:
                 int floor = ((int) Math.floor(Math.abs(primPathParams.TwistBegin - primPathParams.TwistEnd) * 3.5f * (f - 0.5f))) + 2;
                 if (floor < i + 2) {
@@ -138,14 +146,14 @@ public class PrimPath {
                     this.Path.add(pathPoint);
                 }
                 break;
-            case 32:
+            case LL_PCODE_PATH_CIRCLE:
                 int floor2 = (int) Math.floor(Math.floor((Math.abs(primPathParams.TwistBegin - primPathParams.TwistEnd) * 3.5f * (f - 0.5f)) + (6.0f * f)) * primPathParams.Revolutions);
                 if (z) {
                     floor2 = i2;
                 }
                 genNGon(primPathParams, floor2, 0.0f, 1.0f, 1.0f);
                 break;
-            case 48:
+            case LL_PCODE_PATH_CIRCLE2:
                 if (primPathParams.End - primPathParams.Begin >= 0.99f && primPathParams.ScaleX >= 0.99f) {
                     this.Open = false;
                 }
@@ -164,7 +172,7 @@ public class PrimPath {
                     }
                 }
                 break;
-            case 64:
+            case LL_PCODE_PATH_TEST:
                 this.Step = 1.0f / 4;
                 this.Path.ensureCapacity(5);
                 for (int i6 = 0; i6 < 5; i6++) {

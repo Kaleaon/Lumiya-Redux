@@ -222,9 +222,16 @@ def parse_smali(path, resmap):
                     continue  # synthetic accessor / lambda / switch-map helper
                 if m.group(2) == '<init>' and ANON_RE.search(m.group(1)):
                     continue  # anonymous-class ctor: captured-args signature varies
+                if m.group(2) == '<init>':
+                    # Private nested constructors are reached through a synthetic
+                    # constructor with a trailing marker parameter: the class
+                    # itself (dx/Jack) or Outer$N (javac). Drop the marker.
+                    params = re.findall(r'\[*(?:L[^;]+;|[ZBSCIJFD])', m.group(3)[1:m.group(3).index(')')])
+                    if params and (params[-1] == m.group(1) or re.search(r'\$\d+;$', params[-1])):
+                        m = re.match(r'(L[^;\s]+;)->(<init>)(\(.*\)V)', '%s-><init>(%s)V' % (m.group(1), ''.join(params[:-1])))
                 if line[m.start() - 1:m.start()] == '[':
                     owner = '*'  # array clone()
-                if m.group(2) in ('equals', 'hashCode', 'toString', 'getClass'):
+                if m.group(2) in ('equals', 'hashCode', 'toString', 'getClass', 'iterator'):
                     owner = '*'  # java.lang.Object methods: dispatch is virtual either way
                 desc = norm_types(m.group(3))
                 if owner == '*':
@@ -234,6 +241,14 @@ def parse_smali(path, resmap):
             m = REF_RE.search(line)
             if m:
                 owner = norm_type(m.group(1))
+                rm = re.search(r'/R\$(\w+);$', owner)
+                if rm and m.group(3) == ':I' and op.startswith('sget'):
+                    # Library R classes are read at runtime; the app's R is
+                    # inlined. Compare as the resource name either way.
+                    cur.numbers.add('@%s/%s' % (rm.group(1), m.group(2)))
+                    continue
+                if m.group(2) == '$assertionsDisabled':
+                    continue  # d8 compiles `assert` as disabled, as ART runs it
                 if owner == 'LLAMBDA;' or 'SwitchesValues' in m.group(2) or m.group(2).startswith(('$SwitchMap$', 'this$', 'val$')):
                     cur.flags.add('lambda')
                     continue
@@ -243,6 +258,8 @@ def parse_smali(path, resmap):
                 ref = owner + '->' + fname + norm_types(m.group(3))
                 cur.fields[('W ' if 'put' in op else 'R ') + ref] += 1
         elif op in ('new-instance', 'instance-of', 'const-class', 'new-array', 'filled-new-array'):
+            if 'array' in op:
+                cur.flags.add('newarray')
             m = TYPE_RE.search(line)
             if m:
                 t = norm_type(m.group(0))
@@ -375,7 +392,8 @@ def compare(orig, new):
                     # changing behaviour; their bodies are checked in the
                     # bucket. A missing overridable method breaks dispatch.
                     nested_ctor = mk.startswith('<init>(') and '$' in cname
-                    if not (m.private or nested_ctor):
+                    empty_clinit = mk == '<clinit>()V' and m.size <= 1  # bare return-void
+                    if not (m.private or nested_ctor or empty_clinit):
                         entry['missing_methods'].append(cname + '->' + mk)
                     o_bucket.merge(m)
                     continue

@@ -1,6 +1,7 @@
 package com.lumiyaviewer.lumiya.slproto.assets;
 
 import com.google.common.collect.ImmutableList;
+import com.lumiyaviewer.lumiya.Debug;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
@@ -85,11 +86,20 @@ public class SLWearableData {
                             if (i >= split3.length) {
                                 throw new WearableFormatException();
                             }
-                            split = split3[i].trim().split("\\s+");
-                            if (split.length < 2) {
-                                throw new WearableFormatException();
+                            // One "<param id> <value>" per line; a malformed line
+                            // is logged and skipped, as in 3.4.2 (and the viewer's
+                            // LLWearable::importStream, which ignores bad lines).
+                            try {
+                                split = split3[i].trim().split("\\s+");
+                                if (split.length < 2) {
+                                    throw new WearableFormatException();
+                                }
+                                builder.add(new WearableParam(Integer.parseInt(split[0]), Float.parseFloat(split[1])));
+                            } catch (WearableFormatException e) {
+                                Debug.Warning(e);
+                            } catch (NumberFormatException e) {
+                                Debug.Warning(e);
                             }
-                            builder.add(new WearableParam(Integer.parseInt(split[0]), Float.parseFloat(split[1])));
                             i++;
                         }
                         i2 = i;
@@ -100,11 +110,19 @@ public class SLWearableData {
                             if (i >= split3.length) {
                                 throw new WearableFormatException();
                             }
-                            split2 = split3[i].trim().split("\\s+");
-                            if (split2.length < 2) {
-                                throw new WearableFormatException();
+                            // One "<texture entry index> <texture UUID>" per line;
+                            // malformed lines are logged and skipped.
+                            try {
+                                split2 = split3[i].trim().split("\\s+");
+                                if (split2.length < 2) {
+                                    throw new WearableFormatException();
+                                }
+                                builder2.add(new WearableTexture(Integer.parseInt(split2[0]), UUID.fromString(split2[1])));
+                            } catch (WearableFormatException e) {
+                                Debug.Warning(e);
+                            } catch (NumberFormatException e) {
+                                Debug.Warning(e);
                             }
-                            builder2.add(new WearableTexture(Integer.parseInt(split2[0]), UUID.fromString(split2[1])));
                             i++;
                         }
                         i2 = i;

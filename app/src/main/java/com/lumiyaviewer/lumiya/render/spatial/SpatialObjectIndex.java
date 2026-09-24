@@ -36,7 +36,7 @@ public class SpatialObjectIndex {
     private final Object lock = new Object();
     private volatile FrustrumInfo frustrumInfo = null;
     private volatile FrustrumPlanes frustrumPlanes = null;
-    private final DrawListUpdateTask drawListUpdateTask = new DrawListUpdateTask(this, null);
+    private final DrawListUpdateTask drawListUpdateTask = new DrawListUpdateTask();
     private final ObjectsUpdateTask objectsUpdateTask = new ObjectsUpdateTask();
     private final Runnable terrainUpdate = new Runnable() {
         @Override
@@ -110,10 +110,6 @@ public class SpatialObjectIndex {
         private DrawListUpdateTask() {
         }
 
-        /* synthetic */ DrawListUpdateTask(SpatialObjectIndex spatialObjectIndex, DrawListUpdateTask drawListUpdateTask) {
-            this();
-        }
-
         @Override
         public void run() {
             if (SpatialObjectIndex.this.initialUpdateCompleted && (!SpatialObjectIndex.this.indexDisabled)) {
@@ -133,10 +129,6 @@ public class SpatialObjectIndex {
 
     private class ObjectsUpdateTask implements Runnable {
         private ObjectsUpdateTask() {
-        }
-
-        /* synthetic */ ObjectsUpdateTask(SpatialObjectIndex spatialObjectIndex, ObjectsUpdateTask objectsUpdateTask) {
-            this();
         }
 
         @Override

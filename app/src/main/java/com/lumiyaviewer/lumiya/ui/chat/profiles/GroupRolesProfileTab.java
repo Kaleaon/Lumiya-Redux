@@ -54,10 +54,6 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
             this.titlesByRole = null;
         }
 
-        /* synthetic */ GroupRoleAdapter(GroupRolesProfileTab groupRolesProfileTab, GroupRoleAdapter groupRoleAdapter) {
-            this();
-        }
-
         @Override
         public int getCount() {
             if (this.data != null) {
@@ -163,7 +159,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         GroupRoleAdapter groupRoleAdapter = null;
         View inflate = layoutInflater.inflate(R.layout.group_profile_tab_roles, viewGroup, false);
         if (this.adapter == null) {
-            this.adapter = new GroupRoleAdapter(this, groupRoleAdapter);
+            this.adapter = new GroupRoleAdapter();
         }
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setAdapter((ListAdapter) this.adapter);
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {

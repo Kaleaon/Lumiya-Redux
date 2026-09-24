@@ -191,7 +191,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
                 try {
                     File file = new File(cacheDir, bakedTextureIndex.toString() + ".j2k");
                     bakedImage.SaveToJPEG2K(file);
-                    BakedImageUploadRequest bakedImageUploadRequest = new BakedImageUploadRequest(bakedImage, bakedTextureIndex, file);
+                    SLTextureUploadRequest bakedImageUploadRequest = new BakedImageUploadRequest(bakedImage, bakedTextureIndex, file);
                     bakedImageUploadRequest.setOnUploadComplete(this);
                     this.uploader.BeginUpload(bakedImageUploadRequest);
                 } catch (IOException e2) {

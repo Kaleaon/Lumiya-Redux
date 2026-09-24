@@ -104,7 +104,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         protected int mStencilSize;
         private int[] mValue;
 
-        public ComponentSizeChooser(GvrSurfaceView gvrSurfaceView, int i, int i2, int i3, int i4, int i5, int i6) {
+        public ComponentSizeChooser(int i, int i2, int i3, int i4, int i5, int i6) {
             super(new int[]{12324, i, 12323, i2, 12322, i3, 12321, i4, 12325, i5, 12326, i6, 12344});
             this.mValue = new int[1];
             this.mRedSize = i;
@@ -681,8 +681,8 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     private class SimpleEGLConfigChooser extends ComponentSizeChooser {
-        public SimpleEGLConfigChooser(GvrSurfaceView gvrSurfaceView, boolean z) {
-            super(gvrSurfaceView, 8, 8, 8, 0, !z ? 0 : 16, 0);
+        public SimpleEGLConfigChooser(boolean z) {
+            super(8, 8, 8, 0, !z ? 0 : 16, 0);
         }
     }
 
@@ -785,7 +785,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     public void setEGLConfigChooser(int i, int i2, int i3, int i4, int i5, int i6) {
-        setEGLConfigChooser(new ComponentSizeChooser(this, i, i2, i3, i4, i5, i6));
+        setEGLConfigChooser(new ComponentSizeChooser(i, i2, i3, i4, i5, i6));
     }
 
     public void setEGLConfigChooser(GLSurfaceView.EGLConfigChooser eGLConfigChooser) {
@@ -794,7 +794,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     public void setEGLConfigChooser(boolean z) {
-        setEGLConfigChooser(new SimpleEGLConfigChooser(this, z));
+        setEGLConfigChooser(new SimpleEGLConfigChooser(z));
     }
 
     public void setEGLContextClientVersion(int i) {
@@ -827,7 +827,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     public void setRenderer(GLSurfaceView.Renderer renderer) {
         checkRenderThreadState();
         if (this.mEGLConfigChooser == null) {
-            this.mEGLConfigChooser = new SimpleEGLConfigChooser(this, true);
+            this.mEGLConfigChooser = new SimpleEGLConfigChooser(true);
         }
         if (this.mEGLContextFactory == null) {
             this.mEGLContextFactory = new DefaultContextFactory();

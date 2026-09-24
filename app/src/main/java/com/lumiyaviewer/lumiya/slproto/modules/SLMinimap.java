@@ -38,6 +38,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SLMinimap extends SLModule {
+    /** Parcel overlay cells per region: 64 x 64 cells of 4 m (256 m region). */
+    private static final int PARCEL_OVERLAY_CELLS = 4096;
     public static final float CHAT_RANGE = 20.0f;
     private static final int parcelBitmapSize = 256;
     public static final int parcelDataSize = 64;
@@ -389,20 +391,28 @@ public class SLMinimap extends SLModule {
         try {
             LLSDNode parcelData = event.byKey("ParcelData");
             for (int parcelIndex = 0; parcelIndex < parcelData.getCount(); parcelIndex++) {
-                ParcelData parcel = new ParcelData(parcelData.byIndex(parcelIndex));
-                int parcelId = parcel.getParcelID();
-                this.parcels.put(Integer.valueOf(parcelId), parcel);
-                boolean[] bitmap = parcel.getParcelBitmap();
-                int limit = Math.min(bitmap.length, this.parcelIDs.length);
-                for (int bitmapIndex = 0; bitmapIndex < limit; bitmapIndex++) {
-                    if (bitmap[bitmapIndex]) {
-                        this.parcelIDs[bitmapIndex] = parcelId;
-                        avatarParcelChanged |= bitmapIndex == this.myAvatarParcelDataIndex;
+                LLSDNode parcelNode = parcelData.byIndex(parcelIndex);
+                try {
+                    ParcelData parcel = new ParcelData(parcelNode);
+                    int parcelId = parcel.getParcelID();
+                    this.parcels.put(Integer.valueOf(parcelId), parcel);
+                    // ParcelProperties.Bitmap: one bit per 4 m x 4 m cell of the region.
+                    boolean[] bitmap = parcel.getParcelBitmap();
+                    for (int cell = 0; cell < PARCEL_OVERLAY_CELLS; cell++) {
+                        if (bitmap[cell]) {
+                            this.parcelIDs[cell] = parcelId;
+                            if (cell == this.myAvatarParcelDataIndex) {
+                                avatarParcelChanged = true;
+                            }
+                        }
                     }
+                } catch (LLSDException e) {
+                    // A malformed parcel is skipped; the others are still applied.
+                    Debug.Warning(e);
                 }
             }
-        } catch (LLSDException exception) {
-            Debug.Warning(exception);
+        } catch (LLSDException e) {
+            e.printStackTrace();
         }
         if (avatarParcelChanged) {
             requestUpdateAvatarParcelData();

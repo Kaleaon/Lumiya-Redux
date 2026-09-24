@@ -85,10 +85,6 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             this.selectedRoles = new HashSet();
         }
 
-        /* synthetic */ MemberRoleAdapter(GroupMemberRolesFragment groupMemberRolesFragment, MemberRoleAdapter memberRoleAdapter) {
-            this();
-        }
-
         @Override
         public int getCount() {
             if (this.data != null) {
@@ -352,7 +348,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         MemberRoleAdapter memberRoleAdapter = null;
         View inflate = layoutInflater.inflate(R.layout.group_member_roles, viewGroup, false);
         if (this.adapter == null) {
-            this.adapter = new MemberRoleAdapter(this, memberRoleAdapter);
+            this.adapter = new MemberRoleAdapter();
         }
         ((ListView) inflate.findViewById(R.id.member_roles_list)).setAdapter((ListAdapter) this.adapter);
         ((ListView) inflate.findViewById(R.id.member_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
