@@ -93,3 +93,35 @@ Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPlacesReply(Lcom/l
 # --- Android 14 (targetSdk 34): context-registered receivers for non-system broadcasts must be flagged
 Lcom/google/vr/cardboard/NFCUtils;->onResume(Landroid/app/Activity;)V  registerReceiver -> ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED); NDEF/TECH/TAG_DISCOVERED arrive via this app's own PendingIntent, and the unflagged call throws SecurityException on Android 14
 Lcom/google/vr/sdk/base/sensors/NfcSensor;->addOnCardboardNfcListener(Lcom/google/vr/sdk/base/sensors/NfcSensor$OnCardboardNfcListener;)V  same Android 14 receiver flag (RECEIVER_NOT_EXPORTED)
+
+# --- asset fetch: ViewerAsset capability (Second Life retired GetTexture/GetMesh) and mesh fetch fixes
+Lcom/lumiyaviewer/lumiya/slproto/modules/texfetcher/SLTextureFetcher;-><init>(Lcom/lumiyaviewer/lumiya/slproto/SLAgentCircuit;Lcom/lumiyaviewer/lumiya/slproto/caps/SLCaps;Ljava/lang/String;)V  texture cap from SLCaps.getTextureFetchURL (ViewerAsset, then GetTexture) instead of getCapability(GetTexture)
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->onAgentCircuit(Lcom/lumiyaviewer/lumiya/slproto/SLAgentCircuit;)V  mesh cap from SLCaps.getMeshFetchURL (ViewerAsset, GetMesh2, then GetMesh) instead of getCapability(GetMesh)
+Lcom/lumiyaviewer/lumiya/res/mesh/MeshCache$MeshDownloadRequest;->run()V  3.4.2 kept looping after a successful download (fetched twice, completed twice, then completed with null); now returns on success, deletes the partial file on failure and stops when interrupted
+
+# --- PagerSlidingTabStrip (last support-library dependency) replaced by Material TabLayout
+Lcom/lumiyaviewer/lumiya/ui/avapicker/AvatarPickerFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  PagerSlidingTabStrip.setViewPager -> TabLayout.setupWithViewPager
+Lcom/lumiyaviewer/lumiya/ui/chat/ContactsFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  PagerSlidingTabStrip.setViewPager -> TabLayout.setupWithViewPager
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/GroupProfileFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  PagerSlidingTabStrip.setViewPager -> TabLayout.setupWithViewPager
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/UserProfileFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  PagerSlidingTabStrip.setViewPager -> TabLayout.setupWithViewPager
+
+# --- ButterKnife removed: the generated *_ViewBinding classes are kept as source (runtime in ui/common/binding,
+#     normalised by dexdiff BINDING_RE); each ButterKnife.bind call site constructs its binding directly
+Lcom/lumiyaviewer/lumiya/ui/chat/GroupNoticeFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/chat/PayUserFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/UserFirstLifeProfileTab;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/UserMainProfileTab;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/UserPickFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/grids/ManageGridsActivity;->onCreate(Landroid/os/Bundle;)V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/minimap/MinimapActivity;->onCreate(Landroid/os/Bundle;)V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/minimap/NearbyPeopleMinimapFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/myava/MuteListFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/myava/MyAvatarFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/myava/TransactionLogAdapter$TransactionViewHolder;-><init>(Lcom/lumiyaviewer/lumiya/ui/myava/TransactionLogAdapter;Landroid/view/View;)V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/myava/TransactionLogFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/render/WorldViewActivity;->initContentView()V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/search/ParcelInfoFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/search/SearchGridAdapter$SearchViewHolder;-><init>(Lcom/lumiyaviewer/lumiya/ui/search/SearchGridAdapter;Landroid/view/View;)V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/search/SearchGridFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+Lcom/lumiyaviewer/lumiya/ui/voice/VoiceStatusView;->initializeControls()V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)

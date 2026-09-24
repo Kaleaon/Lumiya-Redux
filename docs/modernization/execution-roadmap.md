@@ -50,7 +50,8 @@ Jetifier is disabled, and debug plus release assembly are green.
 
 ### M2 — UI lifecycle safety
 
-- Replace ButterKnife screen-by-screen with View Binding.
+- ~~Replace ButterKnife~~ Done: the generated bindings are in-tree source and the
+  library and annotation processor are removed. View Binding per screen is optional.
 - Replace `AsyncTask` work with lifecycle-owned executors or coroutines,
   explicitly preserving cancellation and result-delivery behavior.
 - Migrate framework preferences to AndroidX preferences.
@@ -104,7 +105,7 @@ dismiss helper, whose API 11/12 fallbacks were unreachable with the app's API
 
 1. Add a dependency report/check that proves which artifacts still require
    Jetifier.
-2. Replace the smallest ButterKnife-backed activity with View Binding and add
+2. Convert the smallest `*_ViewBinding`-backed activity to View Binding and add
    a focused lifecycle test.
 3. Convert one contained `AsyncTask` flow after characterizing cancellation
    and configuration-change behavior.

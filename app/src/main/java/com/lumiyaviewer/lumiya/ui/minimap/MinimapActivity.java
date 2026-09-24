@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -35,16 +33,12 @@ public class MinimapActivity extends ConnectedActivity {
         }
     });
 
-    @BindView(R.id.detailsWithOnlineStatus)
     ViewGroup detailsLayout;
 
-    @BindView(R.id.selector)
     FrameLayout selectorLayout;
 
-    @BindView(R.id.splitMainLayout)
     LinearLayout splitMainLayout;
 
-    @BindView(R.id.split_object_popups_left_spacer)
     View splitObjectPopupsLeftSpacer;
 
     public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
@@ -71,7 +65,7 @@ public class MinimapActivity extends ConnectedActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.split_two_panels);
-        ButterKnife.bind(this);
+        new MinimapActivity_ViewBinding(this);
         if (getResources().getConfiguration().orientation == 2) {
             this.splitMainLayout.setOrientation(0);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) this.selectorLayout.getLayoutParams();

@@ -565,7 +565,6 @@
     <item type="id" name="switchWidget" />
     <item type="id" name="groupNameTextView" />
     <item type="id" name="groupTitleTextView" />
-    <item type="id" name="psts_tab_title" />
     <item type="id" name="dialogQuestionText" />
     <item type="id" name="search_people_text" />
     <item type="id" name="user_main_card_view" />

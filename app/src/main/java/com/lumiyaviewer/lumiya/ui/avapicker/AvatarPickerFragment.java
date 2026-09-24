@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 import com.google.common.base.Predicate;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
@@ -134,7 +134,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         View inflate = layoutInflater.inflate(R.layout.avatar_picker, viewGroup, false);
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.avatar_picker_pager);
         viewPager.setAdapter(new AvatarPickerPagerAdapter(layoutInflater.getContext()));
-        ((PagerSlidingTabStrip) inflate.findViewById(R.id.avatar_picker_tabs)).setViewPager(viewPager);
+        ((TabLayout) inflate.findViewById(R.id.avatar_picker_tabs)).setupWithViewPager(viewPager);
         createExtraView(layoutInflater, (FrameLayout) inflate.findViewById(R.id.avatar_picker_extra_content));
         return inflate;
     }

@@ -17,7 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.StreamingMediaService;
 import com.lumiyaviewer.lumiya.react.Subscription;
@@ -183,7 +183,7 @@ public class ContactsFragment extends Fragment {
         View inflate = layoutInflater.inflate(R.layout.contacts, viewGroup, false);
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.contact_list_pager);
         viewPager.setAdapter(new ContactsPagerAdapter(getChildFragmentManager()));
-        ((PagerSlidingTabStrip) inflate.findViewById(R.id.contact_list_tabs)).setViewPager(viewPager);
+        ((TabLayout) inflate.findViewById(R.id.contact_list_tabs)).setupWithViewPager(viewPager);
         return inflate;
     }
 

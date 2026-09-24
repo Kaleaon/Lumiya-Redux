@@ -36,10 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTouch;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -115,61 +111,42 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private static final float crosshairSize = 0.1f;
     private static final int[] dialogButtonIds = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12};
 
-    @BindView(R.id.button_chat)
     ImageButton buttonChat;
 
-    @BindView(R.id.button_move_backward)
     ImageButton buttonMoveBackward;
 
-    @BindView(R.id.button_move_forward)
     ImageButton buttonMoveForward;
 
-    @BindView(R.id.object_chat_button)
     ImageButton buttonObjectChat;
 
-    @BindView(R.id.object_sit_button)
     ImageButton buttonSit;
 
-    @BindView(R.id.button_speak)
     ImageButton buttonSpeak;
 
-    @BindView(R.id.button_speech_send)
     ImageButton buttonSpeechSend;
 
-    @BindView(R.id.button_stand_up)
     ImageButton buttonStandUp;
 
-    @BindView(R.id.button_touch)
     ImageButton buttonTouch;
 
-    @BindView(R.id.object_touch_button)
     ImageButton buttonTouchObject;
 
-    @BindView(R.id.button_turn_left)
     ImageButton buttonTurnLeft;
 
-    @BindView(R.id.button_turn_right)
     ImageButton buttonTurnRight;
 
-    @BindView(R.id.cardboard_aim_controls)
     ViewGroup cardboardAimControls;
 
-    @BindView(R.id.cardboard_details_page)
     ViewGroup cardboardDetailsPage;
 
-    @BindView(R.id.cardboard_object_controls)
     ViewGroup cardboardObjectControls;
 
-    @BindView(R.id.cardboard_primary_controls)
     ViewGroup cardboardPrimaryControls;
 
-    @BindView(R.id.cardboard_script_dialog)
     ViewGroup cardboardScriptDialog;
 
-    @BindView(R.id.cardboard_speak_controls)
     ViewGroup cardboardSpeakControls;
 
-    @BindView(R.id.cardboard_ims)
     LinearLayout chatsOverlayLayout;
     private VrSession vrSession;
     // Window behaviour 3.4.2 applied in VR mode regardless of runtime:
@@ -179,41 +156,31 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private FullscreenMode fullscreenMode;
     private VrRuntime vrRuntime;
 
-    @BindView(R.id.dialogQuestionText)
     TextView dialogQuestionText;
 
-    @BindView(R.id.move_buttons_layout)
     ViewGroup moveButtonsLayout;
 
-    @BindView(R.id.cardboard_no_button)
     ImageButton noButton;
 
-    @BindView(R.id.cardboard_object_name)
     TextView objectNameView;
     private ViewGroup onScreenControlsLayout;
     private RenderSettings renderSettings;
     private WorldViewRenderer renderer;
 
-    @BindView(R.id.speak_level_indicator)
     ProgressBar speakLevelIndicator;
 
-    @BindView(R.id.speak_now_text)
     TextView speakNowText;
 
-    @BindView(R.id.speech_recognition_results)
     TextView speechRecognitionResults;
     private SpeechRecognizer speechRecognizer;
     private Handler stateHandler;
     private UserManager userManager;
 
-    @BindView(R.id.cardboard_voice_status_view)
     VoiceStatusView voiceStatusView;
     private int voiceViewHeightAllowance;
 
-    @BindView(R.id.cardboard_yes_button)
     ImageButton yesButton;
 
-    @BindView(R.id.cardboard_yesno_text)
     TextView yesNoText;
     private final VrSession.Renderer stereoRenderer = new WorldStereoRenderer();
     private boolean isResumed = false;
@@ -1634,7 +1601,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         data.getModules().voice.nearbyVoiceChatRequest(data2.parcelVoiceChannel());
     }
 
-    @OnTouch({R.id.cardboard_aim_controls})
     public boolean onAimControlsTouch(View view, MotionEvent motionEvent) {
         Debug.Printf("Cardboard: aim controls touched, view %s", view);
         switch (motionEvent.getActionMasked()) {
@@ -1645,7 +1611,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @OnTouch({R.id.button_move_forward, R.id.button_move_backward, R.id.button_turn_left, R.id.button_turn_right})
     public boolean onCamButtonTouch(View view, MotionEvent motionEvent) {
         float f = 1.0f;
         float f2 = -1.0f;
@@ -1681,7 +1646,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return true;
     }
 
-    @OnClick({R.id.button_chat})
     public void onChatButton() {
         if (this.userManager != null) {
             setControlsPage(ControlsPage.pageDetails);
@@ -1746,7 +1710,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 $m$0();
             }
         });
-        ButterKnife.bind(this, this.onScreenControlsLayout);
+        new CardboardActivity_ViewBinding(this, this.onScreenControlsLayout);
         for (View view : new View[]{this.buttonTouch, this.buttonSpeak, this.buttonChat, this.buttonSpeechSend, this.buttonSit, this.buttonTouchObject, this.buttonObjectChat, this.buttonMoveForward, this.buttonMoveBackward, this.buttonTurnLeft, this.buttonTurnRight, this.buttonStandUp, this.yesButton, this.noButton}) {
             view.setAlpha(0.5f);
             view.setOnHoverListener(this.onHoverListener);
@@ -1851,7 +1815,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @OnClick({R.id.cardboard_no_button})
     public void onNoButton() {
         if (this.activeYesNoEvent != null && this.userManager != null) {
             this.activeYesNoEvent.onYesAction(this, this.userManager);
@@ -1861,7 +1824,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         setControlsPage(ControlsPage.pageDefault);
     }
 
-    @OnClick({R.id.object_chat_button})
     public void onObjectChat() {
         SLAgentCircuit data = this.agentCircuit.getData();
         ObjectIntersectInfo objectIntersectInfo = this.pickedObject.get();
@@ -1872,7 +1834,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         startDictation(ChatterID.getUserChatterID(this.userManager.getUserID(), sLObjectInfo.getId()));
     }
 
-    @OnTouch({R.id.cardboard_object_controls})
     public boolean onObjectControlsTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
@@ -1887,7 +1848,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     public void onObjectPopupCountChanged(int i) {
     }
 
-    @OnClick({R.id.object_sit_button})
     public void onObjectSit() {
         SLAgentCircuit data = this.agentCircuit.getData();
         ObjectIntersectInfo objectIntersectInfo = this.pickedObject.get();
@@ -1900,7 +1860,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         setControlsPage(ControlsPage.pageDefault);
     }
 
-    @OnClick({R.id.object_touch_button})
     public void onObjectTouch() {
         SLAgentCircuit data = this.agentCircuit.getData();
         ObjectIntersectInfo objectIntersectInfo = this.pickedObject.get();
@@ -1968,7 +1927,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @OnTouch({R.id.cardboard_script_dialog})
     public boolean onScriptDialogOutsideTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
@@ -1983,14 +1941,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return true;
     }
 
-    @OnClick({R.id.button_speak})
     public void onSpeakButton() {
         if (this.userManager != null) {
             startDictation(ChatterID.getLocalChatterID(this.userManager.getUserID()));
         }
     }
 
-    @OnTouch({R.id.cardboard_speak_controls})
     public boolean onSpeakControlsTouch(View view, MotionEvent motionEvent) {
         Debug.Printf("Cardboard: speak controls touched, view %s", view);
         switch (motionEvent.getActionMasked()) {
@@ -2001,7 +1957,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @OnClick({R.id.button_speech_send})
     public void onSpeechSendButton() {
         SLAgentCircuit activeAgentCircuit;
         if (!Strings.isNullOrEmpty(this.lastSpeechRecognitionResults)) {
@@ -2013,7 +1968,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         closeSpeechControls();
     }
 
-    @OnClick({R.id.button_stand_up})
     public void onStandUpButton() {
         SLAvatarControl sLAvatarControl = this.avatarControl.get();
         if (sLAvatarControl != null) {
@@ -2055,7 +2009,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         super.onStop();
     }
 
-    @OnClick({R.id.button_touch})
     public void onTouchButton() {
         setControlsPage(ControlsPage.pageTouchAim);
     }
@@ -2068,7 +2021,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @OnClick({R.id.cardboard_yes_button})
     public void onYesButton() {
         if (this.activeYesNoEvent != null && this.userManager != null) {
             this.activeYesNoEvent.onYesAction(this, this.userManager);
@@ -2078,7 +2030,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         setControlsPage(ControlsPage.pageDefault);
     }
 
-    @OnTouch({R.id.cardboard_yesno_dialog})
     public boolean onYesNoOutsideTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:

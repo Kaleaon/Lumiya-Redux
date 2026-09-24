@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.tabs.TabLayout;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.common.ChatterReloadableFragment;
@@ -103,7 +103,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
         View inflate = layoutInflater.inflate(R.layout.user_profile_new, viewGroup, false);
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.user_profile_pager);
         viewPager.setAdapter(new ProfilePagerAdapter(getChildFragmentManager()));
-        ((PagerSlidingTabStrip) inflate.findViewById(R.id.user_profile_tabs)).setViewPager(viewPager);
+        ((TabLayout) inflate.findViewById(R.id.user_profile_tabs)).setupWithViewPager(viewPager);
         return inflate;
     }
 

@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
@@ -28,16 +25,12 @@ public class GroupNoticeFragment extends ChatterFragment {
     private static final String ATTACHED_ENTRY_KEY = "attachedEntry";
     private static final int ITEM_FOR_ATTACH_REQUEST = 1;
 
-    @BindView(R.id.groupNoticeAttachmentButton)
     Button groupNoticeAttachmentButton;
 
-    @BindView(R.id.groupNoticeAttachmentText)
     TextView groupNoticeAttachmentText;
 
-    @BindView(R.id.groupNoticeEditText)
     EditText groupNoticeEditText;
 
-    @BindView(R.id.groupNoticeSubject)
     EditText groupNoticeSubject;
     private SLInventoryEntry attachedEntry = null;
     private Unbinder unbinder = null;
@@ -80,7 +73,7 @@ public class GroupNoticeFragment extends ChatterFragment {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.group_notice, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new GroupNoticeFragment_ViewBinding(this, inflate);
         if (bundle != null) {
             if (bundle.containsKey(ATTACHED_ENTRY_KEY)) {
                 this.attachedEntry = (SLInventoryEntry) bundle.getParcelable(ATTACHED_ENTRY_KEY);
@@ -102,7 +95,6 @@ public class GroupNoticeFragment extends ChatterFragment {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.groupNoticeAttachmentButton})
     public void onGroupNoticeAttachmentButton() {
         Debug.Printf("GroupNotice: current attached entry %s", this.attachedEntry);
         if (this.attachedEntry != null) {
@@ -113,7 +105,6 @@ public class GroupNoticeFragment extends ChatterFragment {
         }
     }
 
-    @OnClick({R.id.groupNoticeSendButton})
     public void onGroupNoticeSendButton() {
         SLAgentCircuit activeAgentCircuit;
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup) || (activeAgentCircuit = this.userManager.getActiveAgentCircuit()) == null) {

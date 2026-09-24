@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
@@ -42,25 +39,18 @@ import java.util.UUID;
 public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableFragment, LoadableMonitor.OnLoadableDataChangedListener, ChatterNameRetriever.OnChatterNameUpdated {
     private static final String PARCEL_UUID_KEY = "parcelUUID";
 
-    @BindView(R.id.parcel_details_desc)
     TextView parcelDetailsDescription;
 
-    @BindView(R.id.parcel_details_name)
     TextView parcelDetailsName;
 
-    @BindView(R.id.parcel_image_view)
     ImageAssetView parcelImageView;
 
-    @BindView(R.id.parcel_location)
     TextView parcelLocation;
 
-    @BindView(R.id.parcel_owner_name)
     TextView parcelOwnerName;
 
-    @BindView(R.id.parcel_owner_pic)
     ChatterPicView parcelOwnerPic;
 
-    @BindView(R.id.parcel_sim_name)
     TextView parcelSimName;
     private Unbinder unbinder;
     private final SubscriptionData<UUID, ParcelInfoReply> parcelInfoReply = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -110,7 +100,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.parcel_info, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new ParcelInfoFragment_ViewBinding(this, inflate);
         this.loadableMonitor.setLoadingLayout((LoadingLayout) inflate.findViewById(R.id.loading_layout), getString(R.string.no_parcel_selected), getString(R.string.failed_to_load_parcel_data));
         this.loadableMonitor.setSwipeRefreshLayout((SwipeRefreshLayout) inflate.findViewById(R.id.swipe_refresh_layout));
         this.parcelImageView.setAlignTop(true);
@@ -165,7 +155,6 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         this.parcelLocation.setText(getString(R.string.parcel_location_format, Float.valueOf(data.Data_Field.GlobalX % 256.0f), Float.valueOf(data.Data_Field.GlobalY % 256.0f), Float.valueOf(data.Data_Field.GlobalZ)));
     }
 
-    @OnClick({R.id.parcel_owner_profile_button})
     public void onParcelOwnerProfileClick() {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments());
         ParcelInfoReply data = this.parcelInfoReply.getData();
@@ -181,7 +170,6 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         }
     }
 
-    @OnClick({R.id.parcel_teleport_button})
     public void onParcelTeleportButton() {
         final UserManager userManager = ActivityUtils.getUserManager(getArguments());
         ParcelInfoReply data = this.parcelInfoReply.getData();

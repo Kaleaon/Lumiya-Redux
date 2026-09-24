@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
@@ -43,59 +40,41 @@ import javax.annotation.Nullable;
 
 public class UserMainProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
-    @BindView(R.id.about_edit_button)
     Button aboutEditButton;
 
-    @BindView(R.id.change_pic_button)
     Button changePicButton;
 
-    @BindView(R.id.loading_layout)
     LoadingLayout loadingLayout;
 
-    @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.text_profile_age)
     TextView textProfileAge;
 
-    @BindView(R.id.text_profile_agent_key)
     TextView textProfileAgentKey;
 
-    @BindView(R.id.text_profile_notes_text)
     TextView textProfileNotesText;
 
-    @BindView(R.id.text_profile_online)
     TextView textProfileOnline;
 
-    @BindView(R.id.text_profile_primary_name)
     TextView textProfilePrimaryName;
 
-    @BindView(R.id.text_profile_secondary_name)
     TextView textProfileSecondaryName;
     private Unbinder unbinder;
 
-    @BindView(R.id.user_partner_card_view)
     View userPartnerCardView;
 
-    @BindView(R.id.user_pic_view)
     ImageAssetView userPicView;
 
-    @BindView(R.id.user_profile_about_text)
     TextView userProfileAboutText;
 
-    @BindView(R.id.user_profile_notes_caption)
     View userProfileNotesCaption;
 
-    @BindView(R.id.user_profile_partner_name)
     TextView userProfilePartnerName;
 
-    @BindView(R.id.user_profile_partner_pic)
     ChatterPicView userProfilePartnerPic;
 
-    @BindView(R.id.user_web_profile_card_view)
     View userWebProfileCardView;
 
-    @BindView(R.id.user_web_profile_link)
     TextView userWebProfileLink;
     private final SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, AvatarNotesReply> avatarNotes = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -134,14 +113,12 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         }
     }
 
-    @OnClick({R.id.about_edit_button})
     protected void onAboutEditClicked(View view) {
         if (this.chatterID != null) {
             DetailsActivity.showEmbeddedDetails(getActivity(), UserAboutTextEditFragment.class, UserAboutTextEditFragment.makeSelection(this.chatterID, false));
         }
     }
 
-    @OnClick({R.id.change_pic_button})
     protected void onChangePicClicked(View view) {
         AvatarPropertiesReply data = this.avatarProperties.getData();
         if (this.chatterID == null || data == null) {
@@ -163,7 +140,6 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         this.textProfileSecondaryName.setText(chatterNameRetriever.getResolvedSecondaryName());
     }
 
-    @OnClick({R.id.button_copy_agent_key})
     protected void onCopyAgentKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
             String uuid = ((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID().toString();
@@ -180,7 +156,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.user_profile_tab_main, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new UserMainProfileTab_ViewBinding(this, inflate);
         this.userPicView.setAlignTop(true);
         this.userPicView.setVerticalFit(true);
         this.loadingLayout.setSwipeRefreshLayout(this.swipeRefreshLayout);
@@ -198,7 +174,6 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         super.onDestroyView();
     }
 
-    @OnClick({R.id.button_edit_notes})
     protected void onEditNotesClicked(View view) {
         if (this.chatterID != null) {
             DetailsActivity.showEmbeddedDetails(getActivity(), UserNotesEditFragment.class, UserNotesEditFragment.makeSelection(this.chatterID));
@@ -280,7 +255,6 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         }
     }
 
-    @OnClick({R.id.user_profile_view_partner_button})
     protected void onViewProfileClicked(View view) {
         if (this.chatterID != null) {
             try {

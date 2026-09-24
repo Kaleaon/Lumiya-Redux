@@ -105,8 +105,8 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
          *
          * <p>Baked avatar textures come from the agent appearance service
          * (<code>texture/AVATAR_ID/BAKE_NAME/TEXTURE_ID</code>); everything else
-         * from the region's GetTexture capability (<code>?texture_id=</code>), as
-         * in the viewer's LLTextureFetch. The body is written to a
+         * from the region's ViewerAsset (or legacy GetTexture) capability
+         * (<code>?texture_id=</code>), as in the viewer's LLTextureFetch. The body is written to a
          * <code>.part</code> file and renamed into place under the cache lock.
          * Up to {@link #MAX_RETRIES} attempts are made; if all fail, the request
          * is handed to the UDP (ImageData/ImagePacket) download executor.</p>
@@ -125,6 +125,13 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
                 UUID avatarUUID = params.avatarUUID();
                 AvatarTextureFaceIndex faceIndex = params.avatarFaceIndex();
                 if (appearanceService == null || avatarUUID == null || faceIndex == null) {
+                    if (capURL == null) {
+                        // Beyond 3.4.2, which built "null/?texture_id=", hit
+                        // MalformedURLException and gave up: with no HTTP
+                        // texture cap, go straight to the UDP download path.
+                        TextureCompressedCache.this.downloadExecutor.queueRequest(this);
+                        return;
+                    }
                     url = new URL(capURL + "/?texture_id=" + params.uuid().toString());
                 } else {
                     if (!appearanceService.endsWith("/")) {

@@ -67,40 +67,51 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
                 completeRequest(null);
                 return;
             }
-            File file = new File(this.outputFile.getAbsolutePath() + ".tmp");
-            String str2 = str + "/?mesh_id=" + getParams().toString();
-            Debug.Printf("Fetching mesh: %s", str2);
-            for (int i = 0; i < 2; i++) {
+            File partFile = new File(this.outputFile.getAbsolutePath() + ".tmp");
+            String url = str + "/?mesh_id=" + getParams().toString();
+            Debug.Printf("Fetching mesh: %s", url);
+            // Beyond 3.4.2, which kept looping after a successful download:
+            // it fetched every mesh twice, completed the request twice and
+            // then completed it a third time with null.
+            for (int attempt = 0; attempt < 2 && !Thread.currentThread().isInterrupted(); attempt++) {
+                boolean saved = false;
                 try {
-                    Response execute = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(str2).header(HttpHeaders.ACCEPT, "application/octet-stream").build()).execute();
-                    if (execute == null) {
+                    Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(url).header(HttpHeaders.ACCEPT, "application/octet-stream").build()).execute();
+                    if (response == null) {
                         throw new IOException("Null response");
                     }
                     try {
-                        if (!execute.isSuccessful()) {
-                            throw new IOException("Error response code " + execute.code());
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Error response code " + response.code());
                         }
-                        File parentFile = file.getParentFile();
-                        if (parentFile != null) {
-                            parentFile.mkdirs();
+                        File partDir = partFile.getParentFile();
+                        if (partDir != null) {
+                            partDir.mkdirs();
                         }
-                        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-                        long copy = ByteStreams.copy(execute.body().byteStream(), bufferedOutputStream);
-                        bufferedOutputStream.flush();
-                        bufferedOutputStream.close();
-                        File parentFile2 = this.outputFile.getParentFile();
-                        if (parentFile2 != null) {
-                            parentFile2.mkdirs();
+                        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(partFile));
+                        long copied;
+                        try {
+                            copied = ByteStreams.copy(response.body().byteStream(), output);
+                        } finally {
+                            output.close();
                         }
-                        file.renameTo(this.outputFile);
-                        Debug.Printf("MeshFetch: Saved %d bytes to %s", Long.valueOf(copy), this.outputFile.toString());
-                        completeRequest(new MeshData(this.outputFile));
+                        File outputDir = this.outputFile.getParentFile();
+                        if (outputDir != null) {
+                            outputDir.mkdirs();
+                        }
+                        saved = partFile.renameTo(this.outputFile);
+                        Debug.Printf("MeshFetch: Saved %d bytes to %s", Long.valueOf(copied), this.outputFile.toString());
                     } finally {
-                        execute.close();
+                        response.close();
                     }
-                } catch (IOException e2) {
-                    Debug.Warning(e2);
+                    if (saved) {
+                        completeRequest(new MeshData(this.outputFile));
+                        return;
+                    }
+                } catch (IOException e) {
+                    Debug.Warning(e);
                 }
+                partFile.delete();
             }
             if (this.downloadTask.isCancelled()) {
                 return;

@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import butterknife.internal.Utils;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Utils;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery;
@@ -45,7 +44,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
         SearchViewHolder(View view) {
             super(view);
             this.chatterNameRetriever = null;
-            ButterKnife.bind(this, view);
+            new SearchViewHolder_ViewBinding(this, view);
             view.setOnClickListener(this);
         }
 
@@ -108,9 +107,8 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
     }
 
     /**
-     * ButterKnife binding generated for 3.4.2, kept as source: ButterKnife 10
-     * cannot generate a compilable binding for a nested holder. Binary name
-     * SearchGridAdapter$SearchViewHolder_ViewBinding, which ButterKnife.bind() looks up.
+     * ButterKnife binding generated for 3.4.2, kept as source; the holder
+     * constructs it directly (see ui/common/binding).
      */
     public static class SearchViewHolder_ViewBinding implements Unbinder {
         private SearchViewHolder target;

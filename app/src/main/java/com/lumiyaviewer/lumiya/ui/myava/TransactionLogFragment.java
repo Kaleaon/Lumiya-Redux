@@ -12,9 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -35,10 +33,8 @@ import java.util.UUID;
 public class TransactionLogFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, TransactionLogAdapter.OnTransactionClickListener {
     private TransactionLogAdapter adapter;
 
-    @BindView(R.id.loading_layout)
     LoadingLayout loadingLayout;
 
-    @BindView(R.id.transactionLogView)
     RecyclerView transactionLogView;
     private Unbinder unbinder;
     private final SubscriptionData<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactions = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -132,7 +128,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.transaction_log, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new TransactionLogFragment_ViewBinding(this, inflate);
         this.adapter = new TransactionLogAdapter(getContext(), ActivityUtils.getActiveAgentID(getArguments()), this);
         this.transactionLogView.setAdapter(this.adapter);
         this.loadableMonitor.setLoadingLayout(this.loadingLayout, null, getString(R.string.cannot_load_transaction_list));

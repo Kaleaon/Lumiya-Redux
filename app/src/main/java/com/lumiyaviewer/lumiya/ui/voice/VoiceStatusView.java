@@ -20,9 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GridConnectionService;
@@ -64,45 +61,32 @@ public class VoiceStatusView extends FrameLayout {
     private ChatterNameRetriever speakerNameRetriever;
     private boolean updatingAudioVolume;
 
-    @BindView(R.id.voice_answer_button)
     ImageButton voiceAnswerButton;
     private final SubscriptionData<SubscriptionSingleKey, VoiceAudioProperties> voiceAudioProperties;
 
-    @BindView(R.id.voice_bluetooth_button)
     Button voiceBluetoothButton;
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo;
 
-    @BindView(R.id.voice_loudspeaker_button)
     Button voiceLoudspeakerButton;
 
-    @BindView(R.id.voice_mic_off_button)
     ImageButton voiceMicOffButton;
 
-    @BindView(R.id.voice_mic_on_button)
     ImageButton voiceMicOnButton;
 
-    @BindView(R.id.voice_speak_indicator_left)
     ImageView voiceSpeakIndicatorLeft;
 
-    @BindView(R.id.voice_speak_indicator_right)
     ImageView voiceSpeakIndicatorRight;
 
-    @BindView(R.id.voice_speaker_volume_control)
     SeekBar voiceSpeakerVolumeControl;
 
-    @BindView(R.id.voice_status_card_view)
     CardView voiceStatusCardView;
 
-    @BindView(R.id.voice_status_controls)
     ViewGroup voiceStatusControls;
 
-    @BindView(R.id.voice_status_small_text)
     TextView voiceStatusSmallText;
 
-    @BindView(R.id.voice_status_text)
     TextView voiceStatusText;
 
-    @BindView(R.id.voice_terminate_button)
     ImageButton voiceTerminateButton;
     private final SeekBar.OnSeekBarChangeListener volumeChangeListener;
 
@@ -376,7 +360,7 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     private void initializeControls() {
-        ButterKnife.bind(this);
+        new VoiceStatusView_ViewBinding(this);
         updateVoiceState();
         this.voiceSpeakerVolumeControl.setOnSeekBarChangeListener(this.volumeChangeListener);
     }
@@ -606,7 +590,6 @@ public class VoiceStatusView extends FrameLayout {
         updateVoiceState();
     }
 
-    @OnClick({R.id.voice_loudspeaker_button})
     public void onLoudspeakerButton() {
         VoicePluginServiceConnection voicePluginServiceConnection;
         VoiceAudioProperties data = this.voiceAudioProperties.getData();
@@ -617,7 +600,6 @@ public class VoiceStatusView extends FrameLayout {
         voicePluginServiceConnection.setVoiceAudioProperties(new VoiceSetAudioProperties(0.0f, false, data.speakerphoneOn ? VoiceAudioDevice.Default : VoiceAudioDevice.Loudspeaker));
     }
 
-    @OnClick({R.id.voice_answer_button})
     public void onVoiceAnswerButton() {
         GridConnectionService serviceInstance;
         VoiceChatInfo data = this.voiceChatInfo.getData();
@@ -630,7 +612,6 @@ public class VoiceStatusView extends FrameLayout {
         serviceInstance.acceptVoiceCall(this.chatterID);
     }
 
-    @OnClick({R.id.voice_bluetooth_button})
     public void onVoiceBluetoothButton() {
         VoicePluginServiceConnection voicePluginServiceConnection;
         VoiceAudioProperties data = this.voiceAudioProperties.getData();
@@ -641,7 +622,6 @@ public class VoiceStatusView extends FrameLayout {
         voicePluginServiceConnection.setVoiceAudioProperties(new VoiceSetAudioProperties(0.0f, false, data.bluetoothState == VoiceBluetoothState.Active ? VoiceAudioDevice.Default : VoiceAudioDevice.Bluetooth));
     }
 
-    @OnClick({R.id.voice_mic_off_button})
     public void onVoiceMicOffButton() {
         GridConnectionService serviceInstance = GridConnectionService.getServiceInstance();
         if (serviceInstance != null) {
@@ -649,7 +629,6 @@ public class VoiceStatusView extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.voice_mic_on_button})
     public void onVoiceMicOnButton() {
         GridConnectionService serviceInstance = GridConnectionService.getServiceInstance();
         if (serviceInstance != null) {
@@ -657,7 +636,6 @@ public class VoiceStatusView extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.voice_status_card_view})
     public void onVoiceStatusCardClick() {
         if (this.voiceStatusControls != null) {
             if (this.voiceStatusControls.getVisibility() == 0) {
@@ -669,7 +647,6 @@ public class VoiceStatusView extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.voice_terminate_button})
     public void onVoiceTerminateButton() {
         GridConnectionService serviceInstance;
         if (this.chatterID == null || (serviceInstance = GridConnectionService.getServiceInstance()) == null) {

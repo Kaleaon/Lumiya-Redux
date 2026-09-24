@@ -37,6 +37,10 @@ import struct
 import sys
 
 SUPPORT_RE = re.compile(r'L(?:android/support|androidx|android/arch)/[\w/$]*?/?([\w$]+);')
+# ButterKnife's runtime (Unbinder, internal.Utils, DebouncingOnClickListener)
+# now lives in-tree under ui/common/binding with the same behaviour; the
+# *_ViewBinding classes call it instead of the library.
+BINDING_RE = re.compile(r'L(?:butterknife/(?:internal/)?|com/lumiyaviewer/lumiya/ui/common/binding/)(Unbinder|Utils|DebouncingOnClickListener);')
 LAMBDA_CLASS_RE = re.compile(r'(-\$Lambda\$|\$\$Lambda\$|\$\$ExternalSynthetic|\$\$ExternalSyntheticLambda)')
 LAMBDA_METHOD_RE = re.compile(r'(^lambda\$|-lambda\$|^\$r8\$lambda\$|^-\$\$Nest\$|^\$\$Nest\$|^-wrap\d+$|^-get\d+$|^-set\d+$|-mthref-\d+$|^m\d+get.*SwitchesValues$)')
 ACCESS_RE = re.compile(r'access\$\d+')
@@ -53,6 +57,7 @@ INTENTIONAL = ('Landroid/os/Build$VERSION;->SDK_INT',)
 
 def norm_type(t):
     t = SUPPORT_RE.sub(lambda m: 'LSUPPORT/' + m.group(1) + ';', t)
+    t = BINDING_RE.sub(lambda m: 'LBINDING/' + m.group(1) + ';', t)
     if LAMBDA_CLASS_RE.search(t):
         return 'LLAMBDA;'
     return t
@@ -65,6 +70,8 @@ def norm_owner(t):
     t = norm_type(t)
     if t == 'Lcom/lumiyaviewer/lumiya/compat/PlatformCompat;':
         return '*'  # redirected platform call (tools/recover/legacy)
+    if t.startswith('LBINDING/'):
+        return '*'  # library-equivalent binding runtime, see BINDING_RE
     if t == 'LLAMBDA;' or t.startswith(APP_PREFIXES):
         return t
     return '*'

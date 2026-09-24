@@ -29,7 +29,6 @@ import com.lumiyaviewer.lumiya.res.executors.PrimComputeExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.SLParcelInfo;
 import com.lumiyaviewer.lumiya.slproto.avatar.SLAttachmentPoint;
-import com.lumiyaviewer.lumiya.slproto.caps.SLCaps;
 import com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.types.CameraParams;
@@ -171,7 +170,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.initialUpdateDone = false;
         RenderContext renderContext = this.renderContext.get();
         if (renderContext != null) {
-            renderContext.setMeshCapURL(agentCircuit.getCaps().getCapability(SLCaps.SLCapability.GetMesh));
+            renderContext.setMeshCapURL(agentCircuit.getCaps().getMeshFetchURL());
             if (this.parcelInfo != null) {
                 PrimComputeExecutor.getInstance().execute(this.initSpatialIndexRunnable);
             }
@@ -877,6 +876,13 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         } else {
             GLES10.glEnableClientState(32884);
             GLES10.glClearColor(0.1f, 0.1f, 0.5f, 1.0f);
+        }
+        // Beyond 3.4.2: a recreated GL context gets a new RenderContext (and
+        // MeshCache) but no new agent-circuit event, so 3.4.2 left the mesh
+        // URL unset and every mesh fetch blocked an HTTP fetch thread forever.
+        SLAgentCircuit currentCircuit = this.agentCircuit.getData();
+        if (currentCircuit != null) {
+            renderContext.setMeshCapURL(currentCircuit.getCaps().getMeshFetchURL());
         }
         this.renderContext.set(renderContext);
         this.hoverTextEnableHUDs = GlobalOptions.getInstance().getHoverTextEnableHUDs();

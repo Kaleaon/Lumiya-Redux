@@ -13,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.react.Subscription;
@@ -38,10 +36,8 @@ import javax.annotation.Nullable;
 
 public class NearbyPeopleMinimapFragment extends Fragment {
 
-    @BindView(R.id.empty)
     View emptyView;
 
-    @BindView(com.lumiyaviewer.lumiya.R.id.minimap_users_list)
     RecyclerView userListView;
     private final SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
@@ -251,7 +247,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.minimap_users, viewGroup, false);
-        ButterKnife.bind(this, inflate);
+        new NearbyPeopleMinimapFragment_ViewBinding(this, inflate);
         TypedValue typedValue = new TypedValue();
         layoutInflater.getContext().getTheme().resolveAttribute(com.lumiyaviewer.lumiya.R.attr.CardViewDetailsBackground, typedValue, true);
         this.cardSelectedColor = typedValue.data;

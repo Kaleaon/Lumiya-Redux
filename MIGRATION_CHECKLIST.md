@@ -31,7 +31,8 @@
   - [ ] Finish Room migration for all active entities/queries and validate schema migrations + downgrade/upgrade behavior.
   - [ ] Remove greenDAO runtime/dependencies and generated DAO surface (`de.greenrobot:greendao`, `dao/`, remaining `orm/` artifacts tied to greenDAO only) once Room is authoritative.
 - [ ] **UI cleanup sequencing**
-  - [ ] For every touched ButterKnife-backed UI file, opportunistically replace field injection and click bindings with ViewBinding (preferred) or another modern equivalent when ViewBinding is not a good fit.
+  - [x] Remove ButterKnife: generated `*_ViewBinding` classes kept as source with the `ui/common/binding` runtime (verifier: 0 damaged).
+  - [ ] Convert screens to Android View Binding opportunistically when they are touched.
   - [ ] Keep replacement incremental per-screen to reduce regression surface; avoid mass rewrites without functional changes.
 - [ ] **Documentation and build comments**
   - [ ] Keep `ARCHITECTURE.md` dependency lifecycle notes aligned with migration status.

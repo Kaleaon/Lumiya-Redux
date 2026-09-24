@@ -12,7 +12,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <androidx.legacy.widget.Space android:id="@id/split_object_popups_left_spacer" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0" />
+                <Space android:id="@id/split_object_popups_left_spacer" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0" />
                 <FrameLayout android:id="@id/object_popups_container" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="2.0" />
             </LinearLayout>
         </FrameLayout>
