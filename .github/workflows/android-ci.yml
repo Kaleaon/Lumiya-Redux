@@ -37,7 +37,11 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          # The legacy `tools` SDK package is no longer published. Declare the
+          # supported package explicitly so setup does not request it.
+          packages: platform-tools
 
       - name: Install Android SDK packages
         run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
