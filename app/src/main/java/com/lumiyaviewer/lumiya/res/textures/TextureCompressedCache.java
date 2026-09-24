@@ -37,43 +37,11 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
 
     private class TextureFetchRequest extends ResourceRequest<DrawableTextureParams, File> implements Startable, SLTextureFetchRequest.TextureFetchCompleteListener, Runnable, HasPriority {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
         private static final int MAX_RETRIES = 2;
         private final File compressedFile;
         private volatile SLTextureFetchRequest fetchRequest;
         private volatile Future<?> fetchTask;
         private final SLTextureFetcher fetcher;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m129x8a7b09f7() {
-            if (f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
-                return f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
-            }
-            int[] iArr = new int[TextureClass.values().length];
-            try {
-                iArr[TextureClass.Asset.ordinal()] = 3;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[TextureClass.Baked.ordinal()] = 1;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[TextureClass.Prim.ordinal()] = 4;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[TextureClass.Sculpt.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[TextureClass.Terrain.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = iArr;
-            return iArr;
-        }
 
         public TextureFetchRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, File> resourceManager, File file, SLTextureFetcher sLTextureFetcher) {
             super(drawableTextureParams, resourceManager);
@@ -120,10 +88,10 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
 
         @Override
         public int getPriority() {
-            switch (m129x8a7b09f7()[getParams().textureClass().ordinal()]) {
-                case 1:
+            switch (getParams().textureClass()) {
+                case Baked:
                     return 1;
-                case 2:
+                case Sculpt:
                     return 0;
                 default:
                     return 2;
@@ -132,65 +100,90 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
 
         /* JADX WARN: Removed duplicated region for block: B:38:0x01d2 A[LOOP:0: B:17:0x00bc->B:38:0x01d2, LOOP_END] */
         /* JADX WARN: Removed duplicated region for block: B:39:0x00fc A[SYNTHETIC] */
+        /**
+         * Download the compressed (JPEG2000) texture over HTTP into the cache.
+         *
+         * <p>Baked avatar textures come from the agent appearance service
+         * (<code>texture/AVATAR_ID/BAKE_NAME/TEXTURE_ID</code>); everything else
+         * from the region's GetTexture capability (<code>?texture_id=</code>), as
+         * in the viewer's LLTextureFetch. The body is written to a
+         * <code>.part</code> file and renamed into place under the cache lock.
+         * Up to {@link #MAX_RETRIES} attempts are made; if all fail, the request
+         * is handed to the UDP (ImageData/ImagePacket) download executor.</p>
+         */
         @Override
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
         public void run() {
             if (this.fetcher == null) {
                 completeRequest(null);
                 return;
             }
+            String capURL = this.fetcher.getCapURL();
+            String appearanceService = this.fetcher.getAgentAppearanceService();
             DrawableTextureParams params = getParams();
+            URL url;
             try {
-                String appearanceService = this.fetcher.getAgentAppearanceService();
-                UUID avatarId = params.avatarUUID();
-                AvatarTextureFaceIndex face = params.avatarFaceIndex();
-                URL url;
-                if (appearanceService != null && avatarId != null && face != null) {
-                    if (!appearanceService.endsWith("/")) appearanceService += "/";
-                    url = new URL(appearanceService + "texture/" + avatarId + "/"
-                            + face.getBakedTextureName() + "/" + params.uuid());
+                UUID avatarUUID = params.avatarUUID();
+                AvatarTextureFaceIndex faceIndex = params.avatarFaceIndex();
+                if (appearanceService == null || avatarUUID == null || faceIndex == null) {
+                    url = new URL(capURL + "/?texture_id=" + params.uuid().toString());
                 } else {
-                    url = new URL(this.fetcher.getCapURL() + "/?texture_id=" + params.uuid());
+                    if (!appearanceService.endsWith("/")) {
+                        appearanceService = appearanceService + "/";
+                    }
+                    url = new URL(appearanceService + "texture/" + avatarUUID.toString() + "/"
+                            + faceIndex.getBakedTextureName() + "/" + params.uuid().toString());
                 }
-                File partial = new File(this.compressedFile.getAbsolutePath() + ".part");
-                File parent = partial.getParentFile();
-                if (parent != null && !parent.exists() && !parent.mkdirs() && !parent.exists()) {
-                    Debug.Log("Cannot create texture cache directory " + parent);
-                    completeRequest(null);
+            } catch (MalformedURLException e) {
+                Debug.Warning(e);
+                completeRequest(null);
+                return;
+            }
+            Debug.Log("TextureFetchRequest: Fetching texture " + params.uuid().toString() + ", url = " + url);
+            File partFile = new File(this.compressedFile.getAbsolutePath() + ".part");
+            File tempOutputDir = partFile.getParentFile();
+            boolean createResult = tempOutputDir.mkdirs();
+            Debug.Printf("TextureFetchRequest: tempOutputDir = %s, createResult = %b, exists = %b",
+                    tempOutputDir, Boolean.valueOf(createResult), Boolean.valueOf(tempOutputDir.exists()));
+            for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
+                boolean success = false;
+                try {
+                    Debug.Printf("TextureFetchRequest: getting connection", new Object[0]);
+                    Response response = SLHTTPSConnection.getOkHttpClient().newCall(
+                            new Request.Builder().url(url).header(HttpHeaders.ACCEPT, "image/x-j2c").build()).execute();
+                    if (response == null) {
+                        throw new IOException("Null response");
+                    }
+                    try {
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Response code " + Integer.toString(response.code()));
+                        }
+                        InputStream input = response.body().byteStream();
+                        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(partFile));
+                        try {
+                            ByteStreams.copy(input, output);
+                        } finally {
+                            output.close();
+                        }
+                        // The file is complete once the stream is closed; a
+                        // failure closing the response after that still counts.
+                        success = true;
+                    } finally {
+                        response.close();
+                    }
+                } catch (IOException e) {
+                    Debug.Warning(e);
+                }
+                if (success) {
+                    synchronized (TextureCompressedCache.this.lock) {
+                        partFile.renameTo(this.compressedFile);
+                    }
+                    completeRequest(this.compressedFile);
                     return;
                 }
-                for (int attempt = 0; attempt < MAX_RETRIES && !Thread.currentThread().isInterrupted(); attempt++) {
-                    try (Response response = SLHTTPSConnection.getOkHttpClient().newCall(
-                            new Request.Builder().url(url).header(HttpHeaders.ACCEPT, "image/x-j2c").build()).execute()) {
-                        if (!response.isSuccessful() || response.body() == null) {
-                            throw new IOException("Response code " + response.code());
-                        }
-                        try (InputStream input = response.body().byteStream();
-                             BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(partial))) {
-                            ByteStreams.copy(input, output);
-                        }
-                        synchronized (TextureCompressedCache.this.lock) {
-                            if (!partial.renameTo(this.compressedFile)) {
-                                throw new IOException("Cannot commit texture cache file " + this.compressedFile);
-                            }
-                        }
-                        completeRequest(this.compressedFile);
-                        return;
-                    } catch (IOException exception) {
-                        Debug.Warning(exception);
-                        partial.delete();
-                    }
-                }
-                if (!Thread.currentThread().isInterrupted() && !this.fetchTask.isCancelled()) {
-                    Debug.Log("TextureFetchRequest: HTTP fetch unsuccessful. Trying UDP.");
-                    TextureCompressedCache.this.downloadExecutor.queueRequest(this);
-                }
-            } catch (MalformedURLException exception) {
-                Debug.Warning(exception);
-                completeRequest(null);
+            }
+            if (!this.fetchTask.isCancelled()) {
+                Debug.Log("TextureFetchRequest: HTTP fetch unsuccessful. Trying UDP.");
+                TextureCompressedCache.this.downloadExecutor.queueRequest(this);
             }
         }
 

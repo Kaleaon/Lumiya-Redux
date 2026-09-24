@@ -79,7 +79,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             }
             ProfileTab profileTab = this.tabs.get(i);
             try {
-                Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
+                Fragment fragment = (Fragment) profileTab.tabClass.newInstance();
                 fragment.setArguments(GroupProfileFragment.makeSelection(GroupProfileFragment.this.chatterID));
                 GroupProfileFragment.this.activeFragments.put(profileTab, new WeakReference(fragment));
                 return fragment;

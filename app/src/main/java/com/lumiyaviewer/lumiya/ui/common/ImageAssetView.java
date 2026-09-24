@@ -145,7 +145,10 @@ public class ImageAssetView extends View {
         }
         int width2 = this.imageBitmap.getWidth();
         int height2 = this.imageBitmap.getHeight();
-        float max = Math.max(width2 / width, height2 / height);
+        // Fit the bitmap inside the view: scale by the larger of the two ratios.
+        // Must be float division (the decompiled source used int division, which
+        // made the scale 0 for any image smaller than the view).
+        float max = Math.max((float) width2 / (float) width, (float) height2 / (float) height);
         int round = Math.round(width2 / max);
         int scaledHeight = Math.round(height2 / max);
         int i = (width / 2) - (round / 2);

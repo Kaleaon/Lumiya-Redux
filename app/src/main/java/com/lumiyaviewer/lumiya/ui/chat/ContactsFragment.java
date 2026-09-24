@@ -55,35 +55,6 @@ public class ContactsFragment extends Fragment {
 
     private class ContactsPagerAdapter extends FragmentStatePagerAdapter {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-ui-chat-ContactsFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f251x6907e542 = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-ui-chat-ContactsFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m430x7c67181e() {
-            if (f251x6907e542 != null) {
-                return f251x6907e542;
-            }
-            int[] iArr = new int[ContactListType.values().length];
-            try {
-                iArr[ContactListType.Active.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[ContactListType.Friends.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[ContactListType.Groups.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[ContactListType.Nearby.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            f251x6907e542 = iArr;
-            return iArr;
-        }
-
         ContactsPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
@@ -96,17 +67,17 @@ public class ContactsFragment extends Fragment {
         @Override
         public Fragment getItem(int i) {
             Fragment nearbyUsersFragment;
-            switch (m430x7c67181e()[ContactListType.values()[i].ordinal()]) {
-                case 1:
+            switch (ContactListType.values()[i]) {
+                case Active:
                     nearbyUsersFragment = new ActiveChattersFragment();
                     break;
-                case 2:
+                case Friends:
                     nearbyUsersFragment = new FriendListFragment();
                     break;
-                case 3:
+                case Groups:
                     nearbyUsersFragment = new GroupListFragment();
                     break;
-                case 4:
+                case Nearby:
                     nearbyUsersFragment = new NearbyUsersFragment();
                     break;
                 default:

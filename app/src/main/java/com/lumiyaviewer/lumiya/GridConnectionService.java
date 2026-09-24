@@ -73,11 +73,6 @@ import javax.annotation.Nonnull;
 
 public class GridConnectionService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f3x3582025 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-utils-LEDActionSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues = null;
     public static final String LOGIN_ACTION = "com.lumiyaviewer.lumiya.ACTION_LOGIN";
     private static final int REQUEST_CODE_UNREAD_NOTIFY = com.lumiyaviewer.lumiya.R.id.unread_notify_request_code;
     private Subscription<Boolean, UnreadNotifications> unreadNotifySubscription;
@@ -189,54 +184,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
         public SLGridConnection getGridConn() {
             return GridConnectionService.gridConnection;
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m13xc4a7bd01() {
-        if (f3x3582025 != null) {
-            return f3x3582025;
-        }
-        int[] iArr = new int[NotificationType.values().length];
-        try {
-            iArr[NotificationType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[NotificationType.LocalChat.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[NotificationType.Private.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f3x3582025 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-utils-LEDActionSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m14getcomlumiyaviewerlumiyautilsLEDActionSwitchesValues() {
-        if (f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues != null) {
-            return f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues;
-        }
-        int[] iArr = new int[LEDAction.values().length];
-        try {
-            iArr[LEDAction.Always.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[LEDAction.Fast.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[LEDAction.None.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[LEDAction.Slow.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues = iArr;
-        return iArr;
     }
 
     public GridConnectionService() {
@@ -619,17 +566,17 @@ public class GridConnectionService extends Service implements SharedPreferences.
             NotificationSettings notifySettingsByType2 = orNull5 != null ? notifySettingsByType(orNull5) : null;
             Debug.Printf("GridConnectionService: updateUnreadNotification: ledAction = %s, color = %08x", lEDAction.toString(), Integer.valueOf(i2));
             if (lEDAction != LEDAction.None) {
-                switch (m14getcomlumiyaviewerlumiyautilsLEDActionSwitchesValues()[lEDAction.ordinal()]) {
-                    case 1:
+                switch (lEDAction) {
+                    case Always:
                         builder.setLights(i2, 1, 0);
                         break;
-                    case 2:
+                    case Fast:
                         builder.setLights(i2, 300, 100);
                         break;
-                    case 3:
+                    case None:
                         builder.setLights(i2, 0, 0);
                         break;
-                    case 4:
+                    case Slow:
                         builder.setLights(i2, 1000, TransitionView.TRANSITION_ANIMATION_DURATION_MS);
                         break;
                 }

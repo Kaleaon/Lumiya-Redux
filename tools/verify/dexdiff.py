@@ -45,7 +45,7 @@ TYPE_RE = re.compile(r'L[^;\s]+;')
 
 
 APP_PREFIXES = ('Lcom/lumiyaviewer/', 'Luk/co/senab/', 'Lcom/google/vr/', 'Lcom/google/vrtoolkit/')
-ANON_RE = re.compile(r'\$\d+;$')
+ANON_RE = re.compile(r'\$(?:AnonymousClass)?\d+;$')
 # Reads that disappear on purpose: minSdk was raised to 26, so SDK_INT
 # checks were removed. Reported separately, never counted as damage.
 INTENTIONAL = ('Landroid/os/Build$VERSION;->SDK_INT',)
@@ -75,6 +75,8 @@ def norm_types(s):
 
 
 def norm_mname(n):
+    if re.match(r'^\$m\$\d+$', n):
+        return 'LAMBDA'  # jadx helper inside an inlined lambda class
     if n in ('valuesCustom', '$values'):
         return 'values'  # jadx's alias for the enum values() it could not name
     if LAMBDA_METHOD_RE.search(n) or re.match(r'^m\d+x[0-9a-f]+$', n):
@@ -150,9 +152,24 @@ def parse_smali(path, resmap):
             continue
         if line.startswith('.class'):
             cls = line.split()[-1]
+            HIER.setdefault(TREE[0], {}).setdefault(cls, [None, set()])
+            continue
+        if line.startswith('.field') and cls:
+            FIELDS.setdefault(TREE[0], {}).setdefault(cls, set()).add(re.search(r'(\S+):\S', line).group(1))
+            continue
+        if line.startswith('.super') and cls:
+            HIER[TREE[0]][cls][0] = line.split()[-1]
             continue
         if line.startswith('.method'):
             sig = line.split()[-1]
+            raw_name, raw_desc = sig.split('(', 1)
+            nsig = norm_mname(raw_name) + '(' + norm_types(raw_desc)
+            entry = HIER[TREE[0]][cls]
+            if len(entry) == 2:
+                entry.append(set())
+            entry[2].add(nsig)                      # every declared method
+            if ' static ' not in line and ' private ' not in line:
+                entry[1].add(nsig)                  # overridable ones
             name, desc = sig.split('(', 1)
             key = norm_mname(name) + '(' + norm_types(desc)
             if name.startswith('access$'):
@@ -165,10 +182,15 @@ def parse_smali(path, resmap):
                 key = '<clinit>()V'
             elif re.match(r'^-get.*SwitchesValues$', name) or name.startswith('$SWITCH_TABLE$'):
                 # Enum switch-map helpers: Jack/Eclipse put them in the class,
-                # javac in a synthetic $N class. Compare them in the bucket.
-                key = 'LAMBDA'
+                # javac in a synthetic $N class. They carry no behaviour of
+                # their own (and Jack's map lists every constant, javac's only
+                # the ones switched on), so they are not compared at all.
+                key = 'SWITCHMAP'
             cur = Method()
             cur.private = ' private ' in line or ' synthetic ' in line
+            if key == 'SWITCHMAP':
+                cur = Method()   # parsed but never stored
+                continue
             if key.startswith('LAMBDA('):
                 key = 'LAMBDA'
             if key in methods:
@@ -208,6 +230,9 @@ def parse_smali(path, resmap):
         op = op.replace('/range', '')
         if op.startswith('invoke-'):
             m = REF_RE.search(line)
+            if not m and re.search(r'\}, \[+[ZBSCIJFD]->clone\(\)', line):
+                cur.invokes['*->clone()'] += 1  # primitive array clone()
+                continue
             if m and m.group(2) == 'desiredAssertionStatus':
                 continue  # d8 strips `assert` support
             if m:
@@ -231,6 +256,8 @@ def parse_smali(path, resmap):
                         m = re.match(r'(L[^;\s]+;)->(<init>)(\(.*\)V)', '%s-><init>(%s)V' % (m.group(1), ''.join(params[:-1])))
                 if line[m.start() - 1:m.start()] == '[':
                     owner = '*'  # array clone()
+                if ANON_RE.search(owner):
+                    owner = ANON_RE.sub('$ANON;', owner)  # anonymous classes may be renumbered
                 if m.group(2) in ('equals', 'hashCode', 'toString', 'getClass', 'iterator'):
                     owner = '*'  # java.lang.Object methods: dispatch is virtual either way
                 desc = norm_types(m.group(3))
@@ -301,7 +328,67 @@ def parse_smali(path, resmap):
     return cls, methods
 
 
+HIER = {}      # tree root -> class -> [super, {virtual method sigs}]
+FIELDS = {}    # tree root -> class -> {declared field names}
+TREE = [None]
+
+
+def topmost_declarer(tree, owner, sig):
+    """Highest app class in owner's superclass chain that declares sig."""
+    h = HIER.get(tree, {})
+    if owner in h and len(h[owner]) > 2 and sig in h[owner][2] and sig not in h[owner][1]:
+        return owner  # private/static: bound to its own class
+    best, cur, seen = None, owner, set()
+    while cur in h and cur not in seen:
+        seen.add(cur)
+        if sig in h[cur][1] or (len(h[cur]) > 2 and sig in h[cur][2]):
+            if sig in h[cur][1] or best is None:
+                best = cur
+        cur = h[cur][0]
+    if best is None and cur is not None and not cur.startswith(APP_PREFIXES):
+        # Inherited from a library class (Fragment.setArguments, ...): compare
+        # like any other library call.
+        return '*LIB'
+    return best
+
+
+def rebind(tree, classes):
+    """Name virtual calls after the class that first declares the method, so
+    calling through a subclass or superclass reference compares equal."""
+    h, f = HIER.get(tree, {}), FIELDS.get(tree, {})
+    for methods in classes.values():
+        for m in methods.values():
+            new = collections.Counter()
+            for k, n in m.invokes.items():
+                owner, _, rest = k.partition('->')
+                if owner.startswith('L') and owner in HIER.get(tree, {}):
+                    top = topmost_declarer(tree, owner, rest)
+                    if top == '*LIB':
+                        k = '*->' + rest[:rest.index(')') + 1]
+                    elif top:
+                        k = top + '->' + rest
+                new[k] += n
+            m.invokes = new
+            # Field references name the static type javac or dx saw
+            # (SLObjectAvatarInfo->treeNode vs SLObjectInfo->treeNode); name
+            # them after the class that declares the field.
+            newf = collections.Counter()
+            for k, n in m.fields.items():
+                rw, _, ref = k.partition(' ')
+                owner, _, rest = ref.partition('->')
+                fname = rest.split(':', 1)[0]
+                cur, seen = owner, set()
+                while cur in h and cur not in seen and fname not in f.get(cur, ()):
+                    seen.add(cur)
+                    cur = h[cur][0]
+                if cur in f and fname in f[cur]:
+                    k = rw + ' ' + cur + '->' + rest
+                newf[k] += n
+            m.fields = newf
+
+
 def load_tree(root, resmap, prefixes):
+    TREE[0] = root
     classes = {}
     for dp, _, fns in os.walk(root):
         for fn in fns:
@@ -311,11 +398,14 @@ def load_tree(root, resmap, prefixes):
             if prefixes and not any(rel.startswith(p) for p in prefixes):
                 continue
             cls, methods = parse_smali(os.path.join(dp, fn), resmap)
-            if cls is None or LAMBDA_CLASS_RE.search(cls):
+            if cls is None:
                 continue
+            if LAMBDA_CLASS_RE.search(cls) and '$$ExternalSynthetic' not in cls:
+                continue  # D8/old-D8 package-level trampolines: no own logic
             if re.search(r'/R(\$\w+)?;$', cls):
                 continue  # generated resource tables; ids are checked by name
             classes[cls] = methods
+    rebind(root, classes)
     return classes
 
 
@@ -327,16 +417,50 @@ def counter_missing(a, b):
     return sorted(k for k in a if k not in b)
 
 
+def counter_reduced(a, b):
+    """Present in both, but fewer times in b. Compilers duplicate finally
+    blocks and return paths differently, so this is reported for review
+    rather than counted as damage."""
+    return sorted(k for k in a if k in b and a[k] > b[k])
+
+
+def split_into(text, pieces, memo=None):
+    """Return the pieces whose concatenation is exactly text, or None."""
+    if memo is None:
+        memo = {}
+    if text == '':
+        return []
+    if text in memo:
+        return memo[text]
+    memo[text] = None
+    for p in pieces:
+        if p and text.startswith(p):
+            rest = split_into(text[len(p):], pieces, memo)
+            if rest is not None:
+                memo[text] = [p] + rest
+                return memo[text]
+    return None
+
+
 def diff_method(o, n):
     missing = {}
     added = {}
     for attr in ('invokes', 'fields', 'types', 'strings'):
         mo, mn = getattr(o, attr), getattr(n, attr)
         miss = [k for k in counter_missing(mo, mn) if not any(i in k for i in INTENTIONAL)]
-        if attr == 'strings':
-            # "a" + "b" literals may be folded or split differently.
-            joined = '\x00'.join(mn)
-            miss = [k for k in miss if k not in joined]
+        if attr == 'strings' and miss:
+            # "a" + "b" literals may be folded or split differently: a missing
+            # literal is fine only if some new literal is exactly a
+            # concatenation of original literals that includes it.
+            pieces = set(mo)
+            covered = set()
+            for t in mn:
+                if t in mo:
+                    continue
+                parts = split_into(t, pieces)
+                if parts:
+                    covered.update(parts)
+            miss = [k for k in miss if k not in covered]
         add = counter_missing(mn, mo)
         if miss:
             missing[attr] = miss
@@ -353,6 +477,11 @@ def diff_method(o, n):
         missing['numbers'] = miss
     if add:
         added['numbers'] = add
+    for attr in ('invokes', 'fields'):
+        red = [k for k in counter_reduced(getattr(o, attr), getattr(n, attr))
+               if not re.search(r'StringBuilder|->append\(|->toString\(|^\*-><init>', k)]
+        if red:
+            added.setdefault('reduced', {})[attr] = red
     fm = sorted(o.flags - n.flags - {'lambda', 'newarray'})
     if fm:
         missing['flags'] = fm
@@ -381,7 +510,7 @@ def compare(orig, new):
         # so those are compared as one bucket per top-level class.
         o_bucket, n_bucket = Method(), Method()
         for cname, methods in o_classes.items():
-            anon = re.search(r'\$\d+;$', cname) is not None
+            anon = re.search(r'\$\d+;$', cname) is not None or '$$ExternalSynthetic' in cname
             for mk, m in methods.items():
                 if mk == 'LAMBDA' or anon:
                     o_bucket.merge(m)
@@ -401,7 +530,7 @@ def compare(orig, new):
                 if miss or add:
                     entry['methods'][cname + '->' + mk] = {'missing': miss, 'added': add, 'orig_size': m.size, 'new_size': nm.size}
         for cname, methods in n_classes.items():
-            anon = re.search(r'\$\d+;$', cname) is not None
+            anon = re.search(r'\$\d+;$', cname) is not None or '$$ExternalSynthetic' in cname
             for mk, m in methods.items():
                 if mk == 'LAMBDA' or anon or mk not in o_classes.get(cname, {}):
                     n_bucket.merge(m)
@@ -495,7 +624,19 @@ def main():
                         print('    %s  (orig %d insns, new %d)' % (mk, v['orig_size'], v['new_size']))
                         for k, vals in v['missing'].items():
                             print('        -%s: %s' % (k, ', '.join(map(str, vals[:8])) + (' ...' if len(vals) > 8 else '')))
-    print('SUMMARY', dict(counts), file=sys.stderr)
+    reduced = sum(1 for e in report.values() for v in e['methods'].values() if v['added'].get('reduced'))
+    # An SDK_INT check that vanished excuses everything the method lost,
+    # including code outside the dead branch (the verifier has no control
+    # flow graph). List these so a person confirms each one.
+    folded = [(mk, v['added']['sdk_folded']) for e in report.values() for mk, v in e['methods'].items()
+              if v['added'].get('sdk_folded')]
+    for mk, lost in folded:
+        print('SDKFOLD  %s' % mk)
+        if a.verbose:
+            for k, vals in lost.items():
+                print('        -%s: %s' % (k, ', '.join(map(str, vals[:8])) + (' ...' if len(vals) > 8 else '')))
+    print('SUMMARY', dict(counts), 'methods with reduced call counts (review):', reduced,
+          'methods with SDK-folded losses (review):', len(folded), file=sys.stderr)
     return 1 if counts.get('DAMAGED') or counts.get('ABSENT') else 0
 
 

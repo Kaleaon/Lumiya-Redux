@@ -41,8 +41,6 @@ import javax.annotation.Nullable;
 
 public class TaskInventoryFragment extends FragmentWithTitle {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f501x3332d2fb = null;
     private static final String OBJECT_LOCAL_ID_KEY = "objectLocalId";
     private static final String OBJECT_UUID_KEY = "objectUUID";
     private Subscription<Integer, SLObjectProfileData> objectProfileSubscription;
@@ -122,112 +120,6 @@ public class TaskInventoryFragment extends FragmentWithTitle {
                 }
             }
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m694x9bd6d19f() {
-        if (f501x3332d2fb != null) {
-            return f501x3332d2fb;
-        }
-        int[] iArr = new int[SLAssetType.values().length];
-        try {
-            iArr[SLAssetType.AT_ANIMATION.ordinal()] = 3;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLAssetType.AT_BODYPART.ordinal()] = 4;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLAssetType.AT_CALLINGCARD.ordinal()] = 5;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[SLAssetType.AT_CATEGORY.ordinal()] = 6;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[SLAssetType.AT_CLOTHING.ordinal()] = 7;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[SLAssetType.AT_GESTURE.ordinal()] = 8;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[SLAssetType.AT_IMAGE_JPEG.ordinal()] = 9;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[SLAssetType.AT_IMAGE_TGA.ordinal()] = 10;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[SLAssetType.AT_LANDMARK.ordinal()] = 11;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[SLAssetType.AT_LINK.ordinal()] = 12;
-        } catch (NoSuchFieldError e10) {
-        }
-        try {
-            iArr[SLAssetType.AT_LINK_FOLDER.ordinal()] = 13;
-        } catch (NoSuchFieldError e11) {
-        }
-        try {
-            iArr[SLAssetType.AT_LSL_BYTECODE.ordinal()] = 14;
-        } catch (NoSuchFieldError e12) {
-        }
-        try {
-            iArr[SLAssetType.AT_LSL_TEXT.ordinal()] = 1;
-        } catch (NoSuchFieldError e13) {
-        }
-        try {
-            iArr[SLAssetType.AT_MESH.ordinal()] = 15;
-        } catch (NoSuchFieldError e14) {
-        }
-        try {
-            iArr[SLAssetType.AT_NOTECARD.ordinal()] = 2;
-        } catch (NoSuchFieldError e15) {
-        }
-        try {
-            iArr[SLAssetType.AT_OBJECT.ordinal()] = 16;
-        } catch (NoSuchFieldError e16) {
-        }
-        try {
-            iArr[SLAssetType.AT_SCRIPT.ordinal()] = 17;
-        } catch (NoSuchFieldError e17) {
-        }
-        try {
-            iArr[SLAssetType.AT_SIMSTATE.ordinal()] = 18;
-        } catch (NoSuchFieldError e18) {
-        }
-        try {
-            iArr[SLAssetType.AT_SOUND.ordinal()] = 19;
-        } catch (NoSuchFieldError e19) {
-        }
-        try {
-            iArr[SLAssetType.AT_SOUND_WAV.ordinal()] = 20;
-        } catch (NoSuchFieldError e20) {
-        }
-        try {
-            iArr[SLAssetType.AT_TEXTURE.ordinal()] = 21;
-        } catch (NoSuchFieldError e21) {
-        }
-        try {
-            iArr[SLAssetType.AT_TEXTURE_TGA.ordinal()] = 22;
-        } catch (NoSuchFieldError e22) {
-        }
-        try {
-            iArr[SLAssetType.AT_UNKNOWN.ordinal()] = 23;
-        } catch (NoSuchFieldError e23) {
-        }
-        try {
-            iArr[SLAssetType.AT_WIDGET.ordinal()] = 24;
-        } catch (NoSuchFieldError e24) {
-        }
-        f501x3332d2fb = iArr;
-        return iArr;
     }
 
     private boolean canModifyObject() {
@@ -331,14 +223,14 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         if (!(adapter instanceof TaskInventoryListAdapter) || (item = ((TaskInventoryListAdapter) adapter).getItem(i)) == null) {
             return;
         }
-        switch (m694x9bd6d19f()[SLAssetType.getByType(item.assetType).ordinal()]) {
-            case 1:
+        switch (SLAssetType.getByType(item.assetType)) {
+            case AT_LSL_TEXT:
                 if (canModifyObject() && canModifyObjectContents(item)) {
                     startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), null, item, true, getObjectUUID(), getObjectLocalID()));
                     break;
                 }
                 break;
-            case 2:
+            case AT_NOTECARD:
                 if (canModifyObject() && canModifyObjectContents(item)) {
                     startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), null, item, false, getObjectUUID(), getObjectLocalID()));
                     break;

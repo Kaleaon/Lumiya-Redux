@@ -60,11 +60,6 @@ import javax.annotation.Nullable;
 
 public abstract class SLChatEvent implements View.OnLongClickListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatEvent$ChatMessageTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f72x73d6fc70 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f73xbd9aa5ff = null;
     public static final int CHAT_AUDIBLE_BARELY = 0;
     public static final int CHAT_AUDIBLE_FULLY = 1;
     public static final int CHAT_AUDIBLE_NOT = -1;
@@ -288,134 +283,6 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-chat-generic-SLChatEvent$ChatMessageTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m158x80b3934c() {
-        if (f72x73d6fc70 != null) {
-            return f72x73d6fc70;
-        }
-        int[] iArr = new int[ChatMessageType.values().length];
-        try {
-            iArr[ChatMessageType.BalanceChanged.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatMessageType.EnableRLVOffer.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatMessageType.FriendshipOffered.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[ChatMessageType.FriendshipResult.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[ChatMessageType.GroupInvitation.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[ChatMessageType.GroupInvitationSent.ordinal()] = 6;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[ChatMessageType.InventoryItemOffered.ordinal()] = 7;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[ChatMessageType.InventoryItemOfferedByGroupNotice.ordinal()] = 8;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[ChatMessageType.InventoryItemOfferedByYou.ordinal()] = 9;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[ChatMessageType.Lure.ordinal()] = 10;
-        } catch (NoSuchFieldError e10) {
-        }
-        try {
-            iArr[ChatMessageType.LureRequest.ordinal()] = 11;
-        } catch (NoSuchFieldError e11) {
-        }
-        try {
-            iArr[ChatMessageType.LureRequested.ordinal()] = 12;
-        } catch (NoSuchFieldError e12) {
-        }
-        try {
-            iArr[ChatMessageType.MissedVoiceCall.ordinal()] = 13;
-        } catch (NoSuchFieldError e13) {
-        }
-        try {
-            iArr[ChatMessageType.PermissionRequest.ordinal()] = 14;
-        } catch (NoSuchFieldError e14) {
-        }
-        try {
-            iArr[ChatMessageType.ScriptDialog.ordinal()] = 15;
-        } catch (NoSuchFieldError e15) {
-        }
-        try {
-            iArr[ChatMessageType.SessionMark.ordinal()] = 16;
-        } catch (NoSuchFieldError e16) {
-        }
-        try {
-            iArr[ChatMessageType.SystemMessage.ordinal()] = 17;
-        } catch (NoSuchFieldError e17) {
-        }
-        try {
-            iArr[ChatMessageType.Text.ordinal()] = 18;
-        } catch (NoSuchFieldError e18) {
-        }
-        try {
-            iArr[ChatMessageType.TextBoxDialog.ordinal()] = 19;
-        } catch (NoSuchFieldError e19) {
-        }
-        try {
-            iArr[ChatMessageType.VoiceUpgrade.ordinal()] = 20;
-        } catch (NoSuchFieldError e20) {
-        }
-        try {
-            iArr[ChatMessageType.WentOffline.ordinal()] = 21;
-        } catch (NoSuchFieldError e21) {
-        }
-        try {
-            iArr[ChatMessageType.WentOnline.ordinal()] = 22;
-        } catch (NoSuchFieldError e22) {
-        }
-        f72x73d6fc70 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m159x84fb14a3() {
-        if (f73xbd9aa5ff != null) {
-            return f73xbd9aa5ff;
-        }
-        int[] iArr = new int[ChatMessageSource.ChatMessageSourceType.values().length];
-        try {
-            iArr[ChatMessageSource.ChatMessageSourceType.Group.ordinal()] = 25;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatMessageSource.ChatMessageSourceType.Object.ordinal()] = 1;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatMessageSource.ChatMessageSourceType.System.ordinal()] = 26;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[ChatMessageSource.ChatMessageSourceType.Unknown.ordinal()] = 27;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[ChatMessageSource.ChatMessageSourceType.User.ordinal()] = 2;
-        } catch (NoSuchFieldError e5) {
-        }
-        f73xbd9aa5ff = iArr;
-        return iArr;
-    }
-
     public SLChatEvent(@Nonnull ChatMessage chatMessage, @Nonnull UUID uuid) {
         this.dbMessage = chatMessage;
         this.timestamp = chatMessage.getTimestamp();
@@ -461,50 +328,50 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         if (chatMessage == null) {
             return null;
         }
-        switch (m158x80b3934c()[ChatMessageType.VALUES[chatMessage.getMessageType()].ordinal()]) {
-            case 1:
+        switch (ChatMessageType.VALUES[chatMessage.getMessageType()]) {
+            case BalanceChanged:
                 return new SLChatBalanceChangedEvent(chatMessage, uuid);
-            case 2:
+            case EnableRLVOffer:
                 return new SLEnableRLVOfferEvent(chatMessage, uuid);
-            case 3:
+            case FriendshipOffered:
                 return new SLChatFriendshipOfferedEvent(chatMessage, uuid);
-            case 4:
+            case FriendshipResult:
                 return new SLChatFriendshipResultEvent(chatMessage, uuid);
-            case 5:
+            case GroupInvitation:
                 return new SLChatGroupInvitationEvent(chatMessage, uuid);
-            case 6:
+            case GroupInvitationSent:
                 return new SLChatGroupInvitationSentEvent(chatMessage, uuid);
-            case 7:
+            case InventoryItemOffered:
                 return new SLChatInventoryItemOfferedEvent(chatMessage, uuid);
-            case 8:
+            case InventoryItemOfferedByGroupNotice:
                 return new SLChatInventoryItemOfferedByGroupNoticeEvent(chatMessage, uuid);
-            case 9:
+            case InventoryItemOfferedByYou:
                 return new SLChatInventoryItemOfferedByYouEvent(chatMessage, uuid);
-            case 10:
+            case Lure:
                 return new SLChatLureEvent(chatMessage, uuid);
-            case 11:
+            case LureRequest:
                 return new SLChatLureRequestEvent(chatMessage, uuid);
-            case 12:
+            case LureRequested:
                 return new SLChatLureRequestedEvent(chatMessage, uuid);
-            case 13:
+            case MissedVoiceCall:
                 return new SLMissedVoiceCallEvent(chatMessage, uuid);
-            case 14:
+            case PermissionRequest:
                 return new SLChatPermissionRequestEvent(chatMessage, uuid);
-            case 15:
+            case ScriptDialog:
                 return new SLChatScriptDialog(chatMessage, uuid);
-            case 16:
+            case SessionMark:
                 return new SLChatSessionMarkEvent(chatMessage, uuid);
-            case 17:
+            case SystemMessage:
                 return new SLChatSystemMessageEvent(chatMessage, uuid);
-            case 18:
+            case Text:
                 return new SLChatTextEvent(chatMessage, uuid);
-            case 19:
+            case TextBoxDialog:
                 return new SLChatTextBoxDialog(chatMessage, uuid);
-            case 20:
+            case VoiceUpgrade:
                 return new SLVoiceUpgradeEvent(chatMessage, uuid);
-            case 21:
+            case WentOffline:
                 return new SLChatOnlineOfflineEvent(chatMessage, uuid, false);
-            case 22:
+            case WentOnline:
                 return new SLChatOnlineOfflineEvent(chatMessage, uuid, true);
             default:
                 return null;
@@ -546,14 +413,14 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
             chatEventViewHolder.bubbleView.setOnLongClickListener(this);
         }
         if (chatterPicView != null) {
-            switch (m159x84fb14a3()[this.source.getSourceType().ordinal()]) {
-                case 1:
+            switch (this.source.getSourceType()) {
+                case Object:
                     chatterPicView.setChatterID(null, null);
                     chatterPicView.setForceIcon(R.drawable.inv_object);
                     chatterPicView.setVisibility(View.VISIBLE);
                     chatterPicView.setAttachedMessageSource(this.source);
                     break;
-                case 2:
+                case User:
                     UUID sourceUUID = this.source.getSourceUUID();
                     if (sourceUUID == null) {
                         chatterPicView.setChatterID(null, null);

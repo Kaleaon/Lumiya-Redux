@@ -69,8 +69,6 @@ import javax.annotation.Nullable;
 
 public class InventoryFragment extends FragmentWithTitle implements ReloadableFragment {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-inventory-InventoryActivity$SelectActionSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f446x959df7ce = null;
     private static final String FOLDER_ID_KEY = "folderID";
     private static final String IS_MASTER_FRAGMENT = "isMasterFragment";
     private static final String IS_SEARCHING_KEY = "isSearching";
@@ -174,28 +172,6 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
             $m$0(view);
         }
     };
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-inventory-InventoryActivity$SelectActionSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m600xe8fd8772() {
-        if (f446x959df7ce != null) {
-            return f446x959df7ce;
-        }
-        int[] iArr = new int[InventoryActivity.SelectAction.values().length];
-        try {
-            iArr[InventoryActivity.SelectAction.applyFirstLife.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[InventoryActivity.SelectAction.applyPickImage.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[InventoryActivity.SelectAction.applyUserProfile.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f446x959df7ce = iArr;
-        return iArr;
-    }
 
     private void applyPickImage(SLInventoryEntry sLInventoryEntry, PickInfoReply pickInfoReply) {
         SLAgentCircuit data = this.agentCircuit.getData();
@@ -410,12 +386,12 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         if (bundle == null) {
             bundle = new Bundle();
         }
-        switch (m600xe8fd8772()[selectAction.ordinal()]) {
-            case 1:
-            case 3:
+        switch (selectAction) {
+            case applyFirstLife:
+            case applyUserProfile:
                 applyProfilePic(sLInventoryEntry, selectAction == InventoryActivity.SelectAction.applyFirstLife, (AvatarPropertiesReply) bundle.getParcelable("oldProfileData"));
                 break;
-            case 2:
+            case applyPickImage:
                 applyPickImage(sLInventoryEntry, (PickInfoReply) bundle.getParcelable("oldPickData"));
                 break;
         }

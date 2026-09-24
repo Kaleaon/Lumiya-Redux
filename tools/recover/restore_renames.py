@@ -18,7 +18,7 @@ import pathlib
 import re
 import sys
 
-DECL_RE = re.compile(r'/\* renamed from: (\w+)(?:, reason: [^*]*)? \*/\s*\n(?:\s*@\w+(?:\([^)]*\))?\s*\n)*\s*([\w<>\[\], .?]+?)\s(m\w+)\s*\(')
+DECL_RE = re.compile(r'/\* renamed from: (\w+)(?:, reason: [^*]*)? \*/\s*\n(?:\s*(?:@\w+(?:\([^)]*\))?|/\*(?:[^*]|\*(?!/))*\*/)\s*\n)*\s*([\w<>\[\], .?]+?)\s(m[\w$]+)\s*\(')
 SYNTH_RE = re.compile(r'^mo?\d+')
 
 
@@ -33,7 +33,7 @@ def main():
                 mapping[synth].add(orig)
     mapping = {k: next(iter(v)) for k, v in mapping.items() if len(v) == 1}
     if mapping:
-        name_re = re.compile(r'\b(%s)\b' % '|'.join(map(re.escape, sorted(mapping, key=len, reverse=True))))
+        name_re = re.compile(r'(?<![\w$])(%s)(?![\w$])' % '|'.join(map(re.escape, sorted(mapping, key=len, reverse=True))))
     changed = 0
     for f in files:
         text = f.read_text(encoding='utf-8')

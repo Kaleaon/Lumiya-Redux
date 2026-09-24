@@ -96,103 +96,26 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     private ChatterNameRetriever ringingChatterNameRetriever = null;
     private final Handler fromPluginHandler = new Handler() {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f611x5636931c = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m916xcae206c0() {
-            if (f611x5636931c != null) {
-                return f611x5636931c;
-            }
-            int[] iArr = new int[VoicePluginMessageType.values().length];
-            try {
-                iArr[VoicePluginMessageType.VoiceAcceptCall.ordinal()] = 6;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceAudioProperties.ordinal()] = 1;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceChannelClosed.ordinal()] = 7;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceChannelStatus.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceConnectChannel.ordinal()] = 8;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceEnableMic.ordinal()] = 9;
-            } catch (NoSuchFieldError e6) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceInitialize.ordinal()] = 10;
-            } catch (NoSuchFieldError e7) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceInitializeReply.ordinal()] = 3;
-            } catch (NoSuchFieldError e8) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLogin.ordinal()] = 11;
-            } catch (NoSuchFieldError e9) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLoginStatus.ordinal()] = 4;
-            } catch (NoSuchFieldError e10) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLogout.ordinal()] = 12;
-            } catch (NoSuchFieldError e11) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceRejectCall.ordinal()] = 13;
-            } catch (NoSuchFieldError e12) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceRinging.ordinal()] = 5;
-            } catch (NoSuchFieldError e13) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceSet3DPosition.ordinal()] = 14;
-            } catch (NoSuchFieldError e14) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceSetAudioProperties.ordinal()] = 15;
-            } catch (NoSuchFieldError e15) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceTerminateCall.ordinal()] = 16;
-            } catch (NoSuchFieldError e16) {
-            }
-            f611x5636931c = iArr;
-            return iArr;
-        }
-
         @Override
         public void handleMessage(Message message) {
             if (message.what == 200 && (message.obj instanceof Bundle)) {
                 Bundle bundle = (Bundle) message.obj;
                 if (bundle.containsKey("message") && bundle.containsKey("messageType")) {
                     try {
-                        switch (m916xcae206c0()[VoicePluginMessageType.valueOf(bundle.getString("messageType")).ordinal()]) {
-                            case 1:
+                        switch (VoicePluginMessageType.valueOf(bundle.getString("messageType"))) {
+                            case VoiceAudioProperties:
                                 VoicePluginServiceConnection.this.onVoiceAudioProperties(new VoiceAudioProperties(bundle.getBundle("message")));
                                 break;
-                            case 2:
+                            case VoiceChannelStatus:
                                 VoicePluginServiceConnection.this.onVoiceChannelStatus(new VoiceChannelStatus(bundle.getBundle("message")));
                                 break;
-                            case 3:
+                            case VoiceInitializeReply:
                                 VoicePluginServiceConnection.this.onVoiceInitializeReply(new VoiceInitializeReply(bundle.getBundle("message")));
                                 break;
-                            case 4:
+                            case VoiceLoginStatus:
                                 VoicePluginServiceConnection.this.onVoiceLoginStatus(new VoiceLoginStatus(bundle.getBundle("message")));
                                 break;
-                            case 5:
+                            case VoiceRinging:
                                 VoicePluginServiceConnection.this.onVoiceRinging(new VoiceRinging(bundle.getBundle("message")));
                                 break;
                         }

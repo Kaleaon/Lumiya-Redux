@@ -13,8 +13,6 @@ import java.util.List;
 
 public class BakeLayer {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f64x335e3db9 = null;
     public int fixedColor;
     public SLAvatarGlobalColor globalColor;
     public boolean hasFixedColor;
@@ -27,28 +25,6 @@ public class BakeLayer {
     public String tgaTexture;
     public boolean visibilityMask;
     public boolean writeAllChannels;
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m148x403ad495() {
-        if (f64x335e3db9 != null) {
-            return f64x335e3db9;
-        }
-        int[] iArr = new int[SLAvatarParamColor.ColorOperation.values().length];
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Blend.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Default.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Multiply.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f64x335e3db9 = iArr;
-        return iArr;
-    }
 
     public BakeLayer(String str, SLAvatarGlobalColor sLAvatarGlobalColor, boolean z, int i, boolean z2, boolean z3, boolean z4, AvatarTextureFaceIndex avatarTextureFaceIndex, boolean z5, String str2, boolean z6, int[] iArr) {
         this.layerName = str;
@@ -86,14 +62,14 @@ public class BakeLayer {
                 if (this.layerName.equals("lipstick")) {
                     Debug.Log(String.format("Baking: lipstick color param weight %ff color %08x", Float.valueOf(paramWeight), Integer.valueOf(color)));
                 }
-                switch (m148x403ad495()[sLAvatarParamColor.colorOperation.ordinal()]) {
-                    case 1:
+                switch (sLAvatarParamColor.colorOperation) {
+                    case Blend:
                         colorAdd = SLAvatarParamColor.colorLerp(i4, color, paramWeight);
                         break;
-                    case 2:
+                    case Default:
                         colorAdd = SLAvatarParamColor.colorAdd(i4, color);
                         break;
-                    case 3:
+                    case Multiply:
                         colorAdd = SLAvatarParamColor.colorMult(i4, color);
                         break;
                     default:

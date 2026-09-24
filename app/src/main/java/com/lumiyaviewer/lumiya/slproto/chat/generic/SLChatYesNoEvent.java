@@ -18,9 +18,6 @@ import javax.annotation.Nullable;
 
 public abstract class SLChatYesNoEvent extends SLChatTextEvent {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f74x99a8895a = null;
-
     @Nonnull
     private EventState eventState;
 
@@ -35,28 +32,6 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         public static EventState[] valuesCustom() {
             return values();
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m167xa6852036() {
-        if (f74x99a8895a != null) {
-            return f74x99a8895a;
-        }
-        int[] iArr = new int[EventState.values().length];
-        try {
-            iArr[EventState.EventAccepted.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[EventState.EventCancelled.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[EventState.EventNew.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f74x99a8895a = iArr;
-        return iArr;
     }
 
     public SLChatYesNoEvent(ChatMessage chatMessage, @Nonnull UUID uuid) {
@@ -85,8 +60,8 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
             Button button = chatYesNoEventViewHolder.yesButton;
             Button button2 = chatYesNoEventViewHolder.noButton;
             CardView cardView = chatYesNoEventViewHolder.cardView;
-            switch (m167xa6852036()[this.eventState.ordinal()]) {
-                case 1:
+            switch (this.eventState) {
+                case EventAccepted:
                     textView.setText(getYesMessage(textView.getContext()));
                     button.setVisibility(View.GONE);
                     button2.setVisibility(View.GONE);
@@ -97,7 +72,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
-                case 2:
+                case EventCancelled:
                     textView.setText(getNoMessage(textView.getContext()));
                     button.setVisibility(View.GONE);
                     button2.setVisibility(View.GONE);
@@ -108,7 +83,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
-                case 3:
+                case EventNew:
                     textView.setText(getQuestion(textView.getContext()));
                     textView.setVisibility(View.VISIBLE);
                     button.setVisibility(View.VISIBLE);

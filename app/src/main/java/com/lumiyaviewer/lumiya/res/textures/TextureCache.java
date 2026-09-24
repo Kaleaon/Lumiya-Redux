@@ -41,41 +41,9 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
 
     private class TextureDecompressRequest extends ResourceRequest<DrawableTextureParams, OpenJPEG> implements ResourceConsumer, Runnable, HasPriority, Startable {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
         private volatile File compressedFile;
         private volatile Future<?> decompressorFuture;
         private volatile boolean lowQualityDone;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m126x8a7b09f7() {
-            if (f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
-                return f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
-            }
-            int[] iArr = new int[TextureClass.values().length];
-            try {
-                iArr[TextureClass.Asset.ordinal()] = 3;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[TextureClass.Baked.ordinal()] = 1;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[TextureClass.Prim.ordinal()] = 4;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[TextureClass.Sculpt.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[TextureClass.Terrain.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = iArr;
-            return iArr;
-        }
 
         public TextureDecompressRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, OpenJPEG> resourceManager) {
             super(drawableTextureParams, resourceManager);
@@ -150,10 +118,10 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             if (TextureCache.this.canBeLowQuality(params) && this.lowQualityDone) {
                 return 4;
             }
-            switch (m126x8a7b09f7()[params.textureClass().ordinal()]) {
-                case 1:
+            switch (params.textureClass()) {
+                case Baked:
                     return 2;
-                case 2:
+                case Sculpt:
                     return 1;
                 default:
                     return 3;

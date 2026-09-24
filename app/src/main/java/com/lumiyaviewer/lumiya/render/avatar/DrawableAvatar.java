@@ -192,90 +192,79 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
 
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Type inference failed for: r0v27, types: [com.lumiyaviewer.lumiya.render.spatial.DrawListEntry[]] */
-    public void processUpdateAttachments() {
-        DrawListPrimEntry[] drawListPrimEntryArr;
-        boolean z;
-        DrawableObject drawableObject;
-        DrawableHUD drawableHUD;
-        int i = 0;
-        ArrayListMultimap<Integer, DrawableObject> create = ArrayListMultimap.create();
-        Set newSetFromMap = Collections.newSetFromMap(new IdentityHashMap());
-        int i2 = this.displayedHUDid.get();
-        LinkedTreeNode<SLObjectInfo> firstChild = this.avatarObject.treeNode.getFirstChild();
-        DrawableHUD drawableHUD2 = null;
-        while (firstChild != null) {
-            drawableHUD = drawableHUD2;
-            SLObjectInfo dataObject = firstChild.getDataObject();
-            if (!dataObject.isDead) {
-                int i3 = dataObject.attachmentID;
-                if (i3 < 0 || i3 >= 56) {
-                    drawableHUD = drawableHUD2;
-                } else {
-                    SLAttachmentPoint sLAttachmentPoint = SLAttachmentPoint.attachmentPoints[i3];
-                    if (sLAttachmentPoint != null) {
-                        if (!sLAttachmentPoint.isHUD) {
-                            updateAttachmentParts(dataObject, create, i3);
-                            drawableHUD = drawableHUD2;
-                        } else if (i2 == dataObject.localID) {
-                            drawableHUD = new DrawableHUD(sLAttachmentPoint, this.drawableAttachments, dataObject, this.drawableStore, this);
+    /**
+     * Rebuild the attachment draw lists from the avatar's child objects: world
+     * attachments are grouped per attachment point, the one displayed HUD gets
+     * a DrawableHUD, and dead attachments queued by other threads are removed.
+     * Rigged meshes are re-collected; updateRiggedMeshes() runs when that set
+     * changed.
+     */
+    private void processUpdateAttachments() {
+        ArrayListMultimap<Integer, DrawableObject> attachmentsByPoint = ArrayListMultimap.create();
+        Set<DrawableObject> liveRiggedMeshes = Collections.newSetFromMap(new IdentityHashMap<DrawableObject, Boolean>());
+        int displayedHUD = this.displayedHUDid.get();
+        DrawableHUD hud = null;
+        for (LinkedTreeNode<SLObjectInfo> child = this.avatarObject.treeNode.getFirstChild(); child != null; child = child.getNextChild()) {
+            SLObjectInfo attachment = child.getDataObject();
+            if (attachment.isDead) {
+                continue;
+            }
+            int attachmentPoint = attachment.attachmentID;
+            // 56 attachment points (llvoavatar attachment IDs 0..55); others ignored.
+            if (attachmentPoint < 0 || attachmentPoint >= 56) {
+                continue;
+            }
+            SLAttachmentPoint point = SLAttachmentPoint.attachmentPoints[attachmentPoint];
+            if (point == null) {
+                continue;
+            }
+            if (!point.isHUD) {
+                updateAttachmentParts(attachment, attachmentsByPoint, attachmentPoint);
+            } else if (displayedHUD == attachment.localID) {
+                hud = new DrawableHUD(point, this.drawableAttachments, attachment, this.drawableStore, this);
+            }
+        }
+        DrawListEntry[] deadEntries;
+        synchronized (this.deadAttachmentsLock) {
+            if (this.deadAttachmentsList.isEmpty()) {
+                deadEntries = null;
+            } else {
+                deadEntries = this.deadAttachmentsList.toArray(new DrawListEntry[this.deadAttachmentsList.size()]);
+                this.deadAttachmentsList.clear();
+            }
+        }
+        boolean riggedMeshesChanged = false;
+        for (DrawableObject drawable : attachmentsByPoint.values()) {
+            if (drawable.isRiggedMesh()) {
+                if (this.riggedMeshes.add(drawable)) {
+                    riggedMeshesChanged = true;
+                }
+                liveRiggedMeshes.add(drawable);
+            }
+        }
+        if (deadEntries != null) {
+            for (DrawListEntry dead : deadEntries) {
+                this.drawableAttachments.removeEntry(dead);
+                if (dead instanceof DrawListPrimEntry) {
+                    DrawableObject drawable = ((DrawListPrimEntry) dead).getDrawableObject();
+                    if (drawable != null) {
+                        liveRiggedMeshes.remove(drawable);
+                        if (this.riggedMeshes.remove(drawable)) {
+                            riggedMeshesChanged = true;
                         }
                     }
                 }
             }
-            firstChild = firstChild.getNextChild();
-            drawableHUD2 = drawableHUD;
         }
-        synchronized (this.deadAttachmentsLock) {
-            if (this.deadAttachmentsList.isEmpty()) {
-                drawListPrimEntryArr = null;
-            } else {
-                // jadx left the reg type as `??` because of the Set<DrawListEntry>
-                // → DrawListPrimEntry[] narrowing; the live set only ever holds
-                // DrawListPrimEntry instances (see all deadAttachmentsList.add
-                // callers), so this preserves the original runtime behaviour.
-                @SuppressWarnings({"unchecked", "SuspiciousToArrayCall"})
-                DrawListPrimEntry[] r0 = this.deadAttachmentsList.toArray(new DrawListPrimEntry[0]);
-                this.deadAttachmentsList.clear();
-                drawListPrimEntryArr = r0;
+        for (DrawableObject drawable : this.riggedMeshes) {
+            if (!liveRiggedMeshes.contains(drawable)) {
+                this.riggedMeshes.remove(drawable);
+                riggedMeshesChanged = true;
             }
         }
-        boolean z2 = false;
-        for (DrawableObject drawableObject2 : create.values()) {
-            if (drawableObject2.isRiggedMesh()) {
-                if (this.riggedMeshes.add(drawableObject2)) {
-                    z2 = true;
-                }
-                newSetFromMap.add(drawableObject2);
-            }
-            z2 = z2;
-        }
-        if (drawListPrimEntryArr != null) {
-            int length = drawListPrimEntryArr.length;
-            while (i < length) {
-                DrawListPrimEntry drawListPrimEntry = drawListPrimEntryArr[i];
-                this.drawableAttachments.removeEntry(drawListPrimEntry);
-                if ((drawListPrimEntry instanceof DrawListPrimEntry) && (drawableObject = drawListPrimEntry.getDrawableObject()) != null) {
-                    newSetFromMap.remove(drawableObject);
-                    if (this.riggedMeshes.remove(drawableObject)) {
-                        z = true;
-                        i++;
-                        z2 = z;
-                    }
-                }
-                z = z2;
-                i++;
-                z2 = z;
-            }
-        }
-        for (DrawableObject drawableObject3 : this.riggedMeshes) {
-            if (!newSetFromMap.contains(drawableObject3)) {
-                this.riggedMeshes.remove(drawableObject3);
-                z2 = true;
-            }
-        }
-        this.drawableHUD = drawableHUD2;
-        this.drawableAttachmentList = new DrawableAttachments(create);
-        if (z2) {
+        this.drawableHUD = hud;
+        this.drawableAttachmentList = new DrawableAttachments(attachmentsByPoint);
+        if (riggedMeshesChanged) {
             updateRiggedMeshes();
         }
     }

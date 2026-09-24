@@ -131,11 +131,6 @@ import javax.annotation.Nullable;
 
 public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueue.ICapsEventHandler {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f60x94bee140 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f61xb1d54699 = null;
     private Subscription agentNameSubscription;
     private boolean agentPaused;
 
@@ -163,78 +158,6 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     private boolean teleportRequestSent;
     private final Set<UUID> typingUsers;
     private final UserManager userManager;
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m133x4d1ccd1c() {
-        if (f60x94bee140 != null) {
-            return f60x94bee140;
-        }
-        int[] iArr = new int[SLCapEventQueue.CapsEventType.values().length];
-        try {
-            iArr[SLCapEventQueue.CapsEventType.AgentGroupDataUpdate.ordinal()] = 9;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.AvatarGroupsReply.ordinal()] = 10;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.BulkUpdateInventory.ordinal()] = 11;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ChatterBoxInvitation.ordinal()] = 1;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ChatterBoxSessionStartReply.ordinal()] = 2;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.EstablishAgentCommunication.ordinal()] = 3;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ParcelProperties.ordinal()] = 12;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.TeleportFailed.ordinal()] = 4;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.TeleportFinish.ordinal()] = 5;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.UnknownCapsEvent.ordinal()] = 13;
-        } catch (NoSuchFieldError e10) {
-        }
-        f60x94bee140 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m134x2680ba3d() {
-        if (f61xb1d54699 != null) {
-            return f61xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.values().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f61xb1d54699 = iArr;
-        return iArr;
-    }
 
     public SLAgentCircuit(SLGridConnection sLGridConnection, SLCircuitInfo sLCircuitInfo, SLAuthReply sLAuthReply, SLCaps sLCaps, SLTempCircuit sLTempCircuit) throws IOException {
         super(sLGridConnection, sLCircuitInfo, sLAuthReply, sLTempCircuit);
@@ -313,20 +236,20 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     }
 
     private void HandleCapsEvent(SLCapEventQueue.CapsEvent capsEvent) {
-        switch (m133x4d1ccd1c()[capsEvent.eventType.ordinal()]) {
-            case 1:
+        switch (capsEvent.eventType) {
+            case ChatterBoxInvitation:
                 HandleChatterBoxInvitation(capsEvent.eventBody);
                 break;
-            case 2:
+            case ChatterBoxSessionStartReply:
                 HandleChatterBoxSessionStartReply(capsEvent.eventBody);
                 break;
-            case 3:
+            case EstablishAgentCommunication:
                 HandleEstablishAgentCommunication(capsEvent.eventBody);
                 break;
-            case 4:
+            case TeleportFailed:
                 HandleTeleportFailed(capsEvent.eventBody);
                 break;
-            case 5:
+            case TeleportFinish:
                 HandleTeleportFinish(capsEvent.eventBody);
                 break;
             default:
@@ -1635,14 +1558,14 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     }
 
     public void SendChatMessage(@Nonnull ChatterID chatterID, String str) {
-        switch (m134x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
+        switch (chatterID.getChatterType()) {
+            case Group:
                 SendGroupInstantMessage(chatterID.getOptionalChatterUUID(), str);
                 break;
-            case 2:
+            case Local:
                 SendLocalChatMessage(str);
                 break;
-            case 3:
+            case User:
                 SendInstantMessage(chatterID.getOptionalChatterUUID(), str);
                 break;
         }

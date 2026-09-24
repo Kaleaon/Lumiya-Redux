@@ -18,7 +18,7 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
     }
 
     /* renamed from: cancelRequest, reason: merged with bridge method [inline-methods] */
-    public void m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(@Nonnull K k) {
+    public void cancelRequest(@Nonnull K k) {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
@@ -58,7 +58,7 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         if (this.executor != null) {
             this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
-                    RequestFinalProcessor.this.m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(k);
+                    RequestFinalProcessor.this.cancelRequest(k);
                 }
 
                 @Override
@@ -67,7 +67,7 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
                 }
             });
         } else {
-            m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(k);
+            cancelRequest(k);
         }
     }
 

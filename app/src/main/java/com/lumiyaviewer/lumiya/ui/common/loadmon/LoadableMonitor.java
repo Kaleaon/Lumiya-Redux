@@ -15,8 +15,6 @@ import javax.annotation.Nullable;
 
 public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRefreshLayout.OnRefreshListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f379xeb9cc37f = null;
     private final List<Loadable> loadables = new ArrayList();
     private final List<Loadable> optionalLoadables = new ArrayList();
 
@@ -46,32 +44,6 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         void onLoadableDataChanged();
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m589x4f18d023() {
-        if (f379xeb9cc37f != null) {
-            return f379xeb9cc37f;
-        }
-        int[] iArr = new int[Loadable.Status.values().length];
-        try {
-            iArr[Loadable.Status.Error.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[Loadable.Status.Idle.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[Loadable.Status.Loaded.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[Loadable.Status.Loading.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f379xeb9cc37f = iArr;
-        return iArr;
-    }
-
     public LoadableMonitor(Loadable... loadableArr) {
         Collections.addAll(this.loadables, loadableArr);
         Iterator<Loadable> it = this.loadables.iterator();
@@ -82,17 +54,17 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
 
     private void updateLoadingIndicator() {
         if (this.loadingLayout != null) {
-            switch (m589x4f18d023()[this.status.ordinal()]) {
-                case 1:
+            switch (this.status) {
+                case Error:
                     this.loadingLayout.showMessage(Strings.nullToEmpty(this.loadingErrorMessage));
                     break;
-                case 2:
+                case Idle:
                     this.loadingLayout.showMessage(Strings.nullToEmpty(this.loadingIdleMessage));
                     break;
-                case 3:
+                case Loaded:
                     this.loadingLayout.showContent(this.emptyMessage);
                     break;
-                case 4:
+                case Loading:
                     this.loadingLayout.showLoading();
                     break;
             }
@@ -107,11 +79,11 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         boolean z3 = false;
         while (it.hasNext()) {
             Loadable.Status loadableStatus = ((Loadable) it.next()).getLoadableStatus();
-            switch (m589x4f18d023()[loadableStatus.ordinal()]) {
-                case 1:
+            switch (loadableStatus) {
+                case Error:
                     z2 = true;
                     break;
-                case 4:
+                case Loading:
                     z3 = true;
                     break;
             }

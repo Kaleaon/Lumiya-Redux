@@ -52,8 +52,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class UserFunctionsFragment extends ChatterReloadableFragment implements ReloadableFragment {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f378xb1d54699 = null;
     private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             UserFunctionsFragment.this.onVoiceLoginStatusChanged((Boolean) obj);
@@ -74,28 +72,6 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
             $m$0(obj);
         }
     });
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m569x2680ba3d() {
-        if (f378xb1d54699 != null) {
-            return f378xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.values().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 3;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 2;
-        } catch (NoSuchFieldError e3) {
-        }
-        f378xb1d54699 = iArr;
-        return iArr;
-    }
 
     private void handleEnableVoice() {
         if (VoicePluginServiceConnection.checkPluginInstalled(getContext())) {
@@ -147,7 +123,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
 
     private void handleTeleportTo(final SLAgentCircuit sLAgentCircuit, final ChatterID.ChatterIDUser chatterIDUser) {
         if (sLAgentCircuit != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             builder.setMessage(getString(R.string.teleport_to_user_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     UserFunctionsFragment.this.m587x5441d035((SLAgentCircuit) sLAgentCircuit, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
@@ -214,7 +190,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
         String retrievedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         final String resolvedName = retrievedName != null ? retrievedName : getString(R.string.name_loading_title);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.block_confirm_message, resolvedName)).setCancelable(true);
         CharSequence[] charSequenceArr = userManager.getActiveAgentCircuit() != null ? new CharSequence[]{getString(R.string.mute_action_description), getString(R.string.block_action_description)} : new CharSequence[]{getString(R.string.mute_action_description)};
         final AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -283,7 +259,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     }
 
     private void handleUserRemoveFriend(final SLAgentCircuit sLAgentCircuit, final ChatterID.ChatterIDUser chatterIDUser) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         String resolvedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         if (resolvedName == null) {
             resolvedName = getString(R.string.name_loading_title);
@@ -337,7 +313,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
         String retrievedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         final String resolvedName = retrievedName != null ? retrievedName : getString(R.string.name_loading_title);
-        new AlertDialog.Builder(getContext()).setMessage(getString(R.string.unblock_confirm_message, resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new android.app.AlertDialog.Builder(getContext()).setMessage(getString(R.string.unblock_confirm_message, resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 UserFunctionsFragment.m573x543499cf((UserManager) userManager, (ChatterID) chatterID, (String) resolvedName, dialogInterface, i);
             }
@@ -439,11 +415,11 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         if (chatterID == null || !chatterID.isValidUUID()) {
             return;
         }
-        switch (m569x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
+        switch (chatterID.getChatterType()) {
+            case Group:
                 DetailsActivity.showEmbeddedDetails(getActivity(), GroupProfileFragment.class, GroupProfileFragment.makeSelection(chatterID));
                 break;
-            case 2:
+            case User:
                 DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(chatterID));
                 break;
         }

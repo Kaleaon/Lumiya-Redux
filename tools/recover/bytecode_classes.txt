@@ -2,36 +2,3 @@
 # Generated from tools/verify/dexdiff.py: every class whose recovered source
 # still differs from the original classes.dex, except files listed in
 # protected.txt. Remove a line once its source verifies as OK.
-com/google/vr/ndk/base/GvrSurfaceView
-com/google/vr/sdk/base/Distortion
-com/lumiyaviewer/lumiya/media/MediaPlayerWrapper
-com/lumiyaviewer/lumiya/react/RequestFinalProcessor
-com/lumiyaviewer/lumiya/react/RequestForwarder
-com/lumiyaviewer/lumiya/react/RequestProcessor
-com/lumiyaviewer/lumiya/react/SubscriptionPool
-com/lumiyaviewer/lumiya/render/avatar/DrawableAvatar
-com/lumiyaviewer/lumiya/res/textures/TextureCompressedCache
-com/lumiyaviewer/lumiya/slproto/auth/SLAuth
-com/lumiyaviewer/lumiya/slproto/inventory/SLInventory
-com/lumiyaviewer/lumiya/slproto/inventory/SLInventoryHTTPFetchRequest
-com/lumiyaviewer/lumiya/slproto/modules/SLAvatarAppearance
-com/lumiyaviewer/lumiya/slproto/modules/SLAvatarControl
-com/lumiyaviewer/lumiya/slproto/modules/search/SLSearch
-com/lumiyaviewer/lumiya/slproto/objects/SLObjectInfo
-com/lumiyaviewer/lumiya/slproto/prims/PrimPath
-com/lumiyaviewer/lumiya/slproto/users/manager/ActiveChattersManager
-com/lumiyaviewer/lumiya/slproto/users/manager/ChatterList
-com/lumiyaviewer/lumiya/slproto/users/manager/GroupManager
-com/lumiyaviewer/lumiya/slproto/users/manager/ObjectsManager
-com/lumiyaviewer/lumiya/slproto/users/manager/SyncManager
-com/lumiyaviewer/lumiya/ui/chat/profiles/GroupProfileFragment
-com/lumiyaviewer/lumiya/ui/chat/profiles/UserProfileFragment
-com/lumiyaviewer/lumiya/ui/common/ImageAssetView
-com/lumiyaviewer/lumiya/ui/common/MasterDetailsActivity
-com/lumiyaviewer/lumiya/ui/common/UserFunctionsFragment
-com/lumiyaviewer/lumiya/ui/minimap/MinimapFragment
-com/lumiyaviewer/lumiya/ui/minimap/NearbyPeopleMinimapFragment
-com/lumiyaviewer/lumiya/ui/notify/OnlineNotificationInfo
-com/lumiyaviewer/lumiya/ui/objects/TaskInventoryFragment
-com/lumiyaviewer/lumiya/utils/wlist/ChunkedList
-uk/co/senab/photoview/gestures/VersionedGestureDetector

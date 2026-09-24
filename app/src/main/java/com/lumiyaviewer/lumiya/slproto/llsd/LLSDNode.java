@@ -36,34 +36,13 @@ import org.xmlpull.v1.XmlSerializer;
 
 public abstract class LLSDNode {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f114x653d09df = null;
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m205x70385c83() {
-        if (f114x653d09df != null) {
-            return f114x653d09df;
-        }
-        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.values().length];
-        try {
-            iArr[LLSDContentTypeDetector.LLSDContentType.llsdBinary.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[LLSDContentTypeDetector.LLSDContentType.llsdXML.ordinal()] = 2;
-        } catch (NoSuchFieldError e) {
-        }
-        f114x653d09df = iArr;
-        return iArr;
-    }
-
     public static LLSDNode fromAny(InputStream inputStream, String str) throws LLSDXMLException {
         try {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 65536);
-            switch (m205x70385c83()[LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str).ordinal()]) {
-                case 1:
+            switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
+                case llsdBinary:
                     return fromBinary(new DataInputStream(bufferedInputStream));
-                case 2:
+                case llsdXML:
                     return parseXML(bufferedInputStream, "UTF-8");
                 default:
                     throw new LLSDXMLException("Unknown content type");

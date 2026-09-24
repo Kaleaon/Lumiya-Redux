@@ -2,10 +2,11 @@
 
 **Current (2026-09-24):** `./gradlew :app:assembleDebug` builds, and
 `tools/verify/verify_against_apk.sh` reports **0 damaged classes** and **0
-unresolved references** against the original 3.4.2 bytecode. 226 classes ship
-as original bytecode (`tools/recover/bytecode_classes.txt`), and 25 reviewed
-differences are listed with reasons in `tools/verify/accepted.txt`. Unit tests
-and protocol conformance pass. Method and tools:
+unresolved references** against the original 3.4.2 bytecode. Every class is
+compiled from source (`tools/recover/bytecode_classes.txt` is empty and no
+original-bytecode jar is linked), and 25 reviewed differences are listed with
+reasons in `tools/verify/accepted.txt`. Unit tests (PriorityBinQueueTest) and
+`tools/protocol/run_conformance.sh` pass. Method and tools:
 [docs/recovery/verified_recovery.md](docs/recovery/verified_recovery.md).
 
 The sections below are the historical log from before verification existed.

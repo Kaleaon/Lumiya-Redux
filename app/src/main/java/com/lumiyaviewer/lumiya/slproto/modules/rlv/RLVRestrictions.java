@@ -17,35 +17,7 @@ public class RLVRestrictions {
 
     private static class RLVRestrictionList {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] f127x829a01e5 = null;
         private Map<String, HashSet<UUID>> restMap;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-rlv-RLVRestrictionType$RLVRuleMatchTypeSwitchesValues, reason: not valid java name */
-        private static /* synthetic */ int[] m241xbc0b3b89() {
-            if (f127x829a01e5 != null) {
-                return f127x829a01e5;
-            }
-            int[] iArr = new int[RLVRestrictionType.RLVRuleMatchType.values().length];
-            try {
-                iArr[RLVRestrictionType.RLVRuleMatchType.TargetNoExceptions.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance.ordinal()] = 4;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesException.ordinal()] = 2;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesRestriction.ordinal()] = 3;
-            } catch (NoSuchFieldError e4) {
-            }
-            f127x829a01e5 = iArr;
-            return iArr;
-        }
 
         private RLVRestrictionList() {
             this.restMap = new HashMap();

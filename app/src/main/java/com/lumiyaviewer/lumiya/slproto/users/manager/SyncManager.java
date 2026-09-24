@@ -37,8 +37,6 @@ import javax.annotation.Nullable;
 
 public class SyncManager {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f226xb1d54699 = null;
     private static final int MAX_MESSAGES_PER_BATCH = 100;
 
     @Nonnull
@@ -70,28 +68,6 @@ public class SyncManager {
     private ChatterNameRetriever myNameRetriever = null;
     private ChatterNameRetriever chatterNameRetriever = null;
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m365x2680ba3d() {
-        if (f226xb1d54699 != null) {
-            return f226xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.values().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f226xb1d54699 = iArr;
-        return iArr;
-    }
-
     @SuppressLint({"SimpleDateFormat"})
     SyncManager(@Nonnull UserManager userManager) {
         this.userManager = userManager;
@@ -108,7 +84,7 @@ public class SyncManager {
     public void onChatterNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
             @Override
@@ -125,13 +101,13 @@ public class SyncManager {
         if (Strings.isNullOrEmpty(resolvedName) || !this.flushChatterNames.add(resolvedName)) {
             return;
         }
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
     public void onMyNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
             @Override
@@ -182,7 +158,7 @@ public class SyncManager {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void m370x9b8293aa() {
+    public void syncMoreMessages() {
         boolean zSendMessage = false;
         long j;
         int i;
@@ -223,7 +199,7 @@ public class SyncManager {
                         if (strResolveChatterName == null) {
                             break;
                         }
-                        LogChatMessage logChatMessage = new LogChatMessage(chatterLoad.getType(), chatterLoad.getUuid(), next.getId().longValue(), strResolveChatterName, "[" + this.dateFormat.format(next.getTimestamp()) + "] " + sLChatEventLoadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false));
+                        LogChatMessage logChatMessage = new LogChatMessage(chatterLoad.getType(), chatterLoad.getUuid(), next.getId().longValue(), strResolveChatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(sLChatEventLoadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
                         builder.add(logChatMessage);
                         j = logChatMessage.messageID;
                         i++;
@@ -282,14 +258,14 @@ public class SyncManager {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_10038, reason: not valid java name */
     /* synthetic */ void m373x1b9f54d0() {
         this.needsStopSyncing.set(true);
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_10254, reason: not valid java name */
     /* synthetic */ void m374x1b9f5c8c(ChatterID chatterID) {
-        switch (m365x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
-            case 3:
+        switch (chatterID.getChatterType()) {
+            case Group:
+            case User:
                 if (!this.flushChatters.containsKey(chatterID)) {
                     new ChatterNameRetriever(chatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
@@ -304,9 +280,9 @@ public class SyncManager {
                     break;
                 }
                 break;
-            case 2:
+            case Local:
                 if (this.flushChatterNames.add(this.localChatName)) {
-                    m370x9b8293aa();
+                    syncMoreMessages();
                     break;
                 }
                 break;
@@ -317,7 +293,7 @@ public class SyncManager {
     /* synthetic */ void m375xcf5b71e5(long j) {
         this.lastConfirmedMessageID = j;
         this.syncMessageSent.set(false);
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
     public void onMessagesFlushed(final ImmutableList<Long> immutableList) {
@@ -352,7 +328,7 @@ public class SyncManager {
         this.needsStopSyncing.set(false);
         this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
             @Override
@@ -380,7 +356,7 @@ public class SyncManager {
         if (this.syncingEnabled.get()) {
             this.dbExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
-                    SyncManager.this.m370x9b8293aa();
+                    SyncManager.this.syncMoreMessages();
                 }
 
                 @Override

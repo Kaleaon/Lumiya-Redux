@@ -1,6 +1,9 @@
 # Classes an earlier hand-edit pass changed (commits 3ff787d, 76690a4, 2a1a628)
-# that did not verify against 3.4.2 and now ship as original bytecode.
-# Behaviour those edits added (e.g. bounded retries) is not active for them.
+# that did not verify against 3.4.2. Each has since been rewritten to match
+# 3.4.2 (verified by tools/verify/dexdiff.py). Behaviour those edits added
+# (e.g. bounded retries, delete-on-failure of partial downloads, single
+# transaction per inventory fetch) is therefore not active. PriorityBinQueue is
+# the exception: its fixes are kept and listed in tools/verify/accepted.txt.
 com/google/vr/cardboard/ConfigUtils
 com/google/vr/ndk/base/VrCoreSdkClient
 com/lumiyaviewer/lumiya/dao/SearchGridResultDao

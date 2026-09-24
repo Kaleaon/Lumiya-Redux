@@ -206,14 +206,72 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         return i3;
     }
 
+    /**
+     * Replace the element equal to {@code e} (per {@code comparator}) and
+     * return its overall index, or -1. Chunks are kept in sorted order, so
+     * the search starts at the middle chunk and walks towards the element by
+     * comparing with each chunk's first and last entries. Empty chunks are
+     * stepped over in the current direction; if the first probe is empty the
+     * walk restarts at the first non-empty chunk.
+     */
     public int replaceElement(@Nonnull E e, @Nonnull Comparator<E> comparator) {
-        for (List<E> chunk : this.chunks) {
-            int index = Collections.binarySearch(chunk, e, comparator);
-            if (index >= 0) {
-                return replaceFoundElement(chunk, index, e);
-            }
+        if (this.chunks.isEmpty()) {
+            return -1;
         }
-        return -1;
+        int chunkIndex = this.chunks.size() / 2;
+        int direction = 0;
+        while (true) {
+            List<E> chunk = this.chunks.get(chunkIndex);
+            int next;
+            if (!chunk.isEmpty()) {
+                int vsFirst = comparator.compare(e, chunk.get(0));
+                if (vsFirst == 0) {
+                    return replaceFoundElement(chunk, 0, e);
+                }
+                if (vsFirst < 0) {
+                    next = chunkIndex - 1;
+                    if (next < 0) {
+                        return -1;
+                    }
+                    direction = -1;
+                } else {
+                    int vsLast = comparator.compare(e, chunk.get(chunk.size() - 1));
+                    if (vsLast == 0) {
+                        return replaceFoundElement(chunk, chunk.size() - 1, e);
+                    }
+                    if (vsLast <= 0) {
+                        return replaceElementInChunk(chunk, e, comparator);
+                    }
+                    next = chunkIndex + 1;
+                    direction = 1;
+                    if (next >= this.chunks.size()) {
+                        return -1;
+                    }
+                }
+            } else if (direction < 0) {
+                next = chunkIndex - 1;
+                if (next < 0) {
+                    return -1;
+                }
+            } else if (direction > 0) {
+                next = chunkIndex + 1;
+                if (next >= this.chunks.size()) {
+                    return -1;
+                }
+            } else {
+                next = -1;
+                for (int i = 0; i < this.chunks.size(); i++) {
+                    if (!this.chunks.get(i).isEmpty()) {
+                        next = i;
+                        break;
+                    }
+                }
+                if (next == -1) {
+                    return -1;
+                }
+            }
+            chunkIndex = next;
+        }
     }
 
     @Override

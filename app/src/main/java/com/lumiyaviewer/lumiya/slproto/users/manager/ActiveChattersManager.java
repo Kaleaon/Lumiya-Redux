@@ -186,7 +186,7 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void m283x2a96bcb8(ChatterID chatterID, final SLChatEvent sLChatEvent, boolean z) {
+    public void handleChatEventInternal(ChatterID chatterID, final SLChatEvent sLChatEvent, boolean z) {
         UUID sourceUUID;
         Chatter chatter;
         Chatter chatter2;
@@ -482,7 +482,7 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     public void HandleChatEvent(final ChatterID chatterID, final SLChatEvent sLChatEvent, final boolean z) {
         this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                ActiveChattersManager.this.m283x2a96bcb8((ChatterID) chatterID, (SLChatEvent) sLChatEvent, z);
+                ActiveChattersManager.this.handleChatEventInternal((ChatterID) chatterID, (SLChatEvent) sLChatEvent, z);
             }
 
             @Override

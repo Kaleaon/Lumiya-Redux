@@ -30,9 +30,6 @@ import java.util.UUID;
 
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] f462x282be546 = null;
-
     @BindView(R.id.my_avatar_name)
     TextView myAvatarName;
 
@@ -56,35 +53,6 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
 
     private class MyAvatarPagesAdapter extends ArrayAdapter<MyAvatarDetailsPages> {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f463x282be546 = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m665x90cfe3ea() {
-            if (f463x282be546 != null) {
-                return f463x282be546;
-            }
-            int[] iArr = new int[MyAvatarDetailsPages.values().length];
-            try {
-                iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageBlockList.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageOutfits.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageProfile.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            f463x282be546 = iArr;
-            return iArr;
-        }
-
         public MyAvatarPagesAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.values());
         }
@@ -94,8 +62,8 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
             View view2 = super.getView(i, view, viewGroup);
             MyAvatarDetailsPages item = getItem(i);
             if ((view2 instanceof TextView) && item != null) {
-                switch (m665x90cfe3ea()[item.ordinal()]) {
-                    case 1:
+                switch (item) {
+                    case pageBalance:
                         Integer num = (Integer) MyAvatarFragment.this.myBalance.getData();
                         ((TextView) view2).setText(num != null ? MyAvatarFragment.this.getString(R.string.my_ava_balance_title, num) : MyAvatarFragment.this.getString(R.string.my_ava_balance_unknown));
                         break;
@@ -106,32 +74,6 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
             }
             return view2;
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] m663x90cfe3ea() {
-        if (f462x282be546 != null) {
-            return f462x282be546;
-        }
-        int[] iArr = new int[MyAvatarDetailsPages.values().length];
-        try {
-            iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageBlockList.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageOutfits.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageProfile.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f462x282be546 = iArr;
-        return iArr;
     }
 
     private UUID getAgentUUID() {
@@ -195,17 +137,17 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         if (!(itemAtPosition instanceof MyAvatarDetailsPages) || agentUUID == null) {
             return;
         }
-        switch (m663x90cfe3ea()[((MyAvatarDetailsPages) itemAtPosition).ordinal()]) {
-            case 1:
+        switch (((MyAvatarDetailsPages) itemAtPosition)) {
+            case pageBalance:
                 DetailsActivity.showEmbeddedDetails(getActivity(), TransactionLogFragment.class, TransactionLogFragment.makeSelection(agentUUID));
                 break;
-            case 2:
+            case pageBlockList:
                 DetailsActivity.showEmbeddedDetails(getActivity(), MuteListFragment.class, MuteListFragment.makeSelection(agentUUID));
                 break;
-            case 3:
+            case pageOutfits:
                 DetailsActivity.showEmbeddedDetails(getActivity(), OutfitsFragment.class, OutfitsFragment.makeSelection(agentUUID, null));
                 break;
-            case 4:
+            case pageProfile:
                 DetailsActivity.showEmbeddedDetails(getActivity(), MyProfileFragment.class, MyProfileFragment.makeSelection(ChatterID.getUserChatterID(agentUUID, agentUUID)));
                 break;
         }

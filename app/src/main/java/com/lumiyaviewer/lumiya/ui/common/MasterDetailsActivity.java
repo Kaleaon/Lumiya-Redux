@@ -125,29 +125,27 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         if (z4) {
             if (fragmentFindFragmentById2 == null) {
                 Debug.Printf("MasterDetailsActivity: creating new details fragment", new Object[0]);
-                if (fragmentFindFragmentById != null) {
-                    try {
-                        arguments = fragmentFindFragmentById.getArguments();
-                    } catch (Exception e) {
-                        Debug.Warning(e);
+                // 3.4.2 guards the whole creation: a details fragment that cannot
+                // be created is logged and the activity continues without it.
+                try {
+                    Bundle masterArguments = fragmentFindFragmentById != null ? fragmentFindFragmentById.getArguments() : null;
+                    Bundle newDetailsFragmentArguments = getNewDetailsFragmentArguments(masterArguments, bundle2);
+                    Fragment fragmentNewInstance = getDetailsFragmentFactory().getFragmentClass().newInstance();
+                    if (fragmentNewInstance instanceof ReloadableFragment) {
+                        fragmentNewInstance.setArguments(new Bundle());
+                        ((ReloadableFragment) fragmentNewInstance).setFragmentArgs(getIntent(), newDetailsFragmentArguments);
+                    } else {
+                        fragmentNewInstance.setArguments(newDetailsFragmentArguments);
                     }
-                } else {
-                    arguments = null;
+                    Bundle detailsArguments;
+                    if (!z2 && (detailsArguments = fragmentNewInstance.getArguments()) != null) {
+                        detailsArguments.putBoolean(IMPLICIT_DETAILS_TAG, true);
+                    }
+                    Debug.Printf("MasterDetailsActivity: adding new details fragment: %s", fragmentNewInstance);
+                    fragmentTransactionBeginTransaction.add(R.id.details, fragmentNewInstance, DetailsActivity.DEFAULT_DETAILS_FRAGMENT_TAG);
+                } catch (Exception e) {
+                    Debug.Warning(e);
                 }
-                Bundle newDetailsFragmentArguments = getNewDetailsFragmentArguments(arguments, bundle2);
-                Fragment fragmentNewInstance = getSupportFragmentManager().getFragmentFactory()
-                        .instantiate(getClassLoader(), getDetailsFragmentFactory().getFragmentClass().getName());
-                if (fragmentNewInstance instanceof ReloadableFragment) {
-                    fragmentNewInstance.setArguments(new Bundle());
-                    ((ReloadableFragment) fragmentNewInstance).setFragmentArgs(getIntent(), newDetailsFragmentArguments);
-                } else {
-                    fragmentNewInstance.setArguments(newDetailsFragmentArguments);
-                }
-                if (!z2 && (arguments2 = fragmentNewInstance.getArguments()) != null) {
-                    arguments2.putBoolean(IMPLICIT_DETAILS_TAG, true);
-                }
-                Debug.Printf("MasterDetailsActivity: adding new details fragment: %s", fragmentNewInstance);
-                fragmentTransactionBeginTransaction.add(R.id.details, fragmentNewInstance, DetailsActivity.DEFAULT_DETAILS_FRAGMENT_TAG);
             } else {
                 Debug.Printf("MasterDetailsActivity: not creating new details fragment. existing is detached: %b (%s)", Boolean.valueOf(fragmentFindFragmentById2.isDetached()), fragmentFindFragmentById2);
                 if (fragmentFindFragmentById2.isDetached()) {

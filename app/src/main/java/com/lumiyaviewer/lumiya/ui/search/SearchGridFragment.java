@@ -33,8 +33,6 @@ import java.util.UUID;
 
 public class SearchGridFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, SearchGridAdapter.OnSearchResultClickListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f584xca68d786 = null;
     private SearchGridAdapter adapter;
 
     @BindView(R.id.radiogroup_search_type)
@@ -48,28 +46,6 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
     private Unbinder unbinder;
     private final SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.searchResults).withDataChangedListener(this);
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m861x591f1c2a() {
-        if (f584xca68d786 != null) {
-            return f584xca68d786;
-        }
-        int[] iArr = new int[SearchGridQuery.SearchType.values().length];
-        try {
-            iArr[SearchGridQuery.SearchType.Groups.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SearchGridQuery.SearchType.People.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SearchGridQuery.SearchType.Places.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f584xca68d786 = iArr;
-        return iArr;
-    }
 
     private void beginSearch() {
         SearchGridQuery.SearchType searchType;
@@ -141,14 +117,14 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         if (searchGridResult == null || activeAgentID == null) {
             return;
         }
-        switch (m861x591f1c2a()[SearchGridQuery.SearchType.values()[searchGridResult.getItemType()].ordinal()]) {
-            case 1:
+        switch (SearchGridQuery.SearchType.values()[searchGridResult.getItemType()]) {
+            case Groups:
                 DetailsActivity.showEmbeddedDetails(getActivity(), GroupProfileFragment.class, GroupProfileFragment.makeSelection(ChatterID.getGroupChatterID(activeAgentID, searchGridResult.getItemUUID())));
                 break;
-            case 2:
+            case People:
                 DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, searchGridResult.getItemUUID())));
                 break;
-            case 3:
+            case Places:
                 DetailsActivity.showEmbeddedDetails(getActivity(), ParcelInfoFragment.class, ParcelInfoFragment.makeSelection(activeAgentID, searchGridResult.getItemUUID()));
                 break;
         }

@@ -48,7 +48,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
         public Fragment getItem(int i) {
             ProfileTab profileTab = ProfileTab.values()[i];
             try {
-                Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
+                Fragment fragment = (Fragment) profileTab.tabClass.newInstance();
                 fragment.setArguments(UserProfileFragment.makeSelection(UserProfileFragment.this.chatterID));
                 UserProfileFragment.this.activeFragments.put(profileTab, new WeakReference(fragment));
                 return fragment;

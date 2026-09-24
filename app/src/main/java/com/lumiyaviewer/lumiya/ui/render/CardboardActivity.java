@@ -103,8 +103,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 @TargetApi(16)
 public class CardboardActivity extends DetailsActivity implements ObjectPopupsManager.ObjectPopupListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-render-MoveControlSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues = null;
     private static final int DEFAULT_FONT_SIZE_SP = 16;
     private static final int LISTVIEW_SCROLL_DURATION = 500;
     private static final int LISTVIEW_SCROLL_OFFSET = 100;
@@ -1023,32 +1021,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-render-MoveControlSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m744getcomlumiyaviewerlumiyauirenderMoveControlSwitchesValues() {
-        if (f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues != null) {
-            return f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues;
-        }
-        int[] iArr = new int[MoveControl.values().length];
-        try {
-            iArr[MoveControl.Backward.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[MoveControl.Forward.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[MoveControl.Left.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[MoveControl.Right.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues = iArr;
-        return iArr;
-    }
-
     private void closeSpeechControls() {
         if (this.speechRecognizer != null) {
             this.speechRecognizer.stopListening();
@@ -1115,8 +1087,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     public void handleMoveControl(@Nonnull MoveControl moveControl, float f) {
         SLAvatarControl sLAvatarControl = this.avatarControl.get();
         if (sLAvatarControl != null) {
-            switch (m744getcomlumiyaviewerlumiyauirenderMoveControlSwitchesValues()[moveControl.ordinal()]) {
-                case 1:
+            switch (moveControl) {
+                case Backward:
                     if (f == 0.0f) {
                         if (!this.ownAvatarVisible) {
                             stopWalking();
@@ -1135,7 +1107,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                             break;
                         }
                     }
-                case 2:
+                case Forward:
                     if (f == 0.0f) {
                         if (!this.ownAvatarVisible) {
                             stopWalking();
@@ -1154,7 +1126,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                             break;
                         }
                     }
-                case 3:
+                case Left:
                     if (f == 0.0f) {
                         this.keypadTurning.set(0.0d);
                         break;
@@ -1163,7 +1135,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                         this.keypadTurning.set(-f);
                         break;
                     }
-                case 4:
+                case Right:
                     if (f == 0.0f) {
                         this.keypadTurning.set(0.0d);
                         break;

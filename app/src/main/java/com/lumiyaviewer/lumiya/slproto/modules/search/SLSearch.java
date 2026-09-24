@@ -73,42 +73,17 @@ public class SLSearch extends SLModule {
         this.currentSearchQuery = new AtomicReference<>(null);
         this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() {
 
-            /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] f129xca68d786 = null;
-
-            /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] m248x591f1c2a() {
-                if (f129xca68d786 != null) {
-                    return f129xca68d786;
-                }
-                int[] iArr = new int[SearchGridQuery.SearchType.values().length];
-                try {
-                    iArr[SearchGridQuery.SearchType.Groups.ordinal()] = 1;
-                } catch (NoSuchFieldError e) {
-                }
-                try {
-                    iArr[SearchGridQuery.SearchType.People.ordinal()] = 2;
-                } catch (NoSuchFieldError e2) {
-                }
-                try {
-                    iArr[SearchGridQuery.SearchType.Places.ordinal()] = 3;
-                } catch (NoSuchFieldError e3) {
-                }
-                f129xca68d786 = iArr;
-                return iArr;
-            }
-
             @Override
             public void onRequest(@Nonnull SearchGridQuery searchGridQuery) {
                 SLSearch.this.currentSearchQuery.set(searchGridQuery);
-                switch (m248x591f1c2a()[searchGridQuery.searchType().ordinal()]) {
-                    case 1:
+                switch (searchGridQuery.searchType()) {
+                    case Groups:
                         SLSearch.this.SearchGroups(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
-                    case 2:
+                    case People:
                         SLSearch.this.SearchPeople(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
-                    case 3:
+                    case Places:
                         SLSearch.this.SearchPlaces(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
                 }

@@ -33,8 +33,6 @@ import javax.annotation.Nullable;
 
 public class CloudSyncServiceConnection implements ServiceConnection {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-LogSyncStatus$StatusSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] f229x7f80e748 = null;
     private static final int REQUIRED_PLUGIN_VERSION = 1;
     private final Context context;
 
@@ -45,57 +43,20 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     private final AtomicBoolean syncingStarted = new AtomicBoolean(false);
     private final Handler fromPluginHandler = new Handler() {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-MessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-cloud-common-MessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m394x26663ee2() {
-            if (f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues != null) {
-                return f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues;
-            }
-            int[] iArr = new int[MessageType.values().length];
-            try {
-                iArr[MessageType.LogFlushMessages.ordinal()] = 4;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[MessageType.LogMessageBatch.ordinal()] = 5;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[MessageType.LogMessagesCompleted.ordinal()] = 1;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[MessageType.LogMessagesFlushed.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[MessageType.LogSyncStart.ordinal()] = 6;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                iArr[MessageType.LogSyncStatus.ordinal()] = 3;
-            } catch (NoSuchFieldError e6) {
-            }
-            f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues = iArr;
-            return iArr;
-        }
-
         @Override
         public void handleMessage(Message message) {
             if (message.what == 100 && (message.obj instanceof Bundle)) {
                 Bundle bundle = (Bundle) message.obj;
                 if (bundle.containsKey("message") && bundle.containsKey("messageType")) {
                     try {
-                        switch (m394x26663ee2()[MessageType.valueOf(bundle.getString("messageType")).ordinal()]) {
-                            case 1:
+                        switch (MessageType.valueOf(bundle.getString("messageType"))) {
+                            case LogMessagesCompleted:
                                 CloudSyncServiceConnection.this.onLogMessagesCompleted(new LogMessagesCompleted(bundle.getBundle("message")));
                                 break;
-                            case 2:
+                            case LogMessagesFlushed:
                                 CloudSyncServiceConnection.this.onLogMessagesFlushed(new LogMessagesFlushed(bundle.getBundle("message")));
                                 break;
-                            case 3:
+                            case LogSyncStatus:
                                 CloudSyncServiceConnection.this.onLogSyncStatus(new LogSyncStatus(bundle.getBundle("message")));
                                 break;
                         }
@@ -107,28 +68,6 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         }
     };
     private final Messenger fromPluginMessenger = new Messenger(this.fromPluginHandler);
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-cloud-common-LogSyncStatus$StatusSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] m389xe2fcf3ec() {
-        if (f229x7f80e748 != null) {
-            return f229x7f80e748;
-        }
-        int[] iArr = new int[LogSyncStatus.Status.values().length];
-        try {
-            iArr[LogSyncStatus.Status.AppVersionRejected.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[LogSyncStatus.Status.GoogleDriveError.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[LogSyncStatus.Status.Ready.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f229x7f80e748 = iArr;
-        return iArr;
-    }
 
     public CloudSyncServiceConnection(Context context, UserManager userManager) {
         this.context = context;
@@ -159,18 +98,18 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     public void onLogSyncStatus(LogSyncStatus logSyncStatus) {
         Debug.Printf("LumiyaCloud: got logSyncStatus %s, plugin version %d", logSyncStatus.status, Integer.valueOf(logSyncStatus.pluginVersionCode));
         if (this.toPluginMessenger != null) {
-            switch (m389xe2fcf3ec()[logSyncStatus.status.ordinal()]) {
-                case 1:
+            switch (logSyncStatus.status) {
+                case AppVersionRejected:
                     Intent intent = new Intent("android.intent.action.VIEW");
                     intent.setData(Uri.parse(LicenseChecker.APP_STORE_URL));
                     showSyncingError(this.context.getString(R.string.cloud_sync_app_outdated), this.context.getString(R.string.cloud_sync_app_outdated_long), intent);
                     break;
-                case 2:
+                case GoogleDriveError:
                     Intent intent2 = new Intent("android.intent.action.VIEW");
                     intent2.setData(Uri.parse("https://drive.google.com/"));
                     showSyncingError(this.context.getString(R.string.cloud_sync_drive_error), Strings.isNullOrEmpty(logSyncStatus.errorMessage) ? this.context.getString(R.string.cloud_sync_drive_error_long) : this.context.getString(R.string.cloud_sync_drive_error_message, logSyncStatus.errorMessage), intent2);
                     break;
-                case 3:
+                case Ready:
                     if (logSyncStatus.pluginVersionCode < 1) {
                         Intent intent3 = new Intent("android.intent.action.VIEW");
                         intent3.setData(Uri.parse(LicenseChecker.CLOUD_PLUGIN_URL));

@@ -13,11 +13,13 @@ import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGL11;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.opengles.GL10;
 
 public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
     public static final int DEBUG_CHECK_GL_ERROR = 1;
@@ -422,17 +424,238 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             this.mGvrSurfaceViewWeakRef = weakReference;
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:214:0x009c A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
-        private void guardedRun() throws java.lang.InterruptedException {
-            /*
-                Method dump skipped, instructions count: 964
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.google.vr.ndk.base.GvrSurfaceView.GLThread.guardedRun():void");
+        /**
+         * The render thread's main loop (AOSP GLSurfaceView.GLThread.guardedRun,
+         * with Google VR's swap-mode handling).
+         *
+         * <p>Under the manager lock it waits until the view is ready to draw,
+         * creating or releasing the EGL context and surface as the pause,
+         * surface and size state requires; it then leaves the lock to run queued
+         * events, create the surface and GL interface, call the renderer and
+         * swap. When {@link #mRequestedSwapMode} changes, the EGL surface is
+         * switched between back-buffered (SWAPMODE_QUEUED) and front-buffered
+         * auto-refresh (SWAPMODE_SINGLE) rendering; in single-buffer mode no
+         * swap is needed once the mode is in effect.</p>
+         *
+         * <p>Written by hand from the original bytecode: no decompiler could
+         * structure this method.</p>
+         */
+        private void guardedRun() throws InterruptedException {
+            this.mEglHelper = new EglHelper(this.mGvrSurfaceViewWeakRef);
+            this.mHaveEglContext = false;
+            this.mHaveEglSurface = false;
+            this.mWantRenderNotification = false;
+            GL10 gl = null;
+            boolean createEglContext = false;
+            boolean createEglSurface = false;
+            boolean createGlInterface = false;
+            boolean lostEglContext = false;
+            boolean sizeChanged = false;
+            boolean wantRenderNotification = false;
+            boolean doRenderNotification = false;
+            boolean askedToReleaseEglContext = false;
+            int width = 0;
+            int height = 0;
+            int swapMode = SWAPMODE_QUEUED;
+            boolean swapModeChanged = false;
+            Runnable event = null;
+            try {
+                while (true) {
+                    synchronized (this.mGLThreadManager) {
+                        while (true) {
+                            if (this.mShouldExit) {
+                                return;
+                            }
+                            if (!this.mEventQueue.isEmpty()) {
+                                event = this.mEventQueue.remove(0);
+                                break;
+                            }
+                            boolean pausing = false;
+                            if (this.mPaused != this.mRequestPaused) {
+                                pausing = this.mRequestPaused;
+                                this.mPaused = this.mRequestPaused;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (this.mShouldReleaseEglContext) {
+                                stopEglSurfaceLocked();
+                                stopEglContextLocked();
+                                this.mShouldReleaseEglContext = false;
+                                askedToReleaseEglContext = true;
+                            }
+                            if (lostEglContext) {
+                                stopEglSurfaceLocked();
+                                stopEglContextLocked();
+                                lostEglContext = false;
+                            }
+                            if (pausing && this.mHaveEglSurface) {
+                                stopEglSurfaceLocked();
+                            }
+                            if (pausing && this.mHaveEglContext) {
+                                GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                                boolean preserveEglContext = view != null && view.mPreserveEGLContextOnPause;
+                                if (!preserveEglContext) {
+                                    stopEglContextLocked();
+                                }
+                            }
+                            if (!this.mHasSurface && !this.mWaitingForSurface) {
+                                if (this.mHaveEglSurface) {
+                                    stopEglSurfaceLocked();
+                                }
+                                this.mWaitingForSurface = true;
+                                this.mSurfaceIsBad = false;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (this.mHasSurface && this.mWaitingForSurface) {
+                                this.mWaitingForSurface = false;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (doRenderNotification) {
+                                this.mWantRenderNotification = false;
+                                doRenderNotification = false;
+                                this.mRenderComplete = true;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (readyToDraw()) {
+                                if (!this.mHaveEglContext) {
+                                    if (askedToReleaseEglContext) {
+                                        askedToReleaseEglContext = false;
+                                    } else {
+                                        try {
+                                            this.mEglHelper.start();
+                                        } catch (RuntimeException e) {
+                                            this.mGLThreadManager.releaseEglContextLocked(this);
+                                            throw e;
+                                        }
+                                        this.mHaveEglContext = true;
+                                        createEglContext = true;
+                                        this.mGLThreadManager.notifyAll();
+                                    }
+                                }
+                                if (this.mHaveEglContext && !this.mHaveEglSurface) {
+                                    this.mHaveEglSurface = true;
+                                    createEglSurface = true;
+                                    createGlInterface = true;
+                                    sizeChanged = true;
+                                }
+                                if (this.mHaveEglSurface) {
+                                    if (this.mSizeChanged) {
+                                        sizeChanged = true;
+                                        width = this.mWidth;
+                                        height = this.mHeight;
+                                        this.mWantRenderNotification = true;
+                                        createEglSurface = true;
+                                        this.mSizeChanged = false;
+                                    }
+                                    this.mRequestRender = false;
+                                    this.mGLThreadManager.notifyAll();
+                                    if (this.mWantRenderNotification) {
+                                        wantRenderNotification = true;
+                                    }
+                                    swapModeChanged = this.mRequestedSwapMode != swapMode;
+                                    swapMode = this.mRequestedSwapMode;
+                                    break;
+                                }
+                            }
+                            this.mGLThreadManager.wait();
+                        }
+                    }
+
+                    if (event != null) {
+                        event.run();
+                        event = null;
+                        continue;
+                    }
+                    if (createEglSurface) {
+                        if (!this.mEglHelper.createSurface()) {
+                            synchronized (this.mGLThreadManager) {
+                                this.mFinishedCreatingEglSurface = true;
+                                this.mSurfaceIsBad = true;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            continue;
+                        }
+                        synchronized (this.mGLThreadManager) {
+                            this.mFinishedCreatingEglSurface = true;
+                            this.mGLThreadManager.notifyAll();
+                        }
+                        createEglSurface = false;
+                        // A new surface starts with the default (back-buffered) attributes.
+                        swapMode = SWAPMODE_QUEUED;
+                    }
+                    if (createGlInterface) {
+                        gl = (GL10) this.mEglHelper.createGL();
+                        createGlInterface = false;
+                    }
+                    if (createEglContext) {
+                        GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                        if (view != null) {
+                            TraceCompat.beginSection("onSurfaceCreated");
+                            try {
+                                view.mRenderer.onSurfaceCreated(gl, this.mEglHelper.mEglConfig);
+                            } finally {
+                                TraceCompat.endSection();
+                            }
+                        }
+                        createEglContext = false;
+                    }
+                    if (sizeChanged) {
+                        GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                        if (view != null) {
+                            TraceCompat.beginSection("onSurfaceChanged");
+                            try {
+                                view.mRenderer.onSurfaceChanged(gl, width, height);
+                            } finally {
+                                TraceCompat.endSection();
+                            }
+                        }
+                        sizeChanged = false;
+                    }
+                    if (swapModeChanged) {
+                        // EGL_RENDER_BUFFER: EGL_SINGLE_BUFFER draws straight to the display.
+                        this.mEglHelper.setEglSurfaceAttrib(EGL14.EGL_RENDER_BUFFER,
+                                swapMode == SWAPMODE_SINGLE ? EGL14.EGL_SINGLE_BUFFER : EGL14.EGL_BACK_BUFFER);
+                        this.mEglHelper.setEglSurfaceAttrib(EglHelper.EGL_FRONT_BUFFER_AUTO_REFRESH,
+                                swapMode == SWAPMODE_SINGLE ? 1 : 0);
+                    }
+                    GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                    if (view != null) {
+                        TraceCompat.beginSection("onDrawFrame");
+                        try {
+                            view.mRenderer.onDrawFrame(gl);
+                        } finally {
+                            TraceCompat.endSection();
+                        }
+                    }
+                    if (swapModeChanged || swapMode == SWAPMODE_QUEUED) {
+                        int swapError = this.mEglHelper.swap();
+                        switch (swapError) {
+                            case EGL10.EGL_SUCCESS:
+                                break;
+                            case EGL11.EGL_CONTEXT_LOST:
+                                lostEglContext = true;
+                                break;
+                            default:
+                                EglHelper.logEglErrorAsWarning("GLThread", "eglSwapBuffers", swapError);
+                                if (swapMode == SWAPMODE_QUEUED) {
+                                    synchronized (this.mGLThreadManager) {
+                                        this.mSurfaceIsBad = true;
+                                        this.mGLThreadManager.notifyAll();
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    if (wantRenderNotification) {
+                        doRenderNotification = true;
+                        wantRenderNotification = false;
+                    }
+                }
+            } finally {
+                synchronized (this.mGLThreadManager) {
+                    stopEglSurfaceLocked();
+                    stopEglContextLocked();
+                }
+            }
         }
 
         private boolean readyToDraw() {

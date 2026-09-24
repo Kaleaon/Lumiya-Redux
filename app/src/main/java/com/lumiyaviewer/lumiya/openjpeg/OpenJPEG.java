@@ -19,8 +19,6 @@ import java.nio.ByteBuffer;
 
 public class OpenJPEG implements GLTexture {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-openjpeg-OpenJPEG$ImageFormatSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f5x2156f8d4 = null;
     private static final int ETC1_BYTES_PER_PIXEL = 888;
     public int bytes_per_pixel;
     public int error_code;
@@ -42,28 +40,6 @@ public class OpenJPEG implements GLTexture {
         public static ImageFormat[] valuesCustom() {
             return values();
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-openjpeg-OpenJPEG$ImageFormatSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m22x89faf778() {
-        if (f5x2156f8d4 != null) {
-            return f5x2156f8d4;
-        }
-        int[] iArr = new int[ImageFormat.values().length];
-        try {
-            iArr[ImageFormat.JPEG2000.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ImageFormat.Raw.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ImageFormat.TGA.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f5x2156f8d4 = iArr;
-        return iArr;
     }
 
     static {
@@ -100,20 +76,20 @@ public class OpenJPEG implements GLTexture {
         }
         Debug.Log("OpenJPEG: decompressing " + file.getName() + " class " + textureClass + " format " + imageFormat);
         boolean z2 = textureClass == TextureClass.Prim ? !z : false;
-        switch (m22x89faf778()[imageFormat.ordinal()]) {
-            case 1:
+        switch (imageFormat) {
+            case JPEG2000:
                 this.rawBuffer = decompress(file.getAbsolutePath(), z2 ? 1 : 0, z2 ? 6 : 0, textureClass == TextureClass.Prim, 0, 0);
                 if (this.rawBuffer == null) {
                     throw new IOException("Failed to decompress texture (" + this.error_code + ") " + file.getAbsolutePath());
                 }
                 break;
-            case 2:
+            case Raw:
                 this.rawBuffer = readRaw(file.getAbsolutePath());
                 if (this.rawBuffer == null) {
                     throw new IOException("Failed to read raw texture " + file.getAbsolutePath());
                 }
                 break;
-            case 3:
+            case TGA:
                 throw new IOException("TGA not supported for non-asset files");
         }
         TextureMemoryTracker.allocOpenJpegMemory(this.rawBuffer.capacity(), this.mmapped);

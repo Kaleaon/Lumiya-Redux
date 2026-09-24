@@ -19,42 +19,10 @@ import javax.annotation.Nullable;
 
 class MuteListAdapter extends BaseAdapter {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f461xafabc05e = null;
     private final LayoutInflater layoutInflater;
 
     @Nonnull
     private ImmutableList<MuteListEntry> muteList = ImmutableList.of();
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m656x1327cd02() {
-        if (f461xafabc05e != null) {
-            return f461xafabc05e;
-        }
-        int[] iArr = new int[MuteType.values().length];
-        try {
-            iArr[MuteType.AGENT.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[MuteType.BY_NAME.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[MuteType.EXTERNAL.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[MuteType.GROUP.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[MuteType.OBJECT.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        f461xafabc05e = iArr;
-        return iArr;
-    }
 
     MuteListAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -88,16 +56,16 @@ class MuteListAdapter extends BaseAdapter {
             }
             if (view != null) {
                 ((TextView) view.findViewById(R.id.muteName)).setText(item.name);
-                switch (m656x1327cd02()[item.type.ordinal()]) {
-                    case 1:
-                    case 4:
+                switch (item.type) {
+                    case AGENT:
+                    case GROUP:
                         i2 = R.drawable.inv_human;
                         break;
-                    case 2:
-                    case 5:
+                    case BY_NAME:
+                    case OBJECT:
                         i2 = R.drawable.inv_object;
                         break;
-                    case 3:
+                    case EXTERNAL:
                     default:
                         i2 = R.drawable.inv_link;
                         break;

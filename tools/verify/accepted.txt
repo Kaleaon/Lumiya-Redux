@@ -77,3 +77,15 @@ Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->poll()Ljava/lang/Object;  same
 Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->peek()Ljava/lang/Object;  iterates the bins array directly instead of by numBins
 Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->remove(Ljava/lang/Object;)Z  looks the bin up in allItems instead of scanning all bins
 Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->size()I  allItems.size() instead of summing the bins (same count)
+
+# --- login (SLAuth), deliberate changes
+Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuth;->SendLoginRequest(Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;)Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthReply;  "md5 hash: " and "Auth request: " debug logs (credential-bearing; Debug.Log is a no-op in 3.4.2) removed; XML-RPC string values escaped with TextUtils.htmlEncode so "uri:Region&x&y&z" start locations produce valid XML
+Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPath;->generate(Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPathParams;FIZI)Z  test path step 1.0f / 4 is constant-folded by javac to 0.25f; 3.4.2 divided at runtime (same value)
+Luk/co/senab/photoview/gestures/VersionedGestureDetector;->newInstance(Landroid/content/Context;Luk/co/senab/photoview/gestures/OnGestureListener;)Luk/co/senab/photoview/gestures/GestureDetector;  Cupcake (API < 5) and Eclair (API < 8) detector branches removed: unreachable at minSdk 26
+
+# --- Room migration (commit 6f972bd): search results go through SearchGridResultRepositoryAdapter,
+#     which performs the same greenDAO insert / buildDelete and mirrors the rows into Room
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->updateSearchResults(Lcom/lumiyaviewer/lumiya/dao/SearchGridResultDao;Lcom/lumiyaviewer/lumiya/slproto/modules/search/SearchGridQuery;)V  greenDAO notEq/buildDelete moved into SearchGridResultRepositoryAdapter.deleteOtherQueries (same delete, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirGroupsReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirGroupsReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPeopleReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPeopleReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPlacesReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPlacesReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)

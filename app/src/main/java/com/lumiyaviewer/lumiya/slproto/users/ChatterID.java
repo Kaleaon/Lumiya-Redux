@@ -20,9 +20,6 @@ import javax.annotation.Nullable;
 
 public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f150xb1d54699 = null;
-
     @Nonnull
     public final UUID agentUUID;
 
@@ -379,28 +376,6 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
         void onChatterPictureID(UUID uuid);
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m269x2680ba3d() {
-        if (f150xb1d54699 != null) {
-            return f150xb1d54699;
-        }
-        int[] iArr = new int[ChatterType.values().length];
-        try {
-            iArr[ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f150xb1d54699 = iArr;
-        return iArr;
-    }
-
     private ChatterID(Parcel parcel) {
         this.agentUUID = UUIDPool.getUUID(parcel.readLong(), parcel.readLong());
     }
@@ -419,12 +394,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
     public static ChatterID fromBundle(Bundle bundle) {
         UUID fromString = UUID.fromString(bundle.getString("chatterAgentUUID"));
-        switch (m269x2680ba3d()[ChatterType.VALUES[bundle.getInt("chatterType", 0)].ordinal()]) {
-            case 1:
+        switch (ChatterType.VALUES[bundle.getInt("chatterType", 0)]) {
+            case Group:
                 return getGroupChatterID(fromString, UUID.fromString(bundle.getString("chatterUUID")));
-            case 2:
+            case Local:
                 return getLocalChatterID(fromString);
-            case 3:
+            case User:
                 return getUserChatterID(fromString, UUID.fromString(bundle.getString("chatterUUID")));
             default:
                 return null;
@@ -432,12 +407,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
     }
 
     public static ChatterID fromDatabaseObject(UUID uuid, Chatter chatter) {
-        switch (m269x2680ba3d()[ChatterType.VALUES[chatter.getType()].ordinal()]) {
-            case 1:
+        switch (ChatterType.VALUES[chatter.getType()]) {
+            case Group:
                 return getGroupChatterID(uuid, chatter.getUuid());
-            case 2:
+            case Local:
                 return getLocalChatterID(uuid);
-            case 3:
+            case User:
                 return getUserChatterID(uuid, chatter.getUuid());
             default:
                 return null;

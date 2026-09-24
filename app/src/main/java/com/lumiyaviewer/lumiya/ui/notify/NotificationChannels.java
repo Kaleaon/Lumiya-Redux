@@ -10,8 +10,6 @@ import javax.annotation.Nullable;
 
 public class NotificationChannels {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f464x3582025 = null;
     public static final String MESSAGE_NOTIFICATION_GROUP = "messageNotifications";
     private final NotificationChannelManager channelManager;
 
@@ -52,28 +50,6 @@ public class NotificationChannels {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m676xc4a7bd01() {
-        if (f464x3582025 != null) {
-            return f464x3582025;
-        }
-        int[] iArr = new int[NotificationType.values().length];
-        try {
-            iArr[NotificationType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[NotificationType.LocalChat.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[NotificationType.Private.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f464x3582025 = iArr;
-        return iArr;
-    }
-
     private NotificationChannels() {
         this.channelManager = new OreoNotificationChannelManager();
     }
@@ -91,12 +67,12 @@ public class NotificationChannels {
     }
 
     public Channel getChannelByType(@Nonnull NotificationType notificationType) {
-        switch (m676xc4a7bd01()[notificationType.ordinal()]) {
-            case 1:
+        switch (notificationType) {
+            case Group:
                 return Channel.Group;
-            case 2:
+            case LocalChat:
                 return Channel.Local;
-            case 3:
+            case Private:
                 return Channel.IM;
             default:
                 return null;

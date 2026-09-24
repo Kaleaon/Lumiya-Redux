@@ -45,12 +45,6 @@ import javax.annotation.Nullable;
 
 public class VoiceStatusView extends FrameLayout {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-voice-common-model-VoiceBluetoothStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f606xccb18979 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-voice-common-model-VoiceChatInfo$VoiceChatStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f607xfb1ca037 = null;
-
     @Nullable
     private ChatterID activeChatterID;
 
@@ -111,62 +105,6 @@ public class VoiceStatusView extends FrameLayout {
     @BindView(R.id.voice_terminate_button)
     ImageButton voiceTerminateButton;
     private final SeekBar.OnSeekBarChangeListener volumeChangeListener;
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-model-VoiceBluetoothStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m874xc8b7c355() {
-        if (f606xccb18979 != null) {
-            return f606xccb18979;
-        }
-        int[] iArr = new int[VoiceBluetoothState.values().length];
-        try {
-            iArr[VoiceBluetoothState.Active.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Connected.ordinal()] = 6;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Disconnected.ordinal()] = 7;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Error.ordinal()] = 8;
-        } catch (NoSuchFieldError e5) {
-        }
-        f606xccb18979 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-model-VoiceChatInfo$VoiceChatStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m875x6f23bddb() {
-        if (f607xfb1ca037 != null) {
-            return f607xfb1ca037;
-        }
-        int[] iArr = new int[VoiceChatInfo.VoiceChatState.values().length];
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Active.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.None.ordinal()] = 6;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Ringing.ordinal()] = 3;
-        } catch (NoSuchFieldError e4) {
-        }
-        f607xfb1ca037 = iArr;
-        return iArr;
-    }
 
     public VoiceStatusView(Context context) {
         super(context);
@@ -545,8 +483,8 @@ public class VoiceStatusView extends FrameLayout {
                 chatterIDUser2 = null;
             }
             if (str == null) {
-                switch (m875x6f23bddb()[data.state.ordinal()]) {
-                    case 1:
+                switch (data.state) {
+                    case Active:
                         if (!data.localMicActive) {
                             str = getContext().getString(R.string.voice_status_tap_mic);
                             break;
@@ -554,10 +492,10 @@ public class VoiceStatusView extends FrameLayout {
                             str = getContext().getString(R.string.voice_status_speak_now);
                             break;
                         }
-                    case 2:
+                    case Connecting:
                         str = getContext().getString(R.string.voice_status_connecting);
                         break;
-                    case 3:
+                    case Ringing:
                         str = getContext().getString(R.string.voice_status_ringing);
                         break;
                 }
@@ -602,11 +540,11 @@ public class VoiceStatusView extends FrameLayout {
         VoiceAudioProperties data2 = this.voiceAudioProperties.getData();
         if (data2 != null) {
             Drawable[] compoundDrawables = this.voiceBluetoothButton.getCompoundDrawables();
-            switch (m874xc8b7c355()[data2.bluetoothState.ordinal()]) {
-                case 1:
+            switch (data2.bluetoothState) {
+                case Active:
                     i = R.drawable.active_button_underline;
                     break;
-                case 2:
+                case Connecting:
                     i = R.drawable.yellow_button_underline;
                     break;
                 default:

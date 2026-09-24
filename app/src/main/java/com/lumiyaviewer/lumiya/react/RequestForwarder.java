@@ -62,7 +62,7 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
     }
 
     /* renamed from: processRequestInternal, reason: merged with bridge method [inline-methods] */
-    public void m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(@Nonnull Kup kup) {
+    public void processRequestInternal(@Nonnull Kup kup) {
         RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription put;
         RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription downstreamSubscription = new DownstreamSubscription(kup, getDownstreamKey(kup));
         synchronized (this.lock) {
@@ -82,9 +82,9 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
     @Override
     public void onRequest(@Nonnull final Kup kup) {
         if (this.executor != null) {
-            this.executor.execute(() -> m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup));
+            this.executor.execute(() -> processRequestInternal(kup));
         } else {
-            m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup);
+            processRequestInternal(kup);
         }
     }
 

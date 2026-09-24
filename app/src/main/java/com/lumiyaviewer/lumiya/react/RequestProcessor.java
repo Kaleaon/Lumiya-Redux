@@ -21,7 +21,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
     }
 
     /* renamed from: processRequestInternal, reason: merged with bridge method [inline-methods] */
-    public void m45lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_940(@Nonnull K k) {
+    public void processRequestInternal(@Nonnull K k) {
         Tup processRequest = processRequest(k);
         if (processRequest != null) {
             this.resultHandler.onResultData(k, processRequest);
@@ -33,7 +33,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
     }
 
     /* renamed from: requestUpdateInternal, reason: merged with bridge method [inline-methods] */
-    public void m43lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_1507(@Nonnull K k) {
+    public void requestUpdateInternal(@Nonnull K k) {
         if (this.requestHandler != null) {
             this.requestHandler.onRequest(k);
         }
@@ -67,7 +67,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         if (this.executor != null) {
             this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
-                    RequestProcessor.this.m45lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_940(k);
+                    RequestProcessor.this.processRequestInternal(k);
                 }
 
                 @Override
@@ -76,7 +76,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
                 }
             });
         } else {
-            m45lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_940(k);
+            processRequestInternal(k);
         }
     }
 
@@ -120,7 +120,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         if (this.executor != null) {
             this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
-                    RequestProcessor.this.m43lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_1507(k);
+                    RequestProcessor.this.requestUpdateInternal(k);
                 }
 
                 @Override
@@ -129,7 +129,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
                 }
             });
         } else {
-            m43lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_1507(k);
+            requestUpdateInternal(k);
         }
     }
 }

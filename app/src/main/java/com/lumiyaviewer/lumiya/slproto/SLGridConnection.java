@@ -24,8 +24,6 @@ import java.util.UUID;
 
 public class SLGridConnection extends SLConnection {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f62x8f75539 = null;
     private static final String DEFAULT_SYSTEM_ACCOUNT = "Second Life";
     private static boolean autoresponseEnabled = false;
     private static String autoresponseText = "";
@@ -64,28 +62,6 @@ public class SLGridConnection extends SLConnection {
         public NotConnectedException() {
             super("Grid not connected");
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m140x1c568815() {
-        if (f62x8f75539 != null) {
-            return f62x8f75539;
-        }
-        int[] iArr = new int[ConnectionState.values().length];
-        try {
-            iArr[ConnectionState.Connected.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ConnectionState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ConnectionState.Idle.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f62x8f75539 = iArr;
-        return iArr;
     }
 
     public void DoConnect(SLAuthParams sLAuthParams, String str) {
@@ -296,12 +272,12 @@ public class SLGridConnection extends SLConnection {
             this.hadConnected = false;
         }
         Debug.Log("GridConnection: forceDisconnect() called, fromLogoutRequest = " + (z ? "true" : "false"));
-        switch (m140x1c568815()[this.connectionState.ordinal()]) {
-            case 1:
+        switch (this.connectionState) {
+            case Connected:
                 closeConnectionObjects();
                 reconnectOrDrop(false, z, "Network connection lost.");
                 break;
-            case 2:
+            case Connecting:
                 closeConnectionObjects();
                 reconnectOrDrop(true, z, "Network connection lost.");
                 break;

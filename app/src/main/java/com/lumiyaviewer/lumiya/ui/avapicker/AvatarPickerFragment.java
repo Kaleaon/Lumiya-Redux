@@ -27,9 +27,6 @@ import javax.annotation.Nullable;
 
 public abstract class AvatarPickerFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f234x76a4d210 = null;
-
     public class AvatarPickerPagerAdapter extends PagerAdapter {
         private final Context context;
 
@@ -110,36 +107,14 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m398x55b16b4() {
-        if (f234x76a4d210 != null) {
-            return f234x76a4d210;
-        }
-        int[] iArr = new int[ContactListType.values().length];
-        try {
-            iArr[ContactListType.Friends.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ContactListType.Nearby.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ContactListType.Recent.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f234x76a4d210 = iArr;
-        return iArr;
-    }
-
     @Nonnull
     public ListAdapter createListAdapter(Context context, UserManager userManager, @Nonnull ContactListType contactListType) {
-        switch (m398x55b16b4()[contactListType.ordinal()]) {
-            case 1:
+        switch (contactListType) {
+            case Friends:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Friends);
-            case 2:
+            case Nearby:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Nearby);
-            case 3:
+            case Recent:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Active, new UsersOnlyPredicate(null));
             default:
                 throw new IllegalArgumentException("Unknown contact list type");

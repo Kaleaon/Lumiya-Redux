@@ -25,12 +25,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class LLSDStreamingParser {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f115x653d09df = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-llsd-LLSDNodeTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = null;
-
     public interface LLSDContentHandler {
         LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException;
 
@@ -67,94 +61,14 @@ public class LLSDStreamingParser {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m206x70385c83() {
-        if (f115x653d09df != null) {
-            return f115x653d09df;
-        }
-        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.values().length];
-        try {
-            iArr[LLSDContentTypeDetector.LLSDContentType.llsdBinary.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[LLSDContentTypeDetector.LLSDContentType.llsdXML.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        f115x653d09df = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-llsd-LLSDNodeTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m207xd72dbe28() {
-        if (f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues != null) {
-            return f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues;
-        }
-        int[] iArr = new int[LLSDNodeType.values().length];
-        try {
-            iArr[LLSDNodeType.llsdArray.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdBinary.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdBoolean.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdDate.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdDouble.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdInteger.ordinal()] = 6;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdKey.ordinal()] = 7;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdMap.ordinal()] = 8;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdRoot.ordinal()] = 9;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdString.ordinal()] = 10;
-        } catch (NoSuchFieldError e10) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdURI.ordinal()] = 11;
-        } catch (NoSuchFieldError e11) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdUUID.ordinal()] = 12;
-        } catch (NoSuchFieldError e12) {
-        }
-        try {
-            iArr[LLSDNodeType.llsdUndef.ordinal()] = 13;
-        } catch (NoSuchFieldError e13) {
-        }
-        f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues = iArr;
-        return iArr;
-    }
-
     public static void parseAny(InputStream inputStream, String str, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException {
         try {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 65536);
-            switch (m206x70385c83()[LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str).ordinal()]) {
-                case 1:
+            switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
+                case llsdBinary:
                     parseBinary(new DataInputStream(bufferedInputStream), lLSDContentHandler);
                     return;
-                case 2:
+                case llsdXML:
                     parseXML(bufferedInputStream, "UTF-8", lLSDContentHandler);
                     return;
                 default:
@@ -329,8 +243,8 @@ public class LLSDStreamingParser {
         if (byTag == null) {
             throw new LLSDXMLException("Unknown tag: " + name);
         }
-        switch (m207xd72dbe28()[byTag.ordinal()]) {
-            case 1:
+        switch (byTag) {
+            case llsdArray:
                 LLSDContentHandler onArrayBegin = lLSDContentHandler.onArrayBegin(str);
                 xmlPullParser.nextTag();
                 if (onArrayBegin != null) {
@@ -342,29 +256,29 @@ public class LLSDStreamingParser {
                 lLSDContentHandler.onArrayEnd(str);
                 xmlPullParser.nextTag();
                 return;
-            case 2:
+            case llsdBinary:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDBinary(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 3:
+            case llsdBoolean:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 4:
+            case llsdDate:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDDate(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 5:
+            case llsdDouble:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDDouble(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 6:
+            case llsdInteger:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDInt(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 7:
+            case llsdKey:
                 throw new LLSDXMLException("Unexpected tag: " + name);
-            case 8:
+            case llsdMap:
                 LLSDContentHandler onMapBegin = lLSDContentHandler.onMapBegin(str);
                 xmlPullParser.nextTag();
                 if (onMapBegin != null) {
@@ -382,21 +296,21 @@ public class LLSDStreamingParser {
                 lLSDContentHandler.onMapEnd(str);
                 xmlPullParser.nextTag();
                 return;
-            case 9:
+            case llsdRoot:
                 throw new LLSDXMLException("Unexpected tag: " + name);
-            case 10:
+            case llsdString:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDString(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 11:
+            case llsdURI:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDURI(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 12:
+            case llsdUUID:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDUUID(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
-            case 13:
+            case llsdUndef:
                 lLSDContentHandler.onPrimitiveValue(str, new LLSDUndefined());
                 xmlPullParser.nextTag();
                 return;

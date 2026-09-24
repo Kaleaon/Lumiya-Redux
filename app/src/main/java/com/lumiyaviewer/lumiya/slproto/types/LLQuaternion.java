@@ -4,8 +4,6 @@ import java.nio.ByteBuffer;
 
 public class LLQuaternion {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f143xae1ac4c9 = null;
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     private float[] inverseMatrix;
     private float[] matrix;
@@ -26,40 +24,6 @@ public class LLQuaternion {
         public static Order[] valuesCustom() {
             return values();
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m268xd25893a5() {
-        if (f143xae1ac4c9 != null) {
-            return f143xae1ac4c9;
-        }
-        int[] iArr = new int[Order.values().length];
-        try {
-            iArr[Order.XYZ.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[Order.XZY.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[Order.YXZ.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[Order.YZX.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[Order.ZXY.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[Order.ZYX.ordinal()] = 6;
-        } catch (NoSuchFieldError e6) {
-        }
-        f143xae1ac4c9 = iArr;
-        return iArr;
     }
 
     public LLQuaternion() {

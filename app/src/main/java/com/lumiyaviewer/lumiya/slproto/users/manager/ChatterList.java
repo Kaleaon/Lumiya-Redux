@@ -74,42 +74,9 @@ public class ChatterList {
         };
         new RequestFinalProcessor<ChatterListType, ImmutableList<ChatterDisplayData>>(this.chatterListPool, userManager.getDatabaseExecutor()) {
 
-            /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-manager-ChatterListTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] f225x521388d7 = null;
-
-            /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-manager-ChatterListTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] m306x49b0a37b() {
-                if (f225x521388d7 != null) {
-                    return f225x521388d7;
-                }
-                int[] iArr = new int[ChatterListType.values().length];
-                try {
-                    iArr[ChatterListType.Active.ordinal()] = 1;
-                } catch (NoSuchFieldError e) {
-                }
-                try {
-                    iArr[ChatterListType.Friends.ordinal()] = 2;
-                } catch (NoSuchFieldError e2) {
-                }
-                try {
-                    iArr[ChatterListType.FriendsOnline.ordinal()] = 3;
-                } catch (NoSuchFieldError e3) {
-                }
-                try {
-                    iArr[ChatterListType.Groups.ordinal()] = 4;
-                } catch (NoSuchFieldError e4) {
-                }
-                try {
-                    iArr[ChatterListType.Nearby.ordinal()] = 5;
-                } catch (NoSuchFieldError e5) {
-                }
-                f225x521388d7 = iArr;
-                return iArr;
-            }
-
             @Override
             /* renamed from: cancelRequest, reason: avoid collision after fix types in other method and merged with bridge method [inline-methods] */
-            public void m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(@Nonnull ChatterListType chatterListType) {
+            public void cancelRequest(@Nonnull ChatterListType chatterListType) {
                 ChatterDisplayDataList chatterDisplayDataList = (ChatterDisplayDataList) ChatterList.this.chatterLists.remove(chatterListType);
                 if (chatterDisplayDataList != null) {
                     chatterDisplayDataList.dispose();
@@ -120,20 +87,20 @@ public class ChatterList {
             public ImmutableList<ChatterDisplayData> processRequest(@Nonnull ChatterListType chatterListType) {
                 ChatterDisplayDataList chatterDisplayDataList = (ChatterDisplayDataList) ChatterList.this.chatterLists.get(chatterListType);
                 if (chatterDisplayDataList == null) {
-                    switch (m306x49b0a37b()[chatterListType.ordinal()]) {
-                        case 1:
+                    switch (chatterListType) {
+                        case Active:
                             chatterDisplayDataList = ChatterList.this.activeChattersManager.getActiveChattersList();
                             break;
-                        case 2:
+                        case Friends:
                             chatterDisplayDataList = ChatterList.this.friendManager.getFriendList();
                             break;
-                        case 3:
+                        case FriendsOnline:
                             chatterDisplayDataList = ChatterList.this.friendManager.getFriendsOnlineList();
                             break;
-                        case 4:
+                        case Groups:
                             chatterDisplayDataList = ChatterList.this.groupManager.getGroupList();
                             break;
-                        case 5:
+                        case Nearby:
                             chatterDisplayDataList = new NearbyChattersDisplayDataList(userManager, ChatterList.this.onNearbyListUpdated);
                             break;
                     }
