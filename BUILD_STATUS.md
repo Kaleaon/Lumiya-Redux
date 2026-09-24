@@ -26,7 +26,7 @@ API-floor cleanup note: API 21–25 compatibility codepaths are being removed in
 | Stage | Status |
 | --- | --- |
 | Gradle configuration | Clean — `settings.gradle` + `build.gradle` resolve, wrapper runs. |
-| Dependency resolution | All Maven coordinates resolve (AndroidX, Material, OkHttp, greenDAO 2.1.0, ButterKnife 10.2.3, Gson, Guava, JSR-305). |
+| Dependency resolution | All Maven coordinates resolve (AndroidX, Material, OkHttp, greenDAO 2.1.0, Gson, Guava, JSR-305). |
 | Manifest merge (`processDebugMainManifest`) | Passes after: removing `package=` attr, deduping `READ_EXTERNAL_STORAGE`, adding explicit `android:exported` on every `<activity>`. |
 | Resource merge (`mergeDebugResources`) | Passes after stripping ~306 `<attr>` declarations from `res/values/attrs.xml` that duplicate AndroidX / Material attrs. |
 | Resource compile (`processDebugResources`) | Passes. R class is generated correctly. |
@@ -123,7 +123,7 @@ Because these are all small local edits, the practical workflow is:
 
 ## Not-yet-addressed, but lower priority
 
-- **Release-build minification** is disabled. Re-enabling R8 will need `-keep` rules for greenDAO entities, ButterKnife-generated view-binding classes, JNI callbacks into `com.lumiyaviewer.rawbuffers.DirectByteBuffer` and `com.lumiyaviewer.lumiya.openjpeg.*`.
+- **Release-build minification** is disabled. Re-enabling R8 will need `-keep` rules for greenDAO entities, JNI callbacks into `com.lumiyaviewer.rawbuffers.DirectByteBuffer` and `com.lumiyaviewer.lumiya.openjpeg.*`.
 - **MIPS support** was dropped from `abiFilters` because NDK removed MIPS in r17. Not revisiting.
 - **GVR** will keep running from the bundled `libgvr.so`, but the SDK is end-of-life. The clean replacement is the open [Google Cardboard SDK](https://github.com/googlevr/cardboard), at the cost of rewriting `CardboardActivity` and the renderer wiring.
 

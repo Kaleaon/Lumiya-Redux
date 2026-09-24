@@ -134,7 +134,7 @@ except for the few that are no longer distributed:
 | AndroidX / Material Components | Maven — latest stable (`androidx.*`, `com.google.android.material:*`). The decompiled `android.support.*` imports were rewritten to their AndroidX equivalents by `tools/migrate_androidx.py`. |
 | OkHttp 4.12.0 (Okio 3 transitively) | Maven Central. The APK shipped 3.5.0; 4.x keeps the `okhttp3` package and the Java-facing API the recovered code calls. |
 | greenDAO 2.1.0 | Maven Central. Transitional dependency while Room migration is in progress. Remove once Room is authoritative for all active entities/queries and migrations are validated end-to-end. |
-| ButterKnife 10.2.3 | Maven Central. Deprecated but final release. Transitional dependency: replace touched UI files with ViewBinding (preferred) or modern alternatives opportunistically; remove compiler/runtime after last consumer is migrated. |
+| ~~ButterKnife~~ | Removed. The `*_ViewBinding` classes ButterKnife generated are kept as plain source next to their screens, with a small runtime in `ui/common/binding` (required-view checks, click debouncing, `Unbinder`). No annotation processor, no JDK `--add-opens` flags. Moving a screen to Android View Binding is still possible one screen at a time. |
 | Gson 2.11.0, Guava 33.3.1-android, JSR-305 3.0.2 | Maven Central. |
 | ~~PagerSlidingTabStrip~~ | Replaced by Material `TabLayout` (the four tabbed screens). It was the last dependency built against the old support library, so Jetifier is now off. |
 | **PhotoView** | Shipped in-tree at `uk/co/senab/photoview/` because no reliable Maven drop-in preserves the legacy package. Migration target: `com.github.chrisbanes:PhotoView:2.3.0` + rewrite of the one consumer (`TextureViewFragment`). |
@@ -145,7 +145,7 @@ except for the few that are no longer distributed:
 
 - **GVR teardown gate:** remove `com/google/vr/**`, `com/google/vrtoolkit/**`, `com/google/protobuf/nano/**`, and `jniLibs/*/libgvr.so` only after Cardboard/OpenXR parity is verified and staged rollout health is stable.
 - **Persistence teardown gate:** remove greenDAO runtime + generated DAO surface only after Room migration completion (entities, queries, schema migration tests).
-- **UI modernization gate:** replace ButterKnife in files touched by feature/fix work using ViewBinding-first opportunistic cleanup; avoid all-at-once rewrites unless explicitly scheduled.
+- **UI modernization:** ButterKnife is gone (see above). Convert a screen's `*_ViewBinding` class to Android View Binding when that screen is touched for other work.
 
 ## Protocol modernization guardrails
 
@@ -160,6 +160,6 @@ Use `docs/kotlin-migration-plan.md` for Kotlin adoption boundaries. It defines t
 - The project is built against `compileSdk 34`, `minSdk 26`, `targetSdk 34`.
 - Minimum SDK is intentionally pinned to Android 8.0 (API 26): this lets us remove legacy pre-Oreo compatibility branches and rely on framework notification channels/runtime behavior consistently across the app.
 - Service startup code assumes the Oreo+ foreground-service contract (`ContextCompat.startForegroundService`) for long-lived connection/media entry points; API 21–25 start-service compatibility shims are intentionally removed.
-- Release builds currently run with `minifyEnabled false` so stack traces stay readable. When you turn R8 back on, use `proguard-rules.pro` to keep classes reflected on by greenDAO, ButterKnife, JNI, and the Second Life JSON/LLSD types.
+- Release builds currently run with `minifyEnabled false` so stack traces stay readable. When you turn R8 back on, use `proguard-rules.pro` to keep classes reflected on by greenDAO, JNI, and the Second Life JSON/LLSD types.
 - Run with `./gradlew :app:assembleDebug`. See `BUILD_STATUS.md` for the known set of remaining decomp artefacts.
 - For Second Life protocol debugging, keep `recovered/reference/message_template.msg` open in a split pane — the message classes under `slproto/messages/` are 1:1 with the blocks in that file.

@@ -184,23 +184,6 @@ tasks.withType(JavaCompile).configureEach {
     // real problems are visible.
     options.compilerArgs += ['-Xlint:none', '-Xmaxwarns', '10', '-Xmaxerrs', '100000']
     options.encoding = 'UTF-8'
-
-    // ButterKnife's annotation processor (butterknife-compiler 10.2.3)
-    // uses internal javac APIs that JPMS closed off starting with JDK 16.
-    // Open them back up so the processor can run under modern JDKs.
-    options.forkOptions.jvmArgs += [
-        '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
-        '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
-    ]
-    options.fork = true
 }
 
 // -------------------------------------------------------------------------
@@ -260,14 +243,6 @@ dependencies {
     // `org.greenrobot.greendao`, which would require a find-replace across
     // ~80 DAO + ORM files.)
     implementation 'de.greenrobot:greendao:2.1.0'
-
-    // ── ButterKnife ──
-    // Deprecated but still on Maven; 10.2.3 is the last release and works
-    // with AndroidX. We run the annotation processor against the decompiled
-    // @BindView etc. in ~36 Lumiya UI files. Replace in touched UI files
-    // opportunistically with ViewBinding-first modernization.
-    implementation 'com.jakewharton:butterknife:10.2.3'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
     // ── PhotoView ──
     // The `uk.co.senab.photoview` package was discontinued in 2016 when

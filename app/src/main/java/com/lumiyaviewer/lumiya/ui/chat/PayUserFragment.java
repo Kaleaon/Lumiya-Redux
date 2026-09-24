@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -40,19 +37,14 @@ public class PayUserFragment extends ChatterFragment {
         }
     });
 
-    @BindView(R.id.pay_amount)
     EditText payAmount;
 
-    @BindView(R.id.user_pay_message)
     EditText payMessage;
 
-    @BindView(R.id.payment_details_balance)
     TextView paymentDetailsBalance;
 
-    @BindView(R.id.receiving_user_name)
     TextView receivingUserName;
 
-    @BindView(R.id.receiving_user_pic)
     ChatterPicView receivingUserPic;
     private Unbinder unbinder;
 
@@ -117,7 +109,7 @@ public class PayUserFragment extends ChatterFragment {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.pay_user, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new PayUserFragment_ViewBinding(this, inflate);
         this.chatterNameDisplayer.bindViews(this.receivingUserName, this.receivingUserPic);
         return inflate;
     }
@@ -132,7 +124,6 @@ public class PayUserFragment extends ChatterFragment {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.receiving_user_profile_button})
     public void onReceivingUserViewProfileClick() {
         if (this.chatterID != null) {
             DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(this.chatterID));
@@ -152,7 +143,6 @@ public class PayUserFragment extends ChatterFragment {
         }
     }
 
-    @OnClick({R.id.user_pay_button})
     public void onUserPayButton() {
         try {
             payUser(Integer.parseInt(this.payAmount.getText().toString()), this.payMessage.getText().toString());

@@ -10,9 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -30,13 +28,10 @@ import java.util.UUID;
 
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
 
-    @BindView(R.id.my_avatar_name)
     TextView myAvatarName;
 
-    @BindView(R.id.my_ava_options_list)
     ListView myAvatarOptionsList;
 
-    @BindView(R.id.my_avatar_pic)
     ChatterPicView myAvatarPic;
     private Unbinder unbinder;
     private ChatterNameRetriever myAvatarNameRetriever = null;
@@ -115,7 +110,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.my_avatar, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new MyAvatarFragment_ViewBinding(this, inflate);
         this.myAvatarOptionsList.setAdapter((ListAdapter) new MyAvatarPagesAdapter(viewGroup.getContext()));
         this.myAvatarOptionsList.setOnItemClickListener(this);
         return inflate;

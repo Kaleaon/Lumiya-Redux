@@ -40,9 +40,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.Subscribe;
@@ -113,109 +110,77 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     @Nullable
     private SLAvatarControl avatarControl;
 
-    @BindView(R.id.avatarIconView)
     ImageView avatarIconView;
 
-    @BindView(R.id.button_cam_off)
     ImageButton buttonCamOff;
 
-    @BindView(R.id.button_cam_on)
     ImageButton buttonCamOn;
 
-    @BindView(R.id.button_fly_downward)
     ImageButton buttonFlyDownward;
 
-    @BindView(R.id.button_fly_upward)
     ImageButton buttonFlyUpward;
 
-    @BindView(R.id.button_hud)
     Button buttonHUD;
 
-    @BindView(R.id.button_move_backward)
     ImageButton buttonMoveBackward;
 
-    @BindView(R.id.button_move_forward)
     ImageButton buttonMoveForward;
 
-    @BindView(R.id.button_stand_up)
     ImageButton buttonStandUp;
 
-    @BindView(R.id.button_stop_flying)
     ImageButton buttonStopFlying;
 
-    @BindView(R.id.button_turn_left)
     ImageButton buttonTurnLeft;
 
-    @BindView(R.id.button_turn_right)
     ImageButton buttonTurnRight;
 
-    @BindView(R.id.chats_overlay_layout)
     LinearLayout chatsOverlayLayout;
 
-    @BindView(R.id.details)
     View detailsContainer;
 
-    @BindView(R.id.drag_pointer_view)
     View dragPointer;
 
-    @BindView(R.id.drag_pointer_layout)
     ViewGroup dragPointerLayout;
 
     @Nullable
     private SLDrawDistance drawDistance;
     private FadingTextViewLog fadingTextViewLog;
 
-    @BindView(R.id.fly_buttons_layout)
     LinearLayout flyButtonsLayout;
     private GestureDetectorCompat gestureDetector;
 
-    @BindView(R.id.insets_background)
     FrameLayout insetsBackground;
     private boolean isSplitScreen;
     private WorldSurfaceView mGLView;
 
-    @BindView(R.id.move_buttons_layout)
     View moveButtonsLayout;
 
-    @BindView(R.id.object_chat_button)
     ImageButton objectChatButton;
 
-    @BindView(R.id.object_controls_panel)
     View objectControlsPanel;
 
-    @BindView(R.id.object_more_button)
     ImageButton objectMoreButton;
 
-    @BindView(R.id.objectNameTextView)
     TextView objectNameTextView;
 
-    @BindView(R.id.object_pay_button)
     ImageButton objectPayButton;
 
-    @BindView(R.id.object_popup_left_spacer)
     View objectPopupLeftSpacer;
 
-    @BindView(R.id.object_sit_button)
     ImageButton objectSitButton;
 
-    @BindView(R.id.object_stand_button)
     ImageButton objectStandButton;
 
-    @BindView(R.id.object_touch_button)
     ImageButton objectTouchButton;
     private ScaleGestureDetector scaleGestureDetector;
     private UserManager userManager;
 
-    @BindView(R.id.voice_status_view_3d)
     VoiceStatusView voiceStatusView;
 
-    @BindView(R.id.world_overlays_container)
     ViewGroup worldOverlaysContainer;
 
-    @BindView(R.id.world_view_holder)
     FrameLayout worldViewHolder;
 
-    @BindView(R.id.world_view_touch_receiver)
     View worldViewTouchReceiver;
     private SLObjectInfo pickedObject = null;
     private ObjectIntersectInfo pickedIntersectInfo = null;
@@ -630,7 +595,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     private void initContentView() {
         setContentView(R.layout.world_view);
-        ButterKnife.bind(this);
+        new WorldViewActivity_ViewBinding(this);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         this.mGLView = new WorldSurfaceView(this, this.userManager);
         this.worldViewHolder.addView(this.mGLView);
@@ -1168,7 +1133,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @OnClick({R.id.button_cam_off})
     public void onCamOffButton() {
         if (this.camButtonEnabled) {
             this.manualCamMode = false;
@@ -1179,7 +1143,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @OnClick({R.id.button_cam_on})
     public void onCamOnButton() {
         if (this.camButtonEnabled) {
             this.manualCamMode = true;
@@ -1268,7 +1231,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateSimTimeOverride();
     }
 
-    @OnClick({R.id.button_hud})
     public void onHUDButton() {
         if (this.displayedHUDid == 0) {
             selectHUDtoDisplay();
@@ -1296,21 +1258,18 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @OnClick({R.id.object_chat_button})
     public void onObjectChatButton() {
         if (this.pickedObject != null) {
             chatWithObject(this.pickedObject);
         }
     }
 
-    @OnClick({R.id.object_more_button})
     public void onObjectMoreButton() {
         if (this.pickedObject != null) {
             showObjectInfo(this.pickedObject);
         }
     }
 
-    @OnClick({R.id.object_pay_button})
     public void onObjectPayButton() {
         SLObjectProfileData data;
         if (this.pickedObject != null) {
@@ -1349,7 +1308,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @OnClick({R.id.object_sit_button})
     public void onObjectSitButton() {
         if (this.pickedObject == null || this.avatarControl == null) {
             return;
@@ -1357,14 +1315,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.avatarControl.SitOnObject(this.pickedObject.getId());
     }
 
-    @OnClick({R.id.button_stand_up, R.id.object_stand_button})
     public void onObjectStandButton() {
         if (this.avatarControl != null) {
             this.avatarControl.Stand();
         }
     }
 
-    @OnClick({R.id.object_touch_button})
     public void onObjectTouchButton() {
         if (this.pickedObject != null) {
             touchObject(this.pickedObject, this.pickedIntersectInfo);
@@ -1498,7 +1454,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         super.onStop();
     }
 
-    @OnClick({R.id.button_stop_flying})
     public void onStopFlyingButton() {
         if (this.avatarControl != null) {
             this.avatarControl.stopFlying();

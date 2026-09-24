@@ -8,11 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnEditorAction;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -35,13 +31,10 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
 
     private SearchGridAdapter adapter;
 
-    @BindView(R.id.radiogroup_search_type)
     RadioGroup radioGroupSearchType;
 
-    @BindView(R.id.search_results_list)
     RecyclerView searchResultsList;
 
-    @BindView(R.id.search_string)
     EditText searchString;
     private Unbinder unbinder;
     private final SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -83,7 +76,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.search_fragment, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new SearchGridFragment_ViewBinding(this, inflate);
         this.adapter = new SearchGridAdapter(layoutInflater.getContext(), ActivityUtils.getActiveAgentID(getArguments()), this);
         this.searchResultsList.setAdapter(this.adapter);
         setTitle(getString(R.string.search), null);
@@ -106,7 +99,6 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         }
     }
 
-    @OnClick({R.id.start_search_button})
     public void onSearchButtonClicked() {
         beginSearch();
     }
@@ -130,7 +122,6 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         }
     }
 
-    @OnEditorAction({R.id.search_string})
     public boolean onSearchTextAction(int i, KeyEvent keyEvent) {
         if (i != 3 && (keyEvent == null || keyEvent.getAction() != 0 || keyEvent.getKeyCode() != 66)) {
             return false;

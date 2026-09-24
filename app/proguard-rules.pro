@@ -1,7 +1,7 @@
 # Release build currently runs with minifyEnabled=false; this file is kept
 # as a placeholder so Gradle accepts the buildType config and so a future
 # minified build has somewhere to grow into. Add -keep rules for reflection
-# consumers (greenDAO entity classes, butterknife generated classes, JNI
+# consumers (greenDAO entity classes, JNI
 # callbacks into com.lumiyaviewer.rawbuffers.DirectByteBuffer,
 # com.lumiyaviewer.lumiya.openjpeg.*) when you flip minifyEnabled on.
 

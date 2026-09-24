@@ -14,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.Subscription;
@@ -44,20 +41,15 @@ import java.util.UUID;
 public class UserPickFragment extends FragmentWithTitle {
     private static final String PICK_ID_KEY = "pickID";
 
-    @BindView(R.id.change_pic_button)
     Button changePicButton;
 
-    @BindView(R.id.pick_description)
     TextView pickDescription;
 
-    @BindView(R.id.user_pick_set_location_button)
     Button setLocationButton;
     private Unbinder unbinder;
 
-    @BindView(R.id.user_pick_desc_edit_button)
     Button userPickDescEditButton;
 
-    @BindView(R.id.user_pick_image_view)
     ImageAssetView userPickImageView;
     private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
@@ -211,7 +203,6 @@ public class UserPickFragment extends FragmentWithTitle {
         Toast.makeText(getContext(), R.string.pick_location_set, Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick({R.id.change_pic_button})
     protected void onChangePic(View view) {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         AvatarPickKey pickKey = getPickKey();
@@ -243,13 +234,12 @@ public class UserPickFragment extends FragmentWithTitle {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.user_pick, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new UserPickFragment_ViewBinding(this, inflate);
         this.userPickImageView.setAlignTop(true);
         this.userPickImageView.setVerticalFit(true);
         return inflate;
     }
 
-    @OnClick({R.id.user_pick_desc_edit_button})
     protected void onDescEdit(View view) {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         AvatarPickKey pickKey = getPickKey();
@@ -281,7 +271,6 @@ public class UserPickFragment extends FragmentWithTitle {
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @OnClick({R.id.user_pick_set_location_button})
     protected void onSetLocation(View view) {
         final UserManager userManager = ActivityUtils.getUserManager(getArguments());
         final AvatarPickKey pickKey = getPickKey();
@@ -335,7 +324,6 @@ public class UserPickFragment extends FragmentWithTitle {
         super.onStop();
     }
 
-    @OnClick({R.id.user_pick_teleport_button})
     protected void onTeleportToPickClick(View view) {
         final UserManager userManager = ActivityUtils.getUserManager(getArguments());
         PickInfoReply data = this.pickInfo.getData();

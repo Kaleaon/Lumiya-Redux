@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -30,38 +27,29 @@ import javax.annotation.Nullable;
 
 public class UserFirstLifeProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
-    @BindView(R.id.about_edit_button)
     Button aboutEditButton;
 
-    @BindView(R.id.change_pic_button)
     Button changePicButton;
 
-    @BindView(R.id.loading_layout)
     LoadingLayout loadingLayout;
 
-    @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     private Unbinder unbinder;
 
-    @BindView(R.id.user_pic_view)
     ImageAssetView userPicView;
 
-    @BindView(R.id.user_profile_about_text)
     TextView userProfileAboutText;
 
-    @BindView(R.id.text_profile_payment_info)
     TextView userProfilePaymentInfo;
     private final SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.avatarProperties).withDataChangedListener(this);
 
-    @OnClick({R.id.about_edit_button})
     protected void onAboutEditClicked(View view) {
         if (this.chatterID != null) {
             DetailsActivity.showEmbeddedDetails(getActivity(), UserAboutTextEditFragment.class, UserAboutTextEditFragment.makeSelection(this.chatterID, true));
         }
     }
 
-    @OnClick({R.id.change_pic_button})
     protected void onChangePicClicked(View view) {
         AvatarPropertiesReply data = this.avatarProperties.getData();
         if (this.chatterID == null || data == null) {
@@ -76,7 +64,7 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.user_profile_tab_first, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new UserFirstLifeProfileTab_ViewBinding(this, inflate);
         this.loadingLayout.setSwipeRefreshLayout(this.swipeRefreshLayout);
         this.loadableMonitor.setLoadingLayout(this.loadingLayout, getString(R.string.no_user_selected), getString(R.string.user_profile_fail));
         this.loadableMonitor.setSwipeRefreshLayout(this.swipeRefreshLayout);

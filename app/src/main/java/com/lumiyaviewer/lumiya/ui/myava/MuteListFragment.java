@@ -13,10 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
@@ -36,7 +33,6 @@ import java.util.UUID;
 public class MuteListFragment extends FragmentWithTitle {
     private MuteListAdapter adapter;
 
-    @BindView(R.id.muteList)
     ListView muteList;
     private Unbinder unbinder;
     private final SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
@@ -106,7 +102,6 @@ public class MuteListFragment extends FragmentWithTitle {
         doUnblock(muteListEntry);
     }
 
-    @OnClick({R.id.add_mute_list_button})
     public void onAddMuteListButtonClick() {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         FragmentActivity activity = getActivity();
@@ -141,7 +136,7 @@ public class MuteListFragment extends FragmentWithTitle {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.mute_list, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new MuteListFragment_ViewBinding(this, inflate);
         this.adapter = new MuteListAdapter(layoutInflater.getContext());
         this.muteList.setAdapter((ListAdapter) this.adapter);
         SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = new SwipeDismissListViewTouchListener(this.muteList, new SwipeDismissListViewTouchListener.DismissCallbacks() {

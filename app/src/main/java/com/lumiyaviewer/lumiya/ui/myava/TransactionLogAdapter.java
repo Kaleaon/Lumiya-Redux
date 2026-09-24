@@ -10,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import butterknife.internal.Utils;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Utils;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
@@ -48,7 +47,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
         TransactionViewHolder(View view) {
             super(view);
             this.chatterNameDisplayer = new ChatterNameDisplayer();
-            ButterKnife.bind(this, view);
+            new TransactionViewHolder_ViewBinding(this, view);
             this.chatterNameDisplayer.bindViews(this.userName, this.userPicView);
             view.setOnClickListener(this);
             this.calendar = Calendar.getInstance();
@@ -79,9 +78,8 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
     }
 
     /**
-     * ButterKnife binding generated for 3.4.2, kept as source: ButterKnife 10
-     * cannot generate a compilable binding for a nested holder. Binary name
-     * TransactionLogAdapter$TransactionViewHolder_ViewBinding, which ButterKnife.bind() looks up.
+     * ButterKnife binding generated for 3.4.2, kept as source; the holder
+     * constructs it directly (see ui/common/binding).
      */
     public static class TransactionViewHolder_ViewBinding implements Unbinder {
         private TransactionViewHolder target;

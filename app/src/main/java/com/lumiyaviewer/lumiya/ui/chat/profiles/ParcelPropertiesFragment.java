@@ -14,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.base.Strings;
 import com.google.common.logging.nano.Vr;
 import com.lumiyaviewer.lumiya.R;
@@ -42,37 +39,26 @@ import java.util.UUID;
 public class ParcelPropertiesFragment extends FragmentWithTitle {
     public static final String PARCEL_DATA_KEY = "parcelData";
 
-    @BindView(R.id.parcel_media_play_button)
     Button mediaPlayButton;
 
-    @BindView(R.id.parcel_media_stop_button)
     Button mediaStopButton;
 
-    @BindView(R.id.parcel_area)
     TextView parcelArea;
 
-    @BindView(R.id.parcel_details_desc)
     TextView parcelDescription;
 
-    @BindView(R.id.parcel_image_view)
     ImageAssetView parcelImageView;
 
-    @BindView(R.id.parcel_media_card_view)
     CardView parcelMediaCardView;
 
-    @BindView(R.id.parcel_media_url)
     TextView parcelMediaURL;
 
-    @BindView(R.id.parcel_name)
     TextView parcelName;
 
-    @BindView(R.id.parcel_owner_name)
     TextView parcelOwnerName;
 
-    @BindView(R.id.parcel_owner_pic)
     ChatterPicView parcelOwnerPic;
 
-    @BindView(R.id.sim_restart_card_view)
     CardView simRestartCardView;
     private Unbinder unbinder = null;
     private ParcelData parcelData = null;
@@ -179,7 +165,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.parcel_properties_fragment, viewGroup, false);
-        this.unbinder = ButterKnife.bind(this, inflate);
+        this.unbinder = new ParcelPropertiesFragment_ViewBinding(this, inflate);
         this.ownerNameDisplayer.bindViews(this.parcelOwnerName, this.parcelOwnerPic);
         this.parcelImageView.setVerticalFit(true);
         this.parcelImageView.setAlignTop(true);
@@ -196,7 +182,6 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.parcel_owner_profile_button})
     public void onOwnerProfileButton() {
         if (this.parcelData != null) {
             if (this.parcelData.isGroupOwned()) {
@@ -207,7 +192,6 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         }
     }
 
-    @OnClick({R.id.parcel_media_play_button})
     public void onParcelMediaPlay() {
         if (this.parcelData == null || !(!Strings.isNullOrEmpty(this.parcelData.getMediaURL())) || this.userManager == null) {
             return;
@@ -221,14 +205,12 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         StreamingMediaService.startServiceCompat(getContext(), intent);
     }
 
-    @OnClick({R.id.parcel_media_stop_button})
     public void onParcelMediaStop() {
         Intent intent = new Intent(getContext(), (Class<?>) StreamingMediaService.class);
         intent.setAction("com.lumiyaviewer.lumiya.ACTION_STOP_MEDIA");
         StreamingMediaService.startServiceCompat(getContext(), intent);
     }
 
-    @OnClick({R.id.parcel_set_home_button})
     public void onSetHomeButton() {
         if (this.agentCircuit.getData() != null) {
             new AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -253,7 +235,6 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         }
     }
 
-    @OnClick({R.id.sim_restart_button})
     public void onSimRestartButton() {
         final SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {

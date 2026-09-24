@@ -14,9 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.common.ThemedActivity;
 import com.lumiyaviewer.lumiya.ui.grids.GridEditDialog;
@@ -27,7 +24,6 @@ import java.util.List;
 public class ManageGridsActivity extends ThemedActivity implements GridEditDialog.OnGridEditResultListener, AdapterView.OnItemClickListener {
     private GridListAdapter adapter;
 
-    @BindView(R.id.gridList)
     ListView gridListView;
     private GridList gridList = null;
     private List<GridList.GridInfo> displayList = new ArrayList();
@@ -72,7 +68,6 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         deleteGrid(gridInfo);
     }
 
-    @OnClick({R.id.add_new_grid_button})
     public void onAddNewGridButton() {
         GridEditDialog gridEditDialog = new GridEditDialog(this, this.gridList, null);
         gridEditDialog.setOnGridEditResultListener(this);
@@ -122,7 +117,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.manage_grids);
-        ButterKnife.bind(this);
+        new ManageGridsActivity_ViewBinding(this);
         this.gridList = new GridList(this);
         this.gridList.getGridList(this.displayList);
         this.adapter = new GridListAdapter(this, this.displayList);
