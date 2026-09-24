@@ -32,9 +32,9 @@ statements against current `secondlife/viewer` sources before relying on them.
 | Native | `libopenjpeg.so` (OpenJPEG **1.5.0**, 2012), `librawbuf.so`, `libgvr.so` | `libopenjpeg.so` also holds 18 renderer helpers (skinning morphs, flexi, terrain bake, frustum culling, `drawBuf`). Only `librawbuf` has recovered C. |
 | VR | GVR (Daydream/Cardboard SDK, retired 2019) behind the new `VrRuntime` seam | OpenXR runtime stub exists (`ui/render/vr/OpenXrRuntime.java`). |
 | Persistence | greenDAO 2.1 with a Room mirror in progress | See `data/room`. |
-| Network | OkHttp 3.14.9, XML-RPC login, LLSD/XML caps, UDP circuit | OkHttp 3.x reached end of life in 2021. |
+| Network | OkHttp 3.14.9, XML-RPC login, LLSD/XML caps, UDP circuit | OkHttp 3.x reached end of life in 2021. Now 4.12 (§6). |
 | Voice | Vivox, through a separate plugin APK (`voice/common/VoicePluginMessenger`) | The plugin is not part of this repo. |
-| UI | Activities + Fragments, ButterKnife in 17 files, 6 `AsyncTask`s, framework `android.preference` in 11 files | |
+| UI | Activities + Fragments, ButterKnife in 17 files, 6 `AsyncTask`s, framework `android.preference` in 11 files | ButterKnife removed on this branch (§6). |
 
 The recovery is excellent groundwork: every class is verified against the
 shipped bytecode, and the existing seams (`RenderBackend`, `GpuCapabilities`,
@@ -86,7 +86,7 @@ current grid. **Looks wrong** means content shows but renders incorrectly.
 | TLS | `SLHTTPSConnection` installs a trust-everything `X509TrustManager` **and** a hostname verifier that returns `true`, for every HTTPS call including login (password hash) and caps. Modern viewers verify certificates: the SL viewer ships a CA bundle (`indra/newview/app_settings/ca-bundle.crt`). | **P0 security.** Any on-path attacker can capture the login hash and session. See §5.1 for a rollout that won't strand OpenSimulator users. |
 | 16 KB page size | `jniLibs/arm64-v8a/libgvr.so` and both `x86_64` libraries have 4 KB `LOAD` alignment (`readelf -lW`). Android 15+ devices with 16 KB pages cannot load them, and Google Play requires 16 KB compatibility for apps targeting API 35+. | **P1.** Rebuilding `libopenjpeg`/`librawbuf` from source and removing GVR fixes it. |
 | OpenJPEG 1.5.0 | 2012 release. Many CVEs were fixed in 2.x. It decodes untrusted J2C data from the grid. | P1 |
-| OkHttp 3.14.9 | No longer maintained | P2. Move to OkHttp 4.12 (same `okhttp3` package, Kotlin runtime). |
+| OkHttp 3.14.9 | No longer maintained | Done on this branch: OkHttp 4.12 (§6). |
 | `targetSdk 34` | Play requires API 35 for new updates. This needs edge-to-edge handling and 16 KB libraries. | P2 |
 | Login identity | `viewer_digest` is a fixed UUID, and `mac` is `MD5("android_id")` (a constant string). Both are honest but meaningless. | Low. Keep the TPV-policy identification. |
 
@@ -327,18 +327,22 @@ some accounts cannot log in at all.
 
 ### 5.6 Platform and libraries
 
-| Now | Target | Notes |
+| Now | Target | Status |
 | --- | --- | --- |
-| OkHttp 3.14.9 | OkHttp 4.12 | Drop-in (`okhttp3` package). Needs the Kotlin stdlib, which is already a dependency. |
+| OkHttp 3.14.9 + Okio 1 | OkHttp 4.12 | **Done** (§6) |
+| `legacy-support-v4/v13`, `lifecycle-extensions`, `protobuf-javalite` | Specific AndroidX modules / nothing | **Done** (§6) |
+| PagerSlidingTabStrip, Jetifier | Material `TabLayout`, Jetifier off | **Done** (§6) |
+| ButterKnife | In-tree bindings, then View Binding per screen | **Done** for the library (§6). View Binding is optional per screen. |
+| AndroidX, Material, Gson, Guava | Latest releases that support compileSdk 34 | **Done** (§6). Moving to compileSdk 35 unlocks recyclerview 1.4 / core 1.15+. |
 | greenDAO 2.1 | Room only | Continue the adapter migration. |
-| ButterKnife (17 files) | View Binding | Per screen, as M2 plans. |
 | `AsyncTask` (6) | Coroutines with `lifecycleScope` | |
 | `android.preference` (11) | `androidx.preference` (already a dependency) | |
 | Guava EventBus / `react/` | Kotlin `Flow` | At repository boundaries |
 | Vivox plugin APK | In-app WebRTC | §2.1 |
-| GVR | OpenXR + Cardboard SDK | §4.6 |
-| Java 8 bytecode | Java 17 target | After Kotlin/Java toolchain alignment (M1) |
+| GVR (in-tree) | OpenXR + Cardboard SDK | §4.6 |
+| Java 8 bytecode | Java 17 target | Tried: builds and passes tests, but `dexdiff` reports 15 classes because Java 11+ nestmates call private inner-class constructors directly instead of through synthetic accessors. Teach `dexdiff` that first, then switch. |
 | `targetSdk 34` | 35 | After the 16 KB libraries and edge-to-edge insets |
+| Library styles copied into `res/values/styles.xml` | Remove | The recovered `values/styles.xml` still redefines AppCompat/Preference styles from support library 28 (for example `Theme.AppCompat.DayNight` is redefined as the Light theme). The layout copies are gone (§6); the style copies need a visual check on a device before removal. |
 
 New UI can use Jetpack Compose, hosted in the existing Activities through
 `ComposeView`. Chat and IM, inventory and the login screen are the screens
@@ -349,6 +353,8 @@ scope.
 
 ## 6. What this branch changed
 
+### Protocol and asset fetch
+
 | Change | Files | Behaviour |
 | --- | --- | --- |
 | Texture fetch uses `ViewerAsset`, then `GetTexture` | `slproto/caps/SLCaps.java` (`getTextureFetchURL`), `slproto/modules/texfetcher/SLTextureFetcher.java` | Textures load over HTTP on grids that grant only `ViewerAsset`. |
@@ -357,13 +363,51 @@ scope.
 | Mesh URL restored when the GL context is recreated | `render/WorldViewRenderer.onSurfaceCreated` | Stops mesh fetches blocking the HTTP pool forever after a context loss. |
 | Mesh download returns on success | `res/mesh/MeshCache.java` | One download per mesh instead of two, and no false "failed" completion. |
 
-`GetMesh2` was added to `SLCapability` (for OpenSimulator). The intentional
-bytecode differences are recorded in `tools/verify/accepted.txt`. The cap
-fallback order is covered by `app/src/test/.../slproto/caps/SLCapsTest.java`.
+`GetMesh2` was added to `SLCapability` (for OpenSimulator). The cap fallback
+order is covered by `SLCapsTest`.
 
-**Not verified here:** there is no device or grid in this environment, and
-the original APK needed by `tools/verify/verify_against_apk.sh` is not in the
-repository. The changes were checked by `./gradlew :app:assembleDebug`, the
-unit tests and the protocol conformance script only. The first on-device
-test should confirm meshes and textures load in a mesh-heavy SL region and
-that the log shows `ViewerAsset` URLs.
+### Dependencies and resources
+
+| Change | Why |
+| --- | --- |
+| OkHttp 3.14.9 → 4.12.0; Okio 1.x pin dropped | 3.x is unmaintained. 4.x keeps the `okhttp3` Java API the code uses. |
+| `legacy-support-v4`/`-v13` → swiperefreshlayout, loader, drawerlayout, coordinatorlayout; `androidx.legacy.widget.Space` → `Space` | Depend on what is used. |
+| `lifecycle-extensions`, `protobuf-javalite` removed | Unused. GVR uses the in-tree protobuf-nano. |
+| appcompat 1.7.0, fragment 1.8.5, core 1.13.1, material 1.12.0, lifecycle 2.8.7, constraintlayout 2.2.0, Gson 2.11.0, Guava 33.3.1 | Current releases for compileSdk 34. |
+| 115 support-library-28 layout copies deleted (`abc_*`, `design_*`, `notification_*`, `preference*`, `select_dialog_*`) | They overrode the AndroidX/Material layouts. Two sets named classes that do not exist, so **the Settings screen** (`androidx.appcompat.widget.PreferenceImageView`) **and every Snackbar** (`material.internal.SnackbarContentLayout`) would throw on inflation. |
+| PagerSlidingTabStrip → Material `TabLayout`; Jetifier off | Last support-library dependency. |
+| ButterKnife removed | The 17 generated `*_ViewBinding` classes are source now, with a small `ui/common/binding` runtime (same checks, debouncing, `Unbinder`). This drops the annotation processor and its ten `--add-opens` javac flags. |
+
+### New checks
+
+* `tools/verify/layout_classes.py APK`: every view class named in `res/`
+  must exist in the APK. It reported 2 missing before this branch and 0
+  after.
+* `LayoutInflationTest` (Robolectric): inflates every app layout under each
+  app theme. Restoring the old `preference.xml` makes it fail with
+  `ClassNotFoundException`.
+* `SLCapsTest`: asset cap fallback order.
+* `dexdiff.py` maps ButterKnife's runtime types and the in-tree ones to one
+  name (`BINDING_RE`).
+
+### Verification
+
+* `./gradlew :app:assembleDebug :app:testDebugUnitTest`: pass (7 tests).
+* `tools/protocol/run_conformance.sh`: pass.
+* `tools/verify/verify_against_apk.sh` against the original
+  `Lumiya_3.4.2.apk` (sha256 `cc4bac60…`, fetched as in
+  `docs/original_apk_retrieval.md`): **0 damaged classes, 0 unresolved
+  references**. Intentional differences are listed in
+  `tools/verify/accepted.txt`.
+
+**Not verified:** nothing here ran on a device or against a live grid (this
+environment has no emulator acceleration). The first on-device checks should
+be:
+
+1. In a mesh-heavy SL region, meshes and textures load, and the log shows
+   `ViewerAsset` URLs.
+2. Settings opens.
+3. The four tabbed screens (contacts, user profile, group profile, avatar
+   picker) show and switch tabs.
+4. The screens that used ButterKnife still respond to buttons: world view,
+   minimap, pay, profiles, search, parcel info.
