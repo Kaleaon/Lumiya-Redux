@@ -4,6 +4,38 @@
 # (e.g. bounded retries, delete-on-failure of partial downloads, single
 # transaction per inventory fetch) is therefore not active. PriorityBinQueue is
 # the exception: its fixes are kept and listed in tools/verify/accepted.txt.
+#
+# Review of what those edits added (2a1a628 "Recover critical viewer runtime
+# functionality"; 3ff787d and 76690a4 only fixed compile errors). Most of the
+# additions were hand reconstructions of methods jadx could not decompile
+# (SLCircuit.ProcessReceive, ChunkedListLoader.setVisibleRange, ...); verified
+# source replaced those, and ChunkedListLoader's reconstruction was wrong
+# (it never requested the first page of chat history).
+#
+# Re-added on top of the faithful source (each marked "Beyond 3.4.2" in code):
+#   TextureCompressedCache.TextureFetchRequest.run
+#     - stop retrying once the request is cancelled (thread interrupted)
+#     - a failed rename into the cache is a failed attempt, not a success
+#       with a missing file
+#     - delete the .part file after a failed attempt
+#   BakeLayer (3 sites): TGA asset streams closed even if decoding fails
+#   SyncManager.syncMoreMessages: chat-log cursor closed even on exceptions
+#
+# Deliberately not re-added:
+#   TextureCompressedCache: giving up without the UDP fallback when the cache
+#     directory cannot be created (3.4.2 still falls back to UDP, which is better)
+#   SLInventoryHTTPFetchRequest: one transaction per fetch and stopAndWait(false)
+#     between attempts. SQLite already serialises the writers, and 3.4.2's
+#     per-batch commits and yieldIfContendedSafely() keep the UI responsive.
+#   try-with-resources in AnimationCache / DaydreamApi: already present.
+#   SLAuth response closing: 3.4.2 already closes it in a finally block.
+#
+# Found while auditing (not from those edits): with targetSdk 34, eight
+# PendingIntent factories lacked a mutability flag (IllegalArgumentException
+# on Android 12+) and two NFC receivers lacked an export flag
+# (SecurityException on Android 14). Fixed via compat/PlatformCompat and
+# ContextCompat.registerReceiver.
+#
 com/google/vr/cardboard/ConfigUtils
 com/google/vr/ndk/base/VrCoreSdkClient
 com/lumiyaviewer/lumiya/dao/SearchGridResultDao

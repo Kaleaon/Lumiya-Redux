@@ -144,7 +144,9 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             boolean createResult = tempOutputDir.mkdirs();
             Debug.Printf("TextureFetchRequest: tempOutputDir = %s, createResult = %b, exists = %b",
                     tempOutputDir, Boolean.valueOf(createResult), Boolean.valueOf(tempOutputDir.exists()));
-            for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
+            // Beyond 3.4.2: a cancelled request (fetchTask.cancel(true)
+            // interrupts this thread) stops retrying instead of fetching again.
+            for (int attempt = 0; attempt < MAX_RETRIES && !Thread.currentThread().isInterrupted(); attempt++) {
                 boolean success = false;
                 try {
                     Debug.Printf("TextureFetchRequest: getting connection", new Object[0]);
@@ -174,12 +176,20 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
                     Debug.Warning(e);
                 }
                 if (success) {
+                    boolean committed;
                     synchronized (TextureCompressedCache.this.lock) {
-                        partFile.renameTo(this.compressedFile);
+                        committed = partFile.renameTo(this.compressedFile);
                     }
-                    completeRequest(this.compressedFile);
-                    return;
+                    // Beyond 3.4.2, which ignored the result and reported a
+                    // file that did not exist: a failed rename is a failed attempt.
+                    if (committed) {
+                        completeRequest(this.compressedFile);
+                        return;
+                    }
+                    Debug.Log("TextureFetchRequest: cannot commit texture cache file " + this.compressedFile);
                 }
+                // Beyond 3.4.2: do not leave a partial download behind.
+                partFile.delete();
             }
             if (!this.fetchTask.isCancelled()) {
                 Debug.Log("TextureFetchRequest: HTTP fetch unsuccessful. Trying UDP.");

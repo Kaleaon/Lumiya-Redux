@@ -1,5 +1,6 @@
 package com.google.vr.sdk.base.sensors;
 
+import androidx.core.content.ContextCompat;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -239,7 +240,7 @@ public class NfcSensor {
                     intentFilter.addAction("android.nfc.action.TECH_DISCOVERED");
                     intentFilter.addAction("android.nfc.action.TAG_DISCOVERED");
                     this.nfcIntentFilters = new IntentFilter[]{intentFilter};
-                    this.context.registerReceiver(this.nfcBroadcastReceiver, intentFilter);
+                    ContextCompat.registerReceiver(this.context, this.nfcBroadcastReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED);  // Android 14: own PendingIntent only
                 }
                 Iterator<ListenerHelper> it = this.listeners.iterator();
                 while (it.hasNext()) {
@@ -311,7 +312,7 @@ public class NfcSensor {
         if (isNfcEnabled()) {
             Intent intent = new Intent("android.nfc.action.NDEF_DISCOVERED");
             intent.setPackage(activity.getPackageName());
-            this.nfcAdapter.enableForegroundDispatch(activity, PendingIntent.getBroadcast(this.context, 0, intent, 0), this.nfcIntentFilters, null);
+            this.nfcAdapter.enableForegroundDispatch(activity, PendingIntent.getBroadcast(this.context, 0, intent, PendingIntent.FLAG_MUTABLE), this.nfcIntentFilters, null);
         }
     }
 

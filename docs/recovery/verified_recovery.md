@@ -173,13 +173,15 @@ counted as damage:
 
 ## Decisions left for the maintainer
 
-* **Behaviour from earlier passes that faithful source replaced.** Earlier
-  hand-rewrites (PRs 29, 31, 32) added behaviour that 3.4.2 never had, such as
-  bounded retries in cache I/O and inventory transaction cleanup. Where those
-  files did not verify, they were rewritten to match 3.4.2 exactly. The 92
-  affected classes are listed in `docs/recovery/superseded_hand_edits.txt`. To
-  bring a fix back, apply it on top of the faithful source and record it in
-  `accepted.txt`.
+* **Behaviour from earlier passes.** Earlier hand-rewrites (PRs 29, 31, 32)
+  were reviewed; the ones that improve on 3.4.2 were re-applied on top of the
+  verified source and are marked "Beyond 3.4.2" in the code. The list, and
+  the edits left out with reasons, is in
+  `docs/recovery/superseded_hand_edits.txt`.
+* **Local variable names.** `tools/recover/names/rename_locals.sh` renamed
+  4,827 decompiler-generated locals and parameters with a byte-identical
+  build. Names the tool cannot infer (a primitive parameter never stored in a
+  field, for example `int i2`) remain and need renaming by hand.
 * **Login identity (TPV policy).** `SLAuth` sends `channel = "Lumiya Release"`
   and `user-agent = "Lumiya"`, exactly like 3.4.2. Second Life's Third Party
   Viewer policy expects a modified viewer to identify itself honestly. The

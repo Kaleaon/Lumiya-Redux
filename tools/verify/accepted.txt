@@ -89,3 +89,7 @@ Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->updateSearchResults(L
 Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirGroupsReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirGroupsReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
 Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPeopleReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPeopleReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
 Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPlacesReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPlacesReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+
+# --- Android 14 (targetSdk 34): context-registered receivers for non-system broadcasts must be flagged
+Lcom/google/vr/cardboard/NFCUtils;->onResume(Landroid/app/Activity;)V  registerReceiver -> ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED); NDEF/TECH/TAG_DISCOVERED arrive via this app's own PendingIntent, and the unflagged call throws SecurityException on Android 14
+Lcom/google/vr/sdk/base/sensors/NfcSensor;->addOnCardboardNfcListener(Lcom/google/vr/sdk/base/sensors/NfcSensor$OnCardboardNfcListener;)V  same Android 14 receiver flag (RECEIVER_NOT_EXPORTED)

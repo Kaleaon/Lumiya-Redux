@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya;
 
+import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.LauncherActivity;
@@ -71,7 +72,7 @@ public class LumiyaApp extends Application {
     }
 
     public static void restartApp() {
-        ((AlarmManager) getContext().getSystemService(NotificationCompat.CATEGORY_ALARM)).set(1, System.currentTimeMillis() + 1000, PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), (Class<?>) LauncherActivity.class), PendingIntent.FLAG_CANCEL_CURRENT));
+        ((AlarmManager) getContext().getSystemService(NotificationCompat.CATEGORY_ALARM)).set(1, System.currentTimeMillis() + 1000, PlatformCompat.getActivity(getContext(), 0, new Intent(getContext(), (Class<?>) LauncherActivity.class), PendingIntent.FLAG_CANCEL_CURRENT));
         System.exit(0);
     }
 

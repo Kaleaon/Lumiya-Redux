@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya;
 
+import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -134,12 +135,12 @@ public class StreamingMediaService extends Service {
     }
 
     private void showNotification() {
-        PendingIntent service = PendingIntent.getService(this, 0, new Intent(this, (Class<?>) StreamingMediaService.class), PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent service = PlatformCompat.getService(this, 0, new Intent(this, (Class<?>) StreamingMediaService.class), PendingIntent.FLAG_ONE_SHOT);
         Intent intent = new Intent(this, (Class<?>) StreamingMediaActivity.class);
         ActivityUtils.setActiveAgentID(intent, this.lastActiveAgentUUID);
         intent.putExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY, this.lastParcelData);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_playing_media).setContentTitle("Playing media").setContentText(this.lastLocationName).setDefaults(0).setOngoing(true).setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).addAction(R.drawable.icon_material_stop, "Stop", service).setDeleteIntent(service).setOnlyAlertOnce(true);
+        builder.setSmallIcon(R.drawable.ic_playing_media).setContentTitle("Playing media").setContentText(this.lastLocationName).setDefaults(0).setOngoing(true).setContentIntent(PlatformCompat.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).addAction(R.drawable.icon_material_stop, "Stop", service).setDeleteIntent(service).setOnlyAlertOnce(true);
         startForeground(R.id.media_notify_id, builder.build());
     }
 

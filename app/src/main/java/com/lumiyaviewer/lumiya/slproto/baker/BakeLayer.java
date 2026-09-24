@@ -166,12 +166,10 @@ public class BakeLayer {
                         z7 = z5;
                     } else {
                         boolean z9 = z8 | avatarParam.paramAlpha.multiplyBlend;
-                        try {
-                            InputStream inputStream = LumiyaApp.getAssetManager().open("tga/" + avatarParam.paramAlpha.tgaFile);
+                        try (InputStream inputStream = LumiyaApp.getAssetManager().open("tga/" + avatarParam.paramAlpha.tgaFile)) {  // closed even if decoding fails (3.4.2 leaked it)
                             OpenJPEG openJPEG4 = new OpenJPEG(inputStream, OpenJPEG.ImageFormat.TGA, true, true, avatarParam.paramAlpha.domain, paramWeight, false);
                             Debug.Log(String.format("Baking: layer %s: applying alpha (weight %f domain %f) mask texture %s, width %d, height %d, num_comps %d", this.layerName, Float.valueOf(paramWeight), Float.valueOf(avatarParam.paramAlpha.domain), avatarParam.paramAlpha.tgaFile, Integer.valueOf(openJPEG4.getWidth()), Integer.valueOf(openJPEG4.getHeight()), Integer.valueOf(openJPEG4.getNumComponents())));
                             openJPEG3.blendAlpha(openJPEG4, !avatarParam.paramAlpha.multiplyBlend);
-                            inputStream.close();
                             z4 = z9;
                             z7 = z5;
                         } catch (Exception e) {
@@ -210,13 +208,11 @@ public class BakeLayer {
             }
         }
         if (this.tgaTexture != null) {
-            try {
-                InputStream inputStream2 = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture);
+            try (InputStream inputStream2 = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture)) {  // closed even if decoding fails (3.4.2 leaked it)
                 OpenJPEG openJPEG6 = new OpenJPEG(inputStream2, OpenJPEG.ImageFormat.TGA, this.tgaFileIsMask, false, 0.0f, 0.0f, false);
                 Debug.Log(String.format("Baking: layer %s: applying tga texture %s, writeAllChannels %s, width %d, height %d, num_comps %d", this.layerName, this.tgaTexture, Boolean.valueOf(this.writeAllChannels), Integer.valueOf(openJPEG6.getWidth()), Integer.valueOf(openJPEG6.getHeight()), Integer.valueOf(openJPEG6.getNumComponents())));
                 openJPEG2.draw(openJPEG6, -1, false);
                 z2 = true;
-                inputStream2.close();
             } catch (Exception e4) {
                 e4.printStackTrace();
             }
@@ -243,12 +239,10 @@ public class BakeLayer {
             return;
         }
         if (this.tgaTexture != null) {
-            try {
-                InputStream open = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture);
+            try (InputStream open = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture)) {  // closed even if decoding fails (3.4.2 leaked it)
                 OpenJPEG openJPEG2 = new OpenJPEG(open, OpenJPEG.ImageFormat.TGA, this.tgaFileIsMask, false, 0.0f, 0.0f, false);
                 Debug.Log(String.format("Baking: layer %s: applying tga alpha mask %swidth %d, height %d, num_comps %d", this.layerName, this.tgaTexture, Integer.valueOf(openJPEG2.getWidth()), Integer.valueOf(openJPEG2.getHeight()), Integer.valueOf(openJPEG2.getNumComponents())));
                 openJPEG.blendAlpha(openJPEG2, false);
-                open.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya;
 
+import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -541,7 +542,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
         builder.setOngoing(false);
         builder.setNumber(unreadNotificationInfo.totalUnreadCount());
-        builder.setContentIntent(PendingIntent.getActivity(this, R.id.unread_notify_request_code, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+        builder.setContentIntent(PlatformCompat.getActivity(this, R.id.unread_notify_request_code, intent, PendingIntent.FLAG_UPDATE_CURRENT));
         builder.setDefaults(0);
         if (str5 != null) {
             builder.setTicker(str5);

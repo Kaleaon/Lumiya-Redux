@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya.sync;
 
+import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -168,7 +169,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
 
     public void showSyncingError(String str, String str2, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context);
-        builder.setSmallIcon(R.drawable.ic_cloud_sync_notify).setContentTitle(str).setContentText(str2).setDefaults(0).setOngoing(false).setAutoCancel(true).setContentIntent(PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).setOnlyAlertOnce(true);
+        builder.setSmallIcon(R.drawable.ic_cloud_sync_notify).setContentTitle(str).setContentText(str2).setDefaults(0).setOngoing(false).setAutoCancel(true).setContentIntent(PlatformCompat.getActivity(this.context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).setOnlyAlertOnce(true);
         ((NotificationManager) this.context.getSystemService("notification")).notify(R.id.google_drive_problem_notify, builder.build());
     }
 

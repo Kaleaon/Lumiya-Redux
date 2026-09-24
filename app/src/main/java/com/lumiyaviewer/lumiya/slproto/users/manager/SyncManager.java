@@ -183,34 +183,40 @@ public class SyncManager {
                 forCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
                 LazyList<ChatMessage> listLazy = forCurrentThread.listLazy();
                 ImmutableList.Builder builder = ImmutableList.builder();
-                int i2 = 0;
-                long j2 = 0;
-                Iterator<ChatMessage> it = listLazy.iterator();
-                while (true) {
-                    j = j2;
-                    i = i2;
-                    if (!it.hasNext()) {
-                        break;
-                    }
-                    ChatMessage next = it.next();
-                    SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
-                    if (fromDatabaseObject != null && (chatter = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
-                        String chatterName = resolveChatterName(chatter);
-                        if (chatterName == null) {
+                i = 0;
+                j = 0;
+                try {
+                    int i2 = 0;
+                    long j2 = 0;
+                    Iterator<ChatMessage> it = listLazy.iterator();
+                    while (true) {
+                        j = j2;
+                        i = i2;
+                        if (!it.hasNext()) {
                             break;
                         }
-                        LogChatMessage logChatMessage = new LogChatMessage(chatter.getType(), chatter.getUuid(), next.getId().longValue(), chatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
-                        builder.add(logChatMessage);
-                        j = logChatMessage.messageID;
-                        i++;
-                        if (i >= 100) {
-                            break;
+                        ChatMessage next = it.next();
+                        SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
+                        if (fromDatabaseObject != null && (chatter = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
+                            String chatterName = resolveChatterName(chatter);
+                            if (chatterName == null) {
+                                break;
+                            }
+                            LogChatMessage logChatMessage = new LogChatMessage(chatter.getType(), chatter.getUuid(), next.getId().longValue(), chatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
+                            builder.add(logChatMessage);
+                            j = logChatMessage.messageID;
+                            i++;
+                            if (i >= 100) {
+                                break;
+                            }
                         }
+                        j2 = j;
+                        i2 = i;
                     }
-                    j2 = j;
-                    i2 = i;
+                } finally {
+                    // Beyond 3.4.2: release the cursor even if a message fails to load.
+                    listLazy.close();
                 }
-                listLazy.close();
                 if (i != 0) {
                     LogMessageBatch logMessageBatch = new LogMessageBatch(this.userManager.getUserID(), resolvedName, builder.build(), j);
                     CloudSyncServiceConnection cloudSyncServiceConnection2 = this.syncServiceConnection.get();

@@ -1,5 +1,6 @@
 package com.google.vr.cardboard;
 
+import androidx.core.content.ContextCompat;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -62,10 +63,13 @@ public class NFCUtils {
     }
 
     public void onResume(Activity activity) {
-        activity.registerReceiver(this.nfcBroadcastReceiver, createNfcIntentFilter());
+        // Android 14: a receiver for non-system broadcasts must say whether other
+        // apps may send to it. The NFC intents arrive through this app's own
+        // PendingIntent, so the receiver is not exported.
+        ContextCompat.registerReceiver(activity, this.nfcBroadcastReceiver, createNfcIntentFilter(), ContextCompat.RECEIVER_NOT_EXPORTED);
         Intent intent = new Intent("android.nfc.action.NDEF_DISCOVERED");
         intent.setPackage(activity.getPackageName());
-        PendingIntent broadcast = PendingIntent.getBroadcast(this.context, 0, intent, 0);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this.context, 0, intent, PendingIntent.FLAG_MUTABLE);
         if (isNFCEnabled()) {
             this.nfcAdapter.enableForegroundDispatch(activity, broadcast, this.nfcIntentFilters, null);
         }
