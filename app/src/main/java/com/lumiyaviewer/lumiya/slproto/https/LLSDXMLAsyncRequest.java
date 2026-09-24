@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDXMLException;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public class LLSDXMLAsyncRequest {
 
     public interface LLSDXMLResultListener {
@@ -13,8 +12,8 @@ public class LLSDXMLAsyncRequest {
     }
 
     public LLSDXMLAsyncRequest(final String str, final LLSDNode lLSDNode, final LLSDXMLResultListener lLSDXMLResultListener) {
-        new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.1
-            @Override // java.lang.Runnable
+        new Thread(new Runnable() {
+            @Override
             public void run() {
                 LLSDNode lLSDNode2;
                 try {

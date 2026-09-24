@@ -2,20 +2,19 @@ package com.lumiyaviewer.lumiya.slproto.users.manager;
 
 import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotificationInfo_ObjectPopupMessage extends UnreadNotificationInfo.ObjectPopupMessage {
     private final String message;
     private final String objectName;
 
-    AutoValue_UnreadNotificationInfo_ObjectPopupMessage(String str, String str2) {
-        if (str == null) {
+    AutoValue_UnreadNotificationInfo_ObjectPopupMessage(String objectName, String message) {
+        if (objectName == null) {
             throw new NullPointerException("Null objectName");
         }
-        this.objectName = str;
-        if (str2 == null) {
+        this.objectName = objectName;
+        if (message == null) {
             throw new NullPointerException("Null message");
         }
-        this.message = str2;
+        this.message = message;
     }
 
     public boolean equals(Object obj) {
@@ -36,12 +35,12 @@ final class AutoValue_UnreadNotificationInfo_ObjectPopupMessage extends UnreadNo
         return ((this.objectName.hashCode() ^ 1000003) * 1000003) ^ this.message.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupMessage
+    @Override
     public String message() {
         return this.message;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupMessage
+    @Override
     public String objectName() {
         return this.objectName;
     }

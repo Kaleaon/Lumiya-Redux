@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.orm.DBHandleCache;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/* loaded from: classes.dex */
 public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
     private static final int DB_VERSION = 21;
 
@@ -21,11 +20,11 @@ public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
         }
     }
 
-    private void enableWriteAheadLogging(SQLiteDatabase sQLiteDatabase) {
+    private void enableWriteAheadLogging(SQLiteDatabase sqLiteDatabase) {
         try {
-            Method method = sQLiteDatabase.getClass().getMethod("enableWriteAheadLogging", new Class[0]);
+            Method method = sqLiteDatabase.getClass().getMethod("enableWriteAheadLogging", new Class[0]);
             if (method != null) {
-                method.invoke(sQLiteDatabase, new Object[0]);
+                method.invoke(sqLiteDatabase, new Object[0]);
                 Debug.Printf("Write-ahead logging is supported.", new Object[0]);
             }
         } catch (IllegalAccessException e) {
@@ -46,11 +45,11 @@ public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
         return InstanceHolder.Instance;
     }
 
-    private boolean initTables(SQLiteDatabase sQLiteDatabase) throws SQLiteException {
+    private boolean initTables(SQLiteDatabase sqLiteDatabase) throws SQLiteException {
         boolean z;
         boolean z2;
-        sQLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS DBVersion (Version INTEGER);");
-        Cursor query = sQLiteDatabase.query("DBVersion", new String[]{"Version"}, null, null, null, null, null);
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS DBVersion (Version INTEGER);");
+        Cursor query = sqLiteDatabase.query("DBVersion", new String[]{"Version"}, null, null, null, null, null);
         if (!query.moveToFirst()) {
             z = true;
             z2 = true;
@@ -68,23 +67,23 @@ public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
         }
         Debug.Printf("Database needs upgrade.", new Object[0]);
         try {
-            for (String str : SLInventoryEntry.getCreateTableStatements()) {
-                Debug.Printf("Inventory init: %s", str);
-                sQLiteDatabase.execSQL(str);
+            for (String createTableStatement : SLInventoryEntry.getCreateTableStatements()) {
+                Debug.Printf("Inventory init: %s", createTableStatement);
+                sqLiteDatabase.execSQL(createTableStatement);
             }
             ContentValues contentValues = new ContentValues();
             contentValues.put("Version", (Integer) 21);
             if (z) {
-                sQLiteDatabase.insert("DBVersion", null, contentValues);
+                sqLiteDatabase.insert("DBVersion", null, contentValues);
             } else {
-                sQLiteDatabase.update("DBVersion", contentValues, null, null);
+                sqLiteDatabase.update("DBVersion", contentValues, null, null);
             }
             Debug.Printf("Upgraded database to version %d", 21);
             return true;
         } catch (Exception e) {
-            SQLiteException sQLiteException = new SQLiteException(e.getMessage());
-            sQLiteException.initCause(e);
-            throw sQLiteException;
+            SQLiteException sqLiteException = new SQLiteException(e.getMessage());
+            sqLiteException.initCause(e);
+            throw sqLiteException;
         }
     }
 
@@ -98,7 +97,7 @@ public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
         return DBHandleCache.getInstance().OpenDB(str, this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBHandleCache.DBOpenHelper
+    @Override
     public SQLiteDatabase openOrCreateDatabase(String str) throws SQLiteException {
         SQLiteDatabase openOrCreateDatabase = SQLiteDatabase.openOrCreateDatabase(str, (SQLiteDatabase.CursorFactory) null);
         if (openOrCreateDatabase == null) {

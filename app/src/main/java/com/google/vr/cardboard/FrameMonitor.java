@@ -2,7 +2,6 @@ package com.google.vr.cardboard;
 
 import android.view.Choreographer;
 
-/* loaded from: classes.dex */
 public class FrameMonitor implements Choreographer.FrameCallback {
     static final /* synthetic */ boolean $assertionsDisabled = false;
     private final Choreographer.FrameCallback callback;
@@ -20,7 +19,7 @@ public class FrameMonitor implements Choreographer.FrameCallback {
         choreographer.postFrameCallback(this);
     }
 
-    @Override // android.view.Choreographer.FrameCallback
+    @Override
     public void doFrame(long j) {
         this.choreographer.postFrameCallback(this);
         this.callback.doFrame(j);

@@ -9,7 +9,6 @@ import android.view.Display;
 import android.view.WindowManager;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 
-/* loaded from: classes.dex */
 public class DisplayUtils {
     private static final float DEFAULT_BORDER_SIZE_METERS = 0.003f;
     public static final String EXTERNAL_DISPLAY_RESOURCE_NAME = "display_manager_hdmi_display_name";
@@ -31,13 +30,13 @@ public class DisplayUtils {
             display.getRealMetrics(displayMetrics);
         }
         if (displayMetrics.widthPixels < displayMetrics.heightPixels) {
-            int i = displayMetrics.widthPixels;
+            int widthPixels = displayMetrics.widthPixels;
             displayMetrics.widthPixels = displayMetrics.heightPixels;
-            displayMetrics.heightPixels = i;
+            displayMetrics.heightPixels = widthPixels;
         }
-        float f = displayMetrics.xdpi;
+        float xdpi = displayMetrics.xdpi;
         displayMetrics.xdpi = displayMetrics.ydpi;
-        displayMetrics.ydpi = f;
+        displayMetrics.ydpi = xdpi;
         return displayMetrics;
     }
 

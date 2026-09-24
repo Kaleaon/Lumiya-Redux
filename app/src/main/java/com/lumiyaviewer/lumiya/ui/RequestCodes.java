@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui;
 
-/* loaded from: classes.dex */
 public class RequestCodes {
     public static final int REQCODE_ALERT_RINGTONE = 2;
     public static final int REQ_FOLDER_FOR_COPY = 8;

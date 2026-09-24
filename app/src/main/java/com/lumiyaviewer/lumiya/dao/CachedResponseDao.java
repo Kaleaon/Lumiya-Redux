@@ -7,7 +7,6 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 
-/* loaded from: classes.dex */
 public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
     public static final String TABLENAME = "CachedResponses";
 
@@ -25,30 +24,29 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedResponses' ('KEY' TEXT PRIMARY KEY NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedResponses' ('KEY' TEXT PRIMARY KEY NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedResponses'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedResponses'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
-    public void bindValues(SQLiteStatement sQLiteStatement, CachedResponse cachedResponse) {
-        sQLiteStatement.clearBindings();
+    @Override
+    public void bindValues(SQLiteStatement sqLiteStatement, CachedResponse cachedResponse) {
+        sqLiteStatement.clearBindings();
         String key = cachedResponse.getKey();
         if (key != null) {
-            sQLiteStatement.bindString(1, key);
+            sqLiteStatement.bindString(1, key);
         }
         byte[] data = cachedResponse.getData();
         if (data != null) {
-            sQLiteStatement.bindBlob(2, data);
+            sqLiteStatement.bindBlob(2, data);
         }
-        sQLiteStatement.bindLong(3, cachedResponse.getMustRevalidate() ? 1L : 0L);
+        sqLiteStatement.bindLong(3, cachedResponse.getMustRevalidate() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String getKey(CachedResponse cachedResponse) {
         if (cachedResponse != null) {
             return cachedResponse.getKey();
@@ -56,25 +54,25 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public CachedResponse readEntity(Cursor cursor, int i) {
         return new CachedResponse(cursor.isNull(i + 0) ? null : cursor.getString(i + 0), cursor.isNull(i + 1) ? null : cursor.getBlob(i + 1), cursor.getShort(i + 2) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, CachedResponse cachedResponse, int i) {
         cachedResponse.setKey(cursor.isNull(i + 0) ? null : cursor.getString(i + 0));
         cachedResponse.setData(cursor.isNull(i + 1) ? null : cursor.getBlob(i + 1));
         cachedResponse.setMustRevalidate(cursor.getShort(i + 2) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -82,8 +80,7 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         return cursor.getString(i + 0);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String updateKeyAfterInsert(CachedResponse cachedResponse, long j) {
         return cachedResponse.getKey();
     }

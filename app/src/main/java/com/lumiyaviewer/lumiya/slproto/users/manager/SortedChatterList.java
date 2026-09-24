@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 class SortedChatterList {
     private final SortedSet<ChatterDisplayData> chatters;
     private final OnListUpdated onListUpdatedListener;

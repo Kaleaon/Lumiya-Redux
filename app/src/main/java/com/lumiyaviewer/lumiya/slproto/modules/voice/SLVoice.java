@@ -46,7 +46,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLVoice extends SLModule {
     private static final int INVALID_PARCEL_ID = -1;
     private static final int LOGIN_DELAY = 5;
@@ -74,15 +73,15 @@ public class SLVoice extends SLModule {
     @Nullable
     private volatile VoicePluginServiceConnection voicePluginServiceConnection;
 
-    public SLVoice(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    public SLVoice(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
         this.requestedGroupChats = Collections.synchronizedSet(new HashSet());
-        this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY
+        this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                SLVoice.this.m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0((Boolean) obj);
+                SLVoice.this.onVoiceLoginStatusChanged((Boolean) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -100,9 +99,9 @@ public class SLVoice extends SLModule {
         this.currentParcelVoiceChannel = null;
         this.voiceLoginInfo = null;
         this.userManager = UserManager.getUserManager(this.agentCircuit.getAgentUUID());
-        this.capURL = sLCaps.getCapability(SLCaps.SLCapability.ProvisionVoiceAccountRequest);
-        this.parcelVoiceCapURL = sLCaps.getCapability(SLCaps.SLCapability.ParcelVoiceInfoRequest);
-        this.chatSessionRequestURL = sLCaps.getCapability(SLCaps.SLCapability.ChatSessionRequest);
+        this.capURL = caps.getCapability(SLCaps.SLCapability.ProvisionVoiceAccountRequest);
+        this.parcelVoiceCapURL = caps.getCapability(SLCaps.SLCapability.ParcelVoiceInfoRequest);
+        this.chatSessionRequestURL = caps.getCapability(SLCaps.SLCapability.ChatSessionRequest);
         if (this.userManager != null) {
             this.voiceLoggedInSubscription.subscribe(this.userManager.getVoiceLoggedIn(), SubscriptionSingleKey.Value);
         }
@@ -115,25 +114,21 @@ public class SLVoice extends SLModule {
         updateVoiceEnabledStatus();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onParcelVoiceInfoResult, reason: merged with bridge method [inline-methods] */
-    public void m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(LLSDNode lLSDNode) {
-        if (lLSDNode != null) {
+    public void onParcelVoiceInfoResult(LLSDNode lsdNode) {
+        if (lsdNode != null) {
             try {
-                Debug.Printf("SLVoice: parcel voice info '%s'", lLSDNode.serializeToXML());
+                Debug.Printf("SLVoice: parcel voice info '%s'", lsdNode.serializeToXML());
             } catch (Exception e) {
                 Debug.Warning(e);
             }
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onProvisionVoiceAccountResult, reason: merged with bridge method [inline-methods] and merged with bridge method [inline-methods] */
-    public void m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(LLSDNode lLSDNode) {
-        if (lLSDNode != null) {
+    public void onProvisionVoiceAccountResult(LLSDNode lsdNode) {
+        if (lsdNode != null) {
             try {
-                Debug.Printf("SLVoice: result '%s'", lLSDNode.serializeToXML());
-                this.voiceLoginInfo = new VoiceLoginInfo(lLSDNode.byKey("voice_sip_uri_hostname").asString(), lLSDNode.byKey("voice_account_server_name").asString(), this.agentCircuit.getAgentUUID(), lLSDNode.byKey("username").asString(), lLSDNode.byKey("password").asString());
+                Debug.Printf("SLVoice: result '%s'", lsdNode.serializeToXML());
+                this.voiceLoginInfo = new VoiceLoginInfo(lsdNode.byKey("voice_sip_uri_hostname").asString(), lsdNode.byKey("voice_account_server_name").asString(), this.agentCircuit.getAgentUUID(), lsdNode.byKey("username").asString(), lsdNode.byKey("password").asString());
                 updateVoiceEnabledStatus();
                 return;
             } catch (Exception e) {
@@ -152,12 +147,12 @@ public class SLVoice extends SLModule {
             if (this.shutdown || !this.voiceEnabled) {
                 return;
             }
-            new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.2
+            new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
                 private final /* synthetic */ void $m$0(LLSDNode lLSDNode2) {
-                    SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode2);
+                    SLVoice.this.onProvisionVoiceAccountResult(lLSDNode2);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
+                @Override
                 public final void onLLSDXMLResult(LLSDNode lLSDNode2) {
                     $m$0(lLSDNode2);
                 }
@@ -167,13 +162,11 @@ public class SLVoice extends SLModule {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceLoginStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0(Boolean bool) {
+    public void onVoiceLoginStatusChanged(Boolean bool) {
         this.voiceLoggedIn = bool != null ? bool.booleanValue() : false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         this.shutdown = true;
         this.voiceLoggedInSubscription.unsubscribe();
@@ -203,14 +196,14 @@ public class SLVoice extends SLModule {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_12525, reason: not valid java name */
-    /* synthetic */ void m264x4b46af5c(int i, LLSDNode lLSDNode) {
+    /* synthetic */ void m264x4b46af5c(int i, LLSDNode lsdNode) {
         boolean z;
         VoiceChannelInfo voiceChannelInfo;
         this.currentParcelID = i;
-        if (lLSDNode != null) {
+        if (lsdNode != null) {
             synchronized (this.parcelVoiceChannelLock) {
                 try {
-                    voiceChannelInfo = new VoiceChannelInfo(lLSDNode.byKey("voice_credentials").byKey("channel_uri").asString(), true, true);
+                    voiceChannelInfo = new VoiceChannelInfo(lsdNode.byKey("voice_credentials").byKey("channel_uri").asString(), true, true);
                 } catch (LLSDException e) {
                     Debug.Printf("Voice: error retrieving parcel voice info for %d (%s)", Integer.valueOf(i), e.getMessage());
                     voiceChannelInfo = null;
@@ -280,12 +273,12 @@ public class SLVoice extends SLModule {
         if (!this.voiceCredentialsRequested) {
             this.voiceCredentialsRequested = true;
             if (this.capURL != null) {
-                new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.1
+                new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
                     private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                        SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode);
+                        SLVoice.this.onProvisionVoiceAccountResult(lLSDNode);
                     }
 
-                    @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
+                    @Override
                     public final void onLLSDXMLResult(LLSDNode lLSDNode) {
                         $m$0(lLSDNode);
                     }
@@ -317,16 +310,16 @@ public class SLVoice extends SLModule {
         if (!this.requestedGroupChats.remove(uuid) || this.chatSessionRequestURL == null) {
             return;
         }
-        new LLSDXMLAsyncRequest(this.chatSessionRequestURL, new LLSDMap(new LLSDMap.LLSDMapEntry("method", new LLSDString(NotificationCompat.CATEGORY_CALL)), new LLSDMap.LLSDMapEntry("session-id", new LLSDUUID(uuid))), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.SLVoice.1
-            @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
-            public void onLLSDXMLResult(LLSDNode lLSDNode) {
+        new LLSDXMLAsyncRequest(this.chatSessionRequestURL, new LLSDMap(new LLSDMap.LLSDMapEntry("method", new LLSDString(NotificationCompat.CATEGORY_CALL)), new LLSDMap.LLSDMapEntry("session-id", new LLSDUUID(uuid))), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
+            @Override
+            public void onLLSDXMLResult(LLSDNode lsdNode) {
                 ChatterID groupChatterID = ChatterID.getGroupChatterID(SLVoice.this.userManager.getUserID(), uuid);
                 try {
-                    if (lLSDNode == null) {
+                    if (lsdNode == null) {
                         throw new LLSDException("Null result");
                     }
-                    String asString = lLSDNode.byKey("voice_credentials").byKey("channel_uri").asString();
-                    String asString2 = lLSDNode.byKey("voice_credentials").byKey("channel_credentials").asString();
+                    String asString = lsdNode.byKey("voice_credentials").byKey("channel_uri").asString();
+                    String asString2 = lsdNode.byKey("voice_credentials").byKey("channel_credentials").asString();
                     VoicePluginServiceConnection voicePluginServiceConnection = SLVoice.this.voicePluginServiceConnection;
                     if (SLVoice.this.voiceEnabled && SLVoice.this.voiceLoggedIn && voicePluginServiceConnection != null) {
                         VoiceChannelInfo voiceChannelInfo = new VoiceChannelInfo(asString, false, true);
@@ -342,12 +335,12 @@ public class SLVoice extends SLModule {
     }
 
     public void onVoiceChannelStatus(final VoiceChannelStatus voiceChannelStatus) {
-        this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.5
+        this.agentCircuit.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLVoice.this.m266x4b47941e((VoiceChannelStatus) voiceChannelStatus);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -355,12 +348,12 @@ public class SLVoice extends SLModule {
     }
 
     public void onVoiceLoginStatus(final VoicePluginServiceConnection voicePluginServiceConnection, final VoiceLoginStatus voiceLoginStatus) {
-        this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.6
+        this.agentCircuit.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLVoice.this.m265x4b47856f((VoiceLoginStatus) voiceLoginStatus, (VoicePluginServiceConnection) voicePluginServiceConnection);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -371,12 +364,12 @@ public class SLVoice extends SLModule {
         if (this.parcelVoiceCapURL == null) {
             return false;
         }
-        new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.3
+        new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
             private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                SLVoice.this.m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(lLSDNode);
+                SLVoice.this.onParcelVoiceInfoResult(lLSDNode);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
+            @Override
             public final void onLLSDXMLResult(LLSDNode lLSDNode) {
                 $m$0(lLSDNode);
             }
@@ -393,12 +386,12 @@ public class SLVoice extends SLModule {
             }
         }
         if (z) {
-            new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.7
+            new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
                 private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
                     SLVoice.this.m264x4b46af5c(i, lLSDNode);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
+                @Override
                 public final void onLLSDXMLResult(LLSDNode lLSDNode) {
                     $m$0(lLSDNode);
                 }
@@ -425,12 +418,12 @@ public class SLVoice extends SLModule {
     }
 
     public void updateVoiceEnabledStatus() {
-        UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.4
+        UIThreadExecutor.getInstance().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLVoice.this.m267xd924b13a();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

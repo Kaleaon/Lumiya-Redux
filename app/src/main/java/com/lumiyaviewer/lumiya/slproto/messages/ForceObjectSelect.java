@@ -1,22 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * ForceObjectSelect
+ * sim -> viewer
+ * reliable
+ *
+ * <p>Template: {@code ForceObjectSelect Low 205 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLSelectMgr::processForceObjectSelect()} in indra/newview/llselectmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ForceObjectSelect extends SLMessage {
     public ArrayList<Data> Data_Fields = new ArrayList<>();
     public Header Header_Field;
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int LocalID;
+        public int LocalID; // U32
     }
 
+    /** Block Header, Single. */
     public static class Header {
-        public boolean ResetList;
+        public boolean ResetList; // BOOL
     }
 
     public ForceObjectSelect() {
@@ -24,21 +34,22 @@ public class ForceObjectSelect extends SLMessage {
         this.Header_Field = new Header();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Data_Fields.size() * 4) + 6;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleForceObjectSelect(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleForceObjectSelect(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -51);
+        // Message number: Low 205 (ForceObjectSelect).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xCD);
         packBoolean(byteBuffer, this.Header_Field.ResetList);
         byteBuffer.put((byte) this.Data_Fields.size());
         Iterator<?> it = this.Data_Fields.iterator();
@@ -47,11 +58,11 @@ public class ForceObjectSelect extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Header_Field.ResetList = unpackBoolean(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.LocalID = unpackInt(byteBuffer);
             this.Data_Fields.add(data);

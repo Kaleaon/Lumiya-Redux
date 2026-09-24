@@ -4,19 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * PickGodDelete
+ * Delete a pick from the database.
+ * QueryID is needed so database can send a repeat list of
+ * picks.
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code PickGodDelete Low 187 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class PickGodDelete extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public UUID PickID;
-        public UUID QueryID;
+        public UUID PickID; // LLUUID
+        public UUID QueryID; // LLUUID
     }
 
     public PickGodDelete() {
@@ -25,28 +37,29 @@ public class PickGodDelete extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 68;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickGodDelete(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickGodDelete(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -69);
+        // Message number: Low 187 (PickGodDelete).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xBB);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.PickID);
         packUUID(byteBuffer, this.Data_Field.QueryID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

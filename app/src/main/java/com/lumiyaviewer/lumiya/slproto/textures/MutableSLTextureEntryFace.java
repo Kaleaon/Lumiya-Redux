@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.textures;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MutableSLTextureEntryFace {
     public static final byte BUMP_MASK = 31;
     public static final byte FULLBRIGHT_MASK = 32;
@@ -21,52 +20,52 @@ public class MutableSLTextureEntryFace {
     byte materialb = 0;
     byte mediab = 0;
 
-    public MutableSLTextureEntryFace(int i) {
-        this.hasAttribute = i;
+    public MutableSLTextureEntryFace(int hasAttribute) {
+        this.hasAttribute = hasAttribute;
     }
 
-    public void setGlow(float f) {
-        this.glow = f;
+    public void setGlow(float glow) {
+        this.glow = glow;
         this.hasAttribute |= 512;
     }
 
-    public void setMaterial(byte b) {
-        this.materialb = b;
+    public void setMaterial(byte materialb) {
+        this.materialb = materialb;
         this.hasAttribute |= 128;
     }
 
-    public void setMedia(byte b) {
-        this.mediab = b;
+    public void setMedia(byte mediab) {
+        this.mediab = mediab;
         this.hasAttribute |= 256;
     }
 
-    public void setOffsetU(float f) {
-        this.offsetU = f;
+    public void setOffsetU(float offsetU) {
+        this.offsetU = offsetU;
         this.hasAttribute |= 16;
     }
 
-    public void setOffsetV(float f) {
-        this.offsetV = f;
+    public void setOffsetV(float offsetV) {
+        this.offsetV = offsetV;
         this.hasAttribute |= 32;
     }
 
-    public void setRGBA(int i) {
-        this.rgba = i;
+    public void setRGBA(int rgba) {
+        this.rgba = rgba;
         this.hasAttribute |= 2;
     }
 
-    public void setRepeatU(float f) {
-        this.repeatU = f;
+    public void setRepeatU(float repeatU) {
+        this.repeatU = repeatU;
         this.hasAttribute |= 4;
     }
 
-    public void setRepeatV(float f) {
-        this.repeatV = f;
+    public void setRepeatV(float repeatV) {
+        this.repeatV = repeatV;
         this.hasAttribute |= 8;
     }
 
-    public void setRotation(float f) {
-        this.rotation = f;
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
         this.hasAttribute |= 64;
     }
 

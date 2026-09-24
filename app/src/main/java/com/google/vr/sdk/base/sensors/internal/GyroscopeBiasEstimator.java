@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class GyroscopeBiasEstimator {
     private static final float ACCEL_DIFF_STATIC_THRESHOLD = 0.5f;
     private static final float ACCEL_LOWPASS_FREQ = 1.0f;
@@ -23,8 +22,8 @@ public class GyroscopeBiasEstimator {
         private int consecutiveIsStatic;
         private final int minStaticFrames;
 
-        IsStaticCounter(int i) {
-            this.minStaticFrames = i;
+        IsStaticCounter(int minStaticFrames) {
+            this.minStaticFrames = minStaticFrames;
         }
 
         void appendFrame(boolean z) {

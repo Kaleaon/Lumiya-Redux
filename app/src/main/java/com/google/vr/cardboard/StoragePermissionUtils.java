@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class StoragePermissionUtils {
     private static final String STORAGE_PERMISSION = "android.permission.READ_EXTERNAL_STORAGE";
     public static final int STORAGE_PERMISSION_DUMMY_REQUEST_CODE = 239;

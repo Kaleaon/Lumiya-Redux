@@ -7,12 +7,11 @@ import android.opengl.GLES11;
 import android.view.Surface;
 
 @TargetApi(15)
-/* loaded from: classes.dex */
 public class GLExternalTexture {
     private final int handle;
     private final int height;
-    private final SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener = new SurfaceTexture.OnFrameAvailableListener() { // from class: com.lumiyaviewer.lumiya.render.glres.textures.GLExternalTexture.1
-        @Override // android.graphics.SurfaceTexture.OnFrameAvailableListener
+    private final SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener = new SurfaceTexture.OnFrameAvailableListener() {
+        @Override
         public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         }
     };
@@ -21,18 +20,18 @@ public class GLExternalTexture {
     private final int width;
 
     @TargetApi(15)
-    public GLExternalTexture(int i, int i2) {
-        this.width = i;
-        this.height = i2;
-        int[] iArr = new int[1];
-        GLES11.glGenTextures(1, iArr, 0);
-        this.handle = iArr[0];
+    public GLExternalTexture(int width, int height) {
+        this.width = width;
+        this.height = height;
+        int[] ints = new int[1];
+        GLES11.glGenTextures(1, ints, 0);
+        this.handle = ints[0];
         bind();
-        GLES11.glTexImage2D(36197, 0, 6408, i, i2, 0, 6408, 5121, null);
+        GLES11.glTexImage2D(36197, 0, 6408, width, height, 0, 6408, 5121, null);
         GLES11.glTexParameteri(36197, 10241, 9729);
         GLES11.glTexParameteri(36197, 10240, 9729);
         this.surfaceTexture = new SurfaceTexture(this.handle);
-        this.surfaceTexture.setDefaultBufferSize(i, i2);
+        this.surfaceTexture.setDefaultBufferSize(width, height);
         this.surfaceTexture.setOnFrameAvailableListener(this.onFrameAvailableListener);
         this.surface = new Surface(this.surfaceTexture);
     }
@@ -66,8 +65,8 @@ public class GLExternalTexture {
     }
 
     @TargetApi(11)
-    public void update(float[] fArr) {
+    public void update(float[] floats) {
         this.surfaceTexture.updateTexImage();
-        this.surfaceTexture.getTransformMatrix(fArr);
+        this.surfaceTexture.getTransformMatrix(floats);
     }
 }

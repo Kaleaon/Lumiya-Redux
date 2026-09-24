@@ -3,15 +3,14 @@ package com.google.vr.ndk.base;
 import android.graphics.Point;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class SwapChain {
     private static final String TAG = SwapChain.class.getSimpleName();
     private int currentFrame;
     private final Frame[] frames = new Frame[2];
     private long nativeSwapChain;
 
-    SwapChain(long j) {
-        this.nativeSwapChain = j;
+    SwapChain(long nativeSwapChain) {
+        this.nativeSwapChain = nativeSwapChain;
         this.frames[0] = new Frame();
         this.frames[1] = new Frame();
         this.currentFrame = 0;

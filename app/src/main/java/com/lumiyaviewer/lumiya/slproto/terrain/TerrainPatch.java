@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.terrain;
 
 import com.lumiyaviewer.lumiya.utils.BitBuffer;
 
-/* loaded from: classes.dex */
 public class TerrainPatch {
     public static final int END_OF_PATCHES = 97;
     float DCOffset;
@@ -73,16 +72,16 @@ public class TerrainPatch {
 
     private static void BuildDequantizeTable16() {
         for (int i = 0; i < 16; i++) {
-            for (int i2 = 0; i2 < 16; i2++) {
-                DequantizeTable16[(i * 16) + i2] = ((i2 + i) * 2.0f) + 1.0f;
+            for (int j = 0; j < 16; j++) {
+                DequantizeTable16[(i * 16) + j] = ((j + i) * 2.0f) + 1.0f;
             }
         }
     }
 
     private static void BuildQuantizeTable16() {
         for (int i = 0; i < 16; i++) {
-            for (int i2 = 0; i2 < 16; i2++) {
-                QuantizeTable16[(i * 16) + i2] = 1.0f / (((i2 + i) * 2.0f) + 1.0f);
+            for (int j = 0; j < 16; j++) {
+                QuantizeTable16[(i * 16) + j] = 1.0f / (((j + i) * 2.0f) + 1.0f);
             }
         }
     }
@@ -118,60 +117,60 @@ public class TerrainPatch {
             }
             i2++;
         }
-        float[] fArr = new float[i * i];
-        float[] fArr2 = new float[i * i];
+        float[] floats = new float[i * i];
+        float[] floats2 = new float[i * i];
         int i3 = (terrainPatch.QuantWBits >> 4) + 2;
         float f = (1.0f / (1 << i3)) * terrainPatch.Range;
         float f2 = terrainPatch.DCOffset + ((1 << (i3 - 1)) * f);
         if (i == 16) {
-            for (int i4 = 0; i4 < 256; i4++) {
-                fArr[i4] = terrainPatch.patches[CopyMatrix16[i4]] * DequantizeTable16[i4];
+            for (int j = 0; j < 256; j++) {
+                floats[j] = terrainPatch.patches[CopyMatrix16[j]] * DequantizeTable16[j];
             }
-            float[] fArr3 = new float[256];
-            for (int i5 = 0; i5 < 16; i5++) {
-                IDCTColumn16(fArr, fArr3, i5);
+            float[] floats3 = new float[256];
+            for (int k = 0; k < 16; k++) {
+                IDCTColumn16(floats, floats3, k);
             }
-            for (int i6 = 0; i6 < 16; i6++) {
-                IDCTLine16(fArr3, fArr, i6);
+            for (int m = 0; m < 16; m++) {
+                IDCTLine16(floats3, floats, m);
             }
         } else {
-            for (int i7 = 0; i7 < 1024; i7++) {
-                fArr[i7] = terrainPatch.patches[CopyMatrix32[i7]] * DequantizeTable32[i7];
+            for (int n = 0; n < 1024; n++) {
+                floats[n] = terrainPatch.patches[CopyMatrix32[n]] * DequantizeTable32[n];
             }
         }
-        for (int i8 = 0; i8 < fArr.length; i8++) {
-            fArr2[i8] = (fArr[i8] * f) + f2;
+        for (int i8 = 0; i8 < floats.length; i8++) {
+            floats2[i8] = (floats[i8] * f) + f2;
         }
-        terrainPatch.heightMap = fArr2;
+        terrainPatch.heightMap = floats2;
         return terrainPatch;
     }
 
-    private static void IDCTColumn16(float[] fArr, float[] fArr2, int i) {
-        for (int i2 = 0; i2 < 16; i2++) {
-            float f = fArr[i] * OO_SQRT2;
-            for (int i3 = 1; i3 < 16; i3++) {
-                int i4 = i3 * 16;
-                f += CosineTable16[i4 + i2] * fArr[i4 + i];
+    private static void IDCTColumn16(float[] floats, float[] floats2, int i) {
+        for (int j = 0; j < 16; j++) {
+            float f = floats[i] * OO_SQRT2;
+            for (int k = 1; k < 16; k++) {
+                int i4 = k * 16;
+                f += CosineTable16[i4 + j] * floats[i4 + i];
             }
-            fArr2[(i2 * 16) + i] = f;
+            floats2[(j * 16) + i] = f;
         }
     }
 
-    private static void IDCTLine16(float[] fArr, float[] fArr2, int i) {
+    private static void IDCTLine16(float[] floats, float[] floats2, int i) {
         int i2 = i * 16;
-        for (int i3 = 0; i3 < 16; i3++) {
-            float f = fArr[i2] * OO_SQRT2;
-            for (int i4 = 1; i4 < 16; i4++) {
-                f += fArr[i2 + i4] * CosineTable16[(i4 * 16) + i3];
+        for (int j = 0; j < 16; j++) {
+            float f = floats[i2] * OO_SQRT2;
+            for (int k = 1; k < 16; k++) {
+                f += floats[i2 + k] * CosineTable16[(k * 16) + j];
             }
-            fArr2[i2 + i3] = f * 0.125f;
+            floats2[i2 + j] = f * 0.125f;
         }
     }
 
     private static void SetupCosines16() {
         for (int i = 0; i < 16; i++) {
-            for (int i2 = 0; i2 < 16; i2++) {
-                CosineTable16[(i * 16) + i2] = (float) Math.cos(((i2 * 2.0f) + 1.0f) * i * 0.09817477f);
+            for (int j = 0; j < 16; j++) {
+                CosineTable16[(i * 16) + j] = (float) Math.cos(((j * 2.0f) + 1.0f) * i * 0.09817477f);
             }
         }
     }

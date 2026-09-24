@@ -4,22 +4,33 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * This message is sent up from the viewer to get a list
+ * of the items of a particular type on the map.
+ * Used for Telehubs, Agents, Events, Popular Places, etc.
+ * Returns: MapBlockReply
+ *
+ * <p>Template: {@code MapItemRequest Low 410 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MapItemRequest extends SLMessage {
     public AgentData AgentData_Field;
     public RequestData RequestData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int EstateID;
-        public int Flags;
-        public boolean Godlike;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int EstateID; // U32 - filled in on sim
+        public int Flags; // U32
+        public boolean Godlike; // BOOL - filled in on sim
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RequestData, Single. */
     public static class RequestData {
-        public int ItemType;
-        public long RegionHandle;
+        public int ItemType; // U32
+        public long RegionHandle; // U64 - filled in on sim
     }
 
     public MapItemRequest() {
@@ -28,21 +39,22 @@ public class MapItemRequest extends SLMessage {
         this.RequestData_Field = new RequestData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 57;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapItemRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapItemRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -102);
+        // Message number: Low 410 (MapItemRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x9A);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
@@ -52,7 +64,7 @@ public class MapItemRequest extends SLMessage {
         packLong(byteBuffer, this.RequestData_Field.RegionHandle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

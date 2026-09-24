@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceTerminateCall implements VoicePluginMessage {
 
     @Nonnull
@@ -19,7 +18,7 @@ public class VoiceTerminateCall implements VoicePluginMessage {
         this.channelInfo = voiceChannelInfo;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle("channelInfo", this.channelInfo.toBundle());

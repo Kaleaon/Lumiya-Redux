@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.terrain;
 import com.google.common.primitives.Floats;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class TerrainPatchHeightMap {
     private final int hashCode;
     private final float[] heightMap;
@@ -12,14 +11,14 @@ public class TerrainPatchHeightMap {
     private final float[] normalMap;
     private final float waterHeight;
 
-    public TerrainPatchHeightMap(float f, float[] fArr, float[] fArr2, int i, int i2) {
-        this.waterHeight = f;
-        this.mapWidth = i;
-        this.mapHeight = i2;
-        this.heightMap = new float[fArr.length];
-        System.arraycopy(fArr, 0, this.heightMap, 0, fArr.length);
-        this.normalMap = new float[fArr2.length];
-        System.arraycopy(fArr2, 0, this.normalMap, 0, fArr2.length);
+    public TerrainPatchHeightMap(float waterHeight, float[] floats, float[] floats2, int mapWidth, int mapHeight) {
+        this.waterHeight = waterHeight;
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
+        this.heightMap = new float[floats.length];
+        System.arraycopy(floats, 0, this.heightMap, 0, floats.length);
+        this.normalMap = new float[floats2.length];
+        System.arraycopy(floats2, 0, this.normalMap, 0, floats2.length);
         this.hashCode = getHashCode();
     }
 

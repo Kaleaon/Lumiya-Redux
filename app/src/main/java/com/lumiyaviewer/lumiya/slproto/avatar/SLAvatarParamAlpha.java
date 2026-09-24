@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.avatar;
 
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarParamAlpha {
     public final float domain;
     public final boolean multiplyBlend;
@@ -11,11 +10,11 @@ public class SLAvatarParamAlpha {
     @Nullable
     public final String tgaFile;
 
-    SLAvatarParamAlpha(float f, @Nullable String str, boolean z, boolean z2) {
-        this.domain = f;
-        this.tgaFile = str;
-        this.skipIfZero = z;
-        this.multiplyBlend = z2;
+    SLAvatarParamAlpha(float domain, @Nullable String tgaFile, boolean skipIfZero, boolean multiplyBlend) {
+        this.domain = domain;
+        this.tgaFile = tgaFile;
+        this.skipIfZero = skipIfZero;
+        this.multiplyBlend = multiplyBlend;
     }
 
     public boolean equals(Object obj) {
@@ -25,9 +24,9 @@ public class SLAvatarParamAlpha {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        SLAvatarParamAlpha sLAvatarParamAlpha = (SLAvatarParamAlpha) obj;
-        if (Float.compare(sLAvatarParamAlpha.domain, this.domain) == 0 && this.skipIfZero == sLAvatarParamAlpha.skipIfZero && this.multiplyBlend == sLAvatarParamAlpha.multiplyBlend) {
-            return this.tgaFile != null ? this.tgaFile.equals(sLAvatarParamAlpha.tgaFile) : sLAvatarParamAlpha.tgaFile == null;
+        SLAvatarParamAlpha avatarParamAlpha = (SLAvatarParamAlpha) obj;
+        if (Float.compare(avatarParamAlpha.domain, this.domain) == 0 && this.skipIfZero == avatarParamAlpha.skipIfZero && this.multiplyBlend == avatarParamAlpha.multiplyBlend) {
+            return this.tgaFile != null ? this.tgaFile.equals(avatarParamAlpha.tgaFile) : avatarParamAlpha.tgaFile == null;
         }
         return false;
     }

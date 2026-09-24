@@ -27,7 +27,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryActivity extends MasterDetailsActivity {
     private static final String INITIAL_FOLDER_ID_TAG = "folderID";
     private static final String NAME_FILTER_TAG = "nameFilter";
@@ -45,15 +44,15 @@ public class InventoryActivity extends MasterDetailsActivity {
     private String nameFilter = null;
     private String fragmentSearchString = null;
     private final SubscriptionData<SubscriptionSingleKey, Boolean> searchProcess = new SubscriptionData<>(UIThreadExecutor.getInstance());
-    private final FragmentActivityFactory InventoryDetailsFragmentFactory = new FragmentActivityFactory() { // from class: com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity.1
-        @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+    private final FragmentActivityFactory InventoryDetailsFragmentFactory = new FragmentActivityFactory() {
+        @Override
         public Intent createIntent(Context context, Bundle bundle) {
             Intent intent = new Intent(context, (Class<?>) InventoryActivity.class);
             intent.putExtra(MasterDetailsActivity.INTENT_SELECTION_KEY, bundle);
             return intent;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+        @Override
         public Class<? extends Fragment> getFragmentClass() {
             return InventoryFragment.class;
         }
@@ -66,8 +65,8 @@ public class InventoryActivity extends MasterDetailsActivity {
 
         public final int subtitleResourceId;
 
-        SelectAction(int i) {
-            this.subtitleResourceId = i;
+        SelectAction(int subtitleResourceId) {
+            this.subtitleResourceId = subtitleResourceId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -90,14 +89,14 @@ public class InventoryActivity extends MasterDetailsActivity {
         return intent;
     }
 
-    public static Intent makeSelectActionIntent(Context context, UUID uuid, SelectAction selectAction, Bundle bundle, @Nullable SLAssetType sLAssetType) {
+    public static Intent makeSelectActionIntent(Context context, UUID uuid, SelectAction selectAction, Bundle bundle, @Nullable SLAssetType assetType) {
         Intent intent = new Intent(context, (Class<?>) InventoryActivity.class);
         intent.putExtra("activeAgentUUID", uuid.toString());
         intent.putExtra(SELECT_ITEM_INTENT_TAG, true);
         intent.putExtra(SELECT_ACTION_INTENT_TAG, selectAction.toString());
         intent.putExtra(SELECT_ACTION_PARAMS_TAG, bundle);
-        if (sLAssetType != null) {
-            intent.putExtra(SELECT_ACTION_ASSET_TYPE, sLAssetType.getTypeCode());
+        if (assetType != null) {
+            intent.putExtra(SELECT_ACTION_ASSET_TYPE, assetType.getTypeCode());
         }
         return intent;
     }
@@ -124,12 +123,12 @@ public class InventoryActivity extends MasterDetailsActivity {
         final int sortOrder = InventoryFragmentHelper.getSortOrder(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.sort_order_caption);
-        builder.setSingleChoiceItems(new CharSequence[]{"Newest first", "Alphabetical"}, sortOrder, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$Tc22ivDU79Y83KauKGybv49CW7A
+        builder.setSingleChoiceItems(new CharSequence[]{"Newest first", "Alphabetical"}, sortOrder, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 InventoryActivity.this.m599xeedaf4f8(sortOrder, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -137,26 +136,25 @@ public class InventoryActivity extends MasterDetailsActivity {
         builder.create().show();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateSearchAction() {
-        String str;
+        String trimmed;
         if (this.activityStarted && this.searchActive) {
             UserManager userManager = ActivityUtils.getUserManager(getIntent());
             if (userManager != null) {
                 this.searchProcess.subscribe(userManager.getInventoryManager().getSearchProcess(), SubscriptionSingleKey.Value);
             }
-            str = Strings.nullToEmpty(this.nameFilter).trim();
+            trimmed = Strings.nullToEmpty(this.nameFilter).trim();
         } else {
             this.searchProcess.unsubscribe();
-            str = "";
+            trimmed = "";
         }
-        if (Objects.equal(this.fragmentSearchString, str)) {
+        if (Objects.equal(this.fragmentSearchString, trimmed)) {
             return;
         }
-        this.fragmentSearchString = str;
+        this.fragmentSearchString = trimmed;
         Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);
         if (findFragmentById instanceof InventoryFragment) {
-            ((InventoryFragment) findFragmentById).setSearchString(Strings.emptyToNull(str));
+            ((InventoryFragment) findFragmentById).setSearchString(Strings.emptyToNull(trimmed));
         }
     }
 
@@ -167,17 +165,17 @@ public class InventoryActivity extends MasterDetailsActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected FragmentActivityFactory getDetailsFragmentFactory() {
         return this.InventoryDetailsFragmentFactory;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Bundle getNewDetailsFragmentArguments(@Nullable Bundle bundle, @Nullable Bundle bundle2) {
         return bundle != null ? InventoryFragment.makeDetailsArguments(bundle) : super.getNewDetailsFragmentArguments(null, bundle2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected boolean isAlwaysImplicitFragment(Class<? extends Fragment> cls) {
         return cls.equals(InventoryFragment.class);
     }
@@ -191,7 +189,7 @@ public class InventoryActivity extends MasterDetailsActivity {
         dialogInterface.dismiss();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         if (bundle != null) {
@@ -200,7 +198,7 @@ public class InventoryActivity extends MasterDetailsActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle) {
         InventorySaveInfo inventorySaveInfo;
         SLInventoryEntry findSpecialFolder;
@@ -218,7 +216,7 @@ public class InventoryActivity extends MasterDetailsActivity {
         return InventoryFragment.newInstance(bundle, true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.inventory_menu, menu);
         this.searchMenuItem = menu.findItem(R.id.inventory_search_item);
@@ -227,28 +225,28 @@ public class InventoryActivity extends MasterDetailsActivity {
             MenuItemCompat.expandActionView(this.searchMenuItem);
             searchView.setQuery(this.nameFilter, false);
         }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity.2
-            @Override // androidx.appcompat.widget.SearchView.OnQueryTextListener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
             public boolean onQueryTextChange(String str) {
                 InventoryActivity.this.nameFilter = str;
                 InventoryActivity.this.updateSearchAction();
                 return true;
             }
 
-            @Override // androidx.appcompat.widget.SearchView.OnQueryTextListener
+            @Override
             public boolean onQueryTextSubmit(String str) {
                 return true;
             }
         });
-        MenuItemCompat.setOnActionExpandListener(this.searchMenuItem, new MenuItemCompat.OnActionExpandListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity.3
-            @Override // androidx.core.view.MenuItemCompat.OnActionExpandListener
+        MenuItemCompat.setOnActionExpandListener(this.searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 InventoryActivity.this.searchActive = false;
                 InventoryActivity.this.updateSearchAction();
                 return true;
             }
 
-            @Override // androidx.core.view.MenuItemCompat.OnActionExpandListener
+            @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
                 InventoryActivity.this.searchActive = true;
                 InventoryActivity.this.updateSearchAction();
@@ -258,10 +256,10 @@ public class InventoryActivity extends MasterDetailsActivity {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_sort_order /* 2131755796 */:
+            case R.id.item_sort_order:
                 selectSortOrder();
                 return true;
             default:
@@ -269,7 +267,7 @@ public class InventoryActivity extends MasterDetailsActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         if (bundle != null) {
@@ -278,14 +276,14 @@ public class InventoryActivity extends MasterDetailsActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         this.activityStarted = true;
         updateSearchAction();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         this.activityStarted = false;
         updateSearchAction();

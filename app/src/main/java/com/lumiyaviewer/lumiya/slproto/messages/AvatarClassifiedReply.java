@@ -1,25 +1,37 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarClassifiedReply
+ * dataserver -> simulator -> viewer
+ * Send the header information for this avatar's classifieds
+ * This fills in the tabs of the Classifieds panel.
+ * reliable
+ *
+ * <p>Template: {@code AvatarClassifiedReply Low 42 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processAvatarClassifiedsReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarClassifiedReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID TargetID;
+        public UUID AgentID; // LLUUID
+        public UUID TargetID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public UUID ClassifiedID;
-        public byte[] Name;
+        public UUID ClassifiedID; // LLUUID
+        public byte[] Name; // Variable 1
     }
 
     public AvatarClassifiedReply() {
@@ -27,7 +39,7 @@ public class AvatarClassifiedReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -40,16 +52,17 @@ public class AvatarClassifiedReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarClassifiedReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarClassifiedReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 42);
+        // Message number: Low 42 (AvatarClassifiedReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x2A);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.TargetID);
         byteBuffer.put((byte) this.Data_Fields.size());
@@ -59,12 +72,12 @@ public class AvatarClassifiedReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.TargetID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.ClassifiedID = unpackUUID(byteBuffer);
             data.Name = unpackVariable(byteBuffer, 1);

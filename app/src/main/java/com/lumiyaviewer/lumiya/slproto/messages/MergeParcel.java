@@ -1,23 +1,30 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> dataserver
+ * Merges some of the database information for parcels (dwell).
+ *
+ * <p>Template: {@code MergeParcel Low 223 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MergeParcel extends SLMessage {
     public MasterParcelData MasterParcelData_Field;
     public ArrayList<SlaveParcelData> SlaveParcelData_Fields = new ArrayList<>();
 
+    /** Block MasterParcelData, Single. */
     public static class MasterParcelData {
-        public UUID MasterID;
+        public UUID MasterID; // LLUUID
     }
 
+    /** Block SlaveParcelData, Variable. */
     public static class SlaveParcelData {
-        public UUID SlaveID;
+        public UUID SlaveID; // LLUUID
     }
 
     public MergeParcel() {
@@ -25,21 +32,22 @@ public class MergeParcel extends SLMessage {
         this.MasterParcelData_Field = new MasterParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.SlaveParcelData_Fields.size() * 16) + 21;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMergeParcel(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMergeParcel(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -33);
+        // Message number: Low 223 (MergeParcel).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xDF);
         packUUID(byteBuffer, this.MasterParcelData_Field.MasterID);
         byteBuffer.put((byte) this.SlaveParcelData_Fields.size());
         Iterator<?> it = this.SlaveParcelData_Fields.iterator();
@@ -48,11 +56,11 @@ public class MergeParcel extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.MasterParcelData_Field.MasterID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             SlaveParcelData slaveParcelData = new SlaveParcelData();
             slaveParcelData.SlaveID = unpackUUID(byteBuffer);
             this.SlaveParcelData_Fields.add(slaveParcelData);

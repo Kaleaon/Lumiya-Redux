@@ -13,7 +13,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class LLSDXMLRequest {
     private static final MediaType MEDIA_TYPE_LLSD_XML = MediaType.parse("application/llsd+xml");
     private final AtomicReference<Call> callRef = new AtomicReference<>(null);
@@ -29,10 +28,10 @@ public class LLSDXMLRequest {
         }
     }
 
-    public LLSDNode PerformRequest(String str, LLSDNode lLSDNode) throws IOException, LLSDXMLException {
+    public LLSDNode PerformRequest(String str, LLSDNode lsdNode) throws IOException, LLSDXMLException {
         Request.Builder url = new Request.Builder().url(str);
-        if (lLSDNode != null) {
-            url.post(RequestBody.create(MEDIA_TYPE_LLSD_XML, lLSDNode.serializeToXML()));
+        if (lsdNode != null) {
+            url.post(RequestBody.create(MEDIA_TYPE_LLSD_XML, lsdNode.serializeToXML()));
         }
         url.header(HttpHeaders.ACCEPT, "application/llsd+binary;q=0.5,application/llsd+xml;q=0.1");
         Call newCall = SLHTTPSConnection.getOkHttpClient().newCall(url.build());

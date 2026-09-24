@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.orm.DBObject;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class InventoryEntryDBObject extends DBObject implements Parcelable {
     public static final String insertQuery = "INSERT INTO Entries (parent_id,uuid_high,uuid_low,parentUUID_high,parentUUID_low,name,isFolder,typeDefault,version,sessionID_high,sessionID_low,fetchFailed,description,flags,invType,assetType,creationDate,_blobField) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     public static final int insertUpdateParamCount = 18;
@@ -54,15 +53,15 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
     // - _blobField packs agent/asset/creator/owner/group UUIDs, permission masks,
     //   and sale info from message_template inventory update payloads.
     protected static final String[] fieldNames = {"_id", "parent_id", "uuid_high", "uuid_low", "parentUUID_high", "parentUUID_low", "name", "isFolder", "typeDefault", "version", "sessionID_high", "sessionID_low", "fetchFailed", "description", "flags", "invType", "assetType", "creationDate", "_blobField"};
-    public static final Parcelable.Creator<InventoryEntryDBObject> CREATOR = new Parcelable.Creator<InventoryEntryDBObject>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryEntryDBObject.1
+    public static final Parcelable.Creator<InventoryEntryDBObject> CREATOR = new Parcelable.Creator<InventoryEntryDBObject>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryEntryDBObject createFromParcel(Parcel parcel) {
             return new InventoryEntryDBObject(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryEntryDBObject[] newArray(int i) {
             return new InventoryEntryDBObject[i];
         }
@@ -75,8 +74,8 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         super(cursor);
     }
 
-    public InventoryEntryDBObject(SQLiteDatabase sQLiteDatabase, long j) throws DBObject.DatabaseBindingException {
-        super(sQLiteDatabase, j);
+    public InventoryEntryDBObject(SQLiteDatabase sqLiteDatabase, long j) throws DBObject.DatabaseBindingException {
+        super(sqLiteDatabase, j);
     }
 
     protected InventoryEntryDBObject(Parcel parcel) {
@@ -115,62 +114,62 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         return new String[]{"DROP TABLE IF EXISTS Entries;", "CREATE TABLE Entries (_id INTEGER PRIMARY KEY,parent_id BIGINT,uuid_high BIGINT,uuid_low BIGINT,parentUUID_high BIGINT,parentUUID_low BIGINT,name TEXT,isFolder BOOLEAN,typeDefault INTEGER,version INTEGER,sessionID_high BIGINT,sessionID_low BIGINT,fetchFailed BOOLEAN,description TEXT,flags INTEGER,invType INTEGER,assetType INTEGER,creationDate INTEGER,_blobField BLOB);", "CREATE INDEX Entries_parent_id ON Entries (parent_id);", "CREATE INDEX Entries_uuid ON Entries (uuid_high, uuid_low);"};
     }
 
-    public static Cursor query(SQLiteDatabase sQLiteDatabase, String str, String[] strArr, String str2) throws DBObject.DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public static Cursor query(SQLiteDatabase sqLiteDatabase, String str, String[] strArr, String str2) throws DBObject.DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DBObject.DatabaseBindingException("Database not opened");
         }
-        return sQLiteDatabase.query(tableName, fieldNames, str, strArr, null, null, str2);
+        return sqLiteDatabase.query(tableName, fieldNames, str, strArr, null, null, str2);
     }
 
-    public static Cursor query(DBHandle dBHandle, String str, String[] strArr, String str2) throws DBObject.DatabaseBindingException {
-        if (dBHandle == null) {
+    public static Cursor query(DBHandle dbHandle, String str, String[] strArr, String str2) throws DBObject.DatabaseBindingException {
+        if (dbHandle == null) {
             throw new DBObject.DatabaseBindingException("Database not opened");
         }
-        return dBHandle.getDB().queryWithFactory(dBHandle, false, tableName, fieldNames, str, strArr, null, null, str2, null);
+        return dbHandle.getDB().queryWithFactory(dbHandle, false, tableName, fieldNames, str, strArr, null, null, str2, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
-    public void bindInsertOrUpdate(SQLiteStatement sQLiteStatement) {
-        sQLiteStatement.bindLong(1, this.parent_id);
+    @Override
+    public void bindInsertOrUpdate(SQLiteStatement sqLiteStatement) {
+        sqLiteStatement.bindLong(1, this.parent_id);
         if (this.uuid != null) {
-            sQLiteStatement.bindLong(2, this.uuid.getMostSignificantBits());
-            sQLiteStatement.bindLong(3, this.uuid.getLeastSignificantBits());
+            sqLiteStatement.bindLong(2, this.uuid.getMostSignificantBits());
+            sqLiteStatement.bindLong(3, this.uuid.getLeastSignificantBits());
         } else {
-            sQLiteStatement.bindLong(2, 0L);
-            sQLiteStatement.bindLong(3, 0L);
+            sqLiteStatement.bindLong(2, 0L);
+            sqLiteStatement.bindLong(3, 0L);
         }
         if (this.parentUUID != null) {
-            sQLiteStatement.bindLong(4, this.parentUUID.getMostSignificantBits());
-            sQLiteStatement.bindLong(5, this.parentUUID.getLeastSignificantBits());
+            sqLiteStatement.bindLong(4, this.parentUUID.getMostSignificantBits());
+            sqLiteStatement.bindLong(5, this.parentUUID.getLeastSignificantBits());
         } else {
-            sQLiteStatement.bindLong(4, 0L);
-            sQLiteStatement.bindLong(5, 0L);
+            sqLiteStatement.bindLong(4, 0L);
+            sqLiteStatement.bindLong(5, 0L);
         }
         if (this.name != null) {
-            sQLiteStatement.bindString(6, this.name);
+            sqLiteStatement.bindString(6, this.name);
         } else {
-            sQLiteStatement.bindNull(6);
+            sqLiteStatement.bindNull(6);
         }
-        sQLiteStatement.bindLong(7, this.isFolder ? 1 : 0);
-        sQLiteStatement.bindLong(8, this.typeDefault);
-        sQLiteStatement.bindLong(9, this.version);
+        sqLiteStatement.bindLong(7, this.isFolder ? 1 : 0);
+        sqLiteStatement.bindLong(8, this.typeDefault);
+        sqLiteStatement.bindLong(9, this.version);
         if (this.sessionID != null) {
-            sQLiteStatement.bindLong(10, this.sessionID.getMostSignificantBits());
-            sQLiteStatement.bindLong(11, this.sessionID.getLeastSignificantBits());
+            sqLiteStatement.bindLong(10, this.sessionID.getMostSignificantBits());
+            sqLiteStatement.bindLong(11, this.sessionID.getLeastSignificantBits());
         } else {
-            sQLiteStatement.bindLong(10, 0L);
-            sQLiteStatement.bindLong(11, 0L);
+            sqLiteStatement.bindLong(10, 0L);
+            sqLiteStatement.bindLong(11, 0L);
         }
-        sQLiteStatement.bindLong(12, this.fetchFailed ? 1 : 0);
+        sqLiteStatement.bindLong(12, this.fetchFailed ? 1 : 0);
         if (this.description != null) {
-            sQLiteStatement.bindString(13, this.description);
+            sqLiteStatement.bindString(13, this.description);
         } else {
-            sQLiteStatement.bindNull(13);
+            sqLiteStatement.bindNull(13);
         }
-        sQLiteStatement.bindLong(14, this.flags);
-        sQLiteStatement.bindLong(15, this.invType);
-        sQLiteStatement.bindLong(16, this.assetType);
-        sQLiteStatement.bindLong(17, this.creationDate);
+        sqLiteStatement.bindLong(14, this.flags);
+        sqLiteStatement.bindLong(15, this.invType);
+        sqLiteStatement.bindLong(16, this.assetType);
+        sqLiteStatement.bindLong(17, this.creationDate);
         ByteBuffer wrap = ByteBuffer.wrap(new byte[Vr.VREvent.VrCore.ErrorCode.CONTROLLER_BATTERY_READ_FAILED]);
         if (this.agentUUID != null) {
             wrap.putLong(this.agentUUID.getMostSignificantBits());
@@ -222,15 +221,15 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         wrap.putInt(this.everyoneMask);
         wrap.putInt(this.saleType);
         wrap.putInt(this.salePrice);
-        sQLiteStatement.bindBlob(18, wrap.array());
+        sqLiteStatement.bindBlob(18, wrap.array());
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public ContentValues getContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("parent_id", Long.valueOf(this.parent_id));
@@ -320,17 +319,17 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         return contentValues;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public String[] getFieldNames() {
         return fieldNames;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public String getTableName() {
         return tableName;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public void loadFromCursor(Cursor cursor) {
         this._id = cursor.getLong(0);
         this.parent_id = cursor.getLong(1);
@@ -364,7 +363,7 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         this.salePrice = wrap.getInt();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(this._id);
         parcel.writeLong(this.parent_id);

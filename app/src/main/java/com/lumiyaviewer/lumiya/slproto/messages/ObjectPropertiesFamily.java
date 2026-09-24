@@ -1,31 +1,39 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectPropertiesFamily
+ * Medium because potentially driven by mouse hover events.
+ *
+ * <p>Template: {@code ObjectPropertiesFamily Medium 10 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLSelectMgr::processObjectPropertiesFamily()} in indra/newview/llselectmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ObjectPropertiesFamily extends SLMessage {
     public ObjectData ObjectData_Field;
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public int BaseMask;
-        public int Category;
-        public byte[] Description;
-        public int EveryoneMask;
-        public UUID GroupID;
-        public int GroupMask;
-        public UUID LastOwnerID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int OwnershipCost;
-        public int RequestFlags;
-        public int SalePrice;
-        public int SaleType;
+        public int BaseMask; // U32
+        public int Category; // U32 - LLCategory
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32
+        public UUID GroupID; // LLUUID
+        public int GroupMask; // U32
+        public UUID LastOwnerID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public int OwnerMask; // U32
+        public int OwnershipCost; // S32
+        public int RequestFlags; // U32
+        public int SalePrice; // S32
+        public int SaleType; // U8 - > EForSale
     }
 
     public ObjectPropertiesFamily() {
@@ -33,20 +41,21 @@ public class ObjectPropertiesFamily extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ObjectData_Field.Name.length + 102 + 1 + this.ObjectData_Field.Description.length + 2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectPropertiesFamily(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectPropertiesFamily(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 10);
+        // Message number: Medium 10 (ObjectPropertiesFamily).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x0A);
         packInt(byteBuffer, this.ObjectData_Field.RequestFlags);
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
         packUUID(byteBuffer, this.ObjectData_Field.OwnerID);
@@ -65,7 +74,7 @@ public class ObjectPropertiesFamily extends SLMessage {
         packVariable(byteBuffer, this.ObjectData_Field.Description, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ObjectData_Field.RequestFlags = unpackInt(byteBuffer);
         this.ObjectData_Field.ObjectID = unpackUUID(byteBuffer);
@@ -77,7 +86,7 @@ public class ObjectPropertiesFamily extends SLMessage {
         this.ObjectData_Field.EveryoneMask = unpackInt(byteBuffer);
         this.ObjectData_Field.NextOwnerMask = unpackInt(byteBuffer);
         this.ObjectData_Field.OwnershipCost = unpackInt(byteBuffer);
-        this.ObjectData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.SalePrice = unpackInt(byteBuffer);
         this.ObjectData_Field.Category = unpackInt(byteBuffer);
         this.ObjectData_Field.LastOwnerID = unpackUUID(byteBuffer);

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class LogMessageBatch implements Bundleable {
     public final String agentName;
     public final UUID agentUUID;
@@ -30,14 +29,14 @@ public class LogMessageBatch implements Bundleable {
         this.messages = builder.build();
     }
 
-    public LogMessageBatch(UUID uuid, String str, List<LogChatMessage> list, long j) {
+    public LogMessageBatch(UUID uuid, String agentName, List<LogChatMessage> list, long lastMessageID) {
         this.agentUUID = uuid;
-        this.agentName = str;
+        this.agentName = agentName;
         this.messages = ImmutableList.copyOf((Collection) list);
-        this.lastMessageID = j;
+        this.lastMessageID = lastMessageID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("agentUUID", this.agentUUID.toString());

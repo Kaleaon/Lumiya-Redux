@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLObjectFilterInfo {
     public static SLObjectFilterInfo create() {
         return new AutoValue_SLObjectFilterInfo("", false, false, false, 0.0f);
@@ -28,11 +27,11 @@ public abstract class SLObjectFilterInfo {
         return (str.equals("Object") || str.equals("(loading)") || str.equals("")) ? false : true;
     }
 
-    public boolean objectMatches(SLObjectInfo sLObjectInfo, float f, boolean z) {
+    public boolean objectMatches(SLObjectInfo objectInfo, float f, boolean z) {
         if (z && (!showAttachments())) {
             return false;
         }
-        if (!showNonTouchable() && !sLObjectInfo.isTouchable()) {
+        if (!showNonTouchable() && !objectInfo.isTouchable()) {
             return false;
         }
         if (range() > 0.0f) {

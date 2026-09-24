@@ -7,30 +7,29 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class ChatMessageSourceSystem extends ChatMessageSource {
     ChatMessageSourceSystem() {
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatterID getDefaultChatter(UUID uuid) {
         return ChatterID.getLocalChatterID(uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public String getSourceName(@Nonnull UserManager userManager) {
         return null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatMessageSource.ChatMessageSourceType getSourceType() {
         return ChatMessageSource.ChatMessageSourceType.System;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public UUID getSourceUUID() {
         return null;

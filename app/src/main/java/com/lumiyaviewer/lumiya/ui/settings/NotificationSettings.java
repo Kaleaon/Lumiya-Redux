@@ -5,14 +5,12 @@ import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import androidx.core.view.ViewCompat;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.media.NotificationSounds;
 import com.lumiyaviewer.lumiya.utils.LEDAction;
 
-/* loaded from: classes.dex */
 public class NotificationSettings {
     private NotificationType type;
     private boolean notificationEnabled = false;
@@ -30,7 +28,7 @@ public class NotificationSettings {
             return 0;
         }
         try {
-            return Integer.parseInt(str, 16) | ViewCompat.MEASURED_STATE_MASK;
+            return Integer.parseInt(str, 16) | 0xFF000000;
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
@@ -40,9 +38,9 @@ public class NotificationSettings {
     private String getPreferenceValueName(Context context, String str, int i, int i2) {
         String[] stringArray = context.getResources().getStringArray(i);
         String[] stringArray2 = context.getResources().getStringArray(i2);
-        for (int i3 = 0; i3 < stringArray.length; i3++) {
-            if (stringArray[i3].equals(str)) {
-                return stringArray2[i3];
+        for (int j = 0; j < stringArray.length; j++) {
+            if (stringArray[j].equals(str)) {
+                return stringArray2[j];
             }
         }
         return "";

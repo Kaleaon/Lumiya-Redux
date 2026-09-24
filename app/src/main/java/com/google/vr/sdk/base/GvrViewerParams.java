@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.vr.cardboard.ConfigUtils;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 
-/* loaded from: classes.dex */
 public class GvrViewerParams {
     private static final float CARDBOARD_V1_INTER_LENS_DISTANCE = 0.06f;
     private static final String CARDBOARD_V1_MODEL = "Cardboard v1";
@@ -52,8 +51,8 @@ public class GvrViewerParams {
 
         private final int protoValue;
 
-        VerticalAlignmentType(int i) {
-            this.protoValue = i;
+        VerticalAlignmentType(int protoValue) {
+            this.protoValue = protoValue;
         }
 
         static VerticalAlignmentType fromProtoValue(int i) {
@@ -82,7 +81,7 @@ public class GvrViewerParams {
     public GvrViewerParams(CardboardDevice.DeviceParams deviceParams) {
         setDefaultValues();
         if (deviceParams != null) {
-            this.originalDeviceProto = deviceParams.mo6clone();
+            this.originalDeviceProto = deviceParams.clone();
             this.vendor = deviceParams.getVendor();
             this.model = deviceParams.getModel();
             this.interLensDistance = deviceParams.getInterLensDistance();
@@ -249,38 +248,38 @@ public class GvrViewerParams {
         return DEFAULT_PARAMS.equals(this);
     }
 
-    public void setHasMagnet(boolean z) {
-        this.hasMagnet = z;
+    public void setHasMagnet(boolean hasMagnet) {
+        this.hasMagnet = hasMagnet;
     }
 
-    public void setInterLensDistance(float f) {
-        this.interLensDistance = f;
+    public void setInterLensDistance(float interLensDistance) {
+        this.interLensDistance = interLensDistance;
     }
 
-    public void setModel(String str) {
-        if (str == null) {
-            str = "";
+    public void setModel(String model) {
+        if (model == null) {
+            model = "";
         }
-        this.model = str;
+        this.model = model;
     }
 
-    public void setScreenToLensDistance(float f) {
-        this.screenToLensDistance = f;
+    public void setScreenToLensDistance(float screenToLensDistance) {
+        this.screenToLensDistance = screenToLensDistance;
     }
 
-    public void setVendor(String str) {
-        if (str == null) {
-            str = "";
+    public void setVendor(String vendor) {
+        if (vendor == null) {
+            vendor = "";
         }
-        this.vendor = str;
+        this.vendor = vendor;
     }
 
     public void setVerticalAlignment(VerticalAlignmentType verticalAlignmentType) {
         this.verticalAlignment = verticalAlignmentType;
     }
 
-    public void setVerticalDistanceToLensCenter(float f) {
-        this.verticalDistanceToLensCenter = f;
+    public void setVerticalDistanceToLensCenter(float verticalDistanceToLensCenter) {
+        this.verticalDistanceToLensCenter = verticalDistanceToLensCenter;
     }
 
     byte[] toByteArray() {
@@ -288,7 +287,7 @@ public class GvrViewerParams {
     }
 
     public CardboardDevice.DeviceParams toProtobuf() {
-        CardboardDevice.DeviceParams deviceParams = this.originalDeviceProto == null ? new CardboardDevice.DeviceParams() : this.originalDeviceProto.mo6clone();
+        CardboardDevice.DeviceParams deviceParams = this.originalDeviceProto == null ? new CardboardDevice.DeviceParams() : this.originalDeviceProto.clone();
         deviceParams.setVendor(this.vendor);
         deviceParams.setModel(this.model);
         deviceParams.setInterLensDistance(this.interLensDistance);
@@ -309,16 +308,16 @@ public class GvrViewerParams {
 
     public String toString() {
         StringBuilder append = new StringBuilder().append("{\n");
-        String str = this.vendor;
-        StringBuilder append2 = append.append(new StringBuilder(String.valueOf(str).length() + 12).append("  vendor: ").append(str).append(",\n").toString());
-        String str2 = this.model;
-        StringBuilder append3 = append2.append(new StringBuilder(String.valueOf(str2).length() + 11).append("  model: ").append(str2).append(",\n").toString()).append(new StringBuilder(40).append("  inter_lens_distance: ").append(this.interLensDistance).append(",\n").toString());
+        String vendor = this.vendor;
+        StringBuilder stringBuilder = append.append(new StringBuilder(String.valueOf(vendor).length() + 12).append("  vendor: ").append(vendor).append(",\n").toString());
+        String model = this.model;
+        StringBuilder stringBuilder2 = stringBuilder.append(new StringBuilder(String.valueOf(model).length() + 11).append("  model: ").append(model).append(",\n").toString()).append(new StringBuilder(40).append("  inter_lens_distance: ").append(this.interLensDistance).append(",\n").toString());
         String valueOf = String.valueOf(this.verticalAlignment);
-        StringBuilder append4 = append3.append(new StringBuilder(String.valueOf(valueOf).length() + 24).append("  vertical_alignment: ").append(valueOf).append(",\n").toString()).append(new StringBuilder(53).append("  vertical_distance_to_lens_center: ").append(this.verticalDistanceToLensCenter).append(",\n").toString()).append(new StringBuilder(44).append("  screen_to_lens_distance: ").append(this.screenToLensDistance).append(",\n").toString());
+        StringBuilder stringBuilder3 = stringBuilder2.append(new StringBuilder(String.valueOf(valueOf).length() + 24).append("  vertical_alignment: ").append(valueOf).append(",\n").toString()).append(new StringBuilder(53).append("  vertical_distance_to_lens_center: ").append(this.verticalDistanceToLensCenter).append(",\n").toString()).append(new StringBuilder(44).append("  screen_to_lens_distance: ").append(this.screenToLensDistance).append(",\n").toString());
         String valueOf2 = String.valueOf(this.leftEyeMaxFov.toString().replace("\n", "\n  "));
-        StringBuilder append5 = append4.append(new StringBuilder(String.valueOf(valueOf2).length() + 22).append("  left_eye_max_fov: ").append(valueOf2).append(",\n").toString());
+        StringBuilder stringBuilder4 = stringBuilder3.append(new StringBuilder(String.valueOf(valueOf2).length() + 22).append("  left_eye_max_fov: ").append(valueOf2).append(",\n").toString());
         String valueOf3 = String.valueOf(this.distortion.toString().replace("\n", "\n  "));
-        return append5.append(new StringBuilder(String.valueOf(valueOf3).length() + 16).append("  distortion: ").append(valueOf3).append(",\n").toString()).append(new StringBuilder(17).append("  magnet: ").append(this.hasMagnet).append(",\n").toString()).append("}\n").toString();
+        return stringBuilder4.append(new StringBuilder(String.valueOf(valueOf3).length() + 16).append("  distortion: ").append(valueOf3).append(",\n").toString()).append(new StringBuilder(17).append("  magnet: ").append(this.hasMagnet).append(",\n").toString()).append("}\n").toString();
     }
 
     public Uri toUri() {

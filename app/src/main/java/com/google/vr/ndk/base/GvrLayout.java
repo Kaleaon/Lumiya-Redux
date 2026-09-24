@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class GvrLayout extends FrameLayout {
     private static final boolean DEBUG = false;
     private static final int EXTERNAL_PRESENTATION_MIN_API = 16;
@@ -91,12 +90,12 @@ public class GvrLayout extends FrameLayout {
         private Presentation presentation;
         private final View view;
 
-        PresentationHelper(Context context, FrameLayout frameLayout, View view, DisplaySynchronizer displaySynchronizer, String str) {
+        PresentationHelper(Context context, FrameLayout frameLayout, View view, DisplaySynchronizer displaySynchronizer, String externalDisplayName) {
             this.context = context;
             this.originalParent = frameLayout;
             this.view = view;
             this.displaySynchronizer = displaySynchronizer;
-            this.externalDisplayName = str;
+            this.externalDisplayName = externalDisplayName;
             this.displayManager = (DisplayManager) context.getSystemService("display");
         }
 
@@ -165,9 +164,9 @@ public class GvrLayout extends FrameLayout {
             if (this.presentation == null) {
                 return;
             }
-            Iterator<PresentationListener> it2 = this.listeners.iterator();
-            while (it2.hasNext()) {
-                it2.next().onPresentationStarted(this.presentation.getDisplay());
+            Iterator<PresentationListener> iterator = this.listeners.iterator();
+            while (iterator.hasNext()) {
+                iterator.next().onPresentationStarted(this.presentation.getDisplay());
             }
         }
 
@@ -191,7 +190,7 @@ public class GvrLayout extends FrameLayout {
             setDisplay(null);
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayAdded(int i) {
             Display display = this.displayManager.getDisplay(i);
             if (isValidExternalDisplay(display)) {
@@ -199,11 +198,11 @@ public class GvrLayout extends FrameLayout {
             }
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayChanged(int i) {
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayRemoved(int i) {
             if (this.presentation != null && this.presentation.getDisplay().getDisplayId() == i) {
                 setDisplay(null);
@@ -265,8 +264,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -279,8 +278,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -293,8 +292,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -316,7 +315,7 @@ public class GvrLayout extends FrameLayout {
             this.scanlineRacingView.setEGLWindowSurfaceFactory(this.eglFactory);
             if (!this.stereoModeEnabled) {
                 Log.w(TAG, "Disabling stereo mode with async reprojection enabled may not work properly.");
-                this.scanlineRacingView.setVisibility(8);
+                this.scanlineRacingView.setVisibility(View.GONE);
             }
             if (this.scanlineRacingRenderer == null) {
                 this.scanlineRacingRenderer = new ScanlineRacingRenderer(this.gvrApi);
@@ -410,7 +409,6 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateRenderingViewsVisibility(int i) {
         if (this.presentationView != null) {
             this.presentationView.setVisibility(this.stereoModeEnabled ? i : 0);
@@ -441,15 +439,15 @@ public class GvrLayout extends FrameLayout {
     }
 
     protected VrCoreSdkClient createVrCoreSdkClient(Context context, GvrApi gvrApi, DaydreamUtilsWrapper daydreamUtilsWrapper, FadeOverlayView fadeOverlayView) {
-        return new VrCoreSdkClient(context, gvrApi, ContextUtils.getActivity(context).getComponentName(), daydreamUtilsWrapper, new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.3
-            @Override // java.lang.Runnable
+        return new VrCoreSdkClient(context, gvrApi, ContextUtils.getActivity(context).getComponentName(), daydreamUtilsWrapper, new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.uiLayout.invokeCloseButtonListener();
             }
         }, fadeOverlayView);
     }
 
-    public boolean enableAsyncReprojectionVideoSurface(ExternalSurfaceListener externalSurfaceListener, Handler handler, boolean z) {
+    public boolean enableAsyncReprojectionVideoSurface(ExternalSurfaceListener externalSurfaceListener, Handler handler, boolean isAsyncReprojectionUsingProtectedBuffers) {
         if (!this.daydreamUtils.isDaydreamPhone(getContext())) {
             Log.e(TAG, "Only Daydream devices support async reprojection. Cannot enable video Surface.");
             return false;
@@ -463,7 +461,7 @@ public class GvrLayout extends FrameLayout {
             return false;
         }
         this.isAsyncReprojectionVideoEnabled = true;
-        this.isAsyncReprojectionUsingProtectedBuffers = z;
+        this.isAsyncReprojectionUsingProtectedBuffers = isAsyncReprojectionUsingProtectedBuffers;
         this.scanlineRacingRenderer = new ScanlineRacingRenderer(this.gvrApi);
         this.videoSurfaceId = this.scanlineRacingRenderer.getExternalSurfaceManager().createExternalSurface(externalSurfaceListener, handler);
         return true;
@@ -532,13 +530,13 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
         this.displaySynchronizer.onConfigurationChanged();
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.presentationHelper == null) {
@@ -552,8 +550,8 @@ public class GvrLayout extends FrameLayout {
         try {
             this.gvrApi.pause();
             if (this.scanlineRacingView != null) {
-                this.scanlineRacingView.queueEvent(new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.2
-                    @Override // java.lang.Runnable
+                this.scanlineRacingView.queueEvent(new Runnable() {
+                    @Override
                     public void run() {
                         GvrLayout.this.scanlineRacingRenderer.onPause();
                     }
@@ -605,7 +603,7 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.presentationView != null && isPresenting() && this.presentationView.dispatchTouchEvent(motionEvent)) {
             return true;
@@ -613,24 +611,24 @@ public class GvrLayout extends FrameLayout {
         return super.onTouchEvent(motionEvent);
     }
 
-    @Override // android.view.View
+    @Override
     public void onWindowVisibilityChanged(int i) {
         super.onWindowVisibilityChanged(i);
         updateFadeVisibility();
     }
 
-    public boolean setAsyncReprojectionEnabled(boolean z) {
+    public boolean setAsyncReprojectionEnabled(boolean asyncReprojectionEnabled2) {
         if (Looper.getMainLooper() != Looper.myLooper()) {
             throw new IllegalStateException("setAsyncReprojectionEnabled may only be called from the UI thread");
         }
-        if (this.scanlineRacingView != null && !z) {
+        if (this.scanlineRacingView != null && !asyncReprojectionEnabled2) {
             throw new UnsupportedOperationException("Async reprojection cannot be disabled once enabled");
         }
-        if (z && !this.daydreamUtils.isDaydreamPhone(getContext())) {
+        if (asyncReprojectionEnabled2 && !this.daydreamUtils.isDaydreamPhone(getContext())) {
             return false;
         }
-        boolean asyncReprojectionEnabled = this.gvrApi.setAsyncReprojectionEnabled(z);
-        if (z) {
+        boolean asyncReprojectionEnabled = this.gvrApi.setAsyncReprojectionEnabled(asyncReprojectionEnabled2);
+        if (asyncReprojectionEnabled2) {
             if (!asyncReprojectionEnabled) {
                 Log.e(TAG, "Failed to initialize async reprojection, unsupported device.");
                 this.isAsyncReprojectionVideoEnabled = false;
@@ -654,18 +652,18 @@ public class GvrLayout extends FrameLayout {
         this.presentationView = view;
     }
 
-    public void setStereoModeEnabled(boolean z) {
-        if (this.stereoModeEnabled != z) {
-            this.stereoModeEnabled = z;
-            this.uiLayout.setEnabled(z);
+    public void setStereoModeEnabled(boolean stereoModeEnabled) {
+        if (this.stereoModeEnabled != stereoModeEnabled) {
+            this.stereoModeEnabled = stereoModeEnabled;
+            this.uiLayout.setEnabled(stereoModeEnabled);
             if (this.vrCoreSdkClient != null) {
-                this.vrCoreSdkClient.setEnabled(z);
+                this.vrCoreSdkClient.setEnabled(stereoModeEnabled);
             }
             if (this.fadeOverlayView != null) {
-                this.fadeOverlayView.setEnabled(z);
+                this.fadeOverlayView.setEnabled(stereoModeEnabled);
             }
             if (this.daydreamAlignment != null) {
-                this.daydreamAlignment.setEnabled(z);
+                this.daydreamAlignment.setEnabled(stereoModeEnabled);
             }
             updateRenderingViewsVisibility(0);
         }

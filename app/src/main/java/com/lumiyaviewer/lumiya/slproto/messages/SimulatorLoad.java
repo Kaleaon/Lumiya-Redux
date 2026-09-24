@@ -1,26 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
+/**
+ * SimulatorLoad
+ * simulator -> spaceserver
+ * reliable
+ *
+ * <p>Template: {@code SimulatorLoad Low 12 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SimulatorLoad extends SLMessage {
     public ArrayList<AgentList> AgentList_Fields = new ArrayList<>();
     public SimulatorLoadData SimulatorLoadData_Field;
 
+    /** Block AgentList, Variable. */
     public static class AgentList {
-        public int CircuitCode;
-        public int X;
-        public int Y;
+        public int CircuitCode; // U32
+        public int X; // U8
+        public int Y; // U8
     }
 
     public static class SimulatorLoadData {
-        public int AgentCount;
-        public boolean CanAcceptAgents;
-        public float TimeDilation;
+        public int AgentCount; // S32
+        public boolean CanAcceptAgents; // BOOL
+        public float TimeDilation; // F32
     }
 
     public SimulatorLoad() {
@@ -28,21 +34,22 @@ public class SimulatorLoad extends SLMessage {
         this.SimulatorLoadData_Field = new SimulatorLoadData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.AgentList_Fields.size() * 6) + 14;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorLoad(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorLoad(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.FF);
+        // Message number: Low 12 (SimulatorLoad).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x0C);
         packFloat(byteBuffer, this.SimulatorLoadData_Field.TimeDilation);
         packInt(byteBuffer, this.SimulatorLoadData_Field.AgentCount);
         packBoolean(byteBuffer, this.SimulatorLoadData_Field.CanAcceptAgents);
@@ -54,17 +61,17 @@ public class SimulatorLoad extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SimulatorLoadData_Field.TimeDilation = unpackFloat(byteBuffer);
         this.SimulatorLoadData_Field.AgentCount = unpackInt(byteBuffer);
         this.SimulatorLoadData_Field.CanAcceptAgents = unpackBoolean(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             AgentList agentList = new AgentList();
             agentList.CircuitCode = unpackInt(byteBuffer);
-            agentList.X = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            agentList.Y = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            agentList.X = unpackByte(byteBuffer) & 0xFF;
+            agentList.Y = unpackByte(byteBuffer) & 0xFF;
             this.AgentList_Fields.add(agentList);
         }
     }

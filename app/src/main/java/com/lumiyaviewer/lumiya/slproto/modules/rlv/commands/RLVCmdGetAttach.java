@@ -8,23 +8,22 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommands;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdGetAttach implements RLVCommand {
     private static final int NUM_ATTACHMENT_POINTS_LSL = 41;
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    @Override
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         try {
             int parseInt = Integer.parseInt(str);
-            SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
+            SLAvatarAppearance avatarAppearance = rlvController.getModules().avatarAppearance;
             String str3 = "";
             for (int i = 0; i < 41; i++) {
                 String lowerCase = SLAttachmentPoint.attachmentPoints[i] != null ? SLAttachmentPoint.attachmentPoints[i].name.toLowerCase() : "nonexistent";
                 if (str2.equals("") || lowerCase.equalsIgnoreCase(str2)) {
-                    str3 = sLAvatarAppearance.getAttachmentUUID(i) != null ? str3 + "1" : str3 + "0";
+                    str3 = avatarAppearance.getAttachmentUUID(i) != null ? str3 + "1" : str3 + "0";
                 }
             }
-            rLVController.sayOnChannel(parseInt, str3);
+            rlvController.sayOnChannel(parseInt, str3);
         } catch (NumberFormatException e) {
             Debug.Warning(e);
         }

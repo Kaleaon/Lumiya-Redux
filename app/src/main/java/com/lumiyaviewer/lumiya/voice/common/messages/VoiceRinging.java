@@ -9,7 +9,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceRinging implements VoicePluginMessage {
 
     @Nullable
@@ -33,13 +32,13 @@ public class VoiceRinging implements VoicePluginMessage {
         this.agentUUID = string != null ? UUID.fromString(string) : null;
     }
 
-    public VoiceRinging(@Nonnull String str, VoiceChannelInfo voiceChannelInfo, @Nullable UUID uuid) {
-        this.sessionHandle = str;
+    public VoiceRinging(@Nonnull String sessionHandle, VoiceChannelInfo voiceChannelInfo, @Nullable UUID uuid) {
+        this.sessionHandle = sessionHandle;
         this.voiceChannelInfo = voiceChannelInfo;
         this.agentUUID = uuid;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("sessionHandle", this.sessionHandle);

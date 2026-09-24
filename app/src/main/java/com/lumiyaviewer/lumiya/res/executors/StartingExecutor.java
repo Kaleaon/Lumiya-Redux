@@ -6,7 +6,6 @@ import java.util.IdentityHashMap;
 import java.util.Queue;
 import java.util.Set;
 
-/* loaded from: classes.dex */
 public class StartingExecutor {
     private int maxConcurrentRequests;
     private final Queue<Startable> waitingRequests = new WeakQueue();
@@ -19,9 +18,9 @@ public class StartingExecutor {
         this.maxConcurrentRequests = 1;
     }
 
-    public StartingExecutor(int i) {
+    public StartingExecutor(int maxConcurrentRequests) {
         this.maxConcurrentRequests = 1;
-        this.maxConcurrentRequests = i;
+        this.maxConcurrentRequests = maxConcurrentRequests;
     }
 
     private void runQueue() {
@@ -64,8 +63,8 @@ public class StartingExecutor {
         runQueue();
     }
 
-    public void setMaxConcurrentTasks(int i) {
-        this.maxConcurrentRequests = i;
+    public void setMaxConcurrentTasks(int maxConcurrentRequests) {
+        this.maxConcurrentRequests = maxConcurrentRequests;
     }
 
     public void unpause() {

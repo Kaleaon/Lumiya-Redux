@@ -10,7 +10,6 @@ import android.os.RemoteException;
 import com.google.vr.vrcore.common.api.IDaydreamManager;
 import com.google.vr.vrcore.logging.api.IVrCoreLoggingService;
 
-/* loaded from: classes.dex */
 public interface IVrCoreSdkService extends IInterface {
 
     public static abstract class Stub extends Binder implements IVrCoreSdkService {
@@ -23,26 +22,26 @@ public interface IVrCoreSdkService extends IInterface {
         private static class Proxy implements IVrCoreSdkService {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IVrCoreSdkService
+            @Override
             public IDaydreamManager getDaydreamManager() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IDaydreamManager.Stub.asInterface(obtain2.readStrongBinder());
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return IDaydreamManager.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -51,41 +50,41 @@ public interface IVrCoreSdkService extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IVrCoreSdkService
+            @Override
             public IVrCoreLoggingService getLoggingService() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IVrCoreLoggingService.Stub.asInterface(obtain2.readStrongBinder());
+                    this.mRemote.transact(4, obtain, parcel, 0);
+                    parcel.readException();
+                    return IVrCoreLoggingService.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IVrCoreSdkService
+            @Override
             public boolean initialize(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeInt(i);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IVrCoreSdkService
+            @Override
             public boolean setClientOptions(ComponentName componentName, Bundle bundle) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -100,11 +99,11 @@ public interface IVrCoreSdkService extends IInterface {
                         obtain.writeInt(1);
                         bundle.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -122,12 +121,12 @@ public interface IVrCoreSdkService extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IVrCoreSdkService)) ? (IVrCoreSdkService) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

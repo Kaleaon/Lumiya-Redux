@@ -4,7 +4,6 @@ import android.os.Bundle;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceLoginInfo {
 
     @Nonnull
@@ -22,12 +21,12 @@ public class VoiceLoginInfo {
         this.password = bundle.getString("password");
     }
 
-    public VoiceLoginInfo(String str, String str2, @Nonnull UUID uuid, String str3, String str4) {
-        this.voiceSipUriHostname = str;
-        this.voiceAccountServerName = str2;
+    public VoiceLoginInfo(String voiceSipUriHostname, String voiceAccountServerName, @Nonnull UUID uuid, String userName, String password) {
+        this.voiceSipUriHostname = voiceSipUriHostname;
+        this.voiceAccountServerName = voiceAccountServerName;
         this.agentUUID = uuid;
-        this.userName = str3;
-        this.password = str4;
+        this.userName = userName;
+        this.password = password;
     }
 
     public boolean equals(Object obj) {

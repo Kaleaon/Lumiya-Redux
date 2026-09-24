@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public enum EDeRezDestination {
     DRD_SAVE_INTO_AGENT_INVENTORY(0),
     DRD_ACQUIRE_TO_AGENT_INVENTORY(1),
@@ -16,8 +15,8 @@ public enum EDeRezDestination {
 
     private final int code;
 
-    EDeRezDestination(int i) {
-        this.code = i;
+    EDeRezDestination(int code) {
+        this.code = code;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.dao;
 
-/* loaded from: classes.dex */
 public class CachedAsset {
     private byte[] data;
     private String key;
@@ -10,15 +9,15 @@ public class CachedAsset {
     public CachedAsset() {
     }
 
-    public CachedAsset(String str) {
-        this.key = str;
+    public CachedAsset(String key) {
+        this.key = key;
     }
 
-    public CachedAsset(String str, int i, byte[] bArr, boolean z) {
-        this.key = str;
-        this.status = i;
-        this.data = bArr;
-        this.mustRevalidate = z;
+    public CachedAsset(String key, int status, byte[] bytes, boolean mustRevalidate) {
+        this.key = key;
+        this.status = status;
+        this.data = bytes;
+        this.mustRevalidate = mustRevalidate;
     }
 
     public byte[] getData() {
@@ -37,19 +36,19 @@ public class CachedAsset {
         return this.status;
     }
 
-    public void setData(byte[] bArr) {
-        this.data = bArr;
+    public void setData(byte[] bytes) {
+        this.data = bytes;
     }
 
-    public void setKey(String str) {
-        this.key = str;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setMustRevalidate(boolean z) {
-        this.mustRevalidate = z;
+    public void setMustRevalidate(boolean mustRevalidate) {
+        this.mustRevalidate = mustRevalidate;
     }
 
-    public void setStatus(int i) {
-        this.status = i;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

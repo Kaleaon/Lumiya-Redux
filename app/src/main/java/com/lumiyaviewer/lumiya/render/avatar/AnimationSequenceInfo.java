@@ -4,7 +4,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AnimationSequenceInfo {
     protected static final int INVALID_SEQUENCE_ID = 0;
     protected static final long INVALID_TIMESTAMP = -1;
@@ -19,14 +18,14 @@ public class AnimationSequenceInfo {
     protected final long stoppingRunningSince;
     protected final int stoppingSequenceID;
 
-    private AnimationSequenceInfo(@Nonnull UUID uuid, int i, long j, int i2, long j2, long j3, boolean z) {
+    private AnimationSequenceInfo(@Nonnull UUID uuid, int sequenceID, long runningSince, int stoppingSequenceID, long stoppingRunningSince, long stoppingEasingOutSince, boolean dontEaseIn) {
         this.animationID = uuid;
-        this.sequenceID = i;
-        this.runningSince = j;
-        this.stoppingSequenceID = i2;
-        this.stoppingRunningSince = j2;
-        this.stoppingEasingOutSince = j3;
-        this.dontEaseIn = z;
+        this.sequenceID = sequenceID;
+        this.runningSince = runningSince;
+        this.stoppingSequenceID = stoppingSequenceID;
+        this.stoppingRunningSince = stoppingRunningSince;
+        this.stoppingEasingOutSince = stoppingEasingOutSince;
+        this.dontEaseIn = dontEaseIn;
     }
 
     @Nonnull

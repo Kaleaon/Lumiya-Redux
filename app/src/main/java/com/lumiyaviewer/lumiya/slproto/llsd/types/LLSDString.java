@@ -7,30 +7,29 @@ import java.io.IOException;
 import java.util.UUID;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDString extends LLSDNode {
     private String value;
 
-    public LLSDString(String str) {
-        this.value = str;
+    public LLSDString(String value) {
+        this.value = value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public boolean asBoolean() {
         return "true".equalsIgnoreCase(this.value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public String asString() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public UUID asUUID() {
         return UUID.fromString(this.value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(115);
         if (this.value.isEmpty()) {
@@ -42,7 +41,7 @@ public class LLSDString extends LLSDNode {
         dataOutputStream.write(stringToVariableUTF);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "string");
         xmlSerializer.text(this.value);

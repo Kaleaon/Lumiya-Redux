@@ -1,6 +1,5 @@
 package com.lumiyaviewer.rawbuffers;
 
-/* loaded from: classes.dex */
 public final class BuildConfig {
     public static final String APPLICATION_ID = "com.lumiyaviewer.rawbuffers";
     public static final String BUILD_TYPE = "release";

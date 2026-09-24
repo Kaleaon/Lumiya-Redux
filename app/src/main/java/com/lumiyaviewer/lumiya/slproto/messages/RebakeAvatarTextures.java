@@ -4,12 +4,19 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RebakeAvatarTextures
+ * simulator -> viewer request when a temporary baked avatar texture is not found
+ *
+ * <p>Template: {@code RebakeAvatarTextures Low 87 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RebakeAvatarTextures extends SLMessage {
     public TextureData TextureData_Field;
 
+    /** Block TextureData, Single. */
     public static class TextureData {
-        public UUID TextureID;
+        public UUID TextureID; // LLUUID
     }
 
     public RebakeAvatarTextures() {
@@ -17,25 +24,26 @@ public class RebakeAvatarTextures extends SLMessage {
         this.TextureData_Field = new TextureData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRebakeAvatarTextures(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRebakeAvatarTextures(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 87);
+        // Message number: Low 87 (RebakeAvatarTextures).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x57);
         packUUID(byteBuffer, this.TextureData_Field.TextureID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TextureData_Field.TextureID = unpackUUID(byteBuffer);
     }

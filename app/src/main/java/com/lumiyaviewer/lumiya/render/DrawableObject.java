@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render;
 
 import android.opengl.GLES10;
 import android.opengl.Matrix;
-import androidx.core.view.InputDeviceCompat;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
@@ -25,7 +24,6 @@ import com.lumiyaviewer.lumiya.slproto.prims.PrimFlexibleInfo;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DrawableObject implements IntersectPickable, ResourceConsumer {
     private static final int INVISIBLE_FRAMES_APPEAR = 10;
     private static final int INVISIBLE_FRAMES_DISAPPEAR = 10;
@@ -43,14 +41,14 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
     private int invisibleCount = 0;
     private int invisibleFrames = 0;
 
-    public DrawableObject(DrawableStore drawableStore, SLObjectInfo sLObjectInfo, DrawableAvatar drawableAvatar) {
+    public DrawableObject(DrawableStore drawableStore, SLObjectInfo objectInfo, DrawableAvatar drawableAvatar) {
         this.drawableStore = drawableStore;
-        this.objInfo = sLObjectInfo;
+        this.objInfo = objectInfo;
         this.attachedTo = drawableAvatar;
-        this.objCoordsData = sLObjectInfo.getObjectCoords().getData();
-        this.objCoordsScale = sLObjectInfo.getObjectCoords().getElementOffset(1);
-        setPrimDrawParams(sLObjectInfo.getPrimDrawParams());
-        setHoverText(sLObjectInfo.getHoverText());
+        this.objCoordsData = objectInfo.getObjectCoords().getData();
+        this.objCoordsScale = objectInfo.getObjectCoords().getElementOffset(1);
+        setPrimDrawParams(objectInfo.getPrimDrawParams());
+        setHoverText(objectInfo.getHoverText());
     }
 
     public final void ApplyJointTranslations(MeshJointTranslations meshJointTranslations) {
@@ -62,15 +60,15 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
 
     public final int Draw(RenderContext renderContext, int i) {
         DrawablePrim drawablePrim = this.drawablePrim;
-        float[] fArr = this.objInfo.worldMatrix;
+        float[] worldMatrix = this.objInfo.worldMatrix;
         PrimFlexibleInfo primFlexibleInfo = this.flexibleInfo;
-        if (drawablePrim == null || fArr == null || !(!this.isInvisible)) {
+        if (drawablePrim == null || worldMatrix == null || !(!this.isInvisible)) {
             return 0;
         }
         float f = this.objCoordsData[this.objCoordsScale];
         float f2 = this.objCoordsData[this.objCoordsScale + 1];
         float f3 = this.objCoordsData[this.objCoordsScale + 2];
-        renderContext.glObjWorldPushAndMultMatrixf(fArr, 0);
+        renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
         renderContext.glPushObjectScale(f, f2, f3);
         if (primFlexibleInfo != null) {
             primFlexibleInfo.doFlexibleUpdate(this.objInfo.getPrimDrawParams().getVolumeParams().FlexiParams, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f, f2, f3);
@@ -85,8 +83,8 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         float f;
         DrawableHoverText drawableHoverText = this.drawableHoverText;
         HoverText hoverText = this.hoverText;
-        float[] fArr = this.objInfo.worldMatrix;
-        if (drawableHoverText == null || fArr == null || hoverText == null) {
+        float[] worldMatrix = this.objInfo.worldMatrix;
+        if (drawableHoverText == null || worldMatrix == null || hoverText == null) {
             return;
         }
         float f2 = this.objInfo.worldMatrix[12];
@@ -99,36 +97,36 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
             float f6 = this.objCoordsData[this.objCoordsScale + 1];
             float f7 = this.objCoordsData[this.objCoordsScale + 2];
             float max = (Math.max(Math.max(f5, f6), f7) + 0.01f) / 2.0f;
-            LLVector3 lLVector3 = new LLVector3(renderContext.frameCamera.x - f2, renderContext.frameCamera.y - f3, renderContext.frameCamera.z - f4);
-            lLVector3.normVec();
-            lLVector3.mul(max);
-            f2 += lLVector3.x;
-            f3 += lLVector3.y;
-            f4 += lLVector3.z;
+            LLVector3 vector3 = new LLVector3(renderContext.frameCamera.x - f2, renderContext.frameCamera.y - f3, renderContext.frameCamera.z - f4);
+            vector3.normVec();
+            vector3.mul(max);
+            f2 += vector3.x;
+            f3 += vector3.y;
+            f4 += vector3.z;
             f = f7 / 2.0f;
         }
         drawableHoverText.DrawAtWorld(renderContext, f2, f3, f4, f, z ? renderContext.projectionHUDMatrix : renderContext.projectionMatrix, true, hoverText.color());
     }
 
-    void DrawIfPicked(RenderContext renderContext, SLObjectInfo sLObjectInfo) {
-        if (this.objInfo == sLObjectInfo) {
+    void DrawIfPicked(RenderContext renderContext, SLObjectInfo objectInfo) {
+        if (this.objInfo == objectInfo) {
             DrawablePrim drawablePrim = this.drawablePrim;
-            float[] fArr = this.objInfo.worldMatrix;
+            float[] worldMatrix = this.objInfo.worldMatrix;
             PrimFlexibleInfo primFlexibleInfo = this.flexibleInfo;
-            if (drawablePrim == null || fArr == null) {
+            if (drawablePrim == null || worldMatrix == null) {
                 return;
             }
             float f = this.objCoordsData[this.objCoordsScale];
             float f2 = this.objCoordsData[this.objCoordsScale + 1];
             float f3 = this.objCoordsData[this.objCoordsScale + 2];
-            renderContext.glObjWorldPushAndMultMatrixf(fArr, 0);
+            renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
             if (primFlexibleInfo != null) {
                 primFlexibleInfo.doFlexibleUpdate(this.objInfo.getPrimDrawParams().getVolumeParams().FlexiParams, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f, f2, f3);
             }
             renderContext.glPushObjectScale(f, f2, f3);
             GLES10.glDepthFunc(515);
             drawablePrim.Draw(renderContext, true, primFlexibleInfo, 3);
-            GLES10.glDepthFunc(InputDeviceCompat.SOURCE_DPAD);
+            GLES10.glDepthFunc(GLES10.GL_LESS);
             renderContext.glPopObjectScale();
             renderContext.glObjWorldPopMatrix();
         }
@@ -153,7 +151,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         return drawablePrim.DrawRigged30(renderContext, i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         if (obj instanceof DrawablePrim) {
             DrawablePrim drawablePrim = (DrawablePrim) obj;
@@ -165,64 +163,64 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.picking.IntersectPickable
+    @Override
     public ObjectIntersectInfo PickObject(RenderContext renderContext, float f, float f2, float f3) {
         IntersectInfo IntersectRay;
         DrawablePrim drawablePrim = this.drawablePrim;
-        float[] fArr = this.objInfo.worldMatrix;
-        if (drawablePrim == null || fArr == null) {
+        float[] worldMatrix = this.objInfo.worldMatrix;
+        if (drawablePrim == null || worldMatrix == null) {
             return null;
         }
-        int[] iArr = renderContext.viewportRect;
-        float[] fArr2 = new float[32];
-        float[] fArr3 = new float[6];
-        float f4 = iArr[3] - f2;
+        int[] viewportRect = renderContext.viewportRect;
+        float[] floats = new float[32];
+        float[] floats2 = new float[6];
+        float f4 = viewportRect[3] - f2;
         float f5 = this.objCoordsData[this.objCoordsScale];
         float f6 = this.objCoordsData[this.objCoordsScale + 1];
         float f7 = this.objCoordsData[this.objCoordsScale + 2];
-        renderContext.glObjWorldPushAndMultMatrixf(fArr, 0);
+        renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
         if (renderContext.hasGL20) {
-            Matrix.scaleM(fArr2, 0, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f5, f6, f7);
-            RenderContext.gluUnProject(f, f4, 0.0f, fArr2, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), iArr, 0, fArr3, 0);
-            RenderContext.gluUnProject(f, f4, 1.0f, fArr2, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), iArr, 0, fArr3, 3);
+            Matrix.scaleM(floats, 0, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f5, f6, f7);
+            RenderContext.gluUnProject(f, f4, 0.0f, floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 0);
+            RenderContext.gluUnProject(f, f4, 1.0f, floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 3);
         } else {
-            Matrix.scaleM(fArr2, 16, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f5, f6, f7);
-            Matrix.multiplyMM(fArr2, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), fArr2, 16);
+            Matrix.scaleM(floats, 16, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), f5, f6, f7);
+            Matrix.multiplyMM(floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), floats, 16);
             MatrixStack activeProjectionMatrix = renderContext.getActiveProjectionMatrix();
             if (activeProjectionMatrix != null) {
-                RenderContext.gluUnProject(f, f4, 0.0f, fArr2, 0, activeProjectionMatrix.getMatrixData(), activeProjectionMatrix.getMatrixDataOffset(), iArr, 0, fArr3, 0);
-                RenderContext.gluUnProject(f, f4, 1.0f, fArr2, 0, activeProjectionMatrix.getMatrixData(), activeProjectionMatrix.getMatrixDataOffset(), iArr, 0, fArr3, 3);
+                RenderContext.gluUnProject(f, f4, 0.0f, floats, 0, activeProjectionMatrix.getMatrixData(), activeProjectionMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 0);
+                RenderContext.gluUnProject(f, f4, 1.0f, floats, 0, activeProjectionMatrix.getMatrixData(), activeProjectionMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 3);
             }
         }
         renderContext.glObjWorldPopMatrix();
-        LLVector3 lLVector3 = new LLVector3(fArr3[0], fArr3[1], fArr3[2]);
-        LLVector3 lLVector32 = new LLVector3(fArr3[3], fArr3[4], fArr3[5]);
+        LLVector3 vector3 = new LLVector3(floats2[0], floats2[1], floats2[2]);
+        LLVector3 vector33 = new LLVector3(floats2[3], floats2[4], floats2[5]);
         boolean z = false;
-        LLVector3[] lLVector3Arr = CollisionBox.getInstance().vertices;
+        LLVector3[] vertices = CollisionBox.getInstance().vertices;
         int i = 0;
         while (true) {
             if (i >= 12) {
                 break;
             }
-            if (GLRayTrace.intersect_RayTriangle(lLVector3, lLVector32, lLVector3Arr, i * 3) != null) {
+            if (GLRayTrace.intersect_RayTriangle(vector3, vector33, vertices, i * 3) != null) {
                 z = true;
                 break;
             }
             i++;
         }
-        if (!z || (IntersectRay = drawablePrim.IntersectRay(lLVector3, lLVector32)) == null) {
+        if (!z || (IntersectRay = drawablePrim.IntersectRay(vector3, vector33)) == null) {
             return null;
         }
-        float intersectionDepth = GLRayTrace.getIntersectionDepth(renderContext, IntersectRay.intersectPoint, fArr2);
+        float intersectionDepth = GLRayTrace.getIntersectionDepth(renderContext, IntersectRay.intersectPoint, floats);
         if (intersectionDepth >= f3) {
             return new ObjectIntersectInfo(IntersectRay, this.objInfo, intersectionDepth);
         }
         return null;
     }
 
-    final void TestOcclusion(RenderContext renderContext, float[] fArr) {
-        float[] fArr2 = this.objInfo.worldMatrix;
-        if (fArr2 != null) {
+    final void TestOcclusion(RenderContext renderContext, float[] floats) {
+        float[] worldMatrix = this.objInfo.worldMatrix;
+        if (worldMatrix != null) {
             if (this.occlusionQuery == null) {
                 this.occlusionQuery = new GLQuery(renderContext.glResourceManager);
             }
@@ -236,7 +234,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
                 if (!this.isInvisible) {
                     this.invisibleCount++;
                     if (this.invisibleCount > 10) {
-                        int checkFrustrumOcclusion = OpenJPEG.checkFrustrumOcclusion(fArr, fArr2, this.objCoordsData[this.objCoordsScale], this.objCoordsData[this.objCoordsScale + 1], this.objCoordsData[this.objCoordsScale + 2]);
+                        int checkFrustrumOcclusion = OpenJPEG.checkFrustrumOcclusion(floats, worldMatrix, this.objCoordsData[this.objCoordsScale], this.objCoordsData[this.objCoordsScale + 1], this.objCoordsData[this.objCoordsScale + 2]);
                         if (checkFrustrumOcclusion == 0) {
                             this.invisibleCount = 0;
                         } else {
@@ -258,7 +256,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
             float f = this.objCoordsData[this.objCoordsScale] * 1.001f;
             float f2 = this.objCoordsData[this.objCoordsScale + 1] * 1.001f;
             float f3 = this.objCoordsData[this.objCoordsScale + 2] * 1.001f;
-            renderContext.glObjWorldPushAndMultMatrixf(fArr2, 0);
+            renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
             renderContext.glPushObjectScale(f, f2, f3);
             renderContext.boundingBox.OcclusionQuery(renderContext, this.occlusionQuery);
             renderContext.glPopObjectScale();

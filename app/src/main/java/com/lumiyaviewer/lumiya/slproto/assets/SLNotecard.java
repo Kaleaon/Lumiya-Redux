@@ -18,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class SLNotecard {
     private static final String DELIM_ANY = " \t\n";
     private static final String DELIM_EOL = "\n";
@@ -30,17 +29,17 @@ public class SLNotecard {
         private OnAttachmentClickListener clickListener;
         private SLInventoryEntry entry;
 
-        public AttachmentClickableSpan(SLInventoryEntry sLInventoryEntry, OnAttachmentClickListener onAttachmentClickListener) {
-            this.entry = sLInventoryEntry;
+        public AttachmentClickableSpan(SLInventoryEntry inventoryEntry, OnAttachmentClickListener onAttachmentClickListener) {
+            this.entry = inventoryEntry;
             this.clickListener = onAttachmentClickListener;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.assets.SLNotecard.InventoryEntrySpan
+        @Override
         public SLInventoryEntry getEntry() {
             return this.entry;
         }
 
-        @Override // android.text.style.ClickableSpan
+        @Override
         public void onClick(View view) {
             if (this.clickListener != null) {
                 this.clickListener.onAttachmentClick(this.entry);
@@ -52,12 +51,12 @@ public class SLNotecard {
         private SLInventoryEntry entry;
         private String linkText;
 
-        public AttachmentSpan(SLInventoryEntry sLInventoryEntry) {
-            this.entry = sLInventoryEntry;
-            this.linkText = sLInventoryEntry.getReadableTextForLink();
+        public AttachmentSpan(SLInventoryEntry inventoryEntry) {
+            this.entry = inventoryEntry;
+            this.linkText = inventoryEntry.getReadableTextForLink();
         }
 
-        @Override // android.text.style.ReplacementSpan
+        @Override
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             if (i != i2) {
                 Paint paint2 = new Paint(paint);
@@ -67,12 +66,12 @@ public class SLNotecard {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.assets.SLNotecard.InventoryEntrySpan
+        @Override
         public SLInventoryEntry getEntry() {
             return this.entry;
         }
 
-        @Override // android.text.style.ReplacementSpan
+        @Override
         public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
             if (fontMetricsInt != null) {
                 Paint.FontMetricsInt fontMetricsInt2 = paint.getFontMetricsInt();
@@ -97,26 +96,26 @@ public class SLNotecard {
         SLInventoryEntry entry;
         int extCharIndex;
 
-        public NotecardAttachment(int i, SLInventoryEntry sLInventoryEntry) {
-            this.extCharIndex = i;
-            this.entry = sLInventoryEntry;
+        public NotecardAttachment(int extCharIndex, SLInventoryEntry inventoryEntry) {
+            this.extCharIndex = extCharIndex;
+            this.entry = inventoryEntry;
         }
     }
 
     public interface OnAttachmentClickListener {
-        void onAttachmentClick(SLInventoryEntry sLInventoryEntry);
+        void onAttachmentClick(SLInventoryEntry inventoryEntry);
     }
 
-    public SLNotecard(Spanned spanned, boolean z) {
-        this.isScript = z;
+    public SLNotecard(Spanned spanned, boolean isScript) {
+        this.isScript = isScript;
         StringBuilder sb = new StringBuilder();
         this.attachments = new ArrayList(0);
         InventoryEntrySpan[] inventoryEntrySpanArr = (InventoryEntrySpan[]) spanned.getSpans(0, spanned.length(), InventoryEntrySpan.class);
-        int[] iArr = new int[inventoryEntrySpanArr.length];
-        int[] iArr2 = new int[inventoryEntrySpanArr.length];
+        int[] ints = new int[inventoryEntrySpanArr.length];
+        int[] ints2 = new int[inventoryEntrySpanArr.length];
         for (int i = 0; i < inventoryEntrySpanArr.length; i++) {
-            iArr[i] = spanned.getSpanStart(inventoryEntrySpanArr[i]);
-            iArr2[i] = spanned.getSpanEnd(inventoryEntrySpanArr[i]);
+            ints[i] = spanned.getSpanStart(inventoryEntrySpanArr[i]);
+            ints2[i] = spanned.getSpanEnd(inventoryEntrySpanArr[i]);
         }
         int i2 = 0;
         int i3 = 0;
@@ -126,20 +125,20 @@ public class SLNotecard {
                 if (i4 >= inventoryEntrySpanArr.length) {
                     i4 = -1;
                     break;
-                } else if (iArr[i4] >= i3) {
+                } else if (ints[i4] >= i3) {
                     break;
                 } else {
                     i4++;
                 }
             }
-            int length = i4 != -1 ? iArr[i4] : spanned.length();
+            int length = i4 != -1 ? ints[i4] : spanned.length();
             sb.append(spanned.subSequence(i3, length));
             if (i4 != -1) {
                 this.attachments.add(new NotecardAttachment(i2, inventoryEntrySpanArr[i4].getEntry()));
                 sb.append((char) 56256);
                 sb.append((char) (56320 + i2));
                 i2++;
-                i3 = iArr2[i4];
+                i3 = ints2[i4];
             } else {
                 i3 = length;
             }
@@ -147,16 +146,16 @@ public class SLNotecard {
         this.notecardText = sb.toString();
     }
 
-    public SLNotecard(boolean z) {
-        this.isScript = z;
+    public SLNotecard(boolean isScript) {
+        this.isScript = isScript;
         this.attachments = new ArrayList(0);
         this.notecardText = "";
     }
 
-    public SLNotecard(byte[] bArr, boolean z) throws SimpleStringParser.StringParsingException {
-        String stringFromVariableUTF = SLMessage.stringFromVariableUTF(bArr);
-        this.isScript = z;
-        if (!z) {
+    public SLNotecard(byte[] bytes, boolean isScript) throws SimpleStringParser.StringParsingException {
+        String stringFromVariableUTF = SLMessage.stringFromVariableUTF(bytes);
+        this.isScript = isScript;
+        if (!isScript) {
             SimpleStringParser simpleStringParser = new SimpleStringParser(stringFromVariableUTF, DELIM_ANY);
             simpleStringParser.expectToken("Linden text version 2", DELIM_EOL);
             simpleStringParser.expectToken("{", DELIM_EOL);
@@ -186,10 +185,10 @@ public class SLNotecard {
         }
     }
 
-    public static Spanned createSingleEditableAttachment(SLInventoryEntry sLInventoryEntry) {
+    public static Spanned createSingleEditableAttachment(SLInventoryEntry inventoryEntry) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         spannableStringBuilder.append((CharSequence) "⟹");
-        spannableStringBuilder.setSpan(new AttachmentSpan(sLInventoryEntry), 0, spannableStringBuilder.length(), 33);
+        spannableStringBuilder.setSpan(new AttachmentSpan(inventoryEntry), 0, spannableStringBuilder.length(), 33);
         return spannableStringBuilder;
     }
 

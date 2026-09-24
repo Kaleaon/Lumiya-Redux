@@ -28,11 +28,7 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import com.lumiyaviewer.lumiya.ui.outfits.OutfitsFragment;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] f462x282be546 = null;
 
     @BindView(R.id.my_avatar_name)
     TextView myAvatarName;
@@ -44,12 +40,12 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     ChatterPicView myAvatarPic;
     private Unbinder unbinder;
     private ChatterNameRetriever myAvatarNameRetriever = null;
-    private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$E97LbIKTNF028fQGuPv0gXqIQrc
+    private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            MyAvatarFragment.this.m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0((Integer) obj);
+            MyAvatarFragment.this.onMyBalance((Integer) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -57,46 +53,17 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
 
     private class MyAvatarPagesAdapter extends ArrayAdapter<MyAvatarDetailsPages> {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f463x282be546 = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m665x90cfe3ea() {
-            if (f463x282be546 != null) {
-                return f463x282be546;
-            }
-            int[] iArr = new int[MyAvatarDetailsPages.valuesCustom().length];
-            try {
-                iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageBlockList.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageOutfits.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[MyAvatarDetailsPages.pageProfile.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            f463x282be546 = iArr;
-            return iArr;
-        }
-
         public MyAvatarPagesAdapter(Context context) {
-            super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.valuesCustom());
+            super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.values());
         }
 
-        @Override // android.widget.ArrayAdapter, android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View view2 = super.getView(i, view, viewGroup);
             MyAvatarDetailsPages item = getItem(i);
             if ((view2 instanceof TextView) && item != null) {
-                switch (m665x90cfe3ea()[item.ordinal()]) {
-                    case 1:
+                switch (item) {
+                    case pageBalance:
                         Integer num = (Integer) MyAvatarFragment.this.myBalance.getData();
                         ((TextView) view2).setText(num != null ? MyAvatarFragment.this.getString(R.string.my_ava_balance_title, num) : MyAvatarFragment.this.getString(R.string.my_ava_balance_unknown));
                         break;
@@ -107,32 +74,6 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
             }
             return view2;
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
-    private /* synthetic */ int[] m663x90cfe3ea() {
-        if (f462x282be546 != null) {
-            return f462x282be546;
-        }
-        int[] iArr = new int[MyAvatarDetailsPages.valuesCustom().length];
-        try {
-            iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageBlockList.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageOutfits.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[MyAvatarDetailsPages.pageProfile.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f462x282be546 = iArr;
-        return iArr;
     }
 
     private UUID getAgentUUID() {
@@ -151,9 +92,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         return myAvatarFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMyBalance, reason: merged with bridge method [inline-methods] */
-    public void m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0(Integer num) {
+    public void onMyBalance(Integer num) {
         if (this.unbinder != null) {
             ListAdapter adapter = this.myAvatarOptionsList.getAdapter();
             if (adapter instanceof MyAvatarPagesAdapter) {
@@ -162,7 +101,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         if (this.unbinder != null) {
@@ -172,7 +111,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         setTitle(resolvedName, null);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.my_avatar, viewGroup, false);
@@ -182,7 +121,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -191,30 +130,30 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         super.onDestroyView();
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         UUID agentUUID = getAgentUUID();
         Object itemAtPosition = adapterView.getItemAtPosition(i);
         if (!(itemAtPosition instanceof MyAvatarDetailsPages) || agentUUID == null) {
             return;
         }
-        switch (m663x90cfe3ea()[((MyAvatarDetailsPages) itemAtPosition).ordinal()]) {
-            case 1:
+        switch (((MyAvatarDetailsPages) itemAtPosition)) {
+            case pageBalance:
                 DetailsActivity.showEmbeddedDetails(getActivity(), TransactionLogFragment.class, TransactionLogFragment.makeSelection(agentUUID));
                 break;
-            case 2:
+            case pageBlockList:
                 DetailsActivity.showEmbeddedDetails(getActivity(), MuteListFragment.class, MuteListFragment.makeSelection(agentUUID));
                 break;
-            case 3:
+            case pageOutfits:
                 DetailsActivity.showEmbeddedDetails(getActivity(), OutfitsFragment.class, OutfitsFragment.makeSelection(agentUUID, null));
                 break;
-            case 4:
+            case pageProfile:
                 DetailsActivity.showEmbeddedDetails(getActivity(), MyProfileFragment.class, MyProfileFragment.makeSelection(ChatterID.getUserChatterID(agentUUID, agentUUID)));
                 break;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UUID agentUUID = getAgentUUID();
@@ -227,7 +166,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.myAvatarNameRetriever != null) {
             this.myAvatarNameRetriever.dispose();

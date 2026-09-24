@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.users;
 
-/* loaded from: classes.dex */
 public class SLGroupInfo {
     public static final long GP_ACCOUNTING_ACCOUNTABLE = 1099511627776L;
     public static final long GP_ALL_POWERS = -1;

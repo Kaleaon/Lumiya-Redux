@@ -7,7 +7,6 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import com.google.vr.vrcore.controller.api.IControllerListener;
 
-/* loaded from: classes.dex */
 public interface IControllerService extends IInterface {
 
     public static abstract class Stub extends Binder implements IControllerService {
@@ -19,11 +18,11 @@ public interface IControllerService extends IInterface {
         private static class Proxy implements IControllerService {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -32,52 +31,52 @@ public interface IControllerService extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
+            @Override
             public int initialize(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeInt(i);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
-            public boolean registerListener(int i, String str, IControllerListener iControllerListener) throws RemoteException {
+            @Override
+            public boolean registerListener(int i, String str, IControllerListener controllerListener) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeInt(i);
                     obtain.writeString(str);
-                    obtain.writeStrongBinder(iControllerListener != null ? iControllerListener.asBinder() : null);
-                    this.mRemote.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    obtain.writeStrongBinder(controllerListener != null ? controllerListener.asBinder() : null);
+                    this.mRemote.transact(5, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
+            @Override
             public boolean unregisterListener(String str) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeString(str);
-                    this.mRemote.transact(6, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(6, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -95,12 +94,12 @@ public interface IControllerService extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IControllerService)) ? (IControllerService) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:
@@ -132,7 +131,7 @@ public interface IControllerService extends IInterface {
 
     int initialize(int i) throws RemoteException;
 
-    boolean registerListener(int i, String str, IControllerListener iControllerListener) throws RemoteException;
+    boolean registerListener(int i, String str, IControllerListener controllerListener) throws RemoteException;
 
     boolean unregisterListener(String str) throws RemoteException;
 }

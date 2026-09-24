@@ -14,7 +14,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class LLSDStreamingXMLRequest {
     private static final MediaType MEDIA_TYPE_LLSD_XML = MediaType.parse("application/llsd+xml");
     private final AtomicReference<Call> callRef = new AtomicReference<>(null);
@@ -30,10 +29,10 @@ public class LLSDStreamingXMLRequest {
         }
     }
 
-    public void PerformRequest(String str, LLSDNode lLSDNode, LLSDStreamingParser.LLSDContentHandler lLSDContentHandler) throws IOException, LLSDXMLException {
+    public void PerformRequest(String str, LLSDNode lsdNode, LLSDStreamingParser.LLSDContentHandler lsdContentHandler) throws IOException, LLSDXMLException {
         Request.Builder header = new Request.Builder().url(str).header(HttpHeaders.ACCEPT, "application/llsd+binary;q=0.5,application/llsd+xml;q=0.1");
-        if (lLSDNode != null) {
-            header.post(RequestBody.create(MEDIA_TYPE_LLSD_XML, lLSDNode.serializeToXML()));
+        if (lsdNode != null) {
+            header.post(RequestBody.create(MEDIA_TYPE_LLSD_XML, lsdNode.serializeToXML()));
         }
         Call newCall = SLHTTPSConnection.getOkHttpClient().newCall(header.build());
         this.callRef.set(newCall);
@@ -46,7 +45,7 @@ public class LLSDStreamingXMLRequest {
                 if (!execute.isSuccessful()) {
                     throw new IOException("Error response: " + execute.code());
                 }
-                LLSDStreamingParser.parseAny(execute.body().byteStream(), execute.header(HttpHeaders.CONTENT_TYPE, EnvironmentCompat.MEDIA_UNKNOWN), lLSDContentHandler);
+                LLSDStreamingParser.parseAny(execute.body().byteStream(), execute.header(HttpHeaders.CONTENT_TYPE, EnvironmentCompat.MEDIA_UNKNOWN), lsdContentHandler);
             } finally {
                 execute.close();
                 this.callRef.set(null);

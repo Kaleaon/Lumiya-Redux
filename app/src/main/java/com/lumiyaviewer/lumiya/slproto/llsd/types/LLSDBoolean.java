@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDBoolean extends LLSDNode {
     private boolean value;
 
@@ -19,21 +18,21 @@ public class LLSDBoolean extends LLSDNode {
         }
     }
 
-    public LLSDBoolean(boolean z) {
-        this.value = z;
+    public LLSDBoolean(boolean value) {
+        this.value = value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public boolean asBoolean() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(this.value ? 49 : 48);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "boolean");
         xmlSerializer.text(this.value ? "1" : "0");

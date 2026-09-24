@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class ChatterSubscription {
 
     @Nonnull
@@ -19,22 +18,22 @@ class ChatterSubscription {
 
     @Nonnull
     private final Subscription<ChatterID, VoiceChatInfo> voiceChatInfoSubscription;
-    private final Subscription.OnData<VoiceChatInfo> onVoiceStatusChanged = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$x6PlkRNg0xExeA_EUn8oEJWcOq8
+    private final Subscription.OnData<VoiceChatInfo> onVoiceStatusChanged = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatterSubscription.this.m307x45811332((VoiceChatInfo) obj);
+            ChatterSubscription.this.onVoiceChatInfoChanged((VoiceChatInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     };
-    private final Subscription.OnData<UnreadMessageInfo> onUnreadCount = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$x6PlkRNg0xExeA_EUn8oEJWcOq8.1
+    private final Subscription.OnData<UnreadMessageInfo> onUnreadCount = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatterSubscription.this.m308x45811333((UnreadMessageInfo) obj);
+            ChatterSubscription.this.onUnreadCountChanged((UnreadMessageInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -49,17 +48,13 @@ class ChatterSubscription {
         sortedChatterList.addChatter(this.displayData);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUnreadCountChanged, reason: merged with bridge method [inline-methods] */
-    public void m308x45811333(UnreadMessageInfo unreadMessageInfo) {
+    public void onUnreadCountChanged(UnreadMessageInfo unreadMessageInfo) {
         if (unreadMessageInfo != null) {
             setChatterDisplayData(this.displayData.withUnreadInfo(unreadMessageInfo));
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceChatInfoChanged, reason: merged with bridge method [inline-methods] */
-    public void m307x45811332(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfoChanged(VoiceChatInfo voiceChatInfo) {
         boolean z = false;
         ChatterDisplayData chatterDisplayData = this.displayData;
         if (voiceChatInfo != null && voiceChatInfo.state != VoiceChatInfo.VoiceChatState.None) {
@@ -74,9 +69,9 @@ class ChatterSubscription {
     }
 
     void setChatterDisplayData(@Nonnull ChatterDisplayData chatterDisplayData) {
-        ChatterDisplayData chatterDisplayData2 = this.displayData;
+        ChatterDisplayData displayData = this.displayData;
         this.displayData = chatterDisplayData;
-        this.chatterList.replaceChatter(chatterDisplayData2, this.displayData);
+        this.chatterList.replaceChatter(displayData, this.displayData);
     }
 
     public void unsubscribe() {

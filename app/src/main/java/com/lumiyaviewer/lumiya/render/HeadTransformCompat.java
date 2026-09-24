@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render;
 
-/* loaded from: classes.dex */
 public class HeadTransformCompat {
     public float lastYaw;
     public float neutralYaw;

@@ -4,37 +4,47 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * dataserver -> simulator -> viewer
+ * Reliable
+ *
+ * <p>Template: {@code GroupAccountSummaryReply Low 354 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelGroupLandMoney::processGroupAccountSummaryReply()} in indra/newview/llpanelgrouplandmoney.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupAccountSummaryReply extends SLMessage {
     public AgentData AgentData_Field;
     public MoneyData MoneyData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public int Balance;
-        public int CurrentInterval;
-        public int GroupTaxCurrent;
-        public int GroupTaxEstimate;
-        public int IntervalDays;
-        public int LandTaxCurrent;
-        public int LandTaxEstimate;
-        public byte[] LastTaxDate;
-        public int LightTaxCurrent;
-        public int LightTaxEstimate;
-        public int NonExemptMembers;
-        public int ObjectTaxCurrent;
-        public int ObjectTaxEstimate;
-        public int ParcelDirFeeCurrent;
-        public int ParcelDirFeeEstimate;
-        public UUID RequestID;
-        public byte[] StartDate;
-        public byte[] TaxDate;
-        public int TotalCredits;
-        public int TotalDebits;
+        public int Balance; // S32
+        public int CurrentInterval; // S32
+        public int GroupTaxCurrent; // S32
+        public int GroupTaxEstimate; // S32
+        public int IntervalDays; // S32
+        public int LandTaxCurrent; // S32
+        public int LandTaxEstimate; // S32
+        public byte[] LastTaxDate; // Variable 1 - string
+        public int LightTaxCurrent; // S32
+        public int LightTaxEstimate; // S32
+        public int NonExemptMembers; // S32
+        public int ObjectTaxCurrent; // S32
+        public int ObjectTaxEstimate; // S32
+        public int ParcelDirFeeCurrent; // S32
+        public int ParcelDirFeeEstimate; // S32
+        public UUID RequestID; // LLUUID
+        public byte[] StartDate; // Variable 1 - string
+        public byte[] TaxDate; // Variable 1 - string
+        public int TotalCredits; // S32
+        public int TotalDebits; // S32
     }
 
     public GroupAccountSummaryReply() {
@@ -43,21 +53,22 @@ public class GroupAccountSummaryReply extends SLMessage {
         this.MoneyData_Field = new MoneyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MoneyData_Field.StartDate.length + 25 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + this.MoneyData_Field.LastTaxDate.length + 1 + this.MoneyData_Field.TaxDate.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupAccountSummaryReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupAccountSummaryReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 98);
+        // Message number: Low 354 (GroupAccountSummaryReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x62);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.MoneyData_Field.RequestID);
@@ -82,7 +93,7 @@ public class GroupAccountSummaryReply extends SLMessage {
         packVariable(byteBuffer, this.MoneyData_Field.TaxDate, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.res.text;
 
-/* loaded from: classes.dex */
 public abstract class DrawableTextParams {
     public static DrawableTextParams create(String str, int i) {
         return new AutoValue_DrawableTextParams(str, i);

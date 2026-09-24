@@ -9,7 +9,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AvatarTextures {
     public static final UUID DEFAULT_AVATAR_TEXTURE = UUID.fromString("c228d1cf-4b5d-4ba8-84f4-899a0796aa97");
     private final Map<AvatarTextureFaceIndex, UUID> avatarTextures = new EnumMap(AvatarTextureFaceIndex.class);
@@ -18,20 +17,20 @@ public class AvatarTextures {
         return ApplyTextures(SLTextureEntry.create(ByteBuffer.wrap(avatarAppearance.ObjectData_Field.TextureEntry), avatarAppearance.ObjectData_Field.TextureEntry.length), false);
     }
 
-    public synchronized boolean ApplyTextures(SLTextureEntry sLTextureEntry, boolean z) {
+    public synchronized boolean ApplyTextures(SLTextureEntry textureEntry, boolean z) {
         boolean z2;
         UUID textureID;
-        if (sLTextureEntry.getFaceMask() == 0) {
+        if (textureEntry.getFaceMask() == 0) {
             return false;
         }
-        SLTextureEntryFace GetDefaultTexture = sLTextureEntry.GetDefaultTexture();
-        AvatarTextureFaceIndex[] valuesCustom = AvatarTextureFaceIndex.valuesCustom();
+        SLTextureEntryFace GetDefaultTexture = textureEntry.GetDefaultTexture();
+        AvatarTextureFaceIndex[] valuesCustom = AvatarTextureFaceIndex.values();
         int length = valuesCustom.length;
         int i = 0;
         boolean z3 = false;
         while (i < length) {
             AvatarTextureFaceIndex avatarTextureFaceIndex = valuesCustom[i];
-            SLTextureEntryFace GetFace = sLTextureEntry.GetFace(avatarTextureFaceIndex.ordinal());
+            SLTextureEntryFace GetFace = textureEntry.GetFace(avatarTextureFaceIndex.ordinal());
             if (GetFace == null || (textureID = GetFace.getTextureID(GetDefaultTexture)) == null) {
                 z2 = z3;
             } else {

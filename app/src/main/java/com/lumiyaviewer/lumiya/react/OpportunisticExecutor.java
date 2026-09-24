@@ -12,15 +12,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class OpportunisticExecutor implements Executor {
     private final Thread thread;
     private final Queue<Runnable> queue = new LinkedList();
     private final Lock lock = new ReentrantLock();
     private final Condition notEmpty = this.lock.newCondition();
     private final Set<Runnable> runOnceRunnables = new HashSet();
-    private final Runnable worker = new Runnable() { // from class: com.lumiyaviewer.lumiya.react.OpportunisticExecutor.1
-        @Override // java.lang.Runnable
+    private final Runnable worker = new Runnable() {
+        @Override
         public void run() {
             while (true) {
                 Runnable runnable;
@@ -57,16 +56,11 @@ public class OpportunisticExecutor implements Executor {
         }
     };
 
-    /* JADX INFO: Access modifiers changed from: private */
     public class RunOnceExecutor implements Executor {
         private RunOnceExecutor() {
         }
 
-        /* synthetic */ RunOnceExecutor(OpportunisticExecutor opportunisticExecutor, RunOnceExecutor runOnceExecutor) {
-            this();
-        }
-
-        @Override // java.util.concurrent.Executor
+        @Override
         public void execute(@Nonnull Runnable runnable) {
             try {
                 OpportunisticExecutor.this.lock.lock();
@@ -83,7 +77,7 @@ public class OpportunisticExecutor implements Executor {
         this.thread.start();
     }
 
-    @Override // java.util.concurrent.Executor
+    @Override
     public void execute(@Nonnull Runnable runnable) {
         try {
             this.lock.lock();
@@ -105,6 +99,6 @@ public class OpportunisticExecutor implements Executor {
     }
 
     public RunOnceExecutor getRunOnceExecutor() {
-        return new RunOnceExecutor(this, null);
+        return new RunOnceExecutor();
     }
 }

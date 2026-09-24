@@ -8,10 +8,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class PrimVolumeParams {
     public static final byte LL_SCULPT_FLAG_INVERT = 64;
-    public static final byte LL_SCULPT_FLAG_MIRROR = Byte.MIN_VALUE;
+    public static final byte LL_SCULPT_FLAG_MIRROR = (byte) 0x80;
     public static final byte LL_SCULPT_TYPE_CYLINDER = 4;
     public static final byte LL_SCULPT_TYPE_MASK = 7;
     public static final byte LL_SCULPT_TYPE_MESH = 5;

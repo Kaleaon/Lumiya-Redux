@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.chat.SLChatTextBoxDialog;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.OnClickListener, View.OnKeyListener, View.OnFocusChangeListener {
     private final Button dialogButtonIgnore;
     public final View dialogButtonsLayout;
@@ -42,24 +41,24 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonDialogIgnore /* 2131755305 */:
+            case R.id.buttonDialogIgnore:
                 if (this.textBoxEvent != null) {
-                    this.textBoxEvent.m157xe7f9f9c3(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()));
+                    this.textBoxEvent.onDialogIgnored(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()));
                     requestAdapterUpdate();
                     break;
                 }
                 break;
-            case R.id.buttonTextBoxSend /* 2131755321 */:
+            case R.id.buttonTextBoxSend:
                 if (this.textBox.getVisibility() != 0) {
-                    this.textBox.setVisibility(0);
+                    this.textBox.setVisibility(View.VISIBLE);
                     this.textBox.requestFocus();
                     this.textBoxSend.setText(R.string.textbox_send_caption);
                     break;
                 } else if (this.textBoxEvent != null) {
-                    this.textBoxEvent.m156xe7f9f620(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
+                    this.textBoxEvent.onEnteredText(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
                     requestAdapterUpdate();
                     break;
                 }
@@ -67,16 +66,16 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         }
     }
 
-    @Override // android.view.View.OnFocusChangeListener
+    @Override
     public void onFocusChange(View view, boolean z) {
         if (view != this.textBox || this.textBox == null || z) {
             return;
         }
-        this.textBox.setVisibility(4);
+        this.textBox.setVisibility(View.INVISIBLE);
         this.textBoxSend.setText(R.string.textbox_reply_caption);
     }
 
-    @Override // android.view.View.OnKeyListener
+    @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         if (keyEvent.getAction() != 0 || i != 66 || view.getId() != R.id.llTextBoxEdit) {
             return false;
@@ -84,17 +83,17 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         if (this.textBoxEvent == null) {
             return true;
         }
-        this.textBoxEvent.m156xe7f9f620(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
+        this.textBoxEvent.onEnteredText(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
         requestAdapterUpdate();
         return true;
     }
 
-    public void setTextBoxEvent(@Nullable SLChatTextBoxDialog sLChatTextBoxDialog) {
-        if (this.textBoxEvent != sLChatTextBoxDialog) {
-            this.textBoxEvent = sLChatTextBoxDialog;
+    public void setTextBoxEvent(@Nullable SLChatTextBoxDialog chatTextBoxDialog) {
+        if (this.textBoxEvent != chatTextBoxDialog) {
+            this.textBoxEvent = chatTextBoxDialog;
             if (this.textBox != null) {
                 this.textBox.clearFocus();
-                this.textBox.setVisibility(4);
+                this.textBox.setVisibility(View.INVISIBLE);
                 this.textBoxSend.setText(R.string.textbox_reply_caption);
                 this.textBox.setText((CharSequence) null);
             }

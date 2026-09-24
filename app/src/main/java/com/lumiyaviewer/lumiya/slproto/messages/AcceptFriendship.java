@@ -1,29 +1,36 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AcceptFriendship
+ *
+ * <p>Template: {@code AcceptFriendship Low 297 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AcceptFriendship extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
     public TransactionBlock TransactionBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
+        public UUID FolderID; // LLUUID - place to put calling card.
     }
 
+    /** Block TransactionBlock, Single. */
     public static class TransactionBlock {
-        public UUID TransactionID;
+        public UUID TransactionID; // LLUUID
     }
 
     public AcceptFriendship() {
@@ -32,21 +39,22 @@ public class AcceptFriendship extends SLMessage {
         this.TransactionBlock_Field = new TransactionBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.FolderData_Fields.size() * 16) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAcceptFriendship(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAcceptFriendship(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 41);
+        // Message number: Low 297 (AcceptFriendship).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x29);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.TransactionBlock_Field.TransactionID);
@@ -57,13 +65,13 @@ public class AcceptFriendship extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.TransactionBlock_Field.TransactionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             this.FolderData_Fields.add(folderData);

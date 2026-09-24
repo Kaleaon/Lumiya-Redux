@@ -1,28 +1,35 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * MoveInventoryItem
+ *
+ * <p>Template: {@code MoveInventoryItem Low 268 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processMoveInventoryItem()} in indra/newview/llinventorymodel.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class MoveInventoryItem extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<InventoryData> InventoryData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
-        public boolean Stamp;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
+        public boolean Stamp; // BOOL - should the server re-timestamp?
     }
 
+    /** Block InventoryData, Variable. */
     public static class InventoryData {
-        public UUID FolderID;
-        public UUID ItemID;
-        public byte[] NewName;
+        public UUID FolderID; // LLUUID
+        public UUID ItemID; // LLUUID
+        public byte[] NewName; // Variable 1
     }
 
     public MoveInventoryItem() {
@@ -30,7 +37,7 @@ public class MoveInventoryItem extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 38;
         Iterator<?> it = this.InventoryData_Fields.iterator();
@@ -43,16 +50,17 @@ public class MoveInventoryItem extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMoveInventoryItem(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMoveInventoryItem(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.FF);
+        // Message number: Low 268 (MoveInventoryItem).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x0C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.AgentData_Field.Stamp);
@@ -64,13 +72,13 @@ public class MoveInventoryItem extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.Stamp = unpackBoolean(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
             inventoryData.FolderID = unpackUUID(byteBuffer);

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class LogMessagesFlushed implements Bundleable {
 
     @Nonnull
@@ -27,7 +26,7 @@ public class LogMessagesFlushed implements Bundleable {
         this.messageIDs = ImmutableList.copyOf((Collection) collection);
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("agentUUID", this.agentUUID.toString());

@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectPopupsManager {
     private static final int MAX_POPUPS = 99;
 
@@ -81,12 +80,12 @@ public class ObjectPopupsManager {
             final ObjectPopupListener listener = objectPopupListener;
             final int size = this.objectPopups.size();
             if (executor != null) {
-                executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.4
+                executor.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         listener.onObjectPopupCountChanged(size);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -125,12 +124,12 @@ public class ObjectPopupsManager {
             if (objectPopupListener != null) {
                 final ObjectPopupListener listener = objectPopupListener;
                 if (executor != null) {
-                    executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.3
+                    executor.execute(new Runnable() {
                         private final /* synthetic */ void $m$0() {
                             listener.onObjectPopupCountChanged(size);
                         }
 
-                        @Override // java.lang.Runnable
+                        @Override
                         public final void run() {
                             $m$0();
                         }
@@ -141,12 +140,12 @@ public class ObjectPopupsManager {
             }
         } else if (executor != null) {
             final ObjectPopupListener listener = objectPopupListener;
-            executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.2
+            executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     listener.onNewObjectPopup(sLChatEvent);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -189,12 +188,12 @@ public class ObjectPopupsManager {
         final ObjectPopupListener objectPopupListener = listener;
         if (objectPopupListener != null) {
             if (executor != null) {
-                executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE
+                executor.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         ((ObjectPopupsManager.ObjectPopupListener) objectPopupListener).onNewObjectPopup(null);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -223,12 +222,12 @@ public class ObjectPopupsManager {
         this.objectPopups.clear();
         if (objectPopupListener != null) {
             if (executor != null) {
-                executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$gJtxV6TiuzFNXMR7-6og75a4tFE.1
+                executor.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         ObjectPopupsManager.m347xe63a07b1((ObjectPopupsManager.ObjectPopupListener) objectPopupListener);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }

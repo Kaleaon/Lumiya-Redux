@@ -4,29 +4,38 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * dataserver -> simulator -> viewer
+ *
+ * <p>Template: {@code MoneyBalanceReply Low 314 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_money_balance_reply()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class MoneyBalanceReply extends SLMessage {
     public MoneyData MoneyData_Field;
     public TransactionInfo TransactionInfo_Field;
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public UUID AgentID;
-        public byte[] Description;
-        public int MoneyBalance;
-        public int SquareMetersCommitted;
-        public int SquareMetersCredit;
-        public UUID TransactionID;
-        public boolean TransactionSuccess;
+        public UUID AgentID; // LLUUID
+        public byte[] Description; // Variable 1 - string
+        public int MoneyBalance; // S32
+        public int SquareMetersCommitted; // S32
+        public int SquareMetersCredit; // S32
+        public UUID TransactionID; // LLUUID
+        public boolean TransactionSuccess; // BOOL
     }
 
+    /** Block TransactionInfo, Single. */
     public static class TransactionInfo {
-        public int Amount;
-        public UUID DestID;
-        public boolean IsDestGroup;
-        public boolean IsSourceGroup;
-        public byte[] ItemDescription;
-        public UUID SourceID;
-        public int TransactionType;
+        public int Amount; // S32
+        public UUID DestID; // LLUUID
+        public boolean IsDestGroup; // BOOL
+        public boolean IsSourceGroup; // BOOL
+        public byte[] ItemDescription; // Variable 1 - string
+        public UUID SourceID; // LLUUID
+        public int TransactionType; // S32 - lltransactiontype.h
     }
 
     public MoneyBalanceReply() {
@@ -35,21 +44,22 @@ public class MoneyBalanceReply extends SLMessage {
         this.TransactionInfo_Field = new TransactionInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MoneyData_Field.Description.length + 46 + 4 + this.TransactionInfo_Field.ItemDescription.length + 43;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMoneyBalanceReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMoneyBalanceReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 58);
+        // Message number: Low 314 (MoneyBalanceReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x3A);
         packUUID(byteBuffer, this.MoneyData_Field.AgentID);
         packUUID(byteBuffer, this.MoneyData_Field.TransactionID);
         packBoolean(byteBuffer, this.MoneyData_Field.TransactionSuccess);
@@ -66,7 +76,7 @@ public class MoneyBalanceReply extends SLMessage {
         packVariable(byteBuffer, this.TransactionInfo_Field.ItemDescription, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.MoneyData_Field.AgentID = unpackUUID(byteBuffer);
         this.MoneyData_Field.TransactionID = unpackUUID(byteBuffer);

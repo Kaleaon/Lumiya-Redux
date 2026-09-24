@@ -6,34 +6,33 @@ import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GridConnectionManager {
     private static final Object lock = new Object();
     private static final Map<UUID, SLGridConnection> connections = new WeakHashMap();
 
     @Nullable
     public static SLGridConnection getConnection(@Nullable UUID uuid) {
-        SLGridConnection sLGridConnection;
+        SLGridConnection gridConnection;
         if (uuid == null) {
             return null;
         }
         synchronized (lock) {
-            sLGridConnection = connections.get(uuid);
+            gridConnection = connections.get(uuid);
         }
-        return sLGridConnection;
+        return gridConnection;
     }
 
-    public static void removeConnection(@Nonnull UUID uuid, SLGridConnection sLGridConnection) {
+    public static void removeConnection(@Nonnull UUID uuid, SLGridConnection gridConnection) {
         synchronized (lock) {
-            if (connections.get(uuid) == sLGridConnection) {
+            if (connections.get(uuid) == gridConnection) {
                 connections.remove(uuid);
             }
         }
     }
 
-    public static void setConnection(@Nonnull UUID uuid, SLGridConnection sLGridConnection) {
+    public static void setConnection(@Nonnull UUID uuid, SLGridConnection gridConnection) {
         synchronized (lock) {
-            connections.put(uuid, sLGridConnection);
+            connections.put(uuid, gridConnection);
         }
     }
 }

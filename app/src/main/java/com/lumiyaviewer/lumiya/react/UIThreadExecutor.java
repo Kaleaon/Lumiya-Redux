@@ -11,15 +11,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class UIThreadExecutor implements Executor {
     private final Lock lock = new ReentrantLock();
     private final AtomicBoolean runnablePosted = new AtomicBoolean(false);
     private final Looper mainLooper = Looper.getMainLooper();
     private final Handler handler = new Handler(this.mainLooper);
     private final Queue<Runnable> queue = new ConcurrentLinkedQueue();
-    private final Executor serialExecutor = new Executor() { // from class: com.lumiyaviewer.lumiya.react.UIThreadExecutor.1
-        @Override // java.util.concurrent.Executor
+    private final Executor serialExecutor = new Executor() {
+        @Override
         public void execute(@Nonnull Runnable runnable) {
             try {
                 UIThreadExecutor.this.lock.lock();
@@ -51,7 +50,7 @@ public class UIThreadExecutor implements Executor {
         return InstanceHolder.Instance.serialExecutor;
     }
 
-    @Override // java.util.concurrent.Executor
+    @Override
     public void execute(@Nonnull Runnable runnable) {
         try {
             this.lock.lock();

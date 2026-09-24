@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TextureMemoryTracker {
     private static final int PAGE_SIZE = 4096;
     private static final int RELEASE_DELAY_FRAMES = 4;
@@ -146,21 +145,21 @@ public class TextureMemoryTracker {
         delayedRelease[delayedReleaseIndex.get()].addAndGet(actualSize(i));
     }
 
-    public static void setActiveRenderer(Object obj) {
+    public static void setActiveRenderer(Object activeRenderer) {
         synchronized (rendererLock) {
-            activeRendererRef = new WeakReference<>(obj);
+            activeRendererRef = new WeakReference<>(activeRenderer);
         }
     }
 
-    private static void setInflightMemoryLow(boolean z) {
-        if (inflightLowMemory.getAndSet(z) != z) {
-            TextureCache.getInstance().setTextureMemoryState(z);
+    private static void setInflightMemoryLow(boolean inflightMemoryLow) {
+        if (inflightLowMemory.getAndSet(inflightMemoryLow) != inflightMemoryLow) {
+            TextureCache.getInstance().setTextureMemoryState(inflightMemoryLow);
         }
     }
 
-    public static void setMemoryLimit(int i) {
-        textureMemoryLimit.set(i);
-        int i2 = i / 4;
+    public static void setMemoryLimit(int memoryLimit) {
+        textureMemoryLimit.set(memoryLimit);
+        int i2 = memoryLimit / 4;
         textureMemoryReserved = i2 <= 33554432 ? i2 : 33554432;
     }
 

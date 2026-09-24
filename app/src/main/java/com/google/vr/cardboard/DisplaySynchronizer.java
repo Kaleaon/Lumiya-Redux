@@ -8,7 +8,6 @@ import android.view.Choreographer;
 import android.view.Display;
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class DisplaySynchronizer implements Choreographer.FrameCallback {
     private static final boolean DEBUG = false;
     public static final long DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(1);
@@ -44,15 +43,15 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
     
         if ((r8 - r7.lastDisplayRotationUpdateTimeNanos <= com.google.vr.cardboard.DisplaySynchronizer.DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS) == false) goto L4;
      */
-    @Override // android.view.Choreographer.FrameCallback
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-     public void doFrame(long j) {
+     public void doFrame(long lastDisplayRotationUpdateTimeNanos) {
         checkNativeDisplaySynchronizer();
         if (this.displayRotationDegrees != -1) {
-            if (!(j - this.lastDisplayRotationUpdateTimeNanos <= DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS)) {
+            if (!(lastDisplayRotationUpdateTimeNanos - this.lastDisplayRotationUpdateTimeNanos <= DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS)) {
                 switch (this.display.getRotation()) {
                     case 0:
                         this.displayRotationDegrees = 0;
@@ -71,10 +70,10 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
                         this.displayRotationDegrees = 0;
                         break;
                 }
-                this.lastDisplayRotationUpdateTimeNanos = j;
+                this.lastDisplayRotationUpdateTimeNanos = lastDisplayRotationUpdateTimeNanos;
             }
         }
-        nativeUpdate(this.nativeDisplaySynchronizer, j, this.displayRotationDegrees);
+        nativeUpdate(this.nativeDisplaySynchronizer, lastDisplayRotationUpdateTimeNanos, this.displayRotationDegrees);
     }
 
     protected void finalize() throws Throwable {

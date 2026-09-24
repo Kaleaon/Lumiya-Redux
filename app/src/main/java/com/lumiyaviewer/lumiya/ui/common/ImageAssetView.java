@@ -21,7 +21,6 @@ import com.lumiyaviewer.lumiya.res.textures.TextureCache;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ImageAssetView extends View {
     private boolean alignTop;
     private UUID assetID;
@@ -41,11 +40,7 @@ public class ImageAssetView extends View {
             this.textureReady = new Object();
         }
 
-        /* synthetic */ LoadAssetImageTask(ImageAssetView imageAssetView, LoadAssetImageTask loadAssetImageTask) {
-            this();
-        }
-
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
                 this.texture = (OpenJPEG) obj;
@@ -55,8 +50,7 @@ public class ImageAssetView extends View {
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Bitmap doInBackground(UUID... uuidArr) {
             Debug.Printf("loading asset ID %s", uuidArr[0].toString());
             TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuidArr[0], TextureClass.Asset), this);
@@ -80,8 +74,7 @@ public class ImageAssetView extends View {
             return null;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Bitmap bitmap) {
             ImageAssetView.this.imageBitmap = bitmap;
             if (ImageAssetView.this.verticalFit) {
@@ -122,21 +115,21 @@ public class ImageAssetView extends View {
         this.verticalFit = false;
     }
 
-    @Override // android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.chatBubbleText, typedValue, true);
-        int i = typedValue.data;
+        int data = typedValue.data;
         this.textPaint.setStyle(Paint.Style.STROKE);
-        this.textPaint.setColor(i);
+        this.textPaint.setColor(data);
         this.textPaint.setTextAlign(Paint.Align.CENTER);
         this.textPaint.setAntiAlias(true);
-        this.textPaint.setTextSize(TypedValue.applyDimension(2, 14.0f, displayMetrics));
+        this.textPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14.0f, displayMetrics));
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
@@ -152,7 +145,10 @@ public class ImageAssetView extends View {
         }
         int width2 = this.imageBitmap.getWidth();
         int height2 = this.imageBitmap.getHeight();
-        float max = Math.max(width2 / width, height2 / height);
+        // Fit the bitmap inside the view: scale by the larger of the two ratios.
+        // Must be float division (the decompiled source used int division, which
+        // made the scale 0 for any image smaller than the view).
+        float max = Math.max((float) width2 / (float) width, (float) height2 / (float) height);
         int round = Math.round(width2 / max);
         int scaledHeight = Math.round(height2 / max);
         int i = (width / 2) - (round / 2);
@@ -180,12 +176,12 @@ public class ImageAssetView extends View {
         canvas.drawBitmap(this.imageBitmap, this.bitmapSrcRect, this.bitmapDestRect, this.bitmapPaint);
         Rect rect = this.bitmapDestRect;
         rect.left--;
-        Rect rect2 = this.bitmapDestRect;
-        rect2.top--;
+        Rect bitmapDestRect = this.bitmapDestRect;
+        bitmapDestRect.top--;
         canvas.drawRect(this.bitmapDestRect, this.bitmapPaint);
     }
 
-    @Override // android.view.View
+    @Override
     protected void onMeasure(int i, int i2) {
         if (View.MeasureSpec.getMode(i) == 0 && View.MeasureSpec.getMode(i2) == 0) {
             super.onMeasure(i, i2);
@@ -202,8 +198,8 @@ public class ImageAssetView extends View {
         setMeasuredDimension(size, min);
     }
 
-    public void setAlignTop(boolean z) {
-        this.alignTop = z;
+    public void setAlignTop(boolean alignTop) {
+        this.alignTop = alignTop;
         invalidate();
     }
 
@@ -229,14 +225,14 @@ public class ImageAssetView extends View {
         this.imageBitmap = null;
         if (this.assetID != null) {
             Debug.Printf("requested to view asset ID %s", uuid);
-            this.loadTask = new LoadAssetImageTask(this, loadAssetImageTask);
+            this.loadTask = new LoadAssetImageTask();
             this.loadTask.execute(uuid);
         }
         invalidate();
     }
 
-    public void setVerticalFit(boolean z) {
-        this.verticalFit = z;
+    public void setVerticalFit(boolean verticalFit) {
+        this.verticalFit = verticalFit;
         requestLayout();
     }
 }

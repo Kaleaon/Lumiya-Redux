@@ -15,15 +15,14 @@ import com.lumiyaviewer.lumiya.ui.common.ChatterFragment;
 import com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class PickDescriptionEditFragment extends TextFieldEditFragment {
     private static final String AVATAR_PICK_KEY = "avatarPickKey";
-    private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$Y7Ne2VWglUcvjFUgJydWWKVgIXM
+    private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            PickDescriptionEditFragment.this.m516x9070e529((PickInfoReply) obj);
+            PickDescriptionEditFragment.this.onPickInfoReply((PickInfoReply) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -43,20 +42,18 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
         return makeSelection;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onPickInfoReply, reason: merged with bridge method [inline-methods] */
-    public void m516x9070e529(PickInfoReply pickInfoReply) {
+    public void onPickInfoReply(PickInfoReply pickInfoReply) {
         if (pickInfoReply != null) {
             setOriginalText(SLMessage.stringFromVariableUTF(pickInfoReply.Data_Field.Desc));
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected String getFieldHint(Context context) {
         return getString(R.string.pick_description_edit_hint);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         AvatarPickKey pickKey = getPickKey();
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDUser) || pickKey == null) {
@@ -66,13 +63,13 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
-    protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
+    @Override
+    protected void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str) {
         AvatarPickKey pickKey = getPickKey();
         PickInfoReply data = this.pickInfo.getData();
-        if (sLAgentCircuit == null || pickKey == null || data == null) {
+        if (agentCircuit == null || pickKey == null || data == null) {
             return;
         }
-        sLAgentCircuit.getModules().userProfiles.UpdatePickInfo(pickKey.pickID, data.Data_Field.CreatorID, data.Data_Field.ParcelID, SLMessage.stringFromVariableOEM(data.Data_Field.Name), str, data.Data_Field.SnapshotID, data.Data_Field.PosGlobal, data.Data_Field.SortOrder, data.Data_Field.Enabled);
+        agentCircuit.getModules().userProfiles.UpdatePickInfo(pickKey.pickID, data.Data_Field.CreatorID, data.Data_Field.ParcelID, SLMessage.stringFromVariableOEM(data.Data_Field.Name), str, data.Data_Field.SnapshotID, data.Data_Field.PosGlobal, data.Data_Field.SortOrder, data.Data_Field.Enabled);
     }
 }

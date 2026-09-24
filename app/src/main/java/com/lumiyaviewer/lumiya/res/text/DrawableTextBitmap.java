@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-/* loaded from: classes.dex */
 public class DrawableTextBitmap {
     private final float baselineOffset;
     private final Bitmap bitmap;

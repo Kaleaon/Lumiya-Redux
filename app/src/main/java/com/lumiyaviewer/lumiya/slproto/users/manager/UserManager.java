@@ -68,7 +68,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserManager {
 
     @Nonnull
@@ -166,9 +165,8 @@ public class UserManager {
     private final SubscriptionSingleDataPool<ChatterID> voiceActiveChatterPool = new SubscriptionSingleDataPool<>();
     private final SubscriptionSingleDataPool<VoiceAudioProperties> voiceAudioPropertiesPool = new SubscriptionSingleDataPool<>();
     private final SubscriptionPool<UUID, UserName> userNamesPool = new SubscriptionPool<>();
-    private final RateLimitRequestHandler<UUID, UserName> userNamesHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UserName, UserName>(this.userNamesPool, this.dbExecutor) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UserManager.1
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+    private final RateLimitRequestHandler<UUID, UserName> userNamesHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UserName, UserName>(this.userNamesPool, this.dbExecutor) {
+        @Override
         public boolean isRequestComplete(@Nonnull UUID uuid, UserName userName) {
             if (userName != null) {
                 if (userName.getIsBadUUID()) {
@@ -181,15 +179,13 @@ public class UserManager {
             return false;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        @Override
         @Nullable
         public UserName processRequest(@Nonnull UUID uuid) {
             return UserManager.this.daoSession.getUserNameDao().load(uuid);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        @Override
         public UserName processResult(@Nonnull UUID uuid, UserName userName) {
             UserName load = UserManager.this.daoSession.getUserNameDao().load(uuid);
             if (load == null) {
@@ -306,8 +302,8 @@ public class UserManager {
         this.chatMessageDao.insert(chatMessage);
     }
 
-    public void clearActiveAgentCircuit(@Nullable SLAgentCircuit sLAgentCircuit) {
-        if (this.activeAgentCircuit.compareAndSet(sLAgentCircuit, null)) {
+    public void clearActiveAgentCircuit(@Nullable SLAgentCircuit agentCircuit) {
+        if (this.activeAgentCircuit.compareAndSet(agentCircuit, null)) {
             Debug.Printf("Active agent circuit cleared.", new Object[0]);
             this.objectPopupsManager.clearObjectPopups();
             this.objectsManager.requestObjectListUpdate();
@@ -588,13 +584,13 @@ public class UserManager {
         return this.parcelInfoData;
     }
 
-    public void setActiveAgentCircuit(@Nullable SLAgentCircuit sLAgentCircuit) {
-        this.activeAgentCircuit.set(sLAgentCircuit);
-        if (sLAgentCircuit == null) {
+    public void setActiveAgentCircuit(@Nullable SLAgentCircuit agentCircuit) {
+        this.activeAgentCircuit.set(agentCircuit);
+        if (agentCircuit == null) {
             this.objectPopupsManager.clearObjectPopups();
         }
         this.objectsManager.requestObjectListUpdate();
-        activeAgentCircuitsPool.setData(this.userID, sLAgentCircuit);
+        activeAgentCircuitsPool.setData(this.userID, agentCircuit);
     }
 
     public void setChatterMuted(ChatterID chatterID, boolean z) {
@@ -629,7 +625,7 @@ public class UserManager {
         updateUserNames(uuid, null, null, true);
     }
 
-    public void setUserPic(UUID uuid, byte[] bArr) {
+    public void setUserPic(UUID uuid, byte[] bytes) {
         if (uuid != null) {
             Query<UserPic> forCurrentThread = this.findUserPicQuery.forCurrentThread();
             forCurrentThread.setParameter(0, uuid.toString());
@@ -639,7 +635,7 @@ public class UserManager {
                     unique = new UserPic(null);
                     unique.setUuid(uuid.toString());
                 }
-                unique.setBitmap(bArr);
+                unique.setBitmap(bytes);
                 this.userPicRepository.insertOrReplace(unique);
             }
         }
@@ -657,8 +653,8 @@ public class UserManager {
         this.voiceChatInfoPool.setData(chatterID, voiceChatInfo);
     }
 
-    public void setVoiceLoggedIn(boolean z) {
-        this.voiceLoggedInPool.setData(SubscriptionSingleKey.Value, Boolean.valueOf(z));
+    public void setVoiceLoggedIn(boolean voiceLoggedIn) {
+        this.voiceLoggedInPool.setData(SubscriptionSingleKey.Value, Boolean.valueOf(voiceLoggedIn));
     }
 
     public void updateUserNames(@Nonnull UUID uuid, @Nullable String str, @Nullable String str2) {

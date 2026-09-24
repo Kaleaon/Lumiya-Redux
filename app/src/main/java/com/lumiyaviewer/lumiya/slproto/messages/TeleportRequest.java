@@ -5,20 +5,41 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Teleport messages
+ * The teleport messages are numerous, so I have attempted to give them a
+ * consistent naming convention. Since there is a bit of glob pattern
+ * aliasing, the rules are applied in order.
+ * Teleport* - viewer->sim or sim->viewer message which announces a
+ * teleportation request, progrees, start, or end.
+ * Data* - sim->data or data->sim trusted message.
+ * Space* - sim->space or space->sim trusted messaging
+ * *Lure - A lure message to pass around information.
+ * All actual viewer teleports will begin with a Teleport* message and
+ * end in a TeleportStart, TeleportLocal or TeleportFailed message. The TeleportFailed
+ * message may be returned by any process and must be routed through the
+ * teleporting agent's simulator and back to the viewer.
+ * TeleportRequest
+ * viewer -> sim specifying exact teleport destination
+ *
+ * <p>Template: {@code TeleportRequest Low 62 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class TeleportRequest extends SLMessage {
     public AgentData AgentData_Field;
     public Info Info_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Info, Single. */
     public static class Info {
-        public LLVector3 LookAt;
-        public LLVector3 Position;
-        public UUID RegionID;
+        public LLVector3 LookAt; // LLVector3
+        public LLVector3 Position; // LLVector3
+        public UUID RegionID; // LLUUID
     }
 
     public TeleportRequest() {
@@ -27,21 +48,22 @@ public class TeleportRequest extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 76;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 62);
+        // Message number: Low 62 (TeleportRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x3E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Info_Field.RegionID);
@@ -49,7 +71,7 @@ public class TeleportRequest extends SLMessage {
         packLLVector3(byteBuffer, this.Info_Field.LookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

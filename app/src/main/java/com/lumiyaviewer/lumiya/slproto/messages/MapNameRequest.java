@@ -4,21 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * This message is sent up from the viewer to get a list
+ * of the sims with a given name.
+ * Returns: MapBlockReply
+ *
+ * <p>Template: {@code MapNameRequest Low 408 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MapNameRequest extends SLMessage {
     public AgentData AgentData_Field;
     public NameData NameData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int EstateID;
-        public int Flags;
-        public boolean Godlike;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int EstateID; // U32 - filled in on sim
+        public int Flags; // U32
+        public boolean Godlike; // BOOL - filled in on sim
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block NameData, Single. */
     public static class NameData {
-        public byte[] Name;
+        public byte[] Name; // Variable 1 - string
     }
 
     public MapNameRequest() {
@@ -27,21 +37,22 @@ public class MapNameRequest extends SLMessage {
         this.NameData_Field = new NameData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.NameData_Field.Name.length + 1 + 45;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapNameRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapNameRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -104);
+        // Message number: Low 408 (MapNameRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x98);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
@@ -50,7 +61,7 @@ public class MapNameRequest extends SLMessage {
         packVariable(byteBuffer, this.NameData_Field.Name, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

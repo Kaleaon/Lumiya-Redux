@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base;
 
-/* loaded from: classes.dex */
 public class Constants {
     public static final String CARDBOARD_CATEGORY = "com.google.intent.category.CARDBOARD";
     public static final String DAYDREAM_CATEGORY = "com.google.intent.category.DAYDREAM";

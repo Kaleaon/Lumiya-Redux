@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.protobuf.nano.WireFormatNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Phone {
 
     public static final class PhoneParams extends ExtendableMessageNano<PhoneParams> implements Cloneable {
@@ -39,8 +38,8 @@ public interface Phone {
             return new PhoneParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static PhoneParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (PhoneParams) MessageNano.mergeFrom(new PhoneParams(), bArr);
+        public static PhoneParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (PhoneParams) MessageNano.mergeFrom(new PhoneParams(), bytes);
         }
 
         public final PhoneParams clear() {
@@ -72,11 +71,10 @@ public interface Phone {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
-        public final PhoneParams mo6clone() {
+        @Override
+        public final PhoneParams clone() {
             try {
-                PhoneParams phoneParams = (PhoneParams) super.mo6clone();
+                PhoneParams phoneParams = (PhoneParams) super.clone();
                 if (this.dEPRECATEDGyroBias != null && this.dEPRECATEDGyroBias.length > 0) {
                     phoneParams.dEPRECATEDGyroBias = (float[]) this.dEPRECATEDGyroBias.clone();
                 }
@@ -86,7 +84,7 @@ public interface Phone {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -129,7 +127,7 @@ public interface Phone {
             return (this.bitField0_ & 2) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final PhoneParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -149,35 +147,35 @@ public interface Phone {
                         this.bitField0_ |= 4;
                         break;
                     case 34:
-                        int readRawVarint32 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit = codedInputByteBufferNano.pushLimit(readRawVarint32);
-                        int i = readRawVarint32 / 4;
+                        int rawVarint32 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit = codedInputByteBufferNano.pushLimit(rawVarint32);
+                        int i = rawVarint32 / 4;
                         int length = this.dEPRECATEDGyroBias != null ? this.dEPRECATEDGyroBias.length : 0;
-                        float[] fArr = new float[i + length];
+                        float[] floats = new float[i + length];
                         if (length != 0) {
-                            System.arraycopy(this.dEPRECATEDGyroBias, 0, fArr, 0, length);
+                            System.arraycopy(this.dEPRECATEDGyroBias, 0, floats, 0, length);
                         }
-                        while (length < fArr.length) {
-                            fArr[length] = codedInputByteBufferNano.readFloat();
+                        while (length < floats.length) {
+                            floats[length] = codedInputByteBufferNano.readFloat();
                             length++;
                         }
-                        this.dEPRECATEDGyroBias = fArr;
+                        this.dEPRECATEDGyroBias = floats;
                         codedInputByteBufferNano.popLimit(pushLimit);
                         break;
                     case 37:
                         int repeatedFieldArrayLength = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 37);
                         int length2 = this.dEPRECATEDGyroBias != null ? this.dEPRECATEDGyroBias.length : 0;
-                        float[] fArr2 = new float[repeatedFieldArrayLength + length2];
+                        float[] floats2 = new float[repeatedFieldArrayLength + length2];
                         if (length2 != 0) {
-                            System.arraycopy(this.dEPRECATEDGyroBias, 0, fArr2, 0, length2);
+                            System.arraycopy(this.dEPRECATEDGyroBias, 0, floats2, 0, length2);
                         }
-                        while (length2 < fArr2.length - 1) {
-                            fArr2[length2] = codedInputByteBufferNano.readFloat();
+                        while (length2 < floats2.length - 1) {
+                            floats2[length2] = codedInputByteBufferNano.readFloat();
                             codedInputByteBufferNano.readTag();
                             length2++;
                         }
-                        fArr2[length2] = codedInputByteBufferNano.readFloat();
-                        this.dEPRECATEDGyroBias = fArr2;
+                        floats2[length2] = codedInputByteBufferNano.readFloat();
+                        this.dEPRECATEDGyroBias = floats2;
                         break;
                     default:
                         if (!super.storeUnknownField(codedInputByteBufferNano, readTag)) {
@@ -188,25 +186,25 @@ public interface Phone {
             }
         }
 
-        public final PhoneParams setBottomBezelHeight(float f) {
-            this.bottomBezelHeight_ = f;
+        public final PhoneParams setBottomBezelHeight(float bottomBezelHeight) {
+            this.bottomBezelHeight_ = bottomBezelHeight;
             this.bitField0_ |= 4;
             return this;
         }
 
-        public final PhoneParams setXPpi(float f) {
-            this.xPpi_ = f;
+        public final PhoneParams setXPpi(float xPpi) {
+            this.xPpi_ = xPpi;
             this.bitField0_ |= 1;
             return this;
         }
 
-        public final PhoneParams setYPpi(float f) {
-            this.yPpi_ = f;
+        public final PhoneParams setYPpi(float yPpi) {
+            this.yPpi_ = yPpi;
             this.bitField0_ |= 2;
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeFloat(1, this.xPpi_);

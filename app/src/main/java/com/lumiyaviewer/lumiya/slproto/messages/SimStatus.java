@@ -1,16 +1,21 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * Sim status, condition of this sim
+ * sent reliably, when dirty
+ *
+ * <p>Template: {@code SimStatus Medium 12 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SimStatus extends SLMessage {
     public SimStatusData SimStatusData_Field;
 
     public static class SimStatusData {
-        public boolean CanAcceptAgents;
-        public boolean CanAcceptTasks;
+        public boolean CanAcceptAgents; // BOOL
+        public boolean CanAcceptTasks; // BOOL
     }
 
     public SimStatus() {
@@ -18,25 +23,26 @@ public class SimStatus extends SLMessage {
         this.SimStatusData_Field = new SimStatusData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimStatus(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimStatus(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put(Ascii.FF);
+        // Message number: Medium 12 (SimStatus).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x0C);
         packBoolean(byteBuffer, this.SimStatusData_Field.CanAcceptAgents);
         packBoolean(byteBuffer, this.SimStatusData_Field.CanAcceptTasks);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SimStatusData_Field.CanAcceptAgents = unpackBoolean(byteBuffer);
         this.SimStatusData_Field.CanAcceptTasks = unpackBoolean(byteBuffer);

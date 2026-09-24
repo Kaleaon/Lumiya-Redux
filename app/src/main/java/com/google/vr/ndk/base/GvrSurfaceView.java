@@ -13,13 +13,14 @@ import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGL11;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.opengles.GL10;
 
-/* loaded from: classes.dex */
 public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
     public static final int DEBUG_CHECK_GL_ERROR = 1;
     public static final int DEBUG_LOG_GL_CALLS = 2;
@@ -51,49 +52,49 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     private abstract class BaseConfigChooser implements GLSurfaceView.EGLConfigChooser {
         protected int[] mConfigSpec;
 
-        public BaseConfigChooser(int[] iArr) {
-            this.mConfigSpec = filterConfigSpec(iArr);
+        public BaseConfigChooser(int[] ints) {
+            this.mConfigSpec = filterConfigSpec(ints);
         }
 
-        private int[] filterConfigSpec(int[] iArr) {
+        private int[] filterConfigSpec(int[] ints2) {
             if (GvrSurfaceView.this.mEGLContextClientVersion != 2 && GvrSurfaceView.this.mEGLContextClientVersion != 3) {
-                return iArr;
+                return ints2;
             }
-            int length = iArr.length;
-            int[] iArr2 = new int[length + 2];
-            System.arraycopy(iArr, 0, iArr2, 0, length - 1);
-            iArr2[length - 1] = 12352;
+            int length = ints2.length;
+            int[] ints = new int[length + 2];
+            System.arraycopy(ints2, 0, ints, 0, length - 1);
+            ints[length - 1] = 12352;
             if (GvrSurfaceView.this.mEGLContextClientVersion != 2) {
-                iArr2[length] = 64;
+                ints[length] = 64;
             } else {
-                iArr2[length] = 4;
+                ints[length] = 4;
             }
-            iArr2[length + 1] = 12344;
-            return iArr2;
+            ints[length + 1] = 12344;
+            return ints;
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLConfigChooser
-        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay) {
-            int[] iArr = new int[1];
-            if (!egl10.eglChooseConfig(eGLDisplay, this.mConfigSpec, null, 0, iArr)) {
+        @Override
+        public EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay) {
+            int[] ints = new int[1];
+            if (!egL10.eglChooseConfig(eglDisplay, this.mConfigSpec, null, 0, ints)) {
                 throw new IllegalArgumentException("eglChooseConfig failed");
             }
-            int i = iArr[0];
+            int i = ints[0];
             if (i <= 0) {
                 throw new IllegalArgumentException("No configs match configSpec");
             }
-            EGLConfig[] eGLConfigArr = new EGLConfig[i];
-            if (!egl10.eglChooseConfig(eGLDisplay, this.mConfigSpec, eGLConfigArr, i, iArr)) {
+            EGLConfig[] eglConfigs = new EGLConfig[i];
+            if (!egL10.eglChooseConfig(eglDisplay, this.mConfigSpec, eglConfigs, i, ints)) {
                 throw new IllegalArgumentException("eglChooseConfig#2 failed");
             }
-            EGLConfig chooseConfig = chooseConfig(egl10, eGLDisplay, eGLConfigArr);
+            EGLConfig chooseConfig = chooseConfig(egL10, eglDisplay, eglConfigs);
             if (chooseConfig != null) {
                 return chooseConfig;
             }
             throw new IllegalArgumentException("No config chosen");
         }
 
-        abstract EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr);
+        abstract EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig[] eglConfigs);
     }
 
     private class ComponentSizeChooser extends BaseConfigChooser {
@@ -105,33 +106,33 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         protected int mStencilSize;
         private int[] mValue;
 
-        public ComponentSizeChooser(GvrSurfaceView gvrSurfaceView, int i, int i2, int i3, int i4, int i5, int i6) {
-            super(new int[]{12324, i, 12323, i2, 12322, i3, 12321, i4, 12325, i5, 12326, i6, 12344});
+        public ComponentSizeChooser(int mRedSize, int mGreenSize, int mBlueSize, int mAlphaSize, int mDepthSize, int mStencilSize) {
+            super(new int[]{12324, mRedSize, 12323, mGreenSize, 12322, mBlueSize, 12321, mAlphaSize, 12325, mDepthSize, 12326, mStencilSize, 12344});
             this.mValue = new int[1];
-            this.mRedSize = i;
-            this.mGreenSize = i2;
-            this.mBlueSize = i3;
-            this.mAlphaSize = i4;
-            this.mDepthSize = i5;
-            this.mStencilSize = i6;
+            this.mRedSize = mRedSize;
+            this.mGreenSize = mGreenSize;
+            this.mBlueSize = mBlueSize;
+            this.mAlphaSize = mAlphaSize;
+            this.mDepthSize = mDepthSize;
+            this.mStencilSize = mStencilSize;
         }
 
-        private int findConfigAttrib(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, int i, int i2) {
-            return !egl10.eglGetConfigAttrib(eGLDisplay, eGLConfig, i, this.mValue) ? i2 : this.mValue[0];
+        private int findConfigAttrib(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, int i, int i2) {
+            return !egL10.eglGetConfigAttrib(eglDisplay, eglConfig, i, this.mValue) ? i2 : this.mValue[0];
         }
 
-        @Override // com.google.vr.ndk.base.GvrSurfaceView.BaseConfigChooser
-        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr) {
-            for (EGLConfig eGLConfig : eGLConfigArr) {
-                int findConfigAttrib = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12325, 0);
-                int findConfigAttrib2 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12326, 0);
-                if (findConfigAttrib >= this.mDepthSize && findConfigAttrib2 >= this.mStencilSize) {
-                    int findConfigAttrib3 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12324, 0);
-                    int findConfigAttrib4 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12323, 0);
-                    int findConfigAttrib5 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12322, 0);
-                    int findConfigAttrib6 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12321, 0);
-                    if (findConfigAttrib3 == this.mRedSize && findConfigAttrib4 == this.mGreenSize && findConfigAttrib5 == this.mBlueSize && findConfigAttrib6 == this.mAlphaSize) {
-                        return eGLConfig;
+        @Override
+        public EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig[] eglConfigs) {
+            for (EGLConfig eglConfig : eglConfigs) {
+                int findConfigAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12325, 0);
+                int configAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12326, 0);
+                if (findConfigAttrib >= this.mDepthSize && configAttrib >= this.mStencilSize) {
+                    int configAttrib2 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12324, 0);
+                    int configAttrib3 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12323, 0);
+                    int configAttrib4 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12322, 0);
+                    int configAttrib5 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12321, 0);
+                    if (configAttrib2 == this.mRedSize && configAttrib3 == this.mGreenSize && configAttrib4 == this.mBlueSize && configAttrib5 == this.mAlphaSize) {
+                        return eglConfig;
                     }
                 }
             }
@@ -145,25 +146,25 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         private DefaultContextFactory() {
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLContextFactory
-        public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
-            int[] iArr = {EGL_CONTEXT_CLIENT_VERSION, GvrSurfaceView.this.mEGLContextClientVersion, 12344};
-            EGLContext eGLContext = EGL10.EGL_NO_CONTEXT;
+        @Override
+        public EGLContext createContext(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig) {
+            int[] ints = {EGL_CONTEXT_CLIENT_VERSION, GvrSurfaceView.this.mEGLContextClientVersion, 12344};
+            EGLContext eglContext = EGL10.EGL_NO_CONTEXT;
             if (GvrSurfaceView.this.mEGLContextClientVersion == 0) {
-                iArr = null;
+                ints = null;
             }
-            return egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
+            return egL10.eglCreateContext(eglDisplay, eglConfig, eglContext, ints);
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLContextFactory
-        public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
-            if (egl10.eglDestroyContext(eGLDisplay, eGLContext)) {
+        @Override
+        public void destroyContext(EGL10 egL10, EGLDisplay eglDisplay, EGLContext eglContext) {
+            if (egL10.eglDestroyContext(eglDisplay, eglContext)) {
                 return;
             }
-            String valueOf = String.valueOf(eGLDisplay);
-            String valueOf2 = String.valueOf(eGLContext);
+            String valueOf = String.valueOf(eglDisplay);
+            String valueOf2 = String.valueOf(eglContext);
             Log.e("DefaultContextFactory", new StringBuilder(String.valueOf(valueOf).length() + 18 + String.valueOf(valueOf2).length()).append("display:").append(valueOf).append(" context: ").append(valueOf2).toString());
-            EglHelper.throwEglException("eglDestroyContex", egl10.eglGetError());
+            EglHelper.throwEglException("eglDestroyContex", egL10.eglGetError());
         }
     }
 
@@ -171,19 +172,19 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         private DefaultWindowSurfaceFactory() {
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
-        public EGLSurface createWindowSurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, Object obj) {
+        @Override
+        public EGLSurface createWindowSurface(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, Object obj) {
             try {
-                return egl10.eglCreateWindowSurface(eGLDisplay, eGLConfig, obj, null);
+                return egL10.eglCreateWindowSurface(eglDisplay, eglConfig, obj, null);
             } catch (IllegalArgumentException e) {
                 Log.e(GvrSurfaceView.TAG, "eglCreateWindowSurface", e);
                 return null;
             }
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
-        public void destroySurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLSurface eGLSurface) {
-            egl10.eglDestroySurface(eGLDisplay, eGLSurface);
+        @Override
+        public void destroySurface(EGL10 egL10, EGLDisplay eglDisplay, EGLSurface eglSurface) {
+            egL10.eglDestroySurface(eglDisplay, eglSurface);
         }
     }
 
@@ -409,12 +410,12 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             private GLThreadManager() {
             }
 
-            public void releaseEglContextLocked(GLThread gLThread) {
+            public void releaseEglContextLocked(GLThread glThread) {
                 notifyAll();
             }
 
-            public synchronized void threadExiting(GLThread gLThread) {
-                gLThread.mExited = true;
+            public synchronized void threadExiting(GLThread glThread) {
+                glThread.mExited = true;
                 notifyAll();
             }
         }
@@ -423,17 +424,238 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             this.mGvrSurfaceViewWeakRef = weakReference;
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:214:0x009c A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
-        private void guardedRun() throws java.lang.InterruptedException {
-            /*
-                Method dump skipped, instructions count: 964
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: com.google.vr.ndk.base.GvrSurfaceView.GLThread.guardedRun():void");
+        /**
+         * The render thread's main loop (AOSP GLSurfaceView.GLThread.guardedRun,
+         * with Google VR's swap-mode handling).
+         *
+         * <p>Under the manager lock it waits until the view is ready to draw,
+         * creating or releasing the EGL context and surface as the pause,
+         * surface and size state requires; it then leaves the lock to run queued
+         * events, create the surface and GL interface, call the renderer and
+         * swap. When {@link #mRequestedSwapMode} changes, the EGL surface is
+         * switched between back-buffered (SWAPMODE_QUEUED) and front-buffered
+         * auto-refresh (SWAPMODE_SINGLE) rendering; in single-buffer mode no
+         * swap is needed once the mode is in effect.</p>
+         *
+         * <p>Written by hand from the original bytecode: no decompiler could
+         * structure this method.</p>
+         */
+        private void guardedRun() throws InterruptedException {
+            this.mEglHelper = new EglHelper(this.mGvrSurfaceViewWeakRef);
+            this.mHaveEglContext = false;
+            this.mHaveEglSurface = false;
+            this.mWantRenderNotification = false;
+            GL10 gl = null;
+            boolean createEglContext = false;
+            boolean createEglSurface = false;
+            boolean createGlInterface = false;
+            boolean lostEglContext = false;
+            boolean sizeChanged = false;
+            boolean wantRenderNotification = false;
+            boolean doRenderNotification = false;
+            boolean askedToReleaseEglContext = false;
+            int width = 0;
+            int height = 0;
+            int swapMode = SWAPMODE_QUEUED;
+            boolean swapModeChanged = false;
+            Runnable event = null;
+            try {
+                while (true) {
+                    synchronized (this.mGLThreadManager) {
+                        while (true) {
+                            if (this.mShouldExit) {
+                                return;
+                            }
+                            if (!this.mEventQueue.isEmpty()) {
+                                event = this.mEventQueue.remove(0);
+                                break;
+                            }
+                            boolean pausing = false;
+                            if (this.mPaused != this.mRequestPaused) {
+                                pausing = this.mRequestPaused;
+                                this.mPaused = this.mRequestPaused;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (this.mShouldReleaseEglContext) {
+                                stopEglSurfaceLocked();
+                                stopEglContextLocked();
+                                this.mShouldReleaseEglContext = false;
+                                askedToReleaseEglContext = true;
+                            }
+                            if (lostEglContext) {
+                                stopEglSurfaceLocked();
+                                stopEglContextLocked();
+                                lostEglContext = false;
+                            }
+                            if (pausing && this.mHaveEglSurface) {
+                                stopEglSurfaceLocked();
+                            }
+                            if (pausing && this.mHaveEglContext) {
+                                GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                                boolean preserveEglContext = view != null && view.mPreserveEGLContextOnPause;
+                                if (!preserveEglContext) {
+                                    stopEglContextLocked();
+                                }
+                            }
+                            if (!this.mHasSurface && !this.mWaitingForSurface) {
+                                if (this.mHaveEglSurface) {
+                                    stopEglSurfaceLocked();
+                                }
+                                this.mWaitingForSurface = true;
+                                this.mSurfaceIsBad = false;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (this.mHasSurface && this.mWaitingForSurface) {
+                                this.mWaitingForSurface = false;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (doRenderNotification) {
+                                this.mWantRenderNotification = false;
+                                doRenderNotification = false;
+                                this.mRenderComplete = true;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            if (readyToDraw()) {
+                                if (!this.mHaveEglContext) {
+                                    if (askedToReleaseEglContext) {
+                                        askedToReleaseEglContext = false;
+                                    } else {
+                                        try {
+                                            this.mEglHelper.start();
+                                        } catch (RuntimeException e) {
+                                            this.mGLThreadManager.releaseEglContextLocked(this);
+                                            throw e;
+                                        }
+                                        this.mHaveEglContext = true;
+                                        createEglContext = true;
+                                        this.mGLThreadManager.notifyAll();
+                                    }
+                                }
+                                if (this.mHaveEglContext && !this.mHaveEglSurface) {
+                                    this.mHaveEglSurface = true;
+                                    createEglSurface = true;
+                                    createGlInterface = true;
+                                    sizeChanged = true;
+                                }
+                                if (this.mHaveEglSurface) {
+                                    if (this.mSizeChanged) {
+                                        sizeChanged = true;
+                                        width = this.mWidth;
+                                        height = this.mHeight;
+                                        this.mWantRenderNotification = true;
+                                        createEglSurface = true;
+                                        this.mSizeChanged = false;
+                                    }
+                                    this.mRequestRender = false;
+                                    this.mGLThreadManager.notifyAll();
+                                    if (this.mWantRenderNotification) {
+                                        wantRenderNotification = true;
+                                    }
+                                    swapModeChanged = this.mRequestedSwapMode != swapMode;
+                                    swapMode = this.mRequestedSwapMode;
+                                    break;
+                                }
+                            }
+                            this.mGLThreadManager.wait();
+                        }
+                    }
+
+                    if (event != null) {
+                        event.run();
+                        event = null;
+                        continue;
+                    }
+                    if (createEglSurface) {
+                        if (!this.mEglHelper.createSurface()) {
+                            synchronized (this.mGLThreadManager) {
+                                this.mFinishedCreatingEglSurface = true;
+                                this.mSurfaceIsBad = true;
+                                this.mGLThreadManager.notifyAll();
+                            }
+                            continue;
+                        }
+                        synchronized (this.mGLThreadManager) {
+                            this.mFinishedCreatingEglSurface = true;
+                            this.mGLThreadManager.notifyAll();
+                        }
+                        createEglSurface = false;
+                        // A new surface starts with the default (back-buffered) attributes.
+                        swapMode = SWAPMODE_QUEUED;
+                    }
+                    if (createGlInterface) {
+                        gl = (GL10) this.mEglHelper.createGL();
+                        createGlInterface = false;
+                    }
+                    if (createEglContext) {
+                        GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                        if (view != null) {
+                            TraceCompat.beginSection("onSurfaceCreated");
+                            try {
+                                view.mRenderer.onSurfaceCreated(gl, this.mEglHelper.mEglConfig);
+                            } finally {
+                                TraceCompat.endSection();
+                            }
+                        }
+                        createEglContext = false;
+                    }
+                    if (sizeChanged) {
+                        GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                        if (view != null) {
+                            TraceCompat.beginSection("onSurfaceChanged");
+                            try {
+                                view.mRenderer.onSurfaceChanged(gl, width, height);
+                            } finally {
+                                TraceCompat.endSection();
+                            }
+                        }
+                        sizeChanged = false;
+                    }
+                    if (swapModeChanged) {
+                        // EGL_RENDER_BUFFER: EGL_SINGLE_BUFFER draws straight to the display.
+                        this.mEglHelper.setEglSurfaceAttrib(EGL14.EGL_RENDER_BUFFER,
+                                swapMode == SWAPMODE_SINGLE ? EGL14.EGL_SINGLE_BUFFER : EGL14.EGL_BACK_BUFFER);
+                        this.mEglHelper.setEglSurfaceAttrib(EglHelper.EGL_FRONT_BUFFER_AUTO_REFRESH,
+                                swapMode == SWAPMODE_SINGLE ? 1 : 0);
+                    }
+                    GvrSurfaceView view = this.mGvrSurfaceViewWeakRef.get();
+                    if (view != null) {
+                        TraceCompat.beginSection("onDrawFrame");
+                        try {
+                            view.mRenderer.onDrawFrame(gl);
+                        } finally {
+                            TraceCompat.endSection();
+                        }
+                    }
+                    if (swapModeChanged || swapMode == SWAPMODE_QUEUED) {
+                        int swapError = this.mEglHelper.swap();
+                        switch (swapError) {
+                            case EGL10.EGL_SUCCESS:
+                                break;
+                            case EGL11.EGL_CONTEXT_LOST:
+                                lostEglContext = true;
+                                break;
+                            default:
+                                EglHelper.logEglErrorAsWarning("GLThread", "eglSwapBuffers", swapError);
+                                if (swapMode == SWAPMODE_QUEUED) {
+                                    synchronized (this.mGLThreadManager) {
+                                        this.mSurfaceIsBad = true;
+                                        this.mGLThreadManager.notifyAll();
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    if (wantRenderNotification) {
+                        doRenderNotification = true;
+                        wantRenderNotification = false;
+                    }
+                }
+            } finally {
+                synchronized (this.mGLThreadManager) {
+                    stopEglSurfaceLocked();
+                    stopEglContextLocked();
+                }
+            }
         }
 
         private boolean readyToDraw() {
@@ -460,19 +682,19 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         public int getRenderMode() {
-            int i;
+            int mRenderMode;
             synchronized (this.mGLThreadManager) {
-                i = this.mRenderMode;
+                mRenderMode = this.mRenderMode;
             }
-            return i;
+            return mRenderMode;
         }
 
         public int getSwapMode() {
-            int i;
+            int mRequestedSwapMode;
             synchronized (this.mGLThreadManager) {
-                i = this.mRequestedSwapMode;
+                mRequestedSwapMode = this.mRequestedSwapMode;
             }
-            return i;
+            return mRequestedSwapMode;
         }
 
         public void onPause() {
@@ -505,10 +727,10 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        public void onWindowResize(int i, int i2) {
+        public void onWindowResize(int mWidth, int mHeight) {
             synchronized (this.mGLThreadManager) {
-                this.mWidth = i;
-                this.mHeight = i2;
+                this.mWidth = mWidth;
+                this.mHeight = mHeight;
                 this.mSizeChanged = true;
                 this.mRequestRender = true;
                 this.mRenderComplete = false;
@@ -579,7 +801,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        @Override // java.lang.Thread, java.lang.Runnable
+        @Override
         public void run() {
             setName(new StringBuilder(29).append("GLThread ").append(getId()).toString());
             try {
@@ -590,22 +812,22 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        public void setRenderMode(int i) {
-            if (i < 0 || i > 1) {
+        public void setRenderMode(int mRenderMode) {
+            if (mRenderMode < 0 || mRenderMode > 1) {
                 throw new IllegalArgumentException("renderMode");
             }
             synchronized (this.mGLThreadManager) {
-                this.mRenderMode = i;
+                this.mRenderMode = mRenderMode;
                 this.mGLThreadManager.notifyAll();
             }
         }
 
-        public void setSwapMode(int i) {
-            if (i < 0 || i > 2) {
+        public void setSwapMode(int mRequestedSwapMode) {
+            if (mRequestedSwapMode < 0 || mRequestedSwapMode > 2) {
                 throw new IllegalArgumentException("swapMode");
             }
             synchronized (this.mGLThreadManager) {
-                this.mRequestedSwapMode = i;
+                this.mRequestedSwapMode = mRequestedSwapMode;
                 this.mGLThreadManager.notifyAll();
             }
         }
@@ -658,20 +880,20 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             this.mBuilder.delete(0, this.mBuilder.length());
         }
 
-        @Override // java.io.Writer, java.io.Closeable, java.lang.AutoCloseable
+        @Override
         public void close() {
             flushBuilder();
         }
 
-        @Override // java.io.Writer, java.io.Flushable
+        @Override
         public void flush() {
             flushBuilder();
         }
 
-        @Override // java.io.Writer
-        public void write(char[] cArr, int i, int i2) {
-            for (int i3 = 0; i3 < i2; i3++) {
-                char c = cArr[i + i3];
+        @Override
+        public void write(char[] chars, int i, int i2) {
+            for (int j = 0; j < i2; j++) {
+                char c = chars[i + j];
                 if (c != '\n') {
                     this.mBuilder.append(c);
                 } else {
@@ -682,8 +904,8 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     private class SimpleEGLConfigChooser extends ComponentSizeChooser {
-        public SimpleEGLConfigChooser(GvrSurfaceView gvrSurfaceView, boolean z) {
-            super(gvrSurfaceView, 8, 8, 8, 0, !z ? 0 : 16, 0);
+        public SimpleEGLConfigChooser(boolean z) {
+            super(8, 8, 8, 0, !z ? 0 : 16, 0);
         }
     }
 
@@ -731,7 +953,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         return this.mGLThread.getRenderMode();
     }
 
-    @Override // android.view.SurfaceView, android.view.View
+    @Override
     protected void onAttachedToWindow() {
         int renderMode;
         int swapMode;
@@ -756,7 +978,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mDetached = false;
     }
 
-    @Override // android.view.SurfaceView, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         if (this.mGLThread != null) {
             this.mGLThread.requestExitAndWait();
@@ -781,54 +1003,54 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mGLThread.requestRender();
     }
 
-    public void setDebugFlags(int i) {
-        this.mDebugFlags = i;
+    public void setDebugFlags(int mDebugFlags) {
+        this.mDebugFlags = mDebugFlags;
     }
 
     public void setEGLConfigChooser(int i, int i2, int i3, int i4, int i5, int i6) {
-        setEGLConfigChooser(new ComponentSizeChooser(this, i, i2, i3, i4, i5, i6));
+        setEGLConfigChooser(new ComponentSizeChooser(i, i2, i3, i4, i5, i6));
     }
 
-    public void setEGLConfigChooser(GLSurfaceView.EGLConfigChooser eGLConfigChooser) {
+    public void setEGLConfigChooser(GLSurfaceView.EGLConfigChooser eglConfigChooser) {
         checkRenderThreadState();
-        this.mEGLConfigChooser = eGLConfigChooser;
+        this.mEGLConfigChooser = eglConfigChooser;
     }
 
-    public void setEGLConfigChooser(boolean z) {
-        setEGLConfigChooser(new SimpleEGLConfigChooser(this, z));
+    public void setEGLConfigChooser(boolean eglConfigChooser) {
+        setEGLConfigChooser(new SimpleEGLConfigChooser(eglConfigChooser));
     }
 
-    public void setEGLContextClientVersion(int i) {
+    public void setEGLContextClientVersion(int mEGLContextClientVersion) {
         checkRenderThreadState();
-        this.mEGLContextClientVersion = i;
+        this.mEGLContextClientVersion = mEGLContextClientVersion;
     }
 
-    public void setEGLContextFactory(GLSurfaceView.EGLContextFactory eGLContextFactory) {
+    public void setEGLContextFactory(GLSurfaceView.EGLContextFactory eglContextFactory) {
         checkRenderThreadState();
-        this.mEGLContextFactory = eGLContextFactory;
+        this.mEGLContextFactory = eglContextFactory;
     }
 
-    public void setEGLWindowSurfaceFactory(GLSurfaceView.EGLWindowSurfaceFactory eGLWindowSurfaceFactory) {
+    public void setEGLWindowSurfaceFactory(GLSurfaceView.EGLWindowSurfaceFactory eglWindowSurfaceFactory) {
         checkRenderThreadState();
-        this.mEGLWindowSurfaceFactory = eGLWindowSurfaceFactory;
+        this.mEGLWindowSurfaceFactory = eglWindowSurfaceFactory;
     }
 
-    public void setGLWrapper(GLWrapper gLWrapper) {
-        this.mGLWrapper = gLWrapper;
+    public void setGLWrapper(GLWrapper glWrapper) {
+        this.mGLWrapper = glWrapper;
     }
 
-    public void setPreserveEGLContextOnPause(boolean z) {
-        this.mPreserveEGLContextOnPause = z;
+    public void setPreserveEGLContextOnPause(boolean mPreserveEGLContextOnPause) {
+        this.mPreserveEGLContextOnPause = mPreserveEGLContextOnPause;
     }
 
-    public void setRenderMode(int i) {
-        this.mGLThread.setRenderMode(i);
+    public void setRenderMode(int renderMode) {
+        this.mGLThread.setRenderMode(renderMode);
     }
 
     public void setRenderer(GLSurfaceView.Renderer renderer) {
         checkRenderThreadState();
         if (this.mEGLConfigChooser == null) {
-            this.mEGLConfigChooser = new SimpleEGLConfigChooser(this, true);
+            this.mEGLConfigChooser = new SimpleEGLConfigChooser(true);
         }
         if (this.mEGLContextFactory == null) {
             this.mEGLContextFactory = new DefaultContextFactory();
@@ -841,30 +1063,30 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mGLThread.start();
     }
 
-    public void setSwapMode(int i) {
-        if (i == 1 && Build.VERSION.SDK_INT < 17) {
+    public void setSwapMode(int swapMode) {
+        if (swapMode == 1 && Build.VERSION.SDK_INT < 17) {
             Log.e(TAG, "setSwapMode(SWAPMODE_SINGLE) requires Jellybean MR1 (EGL14 dependency)");
         } else {
-            this.mGLThread.setSwapMode(i);
+            this.mGLThread.setSwapMode(swapMode);
         }
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
         this.mGLThread.onWindowResize(i2, i3);
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.mGLThread.surfaceCreated();
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         this.mGLThread.surfaceDestroyed();
     }
 
-    @Override // android.view.SurfaceHolder.Callback2
+    @Override
     public void surfaceRedrawNeeded(SurfaceHolder surfaceHolder) {
         this.mGLThread.requestRenderAndWait();
     }

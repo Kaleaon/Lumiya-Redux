@@ -5,7 +5,6 @@ import androidx.preference.EditTextPreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-/* loaded from: classes.dex */
 public class FriendlyEditTextPreference extends EditTextPreference {
     public FriendlyEditTextPreference(Context context) {
         super(context);
@@ -19,7 +18,7 @@ public class FriendlyEditTextPreference extends EditTextPreference {
         super(context, attributeSet, i);
     }
 
-    @Override // androidx.preference.Preference
+    @Override
     public CharSequence getSummary() {
         CharSequence summary;
         String text = getText();

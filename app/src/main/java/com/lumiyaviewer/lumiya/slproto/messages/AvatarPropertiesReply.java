@@ -4,26 +4,38 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPropertiesReply
+ * dataserver -> simulator
+ * simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code AvatarPropertiesReply Low 171 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarPropertiesReply extends SLMessage {
     public AgentData AgentData_Field;
     public PropertiesData PropertiesData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID AvatarID;
+        public UUID AgentID; // LLUUID - your id
+        public UUID AvatarID; // LLUUID - avatar you're asking about
     }
 
+    /** Block PropertiesData, Single. */
     public static class PropertiesData {
-        public byte[] AboutText;
-        public byte[] BornOn;
-        public byte[] CharterMember;
-        public byte[] FLAboutText;
-        public UUID FLImageID;
-        public int Flags;
-        public UUID ImageID;
-        public UUID PartnerID;
-        public byte[] ProfileURL;
+        public byte[] AboutText; // Variable 2 - string, up to 512
+        public byte[] BornOn; // Variable 1 - string
+        public byte[] CharterMember; // Variable 1 - special - usually U8
+        public byte[] FLAboutText; // Variable 1 - string
+        public UUID FLImageID; // LLUUID
+        public int Flags; // U32
+        public UUID ImageID; // LLUUID
+        public UUID PartnerID; // LLUUID
+        public byte[] ProfileURL; // Variable 1 - string
     }
 
     public AvatarPropertiesReply() {
@@ -32,21 +44,22 @@ public class AvatarPropertiesReply extends SLMessage {
         this.PropertiesData_Field = new PropertiesData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.PropertiesData_Field.AboutText.length + 50 + 1 + this.PropertiesData_Field.FLAboutText.length + 1 + this.PropertiesData_Field.BornOn.length + 1 + this.PropertiesData_Field.ProfileURL.length + 1 + this.PropertiesData_Field.CharterMember.length + 4 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -85);
+        // Message number: Low 171 (AvatarPropertiesReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xAB);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.AvatarID);
         packUUID(byteBuffer, this.PropertiesData_Field.ImageID);
@@ -60,7 +73,7 @@ public class AvatarPropertiesReply extends SLMessage {
         packInt(byteBuffer, this.PropertiesData_Field.Flags);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.AvatarID = unpackUUID(byteBuffer);

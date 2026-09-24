@@ -7,7 +7,6 @@ import com.google.vr.vrcore.controller.api.ControllerButtonEvent;
 import com.google.vr.vrcore.controller.api.ControllerEventPacket;
 import com.google.vr.vrcore.controller.api.ControllerOrientationEvent;
 
-/* loaded from: classes.dex */
 class CardboardEmulator {
     private static final boolean DEBUG = false;
     private static final String TAG = CardboardEmulator.class.getSimpleName();
@@ -21,7 +20,7 @@ class CardboardEmulator {
             this.cardboardTriggerCallback = runnable;
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onControllerEventPacket(ControllerEventPacket controllerEventPacket) {
             for (int i = 0; i < controllerEventPacket.getButtonEventCount(); i++) {
                 ControllerButtonEvent buttonEvent = controllerEventPacket.getButtonEvent(i);
@@ -36,31 +35,31 @@ class CardboardEmulator {
             }
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onControllerStateChanged(int i, int i2) {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onServiceConnected(int i) {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onServiceDisconnected() {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onServiceFailed() {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onServiceInitFailed(int i) {
         }
 
-        @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+        @Override
         public void onServiceUnavailable() {
         }
     }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 
-/* loaded from: classes.dex */
 public class DaydreamUtilsWrapper {
     public int getActivityDaydreamCompatibility(Activity activity) {
         return DaydreamUtils.getComponentDaydreamCompatibility(activity, activity.getComponentName());

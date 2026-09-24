@@ -4,21 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelJoin - Take all parcels which are owned by agent and inside
+ * rectangle, and make them 1 parcel if they all are leased.
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelJoin Low 210 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelJoin extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public float East;
-        public float North;
-        public float South;
-        public float West;
+        public float East; // F32
+        public float North; // F32
+        public float South; // F32
+        public float West; // F32
     }
 
     public ParcelJoin() {
@@ -27,21 +37,22 @@ public class ParcelJoin extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelJoin(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelJoin(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -46);
+        // Message number: Low 210 (ParcelJoin).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xD2);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packFloat(byteBuffer, this.ParcelData_Field.West);
@@ -50,7 +61,7 @@ public class ParcelJoin extends SLMessage {
         packFloat(byteBuffer, this.ParcelData_Field.North);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

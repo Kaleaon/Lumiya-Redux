@@ -1,23 +1,31 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetSimStatusInDatabase
+ * alters the "simulator" table in the database
+ * sim -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code SetSimStatusInDatabase Low 22 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetSimStatusInDatabase extends SLMessage {
     public Data Data_Field;
 
+    /** Block Data, Single. */
     public static class Data {
-        public int AgentCount;
-        public byte[] HostName;
-        public int PID;
-        public UUID RegionID;
-        public byte[] Status;
-        public int TimeToLive;
-        public int X;
-        public int Y;
+        public int AgentCount; // S32
+        public byte[] HostName; // Variable 1
+        public int PID; // S32
+        public UUID RegionID; // LLUUID
+        public byte[] Status; // Variable 1
+        public int TimeToLive; // S32 - in seconds
+        public int X; // S32
+        public int Y; // S32
     }
 
     public SetSimStatusInDatabase() {
@@ -25,21 +33,22 @@ public class SetSimStatusInDatabase extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.HostName.length + 17 + 4 + 4 + 4 + 4 + 4 + 1 + this.Data_Field.Status.length + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetSimStatusInDatabase(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetSimStatusInDatabase(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.SYN);
+        // Message number: Low 22 (SetSimStatusInDatabase).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x16);
         packUUID(byteBuffer, this.Data_Field.RegionID);
         packVariable(byteBuffer, this.Data_Field.HostName, 1);
         packInt(byteBuffer, this.Data_Field.X);
@@ -50,7 +59,7 @@ public class SetSimStatusInDatabase extends SLMessage {
         packVariable(byteBuffer, this.Data_Field.Status, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Data_Field.RegionID = unpackUUID(byteBuffer);
         this.Data_Field.HostName = unpackVariable(byteBuffer, 1);

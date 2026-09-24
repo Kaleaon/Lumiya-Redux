@@ -11,7 +11,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLWearable implements Subscription.OnData<AssetData>, Subscription.OnError {
 
     @Nonnull
@@ -30,15 +29,15 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
     private volatile SLWearableData wearableData;
 
     public interface OnWearableStatusChangeListener {
-        void onWearableStatusChanged(SLWearable sLWearable);
+        void onWearableStatusChanged(SLWearable wearable);
     }
 
-    public SLWearable(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull UUID uuid, @Nonnull UUID uuid2, @Nonnull SLWearableType sLWearableType, @Nullable OnWearableStatusChangeListener onWearableStatusChangeListener) {
+    public SLWearable(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull UUID uuid, @Nonnull UUID assetID, @Nonnull SLWearableType wearableType, @Nullable OnWearableStatusChangeListener onWearableStatusChangeListener) {
         this.itemID = uuid;
-        this.assetID = uuid2;
+        this.assetID = assetID;
         this.statusChangeListener = onWearableStatusChangeListener;
-        Debug.Printf("Wearable: subscribing for wearable %s", uuid2);
-        this.assetSubscription = userManager.getAssetResponseCacher().getPool().subscribe(AssetKey.createAssetKey(null, null, uuid2, sLWearableType.getAssetType().getTypeCode()), executor, this, this);
+        Debug.Printf("Wearable: subscribing for wearable %s", assetID);
+        this.assetSubscription = userManager.getAssetResponseCacher().getPool().subscribe(AssetKey.createAssetKey(null, null, assetID, wearableType.getAssetType().getTypeCode()), executor, this, this);
     }
 
     public void dispose() {
@@ -58,8 +57,8 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         if (this.inventoryName != null) {
             return this.inventoryName;
         }
-        SLWearableData sLWearableData = this.wearableData;
-        return sLWearableData != null ? sLWearableData.name : this.isFailed ? "(Failed to load)" : "(loading)";
+        SLWearableData wearableData = this.wearableData;
+        return wearableData != null ? wearableData.name : this.isFailed ? "(Failed to load)" : "(loading)";
     }
 
     @Nullable
@@ -67,7 +66,7 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         return this.wearableData;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    @Override
     public void onData(AssetData assetData) {
         if (assetData != null) {
             if (assetData.getStatus() != 1 || assetData.getData() == null) {
@@ -89,7 +88,7 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+    @Override
     public void onError(Throwable th) {
         Debug.Printf("Wearable: got error for asset %s", this.assetID);
         this.isFailed = true;
@@ -98,7 +97,7 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         }
     }
 
-    public void setInventoryName(String str) {
-        this.inventoryName = str;
+    public void setInventoryName(String inventoryName) {
+        this.inventoryName = inventoryName;
     }
 }

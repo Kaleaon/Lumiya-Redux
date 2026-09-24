@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GroupRoleMemberList {
     private UUID groupID;
     private boolean mustRevalidate;
@@ -15,10 +14,10 @@ public class GroupRoleMemberList {
         this.groupID = uuid;
     }
 
-    public GroupRoleMemberList(UUID uuid, UUID uuid2, boolean z) {
+    public GroupRoleMemberList(UUID uuid, UUID requestID, boolean mustRevalidate) {
         this.groupID = uuid;
-        this.requestID = uuid2;
-        this.mustRevalidate = z;
+        this.requestID = requestID;
+        this.mustRevalidate = mustRevalidate;
     }
 
     public UUID getGroupID() {
@@ -37,8 +36,8 @@ public class GroupRoleMemberList {
         this.groupID = uuid;
     }
 
-    public void setMustRevalidate(boolean z) {
-        this.mustRevalidate = z;
+    public void setMustRevalidate(boolean mustRevalidate) {
+        this.mustRevalidate = mustRevalidate;
     }
 
     public void setRequestID(UUID uuid) {

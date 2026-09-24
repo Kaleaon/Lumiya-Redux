@@ -1,30 +1,37 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupRoleUpdate
+ * viewer -> simulator -> dataserver
+ *
+ * <p>Template: {@code GroupRoleUpdate Low 378 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupRoleUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<RoleData> RoleData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RoleData, Variable. */
     public static class RoleData {
-        public byte[] Description;
-        public byte[] Name;
-        public long Powers;
-        public UUID RoleID;
-        public byte[] Title;
-        public int UpdateType;
+        public byte[] Description; // Variable 1
+        public byte[] Name; // Variable 1
+        public long Powers; // U64
+        public UUID RoleID; // LLUUID
+        public byte[] Title; // Variable 1
+        public int UpdateType; // U8
     }
 
     public GroupRoleUpdate() {
@@ -32,7 +39,7 @@ public class GroupRoleUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 53;
         Iterator<?> it = this.RoleData_Fields.iterator();
@@ -46,16 +53,17 @@ public class GroupRoleUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupRoleUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupRoleUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 122);
+        // Message number: Low 378 (GroupRoleUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x7A);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -70,20 +78,20 @@ public class GroupRoleUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             RoleData roleData = new RoleData();
             roleData.RoleID = unpackUUID(byteBuffer);
             roleData.Name = unpackVariable(byteBuffer, 1);
             roleData.Description = unpackVariable(byteBuffer, 1);
             roleData.Title = unpackVariable(byteBuffer, 1);
             roleData.Powers = unpackLong(byteBuffer);
-            roleData.UpdateType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            roleData.UpdateType = unpackByte(byteBuffer) & 0xFF;
             this.RoleData_Fields.add(roleData);
         }
     }

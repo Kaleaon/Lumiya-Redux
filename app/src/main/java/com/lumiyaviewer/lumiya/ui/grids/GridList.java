@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GridList {
     private Context context;
     private ArrayList<GridInfo> customGrids;
@@ -36,10 +35,10 @@ public class GridList {
             this.GridUUID = UUID.fromString(sharedPreferences.getString(str + "_grid", ""));
         }
 
-        public GridInfo(String str, String str2, boolean z, UUID uuid) {
+        public GridInfo(String str, String str2, boolean predefinedGrid, UUID uuid) {
             this.GridName = str;
             this.LoginURL = str2;
-            this.predefinedGrid = z;
+            this.predefinedGrid = predefinedGrid;
             this.GridUUID = uuid;
         }
 
@@ -69,12 +68,12 @@ public class GridList {
             editor.putString(str + "_grid", this.GridUUID.toString());
         }
 
-        public void setGridName(String str) {
-            this.GridName = str;
+        public void setGridName(String gridName) {
+            this.GridName = gridName;
         }
 
-        public void setLoginURL(String str) {
-            this.LoginURL = str;
+        public void setLoginURL(String loginURL) {
+            this.LoginURL = loginURL;
         }
 
         public String toString() {
@@ -143,9 +142,9 @@ public class GridList {
             }
             i++;
         }
-        Iterator<?> it2 = this.customGrids.iterator();
-        while (it2.hasNext()) {
-            if (((GridInfo) it2.next()).getGridUUID().equals(uuid)) {
+        Iterator<?> iterator = this.customGrids.iterator();
+        while (iterator.hasNext()) {
+            if (((GridInfo) iterator.next()).getGridUUID().equals(uuid)) {
                 return i;
             }
             i++;
@@ -175,8 +174,8 @@ public class GridList {
         this.customGrids.clear();
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
         int i = defaultSharedPreferences.getInt("custom_grid_1_count", 0);
-        for (int i2 = 0; i2 < i; i2++) {
-            this.customGrids.add(new GridInfo(defaultSharedPreferences, "custom_grid_1_" + i2));
+        for (int j = 0; j < i; j++) {
+            this.customGrids.add(new GridInfo(defaultSharedPreferences, "custom_grid_1_" + j));
         }
     }
 

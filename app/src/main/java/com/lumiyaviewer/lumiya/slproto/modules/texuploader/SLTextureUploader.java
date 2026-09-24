@@ -6,28 +6,27 @@ import com.lumiyaviewer.lumiya.slproto.modules.SLModule;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/* loaded from: classes.dex */
 public class SLTextureUploader extends SLModule {
     private String capURL;
     private ExecutorService executor;
 
-    public SLTextureUploader(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
-        this.capURL = sLCaps.getCapability(SLCaps.SLCapability.UploadBakedTexture);
+    public SLTextureUploader(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
+        this.capURL = caps.getCapability(SLCaps.SLCapability.UploadBakedTexture);
         if (this.capURL != null) {
             this.executor = Executors.newSingleThreadExecutor();
         }
     }
 
-    public void BeginUpload(SLTextureUploadRequest sLTextureUploadRequest) {
+    public void BeginUpload(SLTextureUploadRequest textureUploadRequest) {
         if (this.executor == null || this.capURL == null) {
             return;
         }
-        sLTextureUploadRequest.setCapURL(this.capURL);
-        this.executor.execute(sLTextureUploadRequest);
+        textureUploadRequest.setCapURL(this.capURL);
+        this.executor.execute(textureUploadRequest);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.executor != null) {
             this.executor.shutdownNow();

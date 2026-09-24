@@ -17,7 +17,6 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class LogoutDialog extends ProgressDialog {
     private static final long DISCONNECT_TIMEOUT = 5000;
     private UUID agentUUID;
@@ -29,12 +28,12 @@ public class LogoutDialog extends ProgressDialog {
         super(context);
         this.handler = new Handler();
         this.eventBus = EventBus.getInstance();
-        this.onDisconnectTimeout = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$Ido4EAnXE9yUsM2nDeFKnyTfU7w
+        this.onDisconnectTimeout = new Runnable() {
             private final /* synthetic */ void $m$0() {
                 LogoutDialog.this.m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -45,12 +44,12 @@ public class LogoutDialog extends ProgressDialog {
         super(context, i);
         this.handler = new Handler();
         this.eventBus = EventBus.getInstance();
-        this.onDisconnectTimeout = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$Ido4EAnXE9yUsM2nDeFKnyTfU7w.1
+        this.onDisconnectTimeout = new Runnable() {
             private final /* synthetic */ void $m$0() {
                 LogoutDialog.this.m647lambda$com_lumiyaviewer_lumiya_ui_login_LogoutDialog_3137();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -74,7 +73,7 @@ public class LogoutDialog extends ProgressDialog {
     }
 
     @EventHandler
-    public void handleDisconnectEvent(SLDisconnectEvent sLDisconnectEvent) {
+    public void handleDisconnectEvent(SLDisconnectEvent disconnectEvent) {
         Debug.Printf("LogoutDialog: disconnect event", new Object[0]);
         dismiss();
     }
@@ -96,7 +95,7 @@ public class LogoutDialog extends ProgressDialog {
         dismiss();
     }
 
-    @Override // android.app.ProgressDialog, android.app.AlertDialog, android.app.Dialog
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setProgressStyle(0);
@@ -106,7 +105,7 @@ public class LogoutDialog extends ProgressDialog {
         }
     }
 
-    @Override // android.app.Dialog
+    @Override
     public Bundle onSaveInstanceState() {
         Bundle onSaveInstanceState = super.onSaveInstanceState();
         if (onSaveInstanceState == null) {
@@ -118,7 +117,7 @@ public class LogoutDialog extends ProgressDialog {
         return onSaveInstanceState;
     }
 
-    @Override // android.app.ProgressDialog, android.app.Dialog
+    @Override
     public void onStart() {
         SLAgentCircuit activeAgentCircuit;
         SLGridConnection gridConnection;
@@ -139,7 +138,7 @@ public class LogoutDialog extends ProgressDialog {
         EventBus.getInstance().publish(new SLDisconnectEvent(true, "Disconnected"));
     }
 
-    @Override // android.app.ProgressDialog, android.app.Dialog
+    @Override
     protected void onStop() {
         this.handler.removeCallbacks(this.onDisconnectTimeout);
         this.eventBus.unsubscribe(this);

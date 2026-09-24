@@ -6,7 +6,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class Extension<M extends ExtendableMessageNano<M>, T> {
     public static final int TYPE_BOOL = 8;
     public static final int TYPE_BYTES = 12;
@@ -35,10 +34,10 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
         private final int nonPackedTag;
         private final int packedTag;
 
-        public PrimitiveExtension(int i, Class<T> cls, int i2, boolean z, int i3, int i4) {
+        public PrimitiveExtension(int i, Class<T> cls, int i2, boolean z, int nonPackedTag, int packedTag) {
             super(i, cls, i2, z);
-            this.nonPackedTag = i3;
-            this.packedTag = i4;
+            this.nonPackedTag = nonPackedTag;
+            this.packedTag = packedTag;
         }
 
         private int computePackedDataSize(Object obj) {
@@ -120,7 +119,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             }
         }
 
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected int computeRepeatedSerializedSize(Object obj) {
             if (this.tag == this.nonPackedTag) {
                 return super.computeRepeatedSerializedSize(obj);
@@ -132,7 +131,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             return computePackedDataSize + CodedOutputByteBufferNano.computeRawVarint32Size(computePackedDataSize) + CodedOutputByteBufferNano.computeRawVarint32Size(this.tag);
         }
 
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected final int computeSingularSerializedSize(Object obj) {
             int tagFieldNumber = WireFormatNano.getTagFieldNumber(this.tag);
             switch (this.type) {
@@ -175,7 +174,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             }
         }
 
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected Object readData(CodedInputByteBufferNano codedInputByteBufferNano) {
             try {
                 return codedInputByteBufferNano.readPrimitiveField(this.type);
@@ -184,7 +183,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             }
         }
 
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected void readDataInto(UnknownFieldData unknownFieldData, List<Object> list) {
             if (unknownFieldData.tag == this.nonPackedTag) {
                 list.add(readData(CodedInputByteBufferNano.newInstance(unknownFieldData.bytes)));
@@ -202,7 +201,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
         }
 
         /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected void writeRepeatedData(Object obj, CodedOutputByteBufferNano codedOutputByteBufferNano) {
             int i = 0;
             if (this.tag == this.nonPackedTag) {
@@ -314,7 +313,7 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             }
         }
 
-        @Override // com.google.protobuf.nano.Extension
+        @Override
         protected final void writeSingularData(Object obj, CodedOutputByteBufferNano codedOutputByteBufferNano) {
             try {
                 codedOutputByteBufferNano.writeRawVarint32(this.tag);
@@ -378,11 +377,11 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
         }
     }
 
-    private Extension(int i, Class<T> cls, int i2, boolean z) {
-        this.type = i;
+    private Extension(int type, Class<T> cls, int tag, boolean repeated) {
+        this.type = type;
         this.clazz = cls;
-        this.tag = i2;
-        this.repeated = z;
+        this.tag = tag;
+        this.repeated = repeated;
     }
 
     @Deprecated
@@ -419,8 +418,8 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             return null;
         }
         T cast = this.clazz.cast(Array.newInstance(this.clazz.getComponentType(), size));
-        for (int i2 = 0; i2 < size; i2++) {
-            Array.set(cast, i2, arrayList.get(i2));
+        for (int j = 0; j < size; j++) {
+            Array.set(cast, j, arrayList.get(j));
         }
         return cast;
     }
@@ -435,9 +434,9 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
     protected int computeRepeatedSerializedSize(Object obj) {
         int i = 0;
         int length = Array.getLength(obj);
-        for (int i2 = 0; i2 < length; i2++) {
-            if (Array.get(obj, i2) != null) {
-                i += computeSingularSerializedSize(Array.get(obj, i2));
+        for (int j = 0; j < length; j++) {
+            if (Array.get(obj, j) != null) {
+                i += computeSingularSerializedSize(Array.get(obj, j));
             }
         }
         return i;

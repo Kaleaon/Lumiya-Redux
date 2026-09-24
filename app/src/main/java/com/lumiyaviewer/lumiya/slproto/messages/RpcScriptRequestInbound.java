@@ -4,22 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Inbound RPC requests follow this path:
+ * RpcScriptRequestInbound: rpcserver -> spaceserver
+ * RpcScriptRequestInboundForward: spaceserver -> simulator
+ * reply: simulator -> rpcserver
+ *
+ * <p>Template: {@code RpcScriptRequestInbound Low 415 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RpcScriptRequestInbound extends SLMessage {
     public DataBlock DataBlock_Field;
     public TargetBlock TargetBlock_Field;
 
+    /** Block DataBlock, Single. */
     public static class DataBlock {
-        public UUID ChannelID;
-        public int IntValue;
-        public UUID ItemID;
-        public byte[] StringValue;
-        public UUID TaskID;
+        public UUID ChannelID; // LLUUID
+        public int IntValue; // U32
+        public UUID ItemID; // LLUUID
+        public byte[] StringValue; // Variable 2 - string
+        public UUID TaskID; // LLUUID
     }
 
+    /** Block TargetBlock, Single. */
     public static class TargetBlock {
-        public int GridX;
-        public int GridY;
+        public int GridX; // U32
+        public int GridY; // U32
     }
 
     public RpcScriptRequestInbound() {
@@ -28,21 +38,22 @@ public class RpcScriptRequestInbound extends SLMessage {
         this.DataBlock_Field = new DataBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.DataBlock_Field.StringValue.length + 54 + 12;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcScriptRequestInbound(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcScriptRequestInbound(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -97);
+        // Message number: Low 415 (RpcScriptRequestInbound).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x9F);
         packInt(byteBuffer, this.TargetBlock_Field.GridX);
         packInt(byteBuffer, this.TargetBlock_Field.GridY);
         packUUID(byteBuffer, this.DataBlock_Field.TaskID);
@@ -52,7 +63,7 @@ public class RpcScriptRequestInbound extends SLMessage {
         packVariable(byteBuffer, this.DataBlock_Field.StringValue, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TargetBlock_Field.GridX = unpackInt(byteBuffer);
         this.TargetBlock_Field.GridY = unpackInt(byteBuffer);

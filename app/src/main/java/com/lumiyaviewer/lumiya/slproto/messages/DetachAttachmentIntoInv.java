@@ -4,13 +4,19 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DetachAttachmentIntoInv
+ *
+ * <p>Template: {@code DetachAttachmentIntoInv Low 397 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class DetachAttachmentIntoInv extends SLMessage {
     public ObjectData ObjectData_Field;
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public UUID AgentID;
-        public UUID ItemID;
+        public UUID AgentID; // LLUUID
+        public UUID ItemID; // LLUUID
     }
 
     public DetachAttachmentIntoInv() {
@@ -18,26 +24,27 @@ public class DetachAttachmentIntoInv extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDetachAttachmentIntoInv(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDetachAttachmentIntoInv(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -115);
+        // Message number: Low 397 (DetachAttachmentIntoInv).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x8D);
         packUUID(byteBuffer, this.ObjectData_Field.AgentID);
         packUUID(byteBuffer, this.ObjectData_Field.ItemID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ObjectData_Field.AgentID = unpackUUID(byteBuffer);
         this.ObjectData_Field.ItemID = unpackUUID(byteBuffer);

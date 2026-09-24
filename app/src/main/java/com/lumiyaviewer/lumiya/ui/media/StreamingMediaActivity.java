@@ -5,35 +5,32 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.StreamingMediaService;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
-import com.lumiyaviewer.lumiya.ui.chat.profiles.ParcelPropertiesFragment;
 
-/* loaded from: classes.dex */
 public class StreamingMediaActivity extends AppCompatActivity implements View.OnClickListener {
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.parcel_media_stop_button /* 2131755615 */:
+            case com.lumiyaviewer.lumiya.R.id.parcel_media_stop_button:
                 Intent intent = new Intent(getIntent());
                 intent.setAction("com.lumiyaviewer.lumiya.ACTION_STOP_MEDIA");
                 intent.setClass(this, StreamingMediaService.class);
-                StreamingMediaService.startServiceCompat(this, intent);
+                startService(intent);
                 finish();
                 break;
         }
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         ParcelData parcelData;
         super.onCreate(bundle);
-        setContentView(R.layout.streaming_media);
+        setContentView(com.lumiyaviewer.lumiya.R.layout.streaming_media);
         Intent intent = getIntent();
-        if (intent.hasExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY) && (parcelData = (ParcelData) intent.getSerializableExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY)) != null) {
-            ((TextView) findViewById(R.id.locationNameView)).setText(parcelData.getName());
+        if (intent.hasExtra("parcelData") && (parcelData = (ParcelData) intent.getSerializableExtra("parcelData")) != null) {
+            ((TextView) findViewById(com.lumiyaviewer.lumiya.R.id.locationNameView)).setText(parcelData.getName());
         }
-        findViewById(R.id.parcel_media_stop_button).setOnClickListener(this);
+        findViewById(com.lumiyaviewer.lumiya.R.id.parcel_media_stop_button).setOnClickListener(this);
     }
 }

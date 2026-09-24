@@ -18,7 +18,6 @@ import java.nio.ByteOrder;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLChatInventoryItemOfferedEvent extends SLChatYesNoEvent {
     private final SLAssetType assetType;
     private final UUID itemID;
@@ -44,13 +43,13 @@ public class SLChatInventoryItemOfferedEvent extends SLChatYesNoEvent {
         this.assetType = extractAssetType(improvedInstantMessage);
     }
 
-    public SLChatInventoryItemOfferedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str, UUID uuid2, SLAssetType sLAssetType) {
-        super(chatMessageSource, uuid, improvedInstantMessage, str);
-        this.itemName = str;
+    public SLChatInventoryItemOfferedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String itemName, UUID itemID, SLAssetType assetType) {
+        super(chatMessageSource, uuid, improvedInstantMessage, itemName);
+        this.itemName = itemName;
         this.origIMType = improvedInstantMessage.MessageBlock_Field.Dialog;
         this.sessionID = improvedInstantMessage.MessageBlock_Field.ID;
-        this.itemID = uuid2;
-        this.assetType = sLAssetType;
+        this.itemID = itemID;
+        this.assetType = assetType;
     }
 
     protected static SLAssetType extractAssetType(ImprovedInstantMessage improvedInstantMessage) {
@@ -79,48 +78,48 @@ public class SLChatInventoryItemOfferedEvent extends SLChatYesNoEvent {
         return this.itemName;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.InventoryItemOffered;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.inv_offer_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.inv_offer_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return context.getString(R.string.inv_offer_question);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         return context.getString(R.string.chat_inventory_other_offer_format, this.itemName);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.inv_offer_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.inv_offer_accepted);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     protected void onNoAction(Context context, UserManager userManager) {
         super.onNoAction(context, userManager);
         UUID sourceUUID = this.source.getSourceUUID();
@@ -145,14 +144,14 @@ public class SLChatInventoryItemOfferedEvent extends SLChatYesNoEvent {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         if (this.dbMessage != null) {
             context.startActivity(InventoryActivity.makeSaveItemIntent(context, this.agentUUID, new InventorySaveInfo(InventorySaveInfo.InventorySaveType.InventoryOffer, this.itemID, getItemName(), null, this.assetType, this.dbMessage.getId().longValue())));
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setOrigIMType(Integer.valueOf(this.origIMType));

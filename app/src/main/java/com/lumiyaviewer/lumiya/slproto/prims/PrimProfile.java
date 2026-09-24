@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class PrimProfile {
     public static final int MIN_DETAIL_FACES = 6;
     private static final float[] tableScale = {1.0f, 1.0f, 1.0f, 0.5f, 0.707107f, 0.53f, 0.525f, 0.5f};
@@ -64,21 +63,21 @@ public class PrimProfile {
         this.TotalOut = this.Total;
         genNGon(primProfileParams, (int) Math.floor(f), f2, -1.0f, f4, i);
         Face addFace = addFace(this.TotalOut, this.Total - this.TotalOut, 0.0f, (short) 4, z);
-        LLVector3[] lLVector3Arr = new LLVector3[this.Total];
+        LLVector3[] vector3s = new LLVector3[this.Total];
         int i2 = this.TotalOut;
         while (true) {
             int i3 = i2;
             if (i3 >= this.Total) {
                 break;
             }
-            lLVector3Arr[i3] = new LLVector3(this.Profile.get(i3));
-            lLVector3Arr[i3].mul(f3);
+            vector3s[i3] = new LLVector3(this.Profile.get(i3));
+            vector3s[i3].mul(f3);
             i2 = i3 + 1;
         }
         int i4 = this.Total - 1;
         int i5 = this.TotalOut;
         while (i5 < this.Total) {
-            this.Profile.set(i5, lLVector3Arr[i4]);
+            this.Profile.set(i5, vector3s[i4]);
             i5++;
             i4--;
         }
@@ -106,13 +105,13 @@ public class PrimProfile {
         float f10 = round < 8 ? tableScale[round] : 0.5f;
         float floor = (float) (Math.floor(i * f6) / i);
         float f11 = 6.2831855f * ((floor * f3) + f);
-        LLVector3 lLVector3 = new LLVector3(((float) Math.cos(f11)) * f10, ((float) Math.sin(f11)) * f10, floor);
+        LLVector3 vector3 = new LLVector3(((float) Math.cos(f11)) * f10, ((float) Math.sin(f11)) * f10, floor);
         float f12 = floor + f8;
         float f13 = f11 + f9;
-        LLVector3 lLVector32 = new LLVector3(((float) Math.cos(f13)) * f10, ((float) Math.sin(f13)) * f10, f12);
+        LLVector3 vector37 = new LLVector3(((float) Math.cos(f13)) * f10, ((float) Math.sin(f13)) * f10, f12);
         float f14 = (f6 - floor) * i;
         if (f14 < 0.9999f) {
-            this.Profile.add(LLVector3.lerp(lLVector3, lLVector32, f14));
+            this.Profile.add(LLVector3.lerp(vector3, vector37, f14));
             f4 = f13;
             f5 = f12;
         } else {
@@ -120,26 +119,26 @@ public class PrimProfile {
             f5 = f12;
         }
         while (f5 < f7) {
-            LLVector3 lLVector33 = new LLVector3(((float) Math.cos(f4)) * f10, ((float) Math.sin(f4)) * f10, f5);
+            LLVector3 vector38 = new LLVector3(((float) Math.cos(f4)) * f10, ((float) Math.sin(f4)) * f10, f5);
             if (this.Profile.size() > 0) {
-                LLVector3 lLVector34 = this.Profile.get(this.Profile.size() - 1);
-                for (int i3 = 0; i3 < i2; i3++) {
-                    this.Profile.add(LLVector3.lerp(lLVector34, lLVector33, (1.0f / (i2 + 1)) * (i3 + 1)));
+                LLVector3 vector39 = this.Profile.get(this.Profile.size() - 1);
+                for (int j = 0; j < i2; j++) {
+                    this.Profile.add(LLVector3.lerp(vector39, vector38, (1.0f / (i2 + 1)) * (j + 1)));
                 }
             }
-            this.Profile.add(lLVector33);
+            this.Profile.add(vector38);
             f4 += f9;
             f5 += f8;
-            lLVector3 = lLVector33;
+            vector3 = vector38;
         }
-        LLVector3 lLVector35 = new LLVector3(((float) Math.cos(f4)) * f10, f10 * ((float) Math.sin(f4)), f5);
+        LLVector3 vector35 = new LLVector3(((float) Math.cos(f4)) * f10, f10 * ((float) Math.sin(f4)), f5);
         float f15 = (f7 - (f5 - f8)) * i;
         if (f15 > 1.0E-4f) {
-            LLVector3 lerp = LLVector3.lerp(lLVector3, lLVector35, f15);
+            LLVector3 lerp = LLVector3.lerp(vector3, vector35, f15);
             if (this.Profile.size() > 0) {
-                LLVector3 lLVector36 = this.Profile.get(this.Profile.size() - 1);
-                for (int i4 = 0; i4 < i2; i4++) {
-                    this.Profile.add(LLVector3.lerp(lLVector36, lerp, (1.0f / (i2 + 1)) * (i4 + 1)));
+                LLVector3 vector36 = this.Profile.get(this.Profile.size() - 1);
+                for (int k = 0; k < i2; k++) {
+                    this.Profile.add(LLVector3.lerp(vector36, lerp, (1.0f / (i2 + 1)) * (k + 1)));
                 }
             }
             this.Profile.add(lerp);
@@ -223,62 +222,62 @@ public class PrimProfile {
     }
 
     protected void genNormals(PrimProfileParams primProfileParams) {
-        LLVector3 lLVector3;
+        LLVector3 vector3;
         int size = this.Profile.size();
         int i = this.TotalOut != 0 ? this.TotalOut : this.Total / 2;
         this.EdgeNormals = new LLVector3[size * 2];
         this.EdgeCenters = new LLVector3[size * 2];
         this.Normals = new LLVector2[size];
         boolean z = primProfileParams.Hollow > 0.0f;
-        for (int i2 = 0; i2 < size; i2++) {
-            this.Normals[i2] = new LLVector2(this.Profile.get(i2).x, this.Profile.get(i2).y);
-            if (z && i2 >= i) {
-                this.Normals[i2].mul(-1.0f);
+        for (int j = 0; j < size; j++) {
+            this.Normals[j] = new LLVector2(this.Profile.get(j).x, this.Profile.get(j).y);
+            if (z && j >= i) {
+                this.Normals[j].mul(-1.0f);
             }
-            if (this.Normals[i2].magVec() < 0.001d) {
-                int i3 = i2 + (-1) >= 0 ? i2 - 1 : size - 1;
+            if (this.Normals[j].magVec() < 0.001d) {
+                int i3 = j + (-1) >= 0 ? j - 1 : size - 1;
                 int i4 = i3 + (-1) >= 0 ? i3 - 1 : size - 1;
-                int i5 = i2 + 1 < size ? i2 + 1 : 0;
+                int i5 = j + 1 < size ? j + 1 : 0;
                 int i6 = i5 + 1 < size ? i5 + 1 : 0;
-                this.Normals[i2] = LLVector2.sum(new LLVector2((this.Profile.get(i3).x + this.Profile.get(i3).x) - this.Profile.get(i4).x, (this.Profile.get(i3).y + this.Profile.get(i3).y) - this.Profile.get(i4).y), new LLVector2((this.Profile.get(i5).x + this.Profile.get(i5).x) - this.Profile.get(i6).x, (this.Profile.get(i5).y + this.Profile.get(i5).y) - this.Profile.get(i6).y));
-                this.Normals[i2].mul(0.5f);
+                this.Normals[j] = LLVector2.sum(new LLVector2((this.Profile.get(i3).x + this.Profile.get(i3).x) - this.Profile.get(i4).x, (this.Profile.get(i3).y + this.Profile.get(i3).y) - this.Profile.get(i4).y), new LLVector2((this.Profile.get(i5).x + this.Profile.get(i5).x) - this.Profile.get(i6).x, (this.Profile.get(i5).y + this.Profile.get(i5).y) - this.Profile.get(i6).y));
+                this.Normals[j].mul(0.5f);
             }
-            this.Normals[i2].normVec();
+            this.Normals[j].normVec();
         }
         int i7 = this.Concave ? 2 : 1;
-        for (int i8 = 0; i8 < i7; i8++) {
+        for (int k = 0; k < i7; k++) {
             int i9 = 0;
             while (true) {
                 int i10 = i9;
                 if (i10 < this.Total) {
-                    LLVector3 lLVector32 = new LLVector3(this.Profile.get(i10));
-                    lLVector32.z = 0.0f;
-                    if (!this.Concave || i8 != 0 || i10 != (this.Total - 1) / 2) {
-                        if (!this.Concave || i8 != 1 || i10 != this.Total - 1) {
-                            LLVector3 lLVector33 = new LLVector3();
-                            LLVector3 lLVector34 = new LLVector3();
-                            lLVector3 = lLVector33;
+                    LLVector3 vector35 = new LLVector3(this.Profile.get(i10));
+                    vector35.z = 0.0f;
+                    if (!this.Concave || k != 0 || i10 != (this.Total - 1) / 2) {
+                        if (!this.Concave || k != 1 || i10 != this.Total - 1) {
+                            LLVector3 vector36 = new LLVector3();
+                            LLVector3 vector37 = new LLVector3();
+                            vector3 = vector36;
                             int i11 = (i10 + 1) % this.Total;
-                            while (lLVector34.magVecSquared() < 1.0E-4f) {
-                                lLVector3 = this.Profile.get(i11);
-                                lLVector34.setSub(lLVector3, lLVector32);
+                            while (vector37.magVecSquared() < 1.0E-4f) {
+                                vector3 = this.Profile.get(i11);
+                                vector37.setSub(vector3, vector35);
                                 i11 = (i11 + 1) % this.Total;
                                 if (i11 == i10) {
                                     break;
                                 }
                             }
                         } else {
-                            lLVector3 = this.Profile.get((this.Total - 1) / 2);
+                            vector3 = this.Profile.get((this.Total - 1) / 2);
                         }
                     } else {
-                        lLVector3 = this.Profile.get(this.Total - 1);
+                        vector3 = this.Profile.get(this.Total - 1);
                     }
-                    lLVector3.z = 0.0f;
-                    LLVector3 sub = LLVector3.sub(lLVector3, lLVector32);
+                    vector3.z = 0.0f;
+                    LLVector3 sub = LLVector3.sub(vector3, vector35);
                     sub.setCross(LLVector3.z_axis);
                     sub.normVec();
-                    this.EdgeNormals[(i8 * size) + i10] = sub;
-                    this.EdgeCenters[(i8 * size) + i10] = LLVector3.lerp(lLVector32, lLVector3, 0.5f);
+                    this.EdgeNormals[(k * size) + i10] = sub;
+                    this.EdgeCenters[(k * size) + i10] = LLVector3.lerp(vector35, vector3, 0.5f);
                     i9 = i10 + 1;
                 }
             }
@@ -357,9 +356,9 @@ public class PrimProfile {
                 int floor = (int) Math.floor(4.0f * f4);
                 squareFaces:
                 while (true) {
-                    int i5 = floor;
+                    int floor3 = floor;
                     int i6 = i3;
-                    if (i5 >= ((int) Math.floor((4.0f * f5) + 0.999f))) {
+                    if (floor3 >= ((int) Math.floor((4.0f * f5) + 0.999f))) {
                         int i7 = 0;
                         while (true) {
                             int i8 = i7;
@@ -388,8 +387,8 @@ public class PrimProfile {
                         }
                     } else {
                         i3 = i6 + 1;
-                        addFace((i + 1) * i6, i + 2, 1.0f, (short) (32 << i5), true);
-                        floor = i5 + 1;
+                        addFace((i + 1) * i6, i + 2, 1.0f, (short) (32 << floor3), true);
+                        floor = floor3 + 1;
                     }
                 }
                 break;

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GroupMemberList {
     private UUID groupID;
     private UUID requestID;
@@ -14,9 +13,9 @@ public class GroupMemberList {
         this.groupID = uuid;
     }
 
-    public GroupMemberList(UUID uuid, UUID uuid2) {
+    public GroupMemberList(UUID uuid, UUID requestID) {
         this.groupID = uuid;
-        this.requestID = uuid2;
+        this.requestID = requestID;
     }
 
     public UUID getGroupID() {

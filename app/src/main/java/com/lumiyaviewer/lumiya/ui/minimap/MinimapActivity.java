@@ -23,14 +23,13 @@ import com.lumiyaviewer.lumiya.ui.common.ConnectedActivity;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MinimapActivity extends ConnectedActivity {
-    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$HQUtmVzLYkemE78mCklVmVxMXms
+    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapActivity.this.m649com_lumiyaviewer_lumiya_ui_minimap_MinimapActivitymthref0((CurrentLocationInfo) obj);
+            MinimapActivity.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -48,9 +47,7 @@ public class MinimapActivity extends ConnectedActivity {
     @BindView(R.id.split_object_popups_left_spacer)
     View splitObjectPopupsLeftSpacer;
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocationInfo, reason: merged with bridge method [inline-methods] */
-    public void m649com_lumiyaviewer_lumiya_ui_minimap_MinimapActivitymthref0(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         if (currentLocationInfo != null) {
             ParcelData parcelData = currentLocationInfo.parcelData();
             String name = parcelData != null ? parcelData.getName() : null;
@@ -70,7 +67,7 @@ public class MinimapActivity extends ConnectedActivity {
         setTitle(str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.split_two_panels);
@@ -99,7 +96,7 @@ public class MinimapActivity extends ConnectedActivity {
             layoutParams4.height = -1;
             layoutParams4.weight = 1.0f;
             this.detailsLayout.setLayoutParams(layoutParams4);
-            this.splitObjectPopupsLeftSpacer.setVisibility(8);
+            this.splitObjectPopupsLeftSpacer.setVisibility(View.GONE);
         }
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getIntent());
         FragmentManager supportFragmentManager = getSupportFragmentManager();
@@ -117,7 +114,7 @@ public class MinimapActivity extends ConnectedActivity {
         beginTransaction.commit();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
@@ -128,7 +125,7 @@ public class MinimapActivity extends ConnectedActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         this.currentLocationInfo.unsubscribe();
         super.onStop();

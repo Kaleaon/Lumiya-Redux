@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class RawShaderProgram extends ShaderProgram {
     public int textureSampler;
     public int uMVPMatrix;
@@ -14,12 +13,12 @@ public class RawShaderProgram extends ShaderProgram {
         super(z ? Shader.ExtTextureVertexShader : Shader.RawVertexShader, z ? Shader.ExtTextureFragmentShader : Shader.RawFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         this.vPosition = GLES20.glGetAttribLocation(this.handle, "vPosition");
         this.vTexCoord = GLES20.glGetAttribLocation(this.handle, "vTexCoord");
@@ -28,7 +27,7 @@ public class RawShaderProgram extends ShaderProgram {
         this.vTextureTransformMatrix = GLES20.glGetUniformLocation(this.handle, "vTextureTransformMatrix");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int getHandle() {
         return super.getHandle();
     }

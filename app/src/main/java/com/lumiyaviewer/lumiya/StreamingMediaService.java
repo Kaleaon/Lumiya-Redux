@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya;
 
+import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -17,7 +18,6 @@ import com.lumiyaviewer.lumiya.media.AudioManagerWrapper;
 import com.lumiyaviewer.lumiya.media.MediaPlayerWrapper;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
@@ -27,7 +27,6 @@ import com.lumiyaviewer.lumiya.ui.media.StreamingMediaActivity;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class StreamingMediaService extends Service {
     public static final String LOCATION_DESC_KEY = "location_desc";
     public static final String LOCATION_NAME_KEY = "location_name";
@@ -60,7 +59,7 @@ public class StreamingMediaService extends Service {
             this(streamingMediaService);
         }
 
-        @Override // android.os.Handler
+        @Override
         public void handleMessage(Message message) {
             StreamingMediaService streamingMediaService;
             if (message.what != 100 || (streamingMediaService = this.streamingMediaService.get()) == null) {
@@ -70,7 +69,6 @@ public class StreamingMediaService extends Service {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handleAudioFocusChange(int i) {
         Debug.Log("StreamingMediaService: focusChange = " + i);
         if (i == -1) {
@@ -137,12 +135,12 @@ public class StreamingMediaService extends Service {
     }
 
     private void showNotification() {
-        PendingIntent service = PendingIntent.getService(this, 0, new Intent(this, (Class<?>) StreamingMediaService.class), 1073741824);
+        PendingIntent service = PlatformCompat.getService(this, 0, new Intent(this, (Class<?>) StreamingMediaService.class), PendingIntent.FLAG_ONE_SHOT);
         Intent intent = new Intent(this, (Class<?>) StreamingMediaActivity.class);
         ActivityUtils.setActiveAgentID(intent, this.lastActiveAgentUUID);
         intent.putExtra(ParcelPropertiesFragment.PARCEL_DATA_KEY, this.lastParcelData);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_playing_media).setContentTitle("Playing media").setContentText(this.lastLocationName).setDefaults(0).setOngoing(true).setContentIntent(PendingIntent.getActivity(this, 0, intent, SLMoveEvents.AGENT_CONTROL_AWAY)).addAction(R.drawable.icon_material_stop, "Stop", service).setDeleteIntent(service).setOnlyAlertOnce(true);
+        builder.setSmallIcon(R.drawable.ic_playing_media).setContentTitle("Playing media").setContentText(this.lastLocationName).setDefaults(0).setOngoing(true).setContentIntent(PlatformCompat.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).addAction(R.drawable.icon_material_stop, "Stop", service).setDeleteIntent(service).setOnlyAlertOnce(true);
         startForeground(R.id.media_notify_id, builder.build());
     }
 
@@ -165,19 +163,19 @@ public class StreamingMediaService extends Service {
         startServiceCompat(context, intent);
     }
 
-    @Override // android.app.Service
+    @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    @Override // android.app.Service
+    @Override
     public void onCreate() {
         super.onCreate();
         this.audioManagerWrapper = new AudioManagerWrapper(this);
         this.audioManagerWrapper.setHandler(this.mHandler, 100);
     }
 
-    @Override // android.app.Service
+    @Override
     public void onDestroy() {
         this.mediaWrapper.release();
         if (this.audioManagerWrapper != null) {
@@ -189,7 +187,7 @@ public class StreamingMediaService extends Service {
         isPlayingMedia.setData(SubscriptionSingleKey.Value, Boolean.FALSE);
     }
 
-    @Override // android.app.Service
+    @Override
     public int onStartCommand(Intent intent, int i, int i2) {
         handleStartService(intent);
         return 2;

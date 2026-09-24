@@ -3,25 +3,24 @@ package com.lumiyaviewer.lumiya.slproto.users.manager;
 import com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 final class AutoValue_GroupManager_GroupMemberRolesQuery extends GroupManager.GroupMemberRolesQuery {
     private final UUID groupID;
     private final UUID memberID;
     private final UUID requestID;
 
-    AutoValue_GroupManager_GroupMemberRolesQuery(UUID uuid, UUID uuid2, UUID uuid3) {
+    AutoValue_GroupManager_GroupMemberRolesQuery(UUID uuid, UUID memberID, UUID requestID) {
         if (uuid == null) {
             throw new NullPointerException("Null groupID");
         }
         this.groupID = uuid;
-        if (uuid2 == null) {
+        if (memberID == null) {
             throw new NullPointerException("Null memberID");
         }
-        this.memberID = uuid2;
-        if (uuid3 == null) {
+        this.memberID = memberID;
+        if (requestID == null) {
             throw new NullPointerException("Null requestID");
         }
-        this.requestID = uuid3;
+        this.requestID = requestID;
     }
 
     public boolean equals(Object obj) {
@@ -38,7 +37,7 @@ final class AutoValue_GroupManager_GroupMemberRolesQuery extends GroupManager.Gr
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.GroupMemberRolesQuery
+    @Override
     public UUID groupID() {
         return this.groupID;
     }
@@ -47,12 +46,12 @@ final class AutoValue_GroupManager_GroupMemberRolesQuery extends GroupManager.Gr
         return ((((this.groupID.hashCode() ^ 1000003) * 1000003) ^ this.memberID.hashCode()) * 1000003) ^ this.requestID.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.GroupMemberRolesQuery
+    @Override
     public UUID memberID() {
         return this.memberID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.GroupMemberRolesQuery
+    @Override
     public UUID requestID() {
         return this.requestID;
     }

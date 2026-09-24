@@ -9,8 +9,6 @@ import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.GridConnectionManager;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
-import com.lumiyaviewer.lumiya.slproto.messages.AvatarPropertiesReply;
-import com.lumiyaviewer.lumiya.slproto.messages.GroupProfileReply;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
@@ -20,25 +18,21 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f150xb1d54699 = null;
 
     @Nonnull
     public final UUID agentUUID;
 
     public static class ChatterIDGroup extends ChatterIDWithUUID {
-        public static final Parcelable.Creator<ChatterIDGroup> CREATOR = new Parcelable.Creator<ChatterIDGroup>() { // from class: com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDGroup.1
+        public static final Parcelable.Creator<ChatterIDGroup> CREATOR = new Parcelable.Creator<ChatterIDGroup>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDGroup createFromParcel(Parcel parcel) {
                 return new ChatterIDGroup(parcel, (ChatterIDGroup) null);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDGroup[] newArray(int i) {
                 return new ChatterIDGroup[i];
             }
@@ -60,12 +54,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             this(uuid, uuid2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ int compareTo(@Nonnull ChatterID chatterID) {
             return super.compareTo(chatterID);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public boolean equals(Object obj) {
             if (obj instanceof ChatterIDGroup) {
                 return super.equals(obj);
@@ -73,65 +67,65 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nonnull
         public ChatterType getChatterType() {
             return ChatterType.Group;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID
+        @Override
         @Nonnull
         public /* bridge */ /* synthetic */ UUID getChatterUUID() {
             return super.getChatterUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nullable
         public /* bridge */ /* synthetic */ UUID getOptionalChatterUUID() {
             return super.getOptionalChatterUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public Subscription getPictureID(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull final OnChatterPictureIDListener onChatterPictureIDListener) {
             return userManager.getCachedGroupProfiles().getPool().subscribe(this.uuid, UIThreadExecutor.getInstance(), groupProfileReply -> onChatterPictureIDListener.onChatterPictureID(groupProfileReply.GroupData_Field.InsigniaID));
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ int hashCode() {
             return super.hashCode();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ boolean isValidUUID() {
             return super.isValidUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ Bundle toBundle() {
             return super.toBundle();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ String toString() {
             return super.toString();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID, android.os.Parcelable
+        @Override
         public /* bridge */ /* synthetic */ void writeToParcel(Parcel parcel, int i) {
             super.writeToParcel(parcel, i);
         }
     }
 
     public static class ChatterIDLocal extends ChatterID {
-        public static final Parcelable.Creator<ChatterIDLocal> CREATOR = new Parcelable.Creator<ChatterIDLocal>() { // from class: com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDLocal.1
+        public static final Parcelable.Creator<ChatterIDLocal> CREATOR = new Parcelable.Creator<ChatterIDLocal>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDLocal createFromParcel(Parcel parcel) {
                 return new ChatterIDLocal(parcel, (ChatterIDLocal) null);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDLocal[] newArray(int i) {
                 return new ChatterIDLocal[i];
             }
@@ -153,7 +147,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             this(uuid);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public boolean equals(Object obj) {
             if (obj instanceof ChatterIDLocal) {
                 return super.equals(obj);
@@ -161,7 +155,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nonnull
         public ChatterType getChatterType() {
             return ChatterType.Local;
@@ -169,15 +163,15 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
     }
 
     public static class ChatterIDUser extends ChatterIDWithUUID {
-        public static final Parcelable.Creator<ChatterIDUser> CREATOR = new Parcelable.Creator<ChatterIDUser>() { // from class: com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDUser.1
+        public static final Parcelable.Creator<ChatterIDUser> CREATOR = new Parcelable.Creator<ChatterIDUser>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDUser createFromParcel(Parcel parcel) {
                 return new ChatterIDUser(parcel, (ChatterIDUser) null);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public ChatterIDUser[] newArray(int i) {
                 return new ChatterIDUser[i];
             }
@@ -199,12 +193,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             this(uuid, uuid2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ int compareTo(@Nonnull ChatterID chatterID) {
             return super.compareTo(chatterID);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public boolean equals(Object obj) {
             if (obj instanceof ChatterIDUser) {
                 return super.equals(obj);
@@ -212,50 +206,50 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nonnull
         public ChatterType getChatterType() {
             return ChatterType.User;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID
+        @Override
         @Nonnull
         public /* bridge */ /* synthetic */ UUID getChatterUUID() {
             return super.getChatterUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nullable
         public /* bridge */ /* synthetic */ UUID getOptionalChatterUUID() {
             return super.getOptionalChatterUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public Subscription getPictureID(@Nonnull UserManager userManager, @Nullable Executor executor, @Nonnull final OnChatterPictureIDListener onChatterPictureIDListener) {
             return userManager.getAvatarProperties().getPool().subscribe(this.uuid, executor, avatarPropertiesReply -> onChatterPictureIDListener.onChatterPictureID(avatarPropertiesReply.PropertiesData_Field.ImageID));
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ int hashCode() {
             return super.hashCode();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ boolean isValidUUID() {
             return super.isValidUUID();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ Bundle toBundle() {
             return super.toBundle();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public /* bridge */ /* synthetic */ String toString() {
             return super.toString();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.ChatterIDWithUUID, com.lumiyaviewer.lumiya.slproto.users.ChatterID, android.os.Parcelable
+        @Override
         public /* bridge */ /* synthetic */ void writeToParcel(Parcel parcel, int i) {
             super.writeToParcel(parcel, i);
         }
@@ -284,7 +278,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             this(uuid, uuid2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public int compareTo(@Nonnull ChatterID chatterID) {
             int compareTo = super.compareTo(chatterID);
             if (compareTo != 0) {
@@ -296,7 +290,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return 0;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public boolean equals(Object obj) {
             if (super.equals(obj) && (obj instanceof ChatterIDWithUUID)) {
                 return Objects.equal(this.uuid, ((ChatterIDWithUUID) obj).uuid);
@@ -309,18 +303,18 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return this.uuid;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         @Nullable
         public UUID getOptionalChatterUUID() {
             return this.uuid;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public int hashCode() {
             return (this.uuid != null ? this.uuid.hashCode() : 0) + super.hashCode();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public boolean isValidUUID() {
             if (this.uuid != null) {
                 return !UUIDPool.ZeroUUID.equals(this.uuid);
@@ -328,19 +322,19 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
             return false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public Bundle toBundle() {
             Bundle bundle = super.toBundle();
             bundle.putString("chatterUUID", this.uuid != null ? this.uuid.toString() : UUIDPool.ZeroUUID.toString());
             return bundle;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID
+        @Override
         public String toString() {
             return super.toString() + ":" + (this.uuid != null ? this.uuid.toString() : "null");
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID, android.os.Parcelable
+        @Override
         public void writeToParcel(Parcel parcel, int i) {
             super.writeToParcel(parcel, i);
             if (this.uuid != null) {
@@ -382,28 +376,6 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
         void onChatterPictureID(UUID uuid);
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m269x2680ba3d() {
-        if (f150xb1d54699 != null) {
-            return f150xb1d54699;
-        }
-        int[] iArr = new int[ChatterType.valuesCustom().length];
-        try {
-            iArr[ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f150xb1d54699 = iArr;
-        return iArr;
-    }
-
     private ChatterID(Parcel parcel) {
         this.agentUUID = UUIDPool.getUUID(parcel.readLong(), parcel.readLong());
     }
@@ -422,12 +394,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
 
     public static ChatterID fromBundle(Bundle bundle) {
         UUID fromString = UUID.fromString(bundle.getString("chatterAgentUUID"));
-        switch (m269x2680ba3d()[ChatterType.VALUES[bundle.getInt("chatterType", 0)].ordinal()]) {
-            case 1:
+        switch (ChatterType.VALUES[bundle.getInt("chatterType", 0)]) {
+            case Group:
                 return getGroupChatterID(fromString, UUID.fromString(bundle.getString("chatterUUID")));
-            case 2:
+            case Local:
                 return getLocalChatterID(fromString);
-            case 3:
+            case User:
                 return getUserChatterID(fromString, UUID.fromString(bundle.getString("chatterUUID")));
             default:
                 return null;
@@ -435,12 +407,12 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
     }
 
     public static ChatterID fromDatabaseObject(UUID uuid, Chatter chatter) {
-        switch (m269x2680ba3d()[ChatterType.VALUES[chatter.getType()].ordinal()]) {
-            case 1:
+        switch (ChatterType.VALUES[chatter.getType()]) {
+            case Group:
                 return getGroupChatterID(uuid, chatter.getUuid());
-            case 2:
+            case Local:
                 return getLocalChatterID(uuid);
-            case 3:
+            case User:
                 return getUserChatterID(uuid, chatter.getUuid());
             default:
                 return null;
@@ -462,13 +434,13 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
         return new ChatterIDUser(uuid, uuid2, null);
     }
 
-    @Override // java.lang.Comparable
+    @Override
     public int compareTo(@Nonnull ChatterID chatterID) {
         int compareTo = this.agentUUID.compareTo(chatterID.agentUUID);
         return compareTo != 0 ? compareTo : getChatterType().compareTo(chatterID.getChatterType());
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -526,7 +498,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
         return "Chatter:" + getChatterType().toString();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(this.agentUUID.getMostSignificantBits());
         parcel.writeLong(this.agentUUID.getLeastSignificantBits());

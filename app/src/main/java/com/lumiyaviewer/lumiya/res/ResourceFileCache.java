@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.res;
 import com.lumiyaviewer.lumiya.res.executors.LoaderExecutor;
 import java.io.File;
 
-/* loaded from: classes.dex */
 public abstract class ResourceFileCache<ResourceParams, ResourceType> extends ResourceMemoryCache<ResourceParams, ResourceType> {
 
     private class ResourceLoadRequest<ResParams extends ResourceParams, ResType extends ResourceType> extends ResourceRequest<ResourceParams, ResourceType> implements Runnable {
@@ -14,18 +13,18 @@ public abstract class ResourceFileCache<ResourceParams, ResourceType> extends Re
             this.file = file;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             LoaderExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             LoaderExecutor.getInstance().execute(this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(ResourceFileCache.this.createResourceFromFile(getParams(), this.file));
@@ -35,7 +34,7 @@ public abstract class ResourceFileCache<ResourceParams, ResourceType> extends Re
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     protected ResourceRequest<ResourceParams, ResourceType> CreateNewRequest(ResourceParams resourceparams, ResourceManager<ResourceParams, ResourceType> resourceManager) {
         File resourceFile = getResourceFile(resourceparams);
         return resourceFile.exists() ? new ResourceLoadRequest(resourceparams, resourceManager, resourceFile) : createResourceGenRequest(resourceparams, resourceManager, resourceFile);

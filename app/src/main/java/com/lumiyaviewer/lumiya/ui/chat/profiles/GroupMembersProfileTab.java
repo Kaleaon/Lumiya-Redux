@@ -41,15 +41,14 @@ import de.greenrobot.dao.query.LazyList;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupMembersProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
     private static final String ROLE_TO_ADD_KEY = "roleToAdd";
-    private final SubscriptionData<UUID, UUID> groupMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.2
+    private final SubscriptionData<UUID, UUID> groupMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMembersProfileTab.this.m483xe6cc6560((UUID) obj);
+            GroupMembersProfileTab.this.onGroupMemberList((UUID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -74,7 +73,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             this.cardSelectedColor = typedValue.data;
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public int getItemCount() {
             if (this.data != null) {
                 return this.data.size();
@@ -82,7 +81,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             return 0;
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public void onBindViewHolder(GroupMemberViewHolder groupMemberViewHolder, int i) {
             if (this.data == null || !(!this.data.isClosed()) || i < 0 || i >= this.data.size()) {
                 return;
@@ -90,12 +89,12 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             groupMemberViewHolder.bindToData(this.data.get(i), i == this.selectedPosition);
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public GroupMemberViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return GroupMembersProfileTab.this.new GroupMemberViewHolder(this.layoutInflater.inflate(R.layout.group_member_list_item, viewGroup, false), GroupMembersProfileTab.this.userManager.getUserID(), this.cardSelectedColor);
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public void onViewRecycled(GroupMemberViewHolder groupMemberViewHolder) {
             groupMemberViewHolder.recycle();
         }
@@ -106,15 +105,15 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             notifyDataSetChanged();
         }
 
-        public void setSelectedPosition(int i) {
-            if (i != this.selectedPosition) {
-                int i2 = this.selectedPosition;
-                this.selectedPosition = i;
-                if (i2 != -1) {
-                    notifyItemChanged(i2);
+        public void setSelectedPosition(int selectedPosition2) {
+            if (selectedPosition2 != this.selectedPosition) {
+                int selectedPosition = this.selectedPosition;
+                this.selectedPosition = selectedPosition2;
+                if (selectedPosition != -1) {
+                    notifyItemChanged(selectedPosition);
                 }
-                if (i != -1) {
-                    notifyItemChanged(i);
+                if (selectedPosition2 != -1) {
+                    notifyItemChanged(selectedPosition2);
                 }
             }
         }
@@ -137,7 +136,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         private final ChatterPicView userPicView;
         private final TextView userTitleText;
 
-        GroupMemberViewHolder(View view, UUID uuid, int i) {
+        GroupMemberViewHolder(View view, UUID uuid, int cardSelectedColor) {
             super(view);
             this.boundChatterID = null;
             this.chatterNameRetriever = null;
@@ -153,7 +152,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             this.groupMemberRolesButton = (Button) view.findViewById(R.id.group_member_roles_button);
             this.groupMemberEjectButton = (Button) view.findViewById(R.id.group_member_eject_button);
             this.cardSelectedElevation = this.cardView.getCardElevation();
-            this.cardSelectedColor = i;
+            this.cardSelectedColor = cardSelectedColor;
             this.cardView.setOnClickListener(this);
             this.groupMemberChatButton.setOnClickListener(this);
             this.groupMemberProfileButton.setOnClickListener(this);
@@ -186,13 +185,13 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
                 this.cardView.setCardElevation(0.0f);
                 this.cardView.setCardBackgroundColor(0);
             }
-            this.selectedLayout.setVisibility(z ? 0 : 8);
+            this.selectedLayout.setVisibility(z ? View.VISIBLE : View.GONE);
             AvatarGroupList.AvatarGroupEntry myGroupEntry = GroupMembersProfileTab.this.getMyGroupEntry();
             this.groupMemberEjectButton.setVisibility(GroupMembersProfileTab.this.agentCircuit != null && myGroupEntry != null && ((myGroupEntry.GroupPowers & 4) > 0L ? 1 : ((myGroupEntry.GroupPowers & 4) == 0L ? 0 : -1)) != 0 ? 0 : 8);
-            this.groupMemberRolesButton.setVisibility(myGroupEntry == null ? 8 : 0);
+            this.groupMemberRolesButton.setVisibility(myGroupEntry == null ? View.GONE : View.VISIBLE);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             if (chatterNameRetriever != null) {
                 this.userNameTextView.setText(chatterNameRetriever.getResolvedName());
@@ -200,10 +199,10 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             }
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.group_member_card_view /* 2131755371 */:
+                case R.id.group_member_card_view:
                     if (!GroupMembersProfileTab.this.getArguments().containsKey(GroupMembersProfileTab.ROLE_TO_ADD_KEY)) {
                         if (GroupMembersProfileTab.this.adapter != null) {
                             GroupMembersProfileTab.this.adapter.setSelectedPosition(getAdapterPosition());
@@ -214,22 +213,22 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
                         break;
                     }
                     break;
-                case R.id.group_member_chat_button /* 2131755375 */:
+                case R.id.group_member_chat_button:
                     if (this.boundChatterID != null) {
                         DetailsActivity.showDetails(GroupMembersProfileTab.this.getActivity(), ChatFragmentActivityFactory.getInstance(), ChatFragment.makeSelection(this.boundChatterID));
                         break;
                     }
                     break;
-                case R.id.group_member_profile_button /* 2131755376 */:
+                case R.id.group_member_profile_button:
                     DetailsActivity.showEmbeddedDetails(GroupMembersProfileTab.this.getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(this.boundChatterID));
                     break;
-                case R.id.group_member_roles_button /* 2131755377 */:
+                case R.id.group_member_roles_button:
                     if (this.boundChatterID != null) {
                         DetailsActivity.showEmbeddedDetails(GroupMembersProfileTab.this.getActivity(), GroupMemberRolesFragment.class, GroupMemberRolesFragment.makeSelection(GroupMembersProfileTab.this.chatterID, this.boundChatterID.getChatterUUID()));
                         break;
                     }
                     break;
-                case R.id.group_member_eject_button /* 2131755378 */:
+                case R.id.group_member_eject_button:
                     if (this.boundChatterID != null) {
                         GroupMembersProfileTab.this.ejectGroupMember(this.boundChatterID);
                         break;
@@ -248,25 +247,24 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void addGroupRoleMember(final ChatterID.ChatterIDUser chatterIDUser) {
         final UUID uuid = UUIDPool.getUUID(getArguments().getString(ROLE_TO_ADD_KEY));
         if (uuid != null) {
-            new AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.4
+            new AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     GroupMembersProfileTab.this.m484xf9973c0c((UUID) uuid, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -274,30 +272,28 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void ejectGroupMember(final ChatterID.ChatterIDUser chatterIDUser) {
-        new AlertDialog.Builder(getContext()).setTitle(R.string.eject_member_confirm).setPositiveButton(R.string.yes_eject_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.3
+        new AlertDialog.Builder(getContext()).setTitle(R.string.eject_member_confirm).setPositiveButton(R.string.yes_eject_button, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GroupMembersProfileTab.this.m485xf997b3d4((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.1
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         }).create().show();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nullable
     public AvatarGroupList.AvatarGroupEntry getMyGroupEntry() {
         try {
@@ -315,9 +311,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         return makeSelection;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onGroupMemberList, reason: merged with bridge method [inline-methods] */
-    public void m483xe6cc6560(UUID uuid) {
+    public void onGroupMemberList(UUID uuid) {
         Debug.Printf("GroupMemberList: got dataset ID = %s", uuid);
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup)) {
             return;
@@ -349,7 +343,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         dialogInterface.dismiss();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.group_profile_tab_members, viewGroup, false);
         ((LoadingLayout) inflate.findViewById(R.id.loading_layout)).setSwipeRefreshLayout((SwipeRefreshLayout) inflate.findViewById(R.id.swipe_refresh_layout));
@@ -360,7 +354,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         if (this.adapter != null) {
             this.adapter.setData(this.groupMembers.getData());
@@ -370,7 +364,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         this.loadableMonitor.setEmptyMessage(data != null ? data.isEmpty() : false, getString(R.string.no_public_group_members));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.loadableMonitor.unsubscribeAll();
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDGroup)) {

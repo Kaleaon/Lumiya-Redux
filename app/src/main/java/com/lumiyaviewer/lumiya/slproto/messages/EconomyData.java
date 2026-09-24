@@ -1,31 +1,38 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * dataserver to sim, response w/ econ data
+ *
+ * <p>Template: {@code EconomyData Low 25 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_economy_data()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class EconomyData extends SLMessage {
     public Info Info_Field;
 
+    /** Block Info, Single. */
     public static class Info {
-        public float EnergyEfficiency;
-        public int ObjectCapacity;
-        public int ObjectCount;
-        public int PriceEnergyUnit;
-        public int PriceGroupCreate;
-        public int PriceObjectClaim;
-        public float PriceObjectRent;
-        public float PriceObjectScaleFactor;
-        public int PriceParcelClaim;
-        public float PriceParcelClaimFactor;
-        public int PriceParcelRent;
-        public int PricePublicObjectDecay;
-        public int PricePublicObjectDelete;
-        public int PriceRentLight;
-        public int PriceUpload;
-        public int TeleportMinPrice;
-        public float TeleportPriceExponent;
+        public float EnergyEfficiency; // F32
+        public int ObjectCapacity; // S32
+        public int ObjectCount; // S32
+        public int PriceEnergyUnit; // S32
+        public int PriceGroupCreate; // S32
+        public int PriceObjectClaim; // S32
+        public float PriceObjectRent; // F32
+        public float PriceObjectScaleFactor; // F32
+        public int PriceParcelClaim; // S32
+        public float PriceParcelClaimFactor; // F32
+        public int PriceParcelRent; // S32
+        public int PricePublicObjectDecay; // S32
+        public int PricePublicObjectDelete; // S32
+        public int PriceRentLight; // S32
+        public int PriceUpload; // S32
+        public int TeleportMinPrice; // S32
+        public float TeleportPriceExponent; // F32
     }
 
     public EconomyData() {
@@ -33,21 +40,22 @@ public class EconomyData extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 72;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEconomyData(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEconomyData(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.EM);
+        // Message number: Low 25 (EconomyData).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x19);
         packInt(byteBuffer, this.Info_Field.ObjectCapacity);
         packInt(byteBuffer, this.Info_Field.ObjectCount);
         packInt(byteBuffer, this.Info_Field.PriceEnergyUnit);
@@ -67,7 +75,7 @@ public class EconomyData extends SLMessage {
         packInt(byteBuffer, this.Info_Field.PriceGroupCreate);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Info_Field.ObjectCapacity = unpackInt(byteBuffer);
         this.Info_Field.ObjectCount = unpackInt(byteBuffer);

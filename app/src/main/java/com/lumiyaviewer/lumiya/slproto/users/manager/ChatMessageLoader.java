@@ -13,7 +13,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatMessageLoader extends ChunkedListLoader<ChatMessage> {
 
     @Nonnull
@@ -36,7 +35,7 @@ public class ChatMessageLoader extends ChunkedListLoader<ChatMessage> {
         this.chatMessageDao = userManager.getDaoSession().getChatMessageDao();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader
+    @Override
     protected ChunkedListLoader.LoadResult<ChatMessage> loadInBackground(int i, long j, boolean z) {
         if (this.chatter == null) {
             this.chatter = this.userManager.getChatterList().getActiveChattersManager().getChatter(this.chatterID, true);

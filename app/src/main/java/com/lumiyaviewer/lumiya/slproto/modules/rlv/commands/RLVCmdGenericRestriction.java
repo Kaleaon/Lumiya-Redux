@@ -8,18 +8,17 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictions;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdGenericRestriction implements RLVCommand {
     private boolean canHaveExceptions;
     private RLVRestrictionType restrictionType;
 
-    public RLVCmdGenericRestriction(RLVRestrictionType rLVRestrictionType, boolean z) {
-        this.restrictionType = rLVRestrictionType;
-        this.canHaveExceptions = z;
+    public RLVCmdGenericRestriction(RLVRestrictionType rlvRestrictionType, boolean canHaveExceptions) {
+        this.restrictionType = rlvRestrictionType;
+        this.canHaveExceptions = canHaveExceptions;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    @Override
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         String str3;
         String str4;
         if (str2 == null) {
@@ -33,29 +32,29 @@ public class RLVCmdGenericRestriction implements RLVCommand {
             str4 = "y";
         }
         if (str.equals(str3) || str.equals("add")) {
-            RLVRestrictions restrictions = rLVController.getRestrictions();
-            RLVRestrictionType rLVRestrictionType = this.restrictionType;
+            RLVRestrictions restrictions = rlvController.getRestrictions();
+            RLVRestrictionType restrictionType = this.restrictionType;
             if (!this.canHaveExceptions) {
                 str2 = "";
             }
-            restrictions.addRestriction(rLVRestrictionType, uuid, str2);
+            restrictions.addRestriction(restrictionType, uuid, str2);
             return;
         }
         if (!str.equals(str4) && !str.equals("rem")) {
             if (str.equals("force")) {
-                HandleForce(rLVController, uuid, str2);
+                HandleForce(rlvController, uuid, str2);
             }
         } else {
-            RLVRestrictions restrictions2 = rLVController.getRestrictions();
-            RLVRestrictionType rLVRestrictionType2 = this.restrictionType;
+            RLVRestrictions restrictions2 = rlvController.getRestrictions();
+            RLVRestrictionType restrictionType2 = this.restrictionType;
             if (!this.canHaveExceptions) {
                 str2 = "";
             }
-            restrictions2.removeRestriction(rLVRestrictionType2, uuid, str2);
+            restrictions2.removeRestriction(restrictionType2, uuid, str2);
         }
     }
 
-    protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
+    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
         Debug.Printf("RLV: force option not supported for restriction '%s'", this.restrictionType.toString());
     }
 }

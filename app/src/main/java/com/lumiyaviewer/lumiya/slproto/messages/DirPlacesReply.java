@@ -1,37 +1,50 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirPlacesReply dataserver->sim->viewer
+ * If the user has specified a location, use that to compute
+ * global x,y,z.  Otherwise, use center of the AABB.
+ * reliable
+ *
+ * <p>Template: {@code DirPlacesReply Low 35 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelDirBrowser::processDirPlacesReply()} in indra/newview/llpaneldirbrowser.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class DirPlacesReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<QueryData> QueryData_Fields = new ArrayList<>();
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
     public ArrayList<StatusData> StatusData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Variable. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public boolean Auction;
-        public float Dwell;
-        public boolean ForSale;
-        public byte[] Name;
-        public UUID ParcelID;
+        public boolean Auction; // BOOL
+        public float Dwell; // F32
+        public boolean ForSale; // BOOL
+        public byte[] Name; // Variable 1
+        public UUID ParcelID; // LLUUID
     }
 
+    /** Block StatusData, Variable. */
     public static class StatusData {
-        public int Status;
+        public int Status; // U32
     }
 
     public DirPlacesReply() {
@@ -39,29 +52,30 @@ public class DirPlacesReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int size = (this.QueryData_Fields.size() * 16) + 21 + 1;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
         while (true) {
-            int i = size;
+            int size2 = size;
             if (!it.hasNext()) {
-                return i + 1 + (this.StatusData_Fields.size() * 4);
+                return size2 + 1 + (this.StatusData_Fields.size() * 4);
             }
-            size = ((QueryReplies) it.next()).Name.length + 17 + 1 + 1 + 4 + i;
+            size = ((QueryReplies) it.next()).Name.length + 17 + 1 + 1 + 4 + size2;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPlacesReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPlacesReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 35);
+        // Message number: Low 35 (DirPlacesReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x23);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         byteBuffer.put((byte) this.QueryData_Fields.size());
         Iterator<?> it = this.QueryData_Fields.iterator();
@@ -77,23 +91,23 @@ public class DirPlacesReply extends SLMessage {
             packFloat(byteBuffer, queryReplies.Dwell);
         }
         byteBuffer.put((byte) this.StatusData_Fields.size());
-        Iterator<?> it2 = this.StatusData_Fields.iterator();
-        while (it2.hasNext()) {
-            packInt(byteBuffer, ((StatusData) it2.next()).Status);
+        Iterator<?> iterator = this.StatusData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packInt(byteBuffer, ((StatusData) iterator.next()).Status);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             QueryData queryData = new QueryData();
             queryData.QueryID = unpackUUID(byteBuffer);
             this.QueryData_Fields.add(queryData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             QueryReplies queryReplies = new QueryReplies();
             queryReplies.ParcelID = unpackUUID(byteBuffer);
             queryReplies.Name = unpackVariable(byteBuffer, 1);
@@ -102,8 +116,8 @@ public class DirPlacesReply extends SLMessage {
             queryReplies.Dwell = unpackFloat(byteBuffer);
             this.QueryReplies_Fields.add(queryReplies);
         }
-        int i5 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i6 = 0; i6 < i5; i6++) {
+        int i5 = byteBuffer.get() & 0xFF;
+        for (int m = 0; m < i5; m++) {
             StatusData statusData = new StatusData();
             statusData.Status = unpackInt(byteBuffer);
             this.StatusData_Fields.add(statusData);

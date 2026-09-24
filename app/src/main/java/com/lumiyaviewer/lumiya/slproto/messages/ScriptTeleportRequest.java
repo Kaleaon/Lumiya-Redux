@@ -4,15 +4,27 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptTeleportRequest
+ * Interestingly, this message does not actually "Request a Teleport"
+ * on the viewer. Instead it opens the world map and places a beacon
+ * at the indicated location.
+ * reliable
+ *
+ * <p>Template: {@code ScriptTeleportRequest Low 195 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_script_teleport_request()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ScriptTeleportRequest extends SLMessage {
     public Data Data_Field;
 
+    /** Block Data, Single. */
     public static class Data {
-        public LLVector3 LookAt;
-        public byte[] ObjectName;
-        public byte[] SimName;
-        public LLVector3 SimPosition;
+        public LLVector3 LookAt; // LLVector3
+        public byte[] ObjectName; // Variable 1
+        public byte[] SimName; // Variable 1
+        public LLVector3 SimPosition; // LLVector3
     }
 
     public ScriptTeleportRequest() {
@@ -20,28 +32,29 @@ public class ScriptTeleportRequest extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.ObjectName.length + 1 + 1 + this.Data_Field.SimName.length + 12 + 12 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptTeleportRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptTeleportRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -61);
+        // Message number: Low 195 (ScriptTeleportRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xC3);
         packVariable(byteBuffer, this.Data_Field.ObjectName, 1);
         packVariable(byteBuffer, this.Data_Field.SimName, 1);
         packLLVector3(byteBuffer, this.Data_Field.SimPosition);
         packLLVector3(byteBuffer, this.Data_Field.LookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Data_Field.ObjectName = unpackVariable(byteBuffer, 1);
         this.Data_Field.SimName = unpackVariable(byteBuffer, 1);

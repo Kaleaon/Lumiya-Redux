@@ -8,7 +8,6 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 import androidx.core.os.EnvironmentCompat;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
@@ -58,7 +57,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-/* loaded from: classes.dex */
 public class RenderContext {
     public static final float NEAR_PLANE = 0.5f;
     public static final int UNIFORM_BLOCK_ANIMATION_DATA = 1;
@@ -153,33 +151,33 @@ public class RenderContext {
         }
     }
 
-    public RenderContext(EGLConfig eGLConfig, GpuCapabilities gpuCapabilities, int i, boolean z, int i2, boolean z2, Object obj) {
+    public RenderContext(EGLConfig eglConfig, GpuCapabilities gpuCapabilities, int i, boolean z, int i2, boolean z2, Object obj) {
         boolean z7;
         boolean z8;
         Shaders30 shaders30;
         this.gpuCapabilities = gpuCapabilities;
         this.glRenderer = Strings.nullToEmpty(gpuCapabilities.glRenderer);
         boolean z3 = gpuCapabilities.selectedTier != GpuCapabilities.CompatibilityTier.TIER_C;
-        boolean z4 = gpuCapabilities.reportsEs11;
-        boolean z5 = gpuCapabilities.supportsVbo;
+        boolean reportsEs11 = gpuCapabilities.reportsEs11;
+        boolean supportsVbo = gpuCapabilities.supportsVbo;
         this.hasGL20 = z3;
-        this.hasGL11 = z4;
-        this.hasVBO = z5;
-        this.useVBO = z3 || gpuCapabilities.supportsEs3 || (z4 && z5);
+        this.hasGL11 = reportsEs11;
+        this.hasVBO = supportsVbo;
+        this.useVBO = z3 || gpuCapabilities.supportsEs3 || (reportsEs11 && supportsVbo);
         if (z3) {
             this.useFXAA = GlobalOptions.getInstance().getUseFXAA();
         } else {
             this.useFXAA = false;
         }
         if (z3) {
-            GPUDetection gPUDetection = new GPUDetection(this.glRenderer);
-            Debug.AlwaysPrintf("Detected GPU family '%s', version '%s', numeric version %d", gPUDetection.detectedFamily.or(EnvironmentCompat.MEDIA_UNKNOWN), gPUDetection.detectedVersion.or(EnvironmentCompat.MEDIA_UNKNOWN), Integer.valueOf(gPUDetection.detectedNumericVersion));
+            GPUDetection gpuDetection = new GPUDetection(this.glRenderer);
+            Debug.AlwaysPrintf("Detected GPU family '%s', version '%s', numeric version %d", gpuDetection.detectedFamily.or(EnvironmentCompat.MEDIA_UNKNOWN), gpuDetection.detectedVersion.or(EnvironmentCompat.MEDIA_UNKNOWN), Integer.valueOf(gpuDetection.detectedNumericVersion));
             HashMap hashMap = new HashMap();
             hashMap.put("__NUM_BASE_JOINTS__", Integer.toString(26));
             hashMap.put("__NUM_BASE_BONE_VECTORS__", Integer.toString(156));
             hashMap.put("__MAX_RIGGED_MESH_BONES__", Integer.toString(SLSkeletonBoneID.VALUES.length + 47));
             hashMap.put("__MAX_RIGGED_MESH_JOINTS__", Integer.toString(MeshData.MAX_RIGGED_MESH_JOINTS));
-            if (gPUDetection.detectedFamily.or("").equals(GPUDetection.GPU_FAMILY_ADRENO)) {
+            if (gpuDetection.detectedFamily.or("").equals(GPUDetection.GPU_FAMILY_ADRENO)) {
                 hashMap.put("__ADRENO__", "");
                 if (gpuCapabilities.quirkDisableEs3Shaders) {
                     z3 = false;
@@ -268,7 +266,7 @@ public class RenderContext {
         this.quad = new Quad();
         this.glResourceManager = new GLResourceManager();
         this.windlightPreset = new WindlightPreset();
-        this.loadQueue = createLoadQueue(eGLConfig);
+        this.loadQueue = createLoadQueue(eglConfig);
         this.drawableStore = new DrawableStore(this.loadQueue, z3, i, z, i2, obj);
         if (z7 || !z3) {
             this.boundingBox = null;
@@ -278,7 +276,7 @@ public class RenderContext {
         this.windlightSky = z2 ? new WindlightSky(this) : null;
         this.renderBackend = RenderBackendFactory.createBackend();
         this.renderBackend.onContextInitialized(this);
-        if (z5) {
+        if (supportsVbo) {
             this.crosshairTexture = GLLoadedTexture.loadFromAssets(this, LumiyaApp.getContext(), "misc/crosshair.png");
         } else {
             this.crosshairTexture = null;
@@ -311,7 +309,7 @@ public class RenderContext {
         this.boundMeshRiggingData = null;
     }
 
-    private GLLoadQueue createLoadQueue(EGLConfig eGLConfig) {
+    private GLLoadQueue createLoadQueue(EGLConfig eglConfig) {
         Debug.Printf("TexLoad: creating load queue.", new Object[0]);
         if (this.hasGL20 && !this.gpuCapabilities.quirkDisableAsyncLoadQueue) {
             EGL egl = EGLContext.getEGL();
@@ -320,7 +318,7 @@ public class RenderContext {
                 try {
                     EGLDisplay eglGetCurrentDisplay = egl10.eglGetCurrentDisplay();
                     if (eglGetCurrentDisplay != null && eglGetCurrentDisplay != EGL10.EGL_NO_DISPLAY) {
-                        return new GLAsyncLoadQueue(this, egl10, egl10.eglGetCurrentDisplay(), eGLConfig, this.hasGL30);
+                        return new GLAsyncLoadQueue(this, egl10, egl10.eglGetCurrentDisplay(), eglConfig, this.hasGL30);
                     }
                 } catch (InstantiationException e) {
                     Debug.Warning(e);
@@ -330,20 +328,20 @@ public class RenderContext {
         return new GLSyncLoadQueue();
     }
 
-    public static int gluUnProject(float f, float f2, float f3, float[] fArr, int i, float[] fArr2, int i2, int[] iArr, int i3, float[] fArr3, int i4) {
-        _tempGluUnProjectData[32] = (((f - iArr[i3]) * 2.0f) / iArr[i3 + 2]) - 1.0f;
-        _tempGluUnProjectData[33] = (((f2 - iArr[i3 + 1]) * 2.0f) / iArr[i3 + 3]) - 1.0f;
+    public static int gluUnProject(float f, float f2, float f3, float[] floats, int i, float[] floats2, int i2, int[] ints, int i3, float[] floats3, int i4) {
+        _tempGluUnProjectData[32] = (((f - ints[i3]) * 2.0f) / ints[i3 + 2]) - 1.0f;
+        _tempGluUnProjectData[33] = (((f2 - ints[i3 + 1]) * 2.0f) / ints[i3 + 3]) - 1.0f;
         _tempGluUnProjectData[34] = (2.0f * f3) - 1.0f;
         _tempGluUnProjectData[35] = 1.0f;
-        Matrix.multiplyMM(_tempGluUnProjectData, 16, fArr2, i2, fArr, i);
+        Matrix.multiplyMM(_tempGluUnProjectData, 16, floats2, i2, floats, i);
         Matrix.invertM(_tempGluUnProjectData, 0, _tempGluUnProjectData, 16);
         Matrix.multiplyMV(_tempGluUnProjectData, 36, _tempGluUnProjectData, 0, _tempGluUnProjectData, 32);
         if (_tempGluUnProjectData[39] == 0.0d) {
             return 0;
         }
-        fArr3[i4] = _tempGluUnProjectData[36] / _tempGluUnProjectData[39];
-        fArr3[i4 + 1] = _tempGluUnProjectData[37] / _tempGluUnProjectData[39];
-        fArr3[i4 + 2] = _tempGluUnProjectData[38] / _tempGluUnProjectData[39];
+        floats3[i4] = _tempGluUnProjectData[36] / _tempGluUnProjectData[39];
+        floats3[i4 + 1] = _tempGluUnProjectData[37] / _tempGluUnProjectData[39];
+        floats3[i4 + 2] = _tempGluUnProjectData[38] / _tempGluUnProjectData[39];
         return 1;
     }
 
@@ -417,8 +415,8 @@ public class RenderContext {
         clearFaceTexture();
     }
 
-    public void enqueueOcclusionQuery(GLQuery gLQuery) {
-        this.activeOcclusionQueries.add(gLQuery);
+    public void enqueueOcclusionQuery(GLQuery glQuery) {
+        this.activeOcclusionQueries.add(glQuery);
     }
 
     final MatrixStack getActiveProjectionMatrix() {
@@ -461,11 +459,11 @@ public class RenderContext {
         }
     }
 
-    public void glGenBuffers(int i, int[] iArr, int i2) {
+    public void glGenBuffers(int i, int[] ints, int i2) {
         if (this.hasGL20) {
-            GLES20.glGenBuffers(i, iArr, i2);
+            GLES20.glGenBuffers(i, ints, i2);
         } else {
-            GLES11.glGenBuffers(i, iArr, i2);
+            GLES11.glGenBuffers(i, ints, i2);
         }
     }
 
@@ -475,11 +473,11 @@ public class RenderContext {
         }
     }
 
-    public void glModelMultMatrixf(float[] fArr, int i) {
+    public void glModelMultMatrixf(float[] floats, int i) {
         if (!this.hasGL20) {
-            GLES10.glMultMatrixf(fArr, i);
+            GLES10.glMultMatrixf(floats, i);
         }
-        this.modelViewMatrix.glMultMatrixf(fArr, i);
+        this.modelViewMatrix.glMultMatrixf(floats, i);
     }
 
     public void glModelPopMatrix() {
@@ -489,12 +487,12 @@ public class RenderContext {
         this.modelViewMatrix.glPopMatrix();
     }
 
-    public void glModelPushAndMultMatrixf(float[] fArr, int i) {
+    public void glModelPushAndMultMatrixf(float[] floats, int i) {
         if (!this.hasGL20) {
             GLES10.glPushMatrix();
-            GLES10.glMultMatrixf(fArr, i);
+            GLES10.glMultMatrixf(floats, i);
         }
-        this.modelViewMatrix.glPushAndMultMatrixf(fArr, i);
+        this.modelViewMatrix.glPushAndMultMatrixf(floats, i);
     }
 
     public void glModelPushMatrix() {
@@ -554,21 +552,21 @@ public class RenderContext {
         this.objWorldMatrix.glPopMatrix();
     }
 
-    public void glObjWorldPushAndLoadMatrixf(float[] fArr, int i) {
+    public void glObjWorldPushAndLoadMatrixf(float[] floats, int i) {
         if (!this.hasGL20) {
             GLES10.glPushMatrix();
             GLES10.glLoadMatrixf(this.modelViewMatrix.getMatrixData(), this.modelViewMatrix.getMatrixDataOffset());
-            GLES10.glMultMatrixf(fArr, i);
+            GLES10.glMultMatrixf(floats, i);
         }
-        this.objWorldMatrix.glPushAndLoadMatrixf(fArr, i);
+        this.objWorldMatrix.glPushAndLoadMatrixf(floats, i);
     }
 
-    public void glObjWorldPushAndMultMatrixf(float[] fArr, int i) {
+    public void glObjWorldPushAndMultMatrixf(float[] floats, int i) {
         if (!this.hasGL20) {
             GLES10.glPushMatrix();
-            GLES10.glMultMatrixf(fArr, i);
+            GLES10.glMultMatrixf(floats, i);
         }
-        this.objWorldMatrix.glPushAndMultMatrixf(fArr, i);
+        this.objWorldMatrix.glPushAndMultMatrixf(floats, i);
     }
 
     public void glObjWorldTranslatef(float f, float f2, float f3) {
@@ -637,13 +635,13 @@ public class RenderContext {
         this.modelViewMatrix.glLoadIdentity();
     }
 
-    final void setActiveProjectionMatrix(float[] fArr, int i) {
+    final void setActiveProjectionMatrix(float[] floats, int i) {
         this.modelViewMatrix.reset();
-        this.modelViewMatrix.glLoadMatrixf(fArr, i);
+        this.modelViewMatrix.glLoadMatrixf(floats, i);
     }
 
-    void setMeshCapURL(String str) {
-        this.drawableStore.setMeshCapURL(str);
+    void setMeshCapURL(String meshCapURL) {
+        this.drawableStore.setMeshCapURL(meshCapURL);
     }
 
     @TargetApi(18)

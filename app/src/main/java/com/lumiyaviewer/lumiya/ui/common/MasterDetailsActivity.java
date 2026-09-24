@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public abstract class MasterDetailsActivity extends DetailsActivity {
     protected static final String FROM_SAME_ACTIVITY = "fromSameActivity";
     private static final String IMPLICIT_DETAILS_TAG = "MasterDetailsActivityIsImplicitDetails";
@@ -29,7 +28,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean isRootDetailsFragment(Class<? extends Fragment> cls) {
         return getDetailsFragmentFactory().getFragmentClass().isAssignableFrom(cls);
     }
@@ -49,7 +48,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
     /* JADX WARN: Removed duplicated region for block: B:87:0x01f2  */
     /* JADX WARN: Removed duplicated region for block: B:94:0x01e5  */
     /* JADX WARN: Removed duplicated region for block: B:98:0x01c0  */
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -58,9 +57,9 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         boolean z = false;
         Bundle bundleExtra;
         boolean z2;
-        Bundle bundle2;
+        Bundle bundleExtra3;
         Bundle arguments = null;
-        Bundle arguments2;
+        Bundle bundle3;
         Bundle bundleExtra2;
         Bundle arguments3;
         super.onCreate(bundle);
@@ -77,10 +76,10 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         objArr[3] = Boolean.valueOf(getSupportFragmentManager().findFragmentById(R.id.details) != null);
         Debug.Printf("MasterDetailsActivity: hasSelectorView = %b, sel fragment %b, hasDetailsView = %b, details fragment %b", objArr);
         Debug.Printf("MasterDetailsActivity: intent = %s", getIntent());
-        FragmentTransaction fragmentTransactionBeginTransaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragmentFindFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);
-        Fragment fragmentFindFragmentById2 = getSupportFragmentManager().findFragmentById(R.id.details);
-        if (fragmentFindFragmentById2 == null || (arguments3 = fragmentFindFragmentById2.getArguments()) == null) {
+        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);
+        Fragment fragmentById2 = getSupportFragmentManager().findFragmentById(R.id.details);
+        if (fragmentById2 == null || (arguments3 = fragmentById2.getArguments()) == null) {
             z = false;
         } else {
             Debug.Printf("MasterDetailsActivity: implicit details tag = %b", Boolean.valueOf(arguments3.getBoolean(IMPLICIT_DETAILS_TAG, false)));
@@ -96,77 +95,75 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         }
         if (z || bundle != null || !this.isSplitScreen || (bundleExtra2 = getIntent().getBundleExtra(WEAK_SELECTION_KEY)) == null) {
             z2 = z;
-            bundle2 = bundleExtra;
+            bundleExtra3 = bundleExtra;
         } else {
-            bundle2 = bundleExtra2;
+            bundleExtra3 = bundleExtra2;
             z2 = true;
         }
         boolean z3 = !this.isSplitScreen ? !z2 : true;
         if (z3) {
             Object[] objArr2 = new Object[1];
-            objArr2[0] = fragmentFindFragmentById != null ? fragmentFindFragmentById.toString() : "null";
+            objArr2[0] = fragmentById != null ? fragmentById.toString() : "null";
             Debug.Printf("MasterDetailsActivity: existing fragment %s", objArr2);
-            if (fragmentFindFragmentById != null) {
+            if (fragmentById != null) {
                 Object[] objArr3 = new Object[1];
-                objArr3[0] = fragmentFindFragmentById.isVisible() ? "visible" : "not visible";
+                objArr3[0] = fragmentById.isVisible() ? "visible" : "not visible";
                 Debug.Printf("MasterDetailsActivity: existing fragment is %s", objArr3);
-                if (fragmentFindFragmentById.isDetached()) {
-                    fragmentTransactionBeginTransaction.attach(fragmentFindFragmentById);
-                } else if (fragmentFindFragmentById.isHidden()) {
-                    fragmentTransactionBeginTransaction.show(fragmentFindFragmentById);
+                if (fragmentById.isDetached()) {
+                    beginTransaction.attach(fragmentById);
+                } else if (fragmentById.isHidden()) {
+                    beginTransaction.show(fragmentById);
                 }
             } else {
-                fragmentTransactionBeginTransaction.add(R.id.selector, onCreateMasterFragment(getIntent(), bundle2));
+                beginTransaction.add(R.id.selector, onCreateMasterFragment(getIntent(), bundleExtra3));
             }
-        } else if (fragmentFindFragmentById != null && !fragmentFindFragmentById.isDetached()) {
-            fragmentTransactionBeginTransaction.detach(fragmentFindFragmentById);
+        } else if (fragmentById != null && !fragmentById.isDetached()) {
+            beginTransaction.detach(fragmentById);
         }
         boolean z4 = !this.isSplitScreen ? z2 : true;
         Debug.Printf("MasterDetailsActivity: selectorVisible %b, detailsVisible %b, hasExplicitDetails %b", Boolean.valueOf(z3), Boolean.valueOf(z4), Boolean.valueOf(z2));
         if (z4) {
-            if (fragmentFindFragmentById2 == null) {
+            if (fragmentById2 == null) {
                 Debug.Printf("MasterDetailsActivity: creating new details fragment", new Object[0]);
-                if (fragmentFindFragmentById != null) {
-                    try {
-                        arguments = fragmentFindFragmentById.getArguments();
-                    } catch (Exception e) {
-                        Debug.Warning(e);
+                // 3.4.2 guards the whole creation: a details fragment that cannot
+                // be created is logged and the activity continues without it.
+                try {
+                    Bundle masterArguments = fragmentById != null ? fragmentById.getArguments() : null;
+                    Bundle newDetailsFragmentArguments = getNewDetailsFragmentArguments(masterArguments, bundleExtra3);
+                    Fragment fragment = getDetailsFragmentFactory().getFragmentClass().newInstance();
+                    if (fragment instanceof ReloadableFragment) {
+                        fragment.setArguments(new Bundle());
+                        ((ReloadableFragment) fragment).setFragmentArgs(getIntent(), newDetailsFragmentArguments);
+                    } else {
+                        fragment.setArguments(newDetailsFragmentArguments);
                     }
-                } else {
-                    arguments = null;
+                    Bundle detailsArguments;
+                    if (!z2 && (detailsArguments = fragment.getArguments()) != null) {
+                        detailsArguments.putBoolean(IMPLICIT_DETAILS_TAG, true);
+                    }
+                    Debug.Printf("MasterDetailsActivity: adding new details fragment: %s", fragment);
+                    beginTransaction.add(R.id.details, fragment, DetailsActivity.DEFAULT_DETAILS_FRAGMENT_TAG);
+                } catch (Exception e) {
+                    Debug.Warning(e);
                 }
-                Bundle newDetailsFragmentArguments = getNewDetailsFragmentArguments(arguments, bundle2);
-                Fragment fragmentNewInstance = getSupportFragmentManager().getFragmentFactory()
-                        .instantiate(getClassLoader(), getDetailsFragmentFactory().getFragmentClass().getName());
-                if (fragmentNewInstance instanceof ReloadableFragment) {
-                    fragmentNewInstance.setArguments(new Bundle());
-                    ((ReloadableFragment) fragmentNewInstance).setFragmentArgs(getIntent(), newDetailsFragmentArguments);
-                } else {
-                    fragmentNewInstance.setArguments(newDetailsFragmentArguments);
-                }
-                if (!z2 && (arguments2 = fragmentNewInstance.getArguments()) != null) {
-                    arguments2.putBoolean(IMPLICIT_DETAILS_TAG, true);
-                }
-                Debug.Printf("MasterDetailsActivity: adding new details fragment: %s", fragmentNewInstance);
-                fragmentTransactionBeginTransaction.add(R.id.details, fragmentNewInstance, DetailsActivity.DEFAULT_DETAILS_FRAGMENT_TAG);
             } else {
-                Debug.Printf("MasterDetailsActivity: not creating new details fragment. existing is detached: %b (%s)", Boolean.valueOf(fragmentFindFragmentById2.isDetached()), fragmentFindFragmentById2);
-                if (fragmentFindFragmentById2.isDetached()) {
-                    fragmentTransactionBeginTransaction.attach(fragmentFindFragmentById2);
+                Debug.Printf("MasterDetailsActivity: not creating new details fragment. existing is detached: %b (%s)", Boolean.valueOf(fragmentById2.isDetached()), fragmentById2);
+                if (fragmentById2.isDetached()) {
+                    beginTransaction.attach(fragmentById2);
                 }
             }
-        } else if (fragmentFindFragmentById2 != null && !fragmentFindFragmentById2.isDetached()) {
-            fragmentTransactionBeginTransaction.remove(fragmentFindFragmentById2);
+        } else if (fragmentById2 != null && !fragmentById2.isDetached()) {
+            beginTransaction.remove(fragmentById2);
         }
-        if (fragmentTransactionBeginTransaction.isEmpty()) {
+        if (beginTransaction.isEmpty()) {
             return;
         }
-        fragmentTransactionBeginTransaction.commit();
+        beginTransaction.commit();
     }
 
     protected abstract Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle);
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean onDetailsStackEmpty() {
         FragmentManager supportFragmentManager;
         Fragment findFragmentById;
@@ -177,20 +174,20 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         FragmentTransaction beginTransaction = supportFragmentManager.beginTransaction();
         beginTransaction.setCustomAnimations(android.R.anim.fade_in, R.anim.slide_to_right, 0, android.R.anim.fade_out);
         beginTransaction.remove(findFragmentById);
-        Fragment findFragmentById2 = supportFragmentManager.findFragmentById(R.id.selector);
+        Fragment fragmentById = supportFragmentManager.findFragmentById(R.id.selector);
         Object[] objArr = new Object[3];
-        objArr[0] = Boolean.valueOf(findFragmentById2 != null);
-        objArr[1] = Boolean.valueOf(findFragmentById2 != null ? findFragmentById2.isDetached() : false);
-        objArr[2] = Boolean.valueOf(findFragmentById2 != null ? findFragmentById2.isHidden() : false);
+        objArr[0] = Boolean.valueOf(fragmentById != null);
+        objArr[1] = Boolean.valueOf(fragmentById != null ? fragmentById.isDetached() : false);
+        objArr[2] = Boolean.valueOf(fragmentById != null ? fragmentById.isHidden() : false);
         Debug.Printf("MasterDetailsFragment: existing selector %b, detached %b, hidden %b", objArr);
-        if (findFragmentById2 == null) {
+        if (fragmentById == null) {
             beginTransaction.add(R.id.selector, onCreateMasterFragment(getIntent(), null));
         } else {
-            if (findFragmentById2.isDetached()) {
-                beginTransaction.attach(findFragmentById2);
+            if (fragmentById.isDetached()) {
+                beginTransaction.attach(fragmentById);
             }
-            if (findFragmentById2.isHidden()) {
-                beginTransaction.show(findFragmentById2);
+            if (fragmentById.isHidden()) {
+                beginTransaction.show(fragmentById);
             }
         }
         beginTransaction.commit();
@@ -198,37 +195,37 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Debug.Printf("MasterDetailsActivity: onNewIntent, intent = %s", intent);
-        Bundle bundleExtra = intent.hasExtra(INTENT_SELECTION_KEY) ? intent.getBundleExtra(INTENT_SELECTION_KEY) : null;
-        Bundle bundleExtra2 = intent.hasExtra(WEAK_SELECTION_KEY) ? intent.getBundleExtra(WEAK_SELECTION_KEY) : null;
-        if (bundleExtra != null) {
-            showDetails(this, getDetailsFragmentFactory(), bundleExtra);
+        Bundle bundle = intent.hasExtra(INTENT_SELECTION_KEY) ? intent.getBundleExtra(INTENT_SELECTION_KEY) : null;
+        Bundle bundle2 = intent.hasExtra(WEAK_SELECTION_KEY) ? intent.getBundleExtra(WEAK_SELECTION_KEY) : null;
+        if (bundle != null) {
+            showDetails(this, getDetailsFragmentFactory(), bundle);
             return;
         }
-        if (this.isSplitScreen && bundleExtra2 != null) {
-            showDetails(this, getDetailsFragmentFactory(), bundleExtra2);
+        if (this.isSplitScreen && bundle2 != null) {
+            showDetails(this, getDetailsFragmentFactory(), bundle2);
             return;
         }
         if (this.isSplitScreen) {
             return;
         }
-        if (getSupportFragmentManager().findFragmentById(R.id.details) == null && bundleExtra2 != null && intent.getBooleanExtra(FROM_SAME_ACTIVITY, false)) {
-            showDetails(this, getDetailsFragmentFactory(), bundleExtra2);
+        if (getSupportFragmentManager().findFragmentById(R.id.details) == null && bundle2 != null && intent.getBooleanExtra(FROM_SAME_ACTIVITY, false)) {
+            showDetails(this, getDetailsFragmentFactory(), bundle2);
         } else {
             clearDetailsStack();
             onDetailsStackEmpty();
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected void replaceDetailsFragment(FragmentManager fragmentManager, Fragment fragment) {
         Fragment findFragmentById;
         FragmentTransaction beginTransaction = fragmentManager.beginTransaction();
@@ -241,7 +238,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         updateTitle();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     public Fragment showDetailsFragment(Class<? extends Fragment> cls, Intent intent, Bundle bundle) {
         Bundle arguments;
         Fragment showDetailsFragment = super.showDetailsFragment(cls, intent, bundle);
@@ -251,7 +248,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return showDetailsFragment;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected void updateTitleNoDetails() {
         boolean handled = false;
         Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);

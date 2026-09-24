@@ -22,11 +22,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLGridConnection extends SLConnection {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f62x8f75539 = null;
     private static final String DEFAULT_SYSTEM_ACCOUNT = "Second Life";
     private static boolean autoresponseEnabled = false;
     private static String autoresponseText = "";
@@ -67,32 +64,9 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m140x1c568815() {
-        if (f62x8f75539 != null) {
-            return f62x8f75539;
-        }
-        int[] iArr = new int[ConnectionState.valuesCustom().length];
+    public void DoConnect(SLAuthParams authParams, String str) {
         try {
-            iArr[ConnectionState.Connected.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ConnectionState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ConnectionState.Idle.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f62x8f75539 = iArr;
-        return iArr;
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public void DoConnect(SLAuthParams sLAuthParams, String str) {
-        try {
-            SLAuthReply Login = new SLAuth().Login(sLAuthParams.withLocation(str));
+            SLAuthReply Login = new SLAuth().Login(authParams.withLocation(str));
             if (!Login.success) {
                 setConnectionState(ConnectionState.Idle);
                 reconnectOrDrop(true, false, Login.message);
@@ -164,20 +138,20 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    private void startCircuit(SLAuthReply sLAuthReply, SLTempCircuit sLTempCircuit) {
-        Debug.Log("login reply: ip = " + sLAuthReply.simAddress.toString() + ", port = " + sLAuthReply.simPort + ", ccode = " + sLAuthReply.circuitCode);
-        if (sLAuthReply.inventoryRoot != null) {
-            Debug.Log("inventory root: " + sLAuthReply.inventoryRoot.toString());
+    private void startCircuit(SLAuthReply authReply, SLTempCircuit tempCircuit) {
+        Debug.Log("login reply: ip = " + authReply.simAddress.toString() + ", port = " + authReply.simPort + ", ccode = " + authReply.circuitCode);
+        if (authReply.inventoryRoot != null) {
+            Debug.Log("inventory root: " + authReply.inventoryRoot.toString());
         } else {
             Debug.Log("inventory root is null");
         }
-        SLCaps sLCaps = new SLCaps();
-        sLCaps.GetCapabilites(this.authReply.loginURL, this.authReply.seedCapability);
+        SLCaps caps = new SLCaps();
+        caps.GetCapabilites(this.authReply.loginURL, this.authReply.seedCapability);
         try {
-            this.agentCircuit = new SLAgentCircuit(this, new SLCircuitInfo(sLAuthReply), sLAuthReply, sLCaps, sLTempCircuit);
+            this.agentCircuit = new SLAgentCircuit(this, new SLCircuitInfo(authReply), authReply, caps, tempCircuit);
             this.modules = this.agentCircuit.getModules();
             try {
-                this.capEventQueue = new SLCapEventQueue(sLCaps.getCapabilityOrThrow(SLCaps.SLCapability.EventQueueGet), this.agentCircuit);
+                this.capEventQueue = new SLCapEventQueue(caps.getCapabilityOrThrow(SLCaps.SLCapability.EventQueueGet), this.agentCircuit);
             } catch (SLCaps.NoSuchCapabilityException e) {
                 e.printStackTrace();
             }
@@ -193,8 +167,8 @@ public class SLGridConnection extends SLConnection {
     }
 
     private void startConnecting(final boolean z, final String str) {
-        this.loginThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.SLGridConnection.1
-            @Override // java.lang.Runnable
+        this.loginThread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 if (z) {
                     try {
@@ -218,15 +192,15 @@ public class SLGridConnection extends SLConnection {
         closeConnectionObjects();
     }
 
-    public synchronized void Connect(SLAuthParams sLAuthParams) {
+    public synchronized void Connect(SLAuthParams authParams) {
         if (this.connectionState == ConnectionState.Idle) {
-            this.authParams = sLAuthParams;
+            this.authParams = authParams;
             this.userWantsConnected = true;
             this.reconnectAttempts = 0;
             this.isReconnecting = false;
             this.hadConnected = false;
             this.firstConnect = true;
-            startConnecting(false, sLAuthParams.startLocation);
+            startConnecting(false, authParams.startLocation);
         }
     }
 
@@ -241,7 +215,7 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    public synchronized void HandleTeleportFinish(SLAuthReply sLAuthReply) {
+    public synchronized void HandleTeleportFinish(SLAuthReply authReply) {
         if (this.agentCircuit != null) {
             this.agentCircuit.CloseCircuit();
             this.agentCircuit = null;
@@ -250,17 +224,17 @@ public class SLGridConnection extends SLConnection {
             this.capEventQueue.stopQueue();
             this.capEventQueue = null;
         }
-        this.authReply = sLAuthReply;
-        startCircuit(sLAuthReply, this.tempCircuits.remove(this.authReply));
+        this.authReply = authReply;
+        startCircuit(authReply, this.tempCircuits.remove(this.authReply));
     }
 
-    synchronized void addTempCircuit(SLAuthReply sLAuthReply) {
-        if (!this.tempCircuits.containsKey(sLAuthReply)) {
+    synchronized void addTempCircuit(SLAuthReply authReply) {
+        if (!this.tempCircuits.containsKey(authReply)) {
             try {
-                SLTempCircuit sLTempCircuit = new SLTempCircuit(this, new SLCircuitInfo(sLAuthReply), sLAuthReply);
-                this.tempCircuits.put(sLAuthReply, sLTempCircuit);
-                AddCircuit(sLTempCircuit);
-                sLTempCircuit.SendUseCode();
+                SLTempCircuit tempCircuit = new SLTempCircuit(this, new SLCircuitInfo(authReply), authReply);
+                this.tempCircuits.put(authReply, tempCircuit);
+                AddCircuit(tempCircuit);
+                tempCircuit.SendUseCode();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -298,12 +272,12 @@ public class SLGridConnection extends SLConnection {
             this.hadConnected = false;
         }
         Debug.Log("GridConnection: forceDisconnect() called, fromLogoutRequest = " + (z ? "true" : "false"));
-        switch (m140x1c568815()[this.connectionState.ordinal()]) {
-            case 1:
+        switch (this.connectionState) {
+            case Connected:
                 closeConnectionObjects();
                 reconnectOrDrop(false, z, "Network connection lost.");
                 break;
-            case 2:
+            case Connecting:
                 closeConnectionObjects();
                 reconnectOrDrop(true, z, "Network connection lost.");
                 break;
@@ -367,13 +341,13 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    synchronized void removeTempCircuit(SLTempCircuit sLTempCircuit) {
+    synchronized void removeTempCircuit(SLTempCircuit tempCircuit) {
         Iterator<Map.Entry<SLAuthReply, SLTempCircuit>> it = this.tempCircuits.entrySet().iterator();
         while (it.hasNext()) {
-            if (it.next().getValue() == sLTempCircuit) {
+            if (it.next().getValue() == tempCircuit) {
                 it.remove();
             }
         }
-        sLTempCircuit.CloseCircuit();
+        tempCircuit.CloseCircuit();
     }
 }

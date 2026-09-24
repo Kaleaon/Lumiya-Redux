@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class OrientationEKF {
     static final /* synthetic */ boolean $assertionsDisabled;
     private static final double MAX_ACCEL_NOISE_SIGMA = 7.0d;
@@ -92,13 +91,13 @@ public class OrientationEKF {
         matrix3x3d.set(dArr[0][0], dArr[0][1], dArr[0][2], dArr[1][0], dArr[1][1], dArr[1][2], dArr[2][0], dArr[2][1], dArr[2][2]);
     }
 
-    private void filterGyroTimestep(float f) {
+    private void filterGyroTimestep(float filteredGyroTimestep) {
         if (!this.timestepFilterInit) {
-            this.filteredGyroTimestep = f;
+            this.filteredGyroTimestep = filteredGyroTimestep;
             this.numGyroTimestepSamples = 1;
             this.timestepFilterInit = true;
         } else {
-            this.filteredGyroTimestep = (this.filteredGyroTimestep * 0.95f) + (0.050000012f * f);
+            this.filteredGyroTimestep = (this.filteredGyroTimestep * 0.95f) + (0.050000012f * filteredGyroTimestep);
             int i = this.numGyroTimestepSamples + 1;
             this.numGyroTimestepSamples = i;
             if (i > 10.0f) {
@@ -109,20 +108,20 @@ public class OrientationEKF {
 
     private double[] glMatrixFromSo3(Matrix3x3d matrix3x3d) {
         for (int i = 0; i < 3; i++) {
-            for (int i2 = 0; i2 < 3; i2++) {
-                this.rotationMatrix[(i2 * 4) + i] = matrix3x3d.get(i, i2);
+            for (int j = 0; j < 3; j++) {
+                this.rotationMatrix[(j * 4) + i] = matrix3x3d.get(i, j);
             }
         }
-        double[] dArr = this.rotationMatrix;
-        double[] dArr2 = this.rotationMatrix;
+        double[] rotationMatrix = this.rotationMatrix;
+        double[] rotationMatrix2 = this.rotationMatrix;
         this.rotationMatrix[11] = 0.0d;
-        dArr2[7] = 0.0d;
-        dArr[3] = 0.0d;
-        double[] dArr3 = this.rotationMatrix;
-        double[] dArr4 = this.rotationMatrix;
+        rotationMatrix2[7] = 0.0d;
+        rotationMatrix[3] = 0.0d;
+        double[] rotationMatrix3 = this.rotationMatrix;
+        double[] rotationMatrix4 = this.rotationMatrix;
         this.rotationMatrix[14] = 0.0d;
-        dArr4[13] = 0.0d;
-        dArr3[12] = 0.0d;
+        rotationMatrix4[13] = 0.0d;
+        rotationMatrix3[12] = 0.0d;
         this.rotationMatrix[15] = 1.0d;
         return this.rotationMatrix;
     }
@@ -133,9 +132,9 @@ public class OrientationEKF {
         So3Util.muFromSO3(this.magObservationFunctionForNumericalJacobianTempM, vector3d);
     }
 
-    private void updateAccelCovariance(double d) {
-        double abs = Math.abs(d - this.previousAccelNorm);
-        this.previousAccelNorm = d;
+    private void updateAccelCovariance(double previousAccelNorm) {
+        double abs = Math.abs(previousAccelNorm - this.previousAccelNorm);
+        this.previousAccelNorm = previousAccelNorm;
         this.movingAverageAccelNormChange = (abs * 0.5d) + (this.movingAverageAccelNormChange * 0.5d);
         double min = Math.min(MAX_ACCEL_NOISE_SIGMA, ((this.movingAverageAccelNormChange / 0.15d) * 6.25d) + MIN_ACCEL_NOISE_SIGMA);
         this.mRaccel.setSameDiagonal(min * min);
@@ -173,10 +172,10 @@ public class OrientationEKF {
         Vector3d vector3d = this.getPredictedGLMatrixTempV1;
         vector3d.set(this.lastGyro);
         vector3d.scale(-d);
-        Matrix3x3d matrix3x3d2 = this.getPredictedGLMatrixTempM1;
-        So3Util.sO3FromMu(vector3d, matrix3x3d2);
+        Matrix3x3d getPredictedGLMatrixTempM1 = this.getPredictedGLMatrixTempM1;
+        So3Util.sO3FromMu(vector3d, getPredictedGLMatrixTempM1);
         matrix3x3d = this.getPredictedGLMatrixTempM2;
-        Matrix3x3d.mult(matrix3x3d2, this.so3SensorFromWorld, matrix3x3d);
+        Matrix3x3d.mult(getPredictedGLMatrixTempM1, this.so3SensorFromWorld, matrix3x3d);
         return glMatrixFromSo3(matrix3x3d);
     }
 
@@ -203,10 +202,10 @@ public class OrientationEKF {
             if (this.alignedToGravity) {
                 accObservationFunctionForNumericalJacobian(this.so3SensorFromWorld, this.mNu);
                 for (int i = 0; i < 3; i++) {
-                    Vector3d vector3d2 = this.processAccVDelta;
-                    vector3d2.setZero();
-                    vector3d2.setComponent(i, 1.0E-7d);
-                    So3Util.sO3FromMu(vector3d2, this.processAccTempM1);
+                    Vector3d processAccVDelta = this.processAccVDelta;
+                    processAccVDelta.setZero();
+                    processAccVDelta.setComponent(i, 1.0E-7d);
+                    So3Util.sO3FromMu(processAccVDelta, this.processAccTempM1);
                     Matrix3x3d.mult(this.processAccTempM1, this.so3SensorFromWorld, this.processAccTempM2);
                     accObservationFunctionForNumericalJacobian(this.processAccTempM2, this.processAccTempV1);
                     Vector3d.sub(this.mNu, this.processAccTempV1, this.processAccTempV2);
@@ -237,11 +236,11 @@ public class OrientationEKF {
         }
     }
 
-    public synchronized void processGyro(Vector3d vector3d, long j) {
+    public synchronized void processGyro(Vector3d vector3d, long sensorTimeStampGyro) {
         float f = 0.01f;
         synchronized (this) {
             if (this.sensorTimeStampGyro != 0) {
-                float f2 = (j - this.sensorTimeStampGyro) * NS2S;
+                float f2 = (sensorTimeStampGyro - this.sensorTimeStampGyro) * NS2S;
                 if (f2 <= 0.04f) {
                     filterGyroTimestep(f2);
                     f = f2;
@@ -259,32 +258,32 @@ public class OrientationEKF {
                 this.processGyroTempM2.scale(f * f);
                 this.mP.plusEquals(this.processGyroTempM2);
             }
-            this.sensorTimeStampGyro = j;
+            this.sensorTimeStampGyro = sensorTimeStampGyro;
             this.lastGyro.set(vector3d);
         }
     }
 
-    public synchronized void processMag(float[] fArr, long j) {
+    public synchronized void processMag(float[] floats, long j) {
         synchronized (this) {
             if (this.alignedToGravity) {
-                this.mz.set(fArr[0], fArr[1], fArr[2]);
+                this.mz.set(floats[0], floats[1], floats[2]);
                 this.mz.normalize();
                 Vector3d vector3d = new Vector3d();
                 this.so3SensorFromWorld.getColumn(2, vector3d);
                 Vector3d.cross(this.mz, vector3d, this.processMagTempV1);
-                Vector3d vector3d2 = this.processMagTempV1;
-                vector3d2.normalize();
-                Vector3d.cross(vector3d, vector3d2, this.processMagTempV2);
-                Vector3d vector3d3 = this.processMagTempV2;
-                vector3d3.normalize();
-                this.mz.set(vector3d3);
+                Vector3d processMagTempV1 = this.processMagTempV1;
+                processMagTempV1.normalize();
+                Vector3d.cross(vector3d, processMagTempV1, this.processMagTempV2);
+                Vector3d processMagTempV2 = this.processMagTempV2;
+                processMagTempV2.normalize();
+                this.mz.set(processMagTempV2);
                 if (this.alignedToNorth) {
                     magObservationFunctionForNumericalJacobian(this.so3SensorFromWorld, this.mNu);
                     for (int i = 0; i < 3; i++) {
-                        Vector3d vector3d4 = this.processMagTempV3;
-                        vector3d4.setZero();
-                        vector3d4.setComponent(i, 1.0E-7d);
-                        So3Util.sO3FromMu(vector3d4, this.processMagTempM1);
+                        Vector3d processMagTempV3 = this.processMagTempV3;
+                        processMagTempV3.setZero();
+                        processMagTempV3.setComponent(i, 1.0E-7d);
+                        So3Util.sO3FromMu(processMagTempV3, this.processMagTempM1);
                         Matrix3x3d.mult(this.processMagTempM1, this.so3SensorFromWorld, this.processMagTempM2);
                         magObservationFunctionForNumericalJacobian(this.processMagTempM2, this.processMagTempV4);
                         Vector3d.sub(this.mNu, this.processMagTempV4, this.processMagTempV5);
@@ -347,8 +346,8 @@ public class OrientationEKF {
         this.alignedToNorth = false;
     }
 
-    public synchronized void setHeadingDegrees(double d) {
-        double headingDegrees = d - getHeadingDegrees();
+    public synchronized void setHeadingDegrees(double headingDegrees2) {
+        double headingDegrees = headingDegrees2 - getHeadingDegrees();
         double sin = Math.sin((headingDegrees / 180.0d) * 3.141592653589793d);
         double cos = Math.cos((headingDegrees / 180.0d) * 3.141592653589793d);
         arrayAssign(new double[][]{new double[]{cos, -sin, 0.0d}, new double[]{sin, cos, 0.0d}, new double[]{0.0d, 0.0d, 1.0d}}, this.setHeadingDegreesTempM1);

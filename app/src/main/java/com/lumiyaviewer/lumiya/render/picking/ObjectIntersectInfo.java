@@ -2,15 +2,14 @@ package com.lumiyaviewer.lumiya.render.picking;
 
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 
-/* loaded from: classes.dex */
 public class ObjectIntersectInfo {
     public final IntersectInfo intersectInfo;
     public final SLObjectInfo objInfo;
     public final float pickDepth;
 
-    public ObjectIntersectInfo(IntersectInfo intersectInfo, SLObjectInfo sLObjectInfo, float f) {
+    public ObjectIntersectInfo(IntersectInfo intersectInfo, SLObjectInfo objectInfo, float pickDepth) {
         this.intersectInfo = intersectInfo;
-        this.objInfo = sLObjectInfo;
-        this.pickDepth = f;
+        this.objInfo = objectInfo;
+        this.pickDepth = pickDepth;
     }
 }

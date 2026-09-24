@@ -4,12 +4,11 @@ import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.res.collections.WeakQueue;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class GLLoadQueue {
     final WeakQueue<GLLoadable> loadQueue = new WeakQueue<>();
 
     interface GLLoadHandler {
-        void GLResourceLoaded(GLLoadable gLLoadable);
+        void GLResourceLoaded(GLLoadable glLoadable);
     }
 
     interface GLLoadable {
@@ -17,7 +16,7 @@ public abstract class GLLoadQueue {
 
         int GLGetLoadSize();
 
-        int GLLoad(RenderContext renderContext, GLLoadHandler gLLoadHandler);
+        int GLLoad(RenderContext renderContext, GLLoadHandler glLoadHandler);
     }
 
     public abstract void RunLoadQueue(@Nonnull RenderContext renderContext);
@@ -26,11 +25,11 @@ public abstract class GLLoadQueue {
         this.loadQueue.clear();
     }
 
-    public void add(@Nonnull GLLoadable gLLoadable) {
-        this.loadQueue.offer(gLLoadable);
+    public void add(@Nonnull GLLoadable glLoadable) {
+        this.loadQueue.offer(glLoadable);
     }
 
-    public void remove(@Nonnull GLLoadable gLLoadable) {
-        this.loadQueue.remove(gLLoadable);
+    public void remove(@Nonnull GLLoadable glLoadable) {
+        this.loadQueue.remove(glLoadable);
     }
 }

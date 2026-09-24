@@ -6,7 +6,6 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 class GLStateBackup {
     private boolean cullFaceEnabled;
     private boolean depthTestEnabled;
@@ -25,8 +24,8 @@ class GLStateBackup {
         private int attributeId;
         private IntBuffer enabled = IntBuffer.allocate(1);
 
-        VertexAttributeState(GLStateBackup gLStateBackup, int i) {
-            this.attributeId = i;
+        VertexAttributeState(int attributeId) {
+            this.attributeId = attributeId;
         }
 
         void readFromGL() {
@@ -46,7 +45,7 @@ class GLStateBackup {
     }
 
     void addTrackedVertexAttribute(int i) {
-        this.vertexAttributes.add(new VertexAttributeState(this, i));
+        this.vertexAttributes.add(new VertexAttributeState(i));
     }
 
     void clearTrackedVertexAttributes() {

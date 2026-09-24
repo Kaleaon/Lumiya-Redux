@@ -5,18 +5,24 @@ import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * spaceserver -> simulator
+ *
+ * <p>Template: {@code RpcScriptRequestInboundForward Low 416 Trusted Unencoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class RpcScriptRequestInboundForward extends SLMessage {
     public DataBlock DataBlock_Field;
 
+    /** Block DataBlock, Single. */
     public static class DataBlock {
-        public UUID ChannelID;
-        public int IntValue;
-        public UUID ItemID;
-        public Inet4Address RPCServerIP;
-        public int RPCServerPort;
-        public byte[] StringValue;
-        public UUID TaskID;
+        public UUID ChannelID; // LLUUID
+        public int IntValue; // U32
+        public UUID ItemID; // LLUUID
+        public Inet4Address RPCServerIP; // IPADDR
+        public int RPCServerPort; // IPPORT
+        public byte[] StringValue; // Variable 2 - string
+        public UUID TaskID; // LLUUID
     }
 
     public RpcScriptRequestInboundForward() {
@@ -24,21 +30,22 @@ public class RpcScriptRequestInboundForward extends SLMessage {
         this.DataBlock_Field = new DataBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.DataBlock_Field.StringValue.length + 60 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcScriptRequestInboundForward(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcScriptRequestInboundForward(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -96);
+        // Message number: Low 416 (RpcScriptRequestInboundForward).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0xA0);
         packIPAddress(byteBuffer, this.DataBlock_Field.RPCServerIP);
         packShort(byteBuffer, (short) this.DataBlock_Field.RPCServerPort);
         packUUID(byteBuffer, this.DataBlock_Field.TaskID);
@@ -48,7 +55,7 @@ public class RpcScriptRequestInboundForward extends SLMessage {
         packVariable(byteBuffer, this.DataBlock_Field.StringValue, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.DataBlock_Field.RPCServerIP = unpackIPAddress(byteBuffer);
         this.DataBlock_Field.RPCServerPort = unpackShort(byteBuffer) & 65535;

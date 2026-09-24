@@ -14,19 +14,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class InventoryQuery implements Parcelable {
     private static final int ASSET_TYPE_ANY = -1;
-    public static final Parcelable.Creator<InventoryQuery> CREATOR = new Parcelable.Creator<InventoryQuery>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryQuery.1
+    public static final Parcelable.Creator<InventoryQuery> CREATOR = new Parcelable.Creator<InventoryQuery>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryQuery createFromParcel(Parcel parcel) {
             Bundle readBundle = parcel.readBundle(getClass().getClassLoader());
             return InventoryQuery.create(UUIDPool.getUUID(readBundle.getString("folderId")), readBundle.getString("containsString"), readBundle.getBoolean("includeFolders"), readBundle.getBoolean("includeItems"), readBundle.getBoolean("newestFirst"), readBundle.getInt("assetType", -1));
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryQuery[] newArray(int i) {
             return new InventoryQuery[i];
         }
@@ -37,8 +36,8 @@ public abstract class InventoryQuery implements Parcelable {
         return new AutoValue_InventoryQuery(uuid, str, z, z2, z3, -1, i);
     }
 
-    public static InventoryQuery create(@Nullable UUID uuid, @Nullable String str, boolean z, boolean z2, boolean z3, @Nullable SLAssetType sLAssetType) {
-        return new AutoValue_InventoryQuery(uuid, str, z, z2, z3, -1, sLAssetType != null ? sLAssetType.getTypeCode() : -1);
+    public static InventoryQuery create(@Nullable UUID uuid, @Nullable String str, boolean z, boolean z2, boolean z3, @Nullable SLAssetType assetType) {
+        return new AutoValue_InventoryQuery(uuid, str, z, z2, z3, -1, assetType != null ? assetType.getTypeCode() : -1);
     }
 
     public static InventoryQuery findFolderWithType(@Nullable UUID uuid, int i) {
@@ -50,7 +49,7 @@ public abstract class InventoryQuery implements Parcelable {
     @Nullable
     public abstract String containsString();
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -67,12 +66,12 @@ public abstract class InventoryQuery implements Parcelable {
     public abstract boolean newestFirst();
 
     @SuppressLint({"DefaultLocale"})
-    public InventoryEntryList query(@Nullable SLInventoryEntry sLInventoryEntry, InventoryDB inventoryDB) {
+    public InventoryEntryList query(@Nullable SLInventoryEntry inventoryEntry, InventoryDB inventoryDB) {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
-        if (sLInventoryEntry != null) {
+        if (inventoryEntry != null) {
             arrayList.add("parent_id = ?");
-            arrayList2.add(Long.toString(sLInventoryEntry.getId()));
+            arrayList2.add(Long.toString(inventoryEntry.getId()));
         }
         String containsString = containsString();
         if (!Strings.isNullOrEmpty(containsString)) {
@@ -92,10 +91,10 @@ public abstract class InventoryQuery implements Parcelable {
         if (assetType() != -1) {
             arrayList.add(String.format("(isFolder OR assetType == %d)", Integer.valueOf(assetType())));
         }
-        return new InventoryEntryList(sLInventoryEntry != null ? sLInventoryEntry.name : null, sLInventoryEntry, SLInventoryEntry.query(inventoryDB.getDatabase(), Joiner.on(" AND ").join(arrayList), (String[]) Iterables.toArray(arrayList2, String.class), "isFolder DESC, (isFolder AND (typeDefault >= 0)) DESC, (assetType == 25) DESC, " + (newestFirst() ? "creationDate DESC, name" : "name, creationDate DESC")));
+        return new InventoryEntryList(inventoryEntry != null ? inventoryEntry.name : null, inventoryEntry, SLInventoryEntry.query(inventoryDB.getDatabase(), Joiner.on(" AND ").join(arrayList), (String[]) Iterables.toArray(arrayList2, String.class), "isFolder DESC, (isFolder AND (typeDefault >= 0)) DESC, (assetType == 25) DESC, " + (newestFirst() ? "creationDate DESC, name" : "name, creationDate DESC")));
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         Bundle bundle = new Bundle();
         UUID folderId = folderId();

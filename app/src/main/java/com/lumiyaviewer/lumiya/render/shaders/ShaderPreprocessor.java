@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ShaderPreprocessor {
     private final ImmutableMap<String, String> definedMacros;
 
@@ -38,12 +37,12 @@ public class ShaderPreprocessor {
                     throw new IOException("#endif expected");
                 }
             } else if (sb != null) {
-                String str2 = trim;
+                String trim2 = trim;
                 for (Map.Entry<String, String> entry : this.definedMacros.entrySet()) {
-                    str2 = str2.replace(entry.getKey(), entry.getValue());
+                    trim2 = trim2.replace(entry.getKey(), entry.getValue());
                 }
-                sb.append(str2).append("\r\n");
-                str = str2;
+                sb.append(trim2).append("\r\n");
+                str = trim2;
             }
             str = trim;
         }

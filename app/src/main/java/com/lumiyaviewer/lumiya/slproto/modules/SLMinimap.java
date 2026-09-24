@@ -37,8 +37,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLMinimap extends SLModule {
+    /** Parcel overlay cells per region: 64 x 64 cells of 4 m (256 m region). */
+    private static final int PARCEL_OVERLAY_CELLS = 4096;
     public static final float CHAT_RANGE = 20.0f;
     private static final int parcelBitmapSize = 256;
     public static final int parcelDataSize = 64;
@@ -75,17 +76,17 @@ public class SLMinimap extends SLModule {
         private final int bitmapWidth;
         final int[] colors;
 
-        MinimapBitmap(int i, int i2) {
-            this.bitmapWidth = i;
-            this.bitmapHeight = i2;
-            this.colors = new int[i * i2];
+        MinimapBitmap(int bitmapWidth, int bitmapHeight) {
+            this.bitmapWidth = bitmapWidth;
+            this.bitmapHeight = bitmapHeight;
+            this.colors = new int[bitmapWidth * bitmapHeight];
         }
 
-        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, int[] iArr) {
+        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, int[] ints) {
             this.bitmapWidth = minimapBitmap.bitmapWidth;
             this.bitmapHeight = minimapBitmap.bitmapHeight;
             this.colors = Arrays.copyOf(minimapBitmap.colors, minimapBitmap.colors.length);
-            System.arraycopy(iArr, 0, this.colors, (this.bitmapHeight * i2) + i, iArr.length);
+            System.arraycopy(ints, 0, this.colors, (this.bitmapHeight * i2) + i, ints.length);
         }
 
         public Bitmap makeBitmap() {
@@ -119,15 +120,15 @@ public class SLMinimap extends SLModule {
         public final ImmutableVector myAvatarPosition;
         public final Map<UUID, UserLocation> userPositions;
 
-        UserLocations(@Nullable ImmutableVector immutableVector, float f, Map<UUID, UserLocation> map) {
+        UserLocations(@Nullable ImmutableVector immutableVector, float myAvatarHeading, Map<UUID, UserLocation> map) {
             this.myAvatarPosition = immutableVector;
-            this.myAvatarHeading = f;
+            this.myAvatarHeading = myAvatarHeading;
             this.userPositions = map;
         }
     }
 
-    SLMinimap(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    SLMinimap(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.minimapBitmap = new MinimapBitmap(256, 256);
         this.parcelIDs = new int[4096];
         this.parcels = new ConcurrentHashMap();
@@ -137,8 +138,8 @@ public class SLMinimap extends SLModule {
         this.myAvatarPosition = null;
         this.afterTeleport = false;
         this.myAvatarParcelDataIndex = -1;
-        this.userLocationRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLMinimap.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.userLocationRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLMinimap.this.userLocationsResultHandler != null) {
                     SLMinimap.this.userLocationsResultHandler.onResultData(subscriptionSingleKey, new UserLocations(SLMinimap.this.myAvatarPosition, SLMinimap.this.getMyAvatarHeading(), SLMinimap.this.userPositions));
@@ -151,10 +152,9 @@ public class SLMinimap extends SLModule {
         } else {
             this.userLocationsResultHandler = null;
         }
-        this.afterTeleport = sLAgentCircuit.getAuthReply().fromTeleport ? !sLAgentCircuit.getAuthReply().isTemporary : false;
+        this.afterTeleport = agentCircuit.getAuthReply().fromTeleport ? !agentCircuit.getAuthReply().isTemporary : false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public float getMyAvatarHeading() {
         return (this.agentCircuit.getModules().avatarControl.getAgentHeading() * 3.1415927f) / 180.0f;
     }
@@ -170,22 +170,20 @@ public class SLMinimap extends SLModule {
         return ((floor2 >= 0 ? floor2 >= 64 ? 63 : floor2 : 0) * 64) + floor;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: updateAvatarParcelData, reason: merged with bridge method [inline-methods] */
-    public void m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0() {
+    public void updateAvatarParcelData() {
         ParcelData parcelData = this.myAvatarParcelDataIndex >= 0 ? this.parcels.get(Integer.valueOf(this.parcelIDs[this.myAvatarParcelDataIndex])) : null;
         if (parcelData != null && this.afterTeleport) {
             this.afterTeleport = false;
             this.userManager.getChatterList().getActiveChattersManager().notifyTeleportComplete(parcelData.getName());
         }
-        SLVoice sLVoice = this.agentCircuit.getModules().voice;
+        SLVoice voice = this.agentCircuit.getModules().voice;
         if (parcelData != null) {
-            sLVoice.setCurrentParcel(parcelData.getParcelID());
+            voice.setCurrentParcel(parcelData.getParcelID());
         }
-        this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, sLVoice.getCurrentParcelVoiceChannel()));
+        this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, voice.getCurrentParcelVoiceChannel()));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getUserLocationsPool().detachRequestHandler(this.userLocationRequestHandler);
@@ -271,9 +269,9 @@ public class SLMinimap extends SLModule {
             }
             z = true;
         } else if (hashSet2 != null) {
-            Iterator it2 = hashSet2.iterator();
-            while (it2.hasNext()) {
-                UserLocation userLocation3 = this.userPositions.get((UUID) it2.next());
+            Iterator iterator = hashSet2.iterator();
+            while (iterator.hasNext()) {
+                UserLocation userLocation3 = this.userPositions.get((UUID) iterator.next());
                 if (userLocation3 != null) {
                     userLocation3.distance = this.myAvatarPosition.distanceTo(userLocation3.location);
                 }
@@ -281,10 +279,10 @@ public class SLMinimap extends SLModule {
             z = true;
         }
         if (z || z5) {
-            Iterator<UserLocation> it3 = this.userPositions.values().iterator();
+            Iterator<UserLocation> iterator2 = this.userPositions.values().iterator();
             int i2 = 0;
-            while (it3.hasNext()) {
-                i2 = ((UserLocation) it3.next()).distance <= 20.0f ? i2 + 1 : i2;
+            while (iterator2.hasNext()) {
+                i2 = ((UserLocation) iterator2.next()).distance <= 20.0f ? i2 + 1 : i2;
             }
             if (i2 != this.chatRangeUsersCount) {
                 this.chatRangeUsersCount = i2;
@@ -304,9 +302,9 @@ public class SLMinimap extends SLModule {
         if (z4) {
             this.userManager.getChatterList().updateDistanceToAllUsers();
         } else if (hashSet2 != null) {
-            Iterator it4 = hashSet2.iterator();
-            while (it4.hasNext()) {
-                this.userManager.getChatterList().updateDistanceToUser((UUID) it4.next());
+            Iterator iterator3 = hashSet2.iterator();
+            while (iterator3.hasNext()) {
+                this.userManager.getChatterList().updateDistanceToUser((UUID) iterator3.next());
             }
         }
         if (z4 || hashSet2 != null) {
@@ -320,11 +318,11 @@ public class SLMinimap extends SLModule {
         Debug.Log("ParcelOverlay: SequenceID = " + parcelOverlay.ParcelData_Field.SequenceID);
         byte[] bArr = parcelOverlay.ParcelData_Field.Data;
         int length = bArr.length / 64;
-        int[] iArr = new int[length * 4 * 64 * 4];
+        int[] ints = new int[length * 4 * 64 * 4];
         int i2 = 0;
-        for (int i3 = 0; i3 < length; i3++) {
-            int i4 = i3 + (parcelOverlay.ParcelData_Field.SequenceID * 16);
-            for (int i6 = 0; i6 < 64; i6++) {
+        for (int j = 0; j < length; j++) {
+            int i4 = j + (parcelOverlay.ParcelData_Field.SequenceID * 16);
+            for (int k = 0; k < 64; k++) {
                     i = i2;
                     int i7 = 0;
                     switch ((byte) (bArr[i] & 15)) {
@@ -367,15 +365,15 @@ public class SLMinimap extends SLModule {
                         i7 = Color.rgb(i8, green, blue);
                     }
                     for (int pixelY = 0; pixelY < 4; pixelY++) {
-                        int rowOffset = ((((length * 4) - 1) - ((i3 * 4) + pixelY)) * 256) + (i6 * 4);
+                        int rowOffset = ((((length * 4) - 1) - ((j * 4) + pixelY)) * 256) + (k * 4);
                         for (int pixelX = 0; pixelX < 4; pixelX++) {
-                            iArr[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || i6 == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
+                            ints[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || k == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
                         }
                     }
                     i2 = i + 1;
             }
         }
-        this.minimapBitmap = new MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, iArr);
+        this.minimapBitmap = new MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, ints);
         if (this.userManager != null) {
             this.userManager.getMinimapBitmapPool().setData(SubscriptionSingleKey.Value, this.minimapBitmap);
         }
@@ -393,20 +391,28 @@ public class SLMinimap extends SLModule {
         try {
             LLSDNode parcelData = event.byKey("ParcelData");
             for (int parcelIndex = 0; parcelIndex < parcelData.getCount(); parcelIndex++) {
-                ParcelData parcel = new ParcelData(parcelData.byIndex(parcelIndex));
-                int parcelId = parcel.getParcelID();
-                this.parcels.put(Integer.valueOf(parcelId), parcel);
-                boolean[] bitmap = parcel.getParcelBitmap();
-                int limit = Math.min(bitmap.length, this.parcelIDs.length);
-                for (int bitmapIndex = 0; bitmapIndex < limit; bitmapIndex++) {
-                    if (bitmap[bitmapIndex]) {
-                        this.parcelIDs[bitmapIndex] = parcelId;
-                        avatarParcelChanged |= bitmapIndex == this.myAvatarParcelDataIndex;
+                LLSDNode parcelNode = parcelData.byIndex(parcelIndex);
+                try {
+                    ParcelData parcel = new ParcelData(parcelNode);
+                    int parcelId = parcel.getParcelID();
+                    this.parcels.put(Integer.valueOf(parcelId), parcel);
+                    // ParcelProperties.Bitmap: one bit per 4 m x 4 m cell of the region.
+                    boolean[] bitmap = parcel.getParcelBitmap();
+                    for (int cell = 0; cell < PARCEL_OVERLAY_CELLS; cell++) {
+                        if (bitmap[cell]) {
+                            this.parcelIDs[cell] = parcelId;
+                            if (cell == this.myAvatarParcelDataIndex) {
+                                avatarParcelChanged = true;
+                            }
+                        }
                     }
+                } catch (LLSDException e) {
+                    // A malformed parcel is skipped; the others are still applied.
+                    Debug.Warning(e);
                 }
             }
-        } catch (LLSDException exception) {
-            Debug.Warning(exception);
+        } catch (LLSDException e) {
+            e.printStackTrace();
         }
         if (avatarParcelChanged) {
             requestUpdateAvatarParcelData();
@@ -443,12 +449,12 @@ public class SLMinimap extends SLModule {
     }
 
     public void requestUpdateAvatarParcelData() {
-        this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$eaDiotW55nmaHN5_b1ikeJpLLsk
+        this.agentCircuit.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SLMinimap.this.m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0();
+                SLMinimap.this.updateAvatarParcelData();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

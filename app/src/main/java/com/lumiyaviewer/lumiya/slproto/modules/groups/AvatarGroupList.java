@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarGroupList implements Serializable {
     public final ImmutableMap<UUID, AvatarGroupEntry> Groups;
     public final UUID avatarID;

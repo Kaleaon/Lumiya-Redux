@@ -1,34 +1,43 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> viewer
+ *
+ * <p>Template: {@code MapItemReply Low 411 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLWorldMapMessage::processMapItemReply()} in indra/newview/llworldmapmessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class MapItemReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
     public RequestData RequestData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int Flags;
+        public UUID AgentID; // LLUUID
+        public int Flags; // U32
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int Extra;
-        public int Extra2;
-        public UUID ID;
-        public byte[] Name;
-        public int X;
-        public int Y;
+        public int Extra; // S32 - extra information
+        public int Extra2; // S32 - extra information
+        public UUID ID; // LLUUID - identifier id
+        public byte[] Name; // Variable 1 - identifier string
+        public int X; // U32 - global position
+        public int Y; // U32 - global position
     }
 
+    /** Block RequestData, Single. */
     public static class RequestData {
-        public int ItemType;
+        public int ItemType; // U32
     }
 
     public MapItemReply() {
@@ -37,7 +46,7 @@ public class MapItemReply extends SLMessage {
         this.RequestData_Field = new RequestData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 29;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -50,16 +59,17 @@ public class MapItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapItemReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapItemReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -101);
+        // Message number: Low 411 (MapItemReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x9B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
         packInt(byteBuffer, this.RequestData_Field.ItemType);
@@ -74,13 +84,13 @@ public class MapItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.Flags = unpackInt(byteBuffer);
         this.RequestData_Field.ItemType = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.X = unpackInt(byteBuffer);
             data.Y = unpackInt(byteBuffer);

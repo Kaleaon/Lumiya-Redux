@@ -4,13 +4,19 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * dataserver -> sim
+ *
+ * <p>Template: {@code ConfirmAuctionStart Low 230 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ConfirmAuctionStart extends SLMessage {
     public AuctionData AuctionData_Field;
 
+    /** Block AuctionData, Single. */
     public static class AuctionData {
-        public int AuctionID;
-        public UUID ParcelID;
+        public int AuctionID; // U32
+        public UUID ParcelID; // LLUUID
     }
 
     public ConfirmAuctionStart() {
@@ -18,26 +24,27 @@ public class ConfirmAuctionStart extends SLMessage {
         this.AuctionData_Field = new AuctionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 24;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleConfirmAuctionStart(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleConfirmAuctionStart(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -26);
+        // Message number: Low 230 (ConfirmAuctionStart).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xE6);
         packUUID(byteBuffer, this.AuctionData_Field.ParcelID);
         packInt(byteBuffer, this.AuctionData_Field.AuctionID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AuctionData_Field.ParcelID = unpackUUID(byteBuffer);
         this.AuctionData_Field.AuctionID = unpackInt(byteBuffer);

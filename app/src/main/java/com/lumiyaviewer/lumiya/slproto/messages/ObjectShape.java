@@ -1,41 +1,47 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectShape
+ *
+ * <p>Template: {@code ObjectShape Low 98 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectShape extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ObjectLocalID;
-        public int PathBegin;
-        public int PathCurve;
-        public int PathEnd;
-        public int PathRadiusOffset;
-        public int PathRevolutions;
-        public int PathScaleX;
-        public int PathScaleY;
-        public int PathShearX;
-        public int PathShearY;
-        public int PathSkew;
-        public int PathTaperX;
-        public int PathTaperY;
-        public int PathTwist;
-        public int PathTwistBegin;
-        public int ProfileBegin;
-        public int ProfileCurve;
-        public int ProfileEnd;
-        public int ProfileHollow;
+        public int ObjectLocalID; // U32
+        public int PathBegin; // U16 - 0 to 1, quanta = 0.01
+        public int PathCurve; // U8
+        public int PathEnd; // U16 - 0 to 1, quanta = 0.01
+        public int PathRadiusOffset; // S8 - -1 to 1, quanta = 0.01
+        public int PathRevolutions; // U8 - 0 to 3, quanta = 0.015
+        public int PathScaleX; // U8 - 0 to 1, quanta = 0.01
+        public int PathScaleY; // U8 - 0 to 1, quanta = 0.01
+        public int PathShearX; // U8 - -.5 to .5, quanta = 0.01
+        public int PathShearY; // U8 - -.5 to .5, quanta = 0.01
+        public int PathSkew; // S8 - -1 to 1, quanta = 0.01
+        public int PathTaperX; // S8 - -1 to 1, quanta = 0.01
+        public int PathTaperY; // S8 - -1 to 1, quanta = 0.01
+        public int PathTwist; // S8 - -1 to 1, quanta = 0.01
+        public int PathTwistBegin; // S8 - -1 to 1, quanta = 0.01
+        public int ProfileBegin; // U16 - 0 to 1, quanta = 0.01
+        public int ProfileCurve; // U8
+        public int ProfileEnd; // U16 - 0 to 1, quanta = 0.01
+        public int ProfileHollow; // U16 - 0 to 1, quanta = 0.01
     }
 
     public ObjectShape() {
@@ -43,21 +49,22 @@ public class ObjectShape extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 27) + 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectShape(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectShape(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 98);
+        // Message number: Low 98 (ObjectShape).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x62);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -84,28 +91,28 @@ public class ObjectShape extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectLocalID = unpackInt(byteBuffer);
-            objectData.PathCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.ProfileCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathCurve = unpackByte(byteBuffer) & 0xFF;
+            objectData.ProfileCurve = unpackByte(byteBuffer) & 0xFF;
             objectData.PathBegin = unpackShort(byteBuffer) & 65535;
             objectData.PathEnd = unpackShort(byteBuffer) & 65535;
-            objectData.PathScaleX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathScaleY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathScaleX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathScaleY = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearY = unpackByte(byteBuffer) & 0xFF;
             objectData.PathTwist = unpackByte(byteBuffer);
             objectData.PathTwistBegin = unpackByte(byteBuffer);
             objectData.PathRadiusOffset = unpackByte(byteBuffer);
             objectData.PathTaperX = unpackByte(byteBuffer);
             objectData.PathTaperY = unpackByte(byteBuffer);
-            objectData.PathRevolutions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathRevolutions = unpackByte(byteBuffer) & 0xFF;
             objectData.PathSkew = unpackByte(byteBuffer);
             objectData.ProfileBegin = unpackShort(byteBuffer) & 65535;
             objectData.ProfileEnd = unpackShort(byteBuffer) & 65535;

@@ -45,7 +45,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupMemberRolesFragment extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener, BackButtonHandler {
     private static final String MEMBER_ID_KEY = "memberID";
     private MenuItem undoMenuItem;
@@ -54,12 +53,12 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
     private final SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
-    private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.3
+    private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMemberRolesFragment.this.m469xd12733d2((UUID) obj);
+            GroupMemberRolesFragment.this.onGroupRoleMemberList((UUID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -86,11 +85,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             this.selectedRoles = new HashSet();
         }
 
-        /* synthetic */ MemberRoleAdapter(GroupMemberRolesFragment groupMemberRolesFragment, MemberRoleAdapter memberRoleAdapter) {
-            this();
-        }
-
-        @Override // android.widget.Adapter
+        @Override
         public int getCount() {
             if (this.data != null) {
                 return this.data.RoleData_Fields.size();
@@ -98,7 +93,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             return 0;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public GroupRoleDataReply.RoleData getItem(int i) {
             if (this.data == null || i < 0 || i >= this.data.RoleData_Fields.size()) {
                 return null;
@@ -106,7 +101,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             return this.data.RoleData_Fields.get(i);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public long getItemId(int i) {
             return i;
         }
@@ -115,7 +110,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             return this.selectedRoles;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = LayoutInflater.from(GroupMemberRolesFragment.this.getContext()).inflate(R.layout.group_member_role_list_item, viewGroup, false);
@@ -128,7 +123,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             return view;
         }
 
-        @Override // android.widget.BaseAdapter, android.widget.Adapter
+        @Override
         public boolean hasStableIds() {
             return false;
         }
@@ -228,7 +223,6 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public long getMyGroupPowers() {
         AvatarGroupList.AvatarGroupEntry myGroupEntry = getMyGroupEntry();
         if (myGroupEntry != null) {
@@ -245,18 +239,14 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         return makeSelection;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onGroupRoleMemberList, reason: merged with bridge method [inline-methods] */
-    public void m469xd12733d2(UUID uuid) {
+    public void onGroupRoleMemberList(UUID uuid) {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup) || this.MemberID == null) {
             return;
         }
         this.activeRoles.subscribe(this.userManager.getChatterList().getGroupManager().getGroupMemberRoleList(), GroupManager.GroupMemberRolesQuery.create(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.MemberID, uuid));
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMemberNameUpdated, reason: merged with bridge method [inline-methods] */
-    public void m470xd12733d3(ChatterNameRetriever chatterNameRetriever) {
+    public void onMemberNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         if (Strings.isNullOrEmpty(resolvedName)) {
             setTitle(getString(R.string.name_loading_title), null);
@@ -265,7 +255,6 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateUnsavedChanges() {
         boolean anyChanges = anyChanges();
         if (anyChanges != this.hasChanged) {
@@ -309,27 +298,27 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         closeFragment();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.BackButtonHandler
+    @Override
     public boolean onBackButtonPressed() {
         if (!anyChanges()) {
             return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ
+        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GroupMemberRolesFragment.this.m473x6c93268c(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.1
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GroupMemberRolesFragment.this.m471x25600606(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -338,14 +327,14 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
         setShowChatterTitle(false);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.group_member_roles_menu, menu);
@@ -353,21 +342,21 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         this.undoMenuItem.setVisible(this.hasChanged);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         MemberRoleAdapter memberRoleAdapter = null;
         View inflate = layoutInflater.inflate(R.layout.group_member_roles, viewGroup, false);
         if (this.adapter == null) {
-            this.adapter = new MemberRoleAdapter(this, memberRoleAdapter);
+            this.adapter = new MemberRoleAdapter();
         }
         ((ListView) inflate.findViewById(R.id.member_roles_list)).setAdapter((ListAdapter) this.adapter);
-        ((ListView) inflate.findViewById(R.id.member_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.2
+        ((ListView) inflate.findViewById(R.id.member_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 GroupMemberRolesFragment.this.m472x6c90dd87(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -378,7 +367,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         if (this.adapter != null) {
             this.adapter.setData(this.groupRoles.getData(), this.activeRoles.getData());
@@ -400,10 +389,10 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_undo /* 2131755778 */:
+            case R.id.item_undo:
                 try {
                     if (this.adapter != null) {
                         this.adapter.setData(this.groupRoles.get(), this.activeRoles.get());
@@ -417,7 +406,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.loadableMonitor.unsubscribeAll();
         if (this.memberNameRetriever != null) {
@@ -434,12 +423,12 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
             return;
         }
         if (this.MemberID != null) {
-            this.memberNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.4
+            this.memberNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() {
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    GroupMemberRolesFragment.this.m470xd12733d3(chatterNameRetriever);
+                    GroupMemberRolesFragment.this.onMemberNameUpdated(chatterNameRetriever);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                @Override
                 public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                     $m$0(chatterNameRetriever);
                 }

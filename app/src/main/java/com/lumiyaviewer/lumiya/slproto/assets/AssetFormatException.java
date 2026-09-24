@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.assets;
 
-/* loaded from: classes.dex */
 public class AssetFormatException extends Exception {
     private static final long serialVersionUID = -8391424207465457690L;
 

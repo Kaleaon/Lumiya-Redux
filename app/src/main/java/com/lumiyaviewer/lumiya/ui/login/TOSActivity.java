@@ -12,23 +12,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/* loaded from: classes.dex */
 public class TOSActivity extends ThemedActivity implements View.OnClickListener {
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tos_accept_button /* 2131755670 */:
+            case R.id.tos_accept_button:
                 setResult(-1);
                 finish();
                 break;
-            case R.id.tos_decline_button /* 2131755671 */:
+            case R.id.tos_decline_button:
                 setResult(0);
                 finish();
                 break;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.tos);

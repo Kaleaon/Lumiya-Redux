@@ -7,13 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class GroupDisplayDataList extends ChatterDisplayDataList {
     public GroupDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated) {
         super(userManager, onListUpdated, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterDisplayDataList
+    @Override
     protected List<ChatterID> getChatters() {
         AvatarGroupList avatarGroupList = this.userManager.getChatterList().getGroupManager().getAvatarGroupList();
         if (avatarGroupList == null) {

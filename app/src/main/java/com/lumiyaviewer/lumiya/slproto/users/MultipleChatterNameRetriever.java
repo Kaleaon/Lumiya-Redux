@@ -11,7 +11,6 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChatterNameUpdated {
     private final UUID agentUUID;
 
@@ -64,14 +63,14 @@ public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChat
             }
         }
         if (hashSet != null) {
-            Iterator it2 = hashSet.iterator();
-            while (it2.hasNext()) {
-                ((ChatterNameRetriever) it2.next()).dispose();
+            Iterator iterator = hashSet.iterator();
+            while (iterator.hasNext()) {
+                ((ChatterNameRetriever) iterator.next()).dispose();
             }
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         OnChatterNameUpdated onChatterNameUpdated = this.listener.get();
         if (onChatterNameUpdated != null) {
@@ -96,9 +95,9 @@ public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChat
             }
         }
         if (hashSet != null) {
-            Iterator it2 = hashSet.iterator();
-            while (it2.hasNext()) {
-                ((ChatterNameRetriever) it2.next()).dispose();
+            Iterator iterator = hashSet.iterator();
+            while (iterator.hasNext()) {
+                ((ChatterNameRetriever) iterator.next()).dispose();
             }
         }
     }

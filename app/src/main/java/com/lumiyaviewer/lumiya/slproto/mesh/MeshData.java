@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.zip.InflaterInputStream;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MeshData {
     public static final int MAX_RIGGED_MESH_JOINTS = 163;
 
@@ -41,9 +40,9 @@ public class MeshData {
     private MeshWeightsBuffer weightsBuffer;
 
     public MeshData(File file) throws IOException {
-        float[] fArr;
-        int[] iArr;
-        float[] fArr2;
+        float[] floats;
+        int[] ints;
+        float[] floats2;
         int i;
         GlobalOptions.MeshRendering meshRendering = GlobalOptions.getInstance().getMeshRendering();
         if (meshRendering == GlobalOptions.MeshRendering.disabled) {
@@ -59,49 +58,49 @@ public class MeshData {
             try {
                 LLSDNode fromBinary = LLSDNode.fromBinary(dataInputStream);
                 long position = fileInputStream.getChannel().position();
-                LLSDNode lLSDNode = null;
+                LLSDNode lsdNode = null;
                 if (fromBinary.keyExists(meshRendering.getLODName())) {
-                    lLSDNode = fromBinary.byKey(meshRendering.getLODName());
+                    lsdNode = fromBinary.byKey(meshRendering.getLODName());
                 } else {
-                    GlobalOptions.MeshRendering[] valuesCustom = GlobalOptions.MeshRendering.valuesCustom();
+                    GlobalOptions.MeshRendering[] valuesCustom = GlobalOptions.MeshRendering.values();
                     int ordinal = meshRendering.ordinal() + 1;
                     while (true) {
                         if (ordinal >= valuesCustom.length) {
                             break;
                         }
-                        String lODName = valuesCustom[ordinal].getLODName();
-                        if (lODName != null && fromBinary.keyExists(lODName)) {
-                            lLSDNode = fromBinary.byKey(lODName);
+                        String lodName = valuesCustom[ordinal].getLODName();
+                        if (lodName != null && fromBinary.keyExists(lodName)) {
+                            lsdNode = fromBinary.byKey(lodName);
                             break;
                         }
                         ordinal++;
                     }
-                    if (lLSDNode == null) {
+                    if (lsdNode == null) {
                         int ordinal2 = meshRendering.ordinal() - 1;
                         while (true) {
                             if (ordinal2 < 0) {
                                 break;
                             }
-                            String lODName2 = valuesCustom[ordinal2].getLODName();
-                            if (lODName2 != null && fromBinary.keyExists(lODName2)) {
-                                lLSDNode = fromBinary.byKey(lODName2);
+                            String lodName2 = valuesCustom[ordinal2].getLODName();
+                            if (lodName2 != null && fromBinary.keyExists(lodName2)) {
+                                lsdNode = fromBinary.byKey(lodName2);
                                 break;
                             }
                             ordinal2--;
                         }
                     }
                 }
-                if (lLSDNode == null) {
+                if (lsdNode == null) {
                     throw new IOException("Mesh LOD not found");
                 }
-                fileInputStream.getChannel().position(lLSDNode.byKey("offset").asInt() + position);
+                fileInputStream.getChannel().position(lsdNode.byKey("offset").asInt() + position);
                 InflaterInputStream inflaterInputStream = new InflaterInputStream(dataInputStream);
                 DataInputStream dataInputStream2 = new DataInputStream(inflaterInputStream);
                 LLSDNode fromBinary2 = LLSDNode.fromBinary(dataInputStream2);
                 int count = fromBinary2.getCount();
                 this.faces = new MeshFace[count];
-                for (int i2 = 0; i2 < count; i2++) {
-                    this.faces[i2] = new MeshFace(fromBinary2.byIndex(i2));
+                for (int j = 0; j < count; j++) {
+                    this.faces[j] = new MeshFace(fromBinary2.byIndex(j));
                 }
                 if (fromBinary.keyExists("skin")) {
                     fileInputStream.getChannel().position(fromBinary.byKey("skin").byKey("offset").asInt() + position);
@@ -111,78 +110,78 @@ public class MeshData {
                     dataInputStream3.close();
                     inflaterInputStream2.close();
                     if (fromBinary3.keyExists("bind_shape_matrix")) {
-                        fArr = new float[16];
-                        for (int i3 = 0; i3 < 16; i3++) {
-                            fArr[i3] = (float) fromBinary3.byKey("bind_shape_matrix").byIndex(i3).asDouble();
+                        floats = new float[16];
+                        for (int k = 0; k < 16; k++) {
+                            floats[k] = (float) fromBinary3.byKey("bind_shape_matrix").byIndex(k).asDouble();
                         }
                     } else {
-                        fArr = null;
+                        floats = null;
                     }
                     if (fromBinary3.keyExists("joint_names")) {
                         LLSDNode byKey = fromBinary3.byKey("joint_names");
                         int min = Math.min(byKey.getCount(), MAX_RIGGED_MESH_JOINTS);
-                        int[] iArr2 = new int[min];
-                        for (int i4 = 0; i4 < min; i4++) {
-                            String asString = byKey.byIndex(i4).asString();
-                            SLSkeletonBoneID sLSkeletonBoneID = SLSkeletonBoneID.bones.get(asString);
-                            int ordinal3 = sLSkeletonBoneID != null ? sLSkeletonBoneID.ordinal() : -1;
-                            if (sLSkeletonBoneID == null || ordinal3 == -1) {
-                                SLAttachmentPoint sLAttachmentPoint = SLAttachmentPoint.pointsByName.get(asString);
-                                if (sLAttachmentPoint != null) {
-                                    sLSkeletonBoneID = sLAttachmentPoint.bone;
-                                    i = sLAttachmentPoint.nonHUDindex + SLSkeletonBoneID.VALUES.length;
+                        int[] ints2 = new int[min];
+                        for (int m = 0; m < min; m++) {
+                            String asString = byKey.byIndex(m).asString();
+                            SLSkeletonBoneID skeletonBoneID = SLSkeletonBoneID.bones.get(asString);
+                            int ordinal3 = skeletonBoneID != null ? skeletonBoneID.ordinal() : -1;
+                            if (skeletonBoneID == null || ordinal3 == -1) {
+                                SLAttachmentPoint attachmentPoint = SLAttachmentPoint.pointsByName.get(asString);
+                                if (attachmentPoint != null) {
+                                    skeletonBoneID = attachmentPoint.bone;
+                                    i = attachmentPoint.nonHUDindex + SLSkeletonBoneID.VALUES.length;
                                 } else {
                                     i = ordinal3;
                                 }
                             } else {
                                 i = ordinal3;
                             }
-                            if (sLSkeletonBoneID != null && sLSkeletonBoneID.isExtended) {
+                            if (skeletonBoneID != null && skeletonBoneID.isExtended) {
                                 z = true;
                             }
-                            iArr2[i4] = i;
+                            ints2[m] = i;
                         }
-                        iArr = iArr2;
+                        ints = ints2;
                     } else {
-                        iArr = null;
+                        ints = null;
                     }
                     if (!fromBinary3.keyExists("inverse_bind_matrix")) {
-                        fArr2 = null;
-                    } else if (iArr != null) {
+                        floats2 = null;
+                    } else if (ints != null) {
                         LLSDNode byKey2 = fromBinary3.byKey("inverse_bind_matrix");
-                        fArr2 = new float[iArr.length * 16];
-                        for (int i5 = 0; i5 < byKey2.getCount(); i5++) {
-                            if (i5 < iArr.length) {
-                                LLSDNode byIndex = byKey2.byIndex(i5);
+                        floats2 = new float[ints.length * 16];
+                        for (int n = 0; n < byKey2.getCount(); n++) {
+                            if (n < ints.length) {
+                                LLSDNode byIndex = byKey2.byIndex(n);
                                 for (int i6 = 0; i6 < 16; i6++) {
-                                    fArr2[(i5 * 16) + i6] = (float) byIndex.byIndex(i6).asDouble();
+                                    floats2[(n * 16) + i6] = (float) byIndex.byIndex(i6).asDouble();
                                 }
                             }
                         }
                         Debug.Printf("inverseBindMatrix count %d", Integer.valueOf(byKey2.getCount()));
                     } else {
-                        fArr2 = null;
+                        floats2 = null;
                     }
                     if (fromBinary3.keyExists("alt_inverse_bind_matrix")) {
                         LLSDNode byKey3 = fromBinary3.byKey("alt_inverse_bind_matrix");
-                        float[] fArr3 = new float[byKey3.getCount() * 16];
+                        float[] floats3 = new float[byKey3.getCount() * 16];
                         for (int i7 = 0; i7 < byKey3.getCount(); i7++) {
                             LLSDNode byIndex2 = byKey3.byIndex(i7);
                             for (int i8 = 0; i8 < 16; i8++) {
-                                fArr3[(i7 * 16) + i8] = (float) byIndex2.byIndex(i8).asDouble();
+                                floats3[(i7 * 16) + i8] = (float) byIndex2.byIndex(i8).asDouble();
                             }
                         }
-                        if (iArr != null) {
+                        if (ints != null) {
                             enumMap = new EnumMap(SLSkeletonBoneID.class);
-                            for (int i9 = 0; i9 < iArr.length; i9++) {
-                                int i10 = iArr[i9];
+                            for (int i9 = 0; i9 < ints.length; i9++) {
+                                int i10 = ints[i9];
                                 if (i10 >= 0 && i10 < SLSkeletonBoneID.VALUES.length) {
-                                    SLSkeletonBoneID sLSkeletonBoneID2 = SLSkeletonBoneID.VALUES[i10];
-                                    float[] fArr4 = new float[3];
+                                    SLSkeletonBoneID skeletonBoneID2 = SLSkeletonBoneID.VALUES[i10];
+                                    float[] floats4 = new float[3];
                                     for (int i11 = 0; i11 < 3; i11++) {
-                                        fArr4[i11] = fArr3[(i9 * 16) + 12 + i11];
+                                        floats4[i11] = floats3[(i9 * 16) + 12 + i11];
                                     }
-                                    enumMap.put(sLSkeletonBoneID2, fArr4);
+                                    enumMap.put(skeletonBoneID2, floats4);
                                 }
                             }
                         }
@@ -195,17 +194,17 @@ public class MeshData {
                     dataInputStream2.close();
                     inflaterInputStream.close();
                 } else {
-                    fArr = null;
-                    iArr = null;
-                    fArr2 = null;
+                    floats = null;
+                    ints = null;
+                    floats2 = null;
                 }
-                if (iArr == null || fArr == null || fArr2 == null) {
+                if (ints == null || floats == null || floats2 == null) {
                     this.riggingData = null;
                     this.bindShapeMatrix = null;
                     this.jointTranslations = null;
                 } else {
-                    this.riggingData = MeshRiggingData.create(iArr, fArr2, z);
-                    this.bindShapeMatrix = fArr;
+                    this.riggingData = MeshRiggingData.create(ints, floats2, z);
+                    this.bindShapeMatrix = floats;
                     this.jointTranslations = enumMap != null ? Maps.immutableEnumMap(enumMap) : null;
                 }
                 this.pelvisOffset = f;

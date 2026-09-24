@@ -4,12 +4,11 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import java.util.Set;
 
-/* loaded from: classes.dex */
 public abstract class ResourceMemoryCache<ResourceParams, ResourceType> extends ResourceManager<ResourceParams, ResourceType> {
     private final Cache<ResourceParams, ResourceType> finalResults = (Cache<ResourceParams, ResourceType>) CacheBuilder.newBuilder().weakValues().build();
     private final Cache<ResourceParams, ResourceType> intermediateResults = (Cache<ResourceParams, ResourceType>) CacheBuilder.newBuilder().weakValues().build();
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     public void CompleteRequest(ResourceParams resourceparams, ResourceType resourcetype, Set<ResourceConsumer> set) {
         if (resourcetype != null) {
             this.finalResults.put(resourceparams, resourcetype);
@@ -19,7 +18,7 @@ public abstract class ResourceMemoryCache<ResourceParams, ResourceType> extends 
         super.CompleteRequest(resourceparams, resourcetype, set);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     public void IntermediateResult(ResourceParams resourceparams, ResourceType resourcetype, Set<ResourceConsumer> set) {
         if (resourcetype != null) {
             this.intermediateResults.put(resourceparams, resourcetype);
@@ -29,7 +28,7 @@ public abstract class ResourceMemoryCache<ResourceParams, ResourceType> extends 
         super.IntermediateResult(resourceparams, resourcetype, set);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     public void RequestResource(ResourceParams resourceparams, ResourceConsumer resourceConsumer) {
         ResourceType ifPresent = this.finalResults.getIfPresent(resourceparams);
         if (ifPresent != null) {

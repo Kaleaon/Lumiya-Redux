@@ -15,7 +15,6 @@ import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnClickListener {
     final CardView cardView;
     private int cardViewDefaultBackground;
@@ -63,13 +62,13 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
         }
         if (this.fadeAnimatorSet == null) {
             ObjectAnimator objectAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_background_fade);
-            ObjectAnimator objectAnimator2 = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_text_unfade);
-            ObjectAnimator clone = objectAnimator2.clone();
+            ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_text_unfade);
+            ObjectAnimator clone = animator.clone();
             objectAnimator.setTarget(this.cardView);
-            objectAnimator2.setTarget(this.textView);
+            animator.setTarget(this.textView);
             clone.setTarget(this.questionMsg);
             this.fadeAnimatorSet = new AnimatorSet();
-            this.fadeAnimatorSet.playTogether(objectAnimator, objectAnimator2, clone);
+            this.fadeAnimatorSet.playTogether(objectAnimator, animator, clone);
         }
         this.fadeAnimatorSet.start();
         this.cardViewFaded = true;
@@ -96,17 +95,17 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
         this.textView.setTextColor(this.cardViewDefaultText);
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonYesNoAccept /* 2131755324 */:
+            case R.id.buttonYesNoAccept:
                 if (this.yesNoEvent != null && this.yesNoEvent.getEventState() == SLChatYesNoEvent.EventState.EventNew) {
                     fadeCardView();
                     this.yesNoEvent.onYesAction(view.getContext(), UserManager.getUserManager(this.yesNoEvent.getAgentUUID()));
                     break;
                 }
                 break;
-            case R.id.buttonYesNoDecline /* 2131755325 */:
+            case R.id.buttonYesNoDecline:
                 if (this.yesNoEvent != null && this.yesNoEvent.getEventState() == SLChatYesNoEvent.EventState.EventNew) {
                     fadeCardView();
                     this.yesNoEvent.onNoAction(view.getContext(), UserManager.getUserManager(this.yesNoEvent.getAgentUUID()));
@@ -116,7 +115,7 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
         }
     }
 
-    public void setEvent(SLChatYesNoEvent sLChatYesNoEvent) {
-        this.yesNoEvent = sLChatYesNoEvent;
+    public void setEvent(SLChatYesNoEvent chatYesNoEvent) {
+        this.yesNoEvent = chatYesNoEvent;
     }
 }

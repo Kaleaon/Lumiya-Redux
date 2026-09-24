@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.orm;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_InventoryQuery extends InventoryQuery {
     private final int assetType;
     private final String containsString;
@@ -13,22 +12,22 @@ final class AutoValue_InventoryQuery extends InventoryQuery {
     private final boolean includeItems;
     private final boolean newestFirst;
 
-    AutoValue_InventoryQuery(@Nullable UUID uuid, @Nullable String str, boolean z, boolean z2, boolean z3, int i, int i2) {
+    AutoValue_InventoryQuery(@Nullable UUID uuid, @Nullable String containsString, boolean includeFolders, boolean includeItems, boolean newestFirst, int folderType, int assetType) {
         this.folderId = uuid;
-        this.containsString = str;
-        this.includeFolders = z;
-        this.includeItems = z2;
-        this.newestFirst = z3;
-        this.folderType = i;
-        this.assetType = i2;
+        this.containsString = containsString;
+        this.includeFolders = includeFolders;
+        this.includeItems = includeItems;
+        this.newestFirst = newestFirst;
+        this.folderType = folderType;
+        this.assetType = assetType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     public int assetType() {
         return this.assetType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     @Nullable
     public String containsString() {
         return this.containsString;
@@ -52,13 +51,13 @@ final class AutoValue_InventoryQuery extends InventoryQuery {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     @Nullable
     public UUID folderId() {
         return this.folderId;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     public int folderType() {
         return this.folderType;
     }
@@ -67,17 +66,17 @@ final class AutoValue_InventoryQuery extends InventoryQuery {
         return (((((((this.includeItems ? 1231 : 1237) ^ (((this.includeFolders ? 1231 : 1237) ^ (((((this.folderId == null ? 0 : this.folderId.hashCode()) ^ 1000003) * 1000003) ^ (this.containsString != null ? this.containsString.hashCode() : 0)) * 1000003)) * 1000003)) * 1000003) ^ (this.newestFirst ? 1231 : 1237)) * 1000003) ^ this.folderType) * 1000003) ^ this.assetType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     public boolean includeFolders() {
         return this.includeFolders;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     public boolean includeItems() {
         return this.includeItems;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.InventoryQuery
+    @Override
     public boolean newestFirst() {
         return this.newestFirst;
     }

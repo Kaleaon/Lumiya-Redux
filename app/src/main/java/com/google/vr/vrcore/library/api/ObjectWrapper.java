@@ -6,7 +6,6 @@ import com.google.vr.vrcore.library.api.IObjectWrapper;
 import java.lang.reflect.Field;
 
 @UsedByReflection("ObjectWrapper.java")
-/* loaded from: classes.dex */
 public final class ObjectWrapper<T> extends IObjectWrapper.Stub {
 
     @UsedByReflection("ObjectWrapper.java")
@@ -16,11 +15,11 @@ public final class ObjectWrapper<T> extends IObjectWrapper.Stub {
         this.wrappedObject = t;
     }
 
-    public static <T> T unwrap(IObjectWrapper iObjectWrapper, Class<T> cls) {
-        if (iObjectWrapper instanceof ObjectWrapper) {
-            return (T) ((ObjectWrapper) iObjectWrapper).wrappedObject;
+    public static <T> T unwrap(IObjectWrapper objectWrapper, Class<T> cls) {
+        if (objectWrapper instanceof ObjectWrapper) {
+            return (T) ((ObjectWrapper) objectWrapper).wrappedObject;
         }
-        IBinder asBinder = iObjectWrapper.asBinder();
+        IBinder asBinder = objectWrapper.asBinder();
         Field[] declaredFields = asBinder.getClass().getDeclaredFields();
         if (declaredFields.length != 1) {
             throw new IllegalArgumentException("The concrete class implementing IObjectWrapper must have exactly *one* declared private field for the wrapped object.  Preferably, this is an instance of the ObjectWrapper<T> class.");

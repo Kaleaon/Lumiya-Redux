@@ -4,20 +4,29 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> simulator
+ * buy object inventory. If the transaction succeeds, it will add
+ * inventory to the agent, and potentially remove the original.
+ *
+ * <p>Template: {@code BuyObjectInventory Low 103 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class BuyObjectInventory extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public UUID FolderID;
-        public UUID ItemID;
-        public UUID ObjectID;
+        public UUID FolderID; // LLUUID
+        public UUID ItemID; // LLUUID
+        public UUID ObjectID; // LLUUID
     }
 
     public BuyObjectInventory() {
@@ -26,21 +35,22 @@ public class BuyObjectInventory extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 84;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleBuyObjectInventory(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleBuyObjectInventory(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 103);
+        // Message number: Low 103 (BuyObjectInventory).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x67);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.ObjectID);
@@ -48,7 +58,7 @@ public class BuyObjectInventory extends SLMessage {
         packUUID(byteBuffer, this.Data_Field.FolderID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

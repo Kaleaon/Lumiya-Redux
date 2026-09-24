@@ -9,16 +9,15 @@ import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class FriendDisplayDataList extends ChatterDisplayDataList {
     private final boolean onlineFriends;
 
-    public FriendDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated, boolean z) {
+    public FriendDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated, boolean onlineFriends) {
         super(userManager, onListUpdated, null);
-        this.onlineFriends = z;
+        this.onlineFriends = onlineFriends;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterDisplayDataList
+    @Override
     protected List<ChatterID> getChatters() {
         List<Friend> list = this.onlineFriends ? this.userManager.getDaoSession().getFriendDao().queryBuilder().where(FriendDao.Properties.IsOnline.eq(true), new WhereCondition[0]).list() : this.userManager.getDaoSession().getFriendDao().loadAll();
         ArrayList arrayList = new ArrayList(list.size());

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.media;
 import android.media.MediaPlayer;
 import com.lumiyaviewer.lumiya.Debug;
 
-/* loaded from: classes.dex */
 public class MediaPlayerWrapper implements Runnable, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener, MediaPlayer.OnPreparedListener {
     private MediaPlayer mediaPlayer = null;
     private Thread workingThread = null;
@@ -11,19 +10,19 @@ public class MediaPlayerWrapper implements Runnable, MediaPlayer.OnErrorListener
     private volatile boolean mustExit = false;
     private volatile String mediaURL = "";
 
-    @Override // android.media.MediaPlayer.OnErrorListener
+    @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
         Debug.Log("MediaPlayerWrapper: onError: what = " + i + ", extra = " + i2);
         return false;
     }
 
-    @Override // android.media.MediaPlayer.OnInfoListener
+    @Override
     public boolean onInfo(MediaPlayer mediaPlayer, int i, int i2) {
         Debug.Log("MediaPlayerWrapper: onInfo: what = " + i + ", extra = " + i2);
         return false;
     }
 
-    @Override // android.media.MediaPlayer.OnPreparedListener
+    @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Debug.Log("MediaPlayerWrapper: prepared, starting playback");
         mediaPlayer.start();
@@ -61,7 +60,7 @@ public class MediaPlayerWrapper implements Runnable, MediaPlayer.OnErrorListener
         }
     }
 
-    @Override // java.lang.Runnable
+    @Override
     public void run() {
         Debug.Log("MediaPlayerWrapper: working thread started");
         while (!this.mustExit) {

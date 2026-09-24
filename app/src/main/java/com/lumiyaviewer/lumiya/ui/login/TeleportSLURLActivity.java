@@ -17,7 +17,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.common.TeleportProgressDialog;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class TeleportSLURLActivity extends AppCompatActivity implements View.OnClickListener {
     private SLURL slurl = null;
 
@@ -27,12 +26,12 @@ public class TeleportSLURLActivity extends AppCompatActivity implements View.OnC
         finish();
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         SLGridConnection gridConnection;
         SLAgentCircuit activeAgentCircuit;
         switch (view.getId()) {
-            case R.id.buttonTeleport /* 2131755665 */:
+            case R.id.buttonTeleport:
                 boolean z = false;
                 if (this.slurl != null && (gridConnection = GridConnectionService.getGridConnection()) != null) {
                     UUID activeAgentUUID = gridConnection.getActiveAgentUUID();
@@ -43,12 +42,12 @@ public class TeleportSLURLActivity extends AppCompatActivity implements View.OnC
                     }
                 }
                 if (!z) {
-                    new AlertDialog.Builder(this).setMessage(R.string.teleport_unable).setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$txy91ryZVkviKYu9VXLZHkYSvg0
+                    new AlertDialog.Builder(this).setMessage(R.string.teleport_unable).setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                             TeleportSLURLActivity.this.m648xe44220a6(dialogInterface, i);
                         }
 
-                        @Override // android.content.DialogInterface.OnClickListener
+                        @Override
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             $m$0(dialogInterface, i);
                         }
@@ -56,13 +55,13 @@ public class TeleportSLURLActivity extends AppCompatActivity implements View.OnC
                     break;
                 }
                 break;
-            case R.id.buttonTeleportCancel /* 2131755666 */:
+            case R.id.buttonTeleportCancel:
                 finish();
                 break;
         }
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     @SuppressLint({"DefaultLocale"})
     public void onCreate(Bundle bundle) {
         boolean z;

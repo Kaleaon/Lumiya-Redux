@@ -7,17 +7,16 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdTeleportTo implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    @Override
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         if (!str.equals("force") || str2 == null) {
             return;
         }
         String[] split = str2.split("/");
         if (split.length >= 3) {
             try {
-                rLVController.teleportToGlobalPos(uuid, new LLVector3(Float.parseFloat(split[0]), Float.parseFloat(split[1]), Float.parseFloat(split[2])));
+                rlvController.teleportToGlobalPos(uuid, new LLVector3(Float.parseFloat(split[0]), Float.parseFloat(split[1]), Float.parseFloat(split[2])));
             } catch (NumberFormatException e) {
                 Debug.Warning(e);
             }

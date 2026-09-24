@@ -9,7 +9,6 @@ import android.widget.ListAdapter;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo;
 
-/* loaded from: classes.dex */
 abstract class ChatterListAdapter extends BaseAdapter implements ListAdapter {
     protected final Context context;
     private final LayoutInflater inflater;
@@ -23,7 +22,7 @@ abstract class ChatterListAdapter extends BaseAdapter implements ListAdapter {
         this.inflater = LayoutInflater.from(context);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         Object item = getItem(i);
         if (!(item instanceof ChatterDisplayInfo)) {
@@ -34,7 +33,7 @@ abstract class ChatterListAdapter extends BaseAdapter implements ListAdapter {
         return this.viewBuilder.getView(this.inflater, view, viewGroup, this.userDistanceInline);
     }
 
-    void setUserDistanceInline(boolean z) {
-        this.userDistanceInline = z;
+    void setUserDistanceInline(boolean userDistanceInline) {
+        this.userDistanceInline = userDistanceInline;
     }
 }

@@ -1,19 +1,26 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPropertiesRequestBackend
+ * simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code AvatarPropertiesRequestBackend Low 170 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AvatarPropertiesRequestBackend extends SLMessage {
     public AgentData AgentData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID AvatarID;
-        public int GodLevel;
-        public boolean WebProfilesDisabled;
+        public UUID AgentID; // LLUUID
+        public UUID AvatarID; // LLUUID
+        public int GodLevel; // U8
+        public boolean WebProfilesDisabled; // BOOL
     }
 
     public AvatarPropertiesRequestBackend() {
@@ -21,32 +28,33 @@ public class AvatarPropertiesRequestBackend extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 38;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesRequestBackend(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesRequestBackend(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -86);
+        // Message number: Low 170 (AvatarPropertiesRequestBackend).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xAA);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.AvatarID);
         packByte(byteBuffer, (byte) this.AgentData_Field.GodLevel);
         packBoolean(byteBuffer, this.AgentData_Field.WebProfilesDisabled);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.AvatarID = unpackUUID(byteBuffer);
-        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.WebProfilesDisabled = unpackBoolean(byteBuffer);
     }
 }

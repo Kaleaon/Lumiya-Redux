@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo;
 import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterItemViewBuilder;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class User implements ChatterDisplayInfo {
     private boolean badUUID;
     private String displayName;
@@ -21,22 +20,22 @@ public class User implements ChatterDisplayInfo {
     public User() {
     }
 
-    public User(Long l) {
-        this.id = l;
+    public User(Long id) {
+        this.id = id;
     }
 
-    public User(Long l, UUID uuid, String str, String str2, boolean z, boolean z2, int i, int i2) {
-        this.id = l;
+    public User(Long id, UUID uuid, String userName, String displayName, boolean badUUID, boolean isFriend, int rightsGiven, int rightsHas) {
+        this.id = id;
         this.uuid = uuid;
-        this.userName = str;
-        this.displayName = str2;
-        this.badUUID = z;
-        this.isFriend = z2;
-        this.rightsGiven = i;
-        this.rightsHas = i2;
+        this.userName = userName;
+        this.displayName = displayName;
+        this.badUUID = badUUID;
+        this.isFriend = isFriend;
+        this.rightsGiven = rightsGiven;
+        this.rightsHas = rightsHas;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public void buildView(Context context, ChatterItemViewBuilder chatterItemViewBuilder, UserManager userManager) {
         chatterItemViewBuilder.setLabel(this.displayName);
         chatterItemViewBuilder.setThumbnailChatterID(getChatterID(userManager), this.displayName);
@@ -46,12 +45,12 @@ public class User implements ChatterDisplayInfo {
         return this.badUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public ChatterID getChatterID(UserManager userManager) {
         return ChatterID.getUserChatterID(userManager.getUserID(), this.uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }
@@ -87,32 +86,32 @@ public class User implements ChatterDisplayInfo {
         return false;
     }
 
-    public void setBadUUID(boolean z) {
-        this.badUUID = z;
+    public void setBadUUID(boolean badUUID) {
+        this.badUUID = badUUID;
     }
 
-    public void setDisplayName(String str) {
-        this.displayName = str;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setIsFriend(boolean z) {
-        this.isFriend = z;
+    public void setIsFriend(boolean isFriend) {
+        this.isFriend = isFriend;
     }
 
-    public void setRightsGiven(int i) {
-        this.rightsGiven = i;
+    public void setRightsGiven(int rightsGiven) {
+        this.rightsGiven = rightsGiven;
     }
 
-    public void setRightsHas(int i) {
-        this.rightsHas = i;
+    public void setRightsHas(int rightsHas) {
+        this.rightsHas = rightsHas;
     }
 
-    public void setUserName(String str) {
-        this.userName = str;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setUuid(UUID uuid) {

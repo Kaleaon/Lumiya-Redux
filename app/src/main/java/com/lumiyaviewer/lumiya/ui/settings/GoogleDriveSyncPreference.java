@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.licensing.LicenseChecker;
 import com.lumiyaviewer.lumiya.sync.CloudSyncServiceConnection;
 
-/* loaded from: classes.dex */
 public class GoogleDriveSyncPreference extends CheckBoxPreference {
     public GoogleDriveSyncPreference(Context context) {
         super(context);
@@ -37,27 +36,27 @@ public class GoogleDriveSyncPreference extends CheckBoxPreference {
         getContext().startActivity(intent);
     }
 
-    @Override // androidx.preference.TwoStatePreference, androidx.preference.Preference
+    @Override
     protected void onClick() {
         super.onClick();
         if (!isChecked() || CloudSyncServiceConnection.checkPluginInstalled(getContext())) {
             return;
         }
-        new AlertDialog.Builder(getContext()).setTitle(R.string.enable_google_drive).setMessage(getContext().getString(R.string.enable_google_drive_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$GONhG2H9-w043w0Zbd-p0nmAUgQ.1
+        new AlertDialog.Builder(getContext()).setTitle(R.string.enable_google_drive).setMessage(getContext().getString(R.string.enable_google_drive_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GoogleDriveSyncPreference.this.m863x92031b8a(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$GONhG2H9-w043w0Zbd-p0nmAUgQ
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }

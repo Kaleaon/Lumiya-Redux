@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SearchGridResult {
     private Long id;
     private String itemName;
@@ -15,17 +14,17 @@ public class SearchGridResult {
     public SearchGridResult() {
     }
 
-    public SearchGridResult(Long l) {
-        this.id = l;
+    public SearchGridResult(Long id) {
+        this.id = id;
     }
 
-    public SearchGridResult(Long l, UUID uuid, int i, UUID uuid2, String str, int i2, Integer num) {
-        this.id = l;
+    public SearchGridResult(Long id, UUID uuid, int itemType, UUID itemUUID, String itemName, int levensteinDistance, Integer num) {
+        this.id = id;
         this.searchUUID = uuid;
-        this.itemType = i;
-        this.itemUUID = uuid2;
-        this.itemName = str;
-        this.levensteinDistance = i2;
+        this.itemType = itemType;
+        this.itemUUID = itemUUID;
+        this.itemName = itemName;
+        this.levensteinDistance = levensteinDistance;
         this.memberCount = num;
     }
 
@@ -57,24 +56,24 @@ public class SearchGridResult {
         return this.searchUUID;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setItemName(String str) {
-        this.itemName = str;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public void setItemType(int i) {
-        this.itemType = i;
+    public void setItemType(int itemType) {
+        this.itemType = itemType;
     }
 
     public void setItemUUID(UUID uuid) {
         this.itemUUID = uuid;
     }
 
-    public void setLevensteinDistance(int i) {
-        this.levensteinDistance = i;
+    public void setLevensteinDistance(int levensteinDistance) {
+        this.levensteinDistance = levensteinDistance;
     }
 
     public void setMemberCount(Integer num) {

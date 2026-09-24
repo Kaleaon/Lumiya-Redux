@@ -30,7 +30,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDMap extends LLSDNode {
 
     @Nonnull
@@ -40,9 +39,9 @@ public class LLSDMap extends LLSDNode {
         final String key;
         final LLSDNode value;
 
-        public LLSDMapEntry(String str, LLSDNode lLSDNode) {
-            this.key = str;
-            this.value = lLSDNode;
+        public LLSDMapEntry(String key, LLSDNode lsdNode) {
+            this.key = key;
+            this.value = lsdNode;
         }
     }
 
@@ -61,19 +60,19 @@ public class LLSDMap extends LLSDNode {
         this.items = ImmutableMap.copyOf((Map) hashMap);
     }
 
-    public LLSDMap(LLSDMapEntry... lLSDMapEntryArr) {
-        HashMap hashMap = new HashMap(lLSDMapEntryArr.length);
-        for (LLSDMapEntry lLSDMapEntry : lLSDMapEntryArr) {
-            hashMap.put(lLSDMapEntry.key, lLSDMapEntry.value);
+    public LLSDMap(LLSDMapEntry... lsdMapEntryArr) {
+        HashMap hashMap = new HashMap(lsdMapEntryArr.length);
+        for (LLSDMapEntry llsdMapEntry : lsdMapEntryArr) {
+            hashMap.put(llsdMapEntry.key, llsdMapEntry.value);
         }
         this.items = ImmutableMap.copyOf((Map) hashMap);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public LLSDNode byKey(String str) throws LLSDInvalidKeyException {
-        LLSDNode lLSDNode = this.items.get(str);
-        if (lLSDNode != null) {
-            return lLSDNode;
+        LLSDNode lsdNode = this.items.get(str);
+        if (lsdNode != null) {
+            return lsdNode;
         }
         throw new LLSDInvalidKeyException("Map key not found, requested \"" + str + "\"");
     }
@@ -82,12 +81,12 @@ public class LLSDMap extends LLSDNode {
         return this.items.entrySet();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public boolean keyExists(String str) {
         return this.items.containsKey(str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_CHARACTERISTIC_NOT_FOUND);
         ImmutableSet<Map.Entry<String, LLSDNode>> entrySet = this.items.entrySet();
@@ -102,14 +101,14 @@ public class LLSDMap extends LLSDNode {
         dataOutputStream.writeByte(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_BATTERY_READ_FAILED);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public <T> T toObject(Class<? extends T> cls) throws LLSDException {
         try {
             T newInstance = cls.newInstance();
             for (Field field : cls.getDeclaredFields()) {
-                LLSDSerialized lLSDSerialized = (LLSDSerialized) field.getAnnotation(LLSDSerialized.class);
-                if (lLSDSerialized != null) {
-                    String name = lLSDSerialized.name();
+                LLSDSerialized annotation = (LLSDSerialized) field.getAnnotation(LLSDSerialized.class);
+                if (annotation != null) {
+                    String name = annotation.name();
                     if (Strings.isNullOrEmpty(name)) {
                         name = field.getName();
                     }
@@ -169,7 +168,7 @@ public class LLSDMap extends LLSDNode {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "map");
         for (Map.Entry<String, LLSDNode> entry : this.items.entrySet()) {

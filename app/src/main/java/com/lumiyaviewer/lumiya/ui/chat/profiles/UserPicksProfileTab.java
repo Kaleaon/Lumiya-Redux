@@ -35,7 +35,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserPicksProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
     private final SubscriptionData<UUID, AvatarPicksReply> avatarPicks = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.avatarPicks).withDataChangedListener(this);
@@ -54,7 +53,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
             this(context);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public int getCount() {
             if (this.picksReply != null) {
                 return this.picksReply.Data_Fields.size();
@@ -62,7 +61,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
             return 0;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public AvatarPicksReply.Data getItem(int i) {
             if (this.picksReply == null || i < 0 || i >= this.picksReply.Data_Fields.size()) {
                 return null;
@@ -70,12 +69,12 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
             return this.picksReply.Data_Fields.get(i);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public long getItemId(int i) {
             return i;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = this.inflater.inflate(R.layout.simple_list_item_1, viewGroup, false);
@@ -87,7 +86,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
             return view;
         }
 
-        @Override // android.widget.BaseAdapter, android.widget.Adapter
+        @Override
         public boolean hasStableIds() {
             return false;
         }
@@ -98,9 +97,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAddNewPick, reason: merged with bridge method [inline-methods] */
-    public void m530xb7c87a2b(View view) {
+    public void onAddNewPick(View view) {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDUser)) {
             return;
         }
@@ -113,21 +110,21 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         final int count = this.picksAdapter != null ? this.picksAdapter.getCount() : 0;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         final String str = (String) Optional.fromNullable(Strings.emptyToNull(parcelData.getName())).or(getString(com.lumiyaviewer.lumiya.R.string.name_loading_title));
-        builder.setMessage(getString(com.lumiyaviewer.lumiya.R.string.create_pick_question, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.3
+        builder.setMessage(getString(com.lumiyaviewer.lumiya.R.string.create_pick_question, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 UserPicksProfileTab.this.m532xd71354a5((SLAgentCircuit) activeAgentCircuit, (String) str, (ParcelData) parcelData, count, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -144,35 +141,35 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_UserPicksProfileTab_4543, reason: not valid java name */
-    /* synthetic */ void m532xd71354a5(SLAgentCircuit sLAgentCircuit, String str, ParcelData parcelData, int i, DialogInterface dialogInterface, int i2) {
+    /* synthetic */ void m532xd71354a5(SLAgentCircuit agentCircuit, String str, ParcelData parcelData, int i, DialogInterface dialogInterface, int i2) {
         UUID randomUUID = UUID.randomUUID();
-        sLAgentCircuit.getModules().userProfiles.UpdatePickInfo(randomUUID, this.userManager.getUserID(), UUIDPool.ZeroUUID, str, Strings.nullToEmpty(parcelData.getDescription()), (UUID) Optional.fromNullable(parcelData.getSnapshotUUID()).or(UUIDPool.ZeroUUID), sLAgentCircuit.getAgentGlobalPosition(), i, true);
+        agentCircuit.getModules().userProfiles.UpdatePickInfo(randomUUID, this.userManager.getUserID(), UUIDPool.ZeroUUID, str, Strings.nullToEmpty(parcelData.getDescription()), (UUID) Optional.fromNullable(parcelData.getSnapshotUUID()).or(UUIDPool.ZeroUUID), agentCircuit.getAgentGlobalPosition(), i, true);
         DetailsActivity.showEmbeddedDetails(getActivity(), UserPickFragment.class, UserPickFragment.makeSelection(this.chatterID.agentUUID, new AvatarPickKey(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), randomUUID)));
         dialogInterface.dismiss();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.user_profile_tab_picks, viewGroup, false);
         this.picksAdapter = new PicksAdapter(layoutInflater.getContext(), null);
-        inflate.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.1
+        inflate.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                UserPicksProfileTab.this.m530xb7c87a2b(view);
+                UserPicksProfileTab.this.onAddNewPick(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.picks_list_view)).setAdapter((ListAdapter) this.picksAdapter);
-        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.picks_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.2
+        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.picks_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 UserPicksProfileTab.this.m531xd7126bce(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -183,7 +180,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         try {
             if (this.picksAdapter != null) {
@@ -195,7 +192,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         boolean z;
         UserManager userManager;
@@ -208,7 +205,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         }
         View view = getView();
         if (view != null) {
-            view.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setVisibility(z ? 0 : 8);
+            view.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setVisibility(z ? View.VISIBLE : View.GONE);
         }
     }
 }

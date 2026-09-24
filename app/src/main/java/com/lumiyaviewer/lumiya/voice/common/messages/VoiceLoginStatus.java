@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceLoginInfo;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceLoginStatus implements VoicePluginMessage {
 
     @Nullable
@@ -22,13 +21,13 @@ public class VoiceLoginStatus implements VoicePluginMessage {
         this.errorMessage = bundle.getString("errorMessage");
     }
 
-    public VoiceLoginStatus(@Nullable VoiceLoginInfo voiceLoginInfo, boolean z, @Nullable String str) {
+    public VoiceLoginStatus(@Nullable VoiceLoginInfo voiceLoginInfo, boolean loggedIn, @Nullable String errorMessage) {
         this.voiceLoginInfo = voiceLoginInfo;
-        this.loggedIn = z;
-        this.errorMessage = str;
+        this.loggedIn = loggedIn;
+        this.errorMessage = errorMessage;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle("voiceLoginInfo", this.voiceLoginInfo != null ? this.voiceLoginInfo.toBundle() : null);

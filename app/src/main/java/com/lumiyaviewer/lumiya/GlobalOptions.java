@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChangeListener {
     private int themeResourceId = R.style.Theme_Lumiya_Light;
     private boolean legacyUserNames = false;
@@ -76,8 +75,8 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
 
         private String lodName;
 
-        MeshRendering(String str) {
-            this.lodName = str;
+        MeshRendering(String lodName) {
+            this.lodName = lodName;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -336,7 +335,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
         return this.legacyUserNames;
     }
 
-    @Override // android.content.SharedPreferences.OnSharedPreferenceChangeListener
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String str) {
         updateFromPreferences(LumiyaApp.getContext(), sharedPreferences);
         EventBus.getInstance().publish(new GlobalOptionsChangedEvent(sharedPreferences));
@@ -368,7 +367,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             edit.putBoolean("system_defaults_set", true);
             edit.commit();
         }
-        int i3 = this.themeResourceId;
+        int themeResourceId = this.themeResourceId;
         String nullToEmpty = Strings.nullToEmpty(sharedPreferences.getString("theme", "light"));
         if (nullToEmpty.equals("dark")) {
             this.themeResourceId = R.style.Theme_Lumiya;
@@ -441,7 +440,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
                 this.forceDaylightHour = 0.5f;
             }
         }
-        if (i3 != this.themeResourceId) {
+        if (themeResourceId != this.themeResourceId) {
             EventBus.getInstance().publish(new ThemeChangedEvent(this.themeResourceId));
         }
     }

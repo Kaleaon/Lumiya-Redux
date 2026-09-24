@@ -1,0 +1,4 @@
+# Classes shipped as ORIGINAL Lumiya 3.4.2 bytecode (see app/build.gradle).
+# Generated from tools/verify/dexdiff.py: every class whose recovered source
+# still differs from the original classes.dex, except files listed in
+# protected.txt. Remove a line once its source verifies as OK.

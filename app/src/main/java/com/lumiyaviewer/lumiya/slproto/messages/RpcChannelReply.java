@@ -4,14 +4,22 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RpcServer allocated a session for the script
+ * ChannelID will be the NULL UUID if unable to register
+ * dataserver -> simulator
+ *
+ * <p>Template: {@code RpcChannelReply Low 414 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RpcChannelReply extends SLMessage {
     public DataBlock DataBlock_Field;
 
+    /** Block DataBlock, Single. */
     public static class DataBlock {
-        public UUID ChannelID;
-        public UUID ItemID;
-        public UUID TaskID;
+        public UUID ChannelID; // LLUUID
+        public UUID ItemID; // LLUUID
+        public UUID TaskID; // LLUUID
     }
 
     public RpcChannelReply() {
@@ -19,27 +27,28 @@ public class RpcChannelReply extends SLMessage {
         this.DataBlock_Field = new DataBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcChannelReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcChannelReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -98);
+        // Message number: Low 414 (RpcChannelReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x9E);
         packUUID(byteBuffer, this.DataBlock_Field.TaskID);
         packUUID(byteBuffer, this.DataBlock_Field.ItemID);
         packUUID(byteBuffer, this.DataBlock_Field.ChannelID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.DataBlock_Field.TaskID = unpackUUID(byteBuffer);
         this.DataBlock_Field.ItemID = unpackUUID(byteBuffer);

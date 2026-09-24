@@ -4,21 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelDivide
+ * If the selection is a subsection of exactly one parcel,
+ * chop out that section and make a new parcel of it.
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelDivide Low 211 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelDivide extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public float East;
-        public float North;
-        public float South;
-        public float West;
+        public float East; // F32
+        public float North; // F32
+        public float South; // F32
+        public float West; // F32
     }
 
     public ParcelDivide() {
@@ -27,21 +38,22 @@ public class ParcelDivide extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDivide(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDivide(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -45);
+        // Message number: Low 211 (ParcelDivide).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xD3);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packFloat(byteBuffer, this.ParcelData_Field.West);
@@ -50,7 +62,7 @@ public class ParcelDivide extends SLMessage {
         packFloat(byteBuffer, this.ParcelData_Field.North);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

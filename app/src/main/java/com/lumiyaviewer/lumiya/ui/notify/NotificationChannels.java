@@ -8,11 +8,8 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class NotificationChannels {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f464x3582025 = null;
     public static final String MESSAGE_NOTIFICATION_GROUP = "messageNotifications";
     private final NotificationChannelManager channelManager;
 
@@ -32,12 +29,12 @@ public class NotificationChannels {
         @Nullable
         public final NotificationType notificationType;
 
-        Channel(String str, int i, @Nonnull int i2, NotificationType notificationType, int i3) {
-            this.channelId = str;
-            this.nameStringId = i;
-            this.descriptionStringId = i2;
+        Channel(String channelId, int nameStringId, @Nonnull int descriptionStringId, NotificationType notificationType, int notificationId) {
+            this.channelId = channelId;
+            this.nameStringId = nameStringId;
+            this.descriptionStringId = descriptionStringId;
             this.notificationType = notificationType;
-            this.notificationId = i3;
+            this.notificationId = notificationId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -51,28 +48,6 @@ public class NotificationChannels {
 
         private InstanceHolder() {
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m676xc4a7bd01() {
-        if (f464x3582025 != null) {
-            return f464x3582025;
-        }
-        int[] iArr = new int[NotificationType.valuesCustom().length];
-        try {
-            iArr[NotificationType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[NotificationType.LocalChat.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[NotificationType.Private.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f464x3582025 = iArr;
-        return iArr;
     }
 
     private NotificationChannels() {
@@ -92,12 +67,12 @@ public class NotificationChannels {
     }
 
     public Channel getChannelByType(@Nonnull NotificationType notificationType) {
-        switch (m676xc4a7bd01()[notificationType.ordinal()]) {
-            case 1:
+        switch (notificationType) {
+            case Group:
                 return Channel.Group;
-            case 2:
+            case LocalChat:
                 return Channel.Local;
-            case 3:
+            case Private:
                 return Channel.IM;
             default:
                 return null;

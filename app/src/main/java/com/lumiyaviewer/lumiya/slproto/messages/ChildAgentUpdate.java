@@ -1,7 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
@@ -10,7 +8,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Child Agent Update - agents send child agents to neighboring simulators.
+ * This will create a child camera if there isn't one at the target already
+ * Can't send viewer IP and port between simulators -- the port may get remapped
+ * if the viewer is behind a Network Address Translation (NAT) box.
+ * Note: some of the fields of this message really only need to be sent when an
+ * agent crosses a region boundary and changes from a child to a main agent
+ * (such as Head/BodyRotation, ControlFlags, Animations etc)
+ * simulator -> simulator
+ * reliable
+ *
+ * <p>Template: {@code ChildAgentUpdate High 25 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ChildAgentUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<GroupData> GroupData_Fields = new ArrayList<>();
@@ -21,65 +32,73 @@ public class ChildAgentUpdate extends SLMessage {
     public ArrayList<AgentAccess> AgentAccess_Fields = new ArrayList<>();
     public ArrayList<AgentInfo> AgentInfo_Fields = new ArrayList<>();
 
+    /** Block AgentAccess, Variable. */
     public static class AgentAccess {
-        public int AgentLegacyAccess;
-        public int AgentMaxAccess;
+        public int AgentLegacyAccess; // U8
+        public int AgentMaxAccess; // U8
     }
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID ActiveGroupID;
-        public int AgentAccess;
-        public UUID AgentID;
-        public LLVector3 AgentPos;
-        public byte[] AgentTextures;
-        public LLVector3 AgentVel;
-        public boolean AlwaysRun;
-        public float Aspect;
-        public LLVector3 AtAxis;
-        public LLQuaternion BodyRotation;
-        public LLVector3 Center;
-        public boolean ChangedGrid;
-        public int ControlFlags;
-        public float EnergyLevel;
-        public float Far;
-        public int GodLevel;
-        public LLQuaternion HeadRotation;
-        public LLVector3 LeftAxis;
-        public int LocomotionState;
-        public UUID PreyAgent;
-        public long RegionHandle;
-        public UUID SessionID;
-        public LLVector3 Size;
-        public byte[] Throttles;
-        public LLVector3 UpAxis;
-        public int ViewerCircuitCode;
+        public UUID ActiveGroupID; // LLUUID
+        public int AgentAccess; // U8
+        public UUID AgentID; // LLUUID
+        public LLVector3 AgentPos; // LLVector3
+        public byte[] AgentTextures; // Variable 2
+        public LLVector3 AgentVel; // LLVector3
+        public boolean AlwaysRun; // BOOL
+        public float Aspect; // F32
+        public LLVector3 AtAxis; // LLVector3
+        public LLQuaternion BodyRotation; // LLQuaternion
+        public LLVector3 Center; // LLVector3
+        public boolean ChangedGrid; // BOOL
+        public int ControlFlags; // U32
+        public float EnergyLevel; // F32
+        public float Far; // F32
+        public int GodLevel; // U8 - Changed from BOOL to U8, and renamed GodLevel (from Godlike)
+        public LLQuaternion HeadRotation; // LLQuaternion
+        public LLVector3 LeftAxis; // LLVector3
+        public int LocomotionState; // U32
+        public UUID PreyAgent; // LLUUID
+        public long RegionHandle; // U64
+        public UUID SessionID; // LLUUID
+        public LLVector3 Size; // LLVector3
+        public byte[] Throttles; // Variable 1
+        public LLVector3 UpAxis; // LLVector3
+        public int ViewerCircuitCode; // U32
     }
 
+    /** Block AgentInfo, Variable. */
     public static class AgentInfo {
-        public int Flags;
+        public int Flags; // U32
     }
 
+    /** Block AnimationData, Variable. */
     public static class AnimationData {
-        public UUID Animation;
-        public UUID ObjectID;
+        public UUID Animation; // LLUUID
+        public UUID ObjectID; // LLUUID
     }
 
+    /** Block GranterBlock, Variable. */
     public static class GranterBlock {
-        public UUID GranterID;
+        public UUID GranterID; // LLUUID
     }
 
+    /** Block GroupData, Variable. */
     public static class GroupData {
-        public boolean AcceptNotices;
-        public UUID GroupID;
-        public long GroupPowers;
+        public boolean AcceptNotices; // BOOL
+        public UUID GroupID; // LLUUID
+        public long GroupPowers; // U64
     }
 
+    /** Block NVPairData, Variable. */
     public static class NVPairData {
-        public byte[] NVPairs;
+        public byte[] NVPairs; // Variable 2
     }
 
+    /** Block VisualParam, Variable. */
     public static class VisualParam {
-        public int ParamValue;
+        public int ParamValue; // U8
     }
 
     public ChildAgentUpdate() {
@@ -87,27 +106,28 @@ public class ChildAgentUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.AgentData_Field.Throttles.length + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.length + 16 + 1 + 1 + (this.GroupData_Fields.size() * 25) + 1 + (this.AnimationData_Fields.size() * 32) + 1 + (this.GranterBlock_Fields.size() * 16) + 1;
         Iterator<?> it = this.NVPairData_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i + 1 + (this.VisualParam_Fields.size() * 1) + 1 + (this.AgentAccess_Fields.size() * 2) + 1 + (this.AgentInfo_Fields.size() * 4);
+                return length2 + 1 + (this.VisualParam_Fields.size() * 1) + 1 + (this.AgentAccess_Fields.size() * 2) + 1 + (this.AgentInfo_Fields.size() * 4);
             }
-            length = ((NVPairData) it.next()).NVPairs.length + 2 + i;
+            length = ((NVPairData) it.next()).NVPairs.length + 2 + length2;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.EM);
+        // Message number: High 25 (ChildAgentUpdate).
+        byteBuffer.put((byte) 0x19);
         packLong(byteBuffer, this.AgentData_Field.RegionHandle);
         packInt(byteBuffer, this.AgentData_Field.ViewerCircuitCode);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
@@ -151,14 +171,14 @@ public class ChildAgentUpdate extends SLMessage {
             packUUID(byteBuffer, ((GranterBlock) it.next()).GranterID);
         }
         byteBuffer.put((byte) this.NVPairData_Fields.size());
-        Iterator<?> it2 = this.NVPairData_Fields.iterator();
-        while (it2.hasNext()) {
-            packVariable(byteBuffer, ((NVPairData) it2.next()).NVPairs, 2);
+        Iterator<?> iterator = this.NVPairData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packVariable(byteBuffer, ((NVPairData) iterator.next()).NVPairs, 2);
         }
         byteBuffer.put((byte) this.VisualParam_Fields.size());
-        Iterator<?> it3 = this.VisualParam_Fields.iterator();
-        while (it3.hasNext()) {
-            packByte(byteBuffer, (byte) ((VisualParam) it3.next()).ParamValue);
+        Iterator<?> iterator2 = this.VisualParam_Fields.iterator();
+        while (iterator2.hasNext()) {
+            packByte(byteBuffer, (byte) ((VisualParam) iterator2.next()).ParamValue);
         }
         byteBuffer.put((byte) this.AgentAccess_Fields.size());
         for (AgentAccess agentAccess : this.AgentAccess_Fields) {
@@ -166,13 +186,13 @@ public class ChildAgentUpdate extends SLMessage {
             packByte(byteBuffer, (byte) agentAccess.AgentMaxAccess);
         }
         byteBuffer.put((byte) this.AgentInfo_Fields.size());
-        Iterator<?> it4 = this.AgentInfo_Fields.iterator();
-        while (it4.hasNext()) {
-            packInt(byteBuffer, ((AgentInfo) it4.next()).Flags);
+        Iterator<?> iterator3 = this.AgentInfo_Fields.iterator();
+        while (iterator3.hasNext()) {
+            packInt(byteBuffer, ((AgentInfo) iterator3.next()).Flags);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.RegionHandle = unpackLong(byteBuffer);
         this.AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer);
@@ -194,53 +214,53 @@ public class ChildAgentUpdate extends SLMessage {
         this.AgentData_Field.BodyRotation = unpackLLQuaternion(byteBuffer);
         this.AgentData_Field.ControlFlags = unpackInt(byteBuffer);
         this.AgentData_Field.EnergyLevel = unpackFloat(byteBuffer);
-        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.AlwaysRun = unpackBoolean(byteBuffer);
         this.AgentData_Field.PreyAgent = unpackUUID(byteBuffer);
-        this.AgentData_Field.AgentAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.AgentAccess = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.AgentTextures = unpackVariable(byteBuffer, 2);
         this.AgentData_Field.ActiveGroupID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             GroupData groupData = new GroupData();
             groupData.GroupID = unpackUUID(byteBuffer);
             groupData.GroupPowers = unpackLong(byteBuffer);
             groupData.AcceptNotices = unpackBoolean(byteBuffer);
             this.GroupData_Fields.add(groupData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             AnimationData animationData = new AnimationData();
             animationData.Animation = unpackUUID(byteBuffer);
             animationData.ObjectID = unpackUUID(byteBuffer);
             this.AnimationData_Fields.add(animationData);
         }
-        int i5 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i6 = 0; i6 < i5; i6++) {
+        int i5 = byteBuffer.get() & 0xFF;
+        for (int m = 0; m < i5; m++) {
             GranterBlock granterBlock = new GranterBlock();
             granterBlock.GranterID = unpackUUID(byteBuffer);
             this.GranterBlock_Fields.add(granterBlock);
         }
-        int i7 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i8 = 0; i8 < i7; i8++) {
-            NVPairData nVPairData = new NVPairData();
-            nVPairData.NVPairs = unpackVariable(byteBuffer, 2);
-            this.NVPairData_Fields.add(nVPairData);
+        int i7 = byteBuffer.get() & 0xFF;
+        for (int n = 0; n < i7; n++) {
+            NVPairData nvPairData = new NVPairData();
+            nvPairData.NVPairs = unpackVariable(byteBuffer, 2);
+            this.NVPairData_Fields.add(nvPairData);
         }
-        int i9 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i9 = byteBuffer.get() & 0xFF;
         for (int i10 = 0; i10 < i9; i10++) {
             VisualParam visualParam = new VisualParam();
-            visualParam.ParamValue = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            visualParam.ParamValue = unpackByte(byteBuffer) & 0xFF;
             this.VisualParam_Fields.add(visualParam);
         }
-        int i11 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i11 = byteBuffer.get() & 0xFF;
         for (int i12 = 0; i12 < i11; i12++) {
             AgentAccess agentAccess = new AgentAccess();
-            agentAccess.AgentLegacyAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            agentAccess.AgentMaxAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            agentAccess.AgentLegacyAccess = unpackByte(byteBuffer) & 0xFF;
+            agentAccess.AgentMaxAccess = unpackByte(byteBuffer) & 0xFF;
             this.AgentAccess_Fields.add(agentAccess);
         }
-        int i13 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i13 = byteBuffer.get() & 0xFF;
         for (int i14 = 0; i14 < i13; i14++) {
             AgentInfo agentInfo = new AgentInfo();
             agentInfo.Flags = unpackInt(byteBuffer);

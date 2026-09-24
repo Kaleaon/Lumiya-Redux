@@ -4,7 +4,6 @@ import android.os.Bundle;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LogChatMessage implements Bundleable {
     public final String chatterName;
     public final int chatterType;
@@ -14,12 +13,12 @@ public class LogChatMessage implements Bundleable {
     public final long messageID;
     public final String messageText;
 
-    public LogChatMessage(int i, @Nullable UUID uuid, long j, String str, String str2) {
-        this.chatterType = i;
+    public LogChatMessage(int chatterType, @Nullable UUID uuid, long messageID, String chatterName, String messageText) {
+        this.chatterType = chatterType;
         this.chatterUUID = uuid;
-        this.messageID = j;
-        this.chatterName = str;
-        this.messageText = str2;
+        this.messageID = messageID;
+        this.chatterName = chatterName;
+        this.messageText = messageText;
     }
 
     public LogChatMessage(Bundle bundle) {
@@ -30,7 +29,7 @@ public class LogChatMessage implements Bundleable {
         this.messageText = bundle.getString("messageText");
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("chatterType", this.chatterType);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.baker;
 
-import androidx.core.view.ViewCompat;
 
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;
@@ -12,11 +11,8 @@ import com.lumiyaviewer.lumiya.slproto.baker.BakeProcess;
 import java.io.InputStream;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class BakeLayer {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f64x335e3db9 = null;
     public int fixedColor;
     public SLAvatarGlobalColor globalColor;
     public boolean hasFixedColor;
@@ -30,72 +26,50 @@ public class BakeLayer {
     public boolean visibilityMask;
     public boolean writeAllChannels;
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m148x403ad495() {
-        if (f64x335e3db9 != null) {
-            return f64x335e3db9;
-        }
-        int[] iArr = new int[SLAvatarParamColor.ColorOperation.valuesCustom().length];
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Blend.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Default.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLAvatarParamColor.ColorOperation.Multiply.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f64x335e3db9 = iArr;
-        return iArr;
-    }
-
-    public BakeLayer(String str, SLAvatarGlobalColor sLAvatarGlobalColor, boolean z, int i, boolean z2, boolean z3, boolean z4, AvatarTextureFaceIndex avatarTextureFaceIndex, boolean z5, String str2, boolean z6, int[] iArr) {
-        this.layerName = str;
-        this.globalColor = sLAvatarGlobalColor;
-        this.hasFixedColor = z;
-        this.fixedColor = i;
-        this.isRenderPassBump = z2;
-        this.visibilityMask = z3;
-        this.writeAllChannels = z4;
+    public BakeLayer(String layerName, SLAvatarGlobalColor avatarGlobalColor, boolean hasFixedColor, int fixedColor, boolean isRenderPassBump, boolean visibilityMask, boolean writeAllChannels, AvatarTextureFaceIndex avatarTextureFaceIndex, boolean localTextureAlphaOnly, String tgaTexture, boolean tgaFileIsMask, int[] ints) {
+        this.layerName = layerName;
+        this.globalColor = avatarGlobalColor;
+        this.hasFixedColor = hasFixedColor;
+        this.fixedColor = fixedColor;
+        this.isRenderPassBump = isRenderPassBump;
+        this.visibilityMask = visibilityMask;
+        this.writeAllChannels = writeAllChannels;
         this.localTexture = avatarTextureFaceIndex;
-        this.localTextureAlphaOnly = z5;
-        this.tgaTexture = str2;
-        this.tgaFileIsMask = z6;
-        this.paramIDs = iArr;
+        this.localTextureAlphaOnly = localTextureAlphaOnly;
+        this.tgaTexture = tgaTexture;
+        this.tgaFileIsMask = tgaFileIsMask;
+        this.paramIDs = ints;
     }
 
-    private int getColorByParamList(BakeProcess bakeProcess, int[] iArr, int i, int i2) {
+    private int getColorByParamList(BakeProcess bakeProcess, int[] ints, int i, int i2) {
         SLAvatarParams.AvatarParam avatarParam;
-        SLAvatarParamColor sLAvatarParamColor;
+        SLAvatarParamColor paramColor;
         int colorAdd;
         boolean z = false;
         if (this.layerName.equals("lipstick")) {
             Debug.Log(String.format("Baking: lipstick start color %08x default %08x", Integer.valueOf(i), Integer.valueOf(i2)));
         }
-        int length = iArr.length;
+        int length = ints.length;
         int i3 = 0;
         int i4 = i;
         while (i3 < length) {
-            int i5 = iArr[i3];
+            int i5 = ints[i3];
             SLAvatarParams.ParamSet paramSet = SLAvatarParams.paramByIDs.get(Integer.valueOf(i5));
-            if (paramSet != null && (sLAvatarParamColor = (avatarParam = paramSet.params.get(0)).paramColor) != null) {
+            if (paramSet != null && (paramColor = (avatarParam = paramSet.params.get(0)).paramColor) != null) {
                 z = true;
                 float paramWeight = bakeProcess.getParamWeight(i5, avatarParam);
-                int color = sLAvatarParamColor.getColor(paramWeight);
+                int color = paramColor.getColor(paramWeight);
                 if (this.layerName.equals("lipstick")) {
                     Debug.Log(String.format("Baking: lipstick color param weight %ff color %08x", Float.valueOf(paramWeight), Integer.valueOf(color)));
                 }
-                switch (m148x403ad495()[sLAvatarParamColor.colorOperation.ordinal()]) {
-                    case 1:
+                switch (paramColor.colorOperation) {
+                    case Blend:
                         colorAdd = SLAvatarParamColor.colorLerp(i4, color, paramWeight);
                         break;
-                    case 2:
+                    case Default:
                         colorAdd = SLAvatarParamColor.colorAdd(i4, color);
                         break;
-                    case 3:
+                    case Multiply:
                         colorAdd = SLAvatarParamColor.colorMult(i4, color);
                         break;
                     default:
@@ -117,15 +91,15 @@ public class BakeLayer {
 
     private int getNetColor(BakeProcess bakeProcess) {
         boolean z;
-        int[] iArr = this.paramIDs;
-        int length = iArr.length;
+        int[] paramIDs = this.paramIDs;
+        int length = paramIDs.length;
         int i = 0;
         while (true) {
             if (i >= length) {
                 z = false;
                 break;
             }
-            SLAvatarParams.ParamSet paramSet = SLAvatarParams.paramByIDs.get(Integer.valueOf(iArr[i]));
+            SLAvatarParams.ParamSet paramSet = SLAvatarParams.paramByIDs.get(Integer.valueOf(paramIDs[i]));
             if (paramSet != null && paramSet.params.get(0).paramColor != null) {
                 z = true;
                 break;
@@ -162,15 +136,15 @@ public class BakeLayer {
         boolean z6 = false;
         int netColor = getNetColor(bakeProcess);
         OpenJPEG openJPEG2 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, 0);
-        OpenJPEG openJPEG3 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, ViewCompat.MEASURED_STATE_MASK);
+        OpenJPEG openJPEG3 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, 0xFF000000);
         Debug.Log(String.format("Baking: layer %s net_color 0x%08x.", this.layerName, Integer.valueOf(netColor)));
         boolean z7 = true;
         boolean z8 = false;
-        int[] iArr = this.paramIDs;
-        int length = iArr.length;
+        int[] paramIDs = this.paramIDs;
+        int length = paramIDs.length;
         int i = 0;
         while (i < length) {
-            int i2 = iArr[i];
+            int i2 = paramIDs[i];
             z4 = z8;
             SLAvatarParams.ParamSet paramSet = SLAvatarParams.paramByIDs.get(Integer.valueOf(i2));
             if (paramSet != null) {
@@ -192,12 +166,10 @@ public class BakeLayer {
                         z7 = z5;
                     } else {
                         boolean z9 = z8 | avatarParam.paramAlpha.multiplyBlend;
-                        try {
-                            InputStream inputStreamOpen = LumiyaApp.getAssetManager().open("tga/" + avatarParam.paramAlpha.tgaFile);
-                            OpenJPEG openJPEG4 = new OpenJPEG(inputStreamOpen, OpenJPEG.ImageFormat.TGA, true, true, avatarParam.paramAlpha.domain, paramWeight, false);
+                        try (InputStream inputStream = LumiyaApp.getAssetManager().open("tga/" + avatarParam.paramAlpha.tgaFile)) {  // closed even if decoding fails (3.4.2 leaked it)
+                            OpenJPEG openJPEG4 = new OpenJPEG(inputStream, OpenJPEG.ImageFormat.TGA, true, true, avatarParam.paramAlpha.domain, paramWeight, false);
                             Debug.Log(String.format("Baking: layer %s: applying alpha (weight %f domain %f) mask texture %s, width %d, height %d, num_comps %d", this.layerName, Float.valueOf(paramWeight), Float.valueOf(avatarParam.paramAlpha.domain), avatarParam.paramAlpha.tgaFile, Integer.valueOf(openJPEG4.getWidth()), Integer.valueOf(openJPEG4.getHeight()), Integer.valueOf(openJPEG4.getNumComponents())));
                             openJPEG3.blendAlpha(openJPEG4, !avatarParam.paramAlpha.multiplyBlend);
-                            inputStreamOpen.close();
                             z4 = z9;
                             z7 = z5;
                         } catch (Exception e) {
@@ -236,13 +208,11 @@ public class BakeLayer {
             }
         }
         if (this.tgaTexture != null) {
-            try {
-                InputStream inputStreamOpen2 = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture);
-                OpenJPEG openJPEG6 = new OpenJPEG(inputStreamOpen2, OpenJPEG.ImageFormat.TGA, this.tgaFileIsMask, false, 0.0f, 0.0f, false);
+            try (InputStream inputStream2 = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture)) {  // closed even if decoding fails (3.4.2 leaked it)
+                OpenJPEG openJPEG6 = new OpenJPEG(inputStream2, OpenJPEG.ImageFormat.TGA, this.tgaFileIsMask, false, 0.0f, 0.0f, false);
                 Debug.Log(String.format("Baking: layer %s: applying tga texture %s, writeAllChannels %s, width %d, height %d, num_comps %d", this.layerName, this.tgaTexture, Boolean.valueOf(this.writeAllChannels), Integer.valueOf(openJPEG6.getWidth()), Integer.valueOf(openJPEG6.getHeight()), Integer.valueOf(openJPEG6.getNumComponents())));
                 openJPEG2.draw(openJPEG6, -1, false);
                 z2 = true;
-                inputStreamOpen2.close();
             } catch (Exception e4) {
                 e4.printStackTrace();
             }
@@ -269,12 +239,10 @@ public class BakeLayer {
             return;
         }
         if (this.tgaTexture != null) {
-            try {
-                InputStream open = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture);
+            try (InputStream open = LumiyaApp.getAssetManager().open("tga/" + this.tgaTexture)) {  // closed even if decoding fails (3.4.2 leaked it)
                 OpenJPEG openJPEG2 = new OpenJPEG(open, OpenJPEG.ImageFormat.TGA, this.tgaFileIsMask, false, 0.0f, 0.0f, false);
                 Debug.Log(String.format("Baking: layer %s: applying tga alpha mask %swidth %d, height %d, num_comps %d", this.layerName, this.tgaTexture, Integer.valueOf(openJPEG2.getWidth()), Integer.valueOf(openJPEG2.getHeight()), Integer.valueOf(openJPEG2.getNumComponents())));
                 openJPEG.blendAlpha(openJPEG2, false);
-                open.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

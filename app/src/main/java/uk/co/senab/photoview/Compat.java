@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 
-/* loaded from: classes.dex */
 public class Compat {
     private static final int SIXTY_FPS_INTERVAL = 16;
 
@@ -14,12 +13,12 @@ public class Compat {
 
     @TargetApi(5)
     private static int getPointerIndexEclair(int i) {
-        return (65280 & i) >> 8;
+        return (0xFF00 & i) >> 8;
     }
 
     @TargetApi(11)
     private static int getPointerIndexHoneyComb(int i) {
-        return (65280 & i) >> 8;
+        return (0xFF00 & i) >> 8;
     }
 
     public static void postOnAnimation(View view, Runnable runnable) {

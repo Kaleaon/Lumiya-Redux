@@ -7,11 +7,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class ChatMessageSource {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f151xbd9aa5ff = null;
 
     public enum ChatMessageSourceType {
         Unknown,
@@ -28,48 +24,18 @@ public abstract class ChatMessageSource {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-chatsrc-ChatMessageSource$ChatMessageSourceTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m278x84fb14a3() {
-        if (f151xbd9aa5ff != null) {
-            return f151xbd9aa5ff;
-        }
-        int[] iArr = new int[ChatMessageSourceType.valuesCustom().length];
-        try {
-            iArr[ChatMessageSourceType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatMessageSourceType.Object.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatMessageSourceType.System.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[ChatMessageSourceType.Unknown.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[ChatMessageSourceType.User.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        f151xbd9aa5ff = iArr;
-        return iArr;
-    }
-
     @Nonnull
     public static ChatMessageSource loadFrom(@Nonnull ChatMessage chatMessage) {
-        switch (m278x84fb14a3()[ChatMessageSourceType.VALUES[chatMessage.getSenderType().intValue()].ordinal()]) {
-            case 1:
+        switch (ChatMessageSourceType.VALUES[chatMessage.getSenderType().intValue()]) {
+            case Group:
                 return new ChatMessageSourceGroup(chatMessage);
-            case 2:
+            case Object:
                 return new ChatMessageSourceObject(chatMessage);
-            case 3:
+            case System:
                 return new ChatMessageSourceSystem();
-            case 4:
+            case Unknown:
                 return ChatMessageSourceUnknown.getInstance();
-            case 5:
+            case User:
                 return new ChatMessageSourceUser(chatMessage);
             default:
                 throw new IllegalArgumentException("Unknown message type");

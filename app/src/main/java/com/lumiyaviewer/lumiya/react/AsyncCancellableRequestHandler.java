@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class AsyncCancellableRequestHandler<K> implements RequestHandler<K> {
 
     @Nonnull
@@ -25,28 +24,28 @@ public class AsyncCancellableRequestHandler<K> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncCancellableRequestHandler_993, reason: not valid java name */
-    /* synthetic */ void m26x869f759f(K obj) {
+    /* synthetic */ void m26x869f759f(K k) {
         try {
-            this.baseHandler.onRequest(obj);
+            this.baseHandler.onRequest(k);
             synchronized (this.lock) {
-                this.activeRequests.remove(obj);
+                this.activeRequests.remove(k);
             }
         } catch (Throwable th) {
             synchronized (this.lock) {
-                this.activeRequests.remove(obj);
+                this.activeRequests.remove(k);
                 throw th;
             }
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final K k) {
         synchronized (this.lock) {
             this.activeRequests.put(k, this.executor.submit(() -> m26x869f759f(k)));
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull K k) {
         synchronized (this.lock) {
             Future<?> remove = this.activeRequests.remove(k);

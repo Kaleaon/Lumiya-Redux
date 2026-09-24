@@ -1,36 +1,47 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GodUpdateRegionInfo
+ * Sent from viewer to sim after a god has changed some
+ * of the parameters in the god tools floater
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code GodUpdateRegionInfo Low 143 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GodUpdateRegionInfo extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<RegionInfo2> RegionInfo2_Fields = new ArrayList<>();
     public RegionInfo RegionInfo_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RegionInfo, Single. */
     public static class RegionInfo {
-        public float BillableFactor;
-        public int EstateID;
-        public int ParentEstateID;
-        public int PricePerMeter;
-        public int RedirectGridX;
-        public int RedirectGridY;
-        public int RegionFlags;
-        public byte[] SimName;
+        public float BillableFactor; // F32
+        public int EstateID; // U32
+        public int ParentEstateID; // U32
+        public int PricePerMeter; // S32
+        public int RedirectGridX; // S32
+        public int RedirectGridY; // S32
+        public int RegionFlags; // U32
+        public byte[] SimName; // Variable 1 - string
     }
 
+    /** Block RegionInfo2, Variable. */
     public static class RegionInfo2 {
-        public long RegionFlagsExtended;
+        public long RegionFlagsExtended; // U64
     }
 
     public GodUpdateRegionInfo() {
@@ -39,21 +50,22 @@ public class GodUpdateRegionInfo extends SLMessage {
         this.RegionInfo_Field = new RegionInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.RegionInfo_Field.SimName.length + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 36 + 1 + (this.RegionInfo2_Fields.size() * 8);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGodUpdateRegionInfo(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGodUpdateRegionInfo(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -113);
+        // Message number: Low 143 (GodUpdateRegionInfo).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x8F);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packVariable(byteBuffer, this.RegionInfo_Field.SimName, 1);
@@ -71,7 +83,7 @@ public class GodUpdateRegionInfo extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
@@ -83,8 +95,8 @@ public class GodUpdateRegionInfo extends SLMessage {
         this.RegionInfo_Field.PricePerMeter = unpackInt(byteBuffer);
         this.RegionInfo_Field.RedirectGridX = unpackInt(byteBuffer);
         this.RegionInfo_Field.RedirectGridY = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             RegionInfo2 regionInfo2 = new RegionInfo2();
             regionInfo2.RegionFlagsExtended = unpackLong(byteBuffer);
             this.RegionInfo2_Fields.add(regionInfo2);

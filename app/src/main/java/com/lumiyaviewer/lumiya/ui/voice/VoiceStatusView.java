@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import androidx.core.content.ContextCompat;
 import androidx.cardview.widget.CardView;
 import android.util.AttributeSet;
@@ -44,14 +43,7 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceStatusView extends FrameLayout {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-voice-common-model-VoiceBluetoothStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f606xccb18979 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-voice-common-model-VoiceChatInfo$VoiceChatStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f607xfb1ca037 = null;
 
     @Nullable
     private ChatterID activeChatterID;
@@ -114,80 +106,24 @@ public class VoiceStatusView extends FrameLayout {
     ImageButton voiceTerminateButton;
     private final SeekBar.OnSeekBarChangeListener volumeChangeListener;
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-model-VoiceBluetoothStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m874xc8b7c355() {
-        if (f606xccb18979 != null) {
-            return f606xccb18979;
-        }
-        int[] iArr = new int[VoiceBluetoothState.values().length];
-        try {
-            iArr[VoiceBluetoothState.Active.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Connected.ordinal()] = 6;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Disconnected.ordinal()] = 7;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[VoiceBluetoothState.Error.ordinal()] = 8;
-        } catch (NoSuchFieldError e5) {
-        }
-        f606xccb18979 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-model-VoiceChatInfo$VoiceChatStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m875x6f23bddb() {
-        if (f607xfb1ca037 != null) {
-            return f607xfb1ca037;
-        }
-        int[] iArr = new int[VoiceChatInfo.VoiceChatState.values().length];
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Active.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Connecting.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.None.ordinal()] = 6;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[VoiceChatInfo.VoiceChatState.Ringing.ordinal()] = 3;
-        } catch (NoSuchFieldError e4) {
-        }
-        f607xfb1ca037 = iArr;
-        return iArr;
-    }
-
     public VoiceStatusView(Context context) {
         super(context);
-        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.1
+        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.2
+        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -201,8 +137,8 @@ public class VoiceStatusView extends FrameLayout {
         this.hoverEnabled = false;
         this.onCallButtonListener = null;
         this.updatingAudioVolume = false;
-        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView.1
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
                 VoicePluginServiceConnection voicePluginServiceConnection;
                 if (z && (!VoiceStatusView.this.updatingAudioVolume)) {
@@ -215,20 +151,20 @@ public class VoiceStatusView extends FrameLayout {
                 }
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         };
-        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.9
+        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoiceStatusView.this.m879lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_24065(chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -239,22 +175,22 @@ public class VoiceStatusView extends FrameLayout {
 
     public VoiceStatusView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.3
+        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.4
+        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -268,8 +204,8 @@ public class VoiceStatusView extends FrameLayout {
         this.hoverEnabled = false;
         this.onCallButtonListener = null;
         this.updatingAudioVolume = false;
-        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView.1
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
                 VoicePluginServiceConnection voicePluginServiceConnection;
                 if (z && (!VoiceStatusView.this.updatingAudioVolume)) {
@@ -282,20 +218,20 @@ public class VoiceStatusView extends FrameLayout {
                 }
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         };
-        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.10
+        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoiceStatusView.this.m879lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_24065(chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -306,22 +242,22 @@ public class VoiceStatusView extends FrameLayout {
 
     public VoiceStatusView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.5
+        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.6
+        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -335,8 +271,8 @@ public class VoiceStatusView extends FrameLayout {
         this.hoverEnabled = false;
         this.onCallButtonListener = null;
         this.updatingAudioVolume = false;
-        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView.1
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onProgressChanged(SeekBar seekBar, int i2, boolean z) {
                 VoicePluginServiceConnection voicePluginServiceConnection;
                 if (z && (!VoiceStatusView.this.updatingAudioVolume)) {
@@ -349,20 +285,20 @@ public class VoiceStatusView extends FrameLayout {
                 }
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         };
-        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.11
+        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoiceStatusView.this.m879lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_24065(chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -374,22 +310,22 @@ public class VoiceStatusView extends FrameLayout {
     @TargetApi(21)
     public VoiceStatusView(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
-        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.7
+        this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.8
+        this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -403,8 +339,8 @@ public class VoiceStatusView extends FrameLayout {
         this.hoverEnabled = false;
         this.onCallButtonListener = null;
         this.updatingAudioVolume = false;
-        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView.1
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+        this.volumeChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onProgressChanged(SeekBar seekBar, int i22, boolean z) {
                 VoicePluginServiceConnection voicePluginServiceConnection;
                 if (z && (!VoiceStatusView.this.updatingAudioVolume)) {
@@ -417,20 +353,20 @@ public class VoiceStatusView extends FrameLayout {
                 }
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            @Override // android.widget.SeekBar.OnSeekBarChangeListener
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         };
-        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.12
+        this.onActiveSpeakerNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoiceStatusView.this.m879lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_24065(chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -461,18 +397,14 @@ public class VoiceStatusView extends FrameLayout {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceAudioProperties, reason: merged with bridge method [inline-methods] */
-    public void m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0(VoiceAudioProperties voiceAudioProperties) {
+    public void onVoiceAudioProperties(VoiceAudioProperties voiceAudioProperties) {
         Object[] objArr = new Object[1];
         objArr[0] = voiceAudioProperties != null ? voiceAudioProperties.bluetoothState : null;
         Debug.Printf("Voice: voice audio properties updated, bluetooth state %s", objArr);
         updateVoiceState();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
         updateVoiceState();
     }
 
@@ -484,37 +416,37 @@ public class VoiceStatusView extends FrameLayout {
         VoiceChatInfo data = this.voiceChatInfo.getData();
         Debug.Printf("VoiceStatusView: voice state %s", data);
         if (data == null || !(!data.state.equals(VoiceChatInfo.VoiceChatState.None))) {
-            this.voiceStatusControls.setVisibility(8);
+            this.voiceStatusControls.setVisibility(View.GONE);
             if (this.showWhenInactive) {
-                setVisibility(0);
+                setVisibility(View.VISIBLE);
                 this.voiceStatusText.setText(R.string.voice_not_connected);
                 if (this.canConnect) {
                     this.voiceStatusSmallText.setText(R.string.voice_tap_to_connect);
-                    this.voiceStatusSmallText.setVisibility(0);
+                    this.voiceStatusSmallText.setVisibility(View.VISIBLE);
                 } else {
-                    this.voiceStatusSmallText.setVisibility(8);
+                    this.voiceStatusSmallText.setVisibility(View.GONE);
                 }
-                this.voiceSpeakIndicatorLeft.setVisibility(4);
-                this.voiceSpeakIndicatorRight.setVisibility(4);
-                this.voiceTerminateButton.setVisibility(4);
-                this.voiceMicOnButton.setVisibility(4);
-                this.voiceMicOffButton.setVisibility(4);
-                this.voiceAnswerButton.setVisibility(this.canConnect ? 0 : 4);
+                this.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
+                this.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
+                this.voiceTerminateButton.setVisibility(View.INVISIBLE);
+                this.voiceMicOnButton.setVisibility(View.INVISIBLE);
+                this.voiceMicOffButton.setVisibility(View.INVISIBLE);
+                this.voiceAnswerButton.setVisibility(this.canConnect ? View.VISIBLE : View.INVISIBLE);
             } else {
-                setVisibility(8);
+                setVisibility(View.GONE);
             }
             chatterIDUser = null;
         } else {
-            setVisibility(0);
-            this.voiceTerminateButton.setVisibility(0);
+            setVisibility(View.VISIBLE);
+            this.voiceTerminateButton.setVisibility(View.VISIBLE);
             boolean z = data.state == VoiceChatInfo.VoiceChatState.Active;
-            this.voiceMicOnButton.setVisibility((z && data.localMicActive) ? 0 : 4);
-            this.voiceMicOffButton.setVisibility((z && (data.localMicActive ^ true)) ? 0 : 4);
-            this.voiceAnswerButton.setVisibility(data.state == VoiceChatInfo.VoiceChatState.Ringing ? 0 : 4);
+            this.voiceMicOnButton.setVisibility((z && data.localMicActive) ? View.VISIBLE : View.INVISIBLE);
+            this.voiceMicOffButton.setVisibility((z && (data.localMicActive ^ true)) ? View.VISIBLE : View.INVISIBLE);
+            this.voiceAnswerButton.setVisibility(data.state == VoiceChatInfo.VoiceChatState.Ringing ? View.VISIBLE : View.INVISIBLE);
             if (data.state == VoiceChatInfo.VoiceChatState.Active && data.numActiveSpeakers != 0) {
                 if (this.voiceSpeakIndicatorLeft.getVisibility() != 0 || this.voiceSpeakIndicatorRight.getVisibility() != 0) {
-                    this.voiceSpeakIndicatorLeft.setVisibility(0);
-                    this.voiceSpeakIndicatorRight.setVisibility(0);
+                    this.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
+                    this.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
                     Drawable drawable = this.voiceSpeakIndicatorLeft.getDrawable();
                     if (drawable instanceof AnimationDrawable) {
                         ((AnimationDrawable) drawable).start();
@@ -540,19 +472,19 @@ public class VoiceStatusView extends FrameLayout {
                     str = data.numActiveSpeakers != 1 ? getContext().getString(R.string.speakers_speaking, Integer.valueOf(data.numActiveSpeakers)) : null;
                 }
             } else if (data.state == VoiceChatInfo.VoiceChatState.Ringing) {
-                this.voiceSpeakIndicatorLeft.setVisibility(0);
-                this.voiceSpeakIndicatorRight.setVisibility(0);
+                this.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
+                this.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
                 str = null;
                 chatterIDUser2 = null;
             } else {
-                this.voiceSpeakIndicatorLeft.setVisibility(4);
-                this.voiceSpeakIndicatorRight.setVisibility(4);
+                this.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
+                this.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
                 str = null;
                 chatterIDUser2 = null;
             }
             if (str == null) {
-                switch (m875x6f23bddb()[data.state.ordinal()]) {
-                    case 1:
+                switch (data.state) {
+                    case Active:
                         if (!data.localMicActive) {
                             str = getContext().getString(R.string.voice_status_tap_mic);
                             break;
@@ -560,29 +492,29 @@ public class VoiceStatusView extends FrameLayout {
                             str = getContext().getString(R.string.voice_status_speak_now);
                             break;
                         }
-                    case 2:
+                    case Connecting:
                         str = getContext().getString(R.string.voice_status_connecting);
                         break;
-                    case 3:
+                    case Ringing:
                         str = getContext().getString(R.string.voice_status_ringing);
                         break;
                 }
             }
             String resolvedName = this.showActiveChatterName ? this.activeChatterNameRetriever != null ? this.activeChatterNameRetriever.getResolvedName() : null : null;
             if (resolvedName != null) {
-                this.voiceStatusSmallText.setVisibility(0);
+                this.voiceStatusSmallText.setVisibility(View.VISIBLE);
                 this.voiceStatusText.setText(resolvedName);
                 this.voiceStatusSmallText.setText(str);
                 chatterIDUser = chatterIDUser2;
             } else {
                 this.voiceStatusSmallText.setText((CharSequence) null);
                 this.voiceStatusText.setText(str);
-                this.voiceStatusSmallText.setVisibility(8);
+                this.voiceStatusSmallText.setVisibility(View.GONE);
                 if (data.state != VoiceChatInfo.VoiceChatState.Active) {
                     chatterIDUser = chatterIDUser2;
                 } else if (data.localMicActive) {
                     this.voiceStatusSmallText.setText(R.string.tap_for_audio_controls);
-                    this.voiceStatusSmallText.setVisibility(0);
+                    this.voiceStatusSmallText.setVisibility(View.VISIBLE);
                     chatterIDUser = chatterIDUser2;
                 } else {
                     chatterIDUser = chatterIDUser2;
@@ -605,14 +537,14 @@ public class VoiceStatusView extends FrameLayout {
                 this.speakerNameRetriever = null;
             }
         }
-        VoiceAudioProperties data2 = this.voiceAudioProperties.getData();
-        if (data2 != null) {
+        VoiceAudioProperties voiceAudioProperties = this.voiceAudioProperties.getData();
+        if (voiceAudioProperties != null) {
             Drawable[] compoundDrawables = this.voiceBluetoothButton.getCompoundDrawables();
-            switch (m874xc8b7c355()[data2.bluetoothState.ordinal()]) {
-                case 1:
+            switch (voiceAudioProperties.bluetoothState) {
+                case Active:
                     i = R.drawable.active_button_underline;
                     break;
-                case 2:
+                case Connecting:
                     i = R.drawable.yellow_button_underline;
                     break;
                 default:
@@ -620,9 +552,9 @@ public class VoiceStatusView extends FrameLayout {
                     break;
             }
             this.voiceBluetoothButton.setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), i));
-            this.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(this.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), data2.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
+            this.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(this.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), voiceAudioProperties.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
             this.updatingAudioVolume = true;
-            this.voiceSpeakerVolumeControl.setProgress(Math.round(data2.speakerVolume * this.voiceSpeakerVolumeControl.getMax()));
+            this.voiceSpeakerVolumeControl.setProgress(Math.round(voiceAudioProperties.speakerVolume * this.voiceSpeakerVolumeControl.getMax()));
             this.updatingAudioVolume = false;
         }
     }
@@ -638,17 +570,17 @@ public class VoiceStatusView extends FrameLayout {
 
     public void enableHover(final OnHoverListenerCompat onHoverListenerCompat) {
         this.hoverEnabled = true;
-        View.OnHoverListener onHoverListener = new View.OnHoverListener() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8
+        View.OnHoverListener onHoverListener = new View.OnHoverListener() {
             private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
                 return VoiceStatusView.m876lambda$com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_6407((OnHoverListenerCompat) onHoverListenerCompat, view, motionEvent);
             }
 
-            @Override // android.view.View.OnHoverListener
+            @Override
             public final boolean onHover(View view, MotionEvent motionEvent) {
                 return $m$0(view, motionEvent);
             }
         };
-        int applyDimension = (int) TypedValue.applyDimension(1, 14.0f, getResources().getDisplayMetrics());
+        int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14.0f, getResources().getDisplayMetrics());
         TypedArray obtainStyledAttributes = getContext().obtainStyledAttributes(new int[]{R.attr.buttonShapeMoveControl});
         for (ImageButton imageButton : new ImageButton[]{this.voiceAnswerButton, this.voiceTerminateButton, this.voiceMicOnButton, this.voiceMicOffButton}) {
             imageButton.setOnHoverListener(onHoverListener);
@@ -729,10 +661,10 @@ public class VoiceStatusView extends FrameLayout {
     public void onVoiceStatusCardClick() {
         if (this.voiceStatusControls != null) {
             if (this.voiceStatusControls.getVisibility() == 0) {
-                this.voiceStatusControls.setVisibility(8);
+                this.voiceStatusControls.setVisibility(View.GONE);
                 return;
             }
-            this.voiceStatusControls.setVisibility(0);
+            this.voiceStatusControls.setVisibility(View.VISIBLE);
             this.voiceStatusControls.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.expand_vertically));
         }
     }
@@ -746,8 +678,8 @@ public class VoiceStatusView extends FrameLayout {
         serviceInstance.terminateVoiceCall(this.chatterID);
     }
 
-    public void setCanConnect(boolean z) {
-        this.canConnect = z;
+    public void setCanConnect(boolean canConnect) {
+        this.canConnect = canConnect;
         updateVoiceState();
     }
 
@@ -799,13 +731,13 @@ public class VoiceStatusView extends FrameLayout {
         this.onCallButtonListener = onClickListener;
     }
 
-    public void setShowActiveChatterName(boolean z) {
-        this.showActiveChatterName = z;
+    public void setShowActiveChatterName(boolean showActiveChatterName) {
+        this.showActiveChatterName = showActiveChatterName;
         updateVoiceState();
     }
 
-    public void setShowWhenInactive(boolean z) {
-        this.showWhenInactive = z;
+    public void setShowWhenInactive(boolean showWhenInactive) {
+        this.showWhenInactive = showWhenInactive;
         updateVoiceState();
     }
 }

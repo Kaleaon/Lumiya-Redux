@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render;
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
-import androidx.core.view.InputDeviceCompat;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
@@ -18,7 +17,6 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 
 @SuppressLint({"InlinedApi"})
-/* loaded from: classes.dex */
 public class WindlightSky {
     private static final int NumStars = 500;
     private static final int SKY_INDEX_BUFFER = 1;
@@ -39,15 +37,15 @@ public class WindlightSky {
     private ShortBuffer starsIndices = ShortBuffer.allocate(500);
 
     public WindlightSky(RenderContext renderContext) {
-        LLVector3 lLVector3 = new LLVector3();
+        LLVector3 vector3 = new LLVector3();
         for (int i = 0; i < 500; i++) {
-            lLVector3.set(StarsRadius, 0.0f, 0.0f);
-            LLQuaternion lLQuaternion = new LLQuaternion((((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f);
-            lLQuaternion.normalize();
-            lLVector3.mul(lLQuaternion);
-            this.starsCoords.put(lLVector3.x);
-            this.starsCoords.put(lLVector3.y);
-            this.starsCoords.put(lLVector3.z);
+            vector3.set(StarsRadius, 0.0f, 0.0f);
+            LLQuaternion quaternion = new LLQuaternion((((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f, (((float) Math.random()) * 2.0f) - 1.0f);
+            quaternion.normalize();
+            vector3.mul(quaternion);
+            this.starsCoords.put(vector3.x);
+            this.starsCoords.put(vector3.y);
+            this.starsCoords.put(vector3.z);
             this.starsIndices.put((short) i);
         }
         if (renderContext.skyProgram.hasCloudsTexture()) {
@@ -56,14 +54,14 @@ public class WindlightSky {
             this.cloudsTexture = null;
         }
         FloatBuffer wrap = FloatBuffer.wrap(icosahedronVertices);
-        ShortBuffer wrap2 = ShortBuffer.wrap(icosahedronIndices);
-        for (int i2 = 0; i2 < this.buffers.length; i2++) {
-            this.buffers[i2] = new GLBuffer(renderContext.glResourceManager, null);
+        ShortBuffer shortBuffer = ShortBuffer.wrap(icosahedronIndices);
+        for (int j = 0; j < this.buffers.length; j++) {
+            this.buffers[j] = new GLBuffer(renderContext.glResourceManager, null);
         }
         GLES20.glBindBuffer(34962, this.buffers[0].handle);
         GLES20.glBufferData(34962, icosahedronVertices.length * 4, wrap.position(0), 35044);
         GLES20.glBindBuffer(34963, this.buffers[1].handle);
-        GLES20.glBufferData(34963, icosahedronIndices.length * 2, wrap2.position(0), 35044);
+        GLES20.glBufferData(34963, icosahedronIndices.length * 2, shortBuffer.position(0), 35044);
         GLES20.glUseProgram(renderContext.skyProgram.getHandle());
         GLES20.glEnableVertexAttribArray(renderContext.skyProgram.vPosition);
         GLES20.glVertexAttribPointer(renderContext.skyProgram.vPosition, 3, 5126, false, 12, 0);
@@ -79,12 +77,12 @@ public class WindlightSky {
     private GLResourceTexture loadClouds(RenderContext renderContext) {
         try {
             AssetManager assetManager = LumiyaApp.getAssetManager();
-            int[] iArr = {34070, 34072, 34074, 34069, 34071, 34073};
+            int[] ints = {34070, 34072, 34074, 34069, 34071, 34073};
             String[] strArr = {"clouds_nx.tga", "clouds_py.tga", "clouds_nz.tga", "clouds_px.tga", "clouds_ny.tga", "clouds_pz.tga"};
-            OpenJPEG[] openJPEGArr = new OpenJPEG[iArr.length];
+            OpenJPEG[] openJPEGArr = new OpenJPEG[ints.length];
             int i = 0;
             int i2 = 0;
-            while (i < iArr.length) {
+            while (i < ints.length) {
                 InputStream open = assetManager.open("windlight/" + strArr[i]);
                 OpenJPEG openJPEG = new OpenJPEG(open, OpenJPEG.ImageFormat.TGA, false, false, 0.0f, 0.0f, true);
                 open.close();
@@ -93,17 +91,17 @@ public class WindlightSky {
                 i++;
                 i2 += openJPEG.getLoadedSize();
             }
-            GLResourceTexture gLResourceTexture = new GLResourceTexture(renderContext.glResourceManager, i2);
-            GLES20.glBindTexture(34067, gLResourceTexture.handle);
-            for (int i3 = 0; i3 < iArr.length; i3++) {
-                openJPEGArr[i3].SetAsTextureTarget(iArr[i3]);
-                openJPEGArr[i3] = null;
+            GLResourceTexture glResourceTexture = new GLResourceTexture(renderContext.glResourceManager, i2);
+            GLES20.glBindTexture(34067, glResourceTexture.handle);
+            for (int j = 0; j < ints.length; j++) {
+                openJPEGArr[j].SetAsTextureTarget(ints[j]);
+                openJPEGArr[j] = null;
             }
             GLES20.glTexParameteri(34067, 10240, 9729);
             GLES20.glTexParameteri(34067, 10241, 9729);
             GLES20.glTexParameteri(34067, 10242, 10497);
             GLES20.glTexParameteri(34067, 10243, 10497);
-            return gLResourceTexture;
+            return glResourceTexture;
         } catch (IOException e) {
             Debug.Warning(e);
             return null;
@@ -145,7 +143,7 @@ public class WindlightSky {
         }
         GLES20.glEnable(2884);
         GLES20.glEnable(3042);
-        GLES20.glDepthFunc(InputDeviceCompat.SOURCE_DPAD);
+        GLES20.glDepthFunc(GLES20.GL_LESS);
         this.skyMatrix.glPopMatrix();
     }
 
@@ -153,18 +151,18 @@ public class WindlightSky {
         if (this.skyMatrix == null) {
             this.skyMatrix = new MatrixStack();
         }
-        float[] fArr = new float[16];
-        Arrays.fill(fArr, 0.0f);
+        float[] floats = new float[16];
+        Arrays.fill(floats, 0.0f);
         float tan = 1.0f / ((float) Math.tan((renderContext.FOVAngle * 3.141592653589793d) / 360.0d));
         float f = 1.0f / renderContext.aspectRatio;
         renderContext.getClass();
-        fArr[0] = tan;
-        fArr[5] = tan / f;
-        fArr[10] = -1.0f;
-        fArr[11] = -1.0f;
-        fArr[14] = -1.0f;
+        floats[0] = tan;
+        floats[5] = tan / f;
+        floats[10] = -1.0f;
+        floats[11] = -1.0f;
+        floats[14] = -1.0f;
         this.skyMatrix.reset();
-        this.skyMatrix.glLoadMatrixf(fArr, 0);
+        this.skyMatrix.glLoadMatrixf(floats, 0);
         this.skyMatrix.glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
     }
 }

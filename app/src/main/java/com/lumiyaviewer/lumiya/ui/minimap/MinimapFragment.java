@@ -17,24 +17,23 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.minimap.MinimapView;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MinimapFragment extends Fragment implements MinimapView.OnUserClickListener {
-    private final SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM
+    private final SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapFragment.this.m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0((SLMinimap.MinimapBitmap) obj);
+            MinimapFragment.this.onMinimapBitmap((SLMinimap.MinimapBitmap) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, SLMinimap.UserLocations> userLocations = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM.1
+    private final SubscriptionData<SubscriptionSingleKey, SLMinimap.UserLocations> userLocations = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapFragment.this.m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1((SLMinimap.UserLocations) obj);
+            MinimapFragment.this.onUserLocations((SLMinimap.UserLocations) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -46,30 +45,26 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
         return minimapFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMinimapBitmap, reason: merged with bridge method [inline-methods] */
-    public void m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0(SLMinimap.MinimapBitmap minimapBitmap) {
+    public void onMinimapBitmap(SLMinimap.MinimapBitmap minimapBitmap) {
         View view = getView();
         if (view != null) {
             ((MinimapView) view.findViewById(R.id.minimapView)).setMinimapBitmap(minimapBitmap);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUserLocations, reason: merged with bridge method [inline-methods] */
-    public void m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1(SLMinimap.UserLocations userLocations) {
+    public void onUserLocations(SLMinimap.UserLocations userLocations) {
         View view = getView();
         if (view != null) {
             ((MinimapView) view.findViewById(R.id.minimapView)).setUserLocations(userLocations);
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.minimap_fragment, viewGroup, false);
@@ -77,7 +72,7 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
@@ -90,14 +85,14 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.minimapBitmap.unsubscribe();
         this.userLocations.unsubscribe();
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.minimap.MinimapView.OnUserClickListener
+    @Override
     public void onUserClick(UUID uuid) {
         FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager != null) {

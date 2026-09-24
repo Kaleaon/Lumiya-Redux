@@ -1,6 +1,5 @@
 package com.google.vr.vrcore.common.api;
 
-/* loaded from: classes.dex */
 public final class SdkServiceConsts {
     public static final String BIND_INTENT_ACTION = "com.google.vr.vrcore.BIND_SDK_SERVICE";
     public static final int FADE_IN = 1;

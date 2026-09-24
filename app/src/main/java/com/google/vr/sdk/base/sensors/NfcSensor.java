@@ -1,5 +1,6 @@
 package com.google.vr.sdk.base.sensors;
 
+import androidx.core.content.ContextCompat;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/* loaded from: classes.dex */
 public class NfcSensor {
     private static final int MAX_CONNECTION_FAILURES = 1;
     private static final long NFC_POLLING_INTERVAL_MS = 250;
@@ -58,20 +58,20 @@ public class NfcSensor {
             return this.listener;
         }
 
-        @Override // com.google.vr.sdk.base.sensors.NfcSensor.OnCardboardNfcListener
+        @Override
         public void onInsertedIntoGvrViewer(final GvrViewerParams gvrViewerParams) {
-            this.handler.post(new Runnable() { // from class: com.google.vr.sdk.base.sensors.NfcSensor.ListenerHelper.1
-                @Override // java.lang.Runnable
+            this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     ListenerHelper.this.listener.onInsertedIntoGvrViewer(gvrViewerParams);
                 }
             });
         }
 
-        @Override // com.google.vr.sdk.base.sensors.NfcSensor.OnCardboardNfcListener
+        @Override
         public void onRemovedFromGvrViewer() {
-            this.handler.post(new Runnable() { // from class: com.google.vr.sdk.base.sensors.NfcSensor.ListenerHelper.2
-                @Override // java.lang.Runnable
+            this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     ListenerHelper.this.listener.onRemovedFromGvrViewer();
                 }
@@ -93,8 +93,8 @@ public class NfcSensor {
             this.nfcAdapter = null;
         }
         if (this.nfcAdapter != null) {
-            this.nfcBroadcastReceiver = new BroadcastReceiver() { // from class: com.google.vr.sdk.base.sensors.NfcSensor.1
-                @Override // android.content.BroadcastReceiver
+            this.nfcBroadcastReceiver = new BroadcastReceiver() {
+                @Override
                 public void onReceive(Context context2, Intent intent) {
                     NfcSensor.this.onNfcIntent(intent);
                 }
@@ -110,7 +110,6 @@ public class NfcSensor {
         return i;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void closeCurrentNfcTag() {
         if (this.nfcDisconnectTimer != null) {
             this.nfcDisconnectTimer.cancel();
@@ -156,14 +155,14 @@ public class NfcSensor {
         boolean z2 = false;
         if (tag != null) {
             synchronized (this.tagLock) {
-                Tag tag2 = this.currentTag;
+                Tag currentTag = this.currentTag;
                 Ndef ndef = this.currentNdef;
-                boolean z3 = this.currentTagIsCardboard;
+                boolean currentTagIsCardboard = this.currentTagIsCardboard;
                 closeCurrentNfcTag();
                 this.currentTag = tag;
                 this.currentNdef = Ndef.get(tag);
                 if (this.currentNdef == null) {
-                    if (z3) {
+                    if (currentTagIsCardboard) {
                         sendDisconnectionEvent();
                     }
                     return;
@@ -172,11 +171,11 @@ public class NfcSensor {
                     z = false;
                 } else {
                     byte[] id = this.currentTag.getId();
-                    byte[] id2 = tag2.getId();
+                    byte[] id2 = currentTag.getId();
                     if (id != null && id2 != null && Arrays.equals(id, id2)) {
                         z2 = true;
                     }
-                    if (!z2 && z3) {
+                    if (!z2 && currentTagIsCardboard) {
                         sendDisconnectionEvent();
                         z = z2;
                     } else {
@@ -198,8 +197,8 @@ public class NfcSensor {
                     if (this.currentTagIsCardboard) {
                         this.tagConnectionFailures = 0;
                         this.nfcDisconnectTimer = new Timer("NFC disconnect timer");
-                        this.nfcDisconnectTimer.schedule(new TimerTask() { // from class: com.google.vr.sdk.base.sensors.NfcSensor.2
-                            @Override // java.util.TimerTask, java.lang.Runnable
+                        this.nfcDisconnectTimer.schedule(new TimerTask() {
+                            @Override
                             public void run() {
                                 synchronized (NfcSensor.this.tagLock) {
                                     if (!NfcSensor.this.currentNdef.isConnected()) {
@@ -216,7 +215,7 @@ public class NfcSensor {
                 } catch (Exception e) {
                     String valueOf = String.valueOf(e.toString());
                     Log.e(TAG, valueOf.length() == 0 ? new String("Error reading NFC tag: ") : "Error reading NFC tag: ".concat(valueOf));
-                    if (z && z3) {
+                    if (z && currentTagIsCardboard) {
                         sendDisconnectionEvent();
                     }
                 }
@@ -224,7 +223,6 @@ public class NfcSensor {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void sendDisconnectionEvent() {
         synchronized (this.listeners) {
             Iterator<ListenerHelper> it = this.listeners.iterator();
@@ -242,7 +240,7 @@ public class NfcSensor {
                     intentFilter.addAction("android.nfc.action.TECH_DISCOVERED");
                     intentFilter.addAction("android.nfc.action.TAG_DISCOVERED");
                     this.nfcIntentFilters = new IntentFilter[]{intentFilter};
-                    this.context.registerReceiver(this.nfcBroadcastReceiver, intentFilter);
+                    ContextCompat.registerReceiver(this.context, this.nfcBroadcastReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED);  // Android 14: own PendingIntent only
                 }
                 Iterator<ListenerHelper> it = this.listeners.iterator();
                 while (it.hasNext()) {
@@ -283,11 +281,11 @@ public class NfcSensor {
     }
 
     public boolean isDeviceInCardboard() {
-        boolean z;
+        boolean currentTagIsCardboard;
         synchronized (this.tagLock) {
-            z = this.currentTagIsCardboard;
+            currentTagIsCardboard = this.currentTagIsCardboard;
         }
-        return z;
+        return currentTagIsCardboard;
     }
 
     public boolean isNfcEnabled() {
@@ -314,7 +312,7 @@ public class NfcSensor {
         if (isNfcEnabled()) {
             Intent intent = new Intent("android.nfc.action.NDEF_DISCOVERED");
             intent.setPackage(activity.getPackageName());
-            this.nfcAdapter.enableForegroundDispatch(activity, PendingIntent.getBroadcast(this.context, 0, intent, 0), this.nfcIntentFilters, null);
+            this.nfcAdapter.enableForegroundDispatch(activity, PendingIntent.getBroadcast(this.context, 0, intent, PendingIntent.FLAG_MUTABLE), this.nfcIntentFilters, null);
         }
     }
 

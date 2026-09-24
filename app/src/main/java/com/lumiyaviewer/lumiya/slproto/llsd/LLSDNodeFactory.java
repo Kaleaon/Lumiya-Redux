@@ -17,72 +17,71 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-/* loaded from: classes.dex */
 public class LLSDNodeFactory {
     private static Map<String, LLSDNodeConstructor> tagMap = new HashMap(22);
-    private static LLSDNodeConstructor createUndef = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.1
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createUndef = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             xmlPullParser.nextTag();
             return new LLSDUndefined();
         }
     };
-    private static LLSDNodeConstructor createBoolean = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.2
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createBoolean = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDBoolean(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createInt = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.3
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createInt = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDInt(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createDouble = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.4
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createDouble = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDDouble(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createUUID = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.5
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createUUID = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDUUID(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createString = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.6
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createString = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDString(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createDate = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.7
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createDate = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDDate(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createURI = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.8
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createURI = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDURI(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createBinary = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.9
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createBinary = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
             return new LLSDBinary(xmlPullParser.nextText());
         }
     };
-    private static LLSDNodeConstructor createArray = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.10
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createArray = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws LLSDXMLException, XmlPullParserException, IOException {
             return new LLSDArray(xmlPullParser);
         }
     };
-    private static LLSDNodeConstructor createMap = new LLSDNodeConstructor() { // from class: com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.11
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNodeFactory.LLSDNodeConstructor
+    private static LLSDNodeConstructor createMap = new LLSDNodeConstructor() {
+        @Override
         public LLSDNode createNodeFromXML(XmlPullParser xmlPullParser) throws LLSDXMLException, XmlPullParserException, IOException {
             return new LLSDMap(xmlPullParser);
         }
@@ -108,10 +107,10 @@ public class LLSDNodeFactory {
 
     public static LLSDNode parseNode(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException, LLSDXMLException {
         String name = xmlPullParser.getName();
-        LLSDNodeConstructor lLSDNodeConstructor = tagMap.get(name);
-        if (lLSDNodeConstructor == null) {
+        LLSDNodeConstructor lsdNodeConstructor = tagMap.get(name);
+        if (lsdNodeConstructor == null) {
             throw new LLSDXMLException("Invalid tag name: " + name);
         }
-        return lLSDNodeConstructor.createNodeFromXML(xmlPullParser);
+        return lsdNodeConstructor.createNodeFromXML(xmlPullParser);
     }
 }

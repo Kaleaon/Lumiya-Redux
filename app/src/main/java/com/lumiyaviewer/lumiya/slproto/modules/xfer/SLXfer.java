@@ -1,9 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.xfer;
 
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.messages.ConfirmXferPacket;
@@ -14,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLXfer {
     private boolean deleteOnCompletion;
     private String fileName;
@@ -28,31 +23,31 @@ public class SLXfer {
     private int expectedPacketNum = 0;
 
     public interface SLXferCompletionListener {
-        void onXferComplete(Object obj, String str, byte[] bArr);
+        void onXferComplete(Object obj, String str, byte[] bytes);
     }
 
     private static class XferListenerInvocation {
         private SLXferCompletionListener listener;
         private Object tag;
 
-        public XferListenerInvocation(Object obj, SLXferCompletionListener sLXferCompletionListener) {
-            this.tag = obj;
-            this.listener = sLXferCompletionListener;
+        public XferListenerInvocation(Object tag, SLXferCompletionListener xferCompletionListener) {
+            this.tag = tag;
+            this.listener = xferCompletionListener;
         }
 
-        public void invokeListener(String str, byte[] bArr) {
-            this.listener.onXferComplete(this.tag, str, bArr);
+        public void invokeListener(String str, byte[] bytes) {
+            this.listener.onXferComplete(this.tag, str, bytes);
         }
     }
 
-    public SLXfer(long j, String str, ELLPath eLLPath, boolean z) {
-        this.id = j;
-        this.fileName = str;
-        this.filePath = eLLPath;
-        this.deleteOnCompletion = z;
+    public SLXfer(long id, String fileName, ELLPath ellPath, boolean deleteOnCompletion) {
+        this.id = id;
+        this.fileName = fileName;
+        this.filePath = ellPath;
+        this.deleteOnCompletion = deleteOnCompletion;
     }
 
-    public void HandleDataPacket(SLXferManager sLXferManager, SendXferPacket sendXferPacket) {
+    public void HandleDataPacket(SLXferManager xferManager, SendXferPacket sendXferPacket) {
         int length;
         int i = 4;
         Debug.Printf("XferPacket: packetNum %d (0x%x), dataLen %d", Integer.valueOf(sendXferPacket.XferID_Field.Packet), Integer.valueOf(sendXferPacket.XferID_Field.Packet), Integer.valueOf(sendXferPacket.DataPacket_Field.Data.length));
@@ -66,7 +61,7 @@ public class SLXfer {
                 if (sendXferPacket.DataPacket_Field.Data.length < 4) {
                     return;
                 }
-                this.expectedDataLen = (sendXferPacket.DataPacket_Field.Data[0] & UnsignedBytes.MAX_VALUE) | ((sendXferPacket.DataPacket_Field.Data[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((sendXferPacket.DataPacket_Field.Data[2] << 16) & 16711680) | ((sendXferPacket.DataPacket_Field.Data[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
+                this.expectedDataLen = (sendXferPacket.DataPacket_Field.Data[0] & 0xFF) | ((sendXferPacket.DataPacket_Field.Data[1] << 8) & 0xFF00) | ((sendXferPacket.DataPacket_Field.Data[2] << 16) & 0xFF0000) | ((sendXferPacket.DataPacket_Field.Data[3] << 24) & 0xFF000000);
                 Debug.Printf("XferPacket: expected data len = %d (0x%x)", Integer.valueOf(this.expectedDataLen), Integer.valueOf(this.expectedDataLen));
                 this.receivedData = new byte[this.expectedDataLen];
                 length = sendXferPacket.DataPacket_Field.Data.length - 4;
@@ -86,11 +81,11 @@ public class SLXfer {
             confirmXferPacket.XferID_Field.ID = this.id;
             confirmXferPacket.XferID_Field.Packet = sendXferPacket.XferID_Field.Packet;
             confirmXferPacket.isReliable = true;
-            sLXferManager.SendMessage(confirmXferPacket);
+            xferManager.SendMessage(confirmXferPacket);
         }
     }
 
-    public void StartTransfer(SLXferManager sLXferManager) {
+    public void StartTransfer(SLXferManager xferManager) {
         RequestXfer requestXfer = new RequestXfer();
         requestXfer.XferID_Field.ID = this.id;
         requestXfer.XferID_Field.Filename = SLMessage.stringToVariableOEM(this.fileName);
@@ -100,11 +95,11 @@ public class SLXfer {
         requestXfer.XferID_Field.VFileID = new UUID(0L, 0L);
         requestXfer.XferID_Field.VFileType = -1;
         requestXfer.isReliable = true;
-        sLXferManager.SendMessage(requestXfer);
+        xferManager.SendMessage(requestXfer);
     }
 
-    public void addListener(SLXferCompletionListener sLXferCompletionListener, Object obj) {
-        this.listeners.add(new XferListenerInvocation(obj, sLXferCompletionListener));
+    public void addListener(SLXferCompletionListener xferCompletionListener, Object obj) {
+        this.listeners.add(new XferListenerInvocation(obj, xferCompletionListener));
     }
 
     public byte[] getData() {

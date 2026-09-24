@@ -4,16 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * New Transfer system
+ * Request a new transfer (target->source)
+ *
+ * <p>Template: {@code TransferRequest Low 153 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processTransferRequest()} in indra/llmessage/lltransfermanager.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class TransferRequest extends SLMessage {
     public TransferInfo TransferInfo_Field;
 
+    /** Block TransferInfo, Single. */
     public static class TransferInfo {
-        public int ChannelType;
-        public byte[] Params;
-        public float Priority;
-        public int SourceType;
-        public UUID TransferID;
+        public int ChannelType; // S32
+        public byte[] Params; // Variable 2
+        public float Priority; // F32
+        public int SourceType; // S32
+        public UUID TransferID; // LLUUID
     }
 
     public TransferRequest() {
@@ -21,21 +30,22 @@ public class TransferRequest extends SLMessage {
         this.TransferInfo_Field = new TransferInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.TransferInfo_Field.Params.length + 30 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -103);
+        // Message number: Low 153 (TransferRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x99);
         packUUID(byteBuffer, this.TransferInfo_Field.TransferID);
         packInt(byteBuffer, this.TransferInfo_Field.ChannelType);
         packInt(byteBuffer, this.TransferInfo_Field.SourceType);
@@ -43,7 +53,7 @@ public class TransferRequest extends SLMessage {
         packVariable(byteBuffer, this.TransferInfo_Field.Params, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TransferInfo_Field.TransferID = unpackUUID(byteBuffer);
         this.TransferInfo_Field.ChannelType = unpackInt(byteBuffer);

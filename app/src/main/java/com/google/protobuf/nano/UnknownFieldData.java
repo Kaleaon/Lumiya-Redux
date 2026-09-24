@@ -3,14 +3,13 @@ package com.google.protobuf.nano;
 import java.io.IOException;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 final class UnknownFieldData {
     final byte[] bytes;
     final int tag;
 
-    UnknownFieldData(int i, byte[] bArr) {
-        this.tag = i;
-        this.bytes = bArr;
+    UnknownFieldData(int tag, byte[] bytes) {
+        this.tag = tag;
+        this.bytes = bytes;
     }
 
     int computeSerializedSize() {

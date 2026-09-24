@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.dao;
 
-/* loaded from: classes.dex */
 public class UserPic {
     private byte[] bitmap;
     private Long id;
@@ -9,14 +8,14 @@ public class UserPic {
     public UserPic() {
     }
 
-    public UserPic(Long l) {
-        this.id = l;
+    public UserPic(Long id) {
+        this.id = id;
     }
 
-    public UserPic(Long l, String str, byte[] bArr) {
-        this.id = l;
-        this.uuid = str;
-        this.bitmap = bArr;
+    public UserPic(Long id, String uuid, byte[] bytes) {
+        this.id = id;
+        this.uuid = uuid;
+        this.bitmap = bytes;
     }
 
     public byte[] getBitmap() {
@@ -31,15 +30,15 @@ public class UserPic {
         return this.uuid;
     }
 
-    public void setBitmap(byte[] bArr) {
-        this.bitmap = bArr;
+    public void setBitmap(byte[] bytes) {
+        this.bitmap = bytes;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setUuid(String str) {
-        this.uuid = str;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

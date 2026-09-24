@@ -1,6 +1,5 @@
 package uk.co.senab.photoview.log;
 
-/* loaded from: classes.dex */
 public final class LogManager {
     private static Logger logger = new LoggerDefault();
 

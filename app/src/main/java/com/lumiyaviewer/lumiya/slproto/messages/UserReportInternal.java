@@ -1,34 +1,39 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * complaint/bug-report - sim -> dataserver. see UserReport for details.
+ * reliable
+ *
+ * <p>Template: {@code UserReportInternal Low 21 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UserReportInternal extends SLMessage {
     public ReportData ReportData_Field;
 
+    /** Block ReportData, Single. */
     public static class ReportData {
-        public UUID AbuseRegionID;
-        public byte[] AbuseRegionName;
-        public UUID AbuserID;
-        public LLVector3 AgentPosition;
-        public int Category;
-        public UUID CreatorID;
-        public byte[] Details;
-        public UUID LastOwnerID;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public UUID RegionID;
-        public int ReportType;
-        public UUID ReporterID;
-        public UUID ScreenshotID;
-        public byte[] Summary;
-        public byte[] VersionString;
-        public LLVector3 ViewerPosition;
+        public UUID AbuseRegionID; // LLUUID
+        public byte[] AbuseRegionName; // Variable 1
+        public UUID AbuserID; // LLUUID
+        public LLVector3 AgentPosition; // LLVector3
+        public int Category; // U8
+        public UUID CreatorID; // LLUUID
+        public byte[] Details; // Variable 2
+        public UUID LastOwnerID; // LLUUID
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public UUID RegionID; // LLUUID
+        public int ReportType; // U8
+        public UUID ReporterID; // LLUUID
+        public UUID ScreenshotID; // LLUUID
+        public byte[] Summary; // Variable 1
+        public byte[] VersionString; // Variable 1
+        public LLVector3 ViewerPosition; // LLVector3
     }
 
     public UserReportInternal() {
@@ -36,21 +41,22 @@ public class UserReportInternal extends SLMessage {
         this.ReportData_Field = new ReportData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ReportData_Field.AbuseRegionName.length + 155 + 16 + 1 + this.ReportData_Field.Summary.length + 2 + this.ReportData_Field.Details.length + 1 + this.ReportData_Field.VersionString.length + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserReportInternal(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserReportInternal(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.NAK);
+        // Message number: Low 21 (UserReportInternal).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x15);
         packByte(byteBuffer, (byte) this.ReportData_Field.ReportType);
         packByte(byteBuffer, (byte) this.ReportData_Field.Category);
         packUUID(byteBuffer, this.ReportData_Field.ReporterID);
@@ -70,10 +76,10 @@ public class UserReportInternal extends SLMessage {
         packVariable(byteBuffer, this.ReportData_Field.VersionString, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        this.ReportData_Field.ReportType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ReportData_Field.Category = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ReportData_Field.ReportType = unpackByte(byteBuffer) & 0xFF;
+        this.ReportData_Field.Category = unpackByte(byteBuffer) & 0xFF;
         this.ReportData_Field.ReporterID = unpackUUID(byteBuffer);
         this.ReportData_Field.ViewerPosition = unpackLLVector3(byteBuffer);
         this.ReportData_Field.AgentPosition = unpackLLVector3(byteBuffer);

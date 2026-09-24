@@ -9,21 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AccountList {
     private ArrayList<AccountInfo> accounts = new ArrayList<>();
     private Context context;
 
     public static class AccountInfo implements Parcelable {
-        public static final Parcelable.Creator<AccountInfo> CREATOR = new Parcelable.Creator<AccountInfo>() { // from class: com.lumiyaviewer.lumiya.ui.accounts.AccountList.AccountInfo.1
+        public static final Parcelable.Creator<AccountInfo> CREATOR = new Parcelable.Creator<AccountInfo>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public AccountInfo createFromParcel(Parcel parcel) {
                 return new AccountInfo(parcel, (AccountInfo) null);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public AccountInfo[] newArray(int i) {
                 return new AccountInfo[i];
             }
@@ -59,7 +58,7 @@ public class AccountList {
             this.GridUUID = uuid;
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public int describeContents() {
             return 0;
         }
@@ -86,15 +85,15 @@ public class AccountList {
             this.GridUUID = uuid;
         }
 
-        public void setLoginName(String str) {
-            this.LoginName = str;
+        public void setLoginName(String loginName) {
+            this.LoginName = loginName;
         }
 
-        public void setPasswordHash(String str) {
-            this.PasswordHash = str;
+        public void setPasswordHash(String passwordHash) {
+            this.PasswordHash = passwordHash;
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public void writeToParcel(Parcel parcel, int i) {
             parcel.writeString(this.LoginName);
             parcel.writeString(this.PasswordHash);
@@ -156,8 +155,8 @@ public class AccountList {
         this.accounts.clear();
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
         int i = defaultSharedPreferences.getInt("accounts_count", 0);
-        for (int i2 = 0; i2 < i; i2++) {
-            this.accounts.add(new AccountInfo(defaultSharedPreferences, "account_" + i2));
+        for (int j = 0; j < i; j++) {
+            this.accounts.add(new AccountInfo(defaultSharedPreferences, "account_" + j));
         }
     }
 

@@ -5,26 +5,36 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> viewer
+ *
+ * <p>Template: {@code AgentMovementComplete Low 250 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_agent_movement_complete()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AgentMovementComplete extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
     public SimData SimData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public LLVector3 LookAt;
-        public LLVector3 Position;
-        public long RegionHandle;
-        public int Timestamp;
+        public LLVector3 LookAt; // LLVector3
+        public LLVector3 Position; // LLVector3
+        public long RegionHandle; // U64
+        public int Timestamp; // U32
     }
 
+    /** Block SimData, Single. */
     public static class SimData {
-        public byte[] ChannelVersion;
+        public byte[] ChannelVersion; // Variable 2
     }
 
     public AgentMovementComplete() {
@@ -34,21 +44,22 @@ public class AgentMovementComplete extends SLMessage {
         this.SimData_Field = new SimData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.SimData_Field.ChannelVersion.length + 2 + 72;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentMovementComplete(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentMovementComplete(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -6);
+        // Message number: Low 250 (AgentMovementComplete).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xFA);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packLLVector3(byteBuffer, this.Data_Field.Position);
@@ -58,7 +69,7 @@ public class AgentMovementComplete extends SLMessage {
         packVariable(byteBuffer, this.SimData_Field.ChannelVersion, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

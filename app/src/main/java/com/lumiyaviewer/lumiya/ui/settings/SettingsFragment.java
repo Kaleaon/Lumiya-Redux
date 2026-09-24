@@ -32,12 +32,10 @@ import java.io.File;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SettingsFragment extends PreferenceFragmentCompat implements FragmentHasTitle {
     private static final String PREF_RESOURCE_KEY = "prefResourceId";
     private RingtonePreference requestedRingtonePreference = null;
 
-    /* JADX INFO: Access modifiers changed from: private */
     class ClearCacheTask extends AsyncTask<Void, Void, Void> {
         private ImmutableList<File> cacheDirs;
         private ProgressDialog progressDialog;
@@ -50,8 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
             this();
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Void doInBackground(Void... voidArr) {
             if (this.cacheDirs != null) {
                 Iterator<File> it = this.cacheDirs.iterator();
@@ -67,8 +64,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
             cancel(false);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Void r2) {
             if (this.progressDialog != null) {
                 this.progressDialog.dismiss();
@@ -78,15 +74,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
             }
         }
 
-        @Override // android.os.AsyncTask
+        @Override
         protected void onPreExecute() {
             this.cacheDirs = GlobalOptions.getInstance().getAvailableCacheDirs();
-            this.progressDialog = ProgressDialog.show(SettingsFragment.this.getContext(), null, SettingsFragment.this.getString(R.string.clearing_cache), true, true, new DialogInterface.OnCancelListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.3
+            this.progressDialog = ProgressDialog.show(SettingsFragment.this.getContext(), null, SettingsFragment.this.getString(R.string.clearing_cache), true, true, new DialogInterface.OnCancelListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface) {
                     ClearCacheTask.this.m870x7613bcc1(dialogInterface);
                 }
 
-                @Override // android.content.DialogInterface.OnCancelListener
+                @Override
                 public final void onCancel(DialogInterface dialogInterface) {
                     $m$0(dialogInterface);
                 }
@@ -94,27 +90,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void askForRestart() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.restart_after_changing_cache_location);
         builder.setCancelable(true);
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         });
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.1
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 SettingsFragment.m866xa8647b17(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -139,12 +134,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.select_dialog_singlechoice, strArr);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.select_cache_location);
-        builder.setSingleChoiceItems(arrayAdapter, i, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.5
+        builder.setSingleChoiceItems(arrayAdapter, i, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i4) {
                 SettingsFragment.this.m868xa86405fa((ImmutableList) availableCacheDirs, (CacheLocationPreference) cacheLocationPreference, (File) baseCacheDir, dialogInterface, i4);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i4) {
                 $m$0(dialogInterface, i4);
             }
@@ -157,22 +152,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.clear_cache_dialog_message);
         builder.setCancelable(true);
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.2
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         });
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$WG8cuhk2hT2A9U0oVctOmx_AHM8.4
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 SettingsFragment.this.m869xa864df93(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -219,13 +214,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         adapter.notifyDataSetChanged();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     @Nullable
     public String getSubTitle() {
         return null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     @Nullable
     public String getTitle() {
         CharSequence title;
@@ -257,7 +252,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         new ClearCacheTask(this, null).execute(new Void[0]);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @SuppressLint({"CommitPrefEdits"})
     public void onActivityResult(int i, int i2, Intent intent) {
         if (i != 2 || i2 != -1 || intent == null || this.requestedRingtonePreference == null) {
@@ -277,7 +272,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         updatePreferencesDisplay();
     }
 
-    @Override // androidx.preference.PreferenceFragmentCompat
+    @Override
     public void onCreatePreferences(Bundle bundle, String str) {
         addPreferencesFromResource(getArguments().getInt(PREF_RESOURCE_KEY));
         FragmentActivity activity = getActivity();
@@ -290,7 +285,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDetach() {
         super.onDetach();
         FragmentActivity activity = getActivity();
@@ -299,7 +294,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         }
     }
 
-    @Override // androidx.preference.PreferenceFragmentCompat, androidx.preference.PreferenceManager.OnPreferenceTreeClickListener
+    @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         NotificationChannels.Channel channelByType;
         if (preference instanceof PreferenceSubPage) {
@@ -326,7 +321,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         return true;
     }
 
-    @Override // androidx.preference.PreferenceFragmentCompat, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         FragmentActivity activity = getActivity();

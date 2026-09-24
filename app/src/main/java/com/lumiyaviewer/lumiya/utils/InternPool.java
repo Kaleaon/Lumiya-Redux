@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.utils;
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
-/* loaded from: classes.dex */
 public class InternPool<T> {
     private final WeakHashMap<T, WeakReference<T>> pool = new WeakHashMap<>();
 

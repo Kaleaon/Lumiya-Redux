@@ -1,26 +1,34 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Gesture saves/loads
+ * Tell the database that some gestures are now active
+ * viewer -> sim -> data
+ *
+ * <p>Template: {@code ActivateGestures Low 316 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ActivateGestures extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int Flags;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int Flags; // U32
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public UUID AssetID;
-        public int GestureFlags;
-        public UUID ItemID;
+        public UUID AssetID; // LLUUID
+        public int GestureFlags; // U32
+        public UUID ItemID; // LLUUID
     }
 
     public ActivateGestures() {
@@ -28,21 +36,22 @@ public class ActivateGestures extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Data_Fields.size() * 36) + 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleActivateGestures(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleActivateGestures(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 60);
+        // Message number: Low 316 (ActivateGestures).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x3C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
@@ -54,13 +63,13 @@ public class ActivateGestures extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.Flags = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.ItemID = unpackUUID(byteBuffer);
             data.AssetID = unpackUUID(byteBuffer);

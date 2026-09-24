@@ -1,6 +1,5 @@
 package com.google.protobuf.nano;
 
-/* loaded from: classes.dex */
 public final class FieldArray implements Cloneable {
     private static final FieldData DELETED = new FieldData();
     private FieldData[] mData;
@@ -20,18 +19,18 @@ public final class FieldArray implements Cloneable {
         this.mSize = 0;
     }
 
-    private boolean arrayEquals(int[] iArr, int[] iArr2, int i) {
-        for (int i2 = 0; i2 < i; i2++) {
-            if (iArr[i2] != iArr2[i2]) {
+    private boolean arrayEquals(int[] ints, int[] ints2, int i) {
+        for (int j = 0; j < i; j++) {
+            if (ints[j] != ints2[j]) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean arrayEquals(FieldData[] fieldDataArr, FieldData[] fieldDataArr2, int i) {
-        for (int i2 = 0; i2 < i; i2++) {
-            if (!fieldDataArr[i2].equals(fieldDataArr2[i2])) {
+    private boolean arrayEquals(FieldData[] fieldDataArr, FieldData[] fieldDatas, int i) {
+        for (int j = 0; j < i; j++) {
+            if (!fieldDataArr[j].equals(fieldDatas[j])) {
                 return false;
             }
         }
@@ -57,17 +56,17 @@ public final class FieldArray implements Cloneable {
     }
 
     private void gc() {
-        int i = this.mSize;
-        int[] iArr = this.mFieldNumbers;
+        int mSize = this.mSize;
+        int[] mFieldNumbers = this.mFieldNumbers;
         FieldData[] fieldDataArr = this.mData;
         int i2 = 0;
-        for (int i3 = 0; i3 < i; i3++) {
-            FieldData fieldData = fieldDataArr[i3];
+        for (int j = 0; j < mSize; j++) {
+            FieldData fieldData = fieldDataArr[j];
             if (fieldData != DELETED) {
-                if (i3 != i2) {
-                    iArr[i2] = iArr[i3];
+                if (j != i2) {
+                    mFieldNumbers[i2] = mFieldNumbers[j];
                     fieldDataArr[i2] = fieldData;
-                    fieldDataArr[i3] = null;
+                    fieldDataArr[j] = null;
                 }
                 i2++;
             }
@@ -77,9 +76,9 @@ public final class FieldArray implements Cloneable {
     }
 
     private int idealByteArraySize(int i) {
-        for (int i2 = 4; i2 < 32; i2++) {
-            if (i <= (1 << i2) - 12) {
-                return (1 << i2) - 12;
+        for (int j = 4; j < 32; j++) {
+            if (i <= (1 << j) - 12) {
+                return (1 << j) - 12;
             }
         }
         return i;
@@ -89,14 +88,13 @@ public final class FieldArray implements Cloneable {
         return idealByteArraySize(i * 4) / 4;
     }
 
-    /* renamed from: clone, reason: merged with bridge method [inline-methods] */
-    public final FieldArray m8clone() {
+    public final FieldArray clone() {
         int size = size();
         FieldArray fieldArray = new FieldArray(size);
         System.arraycopy(this.mFieldNumbers, 0, fieldArray.mFieldNumbers, 0, size);
         for (int i = 0; i < size; i++) {
             if (this.mData[i] != null) {
-                fieldArray.mData[i] = this.mData[i].m9clone();
+                fieldArray.mData[i] = this.mData[i].clone();
             }
         }
         fieldArray.mSize = size;
@@ -137,8 +135,8 @@ public final class FieldArray implements Cloneable {
             gc();
         }
         int i = 17;
-        for (int i2 = 0; i2 < this.mSize; i2++) {
-            i = (((i * 31) + this.mFieldNumbers[i2]) * 31) + this.mData[i2].hashCode();
+        for (int j = 0; j < this.mSize; j++) {
+            i = (((i * 31) + this.mFieldNumbers[j]) * 31) + this.mData[j].hashCode();
         }
         return i;
     }
@@ -165,11 +163,11 @@ public final class FieldArray implements Cloneable {
         }
         if (this.mSize >= this.mFieldNumbers.length) {
             int idealIntArraySize = idealIntArraySize(this.mSize + 1);
-            int[] iArr = new int[idealIntArraySize];
+            int[] ints = new int[idealIntArraySize];
             FieldData[] fieldDataArr = new FieldData[idealIntArraySize];
-            System.arraycopy(this.mFieldNumbers, 0, iArr, 0, this.mFieldNumbers.length);
+            System.arraycopy(this.mFieldNumbers, 0, ints, 0, this.mFieldNumbers.length);
             System.arraycopy(this.mData, 0, fieldDataArr, 0, this.mData.length);
-            this.mFieldNumbers = iArr;
+            this.mFieldNumbers = ints;
             this.mData = fieldDataArr;
         }
         if (this.mSize - i2 != 0) {

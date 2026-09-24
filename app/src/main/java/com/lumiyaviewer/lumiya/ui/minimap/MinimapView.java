@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MinimapView extends View {
     private static final float USER_MARK_TOUCH_SLACK = 50.0f;
     private int activePointerId;
@@ -70,8 +69,8 @@ public class MinimapView extends View {
         this.bitmapPaint = new Paint();
         this.bitmapSrcRect = new Rect();
         this.bitmapDstRect = new Rect();
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() { // from class: com.lumiyaviewer.lumiya.ui.minimap.MinimapView.1
-            @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
             public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f);
                 MinimapView.this.invalidate();
@@ -97,8 +96,8 @@ public class MinimapView extends View {
         this.bitmapPaint = new Paint();
         this.bitmapSrcRect = new Rect();
         this.bitmapDstRect = new Rect();
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() { // from class: com.lumiyaviewer.lumiya.ui.minimap.MinimapView.1
-            @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
             public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f);
                 MinimapView.this.invalidate();
@@ -124,8 +123,8 @@ public class MinimapView extends View {
         this.bitmapPaint = new Paint();
         this.bitmapSrcRect = new Rect();
         this.bitmapDstRect = new Rect();
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() { // from class: com.lumiyaviewer.lumiya.ui.minimap.MinimapView.1
-            @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
             public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f);
                 MinimapView.this.invalidate();
@@ -175,7 +174,7 @@ public class MinimapView extends View {
         if (this.userLocations == null || this.lastDrawRect == null) {
             return;
         }
-        float applyDimension = TypedValue.applyDimension(1, USER_MARK_TOUCH_SLACK, getResources().getDisplayMetrics());
+        float applyDimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, USER_MARK_TOUCH_SLACK, getResources().getDisplayMetrics());
         float f3 = 0.0f;
         Iterator<?> it = this.userLocations.userPositions.entrySet().iterator();
         while (true) {
@@ -207,7 +206,7 @@ public class MinimapView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         if (this.minimapBitmap != null) {
             int width = getWidth();
@@ -261,7 +260,7 @@ public class MinimapView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onMeasure(int i, int i2) {
         Display defaultDisplay = ((WindowManager) getContext().getSystemService("window")).getDefaultDisplay();
         if (Build.VERSION.SDK_INT >= 13) {
@@ -284,7 +283,7 @@ public class MinimapView extends View {
     
         return true;
      */
-    @Override // android.view.View
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -302,9 +301,9 @@ public class MinimapView extends View {
                 this.activePointerId = -1;
                 return true;
             case 2:
-                int iFindPointerIndex = motionEvent.findPointerIndex(this.activePointerId);
-                float x = motionEvent.getX(iFindPointerIndex);
-                float y = motionEvent.getY(iFindPointerIndex);
+                int pointerIndex = motionEvent.findPointerIndex(this.activePointerId);
+                float x = motionEvent.getX(pointerIndex);
+                float y = motionEvent.getY(pointerIndex);
                 if (!this.scaleGestureDetector.isInProgress()) {
                     float f = x - this.prevTouchX;
                     float f2 = y - this.prevTouchY;

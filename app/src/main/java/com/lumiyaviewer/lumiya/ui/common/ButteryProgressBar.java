@@ -7,14 +7,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
 import com.lumiyaviewer.lumiya.R;
 
 @TargetApi(14)
-/* loaded from: classes.dex */
 public class ButteryProgressBar extends View {
     private static final int BASE_DURATION_MS = 500;
     private static final int BASE_SEGMENT_COUNT = 5;
@@ -38,7 +36,7 @@ public class ButteryProgressBar extends View {
             this();
         }
 
-        @Override // android.animation.TimeInterpolator
+        @Override
         public float getInterpolation(float f) {
             return ((float) Math.pow(2.0d, f)) - 1.0f;
         }
@@ -62,14 +60,14 @@ public class ButteryProgressBar extends View {
             this.mAnimator.setFloatValues(1.0f, 2.0f);
             this.mAnimator.setRepeatCount(-1);
             this.mAnimator.setInterpolator(new ExponentialInterpolator(null));
-            this.mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: com.lumiyaviewer.lumiya.ui.common.ButteryProgressBar.1
-                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+            this.mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     ButteryProgressBar.this.invalidate();
                 }
             });
             this.mPaint.setColor(this.mBarColor);
-            this.mShadow = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{(this.mBarColor & ViewCompat.MEASURED_SIZE_MASK) | 570425344, 0});
+            this.mShadow = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{(this.mBarColor & 0x00FFFFFF) | 570425344, 0});
         } catch (Throwable th) {
             obtainStyledAttributes.recycle();
             throw th;
@@ -90,7 +88,7 @@ public class ButteryProgressBar extends View {
         this.mAnimator.cancel();
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         if (this.mAnimator.isStarted()) {
             this.mShadow.draw(canvas);
@@ -106,7 +104,7 @@ public class ButteryProgressBar extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         if (z) {
             int width = getWidth();
@@ -117,7 +115,7 @@ public class ButteryProgressBar extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onVisibilityChanged(View view, int i) {
         super.onVisibilityChanged(view, i);
         if (i == 0) {

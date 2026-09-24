@@ -4,23 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirPlacesQuery viewer->sim
+ * Used for the Find directory of places
+ *
+ * <p>Template: {@code DirPlacesQuery Low 33 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class DirPlacesQuery extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public int Category;
-        public int QueryFlags;
-        public UUID QueryID;
-        public int QueryStart;
-        public byte[] QueryText;
-        public byte[] SimName;
+        public int Category; // S8
+        public int QueryFlags; // U32
+        public UUID QueryID; // LLUUID
+        public int QueryStart; // S32
+        public byte[] QueryText; // Variable 1
+        public byte[] SimName; // Variable 1
     }
 
     public DirPlacesQuery() {
@@ -29,21 +37,22 @@ public class DirPlacesQuery extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.QueryData_Field.QueryText.length + 17 + 4 + 1 + 1 + this.QueryData_Field.SimName.length + 4 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPlacesQuery(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPlacesQuery(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 33);
+        // Message number: Low 33 (DirPlacesQuery).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x21);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
@@ -54,7 +63,7 @@ public class DirPlacesQuery extends SLMessage {
         packInt(byteBuffer, this.QueryData_Field.QueryStart);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

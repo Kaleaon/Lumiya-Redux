@@ -3,7 +3,6 @@ package com.google.vr.vrcore.base.api;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-/* loaded from: classes.dex */
 public class BuildUtils {
     private static volatile Boolean isDebug;
 
@@ -26,9 +25,9 @@ public class BuildUtils {
         return isDebug == null ? computeIsDebugBuild(context) : isDebug.booleanValue();
     }
 
-    public static synchronized void setIsDebugBuild(boolean z) {
+    public static synchronized void setIsDebugBuild(boolean isDebugBuild) {
         synchronized (BuildUtils.class) {
-            isDebug = Boolean.valueOf(z);
+            isDebug = Boolean.valueOf(isDebugBuild);
         }
     }
 }

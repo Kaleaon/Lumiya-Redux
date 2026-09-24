@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class TouchableObjectListAdapter extends BaseAdapter {
     private final Context context;
 
@@ -23,12 +22,12 @@ class TouchableObjectListAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         return this.objects.size();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public SLObjectInfo getItem(int i) {
         if (i < 0 || i >= this.objects.size()) {
             return null;
@@ -36,7 +35,7 @@ class TouchableObjectListAdapter extends BaseAdapter {
         return this.objects.get(i);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         SLObjectInfo item = getItem(i);
         if (item != null) {
@@ -45,7 +44,7 @@ class TouchableObjectListAdapter extends BaseAdapter {
         return -1L;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         SLObjectInfo item = getItem(i);
         if (item == null) {
@@ -54,16 +53,16 @@ class TouchableObjectListAdapter extends BaseAdapter {
         View view2 = (view == null || view.getId() == R.id.touchable_object_list_item) ? view : null;
         View inflate = view2 == null ? ((LayoutInflater) this.context.getSystemService("layout_inflater")).inflate(R.layout.touchable_object_list_item, viewGroup, false) : view2;
         ((TextView) inflate.findViewById(R.id.touchable_objectNameTextView)).setText(item.getName());
-        inflate.findViewById(R.id.touchable_touchIconView).setVisibility(item.isTouchable() ? 0 : 4);
+        inflate.findViewById(R.id.touchable_touchIconView).setVisibility(item.isTouchable() ? View.VISIBLE : View.INVISIBLE);
         return inflate;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return true;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean isEmpty() {
         return this.objects.isEmpty();
     }

@@ -8,7 +8,6 @@ import com.google.protobuf.nano.InvalidProtocolBufferNanoException;
 import com.google.protobuf.nano.MessageNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Nfc {
 
     public static final class NfcParams extends ExtendableMessageNano<NfcParams> implements Cloneable {
@@ -35,8 +34,8 @@ public interface Nfc {
             return new NfcParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static NfcParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (NfcParams) MessageNano.mergeFrom(new NfcParams(), bArr);
+        public static NfcParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (NfcParams) MessageNano.mergeFrom(new NfcParams(), bytes);
         }
 
         public final NfcParams clear() {
@@ -53,17 +52,16 @@ public interface Nfc {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
-        public final NfcParams mo6clone() {
+        @Override
+        public final NfcParams clone() {
             try {
-                return (NfcParams) super.mo6clone();
+                return (NfcParams) super.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             return (this.bitField0_ & 1) == 0 ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(1, this.viewerId_);
@@ -77,7 +75,7 @@ public interface Nfc {
             return (this.bitField0_ & 1) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final NfcParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -97,13 +95,13 @@ public interface Nfc {
             }
         }
 
-        public final NfcParams setViewerId(int i) {
-            this.viewerId_ = i;
+        public final NfcParams setViewerId(int viewerId) {
+            this.viewerId_ = viewerId;
             this.bitField0_ |= 1;
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeInt32(1, this.viewerId_);

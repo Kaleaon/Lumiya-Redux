@@ -3,21 +3,20 @@ package com.lumiyaviewer.lumiya.slproto.modules.search;
 import com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 final class AutoValue_SearchGridQuery extends SearchGridQuery {
     private final String searchText;
     private final SearchGridQuery.SearchType searchType;
     private final UUID searchUUID;
 
-    AutoValue_SearchGridQuery(UUID uuid, String str, SearchGridQuery.SearchType searchType) {
+    AutoValue_SearchGridQuery(UUID uuid, String searchText, SearchGridQuery.SearchType searchType) {
         if (uuid == null) {
             throw new NullPointerException("Null searchUUID");
         }
         this.searchUUID = uuid;
-        if (str == null) {
+        if (searchText == null) {
             throw new NullPointerException("Null searchText");
         }
-        this.searchText = str;
+        this.searchText = searchText;
         if (searchType == null) {
             throw new NullPointerException("Null searchType");
         }
@@ -42,17 +41,17 @@ final class AutoValue_SearchGridQuery extends SearchGridQuery {
         return ((((this.searchUUID.hashCode() ^ 1000003) * 1000003) ^ this.searchText.hashCode()) * 1000003) ^ this.searchType.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public String searchText() {
         return this.searchText;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public SearchGridQuery.SearchType searchType() {
         return this.searchType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public UUID searchUUID() {
         return this.searchUUID;
     }

@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.utils.InlineList;
 import com.lumiyaviewer.lumiya.utils.InlineListEntry;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class DrawListEntry implements InlineListEntry<DrawListEntry> {
 
     @Nonnull
@@ -15,24 +14,24 @@ public abstract class DrawListEntry implements InlineListEntry<DrawListEntry> {
 
     public abstract void addToDrawList(@Nonnull DrawList drawList);
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public InlineList<DrawListEntry> getList() {
         return this.list;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public DrawListEntry getNext() {
         return this.next;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public DrawListEntry getPrev() {
         return this.prev;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public void requestEntryRemoval() {
         InlineList<DrawListEntry> inlineList = this.list;
         if (inlineList != null) {
@@ -40,17 +39,17 @@ public abstract class DrawListEntry implements InlineListEntry<DrawListEntry> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public void setList(InlineList<DrawListEntry> inlineList) {
         this.list = inlineList;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public void setNext(DrawListEntry drawListEntry) {
         this.next = drawListEntry;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineListEntry
+    @Override
     public void setPrev(DrawListEntry drawListEntry) {
         this.prev = drawListEntry;
     }

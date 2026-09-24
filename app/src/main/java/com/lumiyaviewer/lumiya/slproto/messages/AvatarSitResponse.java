@@ -1,28 +1,36 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarSitResponse - response to a request to sit on an object
+ *
+ * <p>Template: {@code AvatarSitResponse High 21 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_avatar_sit_response()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarSitResponse extends SLMessage {
     public SitObject SitObject_Field;
     public SitTransform SitTransform_Field;
 
+    /** Block SitObject, Single. */
     public static class SitObject {
-        public UUID ID;
+        public UUID ID; // LLUUID
     }
 
+    /** Block SitTransform, Single. */
     public static class SitTransform {
-        public boolean AutoPilot;
-        public LLVector3 CameraAtOffset;
-        public LLVector3 CameraEyeOffset;
-        public boolean ForceMouselook;
-        public LLVector3 SitPosition;
-        public LLQuaternion SitRotation;
+        public boolean AutoPilot; // BOOL
+        public LLVector3 CameraAtOffset; // LLVector3
+        public LLVector3 CameraEyeOffset; // LLVector3
+        public boolean ForceMouselook; // BOOL
+        public LLVector3 SitPosition; // LLVector3
+        public LLQuaternion SitRotation; // LLQuaternion
     }
 
     public AvatarSitResponse() {
@@ -31,19 +39,20 @@ public class AvatarSitResponse extends SLMessage {
         this.SitTransform_Field = new SitTransform();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 67;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarSitResponse(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarSitResponse(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.NAK);
+        // Message number: High 21 (AvatarSitResponse).
+        byteBuffer.put((byte) 0x15);
         packUUID(byteBuffer, this.SitObject_Field.ID);
         packBoolean(byteBuffer, this.SitTransform_Field.AutoPilot);
         packLLVector3(byteBuffer, this.SitTransform_Field.SitPosition);
@@ -53,7 +62,7 @@ public class AvatarSitResponse extends SLMessage {
         packBoolean(byteBuffer, this.SitTransform_Field.ForceMouselook);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SitObject_Field.ID = unpackUUID(byteBuffer);
         this.SitTransform_Field.AutoPilot = unpackBoolean(byteBuffer);

@@ -1,39 +1,48 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptControlChange
+ * reliable
+ *
+ * <p>Template: {@code ScriptControlChange Low 189 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAgent::processScriptControlChange()} in indra/newview/llagent.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ScriptControlChange extends SLMessage {
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int Controls;
-        public boolean PassToAgent;
-        public boolean TakeControls;
+        public int Controls; // U32
+        public boolean PassToAgent; // BOOL
+        public boolean TakeControls; // BOOL
     }
 
     public ScriptControlChange() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Data_Fields.size() * 6) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptControlChange(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptControlChange(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -67);
+        // Message number: Low 189 (ScriptControlChange).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xBD);
         byteBuffer.put((byte) this.Data_Fields.size());
         for (Data data : this.Data_Fields) {
             packBoolean(byteBuffer, data.TakeControls);
@@ -42,10 +51,10 @@ public class ScriptControlChange extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.TakeControls = unpackBoolean(byteBuffer);
             data.Controls = unpackInt(byteBuffer);

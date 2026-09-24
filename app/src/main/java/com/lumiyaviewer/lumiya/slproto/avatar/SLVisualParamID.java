@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum SLVisualParamID {
     Male_Skeleton,
     Height,

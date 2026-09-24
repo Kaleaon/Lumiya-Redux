@@ -14,7 +14,6 @@ import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarPickerForMute extends AvatarPickerFragment {
     static Bundle makeArguments(UUID uuid) {
         Bundle bundle = new Bundle();
@@ -22,12 +21,12 @@ public class AvatarPickerForMute extends AvatarPickerFragment {
         return bundle;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     public String getTitle() {
         return getString(R.string.select_avatar_to_mute);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment
+    @Override
     protected void onAvatarSelected(ChatterID chatterID, @Nullable String str) {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         if (userManager != null) {

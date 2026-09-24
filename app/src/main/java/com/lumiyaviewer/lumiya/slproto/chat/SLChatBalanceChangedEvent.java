@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLChatBalanceChangedEvent extends SLChatEvent {
     private final int newBalance;
     private final int transactionAmount;
@@ -22,14 +21,14 @@ public class SLChatBalanceChangedEvent extends SLChatEvent {
         this.newBalance = chatMessage.getNewBalance().intValue();
     }
 
-    public SLChatBalanceChangedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean z, int i, int i2) {
+    public SLChatBalanceChangedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean transactionAmountValid, int transactionAmount, int newBalance) {
         super(chatMessageSource, uuid);
-        this.transactionAmountValid = z;
-        this.transactionAmount = i;
-        this.newBalance = i2;
+        this.transactionAmountValid = transactionAmountValid;
+        this.transactionAmount = transactionAmount;
+        this.newBalance = newBalance;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.BalanceChanged;
@@ -39,7 +38,7 @@ public class SLChatBalanceChangedEvent extends SLChatEvent {
         return this.newBalance;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         if (!this.transactionAmountValid) {
             return context.getString(R.string.your_account_balance_is_now, Integer.valueOf(this.newBalance));
@@ -56,22 +55,22 @@ public class SLChatBalanceChangedEvent extends SLChatEvent {
         return this.transactionAmountValid;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return this.transactionAmountValid && this.source.getSourceName(userManager) != null && getTransactionAmount() >= 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public boolean opensNewChatter() {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setTransactionAmount(this.transactionAmountValid ? Integer.valueOf(this.transactionAmount) : null);

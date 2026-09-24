@@ -13,7 +13,6 @@ import java.nio.FloatBuffer;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLPolyMesh extends SLMeshData {
     protected boolean hasWeights;
     public int[] jointMap;
@@ -48,45 +47,45 @@ public class SLPolyMesh extends SLMeshData {
                 i2 = 0;
                 dataInputStream3 = dataInputStream2;
             }
-            SLVisualParamID sLVisualParamID = SLVisualParamID.valuesCustom()[dataInputStream3.readInt()];
-            this.morphs[i] = new SLPolyMorphData(sLVisualParamID, this, dataInputStream3);
-            this.morphIndices.put(sLVisualParamID, Integer.valueOf(i));
+            SLVisualParamID visualParamID = SLVisualParamID.values()[dataInputStream3.readInt()];
+            this.morphs[i] = new SLPolyMorphData(visualParamID, this, dataInputStream3);
+            this.morphIndices.put(visualParamID, Integer.valueOf(i));
             i++;
             i2++;
         }
         int readInt2 = dataInputStream3.readInt();
         this.jointMap = new int[readInt2];
-        for (int i3 = 0; i3 < readInt2; i3++) {
-            this.jointMap[i3] = dataInputStream3.readInt();
+        for (int j = 0; j < readInt2; j++) {
+            this.jointMap[j] = dataInputStream3.readInt();
         }
         Debug.Log("SLPolyMesh: Loaded, numVerts = " + this.numVertices + ", faces = " + this.numFaces + ", morphs = " + this.morphs.length);
     }
 
-    public void applyMorphData(SLMeshData sLMeshData, float[] fArr, GLTexture gLTexture) {
-        for (int i = 0; i < fArr.length; i++) {
-            this.morphs[i].applyMorphData(sLMeshData, fArr[i], gLTexture);
+    public void applyMorphData(SLMeshData meshData, float[] floats, GLTexture glTexture) {
+        for (int i = 0; i < floats.length; i++) {
+            this.morphs[i].applyMorphData(meshData, floats[i], glTexture);
         }
     }
 
-    public void applySkeleton(SLAnimatedMeshData sLAnimatedMeshData, float[] fArr) {
+    public void applySkeleton(SLAnimatedMeshData animatedMeshData, float[] floats) {
         DirectByteBuffer animatedVertexData;
-        if (!this.hasWeights || this.jointMap == null || (animatedVertexData = sLAnimatedMeshData.getAnimatedVertexData()) == null) {
+        if (!this.hasWeights || this.jointMap == null || (animatedVertexData = animatedMeshData.getAnimatedVertexData()) == null) {
             return;
         }
-        OpenJPEG.applyMorphingTransform(this.numVertices, sLAnimatedMeshData.vertexBuffer.asByteBuffer(), animatedVertexData.asByteBuffer(), this.weightsBuffer.asByteBuffer(), this.jointMap, fArr);
+        OpenJPEG.applyMorphingTransform(this.numVertices, animatedMeshData.vertexBuffer.asByteBuffer(), animatedVertexData.asByteBuffer(), this.weightsBuffer.asByteBuffer(), this.jointMap, floats);
     }
 
-    public void applySkeletonSlow(SLAnimatedMeshData sLAnimatedMeshData, float[] fArr) {
+    public void applySkeletonSlow(SLAnimatedMeshData animatedMeshData, float[] floats3) {
         DirectByteBuffer animatedVertexData;
         double d;
-        if (!this.hasWeights || this.jointMap == null || (animatedVertexData = sLAnimatedMeshData.getAnimatedVertexData()) == null) {
+        if (!this.hasWeights || this.jointMap == null || (animatedVertexData = animatedMeshData.getAnimatedVertexData()) == null) {
             return;
         }
         FloatBuffer asFloatBuffer = this.weightsBuffer.asFloatBuffer();
-        FloatBuffer asFloatBuffer2 = sLAnimatedMeshData.vertexBuffer.asFloatBuffer();
+        FloatBuffer asFloatBuffer2 = animatedMeshData.vertexBuffer.asFloatBuffer();
         FloatBuffer asFloatBuffer3 = animatedVertexData.asFloatBuffer();
-        float[] fArr2 = new float[16];
-        float[] fArr3 = new float[16];
+        float[] floats = new float[16];
+        float[] floats2 = new float[16];
         double d2 = -1.0d;
         int i = 0;
         while (i < this.numVertices) {
@@ -104,30 +103,30 @@ public class SLPolyMesh extends SLMeshData {
                 int i5 = i3 * 16;
                 int i6 = i4 * 16;
                 if (i5 == i6) {
-                    System.arraycopy(fArr, i5, fArr3, 0, 16);
+                    System.arraycopy(floats3, i5, floats2, 0, 16);
                 } else {
-                    for (int i7 = 0; i7 < 16; i7++) {
-                        fArr3[i7] = (fArr[i5 + i7] * (1.0f - f2)) + (fArr[i6 + i7] * f2);
+                    for (int j = 0; j < 16; j++) {
+                        floats2[j] = (floats3[i5 + j] * (1.0f - f2)) + (floats3[i6 + j] * f2);
                     }
                 }
             } else {
                 d = d2;
             }
-            fArr2[0] = asFloatBuffer2.get((i * 6) + 0);
-            fArr2[1] = asFloatBuffer2.get((i * 6) + 1);
-            fArr2[2] = asFloatBuffer2.get((i * 6) + 2);
-            fArr2[3] = 1.0f;
-            Matrix.multiplyMV(fArr2, 4, fArr3, 0, fArr2, 0);
-            asFloatBuffer3.put((i * 6) + 0, fArr2[4]);
-            asFloatBuffer3.put((i * 6) + 1, fArr2[5]);
-            asFloatBuffer3.put((i * 6) + 2, fArr2[6]);
+            floats[0] = asFloatBuffer2.get((i * 6) + 0);
+            floats[1] = asFloatBuffer2.get((i * 6) + 1);
+            floats[2] = asFloatBuffer2.get((i * 6) + 2);
+            floats[3] = 1.0f;
+            Matrix.multiplyMV(floats, 4, floats2, 0, floats, 0);
+            asFloatBuffer3.put((i * 6) + 0, floats[4]);
+            asFloatBuffer3.put((i * 6) + 1, floats[5]);
+            asFloatBuffer3.put((i * 6) + 2, floats[6]);
             i++;
             d2 = d;
         }
     }
 
-    public int getMorphIndex(SLVisualParamID sLVisualParamID) {
-        Integer num = this.morphIndices.get(sLVisualParamID);
+    public int getMorphIndex(SLVisualParamID visualParamID) {
+        Integer num = this.morphIndices.get(visualParamID);
         if (num == null) {
             return -1;
         }

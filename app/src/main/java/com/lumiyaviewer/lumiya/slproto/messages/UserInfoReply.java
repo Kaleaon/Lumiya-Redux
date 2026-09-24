@@ -4,19 +4,28 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UserInfoReply
+ *
+ * <p>Template: {@code UserInfoReply Low 400 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_user_info_reply()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class UserInfoReply extends SLMessage {
     public AgentData AgentData_Field;
     public UserData UserData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block UserData, Single. */
     public static class UserData {
-        public byte[] DirectoryVisibility;
-        public byte[] EMail;
-        public boolean IMViaEMail;
+        public byte[] DirectoryVisibility; // Variable 1
+        public byte[] EMail; // Variable 2
+        public boolean IMViaEMail; // BOOL
     }
 
     public UserInfoReply() {
@@ -25,28 +34,29 @@ public class UserInfoReply extends SLMessage {
         this.UserData_Field = new UserData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.UserData_Field.DirectoryVisibility.length + 2 + 2 + this.UserData_Field.EMail.length + 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserInfoReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserInfoReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -112);
+        // Message number: Low 400 (UserInfoReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x90);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packBoolean(byteBuffer, this.UserData_Field.IMViaEMail);
         packVariable(byteBuffer, this.UserData_Field.DirectoryVisibility, 1);
         packVariable(byteBuffer, this.UserData_Field.EMail, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.UserData_Field.IMViaEMail = unpackBoolean(byteBuffer);

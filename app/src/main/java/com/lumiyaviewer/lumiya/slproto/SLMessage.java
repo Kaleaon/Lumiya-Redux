@@ -3,10 +3,6 @@ package com.lumiyaviewer.lumiya.slproto;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.core.internal.view.SupportMenu;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageFactory;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler;
@@ -25,15 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public abstract class SLMessage implements Parcelable {
-    public static final Parcelable.Creator<SLMessage> CREATOR = new Parcelable.Creator<SLMessage>() { // from class: com.lumiyaviewer.lumiya.slproto.SLMessage.1
+    public static final Parcelable.Creator<SLMessage> CREATOR = new Parcelable.Creator<SLMessage>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLMessage createFromParcel(Parcel parcel) {
-            byte[] bArr = new byte[parcel.readInt()];
-            parcel.readByteArray(bArr);
-            ByteBuffer order = ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder());
+            byte[] bytes = new byte[parcel.readInt()];
+            parcel.readByteArray(bytes);
+            ByteBuffer order = ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder());
             SLMessage CreateByID = SLMessageFactory.CreateByID(SLMessage.DecodeMessageIDGeneric(order));
             if (CreateByID == null) {
                 return null;
@@ -43,7 +38,7 @@ public abstract class SLMessage implements Parcelable {
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLMessage[] newArray(int i) {
             return null;
         }
@@ -69,7 +64,7 @@ public abstract class SLMessage implements Parcelable {
             return b;
         }
         byte b2 = byteBuffer.get();
-        return b2 != -1 ? b2 | 65280 : byteBuffer.getShort() | (-65536);
+        return b2 != -1 ? b2 | 0xFF00 : byteBuffer.getShort() | (-65536);
     }
 
     public static int DecodeMessageIDGeneric(ByteBuffer byteBuffer) {
@@ -79,9 +74,9 @@ public abstract class SLMessage implements Parcelable {
         }
         byte b2 = byteBuffer.get();
         if (b2 != -1) {
-            return b2 | 65280;
+            return b2 | 0xFF00;
         }
-        return ((byteBuffer.get() << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & UnsignedBytes.MAX_VALUE);
+        return ((byteBuffer.get() << 8) & 0xFF00) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & 0xFF);
     }
 
     private void PackPayloadLE(ByteBuffer byteBuffer) {
@@ -102,7 +97,7 @@ public abstract class SLMessage implements Parcelable {
         if ((b & 16) != 0) {
             byte b3 = byteBuffer.get(byteBuffer.limit() - 1);
             int limit2 = (byteBuffer.limit() - 1) - (b3 * 4);
-            for (int i2 = 0; i2 < b3; i2++) {
+            for (int j = 0; j < b3; j++) {
                 list.add(Integer.valueOf(byteBuffer.getInt(limit2)));
                 limit2 += 4;
             }
@@ -177,23 +172,23 @@ public abstract class SLMessage implements Parcelable {
     }
 
     public static int flipBytes(int i) {
-        return (((byte) (i >>> 24)) & UnsignedBytes.MAX_VALUE) | ((((byte) (i >>> 16)) << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((((byte) (i >>> 8)) << 16) & 16711680) | ((((byte) (i >>> 0)) << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
+        return (((byte) (i >>> 24)) & 0xFF) | ((((byte) (i >>> 16)) << 8) & 0xFF00) | ((((byte) (i >>> 8)) << 16) & 0xFF0000) | ((((byte) (i >>> 0)) << 24) & 0xFF000000);
     }
 
-    public static String stringFromVariableOEM(byte[] bArr) {
+    public static String stringFromVariableOEM(byte[] bytes) {
         String str;
         try {
-            str = new String(bArr, "ISO-8859-1");
+            str = new String(bytes, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             str = "";
         }
         return str.endsWith("\u0000") ? str.substring(0, str.length() - 1) : str;
     }
 
-    public static String stringFromVariableUTF(byte[] bArr) {
+    public static String stringFromVariableUTF(byte[] bytes) {
         String str;
         try {
-            str = new String(bArr, "UTF-8");
+            str = new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             str = "";
         }
@@ -232,7 +227,7 @@ public abstract class SLMessage implements Parcelable {
 
     public abstract int CalcPayloadSize();
 
-    public abstract void Handle(SLMessageHandler sLMessageHandler);
+    public abstract void Handle(SLMessageHandler messageHandler);
 
     public void Pack(ByteBuffer byteBuffer, ByteBuffer byteBuffer2) {
         byteBuffer.clear();
@@ -268,7 +263,7 @@ public abstract class SLMessage implements Parcelable {
 
     public abstract void UnpackPayload(ByteBuffer byteBuffer);
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -297,14 +292,14 @@ public abstract class SLMessage implements Parcelable {
         byteBuffer.putDouble(d);
     }
 
-    protected void packFixed(ByteBuffer byteBuffer, byte[] bArr, int i) {
-        if (bArr.length == i) {
-            byteBuffer.put(bArr);
+    protected void packFixed(ByteBuffer byteBuffer, byte[] bytes, int i) {
+        if (bytes.length == i) {
+            byteBuffer.put(bytes);
             return;
         }
-        for (int i2 = 0; i2 < i; i2++) {
-            if (i2 < bArr.length) {
-                byteBuffer.put(bArr[i2]);
+        for (int j = 0; j < i; j++) {
+            if (j < bytes.length) {
+                byteBuffer.put(bytes[j]);
             } else {
                 byteBuffer.put((byte) 0);
             }
@@ -323,29 +318,29 @@ public abstract class SLMessage implements Parcelable {
         byteBuffer.putInt(i);
     }
 
-    protected void packLLQuaternion(ByteBuffer byteBuffer, LLQuaternion lLQuaternion) {
-        byteBuffer.putFloat(lLQuaternion.x);
-        byteBuffer.putFloat(lLQuaternion.y);
-        byteBuffer.putFloat(lLQuaternion.z);
+    protected void packLLQuaternion(ByteBuffer byteBuffer, LLQuaternion quaternion) {
+        byteBuffer.putFloat(quaternion.x);
+        byteBuffer.putFloat(quaternion.y);
+        byteBuffer.putFloat(quaternion.z);
     }
 
-    protected void packLLVector3(ByteBuffer byteBuffer, LLVector3 lLVector3) {
-        byteBuffer.putFloat(lLVector3.x);
-        byteBuffer.putFloat(lLVector3.y);
-        byteBuffer.putFloat(lLVector3.z);
+    protected void packLLVector3(ByteBuffer byteBuffer, LLVector3 vector3) {
+        byteBuffer.putFloat(vector3.x);
+        byteBuffer.putFloat(vector3.y);
+        byteBuffer.putFloat(vector3.z);
     }
 
-    protected void packLLVector3d(ByteBuffer byteBuffer, LLVector3d lLVector3d) {
-        byteBuffer.putDouble(lLVector3d.x);
-        byteBuffer.putDouble(lLVector3d.y);
-        byteBuffer.putDouble(lLVector3d.z);
+    protected void packLLVector3d(ByteBuffer byteBuffer, LLVector3d vector3d) {
+        byteBuffer.putDouble(vector3d.x);
+        byteBuffer.putDouble(vector3d.y);
+        byteBuffer.putDouble(vector3d.z);
     }
 
-    protected void packLLVector4(ByteBuffer byteBuffer, LLVector4 lLVector4) {
-        byteBuffer.putFloat(lLVector4.x);
-        byteBuffer.putFloat(lLVector4.y);
-        byteBuffer.putFloat(lLVector4.z);
-        byteBuffer.putFloat(lLVector4.w);
+    protected void packLLVector4(ByteBuffer byteBuffer, LLVector4 vector4) {
+        byteBuffer.putFloat(vector4.x);
+        byteBuffer.putFloat(vector4.y);
+        byteBuffer.putFloat(vector4.z);
+        byteBuffer.putFloat(vector4.w);
     }
 
     protected void packLong(ByteBuffer byteBuffer, long j) {
@@ -364,18 +359,18 @@ public abstract class SLMessage implements Parcelable {
         byteBuffer.order(order);
     }
 
-    protected void packVariable(ByteBuffer byteBuffer, byte[] bArr, int i) {
+    protected void packVariable(ByteBuffer byteBuffer, byte[] bytes, int i) {
         if (i == 1) {
-            byteBuffer.put((byte) bArr.length);
+            byteBuffer.put((byte) bytes.length);
         } else {
-            byteBuffer.put((byte) (bArr.length & 255));
-            byteBuffer.put((byte) ((bArr.length >>> 8) & 255));
+            byteBuffer.put((byte) (bytes.length & 255));
+            byteBuffer.put((byte) ((bytes.length >>> 8) & 255));
         }
-        byteBuffer.put(bArr);
+        byteBuffer.put(bytes);
     }
 
-    public void setEventListener(SLMessageEventListener sLMessageEventListener) {
-        this.listener = sLMessageEventListener;
+    public void setEventListener(SLMessageEventListener messageEventListener) {
+        this.listener = messageEventListener;
     }
 
     protected boolean unpackBoolean(ByteBuffer byteBuffer) {
@@ -391,9 +386,9 @@ public abstract class SLMessage implements Parcelable {
     }
 
     protected byte[] unpackFixed(ByteBuffer byteBuffer, int i) {
-        byte[] bArr = new byte[i];
-        byteBuffer.get(bArr);
-        return bArr;
+        byte[] bytes = new byte[i];
+        byteBuffer.get(bytes);
+        return bytes;
     }
 
     protected float unpackFloat(ByteBuffer byteBuffer) {
@@ -401,10 +396,10 @@ public abstract class SLMessage implements Parcelable {
     }
 
     protected Inet4Address unpackIPAddress(ByteBuffer byteBuffer) {
-        byte[] bArr = new byte[4];
-        byteBuffer.get(bArr);
+        byte[] bytes = new byte[4];
+        byteBuffer.get(bytes);
         try {
-            return (Inet4Address) Inet4Address.getByAddress(bArr);
+            return (Inet4Address) Inet4Address.getByAddress(bytes);
         } catch (UnknownHostException e) {
             return null;
         }
@@ -415,36 +410,36 @@ public abstract class SLMessage implements Parcelable {
     }
 
     protected LLQuaternion unpackLLQuaternion(ByteBuffer byteBuffer) {
-        LLQuaternion lLQuaternion = new LLQuaternion();
-        lLQuaternion.x = byteBuffer.getFloat();
-        lLQuaternion.y = byteBuffer.getFloat();
-        lLQuaternion.z = byteBuffer.getFloat();
-        return lLQuaternion;
+        LLQuaternion quaternion = new LLQuaternion();
+        quaternion.x = byteBuffer.getFloat();
+        quaternion.y = byteBuffer.getFloat();
+        quaternion.z = byteBuffer.getFloat();
+        return quaternion;
     }
 
     protected LLVector3 unpackLLVector3(ByteBuffer byteBuffer) {
-        LLVector3 lLVector3 = new LLVector3();
-        lLVector3.x = byteBuffer.getFloat();
-        lLVector3.y = byteBuffer.getFloat();
-        lLVector3.z = byteBuffer.getFloat();
-        return lLVector3;
+        LLVector3 vector3 = new LLVector3();
+        vector3.x = byteBuffer.getFloat();
+        vector3.y = byteBuffer.getFloat();
+        vector3.z = byteBuffer.getFloat();
+        return vector3;
     }
 
     protected LLVector3d unpackLLVector3d(ByteBuffer byteBuffer) {
-        LLVector3d lLVector3d = new LLVector3d();
-        lLVector3d.x = byteBuffer.getDouble();
-        lLVector3d.y = byteBuffer.getDouble();
-        lLVector3d.z = byteBuffer.getDouble();
-        return lLVector3d;
+        LLVector3d vector3d = new LLVector3d();
+        vector3d.x = byteBuffer.getDouble();
+        vector3d.y = byteBuffer.getDouble();
+        vector3d.z = byteBuffer.getDouble();
+        return vector3d;
     }
 
     protected LLVector4 unpackLLVector4(ByteBuffer byteBuffer) {
-        LLVector4 lLVector4 = new LLVector4();
-        lLVector4.x = byteBuffer.getFloat();
-        lLVector4.y = byteBuffer.getFloat();
-        lLVector4.z = byteBuffer.getFloat();
-        lLVector4.w = byteBuffer.getFloat();
-        return lLVector4;
+        LLVector4 vector4 = new LLVector4();
+        vector4.x = byteBuffer.getFloat();
+        vector4.y = byteBuffer.getFloat();
+        vector4.z = byteBuffer.getFloat();
+        vector4.w = byteBuffer.getFloat();
+        return vector4;
     }
 
     protected long unpackLong(ByteBuffer byteBuffer) {
@@ -465,17 +460,17 @@ public abstract class SLMessage implements Parcelable {
     }
 
     protected byte[] unpackVariable(ByteBuffer byteBuffer, int i) {
-        byte[] bArr = new byte[i == 1 ? byteBuffer.get() & UnsignedBytes.MAX_VALUE : (byteBuffer.get() & UnsignedBytes.MAX_VALUE) | ((byteBuffer.get() & UnsignedBytes.MAX_VALUE) << 8)];
-        byteBuffer.get(bArr);
-        return bArr;
+        byte[] bytes = new byte[i == 1 ? byteBuffer.get() & 0xFF : (byteBuffer.get() & 0xFF) | ((byteBuffer.get() & 0xFF) << 8)];
+        byteBuffer.get(bytes);
+        return bytes;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         int CalcPayloadSize = CalcPayloadSize();
-        byte[] bArr = new byte[CalcPayloadSize];
-        PackPayload(ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder()));
+        byte[] bytes = new byte[CalcPayloadSize];
+        PackPayload(ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()));
         parcel.writeInt(CalcPayloadSize);
-        parcel.writeByteArray(bArr);
+        parcel.writeByteArray(bytes);
     }
 }

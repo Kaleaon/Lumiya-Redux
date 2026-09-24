@@ -7,7 +7,6 @@ import com.google.vr.cardboard.VrParamsProvider;
 import com.google.vr.cardboard.VrParamsProviderFactory;
 import com.google.vr.vrcore.nano.SdkConfiguration;
 
-/* loaded from: classes.dex */
 public class SdkConfigurationReader {
     public static final Vr.VREvent.SdkConfigurationParams DEFAULT_PARAMS;
     static final Vr.VREvent.SdkConfigurationParams REQUESTED_PARAMS;

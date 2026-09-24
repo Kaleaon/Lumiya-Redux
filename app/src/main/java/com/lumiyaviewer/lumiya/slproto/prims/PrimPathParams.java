@@ -1,13 +1,11 @@
 package com.lumiyaviewer.lumiya.slproto.prims;
 
 import androidx.core.internal.view.SupportMenu;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.messages.ObjectUpdate;
 import com.lumiyaviewer.lumiya.slproto.types.LLTersePacking;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class PrimPathParams {
     public static final float CUT_QUANTA = 2.0E-5f;
     public static final byte LL_PCODE_PATH_CIRCLE = 32;
@@ -73,8 +71,8 @@ public class PrimPathParams {
         this.CurveType = byteBuffer.get();
         this.Begin = (byteBuffer.getShort() & 65535) * 2.0E-5f;
         this.End = (50000 - (byteBuffer.getShort() & 65535)) * 2.0E-5f;
-        this.ScaleX = (200 - (byteBuffer.get() & UnsignedBytes.MAX_VALUE)) * 0.01f;
-        this.ScaleY = (200 - (byteBuffer.get() & UnsignedBytes.MAX_VALUE)) * 0.01f;
+        this.ScaleX = (200 - (byteBuffer.get() & 0xFF)) * 0.01f;
+        this.ScaleY = (200 - (byteBuffer.get() & 0xFF)) * 0.01f;
         this.ShearX = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.ShearY = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TwistEnd = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
@@ -82,7 +80,7 @@ public class PrimPathParams {
         this.RadiusOffset = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TaperX = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TaperY = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
-        this.Revolutions = ((byteBuffer.get() & UnsignedBytes.MAX_VALUE) * 0.015f) + 1.0f;
+        this.Revolutions = ((byteBuffer.get() & 0xFF) * 0.015f) + 1.0f;
         this.Skew = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
     }
 
@@ -105,25 +103,25 @@ public class PrimPathParams {
     }
 
     public LLVector2 getBeginScale() {
-        LLVector2 lLVector2 = new LLVector2(1.0f, 1.0f);
+        LLVector2 vector2 = new LLVector2(1.0f, 1.0f);
         if (this.ScaleX > 1.0f) {
-            lLVector2.x = 2.0f - this.ScaleX;
+            vector2.x = 2.0f - this.ScaleX;
         }
         if (this.ScaleY > 1.0f) {
-            lLVector2.y = 2.0f - this.ScaleY;
+            vector2.y = 2.0f - this.ScaleY;
         }
-        return lLVector2;
+        return vector2;
     }
 
     public LLVector2 getEndScale() {
-        LLVector2 lLVector2 = new LLVector2(1.0f, 1.0f);
+        LLVector2 vector2 = new LLVector2(1.0f, 1.0f);
         if (this.ScaleX < 1.0f) {
-            lLVector2.x = this.ScaleX;
+            vector2.x = this.ScaleX;
         }
         if (this.ScaleY < 1.0f) {
-            lLVector2.y = this.ScaleY;
+            vector2.y = this.ScaleY;
         }
-        return lLVector2;
+        return vector2;
     }
 
     public final int hashCode() {

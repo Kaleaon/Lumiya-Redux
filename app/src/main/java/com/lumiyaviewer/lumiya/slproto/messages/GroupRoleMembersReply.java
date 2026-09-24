@@ -1,26 +1,36 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupRoleMembersReply
+ * All role::member pairs for this group.
+ * dataserver -> simulator -> agent
+ *
+ * <p>Template: {@code GroupRoleMembersReply Low 374 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLGroupMgr::processGroupRoleMembersReply()} in indra/newview/llgroupmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupRoleMembersReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<MemberData> MemberData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID RequestID;
-        public int TotalPairs;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID RequestID; // LLUUID
+        public int TotalPairs; // U32
     }
 
+    /** Block MemberData, Variable. */
     public static class MemberData {
-        public UUID MemberID;
-        public UUID RoleID;
+        public UUID MemberID; // LLUUID
+        public UUID RoleID; // LLUUID
     }
 
     public GroupRoleMembersReply() {
@@ -28,21 +38,22 @@ public class GroupRoleMembersReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.MemberData_Fields.size() * 32) + 57;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupRoleMembersReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupRoleMembersReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 118);
+        // Message number: Low 374 (GroupRoleMembersReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x76);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.AgentData_Field.RequestID);
@@ -54,14 +65,14 @@ public class GroupRoleMembersReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.AgentData_Field.RequestID = unpackUUID(byteBuffer);
         this.AgentData_Field.TotalPairs = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             MemberData memberData = new MemberData();
             memberData.RoleID = unpackUUID(byteBuffer);
             memberData.MemberID = unpackUUID(byteBuffer);

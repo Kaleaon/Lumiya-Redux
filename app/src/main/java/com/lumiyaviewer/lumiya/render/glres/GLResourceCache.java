@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.res.ResourceManager;
 import com.lumiyaviewer.lumiya.res.ResourceMemoryCache;
 import com.lumiyaviewer.lumiya.res.ResourceRequest;
 
-/* loaded from: classes.dex */
 public abstract class GLResourceCache<ResourceParams, RawType, ResourceType extends GLSizedResource> extends ResourceMemoryCache<ResourceParams, ResourceType> {
     private final GLLoadQueue loadQueue;
 
@@ -23,22 +22,22 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
             super(resourceparams, resourceManager);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadable
+        @Override
         public void GLCompleteLoad() {
             ResourceType resourcetype;
-            boolean z;
+            boolean loadedFinal;
             synchronized (this) {
                 resourcetype = this.loadedResource;
-                z = this.loadedFinal;
+                loadedFinal = this.loadedFinal;
             }
-            if (z) {
+            if (loadedFinal) {
                 completeRequest(resourcetype);
             } else {
                 intermediateResult(resourcetype);
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadable
+        @Override
         public int GLGetLoadSize() {
             Raw raw;
             synchronized (this) {
@@ -50,28 +49,28 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
             return 0;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadable
-        public int GLLoad(RenderContext renderContext, GLLoadQueue.GLLoadHandler gLLoadHandler) {
+        @Override
+        public int GLLoad(RenderContext renderContext, GLLoadQueue.GLLoadHandler glLoadHandler) {
             Raw raw;
-            boolean z;
+            boolean finalResult;
             synchronized (this) {
                 raw = this.rawResource;
-                z = this.finalResult;
+                finalResult = this.finalResult;
             }
             ResourceType resourcetype = (ResourceType) GLResourceCache.this.LoadResource(getParams(), raw, renderContext);
             int loadedSize = resourcetype != null ? resourcetype.getLoadedSize() : 0;
             synchronized (this) {
                 this.loadedResource = resourcetype;
-                this.loadedFinal = z;
+                this.loadedFinal = finalResult;
             }
             if (resourcetype != null) {
-                gLLoadHandler.GLResourceLoaded(this);
+                glLoadHandler.GLResourceLoaded(this);
             }
             return loadedSize;
         }
 
         /* JADX WARN: Multi-variable type inference failed */
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj != null) {
                 try {
@@ -90,26 +89,26 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
             GLResourceCache.this.collectReferences();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             GLResourceCache.this.loadQueue.remove(this);
             GLResourceCache.this.CancelRawResource(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             GLResourceCache.this.RequestRawResource(getParams(), this);
         }
     }
 
-    protected GLResourceCache(GLLoadQueue gLLoadQueue) {
-        this.loadQueue = gLLoadQueue;
+    protected GLResourceCache(GLLoadQueue glLoadQueue) {
+        this.loadQueue = glLoadQueue;
     }
 
     protected abstract void CancelRawResource(ResourceConsumer resourceConsumer);
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     protected ResourceRequest<ResourceParams, ResourceType> CreateNewRequest(ResourceParams resourceparams, ResourceManager<ResourceParams, ResourceType> resourceManager) {
         return new LoadRequest(resourceparams, resourceManager);
     }

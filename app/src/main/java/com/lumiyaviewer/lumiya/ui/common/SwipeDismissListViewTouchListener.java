@@ -13,7 +13,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     private long mAnimationTime;
     private DismissCallbacks mCallbacks;
@@ -48,7 +47,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
             this.view = view;
         }
 
-        @Override // java.lang.Comparable
+        @Override
         public int compareTo(PendingDismissData pendingDismissData) {
             return pendingDismissData.position - this.position;
         }
@@ -64,7 +63,6 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
         this.mCallbacks = dismissCallbacks;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void performDismiss(View view, int i) {
         this.mCallbacks.onDismiss(this.mListView, i);
     }
@@ -75,12 +73,12 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     }
 
     public AbsListView.OnScrollListener makeScrollListener() {
-        return new AbsListView.OnScrollListener() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.1
-            @Override // android.widget.AbsListView.OnScrollListener
+        return new AbsListView.OnScrollListener() {
+            @Override
             public void onScroll(AbsListView absListView, int i, int i2, int i3) {
             }
 
-            @Override // android.widget.AbsListView.OnScrollListener
+            @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
                 SwipeDismissListViewTouchListener.this.setEnabled(i != 1);
             }
@@ -88,7 +86,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     }
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-    @Override // android.view.View.OnTouchListener
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         boolean z;
         boolean z2 = true;
@@ -157,8 +155,8 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                         final View view2 = this.mDownView;
                         final int i2 = this.mDownPosition;
                         this.mDismissAnimationRefCount++;
-                        this.mDownView.animate().translationX(z2 ? this.mViewWidth : -this.mViewWidth).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.2
-                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                        this.mDownView.animate().translationX(z2 ? this.mViewWidth : -this.mViewWidth).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() {
+                            @Override
                             public void onAnimationEnd(Animator animator) {
                                 SwipeDismissListViewTouchListener.this.performDismiss(view2, i2);
                             }

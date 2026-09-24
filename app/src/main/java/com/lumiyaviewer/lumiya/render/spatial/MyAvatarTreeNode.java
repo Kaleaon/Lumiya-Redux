@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.spatial;
 
 import com.lumiyaviewer.lumiya.utils.InlineList;
 
-/* loaded from: classes.dex */
 public class MyAvatarTreeNode extends InlineList<DrawListEntry> {
     private final SpatialTree spatialTree;
 
@@ -16,19 +15,19 @@ public class MyAvatarTreeNode extends InlineList<DrawListEntry> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void addEntry(DrawListEntry drawListEntry) {
         super.addEntry(drawListEntry);
         this.spatialTree.setDrawListChanged();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void removeEntry(DrawListEntry drawListEntry) {
         super.removeEntry(drawListEntry);
         this.spatialTree.setDrawListChanged();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void requestEntryRemoval(DrawListEntry drawListEntry) {
         this.spatialTree.spatialObjectIndex.requestEntryRemoval(drawListEntry);
     }

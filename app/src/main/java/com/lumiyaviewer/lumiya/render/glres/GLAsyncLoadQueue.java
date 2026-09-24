@@ -18,7 +18,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-/* loaded from: classes.dex */
 public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadHandler {
     private final EGL10 egl10;
     private final EGLContext eglBaseContext;
@@ -40,22 +39,18 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
             this.renderContext = new AtomicReference<>(renderContext);
         }
 
-        /* synthetic */ EGLLoadThread(GLAsyncLoadQueue gLAsyncLoadQueue, RenderContext renderContext, EGLLoadThread eGLLoadThread) {
-            this(renderContext);
-        }
-
         @Nullable
         private EGLContext createContext() {
             Debug.Printf("TexLoad: create[1]: eglGetError = %d", Integer.valueOf(GLAsyncLoadQueue.this.egl10.eglGetError()));
             EGL10 egl10 = GLAsyncLoadQueue.this.egl10;
-            EGLDisplay eGLDisplay = GLAsyncLoadQueue.this.eglDisplay;
-            EGLConfig eGLConfig = GLAsyncLoadQueue.this.eglConfig;
-            EGLContext eGLContext = GLAsyncLoadQueue.this.eglBaseContext;
-            int[] iArr = new int[3];
-            iArr[0] = 12440;
-            iArr[1] = GLAsyncLoadQueue.this.requestGL30 ? 3 : 2;
-            iArr[2] = 12344;
-            EGLContext eglCreateContext = egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
+            EGLDisplay eglDisplay = GLAsyncLoadQueue.this.eglDisplay;
+            EGLConfig eglConfig = GLAsyncLoadQueue.this.eglConfig;
+            EGLContext eglBaseContext = GLAsyncLoadQueue.this.eglBaseContext;
+            int[] ints = new int[3];
+            ints[0] = 12440;
+            ints[1] = GLAsyncLoadQueue.this.requestGL30 ? 3 : 2;
+            ints[2] = 12344;
+            EGLContext eglCreateContext = egl10.eglCreateContext(eglDisplay, eglConfig, eglBaseContext, ints);
             Debug.Printf("TexLoad: create[2]: eglGetError = %d", Integer.valueOf(GLAsyncLoadQueue.this.egl10.eglGetError()));
             EGLSurface eglCreatePbufferSurface = GLAsyncLoadQueue.this.egl10.eglCreatePbufferSurface(GLAsyncLoadQueue.this.eglDisplay, GLAsyncLoadQueue.this.eglConfig, new int[]{12374, 128, 12375, 128, 12344});
             Debug.Printf("TexLoad: create[3]: eglGetError = %d", Integer.valueOf(GLAsyncLoadQueue.this.egl10.eglGetError()));
@@ -69,7 +64,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
             return eglCreateContext;
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             RenderContext andSet = this.renderContext.getAndSet(null);
             EGLContext createContext = createContext();
@@ -122,17 +117,17 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         }
     }
 
-    public GLAsyncLoadQueue(RenderContext renderContext, EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, boolean z) throws InstantiationException {
-        EGLLoadThread eGLLoadThread = null;
+    public GLAsyncLoadQueue(RenderContext renderContext, EGL10 egl10, EGLDisplay eglDisplay, EGLConfig eglConfig, boolean requestGL30) throws InstantiationException {
+        EGLLoadThread eglLoadThread = null;
         this.egl10 = egl10;
-        this.eglDisplay = eGLDisplay;
-        this.eglConfig = eGLConfig;
-        this.requestGL30 = z;
+        this.eglDisplay = eglDisplay;
+        this.eglConfig = eglConfig;
+        this.requestGL30 = requestGL30;
         this.eglBaseContext = egl10.eglGetCurrentContext();
         if (this.eglBaseContext == null || this.eglBaseContext == EGL10.EGL_NO_CONTEXT) {
             throw new InstantiationException("TexLoad: current context was null");
         }
-        this.thread = new Thread(new EGLLoadThread(this, renderContext, eGLLoadThread), "EGLLoader");
+        this.thread = new Thread(new EGLLoadThread(renderContext), "EGLLoader");
         this.thread.setPriority(4);
         this.thread.start();
         try {
@@ -151,12 +146,12 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadHandler
-    public void GLResourceLoaded(GLLoadQueue.GLLoadable gLLoadable) {
-        this.loadedQueue.offer(gLLoadable);
+    @Override
+    public void GLResourceLoaded(GLLoadQueue.GLLoadable glLoadable) {
+        this.loadedQueue.offer(glLoadable);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     public void RunLoadQueue(@Nonnull RenderContext renderContext) {
         while (true) {
             GLLoadQueue.GLLoadable poll = this.loadedQueue.poll();
@@ -168,7 +163,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     public void StopLoadQueue() {
         Debug.Printf("TexLoad: StopLoadQueue called.", new Object[0]);
         this.mustExit.set(true);
@@ -181,9 +176,9 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         Debug.Printf("TexLoad: StopLoadQueue exiting.", new Object[0]);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
-    public void remove(@Nonnull GLLoadQueue.GLLoadable gLLoadable) {
-        this.loadedQueue.remove(gLLoadable);
-        super.remove(gLLoadable);
+    @Override
+    public void remove(@Nonnull GLLoadQueue.GLLoadable glLoadable) {
+        this.loadedQueue.remove(glLoadable);
+        super.remove(glLoadable);
     }
 }

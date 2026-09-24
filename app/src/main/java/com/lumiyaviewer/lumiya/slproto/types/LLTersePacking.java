@@ -1,8 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-import androidx.core.view.InputDeviceCompat;
 
-/* loaded from: classes.dex */
 public final class LLTersePacking {
     public static final float U16_to_float(int i, float f, float f2) {
         return int_dequantize(1.5259022E-5f, i, f, f2);
@@ -14,7 +12,7 @@ public final class LLTersePacking {
 
     public static final int getSignedByte(int i) {
         int i2 = i & 255;
-        return i2 >= 128 ? i2 + InputDeviceCompat.SOURCE_ANY : i2;
+        return i2 >= 128 ? i2 + (-256) : i2;
     }
 
     private static final float int_dequantize(float f, int i, float f2, float f3) {

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.myava;
 
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 enum MyAvatarDetailsPages {
     pageProfile(R.string.my_profile_fragment_title),
     pageOutfits(R.string.my_outfits_fragment_title),
@@ -11,8 +10,8 @@ enum MyAvatarDetailsPages {
 
     private final int titleResource;
 
-    MyAvatarDetailsPages(int i) {
-        this.titleResource = i;
+    MyAvatarDetailsPages(int titleResource) {
+        this.titleResource = titleResource;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

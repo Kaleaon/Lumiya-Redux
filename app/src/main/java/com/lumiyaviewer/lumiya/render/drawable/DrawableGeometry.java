@@ -21,7 +21,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.utils.CreateFailureException;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public final class DrawableGeometry implements GLCleanable {
     private final int FaceCount;
     private final int[] FaceIndexStartsCounts;
@@ -43,8 +42,8 @@ public final class DrawableGeometry implements GLCleanable {
         this.FaceCount = meshData.getFaceCount();
         int i = 0;
         int i2 = 0;
-        for (int i3 = 0; i3 < this.FaceCount; i3++) {
-            MeshFace face = meshData.getFace(i3);
+        for (int j = 0; j < this.FaceCount; j++) {
+            MeshFace face = meshData.getFace(j);
             if (face.getVertices() != null) {
                 i += face.getNumVertices();
                 i2 += face.getNumIndices();
@@ -67,8 +66,8 @@ public final class DrawableGeometry implements GLCleanable {
         int i6 = 0;
         int i7 = 0;
         this.facesCombined = false;
-        for (int i8 = 0; i8 < this.FaceCount; i8++) {
-            MeshFace face2 = meshData.getFace(i8);
+        for (int k = 0; k < this.FaceCount; k++) {
+            MeshFace face2 = meshData.getFace(k);
             DirectByteBuffer vertices = face2.getVertices();
             DirectByteBuffer texCoords = face2.getTexCoords();
             int numVertices = face2.getNumVertices();
@@ -82,15 +81,15 @@ public final class DrawableGeometry implements GLCleanable {
                 }
                 DirectByteBuffer indices = face2.getIndices();
                 int numIndices = face2.getNumIndices();
-                for (int i9 = 0; i9 < numIndices; i9++) {
-                    if ((indices.getShort(i9) & 65535) >= numVertices) {
+                for (int m = 0; m < numIndices; m++) {
+                    if ((indices.getShort(m) & 65535) >= numVertices) {
                         throw new CreateFailureException("Too many vertices");
                     }
                 }
                 directByteBuffer2.copyFromShort(i4, face2.getIndices(), 0, face2.getNumIndices());
             }
             int i10 = i6 + 1;
-            this.FaceIndexStartsCounts[i6] = i8;
+            this.FaceIndexStartsCounts[i6] = k;
             int i11 = i10 + 1;
             this.FaceIndexStartsCounts[i10] = i4;
             i6 = i11 + 1;
@@ -287,7 +286,7 @@ public final class DrawableGeometry implements GLCleanable {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLCleanable
+    @Override
     public void GLCleanup() {
         this.vertexArrayObject = null;
     }
@@ -306,11 +305,11 @@ public final class DrawableGeometry implements GLCleanable {
         }
     }
 
-    public final void GLDrawFace10(RenderContext renderContext, int i, GLLoadableBuffer gLLoadableBuffer) {
+    public final void GLDrawFace10(RenderContext renderContext, int i, GLLoadableBuffer glLoadableBuffer) {
         int i2 = i * 3;
         if (!this.facesCombined) {
-            gLLoadableBuffer.Bind(renderContext, 32884, 3, 5126, 24, this.FaceVertexStartsCounts[i * 2] * 24);
-            gLLoadableBuffer.Bind(renderContext, 32885, 3, 5126, 24, (this.FaceVertexStartsCounts[i * 2] * 24) + 12);
+            glLoadableBuffer.Bind(renderContext, 32884, 3, 5126, 24, this.FaceVertexStartsCounts[i * 2] * 24);
+            glLoadableBuffer.Bind(renderContext, 32885, 3, 5126, 24, (this.FaceVertexStartsCounts[i * 2] * 24) + 12);
             this.TexCoordsBuffer.Bind(renderContext, 32888, 2, 5126, 8, this.FaceVertexStartsCounts[i * 2] * 4 * 2);
         }
         this.IndexBuffer.DrawElements(renderContext, 4, this.FaceIndexStartsCounts[i2 + 2], 5123, this.FaceIndexStartsCounts[i2 + 1] * 2);
@@ -320,11 +319,11 @@ public final class DrawableGeometry implements GLCleanable {
         int i2 = i * 3;
         if (renderContext.hasGL30) {
             if (this.vertexArrayObject != null) {
-                GLVertexArrayObject gLVertexArrayObject = this.vertexArrayObject;
+                GLVertexArrayObject vertexArrayObject = this.vertexArrayObject;
                 if (this.facesCombined) {
                     i = 0;
                 }
-                gLVertexArrayObject.Bind(i);
+                vertexArrayObject.Bind(i);
                 this.IndexBuffer.DrawElements20(4, this.FaceIndexStartsCounts[i2 + 2], 5123, this.FaceIndexStartsCounts[i2 + 1] * 2);
                 this.vertexArrayObject.Unbind();
                 return;
@@ -350,37 +349,37 @@ public final class DrawableGeometry implements GLCleanable {
         }
     }
 
-    IntersectInfo IntersectRay(LLVector3 lLVector3, LLVector3 lLVector32) {
+    IntersectInfo IntersectRay(LLVector3 vector3, LLVector3 vector33) {
         GLRayTrace.RayIntersectInfo rayIntersectInfo = null;
         int i = -1;
         int i2 = 0;
         float f = 0.0f;
-        LLVector3[] lLVector3Arr = new LLVector3[3];
-        for (int i3 = 0; i3 < 3; i3++) {
-            lLVector3Arr[i3] = new LLVector3();
+        LLVector3[] vector3s = new LLVector3[3];
+        for (int j = 0; j < 3; j++) {
+            vector3s[j] = new LLVector3();
         }
-        for (int i4 = 0; i4 < this.FaceCount; i4++) {
-            int i5 = i4 * 3;
+        for (int k = 0; k < this.FaceCount; k++) {
+            int i5 = k * 3;
             int i6 = this.FaceIndexStartsCounts[i5 + 1];
             int i7 = this.FaceIndexStartsCounts[i5 + 2];
-            for (int i8 = 0; i8 < i7; i8 += 3) {
+            for (int m = 0; m < i7; m += 3) {
                 int i9 = 0;
                 while (true) {
                     int i10 = i9;
                     if (i10 >= 3) {
                         break;
                     }
-                    int i11 = (this.facesCombined ? this.IndexBuffer.getShort(i6 + i8 + i10) : this.IndexBuffer.getShort(i6 + i8 + i10) + this.FaceVertexStartsCounts[i4 * 2]) * 6;
-                    lLVector3Arr[i10].set(this.VertexBuffer.getFloat(i11 + 0), this.VertexBuffer.getFloat(i11 + 1), this.VertexBuffer.getFloat(i11 + 2));
+                    int i11 = (this.facesCombined ? this.IndexBuffer.getShort(i6 + m + i10) : this.IndexBuffer.getShort(i6 + m + i10) + this.FaceVertexStartsCounts[k * 2]) * 6;
+                    vector3s[i10].set(this.VertexBuffer.getFloat(i11 + 0), this.VertexBuffer.getFloat(i11 + 1), this.VertexBuffer.getFloat(i11 + 2));
                     i9 = i10 + 1;
                 }
-                GLRayTrace.RayIntersectInfo intersect_RayTriangle = GLRayTrace.intersect_RayTriangle(lLVector3, lLVector32, lLVector3Arr, 0);
+                GLRayTrace.RayIntersectInfo intersect_RayTriangle = GLRayTrace.intersect_RayTriangle(vector3, vector33, vector3s, 0);
                 if (intersect_RayTriangle != null) {
-                    float f2 = intersect_RayTriangle.intersectPoint.w;
-                    if (rayIntersectInfo == null || f2 < f) {
-                        f = f2;
-                        i2 = i4;
-                        i = i8;
+                    float w = intersect_RayTriangle.intersectPoint.w;
+                    if (rayIntersectInfo == null || w < f) {
+                        f = w;
+                        i2 = k;
+                        i = m;
                         rayIntersectInfo = intersect_RayTriangle;
                     }
                 }
@@ -390,15 +389,15 @@ public final class DrawableGeometry implements GLCleanable {
             return null;
         }
         int i12 = this.FaceIndexStartsCounts[(i2 * 3) + 1];
-        LLVector2[] lLVector2Arr = new LLVector2[3];
+        LLVector2[] vector2s = new LLVector2[3];
         int i13 = 0;
         while (true) {
             int i14 = i13;
             if (i14 >= 3) {
-                return new IntersectInfo(rayIntersectInfo.intersectPoint, i2, ((lLVector2Arr[1].x - lLVector2Arr[0].x) * rayIntersectInfo.s) + ((lLVector2Arr[2].x - lLVector2Arr[0].x) * rayIntersectInfo.t) + lLVector2Arr[0].x, ((lLVector2Arr[1].y - lLVector2Arr[0].y) * rayIntersectInfo.s) + ((lLVector2Arr[2].y - lLVector2Arr[0].y) * rayIntersectInfo.t) + lLVector2Arr[0].y);
+                return new IntersectInfo(rayIntersectInfo.intersectPoint, i2, ((vector2s[1].x - vector2s[0].x) * rayIntersectInfo.s) + ((vector2s[2].x - vector2s[0].x) * rayIntersectInfo.t) + vector2s[0].x, ((vector2s[1].y - vector2s[0].y) * rayIntersectInfo.s) + ((vector2s[2].y - vector2s[0].y) * rayIntersectInfo.t) + vector2s[0].y);
             }
             int i15 = (this.facesCombined ? this.IndexBuffer.getShort(i12 + i + i14) : this.IndexBuffer.getShort(i12 + i + i14) + this.FaceVertexStartsCounts[i2 * 2]) * 2;
-            lLVector2Arr[i14] = new LLVector2(this.TexCoordsBuffer.getFloat(i15), this.TexCoordsBuffer.getFloat(i15 + 1));
+            vector2s[i14] = new LLVector2(this.TexCoordsBuffer.getFloat(i15), this.TexCoordsBuffer.getFloat(i15 + 1));
             i13 = i14 + 1;
         }
     }

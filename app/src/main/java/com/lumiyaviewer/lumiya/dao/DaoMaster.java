@@ -7,7 +7,6 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
-/* loaded from: classes.dex */
 public class DaoMaster extends AbstractDaoMaster {
     public static final int SCHEMA_VERSION = 71;
 
@@ -16,11 +15,11 @@ public class DaoMaster extends AbstractDaoMaster {
             super(context, str, cursorFactory);
         }
 
-        @Override // android.database.sqlite.SQLiteOpenHelper
-        public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
             Log.i("greenDAO", "Upgrading schema from version " + i + " to " + i2 + " by dropping all tables");
-            DaoMaster.dropAllTables(sQLiteDatabase, true);
-            onCreate(sQLiteDatabase);
+            DaoMaster.dropAllTables(sqLiteDatabase, true);
+            onCreate(sqLiteDatabase);
         }
     }
 
@@ -29,15 +28,15 @@ public class DaoMaster extends AbstractDaoMaster {
             super(context, str, cursorFactory, 71);
         }
 
-        @Override // android.database.sqlite.SQLiteOpenHelper
-        public void onCreate(SQLiteDatabase sQLiteDatabase) {
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
             Log.i("greenDAO", "Creating tables for schema version 71");
-            DaoMaster.createAllTables(sQLiteDatabase, false);
+            DaoMaster.createAllTables(sqLiteDatabase, false);
         }
     }
 
-    public DaoMaster(SQLiteDatabase sQLiteDatabase) {
-        super(sQLiteDatabase, 71);
+    public DaoMaster(SQLiteDatabase sqLiteDatabase) {
+        super(sqLiteDatabase, 71);
         registerDaoClass(CachedResponseDao.class);
         registerDaoClass(CachedAssetDao.class);
         registerDaoClass(MoneyTransactionDao.class);
@@ -55,48 +54,48 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ChatterDao.class);
     }
 
-    public static void createAllTables(SQLiteDatabase sQLiteDatabase, boolean z) {
-        CachedResponseDao.createTable(sQLiteDatabase, z);
-        CachedAssetDao.createTable(sQLiteDatabase, z);
-        MoneyTransactionDao.createTable(sQLiteDatabase, z);
-        MuteListCachedDataDao.createTable(sQLiteDatabase, z);
-        SearchGridResultDao.createTable(sQLiteDatabase, z);
-        GroupMemberDao.createTable(sQLiteDatabase, z);
-        GroupMemberListDao.createTable(sQLiteDatabase, z);
-        GroupRoleMemberDao.createTable(sQLiteDatabase, z);
-        GroupRoleMemberListDao.createTable(sQLiteDatabase, z);
-        UserDao.createTable(sQLiteDatabase, z);
-        FriendDao.createTable(sQLiteDatabase, z);
-        UserNameDao.createTable(sQLiteDatabase, z);
-        UserPicDao.createTable(sQLiteDatabase, z);
-        ChatMessageDao.createTable(sQLiteDatabase, z);
-        ChatterDao.createTable(sQLiteDatabase, z);
+    public static void createAllTables(SQLiteDatabase sqLiteDatabase, boolean z) {
+        CachedResponseDao.createTable(sqLiteDatabase, z);
+        CachedAssetDao.createTable(sqLiteDatabase, z);
+        MoneyTransactionDao.createTable(sqLiteDatabase, z);
+        MuteListCachedDataDao.createTable(sqLiteDatabase, z);
+        SearchGridResultDao.createTable(sqLiteDatabase, z);
+        GroupMemberDao.createTable(sqLiteDatabase, z);
+        GroupMemberListDao.createTable(sqLiteDatabase, z);
+        GroupRoleMemberDao.createTable(sqLiteDatabase, z);
+        GroupRoleMemberListDao.createTable(sqLiteDatabase, z);
+        UserDao.createTable(sqLiteDatabase, z);
+        FriendDao.createTable(sqLiteDatabase, z);
+        UserNameDao.createTable(sqLiteDatabase, z);
+        UserPicDao.createTable(sqLiteDatabase, z);
+        ChatMessageDao.createTable(sqLiteDatabase, z);
+        ChatterDao.createTable(sqLiteDatabase, z);
     }
 
-    public static void dropAllTables(SQLiteDatabase sQLiteDatabase, boolean z) {
-        CachedResponseDao.dropTable(sQLiteDatabase, z);
-        CachedAssetDao.dropTable(sQLiteDatabase, z);
-        MoneyTransactionDao.dropTable(sQLiteDatabase, z);
-        MuteListCachedDataDao.dropTable(sQLiteDatabase, z);
-        SearchGridResultDao.dropTable(sQLiteDatabase, z);
-        GroupMemberDao.dropTable(sQLiteDatabase, z);
-        GroupMemberListDao.dropTable(sQLiteDatabase, z);
-        GroupRoleMemberDao.dropTable(sQLiteDatabase, z);
-        GroupRoleMemberListDao.dropTable(sQLiteDatabase, z);
-        UserDao.dropTable(sQLiteDatabase, z);
-        FriendDao.dropTable(sQLiteDatabase, z);
-        UserNameDao.dropTable(sQLiteDatabase, z);
-        UserPicDao.dropTable(sQLiteDatabase, z);
-        ChatMessageDao.dropTable(sQLiteDatabase, z);
-        ChatterDao.dropTable(sQLiteDatabase, z);
+    public static void dropAllTables(SQLiteDatabase sqLiteDatabase, boolean z) {
+        CachedResponseDao.dropTable(sqLiteDatabase, z);
+        CachedAssetDao.dropTable(sqLiteDatabase, z);
+        MoneyTransactionDao.dropTable(sqLiteDatabase, z);
+        MuteListCachedDataDao.dropTable(sqLiteDatabase, z);
+        SearchGridResultDao.dropTable(sqLiteDatabase, z);
+        GroupMemberDao.dropTable(sqLiteDatabase, z);
+        GroupMemberListDao.dropTable(sqLiteDatabase, z);
+        GroupRoleMemberDao.dropTable(sqLiteDatabase, z);
+        GroupRoleMemberListDao.dropTable(sqLiteDatabase, z);
+        UserDao.dropTable(sqLiteDatabase, z);
+        FriendDao.dropTable(sqLiteDatabase, z);
+        UserNameDao.dropTable(sqLiteDatabase, z);
+        UserPicDao.dropTable(sqLiteDatabase, z);
+        ChatMessageDao.dropTable(sqLiteDatabase, z);
+        ChatterDao.dropTable(sqLiteDatabase, z);
     }
 
-    @Override // de.greenrobot.dao.AbstractDaoMaster
+    @Override
     public DaoSession newSession() {
         return new DaoSession(this.db, IdentityScopeType.Session, this.daoConfigMap);
     }
 
-    @Override // de.greenrobot.dao.AbstractDaoMaster
+    @Override
     public DaoSession newSession(IdentityScopeType identityScopeType) {
         return new DaoSession(this.db, identityScopeType, this.daoConfigMap);
     }

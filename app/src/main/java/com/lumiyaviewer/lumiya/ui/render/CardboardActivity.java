@@ -1,5 +1,10 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
+import android.view.WindowManager;
+import android.view.Window;
+import com.google.vr.cardboard.FullscreenMode;
+import com.google.vr.sdk.base.AndroidCompat;
+import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -36,7 +41,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -97,11 +101,8 @@ import javax.annotation.Nullable;
 import javax.microedition.khronos.egl.EGLConfig;
 
 @TargetApi(16)
-/* loaded from: classes.dex */
 public class CardboardActivity extends DetailsActivity implements ObjectPopupsManager.ObjectPopupListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-render-MoveControlSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues = null;
     private static final int DEFAULT_FONT_SIZE_SP = 16;
     private static final int LISTVIEW_SCROLL_DURATION = 500;
     private static final int LISTVIEW_SCROLL_OFFSET = 100;
@@ -171,6 +172,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     @BindView(R.id.cardboard_ims)
     LinearLayout chatsOverlayLayout;
     private VrSession vrSession;
+    // Window behaviour 3.4.2 applied in VR mode regardless of runtime:
+    // keep the screen on, immersive fullscreen (restored after the VR
+    // runtime refactor dropped them).
+    private final ScreenOnFlagHelper screenOnFlagHelper = new ScreenOnFlagHelper(this);
+    private FullscreenMode fullscreenMode;
     private VrRuntime vrRuntime;
 
     @BindView(R.id.dialogQuestionText)
@@ -213,62 +219,62 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private boolean isResumed = false;
     private final AtomicBoolean viewDrawPosted = new AtomicBoolean(false);
     private boolean voiceEnabled = false;
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.11
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m764com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref0((SLAgentCircuit) obj);
+            CardboardActivity.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.12
+    private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m765com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref1((MyAvatarState) obj);
+            CardboardActivity.this.onMyAvatarState((MyAvatarState) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.14
+    private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m774com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref2((Boolean) obj);
+            CardboardActivity.this.onVoiceLoginStatusChanged((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.15
+    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m775com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref3((CurrentLocationInfo) obj);
+            CardboardActivity.this.onCurrentLocationChanged((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.16
+    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m776com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref4((ChatterID) obj);
+            CardboardActivity.this.onVoiceActiveChatter((ChatterID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.17
+    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m777com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref5((VoiceChatInfo) obj);
+            CardboardActivity.this.onVoiceChatInfo((VoiceChatInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -281,48 +287,48 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private final AtomicBoolean keypadActive = new AtomicBoolean(false);
     private final AtomicDouble keypadTurning = new AtomicDouble(0.0d);
     private final AtomicInteger controllerConnectionState = new AtomicInteger(0);
-    private final ImmutableMap<ControlsPage, View.OnTouchListener> outsideTouchListeners = ImmutableMap.of(ControlsPage.pageSpeech, new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.3
+    private final ImmutableMap<ControlsPage, View.OnTouchListener> outsideTouchListeners = ImmutableMap.of(ControlsPage.pageSpeech, new View.OnTouchListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-            return CardboardActivity.this.m778com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref6(view, motionEvent);
+            return CardboardActivity.this.onSpeakControlsTouch(view, motionEvent);
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public final boolean onTouch(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
-    }, ControlsPage.pageObject, new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.4
+    }, ControlsPage.pageObject, new View.OnTouchListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-            return CardboardActivity.this.m779com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref7(view, motionEvent);
+            return CardboardActivity.this.onObjectControlsTouch(view, motionEvent);
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public final boolean onTouch(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
-    }, ControlsPage.pageScriptDialog, new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.5
+    }, ControlsPage.pageScriptDialog, new View.OnTouchListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-            return CardboardActivity.this.m780com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref8(view, motionEvent);
+            return CardboardActivity.this.onScriptDialogOutsideTouch(view, motionEvent);
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public final boolean onTouch(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
-    }, ControlsPage.pageYesNo, new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.6
+    }, ControlsPage.pageYesNo, new View.OnTouchListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-            return CardboardActivity.this.m781com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref9(view, motionEvent);
+            return CardboardActivity.this.onYesNoOutsideTouch(view, motionEvent);
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public final boolean onTouch(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
-    }, ControlsPage.pageDetails, new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.2
+    }, ControlsPage.pageDetails, new View.OnTouchListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
-            return CardboardActivity.this.m766com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref10(view, motionEvent);
+            return CardboardActivity.this.onDetailsOutsideTouch(view, motionEvent);
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public final boolean onTouch(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
@@ -350,66 +356,66 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private final AtomicReference<SLAvatarControl> avatarControl = new AtomicReference<>();
     private final AtomicBoolean touchRequested = new AtomicBoolean(false);
     private final AtomicReference<ObjectIntersectInfo> pickedObject = new AtomicReference<>();
-    private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.13
+    private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            CardboardActivity.this.m767com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref11((SLObjectProfileData) obj);
+            CardboardActivity.this.onSelectedObjectProfile((SLObjectProfileData) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
     private ChatterNameRetriever pickedAvatarNameRetriever = null;
-    private final OnHoverListenerCompat hoverListener = new OnHoverListenerCompat() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.1
-        @Override // com.lumiyaviewer.lumiya.ui.render.OnHoverListenerCompat
+    private final OnHoverListenerCompat hoverListener = new OnHoverListenerCompat() {
+        @Override
         public boolean onHoverEnter(View view) {
             view.setAlpha(1.0f);
             Debug.Printf("Cardboard: hovering enter %d", Integer.valueOf(view.getId()));
             CardboardActivity.this.hoveringOverButton = view;
-            CardboardActivity.this.m768com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref12();
+            CardboardActivity.this.onViewsInvalidated();
             return false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.render.OnHoverListenerCompat
+        @Override
         public boolean onHoverExit(View view) {
             view.setAlpha(0.5f);
             Debug.Printf("Cardboard: hovering exit %d", Integer.valueOf(view.getId()));
             if (CardboardActivity.this.hoveringOverButton == view) {
                 CardboardActivity.this.hoveringOverButton = null;
             }
-            CardboardActivity.this.m768com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref12();
+            CardboardActivity.this.onViewsInvalidated();
             return false;
         }
     };
-    private final View.OnHoverListener onHoverListener = new View.OnHoverListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.1
+    private final View.OnHoverListener onHoverListener = new View.OnHoverListener() {
         private final /* synthetic */ boolean $m$0(View view, MotionEvent motionEvent) {
             return CardboardActivity.this.m784xd3567aba(view, motionEvent);
         }
 
-        @Override // android.view.View.OnHoverListener
+        @Override
         public final boolean onHover(View view, MotionEvent motionEvent) {
             return $m$0(view, motionEvent);
         }
     };
-    private final RecognitionListener recognitionListener = new RecognitionListener() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.2
-        @Override // android.speech.RecognitionListener
+    private final RecognitionListener recognitionListener = new RecognitionListener() {
+        @Override
         public void onBeginningOfSpeech() {
             Debug.Printf("Cardboard: beginning of speech", new Object[0]);
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onBufferReceived(byte[] bArr) {
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onEndOfSpeech() {
             Debug.Printf("Cardboard: end of speech", new Object[0]);
-            CardboardActivity.this.speakLevelIndicator.setVisibility(4);
-            CardboardActivity.this.speakNowText.setVisibility(4);
+            CardboardActivity.this.speakLevelIndicator.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.speakNowText.setVisibility(View.INVISIBLE);
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onError(int i) {
             String string;
             Debug.Printf("Cardboard: speech error %d", Integer.valueOf(i));
@@ -444,11 +450,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             CardboardActivity.this.showSpeechRecognitionError(string);
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onEvent(int i, Bundle bundle) {
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onPartialResults(Bundle bundle) {
             Debug.Printf("Cardboard: speech recognition: got partial results", new Object[0]);
             ArrayList<String> stringArrayList = bundle.getStringArrayList("results_recognition");
@@ -461,15 +467,15 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.this.buttonSpeechSend.setVisibility(0);
+            CardboardActivity.this.buttonSpeechSend.setVisibility(View.VISIBLE);
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onReadyForSpeech(Bundle bundle) {
-            CardboardActivity.this.speakNowText.setVisibility(0);
+            CardboardActivity.this.speakNowText.setVisibility(View.VISIBLE);
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onResults(Bundle bundle) {
             Debug.Printf("Cardboard: speech recognition: got some results", new Object[0]);
             ArrayList<String> stringArrayList = bundle.getStringArrayList("results_recognition");
@@ -482,12 +488,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.this.buttonSpeechSend.setVisibility(0);
-            CardboardActivity.this.speakLevelIndicator.setVisibility(4);
+            CardboardActivity.this.buttonSpeechSend.setVisibility(View.VISIBLE);
+            CardboardActivity.this.speakLevelIndicator.setVisibility(View.INVISIBLE);
             CardboardActivity.this.isSpeechFinished = true;
         }
 
-        @Override // android.speech.RecognitionListener
+        @Override
         public void onRmsChanged(float f) {
             if (CardboardActivity.this.isSpeechFinished) {
                 return;
@@ -510,7 +516,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 round = 100;
             }
             Debug.Printf("Cardboard: speech recognition: RMS %f", Float.valueOf(f));
-            CardboardActivity.this.speakLevelIndicator.setVisibility(0);
+            CardboardActivity.this.speakLevelIndicator.setVisibility(View.VISIBLE);
             CardboardActivity.this.speakLevelIndicator.setProgress(round);
         }
     };
@@ -523,8 +529,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private Point scrollableViewPoint = new Point();
 
     @SuppressLint({"HandlerLeak"})
-    private final Handler handler = new Handler() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.3
-        @Override // android.os.Handler
+    private final Handler handler = new Handler() {
+        @Override
         public void handleMessage(Message message) {
             switch (message.what) {
                 case 1:
@@ -547,8 +553,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             }
         }
     };
-    private final View.OnClickListener onDialogButtonClick = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.4
-        @Override // android.view.View.OnClickListener
+    private final View.OnClickListener onDialogButtonClick = new View.OnClickListener() {
+        @Override
         public void onClick(View view) {
             if (CardboardActivity.this.activeScriptDialog != null) {
                 int i = 0;
@@ -570,17 +576,17 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     };
     private final Object chatEventHandler = new AnonymousClass5();
-    private final View.OnClickListener onVoiceCallButtonListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA
+    private final View.OnClickListener onVoiceCallButtonListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             CardboardActivity.this.m785xd399c564(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
     };
-    private final VrSession.Listener vrSessionListener = new VrSession.Listener() { // from class: com.lumiyaviewer.lumiya.ui.render.CardboardActivity.6
+    private final VrSession.Listener vrSessionListener = new VrSession.Listener() {
         @Override
         public void onApiStatusChanged(int i) {
             Debug.Printf("Cardboard: controller API status: %d", Integer.valueOf(i));
@@ -609,12 +615,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
 
         @Subscribe
         public void onChatMessage(final ActiveChattersManager.ChatMessageEvent chatMessageEvent) {
-            CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.26
+            CardboardActivity.this.runOnUiThread(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     AnonymousClass5.this.m786x4829a1cd((ActiveChattersManager.ChatMessageEvent) chatMessageEvent);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -677,23 +683,23 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             final MoveControl moveControl;
             float moveAmount = 0.0f;
             if (inputState.isAppButtonPressed() && (!this.appButtonPressed)) {
-                CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.20
+                CardboardActivity.this.runOnUiThread(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass7.this.m787xb2042f3a();
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
                 });
             } else if (!inputState.isAppButtonPressed() && this.appButtonPressed) {
-                CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.21
+                CardboardActivity.this.runOnUiThread(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass7.this.m788xb2043377();
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -703,12 +709,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             if (!inputState.isTouching()) {
                 if (this.activeMoveControl != null) {
                     final MoveControl moveControl2 = this.activeMoveControl;
-                    CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.28
+                    CardboardActivity.this.runOnUiThread(new Runnable() {
                         private final /* synthetic */ void $m$0() {
                             AnonymousClass7.this.m792xb20f0dd0((MoveControl) moveControl2);
                         }
 
-                        @Override // java.lang.Runnable
+                        @Override
                         public final void run() {
                             $m$0();
                         }
@@ -748,12 +754,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             final float f = moveAmount;
             if (moveControl == this.activeMoveControl) {
                 if (moveControl != null) {
-                    CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.30
+                    CardboardActivity.this.runOnUiThread(new Runnable() {
                         private final /* synthetic */ void $m$0() {
                             AnonymousClass7.this.m791xb20efe54((MoveControl) moveControl, f);
                         }
 
-                        @Override // java.lang.Runnable
+                        @Override
                         public final void run() {
                             $m$0();
                         }
@@ -761,24 +767,24 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 }
             } else if (moveControl != null) {
                 this.activeMoveControl = moveControl;
-                CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.29
+                CardboardActivity.this.runOnUiThread(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass7.this.m789xb20ea03e((MoveControl) moveControl, f);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
                 });
             } else {
                 final MoveControl moveControl3 = this.activeMoveControl;
-                CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.27
+                CardboardActivity.this.runOnUiThread(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass7.this.m790xb20ea7da((MoveControl) moveControl3);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -809,7 +815,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     class WorldStereoRenderer implements VrSession.Renderer {
         private static final float TURN_DEGREES = 35.0f;
         private static final float TURN_DEGREES_PER_MS = 0.02f;
@@ -881,12 +886,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 if (CardboardActivity.this.hitPointUpdatePosted.getAndSet(true)) {
                     return;
                 }
-                CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.22
+                CardboardActivity.this.runOnUiThread(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         WorldStereoRenderer.this.m793x10c82f4f();
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -998,12 +1003,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             this.externalTexture = new GLExternalTexture((int) (i * 1.0f), ((int) (i2 * CardboardActivity.controlSizeFactorY)) + CardboardActivity.this.voiceViewHeightAllowance);
             this.eyeSeparation = CardboardActivity.this.vrSession != null ? CardboardActivity.this.vrSession.getInterpupillaryDistance() : 0.0f;
             this.headTransformCompat.neutralYawValid = false;
-            CardboardActivity.this.runOnUiThread(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.23
+            CardboardActivity.this.runOnUiThread(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     WorldStereoRenderer.this.m794x44e02702();
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -1014,32 +1019,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         public void onSurfaceCreated(EGLConfig eGLConfig) {
             CardboardActivity.this.renderer.onSurfaceCreated(null, eGLConfig, true);
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-render-MoveControlSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m744getcomlumiyaviewerlumiyauirenderMoveControlSwitchesValues() {
-        if (f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues != null) {
-            return f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues;
-        }
-        int[] iArr = new int[MoveControl.valuesCustom().length];
-        try {
-            iArr[MoveControl.Backward.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[MoveControl.Forward.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[MoveControl.Left.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[MoveControl.Right.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f580comlumiyaviewerlumiyauirenderMoveControlSwitchesValues = iArr;
-        return iArr;
     }
 
     private void closeSpeechControls() {
@@ -1053,7 +1032,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void draw2DUI() {
         GLExternalTexture gLExternalTexture = this.externalTextureRef.get();
         if (gLExternalTexture != null) {
@@ -1071,9 +1049,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.onScreenControlsLayout.draw(canvas);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: drawViews, reason: merged with bridge method [inline-methods] */
-    public void m771com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref15() {
+    public void drawViews() {
         this.viewDrawPosted.set(false);
         Debug.Printf("Cardboard: drawing 2D UI", new Object[0]);
         draw2DUI();
@@ -1108,12 +1084,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handleMoveControl(@Nonnull MoveControl moveControl, float f) {
         SLAvatarControl sLAvatarControl = this.avatarControl.get();
         if (sLAvatarControl != null) {
-            switch (m744getcomlumiyaviewerlumiyauirenderMoveControlSwitchesValues()[moveControl.ordinal()]) {
-                case 1:
+            switch (moveControl) {
+                case Backward:
                     if (f == 0.0f) {
                         if (!this.ownAvatarVisible) {
                             stopWalking();
@@ -1132,7 +1107,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                             break;
                         }
                     }
-                case 2:
+                case Forward:
                     if (f == 0.0f) {
                         if (!this.ownAvatarVisible) {
                             stopWalking();
@@ -1151,7 +1126,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                             break;
                         }
                     }
-                case 3:
+                case Left:
                     if (f == 0.0f) {
                         this.keypadTurning.set(0.0d);
                         break;
@@ -1160,7 +1135,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                         this.keypadTurning.set(-f);
                         break;
                     }
-                case 4:
+                case Right:
                     if (f == 0.0f) {
                         this.keypadTurning.set(0.0d);
                         break;
@@ -1173,7 +1148,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handlePickedObject(ObjectIntersectInfo objectIntersectInfo) {
         SLObjectInfo sLObjectInfo = objectIntersectInfo != null ? objectIntersectInfo.objInfo : null;
         if (sLObjectInfo == null) {
@@ -1194,12 +1168,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                     this.pickedAvatarNameRetriever.dispose();
                     this.pickedAvatarNameRetriever = null;
                 }
-                this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.18
+                this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
                     private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                        CardboardActivity.this.m773com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref17(chatterNameRetriever);
+                        CardboardActivity.this.onPickedAvatarNameUpdated(chatterNameRetriever);
                     }
 
-                    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                    @Override
                     public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                         $m$0(chatterNameRetriever);
                     }
@@ -1213,9 +1187,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         updateObjectPanel();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: isViewScrollable, reason: merged with bridge method [inline-methods] */
-    public boolean m772com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref16(View view) {
+    public boolean isViewScrollable(View view) {
         if (view instanceof ListView) {
             return true;
         }
@@ -1230,16 +1202,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m764com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref0(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         updateDrawingEnabled();
         this.avatarControl.set(sLAgentCircuit != null ? sLAgentCircuit.getModules().avatarControl : null);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCardboardTrigger, reason: merged with bridge method [inline-methods] */
-    public void m769com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref13() {
+    public void onCardboardTrigger() {
         Object[] objArr = new Object[3];
         objArr[0] = Integer.valueOf(this.hoveringOverButton != null ? this.hoveringOverButton.getId() : -1);
         objArr[1] = Integer.valueOf(this.hoveringPressedButton != null ? this.hoveringPressedButton.getId() : -1);
@@ -1267,15 +1235,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocationChanged, reason: merged with bridge method [inline-methods] */
-    public void m775com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref3(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationChanged(CurrentLocationInfo currentLocationInfo) {
         updateVoiceIndication();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onDetailsOutsideTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m766com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref10(View view, MotionEvent motionEvent) {
+    public boolean onDetailsOutsideTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
                 handleBackPressed();
@@ -1284,7 +1248,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return true;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onExternalButtonAction(boolean z) {
         long uptimeMillis = SystemClock.uptimeMillis();
         if (!z) {
@@ -1295,7 +1258,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             MotionEvent obtain2 = MotionEvent.obtain(uptimeMillis, uptimeMillis, 0, this.hitPointX, this.hitPointY, 0);
             obtain2.setSource(2);
             onVrTouchInternal(obtain2, true);
-            m769com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref13();
+            onCardboardTrigger();
         }
     }
 
@@ -1327,12 +1290,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             MotionEvent obtain3 = MotionEvent.obtain(this.insideSince, SystemClock.uptimeMillis(), 7, i, i2, 0);
             obtain3.setSource(2);
             this.onScreenControlsLayout.dispatchGenericMotionEvent(obtain3);
-            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.cardboardDetailsPage, i, i2, 0, 0, new Predicate() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.10
+            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.cardboardDetailsPage, i, i2, 0, 0, new Predicate() {
                 private final /* synthetic */ boolean $m$0(Object obj) {
-                    return CardboardActivity.this.m772com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref16((View) obj);
+                    return CardboardActivity.this.isViewScrollable((View) obj);
                 }
 
-                @Override // com.google.common.base.Predicate
+                @Override
                 public final boolean apply(Object obj) {
                     return $m$0(obj);
                 }
@@ -1364,13 +1327,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMyAvatarState, reason: merged with bridge method [inline-methods] */
-    public void m765com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref1(MyAvatarState myAvatarState) {
+    public void onMyAvatarState(MyAvatarState myAvatarState) {
         SLAvatarControl sLAvatarControl;
         if (myAvatarState.isSitting()) {
-            this.moveButtonsLayout.setVisibility(0);
-            this.buttonStandUp.setVisibility(0);
+            this.moveButtonsLayout.setVisibility(View.VISIBLE);
+            this.buttonStandUp.setVisibility(View.VISIBLE);
             this.ownAvatarVisible = true;
             return;
         }
@@ -1378,51 +1339,42 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             sLAvatarControl.setCameraManualControl(false);
             sLAvatarControl.setAgentHeading(this.neutralAgentHeading);
         }
-        this.moveButtonsLayout.setVisibility(8);
-        this.buttonStandUp.setVisibility(8);
+        this.moveButtonsLayout.setVisibility(View.GONE);
+        this.buttonStandUp.setVisibility(View.GONE);
         this.ownAvatarVisible = false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onNewExternalTexture(GLExternalTexture gLExternalTexture) {
         this.externalTextureRef.set(gLExternalTexture);
         ((CardboardControlsPlaceholder) findViewById(R.id.controls_placeholder)).setFixedSize(gLExternalTexture.getWidth(), gLExternalTexture.getHeight());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onPickedAvatarNameUpdated, reason: merged with bridge method [inline-methods] */
-    public void m773com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref17(ChatterNameRetriever chatterNameRetriever) {
+    public void onPickedAvatarNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         this.objectNameView.setText(chatterNameRetriever.getResolvedName());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onSelectedObjectProfile, reason: merged with bridge method [inline-methods] */
-    public void m767com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref11(SLObjectProfileData sLObjectProfileData) {
+    public void onSelectedObjectProfile(SLObjectProfileData sLObjectProfileData) {
         this.objectNameView.setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onViewsInvalidated, reason: merged with bridge method [inline-methods] */
-    public void m768com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref12() {
+    public void onViewsInvalidated() {
         if (this.viewDrawPosted.getAndSet(true)) {
             return;
         }
         Debug.Printf("Cardboard: posting draw views", new Object[0]);
-        this.handler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.25
+        this.handler.post(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                CardboardActivity.this.m771com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref15();
+                CardboardActivity.this.drawViews();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceActiveChatter, reason: merged with bridge method [inline-methods] */
-    public void m776com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref4(ChatterID chatterID) {
+    public void onVoiceActiveChatter(ChatterID chatterID) {
         if (this.voiceStatusView != null) {
             this.voiceStatusView.setChatterID(chatterID);
         }
@@ -1433,21 +1385,15 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m777com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref5(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
         updateVoiceIndication();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceLoginStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m774com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref2(Boolean bool) {
+    public void onVoiceLoginStatusChanged(Boolean bool) {
         updateVoiceIndication();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVrTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m770com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref14(View view, MotionEvent motionEvent) {
+    public boolean onVrTouch(View view, MotionEvent motionEvent) {
         return onVrTouchInternal(motionEvent, false);
     }
 
@@ -1491,22 +1437,20 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void setControlsPage(@Nonnull ControlsPage controlsPage) {
-        ControlsPage[] valuesCustom = ControlsPage.valuesCustom();
+        ControlsPage[] valuesCustom = ControlsPage.values();
         int length = valuesCustom.length;
         for (int i = 0; i < length; i++) {
             ControlsPage controlsPage2 = valuesCustom[i];
-            findViewById(controlsPage2.pageViewId).setVisibility(controlsPage2 == controlsPage ? 0 : 4);
+            findViewById(controlsPage2.pageViewId).setVisibility(controlsPage2 == controlsPage ? View.VISIBLE : View.INVISIBLE);
         }
         this.currentControlsPage = controlsPage;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void showSpeechRecognitionError(String str) {
-        this.speakNowText.setVisibility(4);
-        this.speakLevelIndicator.setVisibility(4);
-        this.buttonSpeechSend.setVisibility(4);
+        this.speakNowText.setVisibility(View.INVISIBLE);
+        this.speakLevelIndicator.setVisibility(View.INVISIBLE);
+        this.buttonSpeechSend.setVisibility(View.INVISIBLE);
         this.speechRecognitionResults.setText(str);
         this.isSpeechFinished = true;
     }
@@ -1541,7 +1485,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateExternalTexturePointer() {
         int i;
         int i2;
@@ -1562,13 +1505,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             return;
         }
         if (sLObjectInfo.isAvatar()) {
-            this.buttonSit.setVisibility(8);
-            this.buttonTouchObject.setVisibility(8);
-            this.buttonObjectChat.setVisibility(0);
+            this.buttonSit.setVisibility(View.GONE);
+            this.buttonTouchObject.setVisibility(View.GONE);
+            this.buttonObjectChat.setVisibility(View.VISIBLE);
         } else {
-            this.buttonSit.setVisibility(0);
-            this.buttonTouchObject.setVisibility(sLObjectInfo.isTouchable() ? 0 : 8);
-            this.buttonObjectChat.setVisibility(8);
+            this.buttonSit.setVisibility(View.VISIBLE);
+            this.buttonTouchObject.setVisibility(sLObjectInfo.isTouchable() ? View.VISIBLE : View.GONE);
+            this.buttonObjectChat.setVisibility(View.GONE);
         }
     }
 
@@ -1579,13 +1522,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         ChatterID data2 = this.voiceActiveChatter.getData();
         VoiceChatInfo data3 = this.voiceChatInfo.getData();
         if (data2 == null || data3 == null || data3.state == VoiceChatInfo.VoiceChatState.None) {
-            this.buttonSpeak.setVisibility(0);
+            this.buttonSpeak.setVisibility(View.VISIBLE);
         } else {
-            this.buttonSpeak.setVisibility(4);
+            this.buttonSpeak.setVisibility(View.INVISIBLE);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean acceptsDetailFragment(Class<? extends Fragment> cls) {
         if (ContactsFragment.class.isAssignableFrom(cls)) {
             return true;
@@ -1593,7 +1536,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return ChatFragment.class.isAssignableFrom(cls);
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, android.app.Activity, android.view.Window.Callback
+    @Override
     public boolean dispatchKeyEvent(KeyEvent keyEvent) {
         Debug.Printf("Cardboard: dispatch key event: keycode %d", Integer.valueOf(keyEvent.getKeyCode()));
         if (this.avatarControl.get() != null) {
@@ -1644,7 +1587,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return super.dispatchKeyEvent(keyEvent);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity
+    @Override
     public boolean handleBackPressed() {
         if (this.currentControlsPage != ControlsPage.pageDetails) {
             return false;
@@ -1711,17 +1654,17 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (sLAvatarControl != null) {
             if (motionEvent.getActionMasked() == 0) {
                 switch (view.getId()) {
-                    case R.id.button_move_forward /* 2131755260 */:
+                    case R.id.button_move_forward:
                         f2 = 1.0f;
                         f = 0.0f;
                         break;
-                    case R.id.button_turn_left /* 2131755261 */:
+                    case R.id.button_turn_left:
                         f2 = 0.0f;
                         break;
-                    case R.id.button_move_backward /* 2131755262 */:
+                    case R.id.button_move_backward:
                         f = 0.0f;
                         break;
-                    case R.id.button_turn_right /* 2131755263 */:
+                    case R.id.button_turn_right:
                         f = -1.0f;
                         f2 = 0.0f;
                         break;
@@ -1748,36 +1691,41 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(Bundle bundle) {
         setTheme(R.style.Theme_Lumiya_Light);
         super.onCreate(bundle);
-        requestWindowFeature(1);
-        getWindow().setFlags(1024, 1024);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.fullscreenMode = new FullscreenMode(getWindow());
         setContentView(R.layout.cardboard_layout);
         this.userManager = ActivityUtils.getUserManager(getIntent());
         if (this.userManager == null) {
             finish();
             return;
         }
+        // Android VR mode (low-persistence display, VR listener) and sustained
+        // performance mode (stable clocks for frame pacing), as 3.4.2 set them.
+        AndroidCompat.trySetVrModeEnabled(this, true);
+        AndroidCompat.setSustainedPerformanceMode(this, true);
         this.renderSettings = new RenderSettings(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
         this.stateHandler = new Handler();
         Debug.Printf("Cardboard: creating VR view", new Object[0]);
         GlobalOptions globalOptions = GlobalOptions.getInstance();
         CardboardControlsPlaceholder cardboardControlsPlaceholder = (CardboardControlsPlaceholder) findViewById(R.id.controls_placeholder);
         this.onScreenControlsLayout = (ViewGroup) getLayoutInflater().inflate(R.layout.cardboard_controls, (ViewGroup) cardboardControlsPlaceholder, true);
-        cardboardControlsPlaceholder.setOnViewInvalidateListener(new CardboardControlsPlaceholder.OnViewInvalidateListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.19
+        cardboardControlsPlaceholder.setOnViewInvalidateListener(new CardboardControlsPlaceholder.OnViewInvalidateListener() {
             private final /* synthetic */ void $m$0() {
-                CardboardActivity.this.m768com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref12();
+                CardboardActivity.this.onViewsInvalidated();
             }
 
-            @Override // com.lumiyaviewer.lumiya.ui.render.CardboardControlsPlaceholder.OnViewInvalidateListener
+            @Override
             public final void onViewInvalidated() {
                 $m$0();
             }
         });
-        int applyDimension = (int) TypedValue.applyDimension(2, 16.0f, getResources().getDisplayMetrics());
-        this.voiceViewHeightAllowance = globalOptions.getVoiceEnabled() ? (int) TypedValue.applyDimension(1, VOICE_VIEW_HEIGHT_ALLOWANCE_DP, getResources().getDisplayMetrics()) : 0;
+        int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16.0f, getResources().getDisplayMetrics());
+        this.voiceViewHeightAllowance = globalOptions.getVoiceEnabled() ? (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, VOICE_VIEW_HEIGHT_ALLOWANCE_DP, getResources().getDisplayMetrics()) : 0;
         this.renderer = new WorldViewRenderer(this.stateHandler, true, this.userManager, applyDimension);
         this.renderer.setDrawDistance(this.renderSettings.drawDistance);
         this.renderer.setAvatarCountLimit(this.renderSettings.avatarCountLimit);
@@ -1788,12 +1736,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.vrSession.setInputListener(this.vrInputListener);
         Debug.Printf("Cardboard: runtime=%s has magnet: %b", this.vrRuntime.getRuntimeId(), Boolean.valueOf(this.vrSession.hasMagnet()));
         ((FrameLayout) findViewById(R.id.vr_view_placeholder)).addView(this.vrSession.getView(), new FrameLayout.LayoutParams(-1, -1));
-        this.vrSession.setOnTriggerListener(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.24
+        this.vrSession.setOnTriggerListener(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                CardboardActivity.this.m769com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref13();
+                CardboardActivity.this.onCardboardTrigger();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -1807,14 +1755,14 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.touchActivatedButtons.add(this.buttonMoveBackward);
         this.touchActivatedButtons.add(this.buttonTurnLeft);
         this.touchActivatedButtons.add(this.buttonTurnRight);
-        this.buttonStandUp.setVisibility(8);
-        this.moveButtonsLayout.setVisibility(8);
+        this.buttonStandUp.setVisibility(View.GONE);
+        this.moveButtonsLayout.setVisibility(View.GONE);
         this.voiceStatusView.setShowActiveChatterName(true);
         this.voiceStatusView.hideBackground();
         this.voiceStatusView.setLightTheme();
         this.voiceStatusView.enableHover(this.hoverListener);
         this.voiceStatusView.setOnCallButtonListener(this.onVoiceCallButtonListener);
-        int applyDimension2 = (int) TypedValue.applyDimension(1, 1.0f, getResources().getDisplayMetrics());
+        int applyDimension2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.0f, getResources().getDisplayMetrics());
         for (int i : dialogButtonIds) {
             Button button = (Button) findViewById(i);
             button.setAlpha(0.5f);
@@ -1826,39 +1774,39 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.dialogQuestionText.setTextColor(-1);
         this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, this.chatsOverlayLayout, -1, 0);
         setControlsPage(ControlsPage.pageDefault);
-        this.speechRecognitionResults.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.8
+        this.speechRecognitionResults.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             private final /* synthetic */ void $m$0() {
                 CardboardActivity.this.m782xd3478a38();
             }
 
-            @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
+            @Override
             public final void onGlobalLayout() {
                 $m$0();
             }
         });
-        this.cardboardPrimaryControls.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.9
+        this.cardboardPrimaryControls.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             private final /* synthetic */ void $m$0() {
                 CardboardActivity.this.m783xd347f25d();
             }
 
-            @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
+            @Override
             public final void onGlobalLayout() {
                 $m$0();
             }
         });
-        this.vrSession.setOnTouchListener(new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$yhBpPTpVtOAhPHTLXL5B0hI4gXA.7
+        this.vrSession.setOnTouchListener(new View.OnTouchListener() {
             private final /* synthetic */ boolean $m$0(View view2, MotionEvent motionEvent) {
-                return CardboardActivity.this.m770com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref14(view2, motionEvent);
+                return CardboardActivity.this.onVrTouch(view2, motionEvent);
             }
 
-            @Override // android.view.View.OnTouchListener
+            @Override
             public final boolean onTouch(View view2, MotionEvent motionEvent) {
                 return $m$0(view2, motionEvent);
             }
         });
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onDestroy() {
         if (this.vrSession != null) {
             this.vrSession.onDestroy();
@@ -1867,14 +1815,14 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         super.onDestroy();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean onDetailsStackEmpty() {
         super.onDetailsStackEmpty();
         setControlsPage(ControlsPage.pageDefault);
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.slproto.users.manager.ObjectPopupsManager.ObjectPopupListener
+    @Override
     public void onNewObjectPopup(SLChatEvent sLChatEvent) {
         if (!(sLChatEvent instanceof SLChatScriptDialog)) {
             if (sLChatEvent instanceof SLChatPermissionRequestEvent) {
@@ -1893,10 +1841,10 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             for (int i = 0; i < dialogButtonIds.length; i++) {
                 Button button = (Button) findViewById(dialogButtonIds[i]);
                 if (i < buttons.length) {
-                    button.setVisibility(0);
+                    button.setVisibility(View.VISIBLE);
                     button.setText(buttons[i]);
                 } else {
-                    button.setVisibility(8);
+                    button.setVisibility(View.GONE);
                 }
             }
             this.dialogQuestionText.setText(sLChatScriptDialog.getRawText());
@@ -1925,8 +1873,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     @OnTouch({R.id.cardboard_object_controls})
-    /* renamed from: onObjectControlsTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m779com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref7(View view, MotionEvent motionEvent) {
+    public boolean onObjectControlsTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
                 handlePickedObject(null);
@@ -1936,7 +1883,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.slproto.users.manager.ObjectPopupsManager.ObjectPopupListener
+    @Override
     public void onObjectPopupCountChanged(int i) {
     }
 
@@ -1969,7 +1916,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onPause() {
         if (this.speechRecognizer != null) {
             this.speechRecognizer.destroy();
@@ -1989,15 +1936,18 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (this.vrSession != null) {
             this.vrSession.onPause();
         }
+        this.screenOnFlagHelper.stop();
         super.onPause();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         if (this.vrSession != null) {
             this.vrSession.onResume();
         }
+        this.fullscreenMode.goFullscreen();
+        this.screenOnFlagHelper.start();
         if (this.speechRecognizer == null) {
             if (SpeechRecognizer.isRecognitionAvailable(this)) {
                 Debug.Printf("Cardboard: speech recognition is available", new Object[0]);
@@ -2019,12 +1969,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     @OnTouch({R.id.cardboard_script_dialog})
-    /* renamed from: onScriptDialogOutsideTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m780com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref8(View view, MotionEvent motionEvent) {
+    public boolean onScriptDialogOutsideTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
                 if (this.activeScriptDialog != null) {
-                    this.activeScriptDialog.m157xe7f9f9c3(this.userManager);
+                    this.activeScriptDialog.onDialogIgnored(this.userManager);
                     this.activeScriptDialog = null;
                 }
                 handlePickedObject(null);
@@ -2042,8 +1991,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     @OnTouch({R.id.cardboard_speak_controls})
-    /* renamed from: onSpeakControlsTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m778com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref6(View view, MotionEvent motionEvent) {
+    public boolean onSpeakControlsTouch(View view, MotionEvent motionEvent) {
         Debug.Printf("Cardboard: speak controls touched, view %s", view);
         switch (motionEvent.getActionMasked()) {
             case 1:
@@ -2073,7 +2021,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         this.voiceEnabled = GlobalOptions.getInstance().getVoiceEnabled();
@@ -2093,7 +2041,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         this.voiceActiveChatter.unsubscribe();
         this.voiceLoggedIn.unsubscribe();
@@ -2112,9 +2060,12 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         setControlsPage(ControlsPage.pageTouchAim);
     }
 
-    @Override // android.app.Activity, android.view.Window.Callback
+    @Override
     public void onWindowFocusChanged(boolean z) {
         super.onWindowFocusChanged(z);
+        if (this.fullscreenMode != null) {
+            this.fullscreenMode.onWindowFocusChanged(z);
+        }
     }
 
     @OnClick({R.id.cardboard_yes_button})
@@ -2128,8 +2079,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     @OnTouch({R.id.cardboard_yesno_dialog})
-    /* renamed from: onYesNoOutsideTouch, reason: merged with bridge method [inline-methods] */
-    public boolean m781com_lumiyaviewer_lumiya_ui_render_CardboardActivitymthref9(View view, MotionEvent motionEvent) {
+    public boolean onYesNoOutsideTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getActionMasked()) {
             case 1:
                 this.activeYesNoEvent = null;
@@ -2143,9 +2093,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     public void startDictation(ChatterID chatterID) {
         setControlsPage(ControlsPage.pageSpeech);
         this.dictationChatterID = chatterID;
-        this.speakNowText.setVisibility(4);
-        this.speakLevelIndicator.setVisibility(4);
-        this.buttonSpeechSend.setVisibility(4);
+        this.speakNowText.setVisibility(View.INVISIBLE);
+        this.speakLevelIndicator.setVisibility(View.INVISIBLE);
+        this.buttonSpeechSend.setVisibility(View.INVISIBLE);
         this.speechRecognitionResults.setText("");
         if (this.speechRecognizer == null) {
             showSpeechRecognitionError(getString(R.string.speech_recognition_not_available));

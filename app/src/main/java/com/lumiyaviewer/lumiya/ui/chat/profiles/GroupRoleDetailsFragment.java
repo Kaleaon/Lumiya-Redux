@@ -40,7 +40,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupRoleDetailsFragment extends ChatterFragment implements LoadableMonitor.OnLoadableDataChangedListener, BackButtonHandler {
     private static final String ROLE_ID_KEY = "role_id";
     private static final ImmutableList<RolePermission> rolePermissions;
@@ -55,26 +54,26 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
     private final SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.groupRoles, this.groupProfile, this.myGroupList).withOptionalLoadables(this.agentCircuit).withDataChangedListener(this);
     private boolean hasChanged = false;
-    private final TextWatcher textChangedListener = new TextWatcher() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.GroupRoleDetailsFragment.1
-        @Override // android.text.TextWatcher
+    private final TextWatcher textChangedListener = new TextWatcher() {
+        @Override
         public void afterTextChanged(Editable editable) {
             GroupRoleDetailsFragment.this.updateUnsavedChanges();
         }
 
-        @Override // android.text.TextWatcher
+        @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
-        @Override // android.text.TextWatcher
+        @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
     };
-    private final View.OnClickListener permCheckboxClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.3
+    private final View.OnClickListener permCheckboxClickListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             GroupRoleDetailsFragment.this.m496x4277c5d5(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
@@ -142,21 +141,21 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         final String charSequence3 = ((TextView) view.findViewById(R.id.role_description_edit)).getText().toString();
         final long selectedPowers = getSelectedPowers(defaultPowers, (ViewGroup) view.findViewById(R.id.role_permission_list_layout));
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.6
+        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GroupRoleDetailsFragment.this.m499x4287a0c8((String) charSequence, (String) charSequence2, (String) charSequence3, selectedPowers, (Runnable) runnable, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.1
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 GroupRoleDetailsFragment.m495x4288106b((Runnable) runnable, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -167,21 +166,21 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
     private void confirmDeleteRole() {
         if ((getMyGroupPowers() & 32) != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage(getString(R.string.delete_role_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.2
+            builder.setMessage(getString(R.string.delete_role_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     GroupRoleDetailsFragment.this.m497x4286a828(dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -314,9 +313,9 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
                 ((TextView) view.findViewById(R.id.role_description_view)).setText(SLMessage.stringFromVariableOEM(selectedRoleData.Description));
                 ((TextView) view.findViewById(R.id.role_member_count)).setText(getResources().getQuantityString(R.plurals.members, memberCount, Integer.valueOf(memberCount)));
                 setPermissionCheckboxes(selectedRoleData.Powers, (ViewGroup) view.findViewById(R.id.role_permission_list_layout));
-                view.findViewById(R.id.group_role_members_card_view).setVisibility(0);
+                view.findViewById(R.id.group_role_members_card_view).setVisibility(View.VISIBLE);
             } else {
-                view.findViewById(R.id.group_role_members_card_view).setVisibility(8);
+                view.findViewById(R.id.group_role_members_card_view).setVisibility(View.GONE);
                 ((EditText) view.findViewById(R.id.role_name_edit)).setText("");
                 ((EditText) view.findViewById(R.id.role_title_edit)).setText("");
                 ((EditText) view.findViewById(R.id.role_description_edit)).setText("");
@@ -326,12 +325,12 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
                 ((TextView) view.findViewById(R.id.role_member_count)).setText("");
                 setPermissionCheckboxes(getDefaultPowers(), (ViewGroup) view.findViewById(R.id.role_permission_list_layout));
             }
-            view.findViewById(R.id.role_name_edit).setVisibility(z ? 0 : 8);
-            view.findViewById(R.id.role_name_view).setVisibility(!z ? 0 : 8);
-            view.findViewById(R.id.role_title_edit).setVisibility(z ? 0 : 8);
-            view.findViewById(R.id.role_title_view).setVisibility(!z ? 0 : 8);
-            view.findViewById(R.id.role_description_edit).setVisibility(z ? 0 : 8);
-            view.findViewById(R.id.role_description_view).setVisibility(z ? 8 : 0);
+            view.findViewById(R.id.role_name_edit).setVisibility(z ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.role_name_view).setVisibility(!z ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.role_title_edit).setVisibility(z ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.role_title_view).setVisibility(!z ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.role_description_edit).setVisibility(z ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.role_description_view).setVisibility(z ? View.GONE : View.VISIBLE);
         }
         updateUnsavedChanges();
     }
@@ -349,7 +348,6 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateUnsavedChanges() {
         boolean anyChanges = anyChanges();
         if (anyChanges != this.hasChanged) {
@@ -418,17 +416,17 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.BackButtonHandler
+    @Override
     public boolean onBackButtonPressed() {
         if (!anyChanges()) {
             return false;
         }
-        askForSavingChanges(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.5
+        askForSavingChanges(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 GroupRoleDetailsFragment.this.m498x42871ce8();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -436,13 +434,13 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.group_role_edit_menu, menu);
@@ -452,7 +450,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         this.deleteMenuItem.setVisible(false);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.group_role_details_layout, viewGroup, false);
@@ -463,12 +461,12 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         ((TextView) inflate.findViewById(R.id.role_title_edit)).addTextChangedListener(this.textChangedListener);
         ((TextView) inflate.findViewById(R.id.role_description_edit)).addTextChangedListener(this.textChangedListener);
         createPermEntries(layoutInflater, (ViewGroup) inflate.findViewById(R.id.role_permission_list_layout));
-        inflate.findViewById(R.id.button_view_role_members).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$oqvWEi5fLgnwnCXV95inckWtW-E.4
+        inflate.findViewById(R.id.button_view_role_members).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 GroupRoleDetailsFragment.this.m500x12acc68f(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
@@ -476,18 +474,18 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         setLoadedValues();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_undo /* 2131755778 */:
+            case R.id.item_undo:
                 setLoadedValues();
                 return true;
-            case R.id.item_delete_role /* 2131755788 */:
+            case R.id.item_delete_role:
                 confirmDeleteRole();
                 return true;
             default:
@@ -495,7 +493,7 @@ public class GroupRoleDetailsFragment extends ChatterFragment implements Loadabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.loadableMonitor.unsubscribeAll();
         if (getArguments().containsKey(ROLE_ID_KEY)) {

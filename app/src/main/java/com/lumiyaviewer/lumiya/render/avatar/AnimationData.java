@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AnimationData {
     private static final float LL_MAX_PELVIS_OFFSET = 5.0f;
     private final float animLength;
@@ -43,8 +42,8 @@ public class AnimationData {
             int readInt2 = littleEndianDataInputStream.readInt();
             readInt2 = (readInt2 < 0 || readInt2 > 10000) ? 0 : readInt2;
             this.posKeyframes = new AnimationPosKeyframe[readInt2];
-            for (int i2 = 0; i2 < readInt2; i2++) {
-                this.posKeyframes[i2] = new AnimationPosKeyframe(uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), 0.0f, f), new LLVector3(uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET), uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET), uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET)));
+            for (int j = 0; j < readInt2; j++) {
+                this.posKeyframes[j] = new AnimationPosKeyframe(uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), 0.0f, f), new LLVector3(uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET), uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET), uint16ToFloat(littleEndianDataInputStream.readUnsignedShort(), -5.0f, AnimationData.LL_MAX_PELVIS_OFFSET)));
             }
         }
 
@@ -65,15 +64,15 @@ public class AnimationData {
                         if (i2 == i) {
                             animationKeyframeArr[i].setTransform(t);
                         } else {
-                            float f3 = animationKeyframeArr[i].time;
-                            float f4 = animationKeyframeArr[i2].time;
-                            if (f4 > f3) {
-                                f4 -= f;
+                            float time = animationKeyframeArr[i].time;
+                            float time2 = animationKeyframeArr[i2].time;
+                            if (time2 > time) {
+                                time2 -= f;
                             }
-                            if (f4 == f3) {
+                            if (time2 == time) {
                                 animationKeyframeArr[i].setTransform(t);
                             } else {
-                                animationKeyframeArr[i2].setInterpolated(t, (f3 - f2) / (f3 - f4), animationKeyframeArr[i], (f2 - f4) / (f3 - f4));
+                                animationKeyframeArr[i2].setInterpolated(t, (time - f2) / (time - time2), animationKeyframeArr[i], (f2 - time2) / (time - time2));
                             }
                         }
                     }
@@ -92,21 +91,21 @@ public class AnimationData {
             return f4;
         }
 
-        void animate(SLSkeletonBone sLSkeletonBone, float f, float f2, LLQuaternion[] lLQuaternionArr, LLVector3[] lLVector3Arr, int i, float f3, float[] fArr, float[] fArr2, LLQuaternion lLQuaternion, LLVector3 lLVector3) {
+        void animate(SLSkeletonBone skeletonBone, float f, float f2, LLQuaternion[] quaternions, LLVector3[] vector3s, int i, float f3, float[] floats, float[] floats2, LLQuaternion quaternion, LLVector3 vector3) {
             if (this.posKeyframes.length != 0) {
-                float f4 = fArr2[i] * f3;
-                animateArray(f, f2, lLVector3, this.posKeyframes);
-                if (sLSkeletonBone != null && sLSkeletonBone.boneID != SLSkeletonBoneID.mPelvis) {
-                    lLVector3.sub(sLSkeletonBone.getBasePosition());
+                float f4 = floats2[i] * f3;
+                animateArray(f, f2, vector3, this.posKeyframes);
+                if (skeletonBone != null && skeletonBone.boneID != SLSkeletonBoneID.mPelvis) {
+                    vector3.sub(skeletonBone.getBasePosition());
                 }
-                lLVector3Arr[i].addMul(lLVector3, f4);
-                fArr2[i] = fArr2[i] - f4;
+                vector3s[i].addMul(vector3, f4);
+                floats2[i] = floats2[i] - f4;
             }
             if (this.rotKeyframes.length != 0) {
-                float f5 = fArr[i] * f3;
-                animateArray(f, f2, lLQuaternion, this.rotKeyframes);
-                lLQuaternionArr[i].addMul(lLQuaternion, f5);
-                fArr[i] = fArr[i] - f5;
+                float f5 = floats[i] * f3;
+                animateArray(f, f2, quaternion, this.rotKeyframes);
+                quaternions[i].addMul(quaternion, f5);
+                floats[i] = floats[i] - f5;
             }
         }
 
@@ -132,11 +131,11 @@ public class AnimationData {
         private final SparseArray<AnimationJointData> jointAnims;
         private final int priority;
 
-        private AnimationJointSet(UUID uuid, float f, int i) {
+        private AnimationJointSet(UUID uuid, float animLength, int priority) {
             this.jointAnims = new SparseArray<>();
             this.animationUUID = uuid;
-            this.animLength = f;
-            this.priority = i;
+            this.animLength = animLength;
+            this.priority = priority;
         }
 
         /* synthetic */ AnimationJointSet(UUID uuid, float f, int i, AnimationJointSet animationJointSet) {
@@ -147,16 +146,16 @@ public class AnimationData {
             this.jointAnims.put(i, animationJointData);
         }
 
-        void animate(AvatarSkeleton avatarSkeleton, AnimationTiming animationTiming, float[] fArr, float[] fArr2, LLQuaternion[] lLQuaternionArr, LLVector3[] lLVector3Arr) {
-            float f = animationTiming.inAnimationTime;
+        void animate(AvatarSkeleton avatarSkeleton, AnimationTiming animationTiming, float[] floats, float[] floats2, LLQuaternion[] quaternions, LLVector3[] vector3s) {
+            float inAnimationTime = animationTiming.inAnimationTime;
             float f2 = animationTiming.inFactor * animationTiming.outFactor;
             if (f2 > 0.0f) {
-                LLQuaternion lLQuaternion = new LLQuaternion();
-                LLVector3 lLVector3 = new LLVector3();
+                LLQuaternion quaternion = new LLQuaternion();
+                LLVector3 vector3 = new LLVector3();
                 int size = this.jointAnims.size();
                 for (int i = 0; i < size; i++) {
                     int keyAt = this.jointAnims.keyAt(i);
-                    this.jointAnims.valueAt(i).animate(avatarSkeleton.getAnimatedBone(keyAt), this.animLength, f, lLQuaternionArr, lLVector3Arr, keyAt, f2, fArr, fArr2, lLQuaternion, lLVector3);
+                    this.jointAnims.valueAt(i).animate(avatarSkeleton.getAnimatedBone(keyAt), this.animLength, inAnimationTime, quaternions, vector3s, keyAt, f2, floats, floats2, quaternion, vector3);
                 }
             }
         }
@@ -177,8 +176,8 @@ public class AnimationData {
     private static abstract class AnimationKeyframe<T> {
         public final float time;
 
-        private AnimationKeyframe(float f) {
-            this.time = f;
+        private AnimationKeyframe(float time) {
+            this.time = time;
         }
 
         /* synthetic */ AnimationKeyframe(float f, AnimationKeyframe animationKeyframe) {
@@ -195,26 +194,25 @@ public class AnimationData {
     private static class AnimationPosKeyframe extends AnimationKeyframe<LLVector3> {
         private final LLVector3 position;
 
-        AnimationPosKeyframe(float f, LLVector3 lLVector3) {
+        AnimationPosKeyframe(float f, LLVector3 position) {
             super(f, null);
-            this.position = lLVector3;
+            this.position = position;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public LLVector3 getTransform() {
             return this.position;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
-        public void setInterpolated(LLVector3 lLVector3, float f, AnimationKeyframe<LLVector3> animationKeyframe, float f2) {
-            lLVector3.setLerp(this.position, f, animationKeyframe.getTransform(), f2);
+        @Override
+        public void setInterpolated(LLVector3 vector3, float f, AnimationKeyframe<LLVector3> animationKeyframe, float f2) {
+            vector3.setLerp(this.position, f, animationKeyframe.getTransform(), f2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
-        public void setTransform(LLVector3 lLVector3) {
-            lLVector3.set(this.position);
+        @Override
+        public void setTransform(LLVector3 transform) {
+            transform.set(this.position);
         }
 
         public String toString() {
@@ -225,26 +223,25 @@ public class AnimationData {
     private static class AnimationRotKeyframe extends AnimationKeyframe<LLQuaternion> {
         private final LLQuaternion quaternion;
 
-        AnimationRotKeyframe(float f, LLQuaternion lLQuaternion) {
+        AnimationRotKeyframe(float f, LLQuaternion quaternion) {
             super(f, null);
-            this.quaternion = lLQuaternion;
+            this.quaternion = quaternion;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public LLQuaternion getTransform() {
             return this.quaternion;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
-        public void setInterpolated(LLQuaternion lLQuaternion, float f, AnimationKeyframe<LLQuaternion> animationKeyframe, float f2) {
-            lLQuaternion.setLerp(this.quaternion, f, animationKeyframe.getTransform(), f2);
+        @Override
+        public void setInterpolated(LLQuaternion quaternion, float f, AnimationKeyframe<LLQuaternion> animationKeyframe, float f2) {
+            quaternion.setLerp(this.quaternion, f, animationKeyframe.getTransform(), f2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
-        public void setTransform(LLQuaternion lLQuaternion) {
-            lLQuaternion.set(this.quaternion);
+        @Override
+        public void setTransform(LLQuaternion quaternion) {
+            quaternion.set(this.quaternion);
         }
 
         public String toString() {
@@ -253,7 +250,7 @@ public class AnimationData {
     }
 
     public AnimationData(UUID uuid, InputStream inputStream) throws IOException {
-        int i;
+        int animatedIndex;
         AnimationJointSet animationJointSet = null;
         this.animationUUID = uuid;
         LittleEndianDataInputStream littleEndianDataInputStream = new LittleEndianDataInputStream(inputStream);
@@ -268,16 +265,16 @@ public class AnimationData {
         this.easeOutTime = littleEndianDataInputStream.readFloat();
         this.handPose = littleEndianDataInputStream.readInt();
         int readInt = littleEndianDataInputStream.readInt();
-        for (int i2 = 0; i2 < readInt; i2++) {
-            SLSkeletonBoneID sLSkeletonBoneID = SLSkeletonBoneID.bones.get(littleEndianDataInputStream.readZeroTerminatedString());
+        for (int j = 0; j < readInt; j++) {
+            SLSkeletonBoneID skeletonBoneID = SLSkeletonBoneID.bones.get(littleEndianDataInputStream.readZeroTerminatedString());
             AnimationJointData animationJointData = new AnimationJointData(littleEndianDataInputStream, this.animLength);
-            if (sLSkeletonBoneID != null && (i = sLSkeletonBoneID.animatedIndex) >= 0) {
+            if (skeletonBoneID != null && (animatedIndex = skeletonBoneID.animatedIndex) >= 0) {
                 AnimationJointSet animationJointSet2 = this.jointSets.get(animationJointData.Priority);
                 if (animationJointSet2 == null) {
                     animationJointSet2 = new AnimationJointSet(uuid, this.animLength, animationJointData.Priority, animationJointSet);
                     this.jointSets.put(animationJointData.Priority, animationJointSet2);
                 }
-                animationJointSet2.addJointData(i, animationJointData);
+                animationJointSet2.addJointData(animatedIndex, animationJointData);
             }
         }
     }

@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatInventoryItemOfferedByYouEvent extends SLChatEvent {
     private final String itemName;
 
@@ -18,33 +17,33 @@ public final class SLChatInventoryItemOfferedByYouEvent extends SLChatEvent {
         this.itemName = chatMessage.getItemName();
     }
 
-    public SLChatInventoryItemOfferedByYouEvent(@Nonnull UUID uuid, String str) {
+    public SLChatInventoryItemOfferedByYouEvent(@Nonnull UUID uuid, String itemName) {
         super(ChatMessageSourceUnknown.getInstance(), uuid);
-        this.itemName = str;
+        this.itemName = itemName;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.InventoryItemOfferedByYou;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         return context.getString(R.string.chat_inventory_own_offer_format, this.itemName);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setItemName(this.itemName);

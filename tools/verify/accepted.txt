@@ -1,0 +1,95 @@
+# Differences from the original Lumiya 3.4.2 bytecode that were reviewed
+# against the smali and judged NOT to be damage. Format:
+#   <method key as printed by dexdiff.py>  <reason>
+# dexdiff.py refuses entries without a reason. Anything not listed here and
+# reported as DAMAGED is a real divergence to fix.
+
+# --- d8 code generation for ORIGINAL bytecode (libs/lumiya-original-classes.jar)
+Lcom/google/vr/ndk/base/GvrSurfaceView$ComponentSizeChooser;-><init>(Lcom/google/vr/ndk/base/GvrSurfaceView;IIIIII)V  d8 builds the EGL attribute array with a payload instead of dx's indexed aputs
+Lcom/google/vr/sdk/base/Distortion;-><clinit>()V  d8 stores the float coefficient table as fill-array-data
+Lcom/google/vr/sdk/base/sensors/internal/GyroscopeBiasEstimator;->getGyroBias(Lcom/google/vr/sdk/base/sensors/internal/Vector3d;)V  d8 folds a constant subtraction into add-int/lit8
+Lcom/google/vr/sdk/base/sensors/internal/OrientationEKF;-><clinit>()V  d8 removes the $assertionsDisabled machinery for `assert`
+Lcom/google/vr/sdk/base/sensors/internal/OrientationEKF;->setHeadingDegrees(D)V  d8 folds the 1.0 double constant
+Lcom/lumiyaviewer/lumiya/slproto/modules/xfer/SLXfer;->HandleDataPacket(Lcom/lumiyaviewer/lumiya/slproto/modules/xfer/SLXferManager;Lcom/lumiyaviewer/lumiya/slproto/messages/SendXferPacket;)V  d8 folds `x - 4` into add-int/lit8 -4
+Lcom/lumiyaviewer/lumiya/slproto/prims/PrimVolume;->generate()Z  d8 folds `x - 2` into add-int/lit8 -2
+Lcom/lumiyaviewer/lumiya/slproto/users/manager/BalanceManager;->clearFinancialInfo(Lcom/lumiyaviewer/lumiya/slproto/modules/finance/SLFinancialInfo;)V  d8 routes AtomicReference.compareAndSet through its backport shim (Android bug workaround)
+Lcom/lumiyaviewer/lumiya/slproto/users/manager/ObjectsManager;->clearParcelInfo(Lcom/lumiyaviewer/lumiya/slproto/SLParcelInfo;)V  d8 routes AtomicReference.compareAndSet through its backport shim
+Lcom/lumiyaviewer/lumiya/slproto/users/manager/UserManager;->clearActiveAgentCircuit(Lcom/lumiyaviewer/lumiya/slproto/SLAgentCircuit;)V  source still calls activeAgentCircuit.compareAndSet; d8 routes it through its backport shim
+Lcom/lumiyaviewer/lumiya/ui/common/SwipeDismissTouchListener;->performDismiss()V  d8 constant folding of an index
+Lcom/lumiyaviewer/lumiya/voice/common/model/VoiceChannelInfo;-><init>(Ljava/util/UUID;Ljava/lang/String;)V  d8 constant folding of an index
+
+# --- behaviour-preserving source changes
+Lcom/lumiyaviewer/lumiya/slproto/https/LLSDContentTypeDetector;->DetectContentType(Ljava/io/BufferedInputStream;Ljava/lang/String;)Lcom/lumiyaviewer/lumiya/slproto/https/LLSDContentTypeDetector$LLSDContentType;  UTF-8 BOM bytes {EF,BB,BF} hoisted into the static UTF8_BOM constant
+Lcom/lumiyaviewer/lumiya/ui/render/WorldViewActivity;->selectHUDtoDisplay()V  same iterator() call, receiver typed as LinkedTreeNode instead of Iterable
+Lcom/lumiyaviewer/lumiya/dao/DaoManager;->getUserDaoSession(Ljava/util/UUID;)Lcom/lumiyaviewer/lumiya/dao/DaoSession;  greenDAO DevOpenHelper (drops all tables on schema upgrade) replaced by DBOpenHelper; Room database opened alongside for the persistence migration
+Lcom/lumiyaviewer/lumiya/slproto/users/ResponseCacher;-><init>(Lcom/lumiyaviewer/lumiya/dao/DaoSession;Ljava/util/concurrent/Executor;Ljava/lang/String;)V  cache reads/writes go through CachedResponseRepositoryAdapter (greenDAO + Room)
+Lcom/lumiyaviewer/lumiya/slproto/users/ResponseCacher;-><lambdas/anonymous/moved>  load/insertOrReplace/update go through CachedResponseRepositoryAdapter
+Lcom/lumiyaviewer/lumiya/slproto/users/manager/UserManager;->setUserPic(Ljava/util/UUID;[B)V  write goes through userPicRepository.insertOrReplace (greenDAO + Room)
+Lcom/lumiyaviewer/lumiya/StreamingMediaService;-><lambdas/anonymous/moved>  audio-focus changes are posted through a Handler to handleAudioFocusChange
+
+# --- Android 8-14 requirements (targetSdk 34)
+Lcom/lumiyaviewer/lumiya/StreamingMediaService;->startStreamingMediaService(Landroid/content/Context;Lcom/lumiyaviewer/lumiya/slproto/users/manager/UserManager;)V  startService -> startServiceCompat (foreground service start required from API 26)
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;->onParcelMediaPlay()V  startService -> StreamingMediaService.startServiceCompat
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;->onParcelMediaStop()V  startService -> StreamingMediaService.startServiceCompat
+Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;-><lambdas/anonymous/moved>  AsyncTask constructor signature (captured outer instance) differs; same task started
+Lcom/lumiyaviewer/lumiya/ui/login/LoginActivity;->DoLogin()V  startService -> GridConnectionService.startServiceCompat
+Lcom/lumiyaviewer/lumiya/GridConnectionService;->showUnreadNotification(Lcom/lumiyaviewer/lumiya/slproto/users/manager/UnreadNotifications;)V  non-grouped branch removed: on API 26+ OreoNotificationChannelManager.useNotificationGroups() is always true
+Lcom/lumiyaviewer/lumiya/slproto/SLAgentCircuit;->getAgentSLURL()Ljava/lang/String;  map link upgraded from http:// to https://
+
+# --- render backend / GPU capability refactor (render/backend, render/caps)
+Lcom/lumiyaviewer/lumiya/render/RenderContext;-><init>(Ljavax/microedition/khronos/egl/EGLConfig;Ljava/lang/String;ZZZZIZIZLjava/lang/Object;)V  constructor now takes GpuCapabilities; all callers are recompiled source (linkcheck clean)
+Lcom/lumiyaviewer/lumiya/render/RenderContext;-><lambdas/anonymous/moved>  GLSL version constant moved into GpuCapabilities
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->bindFaceTexture(Lcom/lumiyaviewer/lumiya/render/drawable/DrawableFaceTexture;)V  glBindTexture(GL_TEXTURE_2D) via RenderBackend.bindTexture2D
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->clearRiggedMeshProgram()V  GL calls via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->createLoadQueue(Ljavax/microedition/khronos/egl/EGLConfig;)Lcom/lumiyaviewer/lumiya/render/glres/GLLoadQueue;  renderer.contains("tegra") check moved to GpuCapabilities.quirkDisableAsyncLoadQueue
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->glObjScaleApplyVector(I)V  glUniform4f via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->initPrimProgram(Lcom/lumiyaviewer/lumiya/render/shaders/PrimProgram;Z)V  glUseProgram/glUniform1i via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/RenderContext;->setupRiggedMeshProgram(Z)V  glUseProgram via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->drawCrosshair(FF)V  GL calls via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->drawExternalTexture(Lcom/lumiyaviewer/lumiya/render/glres/textures/GLExternalTexture;[FFFFFF[FI)V  GL calls via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->onDrawFrame(Ljavax/microedition/khronos/opengles/GL10;Lcom/lumiyaviewer/lumiya/render/HeadTransformCompat;[F[I[F[FI)V  glUseProgram via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->onSurfaceChanged(Ljavax/microedition/khronos/opengles/GL10;II)V  glUseProgram via RenderBackend
+Lcom/lumiyaviewer/lumiya/render/WorldViewRenderer;->onSurfaceCreated(Ljavax/microedition/khronos/opengles/GL10;Ljavax/microedition/khronos/egl/EGLConfig;Z)V  GL_VENDOR/RENDERER/VERSION/EXTENSIONS and GL_MAJOR_VERSION probing moved into GpuCapabilities.detect
+
+# --- VR runtime boundary (ui/render/vr, Kaleaon/Lumiya-Redux PR 32)
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity$WorldStereoRenderer;->onDrawEye(Lcom/google/vr/sdk/base/Eye;)V  GVR callback adapted in GvrVrSessionAdapter -> VrEye
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity$WorldStereoRenderer;->onFinishFrame(Lcom/google/vr/sdk/base/Viewport;)V  GVR callback adapted in GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity$WorldStereoRenderer;->onNewFrame(Lcom/google/vr/sdk/base/HeadTransform;)V  GVR callback adapted in GvrVrSessionAdapter -> VrPose
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity$WorldStereoRenderer;->onSurfaceChanged(II)V  IPD read through VrSession.getInterpupillaryDistance
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;-><lambdas/anonymous/moved>  GVR Eye/controller access moved into GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;-><init>()V  GVR controller listeners live in GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onCreate(Landroid/os/Bundle;)V  GvrView/ControllerManager created by VrRuntime.createSession; VR mode, sustained performance and fullscreen restored in the activity
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onDestroy()V  GvrView trigger listener/shutdown in GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onPause()V  gvrView.onPause via VrSession.onPause; screenOnFlagHelper.stop restored
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onResume()V  gvrView.onResume via VrSession.onResume; goFullscreen/screenOnFlagHelper.start restored
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onStart()V  controller start in GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onStop()V  controllerManager.stop in GvrVrSessionAdapter
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardActivity;->onWindowFocusChanged(Z)V  field access differs; FullscreenMode.onWindowFocusChanged restored
+Lcom/lumiyaviewer/lumiya/ui/render/CardboardTransitionActivity;-><lambdas/anonymous/moved>  launches the VR activity through VrIntentContract instead of CardboardActivity.class directly
+Lcom/lumiyaviewer/lumiya/ui/render/WorldViewActivity;->onOptionsItemSelected(Landroid/view/MenuItem;)Z  enterCardboardView renamed enterVrView
+Lcom/lumiyaviewer/lumiya/ui/render/WorldViewActivity;->onRequestPermissionsResult(I[Ljava/lang/String;[I)V  startCardboardActivity renamed startVrActivity(VR_RUNTIME_CARDBOARD)
+
+# --- deliberate fixes of latent 3.4.2 bugs (covered by PriorityBinQueueTest)
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->poll(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;  3.4.2 awaited a signal before looking, so a timed poll on a non-empty queue returned null; now checks first, then waits
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->drainTo(Ljava/util/Collection;I)I  3.4.2 threw UnsupportedOperationException (BlockingQueue contract); implemented
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->take()Ljava/lang/Object;  same bin-order removal via pollLocked(); per-item Debug.Printf dropped
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->poll()Ljava/lang/Object;  same bin-order removal via pollLocked()
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->peek()Ljava/lang/Object;  iterates the bins array directly instead of by numBins
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->remove(Ljava/lang/Object;)Z  looks the bin up in allItems instead of scanning all bins
+Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->size()I  allItems.size() instead of summing the bins (same count)
+
+# --- login (SLAuth), deliberate changes
+Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuth;->SendLoginRequest(Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;)Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthReply;  "md5 hash: " and "Auth request: " debug logs (credential-bearing; Debug.Log is a no-op in 3.4.2) removed; XML-RPC string values escaped with TextUtils.htmlEncode so "uri:Region&x&y&z" start locations produce valid XML
+Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPath;->generate(Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPathParams;FIZI)Z  test path step 1.0f / 4 is constant-folded by javac to 0.25f; 3.4.2 divided at runtime (same value)
+Luk/co/senab/photoview/gestures/VersionedGestureDetector;->newInstance(Landroid/content/Context;Luk/co/senab/photoview/gestures/OnGestureListener;)Luk/co/senab/photoview/gestures/GestureDetector;  Cupcake (API < 5) and Eclair (API < 8) detector branches removed: unreachable at minSdk 26
+
+# --- Room migration (commit 6f972bd): search results go through SearchGridResultRepositoryAdapter,
+#     which performs the same greenDAO insert / buildDelete and mirrors the rows into Room
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->updateSearchResults(Lcom/lumiyaviewer/lumiya/dao/SearchGridResultDao;Lcom/lumiyaviewer/lumiya/slproto/modules/search/SearchGridQuery;)V  greenDAO notEq/buildDelete moved into SearchGridResultRepositoryAdapter.deleteOtherQueries (same delete, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirGroupsReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirGroupsReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPeopleReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPeopleReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+Lcom/lumiyaviewer/lumiya/slproto/modules/search/SLSearch;->DirPlacesReply(Lcom/lumiyaviewer/lumiya/slproto/messages/DirPlacesReply;)V  greenDAO insert moved into SearchGridResultRepositoryAdapter.insert (same insert, plus Room mirror)
+
+# --- Android 14 (targetSdk 34): context-registered receivers for non-system broadcasts must be flagged
+Lcom/google/vr/cardboard/NFCUtils;->onResume(Landroid/app/Activity;)V  registerReceiver -> ContextCompat.registerReceiver(..., RECEIVER_NOT_EXPORTED); NDEF/TECH/TAG_DISCOVERED arrive via this app's own PendingIntent, and the unflagged call throws SecurityException on Android 14
+Lcom/google/vr/sdk/base/sensors/NfcSensor;->addOnCardboardNfcListener(Lcom/google/vr/sdk/base/sensors/NfcSensor$OnCardboardNfcListener;)V  same Android 14 receiver flag (RECEIVER_NOT_EXPORTED)

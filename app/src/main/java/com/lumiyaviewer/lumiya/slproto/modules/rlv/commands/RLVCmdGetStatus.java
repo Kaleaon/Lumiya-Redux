@@ -7,31 +7,30 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdGetStatus implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
-        String str3;
-        String str4;
+    @Override
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
+        String substring3;
+        String part2;
         try {
             int parseInt = Integer.parseInt(str);
             String str5 = str2 != null ? str2 : "";
             int indexOf = str5.indexOf(59);
             if (indexOf >= 0) {
                 String substring = str5.substring(indexOf + 1);
-                String substring2 = str5.substring(0, indexOf);
-                str3 = substring;
-                str4 = substring2;
+                String part = str5.substring(0, indexOf);
+                substring3 = substring;
+                part2 = part;
             } else {
-                str3 = "/";
-                str4 = str5;
+                substring3 = "/";
+                part2 = str5;
             }
-            String lowerCase = str4.toLowerCase();
+            String lowerCase = part2.toLowerCase();
             String str6 = "";
-            for (RLVRestrictionType rLVRestrictionType : rLVController.getRestrictions().getRestrictionsByObject(uuid)) {
-                str6 = (lowerCase.equals("") || rLVRestrictionType.toString().indexOf(lowerCase) >= 0) ? str6 + str3 + rLVRestrictionType.toString() : str6;
+            for (RLVRestrictionType rlvRestrictionType : rlvController.getRestrictions().getRestrictionsByObject(uuid)) {
+                str6 = (lowerCase.equals("") || rlvRestrictionType.toString().indexOf(lowerCase) >= 0) ? str6 + substring3 + rlvRestrictionType.toString() : str6;
             }
-            rLVController.sayOnChannel(parseInt, str6);
+            rlvController.sayOnChannel(parseInt, str6);
         } catch (NumberFormatException e) {
             Debug.Warning(e);
         }

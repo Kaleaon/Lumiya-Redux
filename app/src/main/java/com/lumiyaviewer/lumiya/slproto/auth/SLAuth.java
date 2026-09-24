@@ -20,16 +20,15 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import com.lumiyaviewer.lumiya.utils.HashUtils;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public class SLAuth {
 
     private static class LoginRequestField {
         public final String name;
         public final String value;
 
-        private LoginRequestField(String str, String str2) {
-            this.name = str;
-            this.value = str2;
+        private LoginRequestField(String name, String value) {
+            this.name = name;
+            this.value = value;
         }
 
         /* synthetic */ LoginRequestField(String str, String str2, LoginRequestField loginRequestField) {
@@ -48,135 +47,165 @@ public class SLAuth {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private SLAuthReply SendLoginRequest(SLAuthParams sLAuthParams) throws IOException {
-        String str = "last";
-        LoginRequestField loginRequestField = null;
-        String str2 = sLAuthParams.passwordHash;
-        if (sLAuthParams.startLocation != null && sLAuthParams.startLocation.equals("first")) {
-            str = "home";
-        } else if (sLAuthParams.startLocation != null && sLAuthParams.startLocation.startsWith("uri:")) {
-            str = sLAuthParams.startLocation;
-        }
-        LinkedList<LoginRequestField> linkedList = new LinkedList();
-        String strTrim = sLAuthParams.loginName.trim();
-        int length = strTrim.length();
-        for (int i = 0; i < " ._".length(); i++) {
-            int iIndexOf = strTrim.indexOf(" ._".substring(i, i + 1));
-            if (iIndexOf != -1 && iIndexOf < length) {
-                length = iIndexOf;
+    /**
+     * XML-RPC login_to_simulator request (the viewer's LLLoginInstance /
+     * lllogin XML-RPC path). Builds the login struct, posts it to the grid's
+     * login URI and follows up to five "indeterminate" redirects
+     * (next_method / next_url, e.g. for MFA or TOS pages).
+     */
+    private SLAuthReply SendLoginRequest(SLAuthParams authParams) throws IOException {
+        String passwordHash = authParams.passwordHash;
+        // 3.4.2 logged the password hash and the whole request here through
+        // Debug.Log (a no-op in release builds). Left out: credentials must not
+        // reach logs if debug logging is ever enabled (TPV policy).
+        String startLocation = "last";
+        if (authParams.startLocation != null) {
+            if (authParams.startLocation.equals("first")) {
+                startLocation = "home";
+            } else if (authParams.startLocation.startsWith("uri:")) {
+                startLocation = authParams.startLocation;
             }
         }
-        String strSubstring = strTrim.substring(0, length);
-        String strSubstring2 = length < strTrim.length() ? strTrim.substring(length + 1) : "";
-        String strTrim2 = strSubstring.trim();
-        String strTrim3 = strSubstring2.trim();
-        if (strTrim3.equalsIgnoreCase("")) {
-            strTrim3 = "Resident";
-        }
-        linkedList.add(new LoginRequestField("first", strTrim2, loginRequestField));
-        linkedList.add(new LoginRequestField("last", strTrim3, loginRequestField));
-        linkedList.add(new LoginRequestField("passwd", str2, loginRequestField));
-        linkedList.add(new LoginRequestField("start", str, loginRequestField));
-        String str3 = "Lumiya " + (Debug.isDebugBuild() ? "Test" : "Release");
-        String appVersion = LumiyaApp.getAppVersion();
-        for (int iCountOccurrences = StringUtils.countOccurrences(appVersion, '.'); iCountOccurrences < 3; iCountOccurrences++) {
-            appVersion = appVersion + ".0";
-        }
-        Debug.Printf("Auth: viewer channel '%s', version '%s'", str3, appVersion);
-        linkedList.add(new LoginRequestField("channel", str3, loginRequestField));
-        linkedList.add(new LoginRequestField("version", appVersion, loginRequestField));
-        linkedList.add(new LoginRequestField("platform", "Android", loginRequestField));
-        linkedList.add(new LoginRequestField("platform_version", Build.VERSION.RELEASE, loginRequestField));
-        linkedList.add(new LoginRequestField("mac", HashUtils.MD5_Hash("android_id"), loginRequestField));
-        linkedList.add(new LoginRequestField("user-agent", "Lumiya", loginRequestField));
-        linkedList.add(new LoginRequestField("id0", sLAuthParams.clientID.toString(), loginRequestField));
-        linkedList.add(new LoginRequestField("agree_to_tos", "true", loginRequestField));
-        linkedList.add(new LoginRequestField("viewer_digest", "f50cfcc3-d6ce-4f16-a822-b91271de4c48", loginRequestField));
-        String str4 = sLAuthParams.loginURL;
-        String str5 = "login_to_simulator";
-        SLAuthReply sLAuthReply = null;
-        for (int i2 = 0; i2 < 5; i2++) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("<?xml version=\"1.0\"?>\n");
-            sb.append("<methodCall>");
-            sb.append("<methodName>").append(str5).append("</methodName>");
-            sb.append("<params>");
-            sb.append("<param>");
-            sb.append("<value>");
-            sb.append("<struct>");
-            for (LoginRequestField loginRequestField2 : linkedList) {
-                sb.append("<member>");
-                sb.append("<name>");
-                sb.append(loginRequestField2.name);
-                sb.append("</name>");
-                sb.append("<value>");
-                sb.append("<string>");
-                sb.append(TextUtils.htmlEncode(loginRequestField2.value));
-                sb.append("</string>");
-                sb.append("</value>");
-                sb.append("</member>");
+        LinkedList<LoginRequestField> fields = new LinkedList<>();
+        // "First Last", "first.last" or "first_last"; a bare name is a
+        // "Resident" account (the viewer's LLGridManager legacy name handling).
+        String loginName = authParams.loginName.trim();
+        int separatorIndex = loginName.length();
+        String separators = " ._";
+        for (int i = 0; i < separators.length(); i++) {
+            int index = loginName.indexOf(separators.substring(i, i + 1));
+            if (index != -1 && index < separatorIndex) {
+                separatorIndex = index;
             }
-            sb.append("<member>");
-            sb.append("<name>options</name>");
-            sb.append("<value>");
-            sb.append("<array><data>");
-            sb.append("<value><string>buddy-list</string></value>");
-            sb.append("<value><string>display_names</string></value>");
-            sb.append("<value><string>inventory-root</string></value>");
-            sb.append("<value><string>inventory-lib-root</string></value>");
-            sb.append("<value><string>max-agent-groups</string></value>");
-            sb.append("</data></array>");
-            sb.append("</value>");
-            sb.append("</member>");
-            sb.append("</struct>");
-            sb.append("</value>");
-            sb.append("</param>");
-            sb.append("</params>");
-            sb.append("</methodCall>");
-            String string = sb.toString();
-            Debug.Log("Start location: " + str);
-            Response responseExecute = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(str4).header(HttpHeaders.CONNECTION, "close").post(RequestBody.create(MediaType.parse("text/xml"), string)).header(HttpHeaders.CONTENT_TYPE, "text/xml").build()).execute();
+        }
+        String firstName = loginName.substring(0, separatorIndex);
+        String lastName = "";
+        if (separatorIndex < loginName.length()) {
+            lastName = loginName.substring(separatorIndex + 1);
+        }
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        if (lastName.equalsIgnoreCase("")) {
+            lastName = "Resident";
+        }
+        fields.add(new LoginRequestField("first", firstName, null));
+        fields.add(new LoginRequestField("last", lastName, null));
+        fields.add(new LoginRequestField("passwd", passwordHash, null));
+        fields.add(new LoginRequestField("start", startLocation, null));
+        String channel = "Lumiya " + (Debug.isDebugBuild() ? "Test" : "Release");
+        // Login expects a four-part version: pad "3.4.2" to "3.4.2.0".
+        String version = LumiyaApp.getAppVersion();
+        for (int dots = StringUtils.countOccurrences(version, '.'); dots < 3; dots++) {
+            version = version + ".0";
+        }
+        Debug.Printf("Auth: viewer channel '%s', version '%s'", channel, version);
+        fields.add(new LoginRequestField("channel", channel, null));
+        fields.add(new LoginRequestField("version", version, null));
+        fields.add(new LoginRequestField("platform", "Android", null));
+        fields.add(new LoginRequestField("platform_version", Build.VERSION.RELEASE, null));
+        fields.add(new LoginRequestField("mac", HashUtils.MD5_Hash("android_id"), null));
+        fields.add(new LoginRequestField("user-agent", "Lumiya", null));
+        fields.add(new LoginRequestField("id0", authParams.clientID.toString(), null));
+        fields.add(new LoginRequestField("agree_to_tos", "true", null));
+        fields.add(new LoginRequestField("viewer_digest", "f50cfcc3-d6ce-4f16-a822-b91271de4c48", null));
+        String loginURL = authParams.loginURL;
+        String methodName = "login_to_simulator";
+        SLAuthReply reply = null;
+        for (int redirect = 0; redirect < 5; redirect++) {
+            StringBuilder request = new StringBuilder();
+            request.append("<?xml version=\"1.0\"?>\n");
+            request.append("<methodCall>");
+            request.append("<methodName>").append(methodName).append("</methodName>");
+            request.append("<params>");
+            request.append("<param>");
+            request.append("<value>");
+            request.append("<struct>");
+            for (LoginRequestField field : fields) {
+                request.append("<member>");
+                request.append("<name>");
+                request.append(field.name);
+                request.append("</name>");
+                request.append("<value>");
+                request.append("<string>");
+                // Escaped (3.4.2 was not): a "uri:Region&x&y&z" start location
+                // otherwise makes the XML-RPC request malformed.
+                request.append(TextUtils.htmlEncode(field.value));
+                request.append("</string>");
+                request.append("</value>");
+                request.append("</member>");
+            }
+            // Optional login response sections the viewer wants back.
+            request.append("<member>");
+            request.append("<name>options</name>");
+            request.append("<value>");
+            request.append("<array><data>");
+            request.append("<value><string>buddy-list</string></value>");
+            request.append("<value><string>display_names</string></value>");
+            request.append("<value><string>inventory-root</string></value>");
+            request.append("<value><string>inventory-lib-root</string></value>");
+            request.append("<value><string>max-agent-groups</string></value>");
+            request.append("</data></array>");
+            request.append("</value>");
+            request.append("</member>");
+            request.append("</struct>");
+            request.append("</value>");
+            request.append("</param>");
+            request.append("</params>");
+            request.append("</methodCall>");
+            String requestXML = request.toString();
+            Debug.Log("Start location: " + startLocation);
+            Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder()
+                    .url(loginURL)
+                    .header("Connection", "close")
+                    .post(RequestBody.create(MediaType.parse("text/xml"), requestXML))
+                    .header("Content-Type", "text/xml")
+                    .build()).execute();
+            if (response == null) {
+                throw new IOException("Null response");
+            }
             try {
-                if (!responseExecute.isSuccessful()) {
-                    throw new IOException("Login error code " + responseExecute.code());
+                if (!response.isSuccessful()) {
+                    throw new IOException("Login error code " + response.code());
                 }
                 try {
-                    XmlPullParser xmlPullParserNewPullParser = XmlPullParserFactory.newInstance().newPullParser();
-                    if (responseExecute.body() == null) {
-                        throw new IOException("Empty login response");
+                    XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+                    parser.setInput(new BufferedInputStream(response.body().byteStream(), 65536), null);
+                    reply = new SLAuthReply(authParams.gridName, authParams.loginURL, parser);
+                    if (!reply.isIndeterminate || reply.nextMethod == null || reply.nextURL == null) {
+                        return reply;
                     }
-                    xmlPullParserNewPullParser.setInput(new BufferedInputStream(responseExecute.body().byteStream(), 65536), null);
-                    sLAuthReply = new SLAuthReply(sLAuthParams.gridName, sLAuthParams.loginURL, xmlPullParserNewPullParser);
-                    if (!sLAuthReply.isIndeterminate || sLAuthReply.nextMethod == null || sLAuthReply.nextURL == null) {
-                        return sLAuthReply;
-                    }
-                    str5 = sLAuthReply.nextMethod;
-                    str4 = sLAuthReply.nextURL;
-                    responseExecute.close();
+                    methodName = reply.nextMethod;
+                    loginURL = reply.nextURL;
                 } catch (XmlPullParserException e) {
                     Debug.Warning(e);
                     throw new IOException("Login reply parse error", e);
                 }
             } finally {
-                responseExecute.close();
+                response.close();
             }
         }
-        return sLAuthReply;
+        return reply;
     }
 
-    public static String getPasswordHash(String str) {
-        String trim = str.trim();
-        if (trim.length() > 16) {
-            trim = trim.substring(0, 16);
+    /**
+     * Second Life login password: "$1$" + MD5 hex digest, as the viewer sends
+     * it (llpanellogin.cpp LLMD5, llsecapi.cpp "$1$" prefix). 3.4.2 first cuts
+     * the password to 16 characters, Second Life's historical maximum.
+     */
+    public static String getPasswordHash(String password) {
+        String trimmed = password.trim();
+        if (trimmed.length() > 16) {
+            trimmed = trimmed.substring(0, 16);
         }
-        return "$1$" + HashUtils.MD5_Hash(trim);
+        return "$1$" + HashUtils.MD5_Hash(trimmed);
     }
 
-    public SLAuthReply Login(SLAuthParams sLAuthParams) throws IOException {
+    public SLAuthReply Login(SLAuthParams authParams) throws IOException {
         try {
-            return SendLoginRequest(sLAuthParams);
+            return SendLoginRequest(authParams);
         } catch (Exception e) {
-            throw new IOException("Failed to login to simulator", e);
+            e.printStackTrace();
+            throw new IOException("Failed to login to simulator");
         }
     }
 }

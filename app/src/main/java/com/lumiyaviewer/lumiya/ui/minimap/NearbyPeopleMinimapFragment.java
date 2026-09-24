@@ -36,7 +36,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class NearbyPeopleMinimapFragment extends Fragment {
 
     @BindView(R.id.empty)
@@ -44,12 +43,12 @@ public class NearbyPeopleMinimapFragment extends Fragment {
 
     @BindView(com.lumiyaviewer.lumiya.R.id.minimap_users_list)
     RecyclerView userListView;
-    private final SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$0SrW7eOJ5Pm_SVTDQOmxGjUXtco
+    private final SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            NearbyPeopleMinimapFragment.this.m655xe5efdfa3((ImmutableList) obj);
+            NearbyPeopleMinimapFragment.this.onChatterList((ImmutableList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -78,12 +77,12 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             setHasStableIds(true);
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public int getItemCount() {
             return this.chatters.size();
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public long getItemId(int i) {
             UUID optionalChatterUUID;
             Long l;
@@ -93,7 +92,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             return l.longValue();
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public void onBindViewHolder(NearbyUserViewHolder nearbyUserViewHolder, int i) {
             if (i < 0 || i >= this.chatters.size()) {
                 return;
@@ -101,7 +100,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             nearbyUserViewHolder.bindToData(this.context, this.layoutInflater, this.userManager, this.chatters.get(i), i == this.selectedPosition);
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        @Override
         public NearbyUserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             return NearbyPeopleMinimapFragment.this.new NearbyUserViewHolder(this.layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.minimap_user_item, viewGroup, false));
         }
@@ -156,10 +155,10 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             }
             i = -1;
             if (i != this.selectedPosition) {
-                int i3 = this.selectedPosition;
+                int selectedPosition = this.selectedPosition;
                 this.selectedPosition = i;
                 notifyItemChanged(this.selectedPosition);
-                notifyItemChanged(i3);
+                notifyItemChanged(selectedPosition);
             }
         }
     }
@@ -198,19 +197,19 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             if (z) {
                 this.cardView.setCardElevation(this.cardSelectedElevation);
                 this.cardView.setCardBackgroundColor(NearbyPeopleMinimapFragment.this.cardSelectedColor);
-                this.selectedLayout.setVisibility(0);
+                this.selectedLayout.setVisibility(View.VISIBLE);
             } else {
                 this.cardView.setCardElevation(0.0f);
                 this.cardView.setCardBackgroundColor(0);
-                this.selectedLayout.setVisibility(8);
+                this.selectedLayout.setVisibility(View.GONE);
             }
             this.chatterDisplayData = chatterDisplayData;
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case com.lumiyaviewer.lumiya.R.id.user_item_view_holder /* 2131755487 */:
+                case com.lumiyaviewer.lumiya.R.id.user_item_view_holder:
                     FragmentManager fragmentManager = NearbyPeopleMinimapFragment.this.getFragmentManager();
                     if (fragmentManager != null) {
                         ComponentCallbacks findFragmentById = fragmentManager.findFragmentById(com.lumiyaviewer.lumiya.R.id.selector);
@@ -220,7 +219,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
                         }
                     }
                     break;
-                case com.lumiyaviewer.lumiya.R.id.user_item_chat_button /* 2131755489 */:
+                case com.lumiyaviewer.lumiya.R.id.user_item_chat_button:
                     if (this.chatterDisplayData != null) {
                         DetailsActivity.showDetails(NearbyPeopleMinimapFragment.this.getActivity(), ChatFragmentActivityFactory.getInstance(), ChatFragment.makeSelection(this.chatterDisplayData.chatterID));
                         break;
@@ -236,20 +235,18 @@ public class NearbyPeopleMinimapFragment extends Fragment {
         return nearbyPeopleMinimapFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onChatterList, reason: merged with bridge method [inline-methods] */
-    public void m655xe5efdfa3(ImmutableList<ChatterDisplayData> immutableList) {
+    public void onChatterList(ImmutableList<ChatterDisplayData> immutableList) {
         if (this.adapter != null) {
             this.adapter.setChatters(immutableList);
         }
         if (getView() != null) {
             boolean isEmpty = immutableList.isEmpty();
-            this.emptyView.setVisibility(isEmpty ? 0 : 8);
-            this.userListView.setVisibility(isEmpty ? 8 : 0);
+            this.emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            this.userListView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
@@ -263,7 +260,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
@@ -274,7 +271,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.chatterList.unsubscribe();
         super.onStop();

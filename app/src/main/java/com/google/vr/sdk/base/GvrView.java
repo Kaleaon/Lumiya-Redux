@@ -9,7 +9,6 @@ import com.google.vr.cardboard.UsedByNative;
 import com.google.vr.ndk.base.GvrSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 
-/* loaded from: classes.dex */
 public class GvrView extends FrameLayout {
     private CardboardViewApi cardboardViewApi;
 
@@ -24,7 +23,7 @@ public class GvrView extends FrameLayout {
 
         void onSurfaceChanged(int i, int i2);
 
-        void onSurfaceCreated(EGLConfig eGLConfig);
+        void onSurfaceCreated(EGLConfig eglConfig);
     }
 
     public interface StereoRenderer {
@@ -41,7 +40,7 @@ public class GvrView extends FrameLayout {
 
         void onSurfaceChanged(int i, int i2);
 
-        void onSurfaceCreated(EGLConfig eGLConfig);
+        void onSurfaceCreated(EGLConfig eglConfig);
     }
 
     public GvrView(Context context) {
@@ -116,7 +115,7 @@ public class GvrView extends FrameLayout {
         this.cardboardViewApi.onResume();
     }
 
-    @Override // android.view.View
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.cardboardViewApi.onTouchEvent(motionEvent)) {
             return true;
@@ -137,40 +136,40 @@ public class GvrView extends FrameLayout {
         this.cardboardViewApi.resetHeadTracker();
     }
 
-    public boolean setAsyncReprojectionEnabled(boolean z) {
-        return this.cardboardViewApi.setAsyncReprojectionEnabled(z);
+    public boolean setAsyncReprojectionEnabled(boolean asyncReprojectionEnabled) {
+        return this.cardboardViewApi.setAsyncReprojectionEnabled(asyncReprojectionEnabled);
     }
 
-    public void setDepthStencilFormat(int i) {
-        this.cardboardViewApi.setDepthStencilFormat(i);
+    public void setDepthStencilFormat(int depthStencilFormat) {
+        this.cardboardViewApi.setDepthStencilFormat(depthStencilFormat);
     }
 
-    public void setDistortionCorrectionEnabled(boolean z) {
-        this.cardboardViewApi.setDistortionCorrectionEnabled(z);
+    public void setDistortionCorrectionEnabled(boolean distortionCorrectionEnabled) {
+        this.cardboardViewApi.setDistortionCorrectionEnabled(distortionCorrectionEnabled);
     }
 
-    public void setDistortionCorrectionScale(float f) {
-        this.cardboardViewApi.setDistortionCorrectionScale(f);
+    public void setDistortionCorrectionScale(float distortionCorrectionScale) {
+        this.cardboardViewApi.setDistortionCorrectionScale(distortionCorrectionScale);
     }
 
     public void setEGLConfigChooser(int i, int i2, int i3, int i4, int i5, int i6) {
         this.cardboardViewApi.getGvrSurfaceView().setEGLConfigChooser(i, i2, i3, i4, i5, i6);
     }
 
-    public void setEGLContextClientVersion(int i) {
-        this.cardboardViewApi.getGvrSurfaceView().setEGLContextClientVersion(i);
+    public void setEGLContextClientVersion(int eglContextClientVersion) {
+        this.cardboardViewApi.getGvrSurfaceView().setEGLContextClientVersion(eglContextClientVersion);
     }
 
-    public void setMultisampling(int i) {
-        this.cardboardViewApi.setMultisampling(i);
+    public void setMultisampling(int multisampling) {
+        this.cardboardViewApi.setMultisampling(multisampling);
     }
 
-    public void setNeckModelEnabled(boolean z) {
-        this.cardboardViewApi.setNeckModelEnabled(z);
+    public void setNeckModelEnabled(boolean neckModelEnabled) {
+        this.cardboardViewApi.setNeckModelEnabled(neckModelEnabled);
     }
 
-    public void setNeckModelFactor(float f) {
-        this.cardboardViewApi.setNeckModelFactor(f);
+    public void setNeckModelFactor(float neckModelFactor) {
+        this.cardboardViewApi.setNeckModelFactor(neckModelFactor);
     }
 
     public void setOnCardboardBackListener(Runnable runnable) {
@@ -203,12 +202,12 @@ public class GvrView extends FrameLayout {
         this.cardboardViewApi.setRenderer(stereoRenderer);
     }
 
-    public void setStereoModeEnabled(boolean z) {
-        this.cardboardViewApi.setStereoModeEnabled(z);
+    public void setStereoModeEnabled(boolean stereoModeEnabled) {
+        this.cardboardViewApi.setStereoModeEnabled(stereoModeEnabled);
     }
 
-    public void setTransitionViewEnabled(boolean z) {
-        this.cardboardViewApi.setTransitionViewEnabled(z);
+    public void setTransitionViewEnabled(boolean transitionViewEnabled) {
+        this.cardboardViewApi.setTransitionViewEnabled(transitionViewEnabled);
     }
 
     public void shutdown() {

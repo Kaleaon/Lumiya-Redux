@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.types.Vector3Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 public class PrimVolume {
     private static final int FLEXI_PATH_REZ = 16;
     private static final int SCULPT_REZ_1 = 6;
@@ -31,9 +30,9 @@ public class PrimVolume {
     private int sculptRequestedT;
     PrimVolumeParams volumeParams;
 
-    public static PrimVolume create(PrimVolumeParams primVolumeParams, float f, boolean z, boolean z2, GLTexture gLTexture) {
+    public static PrimVolume create(PrimVolumeParams primVolumeParams, float f, boolean z, boolean z2, GLTexture glTexture) {
         if (primVolumeParams.isSculpt()) {
-            if (gLTexture == null) {
+            if (glTexture == null) {
                 return null;
             }
             Debug.Log("Sculpt: using sculpt texture " + primVolumeParams.SculptID);
@@ -48,7 +47,7 @@ public class PrimVolume {
         primVolume.FaceMask = 0;
         primVolume.LODScaleBias = new LLVector3(1.0f, 1.0f, 1.0f);
         if (primVolumeParams.isSculpt()) {
-            if (primVolume.sculpt(gLTexture.getWidth(), gLTexture.getHeight(), gLTexture.getNumComponents(), gLTexture, 1)) {
+            if (primVolume.sculpt(glTexture.getWidth(), glTexture.getHeight(), glTexture.getNumComponents(), glTexture, 1)) {
                 return primVolume;
             }
             return null;
@@ -132,14 +131,14 @@ public class PrimVolume {
         int size = this.Path.Path.size();
         int size2 = this.Profile.Profile.size();
         this.Mesh = new Vector3Array(size2 * size);
-        for (int i2 = 0; i2 < size; i2++) {
-            LLVector2 lLVector2 = this.Path.Path.get(i2).scale;
-            LLQuaternion lLQuaternion = this.Path.Path.get(i2).rot;
-            for (int i3 = 0; i3 < size2; i3++) {
-                int i4 = (i2 * size2) + i3;
-                this.Mesh.set(i4, lLVector2.x * this.Profile.Profile.get(i3).x, this.Profile.Profile.get(i3).y * lLVector2.y, 0.0f);
-                this.Mesh.mul(i4, lLQuaternion);
-                this.Mesh.add(i4, this.Path.Path.get(i2).pos);
+        for (int j = 0; j < size; j++) {
+            LLVector2 scale = this.Path.Path.get(j).scale;
+            LLQuaternion rot = this.Path.Path.get(j).rot;
+            for (int k = 0; k < size2; k++) {
+                int i4 = (j * size2) + k;
+                this.Mesh.set(i4, scale.x * this.Profile.Profile.get(k).x, this.Profile.Profile.get(k).y * scale.y, 0.0f);
+                this.Mesh.mul(i4, rot);
+                this.Mesh.add(i4, this.Path.Path.get(j).pos);
             }
         }
         Iterator<PrimProfile.Face> it = this.Profile.Faces.iterator();
@@ -153,10 +152,10 @@ public class PrimVolume {
         return this.Profile.Faces.size();
     }
 
-    private boolean sculpt(int i, int i2, int i3, GLTexture gLTexture, int i4) {
+    private boolean sculpt(int i, int i2, int i3, GLTexture glTexture, int i4) {
         boolean z;
         byte b = this.volumeParams.SculptType;
-        if (i == 0 || i2 == 0 || i3 < 3 || gLTexture == null) {
+        if (i == 0 || i2 == 0 || i3 < 3 || glTexture == null) {
             i4 = -1;
             z = true;
         } else {
@@ -175,7 +174,7 @@ public class PrimVolume {
             return false;
         }
         try {
-            sculptGenerateMapVertices(i, i2, i3, gLTexture, b);
+            sculptGenerateMapVertices(i, i2, i3, glTexture, b);
             int i5 = 0;
             while (true) {
                 int i6 = i5;
@@ -193,7 +192,7 @@ public class PrimVolume {
         }
     }
 
-    private void sculptGenerateMapVertices(int i, int i2, int i3, GLTexture gLTexture, byte b) {
+    private void sculptGenerateMapVertices(int i, int i2, int i3, GLTexture glTexture, byte b) {
         byte b2 = (byte) (b & 7);
         boolean z = (b & 64) != 0;
         boolean z2 = (b & Byte.MIN_VALUE) != 0;
@@ -203,9 +202,9 @@ public class PrimVolume {
         int i4 = 0;
         int i5 = 0;
         while (i4 < size) {
-            for (int i6 = 0; i6 < size2; i6++) {
-                int i7 = i6 + i5;
-                int i8 = (int) (((z3 ? (size2 - i6) - 1 : i6) / (size2 - 1)) * i);
+            for (int j = 0; j < size2; j++) {
+                int i7 = j + i5;
+                int i8 = (int) (((z3 ? (size2 - j) - 1 : j) / (size2 - 1)) * i);
                 int i9 = (int) ((i4 / (size - 1)) * i2);
                 if (i9 == 0 && b2 == 1) {
                     i8 = i / 2;
@@ -231,7 +230,7 @@ public class PrimVolume {
                 if (i9 >= i2) {
                     i9 = i2 - 1;
                 }
-                int rgb = gLTexture.getRGB(((i9 * i) + i8) * i3);
+                int rgb = glTexture.getRGB(((i9 * i) + i8) * i3);
                 float f = (((rgb >> 16) & 255) / 255.0f) - 0.5f;
                 float f2 = (((rgb >> 8) & 255) / 255.0f) - 0.5f;
                 float f3 = ((rgb & 255) / 255.0f) - 0.5f;

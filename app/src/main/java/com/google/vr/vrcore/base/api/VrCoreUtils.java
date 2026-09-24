@@ -12,7 +12,6 @@ import com.google.vr.cardboard.annotations.UsedByNative;
 import java.util.Iterator;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public final class VrCoreUtils {
     private static final boolean DEBUG = false;
     private static final String TAG = VrCoreUtils.class.getSimpleName();

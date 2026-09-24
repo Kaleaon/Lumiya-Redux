@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.mutelist;
 
-/* loaded from: classes.dex */
 public enum MuteType {
     BY_NAME(2),
     AGENT(0),
@@ -10,8 +9,8 @@ public enum MuteType {
 
     private int viewOrder;
 
-    MuteType(int i) {
-        this.viewOrder = i;
+    MuteType(int viewOrder) {
+        this.viewOrder = viewOrder;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

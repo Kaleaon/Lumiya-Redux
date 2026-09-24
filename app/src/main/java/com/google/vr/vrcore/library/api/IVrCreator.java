@@ -8,7 +8,6 @@ import android.os.RemoteException;
 import com.google.vr.vrcore.library.api.IObjectWrapper;
 import com.google.vr.vrcore.library.api.IVrNativeLibraryLoader;
 
-/* loaded from: classes.dex */
 public interface IVrCreator extends IInterface {
 
     public static abstract class Stub extends Binder implements IVrCreator {
@@ -19,27 +18,27 @@ public interface IVrCreator extends IInterface {
         private static class Proxy implements IVrCreator {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrCreator
-            public IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper iObjectWrapper) throws RemoteException {
+            @Override
+            public IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper objectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IVrNativeLibraryLoader.Stub.asInterface(obtain2.readStrongBinder());
+                    obtain.writeStrongBinder(objectWrapper != null ? objectWrapper.asBinder() : null);
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
+                    return IVrNativeLibraryLoader.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -48,19 +47,19 @@ public interface IVrCreator extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrCreator
-            public IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2) throws RemoteException {
+            @Override
+            public IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper objectWrapper, IObjectWrapper iObjectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iObjectWrapper == null ? null : iObjectWrapper.asBinder());
-                    obtain.writeStrongBinder(iObjectWrapper2 != null ? iObjectWrapper2.asBinder() : null);
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IVrNativeLibraryLoader.Stub.asInterface(obtain2.readStrongBinder());
+                    obtain.writeStrongBinder(objectWrapper == null ? null : objectWrapper.asBinder());
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.mRemote.transact(4, obtain, parcel, 0);
+                    parcel.readException();
+                    return IVrNativeLibraryLoader.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -78,12 +77,12 @@ public interface IVrCreator extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IVrCreator)) ? (IVrCreator) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 3:
@@ -107,7 +106,7 @@ public interface IVrCreator extends IInterface {
         }
     }
 
-    IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper iObjectWrapper) throws RemoteException;
+    IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper objectWrapper) throws RemoteException;
 
-    IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2) throws RemoteException;
+    IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper objectWrapper, IObjectWrapper iObjectWrapper) throws RemoteException;
 }

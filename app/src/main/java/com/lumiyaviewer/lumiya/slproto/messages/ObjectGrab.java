@@ -1,35 +1,42 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectGrab
+ *
+ * <p>Template: {@code ObjectGrab Low 117 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectGrab extends SLMessage {
     public AgentData AgentData_Field;
     public ObjectData ObjectData_Field;
     public ArrayList<SurfaceInfo> SurfaceInfo_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public LLVector3 GrabOffset;
-        public int LocalID;
+        public LLVector3 GrabOffset; // LLVector3
+        public int LocalID; // U32
     }
 
+    /** Block SurfaceInfo, Variable. */
     public static class SurfaceInfo {
-        public LLVector3 Binormal;
-        public int FaceIndex;
-        public LLVector3 Normal;
-        public LLVector3 Position;
-        public LLVector3 STCoord;
-        public LLVector3 UVCoord;
+        public LLVector3 Binormal; // LLVector3
+        public int FaceIndex; // S32
+        public LLVector3 Normal; // LLVector3
+        public LLVector3 Position; // LLVector3
+        public LLVector3 STCoord; // LLVector3
+        public LLVector3 UVCoord; // LLVector3
     }
 
     public ObjectGrab() {
@@ -38,21 +45,22 @@ public class ObjectGrab extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.SurfaceInfo_Fields.size() * 64) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectGrab(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectGrab(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 117);
+        // Message number: Low 117 (ObjectGrab).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x75);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ObjectData_Field.LocalID);
@@ -68,14 +76,14 @@ public class ObjectGrab extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.ObjectData_Field.LocalID = unpackInt(byteBuffer);
         this.ObjectData_Field.GrabOffset = unpackLLVector3(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             SurfaceInfo surfaceInfo = new SurfaceInfo();
             surfaceInfo.UVCoord = unpackLLVector3(byteBuffer);
             surfaceInfo.STCoord = unpackLLVector3(byteBuffer);

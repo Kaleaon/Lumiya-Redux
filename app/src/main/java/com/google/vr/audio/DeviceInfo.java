@@ -8,12 +8,11 @@ import android.media.AudioManager;
 import com.google.vr.cardboard.annotations.UsedByNative;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class DeviceInfo {
     private static final String TAG = "DeviceInfo";
     private final Context context;
-    private final BroadcastReceiver headphoneStateReceiver = new BroadcastReceiver() { // from class: com.google.vr.audio.DeviceInfo.1
-        @Override // android.content.BroadcastReceiver
+    private final BroadcastReceiver headphoneStateReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
                 switch (intent.getIntExtra("state", -1)) {
@@ -41,8 +40,8 @@ public class DeviceInfo {
         }
     }
 
-    private DeviceInfo(long j, Context context) {
-        this.nativeObject = j;
+    private DeviceInfo(long nativeObject, Context context) {
+        this.nativeObject = nativeObject;
         this.context = context;
     }
 
@@ -56,7 +55,6 @@ public class DeviceInfo {
         return ((AudioManager) this.context.getSystemService("audio")).isWiredHeadsetOn();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeUpdateHeadphoneStateChange(long j, int i);
 
     @UsedByNative

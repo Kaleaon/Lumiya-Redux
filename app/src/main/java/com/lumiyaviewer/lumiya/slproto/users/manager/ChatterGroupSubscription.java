@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 @NotThreadSafe
-/* loaded from: classes.dex */
 class ChatterGroupSubscription extends ChatterSubscription {
 
     @Nonnull
@@ -18,21 +17,19 @@ class ChatterGroupSubscription extends ChatterSubscription {
 
     ChatterGroupSubscription(@Nonnull SortedChatterList sortedChatterList, ChatterID.ChatterIDGroup chatterIDGroup, @Nonnull UserManager userManager) {
         super(sortedChatterList, chatterIDGroup, userManager);
-        this.groupProfileSubscription = userManager.getCachedGroupProfiles().getPool().subscribe(chatterIDGroup.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$eTv5Cj2a9ssR4ZBNRV1Lgb181AY
+        this.groupProfileSubscription = userManager.getCachedGroupProfiles().getPool().subscribe(chatterIDGroup.getChatterUUID(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                ChatterGroupSubscription.this.m299xb0ce45f9((GroupProfileReply) obj);
+                ChatterGroupSubscription.this.onGroupProfile((GroupProfileReply) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onGroupProfile, reason: merged with bridge method [inline-methods] */
-    public void m299xb0ce45f9(GroupProfileReply groupProfileReply) {
+    public void onGroupProfile(GroupProfileReply groupProfileReply) {
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
         if (Objects.equal(stringFromVariableOEM, this.displayData.displayName)) {
             return;
@@ -40,7 +37,7 @@ class ChatterGroupSubscription extends ChatterSubscription {
         setChatterDisplayData(this.displayData.withDisplayName(stringFromVariableOEM));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterSubscription
+    @Override
     public void unsubscribe() {
         this.groupProfileSubscription.unsubscribe();
         super.unsubscribe();

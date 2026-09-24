@@ -4,19 +4,26 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Remove a mute list entry.
+ *
+ * <p>Template: {@code RemoveMuteListEntry Low 264 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RemoveMuteListEntry extends SLMessage {
     public AgentData AgentData_Field;
     public MuteData MuteData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block MuteData, Single. */
     public static class MuteData {
-        public UUID MuteID;
-        public byte[] MuteName;
+        public UUID MuteID; // LLUUID
+        public byte[] MuteName; // Variable 1
     }
 
     public RemoveMuteListEntry() {
@@ -25,28 +32,29 @@ public class RemoveMuteListEntry extends SLMessage {
         this.MuteData_Field = new MuteData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MuteData_Field.MuteName.length + 17 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveMuteListEntry(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveMuteListEntry(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 8);
+        // Message number: Low 264 (RemoveMuteListEntry).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x08);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.MuteData_Field.MuteID);
         packVariable(byteBuffer, this.MuteData_Field.MuteName, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

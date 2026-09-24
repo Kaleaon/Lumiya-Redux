@@ -4,7 +4,6 @@ import android.opengl.GLES20;
 import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.slproto.windlight.WindlightPreset;
 
-/* loaded from: classes.dex */
 public class SkyProgram extends ShaderProgram {
     public int hazeColor;
     public int hazeHorizon;
@@ -27,12 +26,12 @@ public class SkyProgram extends ShaderProgram {
         GLES20.glUniform3f(this.hazeColor, windlightPreset.haze_density[0] * windlightPreset.ambient[0], windlightPreset.haze_density[0] * windlightPreset.ambient[1], windlightPreset.ambient[2] * windlightPreset.haze_density[0]);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         this.vPosition = GLES20.glGetAttribLocation(this.handle, "vPosition");
         this.uMVPMatrix = GLES20.glGetUniformLocation(this.handle, "uMVPMatrix");
@@ -41,7 +40,7 @@ public class SkyProgram extends ShaderProgram {
         this.hazeColor = GLES20.glGetUniformLocation(this.handle, "hazeColor");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int getHandle() {
         return super.getHandle();
     }

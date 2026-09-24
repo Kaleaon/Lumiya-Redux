@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -8,41 +7,51 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * This message is sent from viewer -> simulator when the viewer wants
+ * to rez an object from a notecard.
+ *
+ * <p>Template: {@code RezObjectFromNotecard Low 294 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RezObjectFromNotecard extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<InventoryData> InventoryData_Fields = new ArrayList<>();
     public NotecardData NotecardData_Field;
     public RezData RezData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Variable. */
     public static class InventoryData {
-        public UUID ItemID;
+        public UUID ItemID; // LLUUID
     }
 
+    /** Block NotecardData, Single. */
     public static class NotecardData {
-        public UUID NotecardItemID;
-        public UUID ObjectID;
+        public UUID NotecardItemID; // LLUUID
+        public UUID ObjectID; // LLUUID
     }
 
+    /** Block RezData, Single. */
     public static class RezData {
-        public int BypassRaycast;
-        public int EveryoneMask;
-        public UUID FromTaskID;
-        public int GroupMask;
-        public int ItemFlags;
-        public int NextOwnerMask;
-        public LLVector3 RayEnd;
-        public boolean RayEndIsIntersection;
-        public LLVector3 RayStart;
-        public UUID RayTargetID;
-        public boolean RemoveItem;
-        public boolean RezSelected;
+        public int BypassRaycast; // U8
+        public int EveryoneMask; // U32
+        public UUID FromTaskID; // LLUUID
+        public int GroupMask; // U32
+        public int ItemFlags; // U32
+        public int NextOwnerMask; // U32
+        public LLVector3 RayEnd; // LLVector3
+        public boolean RayEndIsIntersection; // BOOL
+        public LLVector3 RayStart; // LLVector3
+        public UUID RayTargetID; // LLUUID
+        public boolean RemoveItem; // BOOL
+        public boolean RezSelected; // BOOL
     }
 
     public RezObjectFromNotecard() {
@@ -52,21 +61,22 @@ public class RezObjectFromNotecard extends SLMessage {
         this.NotecardData_Field = new NotecardData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.InventoryData_Fields.size() * 16) + 161;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezObjectFromNotecard(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezObjectFromNotecard(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 38);
+        // Message number: Low 294 (RezObjectFromNotecard).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x26);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -91,13 +101,13 @@ public class RezObjectFromNotecard extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.RezData_Field.FromTaskID = unpackUUID(byteBuffer);
-        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF;
         this.RezData_Field.RayStart = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayEnd = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayTargetID = unpackUUID(byteBuffer);
@@ -110,8 +120,8 @@ public class RezObjectFromNotecard extends SLMessage {
         this.RezData_Field.NextOwnerMask = unpackInt(byteBuffer);
         this.NotecardData_Field.NotecardItemID = unpackUUID(byteBuffer);
         this.NotecardData_Field.ObjectID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
             this.InventoryData_Fields.add(inventoryData);

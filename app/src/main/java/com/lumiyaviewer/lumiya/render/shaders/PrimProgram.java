@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class PrimProgram extends BasicPrimProgram {
     public int uTexMatrix;
 
@@ -14,7 +13,7 @@ public class PrimProgram extends BasicPrimProgram {
         super(Shader.PrimVertexShader, z ? Shader.PrimOpaqueFragmentShader : Shader.PrimFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.BasicPrimProgram, com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         super.bindVariables();
         this.uTexMatrix = GLES20.glGetUniformLocation(this.handle, "uTexMatrix");

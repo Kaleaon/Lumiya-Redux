@@ -13,11 +13,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRefreshLayout.OnRefreshListener {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f379xeb9cc37f = null;
     private final List<Loadable> loadables = new ArrayList();
     private final List<Loadable> optionalLoadables = new ArrayList();
 
@@ -47,34 +44,8 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         void onLoadableDataChanged();
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m589x4f18d023() {
-        if (f379xeb9cc37f != null) {
-            return f379xeb9cc37f;
-        }
-        int[] iArr = new int[Loadable.Status.valuesCustom().length];
-        try {
-            iArr[Loadable.Status.Error.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[Loadable.Status.Idle.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[Loadable.Status.Loaded.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[Loadable.Status.Loading.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        f379xeb9cc37f = iArr;
-        return iArr;
-    }
-
-    public LoadableMonitor(Loadable... loadableArr) {
-        Collections.addAll(this.loadables, loadableArr);
+    public LoadableMonitor(Loadable... loadable) {
+        Collections.addAll(this.loadables, loadable);
         Iterator<Loadable> it = this.loadables.iterator();
         while (it.hasNext()) {
             ((Loadable) it.next()).addLoadableStatusListener(this);
@@ -83,24 +54,24 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
 
     private void updateLoadingIndicator() {
         if (this.loadingLayout != null) {
-            switch (m589x4f18d023()[this.status.ordinal()]) {
-                case 1:
+            switch (this.status) {
+                case Error:
                     this.loadingLayout.showMessage(Strings.nullToEmpty(this.loadingErrorMessage));
                     break;
-                case 2:
+                case Idle:
                     this.loadingLayout.showMessage(Strings.nullToEmpty(this.loadingIdleMessage));
                     break;
-                case 3:
+                case Loaded:
                     this.loadingLayout.showContent(this.emptyMessage);
                     break;
-                case 4:
+                case Loading:
                     this.loadingLayout.showLoading();
                     break;
             }
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable.LoadableStatusListener
+    @Override
     public void onLoadableStatusChange(Loadable loadable, Loadable.Status status) {
         Iterator<Loadable> it = this.loadables.iterator();
         boolean z = false;
@@ -108,11 +79,11 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         boolean z3 = false;
         while (it.hasNext()) {
             Loadable.Status loadableStatus = ((Loadable) it.next()).getLoadableStatus();
-            switch (m589x4f18d023()[loadableStatus.ordinal()]) {
-                case 1:
+            switch (loadableStatus) {
+                case Error:
                     z2 = true;
                     break;
-                case 4:
+                case Loading:
                     z3 = true;
                     break;
             }
@@ -132,7 +103,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         this.onLoadableDataChangedListener.onLoadableDataChanged();
     }
 
-    @Override // androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+    @Override
     public void onRefresh() {
         for (Loadable loadable : this.loadables) {
             if (loadable instanceof RefreshableOne) {
@@ -146,29 +117,29 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         }
     }
 
-    public void setButteryProgressBar(boolean z) {
+    public void setButteryProgressBar(boolean butteryProgressBar) {
         if (this.loadingLayout != null) {
-            this.loadingLayout.setButteryProgressBar(z);
+            this.loadingLayout.setButteryProgressBar(butteryProgressBar);
         }
     }
 
-    public void setEmptyMessage(boolean z, @Nullable String str) {
+    public void setEmptyMessage(boolean z, @Nullable String emptyMessage) {
         if (!z) {
-            str = null;
+            emptyMessage = null;
         }
-        this.emptyMessage = str;
+        this.emptyMessage = emptyMessage;
         updateLoadingIndicator();
     }
 
-    public void setExtraLoading(boolean z) {
-        this.isExtraLoading = z;
+    public void setExtraLoading(boolean isExtraLoading) {
+        this.isExtraLoading = isExtraLoading;
         onLoadableStatusChange(null, null);
     }
 
-    public void setLoadingLayout(@Nullable LoadingLayout loadingLayout, @Nullable String str, @Nullable String str2) {
+    public void setLoadingLayout(@Nullable LoadingLayout loadingLayout, @Nullable String loadingIdleMessage, @Nullable String loadingErrorMessage) {
         this.loadingLayout = loadingLayout;
-        this.loadingIdleMessage = str;
-        this.loadingErrorMessage = str2;
+        this.loadingIdleMessage = loadingIdleMessage;
+        this.loadingErrorMessage = loadingErrorMessage;
         updateLoadingIndicator();
     }
 
@@ -197,9 +168,9 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         return this;
     }
 
-    public LoadableMonitor withOptionalLoadables(Loadable... loadableArr) {
-        Collections.addAll(this.optionalLoadables, loadableArr);
-        for (Loadable loadable : loadableArr) {
+    public LoadableMonitor withOptionalLoadables(Loadable... loadable2) {
+        Collections.addAll(this.optionalLoadables, loadable2);
+        for (Loadable loadable : loadable2) {
             loadable.addLoadableStatusListener(this);
         }
         return this;

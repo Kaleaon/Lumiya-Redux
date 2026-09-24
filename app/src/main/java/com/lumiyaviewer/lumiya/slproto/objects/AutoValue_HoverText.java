@@ -1,19 +1,18 @@
 package com.lumiyaviewer.lumiya.slproto.objects;
 
-/* loaded from: classes.dex */
 final class AutoValue_HoverText extends HoverText {
     private final int color;
     private final String text;
 
-    AutoValue_HoverText(String str, int i) {
-        if (str == null) {
+    AutoValue_HoverText(String text, int color) {
+        if (text == null) {
             throw new NullPointerException("Null text");
         }
-        this.text = str;
-        this.color = i;
+        this.text = text;
+        this.color = color;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.HoverText
+    @Override
     public int color() {
         return this.color;
     }
@@ -33,7 +32,7 @@ final class AutoValue_HoverText extends HoverText {
         return ((this.text.hashCode() ^ 1000003) * 1000003) ^ this.color;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.HoverText
+    @Override
     public String text() {
         return this.text;
     }

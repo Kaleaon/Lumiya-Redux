@@ -1,35 +1,46 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Disable makes objects nonphysical and turns off their scripts.
+ * ParcelDisableObjects
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelDisableObjects Low 201 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelDisableObjects extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
     public ArrayList<TaskIDs> TaskIDs_Fields = new ArrayList<>();
     public ArrayList<OwnerIDs> OwnerIDs_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block OwnerIDs, Variable. */
     public static class OwnerIDs {
-        public UUID OwnerID;
+        public UUID OwnerID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public int LocalID;
-        public int ReturnType;
+        public int LocalID; // S32
+        public int ReturnType; // U32
     }
 
+    /** Block TaskIDs, Variable. */
     public static class TaskIDs {
-        public UUID TaskID;
+        public UUID TaskID; // LLUUID
     }
 
     public ParcelDisableObjects() {
@@ -38,21 +49,22 @@ public class ParcelDisableObjects extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.TaskIDs_Fields.size() * 16) + 45 + 1 + (this.OwnerIDs_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDisableObjects(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDisableObjects(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -55);
+        // Message number: Low 201 (ParcelDisableObjects).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xC9);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
@@ -63,26 +75,26 @@ public class ParcelDisableObjects extends SLMessage {
             packUUID(byteBuffer, ((TaskIDs) it.next()).TaskID);
         }
         byteBuffer.put((byte) this.OwnerIDs_Fields.size());
-        Iterator<?> it2 = this.OwnerIDs_Fields.iterator();
-        while (it2.hasNext()) {
-            packUUID(byteBuffer, ((OwnerIDs) it2.next()).OwnerID);
+        Iterator<?> iterator = this.OwnerIDs_Fields.iterator();
+        while (iterator.hasNext()) {
+            packUUID(byteBuffer, ((OwnerIDs) iterator.next()).OwnerID);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.ParcelData_Field.LocalID = unpackInt(byteBuffer);
         this.ParcelData_Field.ReturnType = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             TaskIDs taskIDs = new TaskIDs();
             taskIDs.TaskID = unpackUUID(byteBuffer);
             this.TaskIDs_Fields.add(taskIDs);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             OwnerIDs ownerIDs = new OwnerIDs();
             ownerIDs.OwnerID = unpackUUID(byteBuffer);
             this.OwnerIDs_Fields.add(ownerIDs);

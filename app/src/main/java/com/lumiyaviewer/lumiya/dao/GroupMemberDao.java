@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GroupMemberDao extends AbstractDao<GroupMember, Void> {
     public static final String TABLENAME = "GroupMembers";
 
@@ -31,47 +30,46 @@ public class GroupMemberDao extends AbstractDao<GroupMember, Void> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'GroupMembers' ('GROUP_ID' TEXT NOT NULL ,'REQUEST_ID' TEXT NOT NULL ,'USER_ID' TEXT NOT NULL ,'CONTRIBUTION' INTEGER NOT NULL ,'ONLINE_STATUS' TEXT NOT NULL ,'AGENT_POWERS' INTEGER NOT NULL ,'TITLE' TEXT NOT NULL ,'IS_OWNER' INTEGER NOT NULL );");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_GroupMembers_GROUP_ID_REQUEST_ID ON GroupMembers (GROUP_ID,REQUEST_ID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'GroupMembers' ('GROUP_ID' TEXT NOT NULL ,'REQUEST_ID' TEXT NOT NULL ,'USER_ID' TEXT NOT NULL ,'CONTRIBUTION' INTEGER NOT NULL ,'ONLINE_STATUS' TEXT NOT NULL ,'AGENT_POWERS' INTEGER NOT NULL ,'TITLE' TEXT NOT NULL ,'IS_OWNER' INTEGER NOT NULL );");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_GroupMembers_GROUP_ID_REQUEST_ID ON GroupMembers (GROUP_ID,REQUEST_ID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupMembers'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupMembers'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
-    public void bindValues(SQLiteStatement sQLiteStatement, GroupMember groupMember) {
-        sQLiteStatement.clearBindings();
-        sQLiteStatement.bindString(1, groupMember.getGroupID().toString());
-        sQLiteStatement.bindString(2, groupMember.getRequestID().toString());
-        sQLiteStatement.bindString(3, groupMember.getUserID().toString());
-        sQLiteStatement.bindLong(4, groupMember.getContribution());
-        sQLiteStatement.bindString(5, groupMember.getOnlineStatus());
-        sQLiteStatement.bindLong(6, groupMember.getAgentPowers());
-        sQLiteStatement.bindString(7, groupMember.getTitle());
-        sQLiteStatement.bindLong(8, groupMember.getIsOwner() ? 1L : 0L);
+    @Override
+    public void bindValues(SQLiteStatement sqLiteStatement, GroupMember groupMember) {
+        sqLiteStatement.clearBindings();
+        sqLiteStatement.bindString(1, groupMember.getGroupID().toString());
+        sqLiteStatement.bindString(2, groupMember.getRequestID().toString());
+        sqLiteStatement.bindString(3, groupMember.getUserID().toString());
+        sqLiteStatement.bindLong(4, groupMember.getContribution());
+        sqLiteStatement.bindString(5, groupMember.getOnlineStatus());
+        sqLiteStatement.bindLong(6, groupMember.getAgentPowers());
+        sqLiteStatement.bindString(7, groupMember.getTitle());
+        sqLiteStatement.bindLong(8, groupMember.getIsOwner() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void getKey(GroupMember groupMember) {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public GroupMember readEntity(Cursor cursor, int i) {
         return new GroupMember(UUID.fromString(cursor.getString(i + 0)), UUID.fromString(cursor.getString(i + 1)), UUID.fromString(cursor.getString(i + 2)), cursor.getInt(i + 3), cursor.getString(i + 4), cursor.getLong(i + 5), cursor.getString(i + 6), cursor.getShort(i + 7) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, GroupMember groupMember, int i) {
         groupMember.setGroupID(UUID.fromString(cursor.getString(i + 0)));
         groupMember.setRequestID(UUID.fromString(cursor.getString(i + 1)));
@@ -83,13 +81,12 @@ public class GroupMemberDao extends AbstractDao<GroupMember, Void> {
         groupMember.setIsOwner(cursor.getShort(i + 7) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void readKey(Cursor cursor, int i) {
         return null;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void updateKeyAfterInsert(GroupMember groupMember, long j) {
         return null;
     }

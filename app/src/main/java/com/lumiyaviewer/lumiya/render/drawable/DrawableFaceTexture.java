@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.render.glres.textures.GLTextureCache;
 import com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams;
 import com.lumiyaviewer.lumiya.res.ResourceConsumer;
 
-/* loaded from: classes.dex */
 public class DrawableFaceTexture implements ResourceConsumer, GLCleanable {
     private final DrawableTextureParams drawableTextureParams;
     private GLTextureCache glTextureCache = null;
@@ -19,7 +18,7 @@ public class DrawableFaceTexture implements ResourceConsumer, GLCleanable {
         this.drawableTextureParams = drawableTextureParams;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLCleanable
+    @Override
     public void GLCleanup() {
         if (this.glTextureCache != null) {
             this.glTextureCache.CancelRequest(this);
@@ -30,9 +29,9 @@ public class DrawableFaceTexture implements ResourceConsumer, GLCleanable {
     }
 
     public final boolean GLDraw(RenderContext renderContext) {
-        GLLoadedTexture gLLoadedTexture = this.loadedTexture;
-        if (gLLoadedTexture != null) {
-            gLLoadedTexture.GLDraw();
+        GLLoadedTexture loadedTexture = this.loadedTexture;
+        if (loadedTexture != null) {
+            loadedTexture.GLDraw();
             return true;
         }
         if (this.textureRequested) {
@@ -45,12 +44,12 @@ public class DrawableFaceTexture implements ResourceConsumer, GLCleanable {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         if (obj instanceof GLLoadedTexture) {
-            GLLoadedTexture gLLoadedTexture = (GLLoadedTexture) obj;
-            this.loadedTexture = gLLoadedTexture;
-            this.hasAlphaLayer = gLLoadedTexture.hasAlphaLayer();
+            GLLoadedTexture glLoadedTexture = (GLLoadedTexture) obj;
+            this.loadedTexture = glLoadedTexture;
+            this.hasAlphaLayer = glLoadedTexture.hasAlphaLayer();
         } else if (obj == null) {
             this.loadedTexture = null;
             this.hasAlphaLayer = false;

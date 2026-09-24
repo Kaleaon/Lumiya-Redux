@@ -4,24 +4,34 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * This message is sent up from the viewer to get a list
+ * of the sims in a specified region.
+ * Returns: MapBlockReply
+ *
+ * <p>Template: {@code MapBlockRequest Low 407 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MapBlockRequest extends SLMessage {
     public AgentData AgentData_Field;
     public PositionData PositionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int EstateID;
-        public int Flags;
-        public boolean Godlike;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int EstateID; // U32 - filled in on sim
+        public int Flags; // U32
+        public boolean Godlike; // BOOL - filled in on sim
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block PositionData, Single. */
     public static class PositionData {
-        public int MaxX;
-        public int MaxY;
-        public int MinX;
-        public int MinY;
+        public int MaxX; // U16 - in region-widths
+        public int MaxY; // U16 - in region-widths
+        public int MinX; // U16 - in region-widths
+        public int MinY; // U16 - in region-widths
     }
 
     public MapBlockRequest() {
@@ -30,21 +40,22 @@ public class MapBlockRequest extends SLMessage {
         this.PositionData_Field = new PositionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapBlockRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapBlockRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -105);
+        // Message number: Low 407 (MapBlockRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x97);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
@@ -56,7 +67,7 @@ public class MapBlockRequest extends SLMessage {
         packShort(byteBuffer, (short) this.PositionData_Field.MaxY);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

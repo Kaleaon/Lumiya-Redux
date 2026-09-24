@@ -17,7 +17,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 
 @SuppressLint({"ViewConstructor"})
-/* loaded from: classes.dex */
 public class WorldSurfaceView extends GLSurfaceView {
     private static final int DEFAULT_FONT_SIZE_SP = 16;
     private final WorldViewActivity activity;
@@ -32,8 +31,8 @@ public class WorldSurfaceView extends GLSurfaceView {
     WorldSurfaceView(WorldViewActivity worldViewActivity, UserManager userManager) {
         super(worldViewActivity);
         this.ownAvatarHidden = false;
-        this.mHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldSurfaceView.1
-            @Override // android.os.Handler
+        this.mHandler = new Handler() {
+            @Override
             public void handleMessage(Message message) {
                 switch (message.what) {
                     case 1:
@@ -68,7 +67,7 @@ public class WorldSurfaceView extends GLSurfaceView {
             }
         };
         this.activity = worldViewActivity;
-        int applyDimension = (int) TypedValue.applyDimension(2, 16.0f, getResources().getDisplayMetrics());
+        int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16.0f, getResources().getDisplayMetrics());
         this.supportsGL20 = ((ActivityManager) getContext().getSystemService("activity")).getDeviceConfigurationInfo().reqGlEsVersion >= 131072;
         if (Debug.isDebugBuild()) {
             setDebugFlags(3);
@@ -131,7 +130,7 @@ public class WorldSurfaceView extends GLSurfaceView {
         this.renderer.requestScreenshot(this.mHandler);
     }
 
-    @Override // android.opengl.GLSurfaceView
+    @Override
     public void onPause() {
         Debug.Log("GLView: onPause () entered.");
         this.renderer.disableDrawing();
@@ -140,7 +139,7 @@ public class WorldSurfaceView extends GLSurfaceView {
         Debug.Log("GLView: onPause () exiting");
     }
 
-    @Override // android.opengl.GLSurfaceView
+    @Override
     public void onResume() {
         super.onResume();
         if (this.wantGL20 != getWantGL20() && this.activity != null) {
@@ -149,12 +148,12 @@ public class WorldSurfaceView extends GLSurfaceView {
         }
         final WorldViewRenderer worldViewRenderer = this.renderer;
         worldViewRenderer.getClass();
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ((WorldViewRenderer) worldViewRenderer).enableDrawing();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -170,12 +169,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void setDisplayedHUDid(final int i) {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.3
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m802lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5461(i);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -187,12 +186,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void setDrawPickedObject(final SLObjectInfo sLObjectInfo) {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.2
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m805lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5904((SLObjectInfo) sLObjectInfo);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -206,12 +205,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void setHUDOffset(final float f, final float f2) {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.5
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m804lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5758(f, f2);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -219,12 +218,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void setHUDScaleFactor(final float f) {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.4
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m803lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5602(f);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -238,12 +237,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     void setOwnAvatarHidden(final boolean z) {
         if (this.ownAvatarHidden != z) {
             this.ownAvatarHidden = z;
-            queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.7
+            queueEvent(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     WorldSurfaceView.this.m806lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6157(z);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -252,12 +251,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void takeScreenshot() {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.1
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m808lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6612();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -265,12 +264,12 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     void touchHUD(final float f, final float f2) {
-        queueEvent(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$WbegR8yVWPTDY8X58dwHEd9HRSQ.6
+        queueEvent(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 WorldSurfaceView.this.m807lambda$com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_6395(f, f2);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

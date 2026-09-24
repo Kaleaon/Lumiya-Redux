@@ -4,26 +4,25 @@ import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLPrimObjectDisplayInfoWithChildren extends SLPrimObjectDisplayInfo implements SLObjectDisplayInfo.HasChildrenObjects {
 
     @Nonnull
     public final ImmutableList<SLObjectDisplayInfo> children;
     private final boolean implicitlyAdded;
 
-    public SLPrimObjectDisplayInfoWithChildren(SLObjectInfo sLObjectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean z) {
-        super(sLObjectInfo, f);
+    public SLPrimObjectDisplayInfoWithChildren(SLObjectInfo objectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean implicitlyAdded) {
+        super(objectInfo, f);
         this.children = immutableList;
-        this.implicitlyAdded = z;
+        this.implicitlyAdded = implicitlyAdded;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo.HasChildrenObjects
+    @Override
     @Nonnull
     public ImmutableList<SLObjectDisplayInfo> getChildren() {
         return this.children;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo.HasChildrenObjects
+    @Override
     public boolean isImplicitlyAdded() {
         return this.implicitlyAdded;
     }

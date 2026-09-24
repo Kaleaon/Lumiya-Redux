@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class OnlineIndicatorView extends View {
     private final Paint innerRingPaint;
     private float innerRingThickness;
@@ -75,7 +74,7 @@ public class OnlineIndicatorView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.innerRingPaint.setColor(this.onlineIndicatorColor);
@@ -87,7 +86,7 @@ public class OnlineIndicatorView extends View {
         this.outerRingPaint.setStrokeWidth(this.outerRingThickness);
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         float width = getWidth();
         float height = getHeight();

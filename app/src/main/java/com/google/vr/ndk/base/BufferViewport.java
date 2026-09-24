@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.RectF;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferViewport {
     public static final int BUFFER_INDEX_EXTERNAL_SURFACE = -1;
     public static final int EXTERNAL_SURFACE_ID_NONE = -1;
@@ -20,8 +19,8 @@ public class BufferViewport {
         public static final int NONE = 0;
     }
 
-    BufferViewport(long j) {
-        this.nativeBufferViewport = j;
+    BufferViewport(long nativeBufferViewport) {
+        this.nativeBufferViewport = nativeBufferViewport;
     }
 
     public boolean equals(Object obj) {
@@ -66,20 +65,20 @@ public class BufferViewport {
         return GvrApi.nativeBufferViewportGetTargetEye(this.nativeBufferViewport);
     }
 
-    public void getTransform(float[] fArr) {
-        GvrApi.nativeBufferViewportGetTransform(this.nativeBufferViewport, fArr);
+    public void getTransform(float[] floats) {
+        GvrApi.nativeBufferViewportGetTransform(this.nativeBufferViewport, floats);
     }
 
-    public void setExternalSurfaceId(int i) {
-        GvrApi.nativeBufferViewportSetExternalSurfaceId(this.nativeBufferViewport, i);
+    public void setExternalSurfaceId(int externalSurfaceId) {
+        GvrApi.nativeBufferViewportSetExternalSurfaceId(this.nativeBufferViewport, externalSurfaceId);
     }
 
-    public void setReprojection(int i) {
-        GvrApi.nativeBufferViewportSetReprojection(this.nativeBufferViewport, i);
+    public void setReprojection(int reprojection) {
+        GvrApi.nativeBufferViewportSetReprojection(this.nativeBufferViewport, reprojection);
     }
 
-    public void setSourceBufferIndex(int i) {
-        GvrApi.nativeBufferViewportSetSourceBufferIndex(this.nativeBufferViewport, i);
+    public void setSourceBufferIndex(int sourceBufferIndex) {
+        GvrApi.nativeBufferViewportSetSourceBufferIndex(this.nativeBufferViewport, sourceBufferIndex);
     }
 
     public void setSourceFov(RectF rectF) {
@@ -90,12 +89,12 @@ public class BufferViewport {
         GvrApi.nativeBufferViewportSetSourceUv(this.nativeBufferViewport, rectF.left, rectF.top, rectF.right, rectF.bottom);
     }
 
-    public void setTargetEye(int i) {
-        GvrApi.nativeBufferViewportSetTargetEye(this.nativeBufferViewport, i);
+    public void setTargetEye(int targetEye) {
+        GvrApi.nativeBufferViewportSetTargetEye(this.nativeBufferViewport, targetEye);
     }
 
-    public void setTransform(float[] fArr) {
-        GvrApi.nativeBufferViewportSetTransform(this.nativeBufferViewport, fArr);
+    public void setTransform(float[] floats) {
+        GvrApi.nativeBufferViewportSetTransform(this.nativeBufferViewport, floats);
     }
 
     public void shutdown() {

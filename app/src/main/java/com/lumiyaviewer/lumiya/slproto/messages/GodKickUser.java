@@ -4,16 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GodKickUser
+ * When a god wants someone kicked
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code GodKickUser Low 165 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GodKickUser extends SLMessage {
     public UserInfo UserInfo_Field;
 
+    /** Block UserInfo, Single. */
     public static class UserInfo {
-        public UUID AgentID;
-        public UUID GodID;
-        public UUID GodSessionID;
-        public int KickFlags;
-        public byte[] Reason;
+        public UUID AgentID; // LLUUID
+        public UUID GodID; // LLUUID
+        public UUID GodSessionID; // LLUUID
+        public int KickFlags; // U32
+        public byte[] Reason; // Variable 2 - string
     }
 
     public GodKickUser() {
@@ -21,21 +30,22 @@ public class GodKickUser extends SLMessage {
         this.UserInfo_Field = new UserInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.UserInfo_Field.Reason.length + 54 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGodKickUser(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGodKickUser(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -91);
+        // Message number: Low 165 (GodKickUser).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xA5);
         packUUID(byteBuffer, this.UserInfo_Field.GodID);
         packUUID(byteBuffer, this.UserInfo_Field.GodSessionID);
         packUUID(byteBuffer, this.UserInfo_Field.AgentID);
@@ -43,7 +53,7 @@ public class GodKickUser extends SLMessage {
         packVariable(byteBuffer, this.UserInfo_Field.Reason, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.UserInfo_Field.GodID = unpackUUID(byteBuffer);
         this.UserInfo_Field.GodSessionID = unpackUUID(byteBuffer);

@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class CurrentLocationInfo {
     public static CurrentLocationInfo create(@Nullable ParcelData parcelData, int i, int i2, @Nullable VoiceChannelInfo voiceChannelInfo) {
         return new AutoValue_CurrentLocationInfo(parcelData, i, i2, voiceChannelInfo);

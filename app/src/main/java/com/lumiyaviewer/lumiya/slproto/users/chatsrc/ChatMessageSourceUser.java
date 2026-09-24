@@ -9,7 +9,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatMessageSourceUser extends ChatMessageSource {
 
     @Nullable
@@ -33,31 +32,31 @@ public class ChatMessageSourceUser extends ChatMessageSource {
         this.legacyName = null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatterID getDefaultChatter(UUID uuid) {
         return ChatterID.getUserChatterID(uuid, this.uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public String getSourceName(@Nonnull UserManager userManager) {
         return GlobalOptions.getInstance().isLegacyUserNames() ? this.legacyName : this.displayName;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatMessageSource.ChatMessageSourceType getSourceType() {
         return ChatMessageSource.ChatMessageSourceType.User;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public UUID getSourceUUID() {
         return this.uuid;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     public void serializeTo(@Nonnull ChatMessage chatMessage) {
         super.serializeTo(chatMessage);
         chatMessage.setSenderUUID(this.uuid);
@@ -65,11 +64,11 @@ public class ChatMessageSourceUser extends ChatMessageSource {
         chatMessage.setSenderLegacyName(this.legacyName);
     }
 
-    public void setDisplayName(@Nullable String str) {
-        this.displayName = str;
+    public void setDisplayName(@Nullable String displayName) {
+        this.displayName = displayName;
     }
 
-    public void setLegacyName(@Nullable String str) {
-        this.legacyName = str;
+    public void setLegacyName(@Nullable String legacyName) {
+        this.legacyName = legacyName;
     }
 }

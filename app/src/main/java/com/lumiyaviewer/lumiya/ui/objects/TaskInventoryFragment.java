@@ -16,10 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
@@ -41,11 +39,8 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TaskInventoryFragment extends FragmentWithTitle {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f501x3332d2fb = null;
     private static final String OBJECT_LOCAL_ID_KEY = "objectLocalId";
     private static final String OBJECT_UUID_KEY = "objectUUID";
     private Subscription<Integer, SLObjectProfileData> objectProfileSubscription;
@@ -56,27 +51,27 @@ public class TaskInventoryFragment extends FragmentWithTitle {
 
     @Nullable
     private SLObjectProfileData objectProfileData = null;
-    private final Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() { // from class: com.lumiyaviewer.lumiya.ui.objects.TaskInventoryFragment.1
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
-        public void onData(SLTaskInventory sLTaskInventory) {
-            TaskInventoryFragment.this.taskInventory = sLTaskInventory;
+    private final Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() {
+        @Override
+        public void onData(SLTaskInventory taskInventory) {
+            TaskInventoryFragment.this.taskInventory = taskInventory;
             View view = TaskInventoryFragment.this.getView();
             if (view != null) {
                 ListAdapter adapter = ((ListView) view.findViewById(R.id.taskInventoryListView)).getAdapter();
                 if (adapter instanceof TaskInventoryListAdapter) {
-                    ((TaskInventoryListAdapter) adapter).setData(sLTaskInventory);
+                    ((TaskInventoryListAdapter) adapter).setData(taskInventory);
                 }
                 ((TextView) view.findViewById(R.id.taskInventoryEmptyText)).setText(R.string.object_contents_empty);
-                view.findViewById(R.id.taskInventoryLoading).setVisibility(8);
+                view.findViewById(R.id.taskInventoryLoading).setVisibility(View.GONE);
             }
         }
     };
-    private final Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.3
+    private final Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             TaskInventoryFragment.this.m699x1db91107((SLObjectProfileData) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -94,19 +89,19 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             this.val$progressDialog = progressDialog;
         }
 
-        @Override // com.google.common.base.Function
+        @Override
         @Nullable
         public Void apply(@Nullable final UUID uuid) {
-            Executor uIThreadExecutor = UIThreadExecutor.getInstance();
+            Executor executor = UIThreadExecutor.getInstance();
             final int i = this.val$taskID;
             final UserManager userManager = this.val$userManager;
             final ProgressDialog progressDialog = this.val$progressDialog;
-            uIThreadExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.4
+            executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     AnonymousClass2.this.m700x9b244ddf((UserManager) userManager, i, (ProgressDialog) progressDialog, (UUID) uuid);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -127,112 +122,6 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m694x9bd6d19f() {
-        if (f501x3332d2fb != null) {
-            return f501x3332d2fb;
-        }
-        int[] iArr = new int[SLAssetType.valuesCustom().length];
-        try {
-            iArr[SLAssetType.AT_ANIMATION.ordinal()] = 3;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLAssetType.AT_BODYPART.ordinal()] = 4;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLAssetType.AT_CALLINGCARD.ordinal()] = 5;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[SLAssetType.AT_CATEGORY.ordinal()] = 6;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[SLAssetType.AT_CLOTHING.ordinal()] = 7;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[SLAssetType.AT_GESTURE.ordinal()] = 8;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[SLAssetType.AT_IMAGE_JPEG.ordinal()] = 9;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[SLAssetType.AT_IMAGE_TGA.ordinal()] = 10;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[SLAssetType.AT_LANDMARK.ordinal()] = 11;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[SLAssetType.AT_LINK.ordinal()] = 12;
-        } catch (NoSuchFieldError e10) {
-        }
-        try {
-            iArr[SLAssetType.AT_LINK_FOLDER.ordinal()] = 13;
-        } catch (NoSuchFieldError e11) {
-        }
-        try {
-            iArr[SLAssetType.AT_LSL_BYTECODE.ordinal()] = 14;
-        } catch (NoSuchFieldError e12) {
-        }
-        try {
-            iArr[SLAssetType.AT_LSL_TEXT.ordinal()] = 1;
-        } catch (NoSuchFieldError e13) {
-        }
-        try {
-            iArr[SLAssetType.AT_MESH.ordinal()] = 15;
-        } catch (NoSuchFieldError e14) {
-        }
-        try {
-            iArr[SLAssetType.AT_NOTECARD.ordinal()] = 2;
-        } catch (NoSuchFieldError e15) {
-        }
-        try {
-            iArr[SLAssetType.AT_OBJECT.ordinal()] = 16;
-        } catch (NoSuchFieldError e16) {
-        }
-        try {
-            iArr[SLAssetType.AT_SCRIPT.ordinal()] = 17;
-        } catch (NoSuchFieldError e17) {
-        }
-        try {
-            iArr[SLAssetType.AT_SIMSTATE.ordinal()] = 18;
-        } catch (NoSuchFieldError e18) {
-        }
-        try {
-            iArr[SLAssetType.AT_SOUND.ordinal()] = 19;
-        } catch (NoSuchFieldError e19) {
-        }
-        try {
-            iArr[SLAssetType.AT_SOUND_WAV.ordinal()] = 20;
-        } catch (NoSuchFieldError e20) {
-        }
-        try {
-            iArr[SLAssetType.AT_TEXTURE.ordinal()] = 21;
-        } catch (NoSuchFieldError e21) {
-        }
-        try {
-            iArr[SLAssetType.AT_TEXTURE_TGA.ordinal()] = 22;
-        } catch (NoSuchFieldError e22) {
-        }
-        try {
-            iArr[SLAssetType.AT_UNKNOWN.ordinal()] = 23;
-        } catch (NoSuchFieldError e23) {
-        }
-        try {
-            iArr[SLAssetType.AT_WIDGET.ordinal()] = 24;
-        } catch (NoSuchFieldError e24) {
-        }
-        f501x3332d2fb = iArr;
-        return iArr;
-    }
-
     private boolean canModifyObject() {
         UserManager userManager = getUserManager();
         if (this.objectProfileData == null || userManager == null || !userManager.getUserID().equals(this.objectProfileData.ownerUUID())) {
@@ -241,10 +130,10 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         return this.objectProfileData.isModifiable();
     }
 
-    private boolean canModifyObjectContents(SLInventoryEntry sLInventoryEntry) {
+    private boolean canModifyObjectContents(SLInventoryEntry inventoryEntry) {
         UserManager userManager = getUserManager();
         if (userManager != null) {
-            return userManager.getUserID().equals(sLInventoryEntry.ownerUUID) ? (sLInventoryEntry.ownerMask & 16384) != 0 : (sLInventoryEntry.everyoneMask & 16384) != 0;
+            return userManager.getUserID().equals(inventoryEntry.ownerUUID) ? (inventoryEntry.ownerMask & 16384) != 0 : (inventoryEntry.everyoneMask & 16384) != 0;
         }
         return false;
     }
@@ -259,12 +148,12 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         if (this.taskInventory == null || this.objectProfileData == null || userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || (modules = activeAgentCircuit.getModules()) == null) {
             return;
         }
-        SLInventory sLInventory = modules.inventory;
+        SLInventory inventory = modules.inventory;
         if (this.taskInventory.entries.size() == 0) {
             return;
         }
         if (!userManager.getUserID().equals(this.objectProfileData.ownerUUID())) {
-            Toast.makeText(getActivity(), R.string.object_contents_not_owned, 1).show();
+            Toast.makeText(getActivity(), R.string.object_contents_not_owned, Toast.LENGTH_LONG).show();
             return;
         }
         if (!z) {
@@ -279,21 +168,21 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             }
             if (z2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.1
+                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         TaskInventoryFragment.this.m697x992e5209(dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -304,11 +193,11 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
         String or = this.objectProfileData.name().or(getString(R.string.default_object_contents_folder));
         HashSet hashSet = new HashSet();
-        Iterator<SLInventoryEntry> it2 = this.taskInventory.entries.iterator();
-        while (it2.hasNext()) {
-            hashSet.add(it2.next().uuid);
+        Iterator<SLInventoryEntry> iterator = this.taskInventory.entries.iterator();
+        while (iterator.hasNext()) {
+            hashSet.add(iterator.next().uuid);
         }
-        sLInventory.CopyObjectContents(or, objectLocalID, hashSet, new AnonymousClass2(userManager, objectLocalID, ProgressDialog.show(getContext(), null, getString(R.string.copying_object_contents), true, true)));
+        inventory.CopyObjectContents(or, objectLocalID, hashSet, new AnonymousClass2(userManager, objectLocalID, ProgressDialog.show(getContext(), null, getString(R.string.copying_object_contents), true, true)));
     }
 
     private int getObjectLocalID() {
@@ -334,14 +223,14 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         if (!(adapter instanceof TaskInventoryListAdapter) || (item = ((TaskInventoryListAdapter) adapter).getItem(i)) == null) {
             return;
         }
-        switch (m694x9bd6d19f()[SLAssetType.getByType(item.assetType).ordinal()]) {
-            case 1:
+        switch (SLAssetType.getByType(item.assetType)) {
+            case AT_LSL_TEXT:
                 if (canModifyObject() && canModifyObjectContents(item)) {
                     startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), null, item, true, getObjectUUID(), getObjectLocalID()));
                     break;
                 }
                 break;
-            case 2:
+            case AT_NOTECARD:
                 if (canModifyObject() && canModifyObjectContents(item)) {
                     startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), null, item, false, getObjectUUID(), getObjectLocalID()));
                     break;
@@ -371,37 +260,37 @@ public class TaskInventoryFragment extends FragmentWithTitle {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_objects_TaskInventoryFragment_5570, reason: not valid java name */
-    /* synthetic */ void m699x1db91107(SLObjectProfileData sLObjectProfileData) {
-        this.objectProfileData = sLObjectProfileData;
+    /* synthetic */ void m699x1db91107(SLObjectProfileData objectProfileData) {
+        this.objectProfileData = objectProfileData;
         if (this.objectProfileData.name().isPresent()) {
             setTitle(getString(R.string.object_contents_title), this.objectProfileData.name().or(getString(R.string.object_name_loading)));
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.task_inventory_menu, menu);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.task_inventory, viewGroup, false);
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setAdapter((ListAdapter) new TaskInventoryListAdapter(layoutInflater.getContext()));
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setEmptyView(inflate.findViewById(android.R.id.empty));
-        ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.2
+        ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 TaskInventoryFragment.this.m698x1db827b5(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -409,10 +298,10 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_copy_all /* 2131755858 */:
+            case R.id.item_copy_all:
                 copyAllToInventory(false);
                 return true;
             default:
@@ -420,7 +309,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         setTitle(getString(R.string.object_contents_title), null);
@@ -432,7 +321,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.taskInventorySubscription != null) {
             this.taskInventorySubscription.unsubscribe();

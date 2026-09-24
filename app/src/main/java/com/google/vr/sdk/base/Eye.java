@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import com.google.vr.cardboard.UsedByNative;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class Eye {
     private float lastZFar;
     private float lastZNear;
@@ -21,8 +20,8 @@ public class Eye {
     }
 
     @UsedByNative
-    public Eye(int i) {
-        this.type = i;
+    public Eye(int type) {
+        this.type = type;
     }
 
     @UsedByNative
@@ -41,16 +40,16 @@ public class Eye {
         return this.fov;
     }
 
-    public float[] getPerspective(float f, float f2) {
-        if (!this.projectionChanged && this.lastZNear == f && this.lastZFar == f2) {
+    public float[] getPerspective(float lastZNear, float lastZFar) {
+        if (!this.projectionChanged && this.lastZNear == lastZNear && this.lastZFar == lastZFar) {
             return this.perspective;
         }
         if (this.perspective == null) {
             this.perspective = new float[16];
         }
-        getFov().toPerspectiveMatrix(f, f2, this.perspective, 0);
-        this.lastZNear = f;
-        this.lastZFar = f2;
+        getFov().toPerspectiveMatrix(lastZNear, lastZFar, this.perspective, 0);
+        this.lastZNear = lastZNear;
+        this.lastZFar = lastZFar;
         this.projectionChanged = false;
         return this.perspective;
     }

@@ -3,14 +3,13 @@ package com.lumiyaviewer.lumiya.slproto.users.manager;
 import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadMessageInfo extends UnreadMessageInfo {
     private final SLChatEvent lastMessage;
     private final int unreadCount;
 
-    AutoValue_UnreadMessageInfo(int i, @Nullable SLChatEvent sLChatEvent) {
-        this.unreadCount = i;
-        this.lastMessage = sLChatEvent;
+    AutoValue_UnreadMessageInfo(int unreadCount, @Nullable SLChatEvent chatEvent) {
+        this.unreadCount = unreadCount;
+        this.lastMessage = chatEvent;
     }
 
     public boolean equals(Object obj) {
@@ -31,7 +30,7 @@ final class AutoValue_UnreadMessageInfo extends UnreadMessageInfo {
         return (this.lastMessage == null ? 0 : this.lastMessage.hashCode()) ^ (1000003 * (this.unreadCount ^ 1000003));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadMessageInfo
+    @Override
     @Nullable
     public SLChatEvent lastMessage() {
         return this.lastMessage;
@@ -41,7 +40,7 @@ final class AutoValue_UnreadMessageInfo extends UnreadMessageInfo {
         return "UnreadMessageInfo{unreadCount=" + this.unreadCount + ", lastMessage=" + this.lastMessage + "}";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadMessageInfo
+    @Override
     public int unreadCount() {
         return this.unreadCount;
     }

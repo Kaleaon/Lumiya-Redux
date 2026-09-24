@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class FadingTextViewLog {
     private static final long STALE_CHAT_TIMEOUT = 5000;
     private final LinearLayout chatsOverlayLayout;
@@ -29,8 +28,8 @@ public class FadingTextViewLog {
     private final Handler mHandler = new Handler();
     private final Map<Long, ChatEventOverlay> chatEventOverlays = new LinkedHashMap();
     private boolean removeStaleChatsPosted = false;
-    private final Runnable RemoveStaleChatsTask = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.FadingTextViewLog.1
-        @Override // java.lang.Runnable
+    private final Runnable RemoveStaleChatsTask = new Runnable() {
+        @Override
         public void run() {
             FadingTextViewLog.this.removeStaleChatsPosted = false;
             if (FadingTextViewLog.this.chatsOverlayLayout != null) {
@@ -44,8 +43,8 @@ public class FadingTextViewLog {
                         }
                         final TextView textView = ((ChatEventOverlay) entry.getValue()).textView;
                         if (Build.VERSION.SDK_INT >= 14) {
-                            textView.animate().alpha(0.0f).setDuration(1000L).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.render.FadingTextViewLog.1.1
-                                @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                            textView.animate().alpha(0.0f).setDuration(1000L).setListener(new AnimatorListenerAdapter() {
+                                @Override
                                 public void onAnimationEnd(Animator animator) {
                                     FadingTextViewLog.this.chatsOverlayLayout.removeView(textView);
                                 }
@@ -61,12 +60,12 @@ public class FadingTextViewLog {
         }
     };
 
-    FadingTextViewLog(UserManager userManager, Context context, LinearLayout linearLayout, int i, int i2) {
+    FadingTextViewLog(UserManager userManager, Context context, LinearLayout linearLayout, int logTextColor, int logBackgroundColor) {
         this.userManager = userManager;
         this.context = context;
         this.chatsOverlayLayout = linearLayout;
-        this.logTextColor = i;
-        this.logBackgroundColor = i2;
+        this.logTextColor = logTextColor;
+        this.logBackgroundColor = logBackgroundColor;
     }
 
     void clearChatEvents() {
@@ -88,10 +87,10 @@ public class FadingTextViewLog {
             String str = chatMessageEvent.isPrivate ? "[IM] " + charSequence : charSequence;
             if (chatMessageEvent.isNewMessage) {
                 DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics();
-                int applyDimension = (int) TypedValue.applyDimension(1, 10.0f, displayMetrics);
-                int applyDimension2 = (int) TypedValue.applyDimension(1, 5.0f, displayMetrics);
-                int applyDimension3 = (int) TypedValue.applyDimension(1, 10.0f, displayMetrics);
-                int applyDimension4 = (int) TypedValue.applyDimension(1, 5.0f, displayMetrics);
+                int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, displayMetrics);
+                int applyDimension2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, displayMetrics);
+                int applyDimension3 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, displayMetrics);
+                int applyDimension4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, displayMetrics);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-2, -2);
                 layoutParams.setMargins(applyDimension, applyDimension2, applyDimension, applyDimension2);
                 textView = new TextView(this.context);

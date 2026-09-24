@@ -5,12 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDInt extends LLSDNode {
     private int value;
 
-    public LLSDInt(int i) {
-        this.value = i;
+    public LLSDInt(int value) {
+        this.value = value;
     }
 
     public LLSDInt(String str) {
@@ -21,23 +20,23 @@ public class LLSDInt extends LLSDNode {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public boolean asBoolean() {
         return this.value != 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public int asInt() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(105);
         dataOutputStream.writeInt(this.value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "integer");
         xmlSerializer.text(Integer.toString(this.value));

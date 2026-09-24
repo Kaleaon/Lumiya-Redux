@@ -4,13 +4,20 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GetScriptRunning - asks if a script is running or not. the simulator
+ * responds with ScriptRunningReply
+ *
+ * <p>Template: {@code GetScriptRunning Low 243 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GetScriptRunning extends SLMessage {
     public Script Script_Field;
 
+    /** Block Script, Single. */
     public static class Script {
-        public UUID ItemID;
-        public UUID ObjectID;
+        public UUID ItemID; // LLUUID
+        public UUID ObjectID; // LLUUID
     }
 
     public GetScriptRunning() {
@@ -18,26 +25,27 @@ public class GetScriptRunning extends SLMessage {
         this.Script_Field = new Script();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGetScriptRunning(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGetScriptRunning(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -13);
+        // Message number: Low 243 (GetScriptRunning).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xF3);
         packUUID(byteBuffer, this.Script_Field.ObjectID);
         packUUID(byteBuffer, this.Script_Field.ItemID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Script_Field.ObjectID = unpackUUID(byteBuffer);
         this.Script_Field.ItemID = unpackUUID(byteBuffer);

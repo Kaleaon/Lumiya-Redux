@@ -7,7 +7,6 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class DaoSession extends AbstractDaoSession {
     private final CachedAssetDao cachedAssetDao;
     private final DaoConfig cachedAssetDaoConfig;
@@ -40,8 +39,8 @@ public class DaoSession extends AbstractDaoSession {
     private final UserPicDao userPicDao;
     private final DaoConfig userPicDaoConfig;
 
-    public DaoSession(SQLiteDatabase sQLiteDatabase, IdentityScopeType identityScopeType, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig> map) {
-        super(sQLiteDatabase);
+    public DaoSession(SQLiteDatabase sqLiteDatabase, IdentityScopeType identityScopeType, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig> map) {
+        super(sqLiteDatabase);
         this.cachedResponseDaoConfig = map.get(CachedResponseDao.class).clone();
         this.cachedResponseDaoConfig.initIdentityScope(identityScopeType);
         this.cachedAssetDaoConfig = map.get(CachedAssetDao.class).clone();

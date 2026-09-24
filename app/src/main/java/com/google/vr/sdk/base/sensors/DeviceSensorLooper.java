@@ -12,7 +12,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 public class DeviceSensorLooper implements SensorEventProvider {
     private static final String LOG_TAG = DeviceSensorLooper.class.getSimpleName();
     private boolean isRunning;
@@ -25,7 +24,6 @@ public class DeviceSensorLooper implements SensorEventProvider {
         this.sensorManager = sensorManager;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public Sensor getUncalibratedGyro() {
         if (Build.MANUFACTURER.equals("HTC")) {
             return null;
@@ -33,20 +31,20 @@ public class DeviceSensorLooper implements SensorEventProvider {
         return this.sensorManager.getDefaultSensor(16);
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void registerListener(SensorEventListener sensorEventListener) {
         synchronized (this.registeredListeners) {
             this.registeredListeners.add(sensorEventListener);
         }
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void start() {
         if (this.isRunning) {
             return;
         }
-        this.sensorEventListener = new SensorEventListener() { // from class: com.google.vr.sdk.base.sensors.DeviceSensorLooper.1
-            @Override // android.hardware.SensorEventListener
+        this.sensorEventListener = new SensorEventListener() {
+            @Override
             public void onAccuracyChanged(Sensor sensor, int i) {
                 synchronized (DeviceSensorLooper.this.registeredListeners) {
                     Iterator it = DeviceSensorLooper.this.registeredListeners.iterator();
@@ -56,7 +54,7 @@ public class DeviceSensorLooper implements SensorEventProvider {
                 }
             }
 
-            @Override // android.hardware.SensorEventListener
+            @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 synchronized (DeviceSensorLooper.this.registeredListeners) {
                     Iterator it = DeviceSensorLooper.this.registeredListeners.iterator();
@@ -66,8 +64,8 @@ public class DeviceSensorLooper implements SensorEventProvider {
                 }
             }
         };
-        HandlerThread handlerThread = new HandlerThread("sensor") { // from class: com.google.vr.sdk.base.sensors.DeviceSensorLooper.2
-            @Override // android.os.HandlerThread
+        HandlerThread handlerThread = new HandlerThread("sensor") {
+            @Override
             protected void onLooperPrepared() {
                 Handler handler = new Handler(Looper.myLooper());
                 DeviceSensorLooper.this.sensorManager.registerListener(DeviceSensorLooper.this.sensorEventListener, DeviceSensorLooper.this.sensorManager.getDefaultSensor(1), 0, handler);
@@ -84,7 +82,7 @@ public class DeviceSensorLooper implements SensorEventProvider {
         this.isRunning = true;
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void stop() {
         if (this.isRunning) {
             this.sensorManager.unregisterListener(this.sensorEventListener);
@@ -95,7 +93,7 @@ public class DeviceSensorLooper implements SensorEventProvider {
         }
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void unregisterListener(SensorEventListener sensorEventListener) {
         synchronized (this.registeredListeners) {
             this.registeredListeners.remove(sensorEventListener);

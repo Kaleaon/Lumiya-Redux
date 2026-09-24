@@ -1,42 +1,51 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * MeanCollisionAlert
+ * Specifies the text to be posted in an alert dialog
+ *
+ * <p>Template: {@code MeanCollisionAlert Low 136 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_mean_collision_alert_message()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class MeanCollisionAlert extends SLMessage {
     public ArrayList<MeanCollision> MeanCollision_Fields = new ArrayList<>();
 
+    /** Block MeanCollision, Variable. */
     public static class MeanCollision {
-        public float Mag;
-        public UUID Perp;
-        public int Time;
-        public int Type;
-        public UUID Victim;
+        public float Mag; // F32
+        public UUID Perp; // LLUUID
+        public int Time; // U32
+        public int Type; // U8
+        public UUID Victim; // LLUUID
     }
 
     public MeanCollisionAlert() {
         this.zeroCoded = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.MeanCollision_Fields.size() * 41) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMeanCollisionAlert(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMeanCollisionAlert(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -120);
+        // Message number: Low 136 (MeanCollisionAlert).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x88);
         byteBuffer.put((byte) this.MeanCollision_Fields.size());
         for (MeanCollision meanCollision : this.MeanCollision_Fields) {
             packUUID(byteBuffer, meanCollision.Victim);
@@ -47,16 +56,16 @@ public class MeanCollisionAlert extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             MeanCollision meanCollision = new MeanCollision();
             meanCollision.Victim = unpackUUID(byteBuffer);
             meanCollision.Perp = unpackUUID(byteBuffer);
             meanCollision.Time = unpackInt(byteBuffer);
             meanCollision.Mag = unpackFloat(byteBuffer);
-            meanCollision.Type = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            meanCollision.Type = unpackByte(byteBuffer) & 0xFF;
             this.MeanCollision_Fields.add(meanCollision);
         }
     }

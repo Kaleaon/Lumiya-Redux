@@ -4,16 +4,24 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * InviteGroupResponse
+ * simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code InviteGroupResponse Low 350 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class InviteGroupResponse extends SLMessage {
     public InviteData InviteData_Field;
 
+    /** Block InviteData, Single. */
     public static class InviteData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID InviteeID;
-        public int MembershipFee;
-        public UUID RoleID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID InviteeID; // LLUUID
+        public int MembershipFee; // S32
+        public UUID RoleID; // LLUUID
     }
 
     public InviteGroupResponse() {
@@ -21,21 +29,22 @@ public class InviteGroupResponse extends SLMessage {
         this.InviteData_Field = new InviteData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 72;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInviteGroupResponse(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInviteGroupResponse(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 94);
+        // Message number: Low 350 (InviteGroupResponse).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x5E);
         packUUID(byteBuffer, this.InviteData_Field.AgentID);
         packUUID(byteBuffer, this.InviteData_Field.InviteeID);
         packUUID(byteBuffer, this.InviteData_Field.GroupID);
@@ -43,7 +52,7 @@ public class InviteGroupResponse extends SLMessage {
         packInt(byteBuffer, this.InviteData_Field.MembershipFee);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.InviteData_Field.AgentID = unpackUUID(byteBuffer);
         this.InviteData_Field.InviteeID = unpackUUID(byteBuffer);

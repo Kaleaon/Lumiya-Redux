@@ -5,15 +5,22 @@ import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Logout
+ * userserver -> dataserver
+ *
+ * <p>Template: {@code DataServerLogout Low 251 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class DataServerLogout extends SLMessage {
     public UserData UserData_Field;
 
+    /** Block UserData, Single. */
     public static class UserData {
-        public UUID AgentID;
-        public boolean Disconnect;
-        public UUID SessionID;
-        public Inet4Address ViewerIP;
+        public UUID AgentID; // LLUUID
+        public boolean Disconnect; // BOOL
+        public UUID SessionID; // LLUUID
+        public Inet4Address ViewerIP; // IPADDR
     }
 
     public DataServerLogout() {
@@ -21,28 +28,29 @@ public class DataServerLogout extends SLMessage {
         this.UserData_Field = new UserData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDataServerLogout(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDataServerLogout(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -5);
+        // Message number: Low 251 (DataServerLogout).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xFB);
         packUUID(byteBuffer, this.UserData_Field.AgentID);
         packIPAddress(byteBuffer, this.UserData_Field.ViewerIP);
         packBoolean(byteBuffer, this.UserData_Field.Disconnect);
         packUUID(byteBuffer, this.UserData_Field.SessionID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.UserData_Field.AgentID = unpackUUID(byteBuffer);
         this.UserData_Field.ViewerIP = unpackIPAddress(byteBuffer);

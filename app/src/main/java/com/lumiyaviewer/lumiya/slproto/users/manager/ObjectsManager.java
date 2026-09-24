@@ -26,25 +26,24 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectsManager {
     private final MultipleChatterNameRetriever nameRetriever;
     private final UserManager userManager;
     private final AtomicReference<SLParcelInfo> parcelInfo = new AtomicReference<>(null);
     private final Object filterLock = new Object();
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create();
-    private final MultipleChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new MultipleChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4
+    private final MultipleChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new MultipleChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(MultipleChatterNameRetriever multipleChatterNameRetriever) {
             ObjectsManager.this.m357x8e849dac(multipleChatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.MultipleChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(MultipleChatterNameRetriever multipleChatterNameRetriever) {
             $m$0(multipleChatterNameRetriever);
         }
     };
-    private final SimpleRequestHandler<SubscriptionSingleKey> updateRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ObjectsManager.1
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    private final SimpleRequestHandler<SubscriptionSingleKey> updateRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+        @Override
         public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
             SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
@@ -54,26 +53,26 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.SimpleRequestHandler, com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequestCancelled(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
             ObjectsManager.this.nameRetriever.clearChatters();
         }
     };
     private final SimpleRequestHandler<Integer> objectProfileRequestHandler = new AnonymousClass2();
     private final SimpleRequestHandler<UUID> touchableObjectsRequestHandler = new AnonymousClass3();
-    private final Runnable updateObjectListRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ObjectsManager.4
-        @Override // java.lang.Runnable
+    private final Runnable updateObjectListRunnable = new Runnable() {
+        @Override
         public void run() {
-            SLObjectFilterInfo sLObjectFilterInfo;
+            SLObjectFilterInfo filterInfo;
             synchronized (ObjectsManager.this.filterLock) {
-                sLObjectFilterInfo = ObjectsManager.this.filterInfo;
+                filterInfo = ObjectsManager.this.filterInfo;
             }
             SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             AgentPosition agentPosition = activeAgentCircuit != null ? activeAgentCircuit.getModules().avatarControl.getAgentPosition() : null;
             ImmutableVector immutablePosition = agentPosition != null ? agentPosition.getImmutablePosition() : null;
-            SLParcelInfo sLParcelInfo = (SLParcelInfo) ObjectsManager.this.parcelInfo.get();
-            Debug.Printf("ObjectList: updating object list, parcelInfo %s, agentPosVector %s", sLParcelInfo, immutablePosition);
-            ObjectsManager.this.objectDisplayListPool.onResultData(SubscriptionSingleKey.Value, (sLParcelInfo == null || immutablePosition == null) ? new ObjectDisplayList(ImmutableList.of(), false) : sLParcelInfo.getDisplayObjects(immutablePosition, sLObjectFilterInfo, ObjectsManager.this.nameRetriever));
+            SLParcelInfo parcelInfo = (SLParcelInfo) ObjectsManager.this.parcelInfo.get();
+            Debug.Printf("ObjectList: updating object list, parcelInfo %s, agentPosVector %s", parcelInfo, immutablePosition);
+            ObjectsManager.this.objectDisplayListPool.onResultData(SubscriptionSingleKey.Value, (parcelInfo == null || immutablePosition == null) ? new ObjectDisplayList(ImmutableList.of(), false) : parcelInfo.getDisplayObjects(immutablePosition, filterInfo, ObjectsManager.this.nameRetriever));
         }
     };
     private final SubscriptionPool<SubscriptionSingleKey, ObjectDisplayList> objectDisplayListPool = new SubscriptionPool<>();
@@ -89,9 +88,9 @@ public class ObjectsManager {
         }
 
         /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_ObjectsManager$2_3438, reason: not valid java name */
-        /* synthetic */ void m358xd130cea5(SLAgentCircuit sLAgentCircuit, Integer num) {
+        /* synthetic */ void m358xd130cea5(SLAgentCircuit agentCircuit, Integer num) {
             ObjectDoesNotExistException objectDoesNotExistException = null;
-            SLObjectProfileData objectProfile = sLAgentCircuit.getObjectProfile(num.intValue());
+            SLObjectProfileData objectProfile = agentCircuit.getObjectProfile(num.intValue());
             if (objectProfile != null) {
                 ObjectsManager.this.objectProfilePool.onResultData(num, objectProfile);
             } else {
@@ -99,16 +98,16 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequest(@Nonnull final Integer num) {
             final SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
-                activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.1
+                activeAgentCircuit.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass2.this.m358xd130cea5((SLAgentCircuit) activeAgentCircuit, (Integer) num);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -125,9 +124,9 @@ public class ObjectsManager {
         }
 
         /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_ObjectsManager$3_4319, reason: not valid java name */
-        /* synthetic */ void m359xd2e617a5(SLAgentCircuit sLAgentCircuit, UUID uuid) {
+        /* synthetic */ void m359xd2e617a5(SLAgentCircuit agentCircuit, UUID uuid) {
             ObjectDoesNotExistException objectDoesNotExistException = null;
-            ImmutableList<SLObjectInfo> userTouchableObjects = sLAgentCircuit.getGridConnection().parcelInfo.getUserTouchableObjects(sLAgentCircuit, uuid);
+            ImmutableList<SLObjectInfo> userTouchableObjects = agentCircuit.getGridConnection().parcelInfo.getUserTouchableObjects(agentCircuit, uuid);
             if (userTouchableObjects != null) {
                 ObjectsManager.this.touchableObjectsPool.onResultData(uuid, userTouchableObjects);
             } else {
@@ -135,16 +134,16 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequest(@Nonnull final UUID uuid) {
             final SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
-                activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.2
+                activeAgentCircuit.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass3.this.m359xd2e617a5((SLAgentCircuit) activeAgentCircuit, (UUID) uuid);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -159,9 +158,9 @@ public class ObjectsManager {
         public final boolean isLoading;
         public final ImmutableList<SLObjectDisplayInfo> objects;
 
-        public ObjectDisplayList(ImmutableList<SLObjectDisplayInfo> immutableList, boolean z) {
+        public ObjectDisplayList(ImmutableList<SLObjectDisplayInfo> immutableList, boolean isLoading) {
             this.objects = immutableList;
-            this.isLoading = z;
+            this.isLoading = isLoading;
         }
     }
 
@@ -171,8 +170,8 @@ public class ObjectsManager {
         @Nullable
         private final UUID uuid;
 
-        private ObjectDoesNotExistException(int i) {
-            this.localID = i;
+        private ObjectDoesNotExistException(int localID) {
+            this.localID = localID;
             this.uuid = null;
         }
 
@@ -202,8 +201,8 @@ public class ObjectsManager {
         this.touchableObjectsPool.attachRequestHandler(this.touchableObjectsRequestHandler);
     }
 
-    public void clearParcelInfo(@Nullable SLParcelInfo sLParcelInfo) {
-        this.parcelInfo.compareAndSet(sLParcelInfo, null);
+    public void clearParcelInfo(@Nullable SLParcelInfo parcelInfo) {
+        this.parcelInfo.compareAndSet(parcelInfo, null);
     }
 
     public Subscribable<SubscriptionSingleKey, ObjectDisplayList> getObjectDisplayList() {
@@ -251,11 +250,11 @@ public class ObjectsManager {
         return this.runningAnimationsPool;
     }
 
-    public void setFilter(SLObjectFilterInfo sLObjectFilterInfo) {
+    public void setFilter(SLObjectFilterInfo objectFilterInfo) {
         boolean z = false;
         synchronized (this.filterLock) {
-            if (!this.filterInfo.equals(sLObjectFilterInfo)) {
-                this.filterInfo = sLObjectFilterInfo;
+            if (!this.filterInfo.equals(objectFilterInfo)) {
+                this.filterInfo = objectFilterInfo;
                 z = true;
             }
         }
@@ -264,8 +263,8 @@ public class ObjectsManager {
         }
     }
 
-    public void setParcelInfo(@Nullable SLParcelInfo sLParcelInfo) {
-        this.parcelInfo.set(sLParcelInfo);
+    public void setParcelInfo(@Nullable SLParcelInfo parcelInfo) {
+        this.parcelInfo.set(parcelInfo);
         requestObjectListUpdate();
     }
 

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.modules;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 
-/* loaded from: classes.dex */
 public class SLDrawDistance extends SLModule {
     public static final float CHAT_RANGE = 20.0f;
     private static final long DRAW_RANGE_TIMEOUT = 10000;
@@ -19,8 +18,8 @@ public class SLDrawDistance extends SLModule {
     private float worldDrawDistance;
     private volatile boolean worldViewActive;
 
-    public SLDrawDistance(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLDrawDistance(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.worldViewActive = false;
         this.objectSelectionActive = false;
         this.keepDrawDistance = false;
@@ -79,20 +78,20 @@ public class SLDrawDistance extends SLModule {
         this.agentCircuit.TryWakeUp();
     }
 
-    public synchronized void Enable3DView(int i) {
-        Debug.Log("Enable3DView: Setting drawDistance to " + i);
-        this.worldDrawDistance = i;
+    public synchronized void Enable3DView(int worldDrawDistance) {
+        Debug.Log("Enable3DView: Setting drawDistance to " + worldDrawDistance);
+        this.worldDrawDistance = worldDrawDistance;
         if (!this.worldViewActive) {
             this.worldViewActive = true;
             this.agentCircuit.getModules().avatarControl.EnableFastUpdates();
         }
-        this.gridConn.parcelInfo.setDrawDistance(i);
+        this.gridConn.parcelInfo.setDrawDistance(worldDrawDistance);
         this.agentCircuit.TryWakeUp();
     }
 
-    public synchronized void EnableKeepDistance(float f) {
+    public synchronized void EnableKeepDistance(float keepSelectDistance) {
         this.keepDrawDistance = true;
-        this.keepSelectDistance = f;
+        this.keepSelectDistance = keepSelectDistance;
     }
 
     public synchronized void EnableObjectSelect() {
@@ -123,8 +122,8 @@ public class SLDrawDistance extends SLModule {
         return this.wantedDrawDistance != this.activeDrawDistance;
     }
 
-    public synchronized void setObjectSelectRange(float f) {
-        this.objectSelectDistance = f;
+    public synchronized void setObjectSelectRange(float objectSelectDistance) {
+        this.objectSelectDistance = objectSelectDistance;
         this.agentCircuit.TryWakeUp();
     }
 }

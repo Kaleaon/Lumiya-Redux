@@ -2,7 +2,6 @@ package com.google.vr.sdk.base;
 
 import android.opengl.Matrix;
 
-/* loaded from: classes.dex */
 public class FieldOfView {
     private static final float CARDBOARD_V1_MAX_FOV_BOTTOM = 40.0f;
     private static final float CARDBOARD_V1_MAX_FOV_LEFT_RIGHT = 40.0f;
@@ -36,9 +35,9 @@ public class FieldOfView {
         return fieldOfView;
     }
 
-    public static FieldOfView parseFromProtobuf(float[] fArr) {
-        if (fArr.length == 4) {
-            return new FieldOfView(fArr[0], fArr[1], fArr[2], fArr[3]);
+    public static FieldOfView parseFromProtobuf(float[] floats) {
+        if (floats.length == 4) {
+            return new FieldOfView(floats[0], floats[1], floats[2], floats[3]);
         }
         return null;
     }
@@ -80,34 +79,34 @@ public class FieldOfView {
         return this.top;
     }
 
-    public void setAngles(float f, float f2, float f3, float f4) {
-        this.left = f;
-        this.right = f2;
-        this.bottom = f3;
-        this.top = f4;
+    public void setAngles(float left, float right, float bottom, float top) {
+        this.left = left;
+        this.right = right;
+        this.bottom = bottom;
+        this.top = top;
     }
 
-    public void setBottom(float f) {
-        this.bottom = f;
+    public void setBottom(float bottom) {
+        this.bottom = bottom;
     }
 
-    public void setLeft(float f) {
-        this.left = f;
+    public void setLeft(float left) {
+        this.left = left;
     }
 
-    public void setRight(float f) {
-        this.right = f;
+    public void setRight(float right) {
+        this.right = right;
     }
 
-    public void setTop(float f) {
-        this.top = f;
+    public void setTop(float top) {
+        this.top = top;
     }
 
-    public void toPerspectiveMatrix(float f, float f2, float[] fArr, int i) {
-        if (i + 16 > fArr.length) {
+    public void toPerspectiveMatrix(float f, float f2, float[] floats, int i) {
+        if (i + 16 > floats.length) {
             throw new IllegalArgumentException("Not enough space to write the result");
         }
-        Matrix.frustumM(fArr, i, ((float) (-Math.tan(Math.toRadians(this.left)))) * f, ((float) Math.tan(Math.toRadians(this.right))) * f, ((float) (-Math.tan(Math.toRadians(this.bottom)))) * f, ((float) Math.tan(Math.toRadians(this.top))) * f, f, f2);
+        Matrix.frustumM(floats, i, ((float) (-Math.tan(Math.toRadians(this.left)))) * f, ((float) Math.tan(Math.toRadians(this.right))) * f, ((float) (-Math.tan(Math.toRadians(this.bottom)))) * f, ((float) Math.tan(Math.toRadians(this.top))) * f, f, f2);
     }
 
     public float[] toProtobuf() {

@@ -103,7 +103,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class WorldViewActivity extends DetailsActivity implements View.OnTouchListener, ThemeMapper, ScriptDialogHandler, UnreadNotificationManager.NotifyCapture {
     private static final long BUTTONS_FADE_TIMEOUT_MILLIS = 7500;
     private static final String FROM_NOTIFICATION_TAG = "fromNotification";
@@ -245,69 +244,69 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private boolean wasInScaling = false;
     private boolean isInteracting = false;
     private boolean isDragging = false;
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.3
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0((SLAgentCircuit) obj);
+            WorldViewActivity.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.4
+    private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1((MyAvatarState) obj);
+            WorldViewActivity.this.onMyAvatarState((MyAvatarState) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.5
+    private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2((SLObjectProfileData) obj);
+            WorldViewActivity.this.onSelectedObjectProfile((SLObjectProfileData) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.6
+    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3((CurrentLocationInfo) obj);
+            WorldViewActivity.this.onCurrentLocation((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.7
+    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4((ChatterID) obj);
+            WorldViewActivity.this.onVoiceActiveChatter((ChatterID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.8
+    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5((VoiceChatInfo) obj);
+            WorldViewActivity.this.onVoiceChatInfo((VoiceChatInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
     private final Object chatEventHandler = new AnonymousClass1();
-    private final Runnable objectDeselectTimerTask = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.2
-        @Override // java.lang.Runnable
+    private final Runnable objectDeselectTimerTask = new Runnable() {
+        @Override
         public void run() {
             WorldViewActivity.this.objectDeselectTimerStarted = false;
             if (WorldViewActivity.this.detailsVisible() || !(!WorldViewActivity.this.isDragging)) {
@@ -323,8 +322,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             }
         }
     };
-    private final Runnable buttonsFadeTask = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.3
-        @Override // java.lang.Runnable
+    private final Runnable buttonsFadeTask = new Runnable() {
+        @Override
         public void run() {
             WorldViewActivity.this.buttonsFadeTimerStarted = false;
             if (!WorldViewActivity.this.detailsVisible() && (!WorldViewActivity.this.isDragging) && WorldViewActivity.this.agentCircuit.hasData()) {
@@ -343,8 +342,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             }
         }
     };
-    private final Runnable buttonsRestoreTask = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.4
-        @Override // java.lang.Runnable
+    private final Runnable buttonsRestoreTask = new Runnable() {
+        @Override
         public void run() {
             if (WorldViewActivity.this.buttonsFadeAnimator != null) {
                 WorldViewActivity.this.buttonsFadeAnimator.cancel();
@@ -352,11 +351,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             WorldViewActivity.this.insetsBackground.setAlpha(1.0f);
         }
     };
-    private final View.OnTouchListener worldViewTouchListener = new View.OnTouchListener() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.5
-        @Override // android.view.View.OnTouchListener
+    private final View.OnTouchListener worldViewTouchListener = new View.OnTouchListener() {
+        @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             boolean z;
-            boolean z2 = WorldViewActivity.this.isInteracting;
+            boolean isInteracting = WorldViewActivity.this.isInteracting;
             switch (motionEvent.getActionMasked()) {
                 case 0:
                     WorldViewActivity.this.isInteracting = true;
@@ -370,19 +369,19 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     z = false;
                     break;
             }
-            if (WorldViewActivity.this.isInteracting && (!z2)) {
+            if (WorldViewActivity.this.isInteracting && (!isInteracting)) {
                 WorldViewActivity.this.mGLView.setIsInteracting(true);
             }
             WorldViewActivity.this.wasInScaling = WorldViewActivity.this.isInScaling;
             boolean onTouchEvent = z | WorldViewActivity.this.scaleGestureDetector.onTouchEvent(motionEvent) | WorldViewActivity.this.gestureDetector.onTouchEvent(motionEvent);
-            if (z2 && (!WorldViewActivity.this.isInteracting)) {
+            if (isInteracting && (!WorldViewActivity.this.isInteracting)) {
                 WorldViewActivity.this.mGLView.setIsInteracting(false);
             }
             return onTouchEvent;
         }
     };
-    private final GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.6
-        @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+    private final GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
         public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
             if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling) || !(!WorldViewActivity.this.isDragging)) {
                 return false;
@@ -396,7 +395,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return true;
         }
 
-        @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+        @Override
         public void onLongPress(MotionEvent motionEvent) {
             float rawX = motionEvent.getRawX();
             float rawY = motionEvent.getRawY();
@@ -412,7 +411,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             }
         }
 
-        @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+        @Override
         public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
             if (WorldViewActivity.this.isDragging) {
                 AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) WorldViewActivity.this.dragPointer.getLayoutParams();
@@ -441,7 +440,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return true;
         }
 
-        @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+        @Override
         public boolean onSingleTapUp(MotionEvent motionEvent) {
             if (WorldViewActivity.this.isDragging) {
                 WorldViewActivity.this.dragSelectorSetRawPosition((int) motionEvent.getRawX(), (int) motionEvent.getRawY());
@@ -455,8 +454,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return true;
         }
     };
-    private final ScaleGestureDetector.OnScaleGestureListener scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() { // from class: com.lumiyaviewer.lumiya.ui.render.WorldViewActivity.7
-        @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+    private final ScaleGestureDetector.OnScaleGestureListener scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             Debug.Printf("Gesture: scale factor: %f", Float.valueOf(scaleGestureDetector.getScaleFactor()));
             if (WorldViewActivity.this.displayedHUDid != 0) {
@@ -480,7 +479,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return true;
         }
 
-        @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+        @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
             WorldViewActivity.this.isInScaling = true;
             WorldViewActivity.this.oldScaleFocusX = scaleGestureDetector.getFocusX();
@@ -488,7 +487,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return true;
         }
 
-        @Override // android.view.ScaleGestureDetector.SimpleOnScaleGestureListener, android.view.ScaleGestureDetector.OnScaleGestureListener
+        @Override
         public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
             WorldViewActivity.this.isInScaling = false;
         }
@@ -506,12 +505,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
         @Subscribe
         public void onChatMessage(final ActiveChattersManager.ChatMessageEvent chatMessageEvent) {
-            WorldViewActivity.this.mHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.11
+            WorldViewActivity.this.mHandler.post(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     AnonymousClass1.this.m856xad728e4a((ActiveChattersManager.ChatMessageEvent) chatMessageEvent);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -523,9 +522,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         private String attachmentName;
         private int localID;
 
-        public SelectableAttachment(int i, String str) {
-            this.localID = i;
-            this.attachmentName = str;
+        public SelectableAttachment(int localID, String attachmentName) {
+            this.localID = localID;
+            this.attachmentName = attachmentName;
         }
 
         public int getLocalID() {
@@ -566,24 +565,23 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    private void chatWithObject(SLObjectInfo sLObjectInfo) {
-        if (!(sLObjectInfo instanceof SLObjectAvatarInfo) || ((SLObjectAvatarInfo) sLObjectInfo).isMyAvatar() || sLObjectInfo.getId() == null) {
+    private void chatWithObject(SLObjectInfo objectInfo) {
+        if (!(objectInfo instanceof SLObjectAvatarInfo) || ((SLObjectAvatarInfo) objectInfo).isMyAvatar() || objectInfo.getId() == null) {
             return;
         }
-        DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, ChatFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), sLObjectInfo.getId())));
+        DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, ChatFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), objectInfo.getId())));
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean detailsVisible() {
         Fragment findFragmentById;
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         return (supportFragmentManager == null || (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) == null || !findFragmentById.isVisible()) ? false : true;
     }
 
-    private void displayHUD(int i) {
-        Debug.Printf("Displaying HUD with ID %d", Integer.valueOf(i));
-        this.displayedHUDid = i;
-        this.mGLView.setDisplayedHUDid(i);
+    private void displayHUD(int displayedHUDid) {
+        Debug.Printf("Displaying HUD with ID %d", Integer.valueOf(displayedHUDid));
+        this.displayedHUDid = displayedHUDid;
+        this.mGLView.setDisplayedHUDid(displayedHUDid);
         if (this.displayedHUDid != this.prevDisplayedHUDid) {
             this.hudScaleFactor = 1.0f;
             this.hudOffsetX = 0.0f;
@@ -598,16 +596,15 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void dragSelectorSetRawPosition(int i, int i2) {
-        int[] iArr = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(iArr);
+        int[] ints = new int[2];
+        this.dragPointerLayout.getLocationOnScreen(ints);
         int width = i - (this.dragPointer.getWidth() / 2);
         int height = i2 - (this.dragPointer.getHeight() / 2);
         AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) this.dragPointer.getLayoutParams();
         if (layoutParams != null) {
-            layoutParams.x = Math.max(Math.min(width - iArr[0], this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()), 0);
-            layoutParams.y = Math.max(Math.min(height - iArr[1], this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()), 0);
+            layoutParams.x = Math.max(Math.min(width - ints[0], this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()), 0);
+            layoutParams.y = Math.max(Math.min(height - ints[1], this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()), 0);
             this.dragPointer.setLayoutParams(layoutParams);
             selectByDragPointer(layoutParams.x, layoutParams.y);
         }
@@ -651,21 +648,19 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.buttonFlyDownward.setFocusable(false);
         this.voiceStatusView.setShowActiveChatterName(true);
         this.worldViewTouchReceiver.setOnTouchListener(this.worldViewTouchListener);
-        this.objectControlsPanel.setVisibility(8);
+        this.objectControlsPanel.setVisibility(View.GONE);
         View findViewById = findViewById(R.id.offline_notify_status_layout);
         if (findViewById != null) {
             findViewById.setBackgroundColor(Color.argb(128, 0, 0, 0));
-            int applyDimension = (int) TypedValue.applyDimension(1, 10.0f, getResources().getDisplayMetrics());
+            int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, getResources().getDisplayMetrics());
             findViewById.setPadding(applyDimension, applyDimension, applyDimension, applyDimension);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0(SLAgentCircuit sLAgentCircuit) {
-        if (sLAgentCircuit != null) {
-            this.avatarControl = sLAgentCircuit.getModules().avatarControl;
-            this.drawDistance = sLAgentCircuit.getModules().drawDistance;
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
+        if (agentCircuit != null) {
+            this.avatarControl = agentCircuit.getModules().avatarControl;
+            this.drawDistance = agentCircuit.getModules().drawDistance;
             if (this.localDrawingEnabled) {
                 this.drawDistance.Enable3DView(this.prefDrawDistance);
             }
@@ -683,9 +678,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
-    public void m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ParcelData parcelData = currentLocationInfo != null ? currentLocationInfo.parcelData() : null;
         String name = parcelData != null ? parcelData.getName() : null;
         if (name == null) {
@@ -694,36 +687,28 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         setDefaultTitle(name, null);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMyAvatarState, reason: merged with bridge method [inline-methods] */
-    public void m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1(MyAvatarState myAvatarState) {
+    public void onMyAvatarState(MyAvatarState myAvatarState) {
         updateObjectPanel();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onPickedAvatarNameUpdated, reason: merged with bridge method [inline-methods] */
-    public void m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(ChatterNameRetriever chatterNameRetriever) {
+    public void onPickedAvatarNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         if (chatterNameRetriever == this.pickedAvatarNameRetriever) {
             updateObjectPanel();
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onSelectedObjectProfile, reason: merged with bridge method [inline-methods] */
-    public void m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2(SLObjectProfileData sLObjectProfileData) {
-        Debug.Printf("got selected object profile: %s", sLObjectProfileData);
+    public void onSelectedObjectProfile(SLObjectProfileData objectProfileData) {
+        Debug.Printf("got selected object profile: %s", objectProfileData);
         updateObjectPanel();
-        if (sLObjectProfileData != null) {
+        if (objectProfileData != null) {
             SLAgentCircuit data = this.agentCircuit.getData();
-            if (sLObjectProfileData.isPayable() && sLObjectProfileData.payInfo() == null && data != null) {
-                data.DoRequestPayPrice(sLObjectProfileData.objectUUID());
+            if (objectProfileData.isPayable() && objectProfileData.payInfo() == null && data != null) {
+                data.DoRequestPayPrice(objectProfileData.objectUUID());
             }
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceActiveChatter, reason: merged with bridge method [inline-methods] */
-    public void m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4(ChatterID chatterID) {
+    public void onVoiceActiveChatter(ChatterID chatterID) {
         if (this.voiceStatusView != null) {
             this.voiceStatusView.setChatterID(chatterID);
         }
@@ -734,34 +719,31 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void selectByDragPointer(int i, int i2) {
-        int[] iArr = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(iArr);
-        int width = iArr[0] + (this.dragPointer.getWidth() / 2) + i;
-        int height = iArr[1] + (this.dragPointer.getHeight() / 2) + i2;
+        int[] ints = new int[2];
+        this.dragPointerLayout.getLocationOnScreen(ints);
+        int width = ints[0] + (this.dragPointer.getWidth() / 2) + i;
+        int height = ints[1] + (this.dragPointer.getHeight() / 2) + i2;
         int[] worldLocation = new int[2];
         this.worldViewHolder.getLocationOnScreen(worldLocation);
         this.mGLView.pickObjectHover(width - worldLocation[0], height - worldLocation[1]);
     }
 
     private void selectHUDtoDisplay() {
-        int i;
-        SLAttachmentPoint sLAttachmentPoint;
+        int attachmentID;
+        SLAttachmentPoint attachmentPoint;
         final ArrayList arrayList = new ArrayList();
         SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {
             SLObjectAvatarInfo agentAvatar = data.getGridConnection().parcelInfo.getAgentAvatar();
             if (agentAvatar != null) {
                 try {
-                    for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                        if (!Strings.nullToEmpty(sLObjectInfo.getName()).startsWith("#") && (i = sLObjectInfo.attachmentID) >= 0 && i < 56 && (sLAttachmentPoint = SLAttachmentPoint.attachmentPoints[i]) != null && sLAttachmentPoint.isHUD) {
-                            arrayList.add(new SelectableAttachment(sLObjectInfo.localID, sLObjectInfo.name));
+                    for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                        if (!Strings.nullToEmpty(objectInfo.getName()).startsWith("#") && (attachmentID = objectInfo.attachmentID) >= 0 && attachmentID < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[attachmentID]) != null && attachmentPoint.isHUD) {
+                            arrayList.add(new SelectableAttachment(objectInfo.localID, objectInfo.name));
                         }
                     }
                 } catch (NoSuchElementException e) {
@@ -778,12 +760,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.select_hud_title);
-            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.10
+            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                     WorldViewActivity.this.m855x5cf6cbb8((List) arrayList, dialogInterface, i2);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i2) {
                     $m$0(dialogInterface, i2);
                 }
@@ -792,14 +774,14 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    private void showObjectInfo(SLObjectInfo sLObjectInfo) {
-        if (sLObjectInfo.getId() == null || this.userManager == null) {
+    private void showObjectInfo(SLObjectInfo objectInfo) {
+        if (objectInfo.getId() == null || this.userManager == null) {
             return;
         }
-        if (!sLObjectInfo.isAvatar()) {
-            DetailsActivity.showEmbeddedDetails(this, ObjectDetailsFragment.class, ObjectDetailsFragment.makeSelection(this.userManager.getUserID(), sLObjectInfo.localID));
-        } else if (sLObjectInfo instanceof SLObjectAvatarInfo) {
-            DetailsActivity.showEmbeddedDetails(this, UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), sLObjectInfo.getId())));
+        if (!objectInfo.isAvatar()) {
+            DetailsActivity.showEmbeddedDetails(this, ObjectDetailsFragment.class, ObjectDetailsFragment.makeSelection(this.userManager.getUserID(), objectInfo.localID));
+        } else if (objectInfo instanceof SLObjectAvatarInfo) {
+            DetailsActivity.showEmbeddedDetails(this, UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), objectInfo.getId())));
         }
     }
 
@@ -817,7 +799,6 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         finish();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void startFadingButtons() {
         if (this.buttonsFadeAnimator == null) {
             return;
@@ -841,26 +822,26 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     private void takeScreenshot() {
-        Toast.makeText(this, R.string.taking_screenshot, 0).show();
+        Toast.makeText(this, R.string.taking_screenshot, Toast.LENGTH_SHORT).show();
         this.mGLView.takeScreenshot();
     }
 
-    private void touchObject(SLObjectInfo sLObjectInfo, ObjectIntersectInfo objectIntersectInfo) {
+    private void touchObject(SLObjectInfo objectInfo, ObjectIntersectInfo objectIntersectInfo) {
         SLAgentCircuit data = this.agentCircuit.getData();
-        if (data == null || sLObjectInfo == null) {
+        if (data == null || objectInfo == null) {
             return;
         }
-        if (sLObjectInfo.isAvatar()) {
-            if (sLObjectInfo.hasTouchableChildren()) {
-                DetailsActivity.showEmbeddedDetails(this, TouchableObjectsFragment.class, TouchableObjectsFragment.makeSelection(this.userManager.getUserID(), sLObjectInfo.getId()));
+        if (objectInfo.isAvatar()) {
+            if (objectInfo.hasTouchableChildren()) {
+                DetailsActivity.showEmbeddedDetails(this, TouchableObjectsFragment.class, TouchableObjectsFragment.makeSelection(this.userManager.getUserID(), objectInfo.getId()));
             }
         } else {
-            this.lastTouchUUID = sLObjectInfo.getId();
+            this.lastTouchUUID = objectInfo.getId();
             if (!(objectIntersectInfo != null ? objectIntersectInfo.intersectInfo.faceKnown : false)) {
-                data.TouchObject(sLObjectInfo.localID);
+                data.TouchObject(objectInfo.localID);
             } else {
-                LLVector3 absolutePosition = sLObjectInfo.getAbsolutePosition();
-                data.TouchObjectFace(sLObjectInfo, objectIntersectInfo.intersectInfo.faceID, absolutePosition.x, absolutePosition.y, absolutePosition.z, objectIntersectInfo.intersectInfo.u, objectIntersectInfo.intersectInfo.v, objectIntersectInfo.intersectInfo.s, objectIntersectInfo.intersectInfo.t);
+                LLVector3 absolutePosition = objectInfo.getAbsolutePosition();
+                data.TouchObjectFace(objectInfo, objectIntersectInfo.intersectInfo.faceID, absolutePosition.x, absolutePosition.y, absolutePosition.z, objectIntersectInfo.intersectInfo.u, objectIntersectInfo.intersectInfo.v, objectIntersectInfo.intersectInfo.s, objectIntersectInfo.intersectInfo.t);
             }
         }
     }
@@ -889,20 +870,20 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         int i;
         int i2;
         int i3;
-        String strOrNull;
+        String orNull;
         MyAvatarState data = this.myAvatarState.getData();
-        SLAgentCircuit data2 = this.agentCircuit.getData();
-        boolean z = data2 != null;
-        boolean zIsSitting = data != null ? data.isSitting() : false;
-        boolean zHasHUDs = data != null ? data.hasHUDs() : false;
-        boolean zIsFlying = data != null ? data.isFlying() : false;
-        boolean zCanStandUp = data2 != null ? data2.getModules().rlvController.canStandUp() : false;
-        boolean zCanSit = data2 != null ? data2.getModules().rlvController.canSit() : false;
+        SLAgentCircuit agentCircuit = this.agentCircuit.getData();
+        boolean z = agentCircuit != null;
+        boolean isSitting = data != null ? data.isSitting() : false;
+        boolean hasHUDs = data != null ? data.hasHUDs() : false;
+        boolean isFlying = data != null ? data.isFlying() : false;
+        boolean canStandUp = agentCircuit != null ? agentCircuit.getModules().rlvController.canStandUp() : false;
+        boolean canSit = agentCircuit != null ? agentCircuit.getModules().rlvController.canSit() : false;
         boolean z2 = this.pickedObject != null;
-        Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(zIsSitting), Boolean.valueOf(zIsFlying), Boolean.valueOf(zHasHUDs), Boolean.valueOf(this.isDragging));
-        this.dragPointerLayout.setVisibility(this.isDragging ? 0 : 4);
-        this.dragPointer.setVisibility(this.isDragging ? 0 : 4);
-        boolean movementControlsVisible = z && !zIsSitting
+        Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(isSitting), Boolean.valueOf(isFlying), Boolean.valueOf(hasHUDs), Boolean.valueOf(this.isDragging));
+        this.dragPointerLayout.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
+        this.dragPointer.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
+        boolean movementControlsVisible = z && !isSitting
                 && !(this.camButtonEnabled && this.manualCamMode)
                 && !this.isDragging && !z2;
         LinearLayout linearLayout = this.flyButtonsLayout;
@@ -911,48 +892,48 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         View view = this.moveButtonsLayout;
         i2 = movementControlsVisible ? 0 : 4;
         view.setVisibility(i2);
-        this.buttonStandUp.setVisibility((zCanStandUp && zIsSitting && (this.isDragging ^ true)) ? 0 : 8);
-        this.buttonHUD.setVisibility((zHasHUDs && (this.isDragging ^ true) && z) ? 0 : 8);
-        this.buttonFlyDownward.setVisibility(((zIsFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? 0 : 8);
+        this.buttonStandUp.setVisibility((canStandUp && isSitting && (this.isDragging ^ true)) ? View.VISIBLE : View.GONE);
+        this.buttonHUD.setVisibility((hasHUDs && (this.isDragging ^ true) && z) ? View.VISIBLE : View.GONE);
+        this.buttonFlyDownward.setVisibility(((isFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? View.VISIBLE : View.GONE);
         ImageButton imageButton = this.buttonStopFlying;
-        i3 = zIsFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
+        i3 = isFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
         imageButton.setVisibility(i3);
-        this.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? 0 : 8);
-        this.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? 0 : 8);
+        this.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
+        this.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
         if (this.pickedObject == null || (!z)) {
-            this.objectControlsPanel.setVisibility(8);
+            this.objectControlsPanel.setVisibility(View.GONE);
             return;
         }
-        this.objectControlsPanel.setVisibility(0);
-        boolean zIsTouchable = this.pickedObject.isTouchable();
+        this.objectControlsPanel.setVisibility(View.VISIBLE);
+        boolean isTouchable = this.pickedObject.isTouchable();
         if (this.pickedObject.isAvatar()) {
-            zIsTouchable |= this.pickedObject.hasTouchableChildren();
+            isTouchable |= this.pickedObject.hasTouchableChildren();
         }
-        this.objectTouchButton.setVisibility(zIsTouchable ? 0 : 8);
-        boolean zIsAvatar = this.pickedObject.isAvatar();
-        boolean z3 = zIsSitting && this.pickedObject.localID == data.sittingOn();
-        boolean z4 = !zIsAvatar ? !z3 : false;
-        if (zIsAvatar) {
+        this.objectTouchButton.setVisibility(isTouchable ? View.VISIBLE : View.GONE);
+        boolean isAvatar = this.pickedObject.isAvatar();
+        boolean z3 = isSitting && this.pickedObject.localID == data.sittingOn();
+        boolean z4 = !isAvatar ? !z3 : false;
+        if (isAvatar) {
             z3 = false;
         }
-        this.objectSitButton.setVisibility((z4 && zCanSit) ? 0 : 8);
-        this.objectStandButton.setVisibility((z3 && zCanStandUp) ? 0 : 8);
-        this.objectChatButton.setVisibility(zIsAvatar ? 0 : 8);
-        this.avatarIconView.setVisibility(zIsAvatar ? 0 : 8);
-        this.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? 0 : 8);
+        this.objectSitButton.setVisibility((z4 && canSit) ? View.VISIBLE : View.GONE);
+        this.objectStandButton.setVisibility((z3 && canStandUp) ? View.VISIBLE : View.GONE);
+        this.objectChatButton.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
+        this.avatarIconView.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
+        this.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? View.VISIBLE : View.GONE);
         if (this.pickedObject.isAvatar()) {
-            strOrNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
+            orNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
         } else {
-            SLObjectProfileData data3 = this.selectedObjectProfile.getData();
-            strOrNull = (data3 == null || !Objects.equal(data3.objectUUID(), this.pickedObject.getId())) ? null : data3.name().orNull();
-            if (strOrNull == null) {
-                strOrNull = this.pickedObject.name;
+            SLObjectProfileData objectProfileData = this.selectedObjectProfile.getData();
+            orNull = (objectProfileData == null || !Objects.equal(objectProfileData.objectUUID(), this.pickedObject.getId())) ? null : objectProfileData.name().orNull();
+            if (orNull == null) {
+                orNull = this.pickedObject.name;
             }
         }
-        if (strOrNull == null) {
-            strOrNull = getString(R.string.object_name_loading);
+        if (orNull == null) {
+            orNull = getString(R.string.object_name_loading);
         }
-        this.objectNameTextView.setText(strOrNull);
+        this.objectNameTextView.setText(orNull);
     }
 
     private void updateSimTimeOverride() {
@@ -970,15 +951,15 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         objArr[2] = Boolean.valueOf(findFragmentById != null ? findFragmentById.isDetached() : false);
         Debug.Printf("updateSplitScreenLayout: isSplitScreen now %b details has %b detached %b", objArr);
         if (findFragmentById == null || !(!findFragmentById.isDetached())) {
-            this.worldOverlaysContainer.setVisibility(0);
+            this.worldOverlaysContainer.setVisibility(View.VISIBLE);
         } else {
-            this.detailsContainer.setVisibility(0);
-            this.worldOverlaysContainer.setVisibility(this.isSplitScreen ? 0 : 8);
+            this.detailsContainer.setVisibility(View.VISIBLE);
+            this.worldOverlaysContainer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
         }
-        this.objectPopupLeftSpacer.setVisibility(this.isSplitScreen ? 0 : 8);
+        this.objectPopupLeftSpacer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, android.app.Activity, android.view.Window.Callback
+    @Override
     public boolean dispatchKeyEvent(KeyEvent keyEvent) {
         if (this.detailsContainer.getVisibility() == 0) {
             return super.dispatchKeyEvent(keyEvent);
@@ -1071,9 +1052,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     @EventHandler
-    public void handleBakingProgressEvent(SLBakingProgressEvent sLBakingProgressEvent) {
-        if (sLBakingProgressEvent.first) {
-            Toast.makeText(this, "Updating avatar appearance...", 0).show();
+    public void handleBakingProgressEvent(SLBakingProgressEvent bakingProgressEvent) {
+        if (bakingProgressEvent.first) {
+            Toast.makeText(this, "Updating avatar appearance...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1095,12 +1076,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                         this.pickedAvatarNameRetriever.dispose();
                         this.pickedAvatarNameRetriever = null;
                     }
-                    this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.9
+                    this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            WorldViewActivity.this.m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(chatterNameRetriever);
+                            WorldViewActivity.this.onPickedAvatarNameUpdated(chatterNameRetriever);
                         }
 
-                        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                        @Override
                         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                             $m$0(chatterNameRetriever);
                         }
@@ -1123,7 +1104,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean isRootDetailsFragment(Class<? extends Fragment> cls) {
         return cls == ContactsFragment.class || cls == ChatFragment.class || cls == ObjectDetailsFragment.class || cls == OutfitsFragment.class || cls == UserProfileFragment.class;
     }
@@ -1150,9 +1131,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         displayHUD(((SelectableAttachment) list.get(i)).getLocalID());
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.ThemeMapper
+    @Override
     public int mapThemeResourceId(int i) {
-        return i == 2131427372 ? R.style.Theme_Lumiya_Light_NoActionBar : i == 2131427375 ? R.style.Theme_Lumiya_Pink_NoActionBar : R.style.Theme_Lumiya_NoActionBar;
+        return i == com.lumiyaviewer.lumiya.R.style.Theme_Lumiya_Light ? R.style.Theme_Lumiya_Light_NoActionBar : i == com.lumiyaviewer.lumiya.R.style.Theme_Lumiya_Pink ? R.style.Theme_Lumiya_Pink_NoActionBar : R.style.Theme_Lumiya_NoActionBar;
     }
 
     public void moveTouchEvent(int i, MotionEvent motionEvent) {
@@ -1209,14 +1190,14 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity, android.content.ComponentCallbacks
+    @Override
     public void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
         this.isSplitScreen = LumiyaApp.isSplitScreenNeeded(this);
         updateSplitScreenLayout();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         this.userManager = ActivityUtils.getUserManager(getIntent());
@@ -1235,12 +1216,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         if (Build.VERSION.SDK_INT >= 12) {
             this.buttonsFadeAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
             this.buttonsFadeAnimator.setDuration(1000L);
-            this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.1
+            this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
                     WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
                 }
 
-                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+                @Override
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                     $m$0(valueAnimator);
                 }
@@ -1250,35 +1231,35 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         startFadingButtonsTimer();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.world_view_menu, menu);
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean onDetailsStackEmpty() {
         if (super.onDetailsStackEmpty()) {
             return true;
         }
-        this.detailsContainer.setVisibility(8);
+        this.detailsContainer.setVisibility(View.GONE);
         if (!this.isSplitScreen) {
-            this.worldOverlaysContainer.setVisibility(0);
+            this.worldOverlaysContainer.setVisibility(View.VISIBLE);
         }
         beginCountingButtonsFade();
         beginCountingObjectDeselect();
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationManager.NotifyCapture
+    @Override
     @Nullable
     public Intent onGetNotifyCaptureIntent(@Nonnull UnreadNotificationInfo unreadNotificationInfo, Intent intent) {
         Debug.Printf("NotifyCapture: returning new intent", new Object[0]);
         Intent intent2 = new Intent(this, (Class<?>) WorldViewActivity.class);
         intent2.putExtras(intent);
         intent2.putExtra(FROM_NOTIFICATION_TAG, true);
-        intent2.addFlags(536870912);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return intent2;
     }
 
@@ -1298,7 +1279,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Debug.Printf("NotifyCapture: got newIntent: %s", intent);
@@ -1306,9 +1287,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         beginCountingButtonsFade();
         beginCountingObjectDeselect();
         if (intent.hasExtra(FROM_NOTIFICATION_TAG)) {
-            Bundle bundleExtra = intent.hasExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) ? intent.getBundleExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) : null;
-            if (bundleExtra != null) {
-                DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, bundleExtra);
+            Bundle bundle = intent.hasExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) ? intent.getBundleExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) : null;
+            if (bundle != null) {
+                DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, bundle);
             } else if (this.userManager != null) {
                 DetailsActivity.showEmbeddedDetails(this, ContactsFragment.class, ActivityUtils.makeFragmentArguments(this.userManager.getUserID(), null));
             }
@@ -1339,21 +1320,21 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             }
             if (this.pickedObject.saleType != 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(String.format(getString(R.string.object_buy_confirm), name, Integer.valueOf(this.pickedObject.salePrice))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.2
+                builder.setMessage(String.format(getString(R.string.object_buy_confirm), name, Integer.valueOf(this.pickedObject.salePrice))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         WorldViewActivity.this.m854x5cf47ab6(dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -1390,29 +1371,29 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_chat /* 2131755881 */:
+            case R.id.item_chat:
                 DetailsActivity.showEmbeddedDetails(this, ContactsFragment.class, ActivityUtils.makeFragmentArguments(this.userManager.getUserID(), null));
                 return true;
-            case R.id.item_outfits /* 2131755882 */:
+            case R.id.item_outfits:
                 DetailsActivity.showEmbeddedDetails(this, OutfitsFragment.class, OutfitsFragment.makeSelection(this.userManager.getUserID(), null));
                 return true;
-            case R.id.item_select_object /* 2131755883 */:
+            case R.id.item_select_object:
                 if (this.isDragging) {
                     endDragSelection();
                 } else {
                     beginDragSelection();
                 }
                 return true;
-            case R.id.item_cardboard_view /* 2131755884 */:
+            case R.id.item_cardboard_view:
                 enterVrView();
                 return true;
-            case R.id.item_take_screenshot /* 2131755885 */:
+            case R.id.item_take_screenshot:
                 takeScreenshot();
                 return true;
-            case R.id.item_stop_animations /* 2131755886 */:
+            case R.id.item_stop_animations:
                 stopAvatarAnimations();
                 return true;
             default:
@@ -1420,7 +1401,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     public void onPause() {
         Debug.Printf("WorldViewActivity: onPause", new Object[0]);
         if (this.userManager != null) {
@@ -1449,7 +1430,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         super.onPause();
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem findItem = menu.findItem(R.id.item_cardboard_view);
         if (findItem != null) {
@@ -1458,15 +1439,15 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         return super.onPrepareOptionsMenu(menu);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, androidx.fragment.app.FragmentActivity, android.app.Activity, androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
-    public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] iArr) {
+    @Override
+    public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] ints) {
         Debug.Printf("Cardboard: onRequestPermissionResult, code %d", Integer.valueOf(i));
         if (i == 100) {
             startVrActivity(VrIntentContract.VR_RUNTIME_CARDBOARD);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     public void onResume() {
         super.onResume();
         Debug.Printf("WorldViewActivity: onResume", new Object[0]);
@@ -1498,7 +1479,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         if (this.userManager != null) {
@@ -1508,7 +1489,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateSimTimeOverride();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         this.agentCircuit.unsubscribe();
         this.voiceActiveChatter.unsubscribe();
@@ -1530,17 +1511,17 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     
         return false;
      */
-    @Override // android.view.View.OnTouchListener
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (view.getId()) {
-            case R.id.button_move_forward /* 2131755260 */:
+            case R.id.button_move_forward:
                 moveTouchEvent(2, motionEvent);
                 return false;
-            case R.id.button_turn_left /* 2131755261 */:
+            case R.id.button_turn_left:
                 if (!this.arrowsToTurn) {
                     moveTouchEvent(32, motionEvent);
                 } else if (this.avatarControl != null) {
@@ -1557,10 +1538,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     }
                 }
                 return false;
-            case R.id.button_move_backward /* 2131755262 */:
+            case R.id.button_move_backward:
                 moveTouchEvent(4, motionEvent);
                 return false;
-            case R.id.button_turn_right /* 2131755263 */:
+            case R.id.button_turn_right:
                 if (!this.arrowsToTurn) {
                     moveTouchEvent(64, motionEvent);
                 } else if (this.avatarControl != null) {
@@ -1577,10 +1558,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     }
                 }
                 return false;
-            case R.id.button_fly_upward /* 2131755756 */:
+            case R.id.button_fly_upward:
                 moveTouchEvent(8, motionEvent);
                 return false;
-            case R.id.button_fly_downward /* 2131755757 */:
+            case R.id.button_fly_downward:
                 moveTouchEvent(16, motionEvent);
                 return false;
             default:
@@ -1588,7 +1569,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public void onUserInteraction() {
         super.onUserInteraction();
         Debug.Printf("ButtonsFade: some user interaction", new Object[0]);
@@ -1618,7 +1599,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             intent.setFlags(1);
             startActivity(Intent.createChooser(intent, getString(R.string.export_screenshot_to)));
         } catch (Exception e) {
-            Toast.makeText(this, R.string.failed_to_make_screenshot, 0).show();
+            Toast.makeText(this, R.string.failed_to_make_screenshot, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1630,7 +1611,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     @SuppressLint({"CommitPrefEdits"})
     void rendererShaderCompileError() {
-        Toast.makeText(this, "Advanced rendering is not available on your hardware. Falling back to basic rendering.", 1).show();
+        Toast.makeText(this, "Advanced rendering is not available on your hardware. Falling back to basic rendering.", Toast.LENGTH_LONG).show();
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
         edit.putBoolean("advanced_rendering", false);
         edit.commit();
@@ -1644,26 +1625,26 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ScriptDialogHandler
+    @Override
     public void setLastTouchUUID(UUID uuid) {
         this.lastTouchUUID = uuid;
     }
 
-    public void setTouchedObject(SLObjectInfo sLObjectInfo) {
-        if (sLObjectInfo != null) {
-            this.lastTouchUUID = sLObjectInfo.getId();
+    public void setTouchedObject(SLObjectInfo objectInfo) {
+        if (objectInfo != null) {
+            this.lastTouchUUID = objectInfo.getId();
             if (this.lastTouchUUID != null) {
                 Debug.Log("Touch: Last touched object set to " + this.lastTouchUUID);
             }
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     @Nullable
     public Fragment showDetailsFragment(Class<? extends Fragment> cls, Intent intent, Bundle bundle) {
-        this.detailsContainer.setVisibility(0);
+        this.detailsContainer.setVisibility(View.VISIBLE);
         if (!this.isSplitScreen) {
-            this.worldOverlaysContainer.setVisibility(8);
+            this.worldOverlaysContainer.setVisibility(View.GONE);
             this.voiceStatusView.disableMic();
         }
         if (this.fadingTextViewLog != null) {

@@ -4,16 +4,23 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Asset storage messages
+ * current assumes an existing UUID, need to enhance for new assets
+ *
+ * <p>Template: {@code AssetUploadRequest Low 333 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AssetUploadRequest extends SLMessage {
     public AssetBlock AssetBlock_Field;
 
+    /** Block AssetBlock, Single. */
     public static class AssetBlock {
-        public byte[] AssetData;
-        public boolean StoreLocal;
-        public boolean Tempfile;
-        public UUID TransactionID;
-        public int Type;
+        public byte[] AssetData; // Variable 2 - Optional: the actual asset data if the whole thing will fit it this packet
+        public boolean StoreLocal; // BOOL
+        public boolean Tempfile; // BOOL
+        public UUID TransactionID; // LLUUID
+        public int Type; // S8
     }
 
     public AssetUploadRequest() {
@@ -21,21 +28,22 @@ public class AssetUploadRequest extends SLMessage {
         this.AssetBlock_Field = new AssetBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.AssetBlock_Field.AssetData.length + 21 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAssetUploadRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAssetUploadRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 77);
+        // Message number: Low 333 (AssetUploadRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x4D);
         packUUID(byteBuffer, this.AssetBlock_Field.TransactionID);
         packByte(byteBuffer, (byte) this.AssetBlock_Field.Type);
         packBoolean(byteBuffer, this.AssetBlock_Field.Tempfile);
@@ -43,7 +51,7 @@ public class AssetUploadRequest extends SLMessage {
         packVariable(byteBuffer, this.AssetBlock_Field.AssetData, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AssetBlock_Field.TransactionID = unpackUUID(byteBuffer);
         this.AssetBlock_Field.Type = unpackByte(byteBuffer);

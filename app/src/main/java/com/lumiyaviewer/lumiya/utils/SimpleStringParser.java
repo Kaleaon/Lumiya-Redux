@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.utils;
 import com.google.common.logging.nano.Vr;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 
-/* loaded from: classes.dex */
 public class SimpleStringParser {
     private int curPos = 0;
     private String spaceChars;
@@ -15,9 +14,9 @@ public class SimpleStringParser {
         }
     }
 
-    public SimpleStringParser(String str, String str2) {
+    public SimpleStringParser(String str, String spaceChars) {
         this.string = str;
-        this.spaceChars = str2;
+        this.spaceChars = spaceChars;
     }
 
     public boolean endOfString() {
@@ -65,9 +64,9 @@ public class SimpleStringParser {
         if (stringToVariableUTF.length < i) {
             throw new StringParsingException("End of string reached: wanted " + i + ", still has " + stringToVariableUTF.length);
         }
-        byte[] bArr = new byte[i];
-        System.arraycopy(stringToVariableUTF, 0, bArr, 0, i);
-        String stringFromVariableUTF = SLMessage.stringFromVariableUTF(bArr);
+        byte[] bytes = new byte[i];
+        System.arraycopy(stringToVariableUTF, 0, bytes, 0, i);
+        String stringFromVariableUTF = SLMessage.stringFromVariableUTF(bytes);
         this.curPos += stringFromVariableUTF.length();
         return stringFromVariableUTF;
     }

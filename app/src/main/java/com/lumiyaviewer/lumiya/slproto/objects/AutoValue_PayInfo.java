@@ -3,17 +3,16 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 import androidx.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 
-/* loaded from: classes.dex */
 final class AutoValue_PayInfo extends PayInfo {
     private final int defaultPayPrice;
     private final ImmutableList<Integer> payPrices;
 
-    AutoValue_PayInfo(int i, @Nullable ImmutableList<Integer> immutableList) {
-        this.defaultPayPrice = i;
+    AutoValue_PayInfo(int defaultPayPrice, @Nullable ImmutableList<Integer> immutableList) {
+        this.defaultPayPrice = defaultPayPrice;
         this.payPrices = immutableList;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.PayInfo
+    @Override
     public int defaultPayPrice() {
         return this.defaultPayPrice;
     }
@@ -36,7 +35,7 @@ final class AutoValue_PayInfo extends PayInfo {
         return (this.payPrices == null ? 0 : this.payPrices.hashCode()) ^ (1000003 * (this.defaultPayPrice ^ 1000003));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.PayInfo
+    @Override
     @Nullable
     public ImmutableList<Integer> payPrices() {
         return this.payPrices;

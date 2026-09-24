@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public abstract class DBObject implements Parcelable {
     protected long _id;
 
@@ -31,11 +30,11 @@ public abstract class DBObject implements Parcelable {
         loadFromCursor(cursor);
     }
 
-    public DBObject(SQLiteDatabase sQLiteDatabase, long j) throws DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public DBObject(SQLiteDatabase sqLiteDatabase, long j) throws DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DatabaseBindingException(getClass(), "database not opened.");
         }
-        Cursor query = sQLiteDatabase.query(getTableName(), getFieldNames(), "_id = ?", new String[]{Long.toString(j)}, null, null, null);
+        Cursor query = sqLiteDatabase.query(getTableName(), getFieldNames(), "_id = ?", new String[]{Long.toString(j)}, null, null, null);
         if (!query.moveToFirst()) {
             query.close();
             throw new DatabaseBindingException(getClass(), "not found: _id = " + j);
@@ -44,8 +43,8 @@ public abstract class DBObject implements Parcelable {
         query.close();
     }
 
-    protected UUID UUIDfromBlob(byte[] bArr) {
-        ByteBuffer wrap = ByteBuffer.wrap(bArr);
+    protected UUID UUIDfromBlob(byte[] bytes) {
+        ByteBuffer wrap = ByteBuffer.wrap(bytes);
         return new UUID(wrap.getLong(), wrap.getLong());
     }
 
@@ -56,14 +55,14 @@ public abstract class DBObject implements Parcelable {
         return wrap.array();
     }
 
-    public abstract void bindInsertOrUpdate(SQLiteStatement sQLiteStatement);
+    public abstract void bindInsertOrUpdate(SQLiteStatement sqLiteStatement);
 
-    public void delete(SQLiteDatabase sQLiteDatabase) throws DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public void delete(SQLiteDatabase sqLiteDatabase) throws DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DatabaseBindingException(getClass(), "database not opened.");
         }
         if (this._id != 0) {
-            sQLiteDatabase.delete(getTableName(), "_id = ?", new String[]{Long.toString(this._id)});
+            sqLiteDatabase.delete(getTableName(), "_id = ?", new String[]{Long.toString(this._id)});
         }
     }
 
@@ -79,12 +78,12 @@ public abstract class DBObject implements Parcelable {
 
     public abstract void loadFromCursor(Cursor cursor);
 
-    public void reload(SQLiteDatabase sQLiteDatabase) throws DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public void reload(SQLiteDatabase sqLiteDatabase) throws DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DatabaseBindingException(getClass(), "database not opened.");
         }
         if (this._id != 0) {
-            Cursor query = sQLiteDatabase.query(getTableName(), getFieldNames(), "_id = ?", new String[]{Long.toString(this._id)}, null, null, null);
+            Cursor query = sqLiteDatabase.query(getTableName(), getFieldNames(), "_id = ?", new String[]{Long.toString(this._id)}, null, null, null);
             if (query.moveToFirst()) {
                 loadFromCursor(query);
             }
@@ -96,17 +95,17 @@ public abstract class DBObject implements Parcelable {
         this._id = 0L;
     }
 
-    public void save(SQLiteDatabase sQLiteDatabase) throws DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public void save(SQLiteDatabase sqLiteDatabase) throws DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DatabaseBindingException(getClass(), "database not opened.");
         }
         String tableName = getTableName();
         ContentValues contentValues = getContentValues();
         try {
             if (this._id != 0) {
-                sQLiteDatabase.update(tableName, contentValues, "_id = ?", new String[]{Long.toString(this._id)});
+                sqLiteDatabase.update(tableName, contentValues, "_id = ?", new String[]{Long.toString(this._id)});
             } else {
-                this._id = sQLiteDatabase.insert(tableName, null, contentValues);
+                this._id = sqLiteDatabase.insert(tableName, null, contentValues);
             }
         } catch (SQLiteException e) {
             DatabaseBindingException databaseBindingException = new DatabaseBindingException(getClass(), "insert or update failed");
@@ -115,15 +114,15 @@ public abstract class DBObject implements Parcelable {
         }
     }
 
-    protected void updateOrInsert(SQLiteDatabase sQLiteDatabase, String str, String[] strArr) throws DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    protected void updateOrInsert(SQLiteDatabase sqLiteDatabase, String str, String[] strArr) throws DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DatabaseBindingException(getClass(), "database not opened.");
         }
         String tableName = getTableName();
         ContentValues contentValues = getContentValues();
         try {
-            if (sQLiteDatabase.update(tableName, contentValues, str, strArr) == 0) {
-                this._id = sQLiteDatabase.insert(tableName, null, contentValues);
+            if (sqLiteDatabase.update(tableName, contentValues, str, strArr) == 0) {
+                this._id = sqLiteDatabase.insert(tableName, null, contentValues);
             }
         } catch (SQLiteException e) {
             DatabaseBindingException databaseBindingException = new DatabaseBindingException(getClass(), "insert or update failed");
@@ -132,12 +131,12 @@ public abstract class DBObject implements Parcelable {
         }
     }
 
-    protected void updateOrInsert(SQLiteStatement sQLiteStatement, SQLiteStatement sQLiteStatement2) throws DatabaseBindingException {
+    protected void updateOrInsert(SQLiteStatement sqLiteStatement, SQLiteStatement sqLiteStatement2) throws DatabaseBindingException {
         try {
-            bindInsertOrUpdate(sQLiteStatement);
-            if (sQLiteStatement.executeUpdateDelete() == 0) {
-                bindInsertOrUpdate(sQLiteStatement2);
-                this._id = sQLiteStatement2.executeInsert();
+            bindInsertOrUpdate(sqLiteStatement);
+            if (sqLiteStatement.executeUpdateDelete() == 0) {
+                bindInsertOrUpdate(sqLiteStatement2);
+                this._id = sqLiteStatement2.executeInsert();
             }
         } catch (SQLiteException e) {
             DatabaseBindingException databaseBindingException = new DatabaseBindingException(getClass(), "insert or update failed");

@@ -9,7 +9,6 @@ import android.os.Build;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class DaydreamUtils {
     public static final int DAYDREAM_NOT_SUPPORTED = 0;
     public static final int DAYDREAM_OPTIONAL = 1;
@@ -64,7 +63,7 @@ public class DaydreamUtils {
         return (deviceParams == null || deviceParams.daydreamInternal == null) ? false : true;
     }
 
-    static void setIsDaydreamPhoneForTesting(boolean z) {
-        sDaydreamPhoneOverrideForTesting = z;
+    static void setIsDaydreamPhoneForTesting(boolean isDaydreamPhoneForTesting) {
+        sDaydreamPhoneOverrideForTesting = isDaydreamPhoneForTesting;
     }
 }

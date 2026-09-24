@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.terrain.TerrainData;
 import java.lang.ref.WeakReference;
 
-/* loaded from: classes.dex */
 public class SpatialIndex {
     private volatile WeakReference<Object> indexHolder;
     private volatile SpatialObjectIndex objectIndex;
@@ -48,10 +47,10 @@ public class SpatialIndex {
         return this.objectIndex;
     }
 
-    public DrawableAvatar getDrawableAvatar(SLObjectInfo sLObjectInfo) {
+    public DrawableAvatar getDrawableAvatar(SLObjectInfo objectInfo) {
         SpatialObjectIndex spatialObjectIndex = this.objectIndex;
         if (spatialObjectIndex != null) {
-            return spatialObjectIndex.getDrawableAvatar(sLObjectInfo);
+            return spatialObjectIndex.getDrawableAvatar(objectInfo);
         }
         return null;
     }
@@ -60,10 +59,10 @@ public class SpatialIndex {
         return this.objectIndex;
     }
 
-    public void setAvatarCountLimit(int i) {
+    public void setAvatarCountLimit(int avatarCountLimit) {
         SpatialObjectIndex spatialObjectIndex = this.objectIndex;
         if (spatialObjectIndex != null) {
-            spatialObjectIndex.setAvatarCountLimit(i);
+            spatialObjectIndex.setAvatarCountLimit(avatarCountLimit);
         }
     }
 

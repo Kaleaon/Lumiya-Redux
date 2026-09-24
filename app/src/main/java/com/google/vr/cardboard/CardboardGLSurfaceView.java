@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import com.google.vr.ndk.base.GvrSurfaceView;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class CardboardGLSurfaceView extends GvrSurfaceView {
     private static final String TAG = CardboardGLSurfaceView.class.getSimpleName();
     private final EglFactory eglFactory;
@@ -39,7 +38,7 @@ public class CardboardGLSurfaceView extends GvrSurfaceView {
         return this.isDetached;
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView, android.view.SurfaceView, android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.isDetached = false;
@@ -57,7 +56,7 @@ public class CardboardGLSurfaceView extends GvrSurfaceView {
         this.eventQueueWhileDetached.clear();
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView, android.view.SurfaceView, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         if (this.isRendererSet && this.listener != null) {
             this.listener.onSurfaceViewDetachedFromWindow();
@@ -66,21 +65,21 @@ public class CardboardGLSurfaceView extends GvrSurfaceView {
         this.isDetached = true;
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView
+    @Override
     public void onPause() {
         if (this.isRendererSet) {
             super.onPause();
         }
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView
+    @Override
     public void onResume() {
         if (this.isRendererSet) {
             super.onResume();
         }
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView
+    @Override
     public void queueEvent(Runnable runnable) {
         if (!this.isRendererSet) {
             runnable.run();
@@ -96,13 +95,13 @@ public class CardboardGLSurfaceView extends GvrSurfaceView {
         }
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView
-    public void setEGLContextClientVersion(int i) {
-        super.setEGLContextClientVersion(i);
-        this.eglFactory.setEGLContextClientVersion(i);
+    @Override
+    public void setEGLContextClientVersion(int eglContextClientVersion) {
+        super.setEGLContextClientVersion(eglContextClientVersion);
+        this.eglFactory.setEGLContextClientVersion(eglContextClientVersion);
     }
 
-    @Override // com.google.vr.ndk.base.GvrSurfaceView
+    @Override
     public void setRenderer(GLSurfaceView.Renderer renderer) {
         super.setRenderer(renderer);
         this.isRendererSet = true;

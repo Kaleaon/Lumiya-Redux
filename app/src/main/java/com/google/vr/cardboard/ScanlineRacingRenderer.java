@@ -9,7 +9,6 @@ import com.google.vr.ndk.base.GvrSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-/* loaded from: classes.dex */
 public class ScanlineRacingRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "ScanlineRacingRenderer";
     private final GvrApi gvrApi;
@@ -28,8 +27,8 @@ public class ScanlineRacingRenderer implements GLSurfaceView.Renderer {
         return this.surfaceManager;
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
-    public void onDrawFrame(GL10 gl10) {
+    @Override
+    public void onDrawFrame(GL10 gL10) {
         this.surfaceManager.consumerUpdateManagedSurfaces();
         Point renderReprojectionThread = this.gvrApi.renderReprojectionThread();
         if (renderReprojectionThread == null) {
@@ -43,21 +42,21 @@ public class ScanlineRacingRenderer implements GLSurfaceView.Renderer {
         this.surfaceManager.consumerDetachFromCurrentGLContext();
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
-    public void onSurfaceChanged(GL10 gl10, int i, int i2) {
+    @Override
+    public void onSurfaceChanged(GL10 gL10, int i, int i2) {
         this.surfaceManager.consumerAttachToCurrentGLContext();
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
+    @Override
+    public void onSurfaceCreated(GL10 gL10, EGLConfig eglConfig) {
         Thread.currentThread().setPriority(10);
         AndroidNCompat.setVrThread(Process.myTid());
         this.gvrApi.onSurfaceCreatedReprojectionThread();
     }
 
     public void setSurfaceSize(final int i, final int i2) {
-        ThreadUtils.runOnUiThread(new Runnable() { // from class: com.google.vr.cardboard.ScanlineRacingRenderer.1
-            @Override // java.lang.Runnable
+        ThreadUtils.runOnUiThread(new Runnable() {
+            @Override
             public void run() {
                 if (i > 0 && i2 > 0) {
                     ScanlineRacingRenderer.this.gvrSurfaceView.getHolder().setFixedSize(i, i2);

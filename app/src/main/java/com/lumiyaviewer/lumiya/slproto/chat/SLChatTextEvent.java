@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLChatTextEvent extends SLChatEvent {
     protected final String text;
 
@@ -20,10 +19,10 @@ public class SLChatTextEvent extends SLChatEvent {
         this.text = chatMessage.getMessageText();
     }
 
-    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str) {
+    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String text) {
         super(improvedInstantMessage, uuid, chatMessageSource);
-        if (str != null) {
-            this.text = str;
+        if (text != null) {
+            this.text = text;
         } else if (improvedInstantMessage != null) {
             this.text = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message);
         } else {
@@ -36,12 +35,12 @@ public class SLChatTextEvent extends SLChatEvent {
         this.text = SLMessage.stringFromVariableUTF(loadURL.Data_Field.Message) + ": " + SLMessage.stringFromVariableUTF(loadURL.Data_Field.URL);
     }
 
-    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, String str) {
+    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, String text) {
         super(chatMessageSource, uuid);
-        this.text = str;
+        this.text = text;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.Text;
@@ -51,22 +50,22 @@ public class SLChatTextEvent extends SLChatEvent {
         return (this.text == null || !this.text.startsWith("/me ")) ? this.text : this.text.substring(4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         return (this.text == null || !this.text.startsWith("/me ")) ? this.text : this.text.substring(4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return this.text != null && this.text.startsWith("/me ");
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setMessageText(this.text);

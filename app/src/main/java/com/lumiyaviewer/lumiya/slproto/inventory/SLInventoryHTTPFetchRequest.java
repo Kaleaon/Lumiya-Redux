@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.inventory;
 
 import android.database.sqlite.SQLiteStatement;
-import android.os.Build;
 import com.lumiyaviewer.lumiya.orm.DBObject;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDArray;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDBoolean;
@@ -20,6 +19,7 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDValueTypeException;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDXMLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Future;
@@ -27,7 +27,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/* loaded from: classes.dex */
 class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
     private final String capURL;
     private final AtomicReference<Future<?>> futureRef;
@@ -46,60 +45,85 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.aborted = false;
         }
 
-        /* synthetic */ DatabaseCommitThread(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread) {
-            this();
+            void addEntry(SLInventoryEntry inventoryEntry) throws InterruptedException {
+            this.commitEntryQueue.put(inventoryEntry);
         }
 
-        void addEntry(SLInventoryEntry sLInventoryEntry) throws InterruptedException {
-            this.commitEntryQueue.put(sLInventoryEntry);
-        }
-
-        /* JADX WARN: Removed duplicated region for block: B:32:0x0045  */
-        /* JADX WARN: Removed duplicated region for block: B:38:0x006f  */
-        /* JADX WARN: Removed duplicated region for block: B:40:0x0074  */
-        /* JADX WARN: Removed duplicated region for block: B:42:0x0079  */
-        /* JADX WARN: Removed duplicated region for block: B:48:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
-        @Override // java.lang.Thread, java.lang.Runnable
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
+        /**
+         * Write parsed entries to the inventory database as they arrive.
+         *
+         * <p>Entries are written in a transaction that is committed whenever
+         * the queue runs dry, so a large folder becomes visible in batches;
+         * every 16 entries the transaction yields to other database users.
+         * The loop ends at {@link #stopEntry}. Whatever was written is
+         * committed even if the fetch failed; only a successful, non-aborted
+         * fetch then prunes children that were not in the reply
+         * (retainChildren).</p>
+         */
+        @Override
         public void run() {
-            HashSet<UUID> retainedChildren = new HashSet<>();
-            SQLiteStatement insert = null;
-            SQLiteStatement update = null;
-            boolean transactionOpen = false;
-            boolean success = false;
+            Set<UUID> retainedChildren = new HashSet<>();
+            SQLiteStatement insertStatement = null;
+            SQLiteStatement updateStatement = null;
+            boolean inTransaction = false;
+            int uncommittedCount = 0;
+            boolean success;
             try {
-                insert = SLInventoryEntry.getInsertStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
-                update = SLInventoryEntry.getUpdateStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
-                while (!isInterrupted()) {
-                    SLInventoryEntry entry = this.commitEntryQueue.take();
+                while (!Thread.interrupted()) {
+                    SLInventoryEntry entry = this.commitEntryQueue.poll();
+                    if (entry == null) {
+                        if (inTransaction) {
+                            SLInventoryHTTPFetchRequest.this.db.setTransactionSuccessful();
+                            SLInventoryHTTPFetchRequest.this.db.endTransaction();
+                            inTransaction = false;
+                            uncommittedCount = 0;
+                        }
+                        entry = this.commitEntryQueue.take();
+                    }
                     if (entry == this.stopEntry) {
-                        success = !this.aborted;
                         break;
                     }
-                    if (!transactionOpen) {
+                    if (!inTransaction) {
                         SLInventoryHTTPFetchRequest.this.db.beginTransaction();
-                        transactionOpen = true;
+                        inTransaction = true;
+                    }
+                    uncommittedCount++;
+                    if (uncommittedCount >= 16) {
+                        SLInventoryHTTPFetchRequest.this.db.yieldIfContendedSafely();
+                        uncommittedCount = 0;
                     }
                     retainedChildren.add(entry.uuid);
-                    entry.updateOrInsert(update, insert);
+                    if (insertStatement == null) {
+                        insertStatement = SLInventoryEntry.getInsertStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
+                    }
+                    if (updateStatement == null) {
+                        updateStatement = SLInventoryEntry.getUpdateStatement(SLInventoryHTTPFetchRequest.this.db.getDatabase());
+                    }
+                    entry.updateOrInsert(updateStatement, insertStatement);
                 }
-                if (transactionOpen && success) SLInventoryHTTPFetchRequest.this.db.setTransactionSuccessful();
-            } catch (InterruptedException exception) {
-                interrupt();
-            } catch (DBObject.DatabaseBindingException exception) {
-                Debug.Warning(exception);
-            } finally {
-                if (transactionOpen) SLInventoryHTTPFetchRequest.this.db.endTransaction();
-                if (insert != null) insert.close();
-                if (update != null) update.close();
+                success = !Thread.interrupted();
+            } catch (InterruptedException e) {
+                Debug.Warning(e);
+                success = false;
+            } catch (DBObject.DatabaseBindingException e) {
+                Debug.Warning(e);
+                success = false;
             }
-            if (success) {
+            if (inTransaction) {
+                Debug.Printf("InvFetch: commit thread ending transaction (success: %s, count %d).",
+                        success ? "true" : "false", Integer.valueOf(retainedChildren.size()));
+                SLInventoryHTTPFetchRequest.this.db.setTransactionSuccessful();
+                SLInventoryHTTPFetchRequest.this.db.endTransaction();
+            }
+            if (insertStatement != null) {
+                insertStatement.close();
+            }
+            if (updateStatement != null) {
+                updateStatement.close();
+            }
+            if (success && !this.aborted) {
                 Debug.Printf("InvFetch: commit thread successful, calling retainChildren.", new Object[0]);
-                SLInventoryHTTPFetchRequest.this.db.retainChildren(
-                        SLInventoryHTTPFetchRequest.this.folderId, retainedChildren);
+                SLInventoryHTTPFetchRequest.this.db.retainChildren(SLInventoryHTTPFetchRequest.this.folderId, retainedChildren);
             }
         }
 
@@ -121,26 +145,22 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread = databaseCommitThread;
         }
 
-        /* synthetic */ FolderDataContentHandler(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread, FolderDataContentHandler folderDataContentHandler) {
-            this(databaseCommitThread);
-        }
-
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException {
-            return str.equals("categories") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.FolderDataContentHandler.1
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            return str.equals("categories") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str2) throws LLSDXMLException {
                     return SLInventoryHTTPFetchRequest.this.new FolderEntryContentHandler(FolderDataContentHandler.this.commitThread);
                 }
-            } : str.equals("items") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.FolderDataContentHandler.2
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            } : str.equals("items") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str2) throws LLSDXMLException {
                     return SLInventoryHTTPFetchRequest.this.new ItemEntryContentHandler(FolderDataContentHandler.this.commitThread);
                 }
             } : super.onArrayBegin(str);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.gotUUID == null || !this.gotUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID) || this.gotVersion == SLInventoryHTTPFetchRequest.this.folderEntry.version) {
                 return;
@@ -149,76 +169,28 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(SLInventoryHTTPFetchRequest.this.folderEntry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
-            Debug.Printf("InvFetch: FolderDataContentHandler: key '%s' value '%s'", str, lLSDNode);
+        @Override
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
+            Debug.Printf("InvFetch: FolderDataContentHandler: key '%s' value '%s'", str, lsdNode);
             if (str.equals("version")) {
-                this.gotVersion = lLSDNode.asInt();
+                this.gotVersion = lsdNode.asInt();
             } else if (str.equals("folder_id")) {
-                this.gotUUID = lLSDNode.asUUID();
+                this.gotUUID = lsdNode.asUUID();
             }
         }
     }
 
     private class FolderEntryContentHandler extends LLSDStreamingParser.LLSDDefaultContentHandler {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$FolderValueKeySwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f111xb781ade = null;
         private final DatabaseCommitThread commitThread;
         private final SLInventoryEntry entry = new SLInventoryEntry();
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$FolderValueKeySwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m199x6cbd47ba() {
-            if (f111xb781ade != null) {
-                return f111xb781ade;
-            }
-            int[] iArr = new int[FolderValueKey.valuesCustom().length];
-            try {
-                iArr[FolderValueKey.agent_id.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[FolderValueKey.category_id.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[FolderValueKey.folder_id.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[FolderValueKey.name.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[FolderValueKey.parent_id.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                iArr[FolderValueKey.preferred_type.ordinal()] = 6;
-            } catch (NoSuchFieldError e6) {
-            }
-            try {
-                iArr[FolderValueKey.type.ordinal()] = 7;
-            } catch (NoSuchFieldError e7) {
-            }
-            try {
-                iArr[FolderValueKey.type_default.ordinal()] = 8;
-            } catch (NoSuchFieldError e8) {
-            }
-            try {
-                iArr[FolderValueKey.version.ordinal()] = 9;
-            } catch (NoSuchFieldError e9) {
-            }
-            f111xb781ade = iArr;
-            return iArr;
-        }
 
         FolderEntryContentHandler(DatabaseCommitThread databaseCommitThread) {
             this.commitThread = databaseCommitThread;
             this.entry.isFolder = true;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.entry.parentUUID == null) {
                 this.entry.parentUUID = SLInventoryHTTPFetchRequest.this.folderEntry.parentUUID;
@@ -230,28 +202,28 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(this.entry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        @Override
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
             FolderValueKey byTag = FolderValueKey.byTag(str);
             if (byTag == null) {
                 Debug.Printf("InvFetch: Folder unknown key '%s'", str);
                 return;
             }
-            switch (m199x6cbd47ba()[byTag.ordinal()]) {
-                case 1:
-                    this.entry.agentUUID = lLSDNode.asUUID();
+            switch (byTag) {
+                case agent_id:
+                    this.entry.agentUUID = lsdNode.asUUID();
                     break;
-                case 2:
-                    this.entry.uuid = lLSDNode.asUUID();
+                case category_id:
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
-                case 3:
-                    this.entry.uuid = lLSDNode.asUUID();
+                case folder_id:
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
-                case 4:
-                    this.entry.name = lLSDNode.asString();
+                case name:
+                    this.entry.name = lsdNode.asString();
                     break;
-                case 5:
-                    this.entry.parentUUID = lLSDNode.asUUID();
+                case parent_id:
+                    this.entry.parentUUID = lsdNode.asUUID();
                     if (!this.entry.parentUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID)) {
                         SLInventoryEntry findEntry = SLInventoryHTTPFetchRequest.this.db.findEntry(this.entry.parentUUID);
                         if (findEntry == null) {
@@ -265,25 +237,25 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                         this.entry.parent_id = SLInventoryHTTPFetchRequest.this.folderEntry.getId();
                         break;
                     }
-                case 7:
-                    if (!lLSDNode.isInt()) {
-                        SLAssetType byString = SLAssetType.getByString(lLSDNode.asString());
+                case type:
+                    if (!lsdNode.isInt()) {
+                        SLAssetType byString = SLAssetType.getByString(lsdNode.asString());
                         if (byString == SLAssetType.AT_UNKNOWN) {
-                            this.entry.typeDefault = SLInventoryType.getByString(lLSDNode.asString()).getTypeCode();
+                            this.entry.typeDefault = SLInventoryType.getByString(lsdNode.asString()).getTypeCode();
                             break;
                         } else {
                             this.entry.typeDefault = byString.getInventoryType().getTypeCode();
                             break;
                         }
                     } else {
-                        this.entry.typeDefault = lLSDNode.asInt();
+                        this.entry.typeDefault = lsdNode.asInt();
                         break;
                     }
-                case 8:
-                    this.entry.typeDefault = lLSDNode.asInt();
+                case type_default:
+                    this.entry.typeDefault = lsdNode.asInt();
                     break;
-                case 9:
-                    this.entry.version = lLSDNode.asInt();
+                case version:
+                    this.entry.version = lsdNode.asInt();
                     break;
             }
         }
@@ -320,119 +292,64 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
 
     private class ItemEntryContentHandler extends LLSDStreamingParser.LLSDDefaultContentHandler {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$ItemValueKeySwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f112xeca6ff43 = null;
         private final DatabaseCommitThread commitThread;
-        private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.ItemEntryContentHandler.1
+        private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
 
-            /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$PermissionsValueKeySwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] f113xc291c278 = null;
-
-            /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$PermissionsValueKeySwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] m202xf1123f1c() {
-                if (f113xc291c278 != null) {
-                    return f113xc291c278;
-                }
-                int[] iArr = new int[PermissionsValueKey.valuesCustom().length];
-                try {
-                    iArr[PermissionsValueKey.base_mask.ordinal()] = 1;
-                } catch (NoSuchFieldError e) {
-                }
-                try {
-                    iArr[PermissionsValueKey.creator_id.ordinal()] = 2;
-                } catch (NoSuchFieldError e2) {
-                }
-                try {
-                    iArr[PermissionsValueKey.everyone_mask.ordinal()] = 3;
-                } catch (NoSuchFieldError e3) {
-                }
-                try {
-                    iArr[PermissionsValueKey.group_id.ordinal()] = 4;
-                } catch (NoSuchFieldError e4) {
-                }
-                try {
-                    iArr[PermissionsValueKey.group_mask.ordinal()] = 5;
-                } catch (NoSuchFieldError e5) {
-                }
-                try {
-                    iArr[PermissionsValueKey.is_owner_group.ordinal()] = 6;
-                } catch (NoSuchFieldError e6) {
-                }
-                try {
-                    iArr[PermissionsValueKey.last_owner_id.ordinal()] = 7;
-                } catch (NoSuchFieldError e7) {
-                }
-                try {
-                    iArr[PermissionsValueKey.next_owner_mask.ordinal()] = 8;
-                } catch (NoSuchFieldError e8) {
-                }
-                try {
-                    iArr[PermissionsValueKey.owner_id.ordinal()] = 9;
-                } catch (NoSuchFieldError e9) {
-                }
-                try {
-                    iArr[PermissionsValueKey.owner_mask.ordinal()] = 10;
-                } catch (NoSuchFieldError e10) {
-                }
-                f113xc291c278 = iArr;
-                return iArr;
-            }
-
-            @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
-            public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+            @Override
+            public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
                 PermissionsValueKey byTag = PermissionsValueKey.byTag(str);
                 if (byTag == null) {
                     Debug.Printf("InvFetch: Permissions unknown key '%s'", str);
                     return;
                 }
-                switch (m202xf1123f1c()[byTag.ordinal()]) {
-                    case 1:
-                        ItemEntryContentHandler.this.entry.baseMask = lLSDNode.asInt();
+                switch (byTag) {
+                    case base_mask:
+                        ItemEntryContentHandler.this.entry.baseMask = lsdNode.asInt();
                         break;
-                    case 2:
-                        ItemEntryContentHandler.this.entry.creatorUUID = lLSDNode.asUUID();
+                    case creator_id:
+                        ItemEntryContentHandler.this.entry.creatorUUID = lsdNode.asUUID();
                         break;
-                    case 3:
-                        ItemEntryContentHandler.this.entry.everyoneMask = lLSDNode.asInt();
+                    case everyone_mask:
+                        ItemEntryContentHandler.this.entry.everyoneMask = lsdNode.asInt();
                         break;
-                    case 4:
-                        ItemEntryContentHandler.this.entry.groupUUID = lLSDNode.asUUID();
+                    case group_id:
+                        ItemEntryContentHandler.this.entry.groupUUID = lsdNode.asUUID();
                         break;
-                    case 5:
-                        ItemEntryContentHandler.this.entry.groupMask = lLSDNode.asInt();
+                    case group_mask:
+                        ItemEntryContentHandler.this.entry.groupMask = lsdNode.asInt();
                         break;
-                    case 6:
-                        ItemEntryContentHandler.this.entry.isGroupOwned = lLSDNode.asBoolean();
+                    case is_owner_group:
+                        ItemEntryContentHandler.this.entry.isGroupOwned = lsdNode.asBoolean();
                         break;
-                    case 7:
-                        ItemEntryContentHandler.this.entry.lastOwnerUUID = lLSDNode.asUUID();
+                    case last_owner_id:
+                        ItemEntryContentHandler.this.entry.lastOwnerUUID = lsdNode.asUUID();
                         break;
-                    case 8:
-                        ItemEntryContentHandler.this.entry.nextOwnerMask = lLSDNode.asInt();
+                    case next_owner_mask:
+                        ItemEntryContentHandler.this.entry.nextOwnerMask = lsdNode.asInt();
                         break;
-                    case 9:
-                        ItemEntryContentHandler.this.entry.ownerUUID = lLSDNode.asUUID();
+                    case owner_id:
+                        ItemEntryContentHandler.this.entry.ownerUUID = lsdNode.asUUID();
                         break;
-                    case 10:
-                        ItemEntryContentHandler.this.entry.ownerMask = lLSDNode.asInt();
+                    case owner_mask:
+                        ItemEntryContentHandler.this.entry.ownerMask = lsdNode.asInt();
                         break;
                 }
             }
         };
-        private final LLSDStreamingParser.LLSDContentHandler saleInfoHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.ItemEntryContentHandler.2
-            @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
-            public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        private final LLSDStreamingParser.LLSDContentHandler saleInfoHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
+            @Override
+            public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
                 if (str.equals("sale_type")) {
-                    if (lLSDNode.isString()) {
-                        ItemEntryContentHandler.this.entry.saleType = SLSaleType.getByString(lLSDNode.asString()).getTypeCode();
+                    if (lsdNode.isString()) {
+                        ItemEntryContentHandler.this.entry.saleType = SLSaleType.getByString(lsdNode.asString()).getTypeCode();
                         return;
                     } else {
-                        ItemEntryContentHandler.this.entry.saleType = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.saleType = lsdNode.asInt();
                         return;
                     }
                 }
                 if (str.equals("sale_price")) {
-                    ItemEntryContentHandler.this.entry.salePrice = lLSDNode.asInt();
+                    ItemEntryContentHandler.this.entry.salePrice = lsdNode.asInt();
                 } else {
                     Debug.Printf("InvFetch: Sale info unknown key '%s'", str);
                 }
@@ -440,67 +357,17 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         };
         private final SLInventoryEntry entry = new SLInventoryEntry();
 
-        /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$ItemValueKeySwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m201x8bc9b31f() {
-            if (f112xeca6ff43 != null) {
-                return f112xeca6ff43;
-            }
-            int[] iArr = new int[ItemValueKey.valuesCustom().length];
-            try {
-                iArr[ItemValueKey.agent_id.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[ItemValueKey.asset_id.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[ItemValueKey.created_at.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[ItemValueKey.desc.ordinal()] = 4;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[ItemValueKey.flags.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                iArr[ItemValueKey.inv_type.ordinal()] = 6;
-            } catch (NoSuchFieldError e6) {
-            }
-            try {
-                iArr[ItemValueKey.item_id.ordinal()] = 7;
-            } catch (NoSuchFieldError e7) {
-            }
-            try {
-                iArr[ItemValueKey.name.ordinal()] = 8;
-            } catch (NoSuchFieldError e8) {
-            }
-            try {
-                iArr[ItemValueKey.parent_id.ordinal()] = 9;
-            } catch (NoSuchFieldError e9) {
-            }
-            try {
-                iArr[ItemValueKey.type.ordinal()] = 10;
-            } catch (NoSuchFieldError e10) {
-            }
-            f112xeca6ff43 = iArr;
-            return iArr;
-        }
-
         ItemEntryContentHandler(DatabaseCommitThread databaseCommitThread) {
             this.commitThread = databaseCommitThread;
             this.entry.isFolder = false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
             return str.equals("permissions") ? this.permissionsHandler : str.equals("sale_info") ? this.saleInfoHandler : super.onMapBegin(str);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.entry.parentUUID == null) {
                 this.entry.parentUUID = SLInventoryHTTPFetchRequest.this.folderEntry.parentUUID;
@@ -512,45 +379,45 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(this.entry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        @Override
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
             ItemValueKey byTag = ItemValueKey.byTag(str);
             if (byTag == null) {
                 Debug.Printf("InvFetch: Item unknown key '%s'", str);
                 return;
             }
-            switch (m201x8bc9b31f()[byTag.ordinal()]) {
-                case 1:
-                    this.entry.agentUUID = lLSDNode.asUUID();
+            switch (byTag) {
+                case agent_id:
+                    this.entry.agentUUID = lsdNode.asUUID();
                     break;
-                case 2:
-                    this.entry.assetUUID = lLSDNode.asUUID();
+                case asset_id:
+                    this.entry.assetUUID = lsdNode.asUUID();
                     break;
-                case 3:
-                    this.entry.creationDate = lLSDNode.asInt();
+                case created_at:
+                    this.entry.creationDate = lsdNode.asInt();
                     break;
-                case 4:
-                    this.entry.description = lLSDNode.asString();
+                case desc:
+                    this.entry.description = lsdNode.asString();
                     break;
-                case 5:
-                    this.entry.flags = lLSDNode.asInt();
+                case flags:
+                    this.entry.flags = lsdNode.asInt();
                     break;
-                case 6:
-                    if (!lLSDNode.isInt()) {
-                        this.entry.invType = SLInventoryType.getByString(lLSDNode.asString()).getTypeCode();
+                case inv_type:
+                    if (!lsdNode.isInt()) {
+                        this.entry.invType = SLInventoryType.getByString(lsdNode.asString()).getTypeCode();
                         break;
                     } else {
-                        this.entry.invType = lLSDNode.asInt();
+                        this.entry.invType = lsdNode.asInt();
                         break;
                     }
-                case 7:
-                    this.entry.uuid = lLSDNode.asUUID();
+                case item_id:
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
-                case 8:
-                    this.entry.name = lLSDNode.asString();
+                case name:
+                    this.entry.name = lsdNode.asString();
                     break;
-                case 9:
-                    this.entry.parentUUID = lLSDNode.asUUID();
+                case parent_id:
+                    this.entry.parentUUID = lsdNode.asUUID();
                     if (!this.entry.parentUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID)) {
                         SLInventoryEntry findEntry = SLInventoryHTTPFetchRequest.this.db.findEntry(this.entry.parentUUID);
                         if (findEntry == null) {
@@ -564,12 +431,12 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                         this.entry.parent_id = SLInventoryHTTPFetchRequest.this.folderEntry.getId();
                         break;
                     }
-                case 10:
-                    if (!lLSDNode.isInt()) {
-                        this.entry.assetType = SLAssetType.getByString(lLSDNode.asString()).getTypeCode();
+                case type:
+                    if (!lsdNode.isInt()) {
+                        this.entry.assetType = SLAssetType.getByString(lsdNode.asString()).getTypeCode();
                         break;
                     } else {
-                        this.entry.assetType = lLSDNode.asInt();
+                        this.entry.assetType = lsdNode.asInt();
                         break;
                     }
             }
@@ -643,19 +510,15 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread = databaseCommitThread;
         }
 
-        /* synthetic */ RootContentHandler(SLInventoryHTTPFetchRequest sLInventoryHTTPFetchRequest, DatabaseCommitThread databaseCommitThread, RootContentHandler rootContentHandler) {
-            this(databaseCommitThread);
-        }
-
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
-            return new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.RootContentHandler.1
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            return new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onArrayBegin(String str2) throws LLSDXMLException {
-                    return str2.equals("folders") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.RootContentHandler.1.1
-                        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+                    return str2.equals("folders") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                        @Override
                         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str3) throws LLSDXMLException {
-                            return new FolderDataContentHandler(SLInventoryHTTPFetchRequest.this, RootContentHandler.this.commitThread, null);
+                            return new FolderDataContentHandler(RootContentHandler.this.commitThread);
                         }
                     } : super.onArrayBegin(str2);
                 }
@@ -663,70 +526,82 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
     }
 
-    SLInventoryHTTPFetchRequest(SLInventory sLInventory, UUID uuid, String str) throws SLInventory.NoInventoryItemException {
-        super(sLInventory, uuid);
+    SLInventoryHTTPFetchRequest(SLInventory inventory, UUID uuid, String capURL) throws SLInventory.NoInventoryItemException {
+        super(inventory, uuid);
         this.futureRef = new AtomicReference<>(null);
         this.streamingXmlReqRef = new AtomicReference<>(null);
         this.isCancelled = new AtomicBoolean(false);
-        this.httpRequest = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.1
-            /* JADX WARN: Removed duplicated region for block: B:21:0x00f9  */
-            /* JADX WARN: Removed duplicated region for block: B:24:0x0114  */
-            /* JADX WARN: Removed duplicated region for block: B:28:0x0172  */
-            /* JADX WARN: Removed duplicated region for block: B:29:0x0170  */
-            @Override // java.lang.Runnable
-            /*
-                Code decompiled incorrectly, please refer to instructions dump.
-                To view partially-correct add '--show-bad-code' argument
-            */
+        this.httpRequest = new Runnable() {
+            /**
+             * Fetch one folder through the FetchInventoryDescendents2 capability
+             * (LLSD request <code>{folders: [{folder_id, fetch_folders, fetch_items}]}</code>).
+             * The streamed reply is parsed on this thread and committed to the
+             * database by a {@link DatabaseCommitThread}. Up to three attempts
+             * are made; an attempt that fails interrupts its commit thread.
+             */
+            @Override
             public void run() {
                 boolean success = false;
-                boolean cancelled = false;
-                long started = System.currentTimeMillis();
-                LLSDStreamingXMLRequest request = new LLSDStreamingXMLRequest();
-                LLSDArray folders = new LLSDArray();
-                folders.add(new LLSDMap(
-                        new LLSDMap.LLSDMapEntry("folder_id", new LLSDUUID(SLInventoryHTTPFetchRequest.this.folderUUID)),
-                        new LLSDMap.LLSDMapEntry("fetch_folders", new LLSDBoolean(true)),
-                        new LLSDMap.LLSDMapEntry("fetch_items", new LLSDBoolean(true))));
-                LLSDMap body = new LLSDMap(new LLSDMap.LLSDMapEntry("folders", folders));
-                SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(request);
                 try {
-                    for (int attempt = 0; attempt < 3 && !SLInventoryHTTPFetchRequest.this.isCancelled.get(); attempt++) {
-                        DatabaseCommitThread commitThread = new DatabaseCommitThread(SLInventoryHTTPFetchRequest.this, null);
-                        commitThread.start();
+                    long startTime = System.currentTimeMillis();
+                    Debug.Printf("InventoryFetcher: Going to fetch folder: %s", SLInventoryHTTPFetchRequest.this.folderUUID);
+                    LLSDStreamingXMLRequest request = new LLSDStreamingXMLRequest();
+                    LLSDArray folders = new LLSDArray();
+                    folders.add(new LLSDMap(
+                            new LLSDMap.LLSDMapEntry("folder_id", new LLSDUUID(SLInventoryHTTPFetchRequest.this.folderUUID)),
+                            new LLSDMap.LLSDMapEntry("fetch_folders", new LLSDBoolean(true)),
+                            new LLSDMap.LLSDMapEntry("fetch_items", new LLSDBoolean(true))));
+                    LLSDMap body = new LLSDMap(new LLSDMap.LLSDMapEntry("folders", folders));
+                    SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(request);
+                    for (int attempt = 0; attempt < 3; attempt++) {
+                        DatabaseCommitThread commitThread = new DatabaseCommitThread();
                         try {
-                            request.PerformRequest(SLInventoryHTTPFetchRequest.this.capURL, body,
-                                    new RootContentHandler(SLInventoryHTTPFetchRequest.this, commitThread, null));
+                            commitThread.start();
+                            Debug.Printf("InventoryFetcher: Starting HTTP request for folder: %s", SLInventoryHTTPFetchRequest.this.folderUUID);
+                            request.PerformRequest(SLInventoryHTTPFetchRequest.this.capURL, body, new RootContentHandler(commitThread));
+                            Debug.Printf("InvFetch: done parsing,  waiting for commit thread", new Object[0]);
                             commitThread.stopAndWait(true);
+                            Debug.Printf("InvFetch: commit thread finished", new Object[0]);
                             success = true;
+                        } catch (LLSDXMLException e) {
+                            e.printStackTrace();
+                            try {
+                                Debug.Log("InventoryFetcher: malformed xml after req = " + body.serializeToXML());
+                            } catch (Exception ignored) {
+                                // logging only
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (success) {
                             break;
-                        } catch (IOException | LLSDXMLException exception) {
-                            Debug.Warning(exception);
-                            commitThread.stopAndWait(false);
+                        }
+                        commitThread.interrupt();
+                        if (Thread.interrupted() || SLInventoryHTTPFetchRequest.this.isCancelled.get()) {
+                            break;
                         }
                     }
-                } catch (InterruptedException exception) {
-                    Thread.currentThread().interrupt();
-                } finally {
+                    Debug.Printf("InventoryFetcher: Fetched folder: %s (fetch time = %d)",
+                            SLInventoryHTTPFetchRequest.this.folderUUID.toString(), Long.valueOf(System.currentTimeMillis() - startTime));
                     SLInventoryHTTPFetchRequest.this.streamingXmlReqRef.set(null);
-                    cancelled = Thread.currentThread().isInterrupted()
-                            || SLInventoryHTTPFetchRequest.this.isCancelled.get();
-                    Debug.Printf("InventoryFetcher: done processing folder %s: success %s cancelled %b (time %d ms)",
-                            SLInventoryHTTPFetchRequest.this.folderUUID, Boolean.toString(success),
-                            Boolean.valueOf(cancelled), Long.valueOf(System.currentTimeMillis() - started));
-                    SLInventoryHTTPFetchRequest.this.completeFetch(success, cancelled);
+                } catch (Exception e) {
+                    Debug.Warning(e);
                 }
+                boolean cancelled = Thread.interrupted() || SLInventoryHTTPFetchRequest.this.isCancelled.get();
+                Debug.Printf("InventoryFetcher: done processing folder %s: success %s cancelled %b",
+                        SLInventoryHTTPFetchRequest.this.folderUUID.toString(), success ? "true" : "false", Boolean.valueOf(cancelled));
+                SLInventoryHTTPFetchRequest.this.completeFetch(success, cancelled);
             }
         };
-        this.capURL = str;
+        this.capURL = capURL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void cancel() {
         this.isCancelled.set(true);
-        LLSDStreamingXMLRequest lLSDStreamingXMLRequest = this.streamingXmlReqRef.get();
-        if (lLSDStreamingXMLRequest != null) {
-            lLSDStreamingXMLRequest.InterruptRequest();
+        LLSDStreamingXMLRequest lsdStreamingXMLRequest = this.streamingXmlReqRef.get();
+        if (lsdStreamingXMLRequest != null) {
+            lsdStreamingXMLRequest.InterruptRequest();
         }
         Future<?> andSet = this.futureRef.getAndSet(null);
         if (andSet != null) {
@@ -734,7 +609,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void start() {
         if (this.isCancelled.get() || this.futureRef.get() != null) {
             return;

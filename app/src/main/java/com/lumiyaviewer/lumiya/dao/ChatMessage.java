@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.utils.Identifiable;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ChatMessage implements Identifiable<Long> {
     private Boolean accepted;
     private Integer assetType;
@@ -40,41 +39,41 @@ public class ChatMessage implements Identifiable<Long> {
     public ChatMessage() {
     }
 
-    public ChatMessage(Long l) {
-        this.id = l;
+    public ChatMessage(Long id) {
+        this.id = id;
     }
 
-    public ChatMessage(Long l, long j, Date date, int i, Date date2, Boolean bool, UUID uuid, Integer num, String str, String str2, String str3, int i2, Integer num2, Integer num3, UUID uuid2, UUID uuid3, String str4, Integer num4, Integer num5, Integer num6, Integer num7, Boolean bool2, Boolean bool3, UUID uuid4, String str5, Integer num8, byte[] bArr, String str6, Integer num9, boolean z) {
-        this.id = l;
-        this.chatterID = j;
+    public ChatMessage(Long id, long chatterID, Date date, int viewType, Date origTimestamp, Boolean bool, UUID uuid, Integer num, String senderName, String senderLegacyName, String messageText, int messageType, Integer eventState, Integer origIMType, UUID sessionID, UUID itemID, String itemName, Integer assetType, Integer transactionAmount, Integer newBalance, Integer chatChannel, Boolean dialogIgnored, Boolean accepted, UUID userID, String objectName, Integer questionMask, byte[] bytes, String dialogSelectedOption, Integer textBoxButtonIndex, boolean syncedToGoogleDrive) {
+        this.id = id;
+        this.chatterID = chatterID;
         this.timestamp = date;
-        this.viewType = i;
-        this.origTimestamp = date2;
+        this.viewType = viewType;
+        this.origTimestamp = origTimestamp;
         this.isOffline = bool;
         this.senderUUID = uuid;
         this.senderType = num;
-        this.senderName = str;
-        this.senderLegacyName = str2;
-        this.messageText = str3;
-        this.messageType = i2;
-        this.eventState = num2;
-        this.origIMType = num3;
-        this.sessionID = uuid2;
-        this.itemID = uuid3;
-        this.itemName = str4;
-        this.assetType = num4;
-        this.transactionAmount = num5;
-        this.newBalance = num6;
-        this.chatChannel = num7;
-        this.dialogIgnored = bool2;
-        this.accepted = bool3;
-        this.userID = uuid4;
-        this.objectName = str5;
-        this.questionMask = num8;
-        this.dialogButtons = bArr;
-        this.dialogSelectedOption = str6;
-        this.textBoxButtonIndex = num9;
-        this.syncedToGoogleDrive = z;
+        this.senderName = senderName;
+        this.senderLegacyName = senderLegacyName;
+        this.messageText = messageText;
+        this.messageType = messageType;
+        this.eventState = eventState;
+        this.origIMType = origIMType;
+        this.sessionID = sessionID;
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.assetType = assetType;
+        this.transactionAmount = transactionAmount;
+        this.newBalance = newBalance;
+        this.chatChannel = chatChannel;
+        this.dialogIgnored = dialogIgnored;
+        this.accepted = accepted;
+        this.userID = userID;
+        this.objectName = objectName;
+        this.questionMask = questionMask;
+        this.dialogButtons = bytes;
+        this.dialogSelectedOption = dialogSelectedOption;
+        this.textBoxButtonIndex = textBoxButtonIndex;
+        this.syncedToGoogleDrive = syncedToGoogleDrive;
     }
 
     public Boolean getAccepted() {
@@ -110,7 +109,7 @@ public class ChatMessage implements Identifiable<Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // com.lumiyaviewer.lumiya.utils.Identifiable
+    @Override
     public Long getId() {
         return this.id;
     }
@@ -211,28 +210,28 @@ public class ChatMessage implements Identifiable<Long> {
         this.chatChannel = num;
     }
 
-    public void setChatterID(long j) {
-        this.chatterID = j;
+    public void setChatterID(long chatterID) {
+        this.chatterID = chatterID;
     }
 
-    public void setDialogButtons(byte[] bArr) {
-        this.dialogButtons = bArr;
+    public void setDialogButtons(byte[] bytes) {
+        this.dialogButtons = bytes;
     }
 
     public void setDialogIgnored(Boolean bool) {
         this.dialogIgnored = bool;
     }
 
-    public void setDialogSelectedOption(String str) {
-        this.dialogSelectedOption = str;
+    public void setDialogSelectedOption(String dialogSelectedOption) {
+        this.dialogSelectedOption = dialogSelectedOption;
     }
 
     public void setEventState(Integer num) {
         this.eventState = num;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setIsOffline(Boolean bool) {
@@ -243,24 +242,24 @@ public class ChatMessage implements Identifiable<Long> {
         this.itemID = uuid;
     }
 
-    public void setItemName(String str) {
-        this.itemName = str;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public void setMessageText(String str) {
-        this.messageText = str;
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
-    public void setMessageType(int i) {
-        this.messageType = i;
+    public void setMessageType(int messageType) {
+        this.messageType = messageType;
     }
 
     public void setNewBalance(Integer num) {
         this.newBalance = num;
     }
 
-    public void setObjectName(String str) {
-        this.objectName = str;
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
     }
 
     public void setOrigIMType(Integer num) {
@@ -275,12 +274,12 @@ public class ChatMessage implements Identifiable<Long> {
         this.questionMask = num;
     }
 
-    public void setSenderLegacyName(String str) {
-        this.senderLegacyName = str;
+    public void setSenderLegacyName(String senderLegacyName) {
+        this.senderLegacyName = senderLegacyName;
     }
 
-    public void setSenderName(String str) {
-        this.senderName = str;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public void setSenderType(Integer num) {
@@ -295,8 +294,8 @@ public class ChatMessage implements Identifiable<Long> {
         this.sessionID = uuid;
     }
 
-    public void setSyncedToGoogleDrive(boolean z) {
-        this.syncedToGoogleDrive = z;
+    public void setSyncedToGoogleDrive(boolean syncedToGoogleDrive) {
+        this.syncedToGoogleDrive = syncedToGoogleDrive;
     }
 
     public void setTextBoxButtonIndex(Integer num) {
@@ -315,7 +314,7 @@ public class ChatMessage implements Identifiable<Long> {
         this.userID = uuid;
     }
 
-    public void setViewType(int i) {
-        this.viewType = i;
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
     }
 }

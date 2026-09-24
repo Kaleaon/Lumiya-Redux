@@ -39,7 +39,6 @@ import com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableFragment, LoadableMonitor.OnLoadableDataChangedListener, ChatterNameRetriever.OnChatterNameUpdated {
     private static final String PARCEL_UUID_KEY = "parcelUUID";
 
@@ -95,7 +94,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         if ((chatterNameRetriever != this.ownerNameRetriever && chatterNameRetriever != this.ownerGroupNameRetriever) || this.unbinder == null || this.ownerGroupNameRetriever == null || this.ownerNameRetriever == null) {
             return;
@@ -103,11 +102,11 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         ChatterNameRetriever chatterNameRetriever2 = this.ownerGroupNameRetriever.getResolvedName() != null ? this.ownerGroupNameRetriever : this.ownerNameRetriever;
         String resolvedName = chatterNameRetriever2.getResolvedName();
         this.parcelOwnerName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
-        this.parcelOwnerPic.setVisibility(0);
+        this.parcelOwnerPic.setVisibility(View.VISIBLE);
         this.parcelOwnerPic.setChatterID(chatterNameRetriever2.chatterID, resolvedName);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.parcel_info, viewGroup, false);
@@ -119,7 +118,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -128,7 +127,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         ParcelInfoReply data = this.parcelInfoReply.getData();
         Debug.Printf("ParcelInfo: loadable data %s", data);
@@ -156,7 +155,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         Debug.Printf("ParcelInfo: ownerID = %s", data.Data_Field.OwnerID);
         if (UUIDPool.ZeroUUID.equals(data.Data_Field.OwnerID)) {
             this.parcelOwnerName.setText(R.string.group_owned);
-            this.parcelOwnerPic.setVisibility(8);
+            this.parcelOwnerPic.setVisibility(View.GONE);
         } else {
             this.ownerNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(activeAgentID, data.Data_Field.OwnerID), this, UIThreadExecutor.getSerialInstance());
             this.ownerGroupNameRetriever = new ChatterNameRetriever(ChatterID.getGroupChatterID(activeAgentID, data.Data_Field.OwnerID), this, UIThreadExecutor.getSerialInstance());
@@ -191,21 +190,21 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         }
         final LLVector3 lLVector3 = new LLVector3(data.Data_Field.GlobalX, data.Data_Field.GlobalY, data.Data_Field.GlobalZ);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getActivity().getString(R.string.teleport_parcel_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.search.-$Lambda$5Jqy4HmgAu6T9fnroWh-Zqm3eJE.1
+        builder.setMessage(getActivity().getString(R.string.teleport_parcel_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 ParcelInfoFragment.this.m858xc965e5a8((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.search.-$Lambda$5Jqy4HmgAu6T9fnroWh-Zqm3eJE
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -213,13 +212,13 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         builder.create().show();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         showParcelInfo(UUIDPool.getUUID(getArguments().getString(PARCEL_UUID_KEY)));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.loadableMonitor.unsubscribeAll();
         if (this.ownerNameRetriever != null) {
@@ -237,7 +236,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         getArguments().putAll(bundle);
         if (isFragmentStarted()) {

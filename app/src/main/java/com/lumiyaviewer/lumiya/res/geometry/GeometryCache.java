@@ -14,7 +14,6 @@ import com.lumiyaviewer.lumiya.res.textures.TextureCache;
 import com.lumiyaviewer.lumiya.slproto.mesh.MeshData;
 import com.lumiyaviewer.lumiya.slproto.prims.PrimVolumeParams;
 
-/* loaded from: classes.dex */
 public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, DrawableGeometry> {
     private final MeshCache meshCache;
 
@@ -27,7 +26,7 @@ public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, Drawabl
             this.meshCache = meshCache;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (!(obj instanceof MeshData)) {
                 completeRequest(null);
@@ -37,18 +36,18 @@ public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, Drawabl
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             PrimComputeExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             this.meshCache.RequestResource(getParams().SculptID, this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new DrawableGeometry(this.meshData));
@@ -67,7 +66,7 @@ public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, Drawabl
             this.sculptTextureParams = DrawableTextureParams.create(getParams().SculptID, TextureClass.Sculpt);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (!(obj instanceof OpenJPEG)) {
                 completeRequest(null);
@@ -77,19 +76,19 @@ public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, Drawabl
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             PrimComputeExecutor.getInstance().remove(this);
             TextureCache.getInstance().CancelRequest(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             TextureCache.getInstance().RequestResource(this.sculptTextureParams, this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new DrawableGeometry(getParams(), this.sculptData));
@@ -104,18 +103,18 @@ public class GeometryCache extends ResourceMemoryCache<PrimVolumeParams, Drawabl
             super(primVolumeParams, resourceManager);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             PrimComputeExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             PrimComputeExecutor.getInstance().execute(this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new DrawableGeometry(getParams(), null));

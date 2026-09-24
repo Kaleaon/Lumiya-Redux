@@ -1,13 +1,17 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * end viewer to simulator section
+ *
+ * <p>Template: {@code ViewerStats Low 131 NotTrusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class ViewerStats extends SLMessage {
     public AgentData AgentData_Field;
     public DownloadTotals DownloadTotals_Field;
@@ -15,49 +19,54 @@ public class ViewerStats extends SLMessage {
     public NetStats[] NetStats_Fields = new NetStats[2];
     public ArrayList<MiscStats> MiscStats_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int AgentsInView;
-        public float FPS;
-        public Inet4Address IP;
-        public double MetersTraveled;
-        public float Ping;
-        public int RegionsVisited;
-        public float RunTime;
-        public UUID SessionID;
-        public float SimFPS;
-        public int StartTime;
-        public byte[] SysCPU;
-        public byte[] SysGPU;
-        public byte[] SysOS;
-        public int SysRAM;
+        public UUID AgentID; // LLUUID
+        public int AgentsInView; // U8
+        public float FPS; // F32
+        public Inet4Address IP; // IPADDR
+        public double MetersTraveled; // F64
+        public float Ping; // F32
+        public int RegionsVisited; // S32
+        public float RunTime; // F32
+        public UUID SessionID; // LLUUID
+        public float SimFPS; // F32
+        public int StartTime; // U32
+        public byte[] SysCPU; // Variable 1 - String
+        public byte[] SysGPU; // Variable 1 - String
+        public byte[] SysOS; // Variable 1 - String
+        public int SysRAM; // U32
     }
 
+    /** Block DownloadTotals, Single. */
     public static class DownloadTotals {
-        public int Objects;
-        public int Textures;
-        public int World;
+        public int Objects; // U32
+        public int Textures; // U32
+        public int World; // U32
     }
 
+    /** Block FailStats, Single. */
     public static class FailStats {
-        public int Dropped;
-        public int FailedResends;
-        public int Invalid;
-        public int OffCircuit;
-        public int Resent;
-        public int SendPacket;
+        public int Dropped; // U32
+        public int FailedResends; // U32
+        public int Invalid; // U32
+        public int OffCircuit; // U32
+        public int Resent; // U32
+        public int SendPacket; // U32
     }
 
+    /** Block MiscStats, Variable. */
     public static class MiscStats {
-        public int Type;
-        public double Value;
+        public int Type; // U32
+        public double Value; // F64
     }
 
+    /** Block NetStats, Multiple 2. */
     public static class NetStats {
-        public int Bytes;
-        public int Compressed;
-        public int Packets;
-        public int Savings;
+        public int Bytes; // U32
+        public int Compressed; // U32
+        public int Packets; // U32
+        public int Savings; // U32
     }
 
     public ViewerStats() {
@@ -70,21 +79,22 @@ public class ViewerStats extends SLMessage {
         this.FailStats_Field = new FailStats();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.AgentData_Field.SysOS.length + 74 + 1 + this.AgentData_Field.SysCPU.length + 1 + this.AgentData_Field.SysGPU.length + 4 + 12 + 32 + 24 + 1 + (this.MiscStats_Fields.size() * 12);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleViewerStats(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleViewerStats(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -125);
+        // Message number: Low 131 (ViewerStats).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x83);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packIPAddress(byteBuffer, this.AgentData_Field.IP);
@@ -122,7 +132,7 @@ public class ViewerStats extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
@@ -131,7 +141,7 @@ public class ViewerStats extends SLMessage {
         this.AgentData_Field.RunTime = unpackFloat(byteBuffer);
         this.AgentData_Field.SimFPS = unpackFloat(byteBuffer);
         this.AgentData_Field.FPS = unpackFloat(byteBuffer);
-        this.AgentData_Field.AgentsInView = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.AgentsInView = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.Ping = unpackFloat(byteBuffer);
         this.AgentData_Field.MetersTraveled = unpackDouble(byteBuffer);
         this.AgentData_Field.RegionsVisited = unpackInt(byteBuffer);
@@ -154,8 +164,8 @@ public class ViewerStats extends SLMessage {
         this.FailStats_Field.FailedResends = unpackInt(byteBuffer);
         this.FailStats_Field.OffCircuit = unpackInt(byteBuffer);
         this.FailStats_Field.Invalid = unpackInt(byteBuffer);
-        int i2 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i3 = 0; i3 < i2; i3++) {
+        int i2 = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i2; j++) {
             MiscStats miscStats = new MiscStats();
             miscStats.Type = unpackInt(byteBuffer);
             miscStats.Value = unpackDouble(byteBuffer);

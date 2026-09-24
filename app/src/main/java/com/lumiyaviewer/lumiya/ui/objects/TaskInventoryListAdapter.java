@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry;
 import com.lumiyaviewer.lumiya.slproto.inventory.SLTaskInventory;
 
-/* loaded from: classes.dex */
 public class TaskInventoryListAdapter extends BaseAdapter {
     private final Context context;
 
@@ -23,7 +22,7 @@ public class TaskInventoryListAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         if (this.taskInventory != null) {
             return this.taskInventory.entries.size();
@@ -31,7 +30,7 @@ public class TaskInventoryListAdapter extends BaseAdapter {
         return 0;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public SLInventoryEntry getItem(int i) {
         if (this.taskInventory != null) {
             return this.taskInventory.entries.get(i);
@@ -39,12 +38,12 @@ public class TaskInventoryListAdapter extends BaseAdapter {
         return null;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         return i;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = ((LayoutInflater) this.context.getSystemService("layout_inflater")).inflate(R.layout.inventory_item, viewGroup, false);
@@ -64,17 +63,17 @@ public class TaskInventoryListAdapter extends BaseAdapter {
             ((ImageView) view.findViewById(R.id.itemTypeIconView)).setImageBitmap(null);
             ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageBitmap(null);
         }
-        view.findViewById(R.id.itemWornIcon).setVisibility(8);
+        view.findViewById(R.id.itemWornIcon).setVisibility(View.GONE);
         return view;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return false;
     }
 
-    public void setData(SLTaskInventory sLTaskInventory) {
-        this.taskInventory = sLTaskInventory;
+    public void setData(SLTaskInventory taskInventory) {
+        this.taskInventory = taskInventory;
         notifyDataSetChanged();
     }
 }

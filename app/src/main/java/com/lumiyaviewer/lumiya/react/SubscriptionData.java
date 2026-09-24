@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscription.OnError, Loadable, RefreshableOne, UnsubscribableOne {
 
     @Nullable
@@ -106,7 +105,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         this.inLoadableListeners.set(false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable
+    @Override
     public void addLoadableStatusListener(Loadable.LoadableStatusListener loadableStatusListener) {
         synchronized (this.lock) {
             this.loadableStatusListeners.add(loadableStatusListener);
@@ -146,7 +145,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         return this.error;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable
+    @Override
     @Nonnull
     public Loadable.Status getLoadableStatus() {
         return this.subscription.get() == null ? Loadable.Status.Idle : this.error != null ? Loadable.Status.Error : this.data != null ? Loadable.Status.Loaded : Loadable.Status.Loading;
@@ -164,7 +163,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         return this.subscription.get() != null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    @Override
     public void onData(T t) {
         synchronized (this.lock) {
             this.data = t;
@@ -176,7 +175,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         invokeLoadableListeners();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+    @Override
     public void onError(Throwable th) {
         synchronized (this.lock) {
             this.data = null;
@@ -188,7 +187,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         invokeLoadableListeners();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RefreshableOne
+    @Override
     public void requestRefresh() {
         Subscription<K, T> subscription = this.subscription.get();
         if (subscription != null) {
@@ -209,7 +208,7 @@ public class SubscriptionData<K, T> implements Subscription.OnData<T>, Subscript
         invokeLoadableListeners();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.UnsubscribableOne
+    @Override
     public void unsubscribe() {
         Subscription<K, T> andSet = this.subscription.getAndSet(null);
         if (andSet != null) {

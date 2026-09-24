@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.common.loadmon;
 
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public interface Loadable {
 
     public interface LoadableStatusListener {

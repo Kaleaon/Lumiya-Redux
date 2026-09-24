@@ -1,6 +1,5 @@
 package uk.co.senab.photoview;
 
-/* loaded from: classes.dex */
 public final class BuildConfig {
     public static final String APPLICATION_ID = "uk.co.senab.photoview";
     public static final String BUILD_TYPE = "release";

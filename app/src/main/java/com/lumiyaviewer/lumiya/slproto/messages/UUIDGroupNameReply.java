@@ -1,26 +1,34 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UUIDGroupNameReply
+ * Translate a UUID into a group name
+ *
+ * <p>Template: {@code UUIDGroupNameReply Low 238 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code handleUUIDGroupNameReply()} in indra/llmessage/llcachename.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class UUIDGroupNameReply extends SLMessage {
     public ArrayList<UUIDNameBlock> UUIDNameBlock_Fields = new ArrayList<>();
 
+    /** Block UUIDNameBlock, Variable. */
     public static class UUIDNameBlock {
-        public byte[] GroupName;
-        public UUID ID;
+        public byte[] GroupName; // Variable 1
+        public UUID ID; // LLUUID
     }
 
     public UUIDGroupNameReply() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.UUIDNameBlock_Fields.iterator();
@@ -33,31 +41,32 @@ public class UUIDGroupNameReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUUIDGroupNameReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUUIDGroupNameReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -18);
+        // Message number: Low 238 (UUIDGroupNameReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xEE);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
-        for (UUIDNameBlock uUIDNameBlock : this.UUIDNameBlock_Fields) {
-            packUUID(byteBuffer, uUIDNameBlock.ID);
-            packVariable(byteBuffer, uUIDNameBlock.GroupName, 1);
+        for (UUIDNameBlock uuidNameBlock : this.UUIDNameBlock_Fields) {
+            packUUID(byteBuffer, uuidNameBlock.ID);
+            packVariable(byteBuffer, uuidNameBlock.GroupName, 1);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
-            UUIDNameBlock uUIDNameBlock = new UUIDNameBlock();
-            uUIDNameBlock.ID = unpackUUID(byteBuffer);
-            uUIDNameBlock.GroupName = unpackVariable(byteBuffer, 1);
-            this.UUIDNameBlock_Fields.add(uUIDNameBlock);
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
+            UUIDNameBlock uuidNameBlock = new UUIDNameBlock();
+            uuidNameBlock.ID = unpackUUID(byteBuffer);
+            uuidNameBlock.GroupName = unpackVariable(byteBuffer, 1);
+            this.UUIDNameBlock_Fields.add(uuidNameBlock);
         }
     }
 }

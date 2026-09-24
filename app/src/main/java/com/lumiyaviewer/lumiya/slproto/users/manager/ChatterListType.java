@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
-/* loaded from: classes.dex */
 public enum ChatterListType {
     FriendsOnline,
     Friends,

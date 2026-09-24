@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.settings;
 
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public enum SettingsPage {
     PageConnection(R.xml.preferences_connection, R.string.prefs_category_connection),
     PageAppearance(R.xml.preferences_appearance, R.string.prefs_category_appearance),
@@ -15,9 +14,9 @@ public enum SettingsPage {
     private final int pageResourceId;
     private final int pageTitle;
 
-    SettingsPage(int i, int i2) {
-        this.pageResourceId = i;
-        this.pageTitle = i2;
+    SettingsPage(int pageResourceId, int pageTitle) {
+        this.pageResourceId = pageResourceId;
+        this.pageTitle = pageTitle;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

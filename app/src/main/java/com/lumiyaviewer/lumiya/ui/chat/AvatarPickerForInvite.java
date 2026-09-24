@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarPickerForInvite extends AvatarPickerFragment {
     private static final String GROUP_ID_KEY = "groupID";
     private static final String GROUP_LIST_KEY = "avatarGroupList";
@@ -39,9 +38,9 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
         final UUID roleID;
         final String roleTitle;
 
-        private RoleEntry(UUID uuid, String str) {
+        private RoleEntry(UUID uuid, String roleTitle) {
             this.roleID = uuid;
-            this.roleTitle = str;
+            this.roleTitle = roleTitle;
         }
 
         /* synthetic */ RoleEntry(UUID uuid, String str, RoleEntry roleEntry) {
@@ -67,17 +66,17 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
         return makeFragmentArguments;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment
+    @Override
     protected void createExtraView(LayoutInflater layoutInflater, FrameLayout frameLayout) {
         layoutInflater.inflate(R.layout.invite_role_picker_extra, frameLayout);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     public String getTitle() {
         return getString(R.string.invite_selector_title);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment
+    @Override
     protected void onAvatarSelected(ChatterID chatterID, @Nullable String str) {
         UserManager userManager;
         SLAgentCircuit activeAgentCircuit;
@@ -88,7 +87,7 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
                 return;
             }
             activeAgentCircuit.getModules().groupManager.SendGroupInvite(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), getGroupID(), ((RoleEntry) selectedItem).roleID);
-            Toast.makeText(getContext(), R.string.group_invitation_sent, 1).show();
+            Toast.makeText(getContext(), R.string.group_invitation_sent, Toast.LENGTH_LONG).show();
             FragmentActivity activity = getActivity();
             if (activity instanceof DetailsActivity) {
                 ((DetailsActivity) activity).closeDetailsFragment(this);
@@ -96,7 +95,7 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         boolean z;
         boolean z2;

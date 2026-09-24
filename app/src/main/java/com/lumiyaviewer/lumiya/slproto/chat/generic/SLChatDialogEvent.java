@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class SLChatDialogEvent extends SLChatTextEvent {
     protected final int chatChannel;
     protected boolean ignored;
@@ -35,12 +34,11 @@ public abstract class SLChatDialogEvent extends SLChatTextEvent {
         return str.trim();
     }
 
-    /* renamed from: onDialogIgnored */
-    protected void m157xe7f9f9c3(UserManager userManager) {
+    protected void onDialogIgnored(UserManager userManager) {
         this.ignored = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setChatChannel(Integer.valueOf(this.chatChannel));

@@ -10,19 +10,18 @@ import com.lumiyaviewer.lumiya.ui.inventory.InventoryFragmentHelper;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarPickerForShare extends AvatarPickerFragment {
     private static final String INVENTORY_ENTRY_KEY = "inventoryEntry";
     private final InventoryFragmentHelper inventoryFragmentHelper = new InventoryFragmentHelper(this);
 
-    public static Bundle makeArguments(UUID uuid, SLInventoryEntry sLInventoryEntry) {
+    public static Bundle makeArguments(UUID uuid, SLInventoryEntry inventoryEntry) {
         Bundle bundle = new Bundle();
         bundle.putString("activeAgentUUID", uuid.toString());
-        bundle.putParcelable(INVENTORY_ENTRY_KEY, sLInventoryEntry);
+        bundle.putParcelable(INVENTORY_ENTRY_KEY, inventoryEntry);
         return bundle;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     public String getTitle() {
         return getString(R.string.share_with_title);
     }
@@ -35,18 +34,18 @@ public class AvatarPickerForShare extends AvatarPickerFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.avapicker.AvatarPickerFragment
+    @Override
     protected void onAvatarSelected(ChatterID chatterID, @Nullable String str) {
         Bundle arguments = getArguments();
         if (arguments == null || !arguments.containsKey(INVENTORY_ENTRY_KEY)) {
             return;
         }
-        this.inventoryFragmentHelper.ConfirmShareInventoryEntry((SLInventoryEntry) arguments.getParcelable(INVENTORY_ENTRY_KEY), chatterID, str, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.avapicker.-$Lambda$GxFBFkg7vdmipTAXKE3eB-6HqSs
+        this.inventoryFragmentHelper.ConfirmShareInventoryEntry((SLInventoryEntry) arguments.getParcelable(INVENTORY_ENTRY_KEY), chatterID, str, new Runnable() {
             private final /* synthetic */ void $m$0() {
                 AvatarPickerForShare.this.m397xf146b8d7();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

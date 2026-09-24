@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.modules.mutelist;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MuteListKey {
     public final MuteType muteType;
     public final UUID uuid;

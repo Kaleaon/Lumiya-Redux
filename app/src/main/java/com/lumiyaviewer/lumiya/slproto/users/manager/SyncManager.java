@@ -35,11 +35,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SyncManager {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f226xb1d54699 = null;
     private static final int MAX_MESSAGES_PER_BATCH = 100;
 
     @Nonnull
@@ -71,28 +68,6 @@ public class SyncManager {
     private ChatterNameRetriever myNameRetriever = null;
     private ChatterNameRetriever chatterNameRetriever = null;
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m365x2680ba3d() {
-        if (f226xb1d54699 != null) {
-            return f226xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f226xb1d54699 = iArr;
-        return iArr;
-    }
-
     @SuppressLint({"SimpleDateFormat"})
     SyncManager(@Nonnull UserManager userManager) {
         this.userManager = userManager;
@@ -106,51 +81,43 @@ public class SyncManager {
         this.messagesQuery = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.Id.gt(null), ChatMessageDao.Properties.SyncedToGoogleDrive.eq(false)).orderAsc(ChatMessageDao.Properties.Id).limit(100).build();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onChatterNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m371x9b8293ab(ChatterNameRetriever chatterNameRetriever) {
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.3
+    public void onChatterNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onFlushChatterNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m372x9b8293ac(ChatterNameRetriever chatterNameRetriever) {
+    public void onFlushChatterNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         this.flushChatters.remove(chatterNameRetriever.chatterID);
         chatterNameRetriever.dispose();
         if (Strings.isNullOrEmpty(resolvedName) || !this.flushChatterNames.add(resolvedName)) {
             return;
         }
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMyNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m367x9b8293a7(ChatterNameRetriever chatterNameRetriever) {
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.4
+    public void onMyNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: processMessagesFlushed, reason: merged with bridge method [inline-methods] */
-    public void m376xcf5b7a09(ImmutableList<Long> immutableList) {
+    public void processMessagesFlushed(ImmutableList<Long> immutableList) {
         Iterator<Long> it = immutableList.iterator();
         while (it.hasNext()) {
             ChatMessage load = this.chatMessageDao.load(it.next());
@@ -171,12 +138,12 @@ public class SyncManager {
             if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose();
             }
-            this.chatterNameRetriever = new ChatterNameRetriever(fromDatabaseObject, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.1
+            this.chatterNameRetriever = new ChatterNameRetriever(fromDatabaseObject, new ChatterNameRetriever.OnChatterNameUpdated() {
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    SyncManager.this.m371x9b8293ab(chatterNameRetriever);
+                    SyncManager.this.onChatterNameRetrieved(chatterNameRetriever);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                @Override
                 public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                     $m$0(chatterNameRetriever);
                 }
@@ -185,27 +152,26 @@ public class SyncManager {
         return this.chatterNameRetriever.getResolvedName();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Removed duplicated region for block: B:31:0x014f  */
     /* renamed from: syncMoreMessages, reason: merged with bridge method [inline-methods] and merged with bridge method [inline-methods] and merged with bridge method [inline-methods] and merged with bridge method [inline-methods] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void m370x9b8293aa() {
+    public void syncMoreMessages() {
         boolean zSendMessage = false;
         long j;
         int i;
         CloudSyncServiceConnection cloudSyncServiceConnection;
-        Chatter chatterLoad;
+        Chatter chatter;
         if (!this.syncMessageSent.getAndSet(true)) {
             if (this.myNameRetriever == null) {
-                this.myNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.2
+                this.myNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), new ChatterNameRetriever.OnChatterNameUpdated() {
                     private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                        SyncManager.this.m367x9b8293a7(chatterNameRetriever);
+                        SyncManager.this.onMyNameRetrieved(chatterNameRetriever);
                     }
 
-                    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                    @Override
                     public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                         $m$0(chatterNameRetriever);
                     }
@@ -213,47 +179,53 @@ public class SyncManager {
             }
             String resolvedName = this.myNameRetriever.getResolvedName();
             if (resolvedName != null) {
-                Query<ChatMessage> queryForCurrentThread = this.messagesQuery.forCurrentThread();
-                queryForCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
-                LazyList<ChatMessage> lazyListListLazy = queryForCurrentThread.listLazy();
+                Query<ChatMessage> forCurrentThread = this.messagesQuery.forCurrentThread();
+                forCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
+                LazyList<ChatMessage> listLazy = forCurrentThread.listLazy();
                 ImmutableList.Builder builder = ImmutableList.builder();
-                int i2 = 0;
-                long j2 = 0;
-                Iterator<ChatMessage> it = lazyListListLazy.iterator();
-                while (true) {
-                    j = j2;
-                    i = i2;
-                    if (!it.hasNext()) {
-                        break;
-                    }
-                    ChatMessage next = it.next();
-                    SLChatEvent sLChatEventLoadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
-                    if (sLChatEventLoadFromDatabaseObject != null && (chatterLoad = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
-                        String strResolveChatterName = resolveChatterName(chatterLoad);
-                        if (strResolveChatterName == null) {
+                i = 0;
+                j = 0;
+                try {
+                    int i2 = 0;
+                    long j2 = 0;
+                    Iterator<ChatMessage> it = listLazy.iterator();
+                    while (true) {
+                        j = j2;
+                        i = i2;
+                        if (!it.hasNext()) {
                             break;
                         }
-                        LogChatMessage logChatMessage = new LogChatMessage(chatterLoad.getType(), chatterLoad.getUuid(), next.getId().longValue(), strResolveChatterName, "[" + this.dateFormat.format(next.getTimestamp()) + "] " + sLChatEventLoadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false));
-                        builder.add(logChatMessage);
-                        j = logChatMessage.messageID;
-                        i++;
-                        if (i >= 100) {
-                            break;
+                        ChatMessage next = it.next();
+                        SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
+                        if (fromDatabaseObject != null && (chatter = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
+                            String chatterName = resolveChatterName(chatter);
+                            if (chatterName == null) {
+                                break;
+                            }
+                            LogChatMessage logChatMessage = new LogChatMessage(chatter.getType(), chatter.getUuid(), next.getId().longValue(), chatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
+                            builder.add(logChatMessage);
+                            j = logChatMessage.messageID;
+                            i++;
+                            if (i >= 100) {
+                                break;
+                            }
                         }
+                        j2 = j;
+                        i2 = i;
                     }
-                    j2 = j;
-                    i2 = i;
+                } finally {
+                    // Beyond 3.4.2: release the cursor even if a message fails to load.
+                    listLazy.close();
                 }
-                lazyListListLazy.close();
                 if (i != 0) {
                     LogMessageBatch logMessageBatch = new LogMessageBatch(this.userManager.getUserID(), resolvedName, builder.build(), j);
                     CloudSyncServiceConnection cloudSyncServiceConnection2 = this.syncServiceConnection.get();
                     zSendMessage = cloudSyncServiceConnection2 != null ? cloudSyncServiceConnection2.sendMessage(MessageType.LogMessageBatch, logMessageBatch) : false;
                     if (!this.flushChatterNames.isEmpty() && (cloudSyncServiceConnection = this.syncServiceConnection.get()) != null) {
-                        Iterator<String> it2 = this.flushChatterNames.iterator();
-                        if (it2.hasNext()) {
-                            String next2 = it2.next();
-                            it2.remove();
+                        Iterator<String> iterator = this.flushChatterNames.iterator();
+                        if (iterator.hasNext()) {
+                            String next2 = iterator.next();
+                            iterator.remove();
                             cloudSyncServiceConnection.sendMessage(MessageType.LogFlushMessages, new LogFlushMessages(this.userManager.getUserID(), resolvedName, next2));
                         }
                     }
@@ -276,12 +248,12 @@ public class SyncManager {
 
     void flushChatter(final ChatterID chatterID) {
         if (this.syncingEnabled.get()) {
-            this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.8
+            this.dbExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     SyncManager.this.m374x1b9f5c8c((ChatterID) chatterID);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -292,21 +264,21 @@ public class SyncManager {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_10038, reason: not valid java name */
     /* synthetic */ void m373x1b9f54d0() {
         this.needsStopSyncing.set(true);
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_10254, reason: not valid java name */
     /* synthetic */ void m374x1b9f5c8c(ChatterID chatterID) {
-        switch (m365x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
-            case 3:
+        switch (chatterID.getChatterType()) {
+            case Group:
+            case User:
                 if (!this.flushChatters.containsKey(chatterID)) {
-                    new ChatterNameRetriever(chatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8
+                    new ChatterNameRetriever(chatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            SyncManager.this.m372x9b8293ac(chatterNameRetriever);
+                            SyncManager.this.onFlushChatterNameRetrieved(chatterNameRetriever);
                         }
 
-                        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+                        @Override
                         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                             $m$0(chatterNameRetriever);
                         }
@@ -314,9 +286,9 @@ public class SyncManager {
                     break;
                 }
                 break;
-            case 2:
+            case Local:
                 if (this.flushChatterNames.add(this.localChatName)) {
-                    m370x9b8293aa();
+                    syncMoreMessages();
                     break;
                 }
                 break;
@@ -324,19 +296,19 @@ public class SyncManager {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_9602, reason: not valid java name */
-    /* synthetic */ void m375xcf5b71e5(long j) {
-        this.lastConfirmedMessageID = j;
+    /* synthetic */ void m375xcf5b71e5(long lastConfirmedMessageID) {
+        this.lastConfirmedMessageID = lastConfirmedMessageID;
         this.syncMessageSent.set(false);
-        m370x9b8293aa();
+        syncMoreMessages();
     }
 
     public void onMessagesFlushed(final ImmutableList<Long> immutableList) {
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.9
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m376xcf5b7a09((ImmutableList) immutableList);
+                SyncManager.this.processMessagesFlushed((ImmutableList) immutableList);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -344,12 +316,12 @@ public class SyncManager {
     }
 
     public void onMessagesWritten(final long j) {
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.10
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SyncManager.this.m375xcf5b71e5(j);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -360,12 +332,12 @@ public class SyncManager {
         this.syncServiceConnection.set(cloudSyncServiceConnection);
         this.syncingEnabled.set(true);
         this.needsStopSyncing.set(false);
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.5
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m370x9b8293aa();
+                SyncManager.this.syncMoreMessages();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -374,12 +346,12 @@ public class SyncManager {
 
     public void stopSyncing() {
         Debug.Printf("SyncManager: requested to stop syncing", new Object[0]);
-        this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.6
+        this.dbExecutor.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SyncManager.this.m373x1b9f54d0();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -388,12 +360,12 @@ public class SyncManager {
 
     void syncNewMessages() {
         if (this.syncingEnabled.get()) {
-            this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.7
+            this.dbExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
-                    SyncManager.this.m370x9b8293aa();
+                    SyncManager.this.syncMoreMessages();
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }

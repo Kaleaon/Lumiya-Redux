@@ -1,30 +1,40 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * This is the new improved way to remove inventory items.  It is
+ * currently only supported in viewer->userserver->dataserver
+ * messages typically initiated by an empty trash method.
+ *
+ * <p>Template: {@code RemoveInventoryObjects Low 284 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processRemoveInventoryObjects()} in indra/newview/llinventorymodel.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class RemoveInventoryObjects extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
     public ArrayList<ItemData> ItemData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
+        public UUID FolderID; // LLUUID
     }
 
+    /** Block ItemData, Variable. */
     public static class ItemData {
-        public UUID ItemID;
+        public UUID ItemID; // LLUUID
     }
 
     public RemoveInventoryObjects() {
@@ -32,21 +42,22 @@ public class RemoveInventoryObjects extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.FolderData_Fields.size() * 16) + 37 + 1 + (this.ItemData_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveInventoryObjects(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveInventoryObjects(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.FS);
+        // Message number: Low 284 (RemoveInventoryObjects).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x1C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.FolderData_Fields.size());
@@ -55,24 +66,24 @@ public class RemoveInventoryObjects extends SLMessage {
             packUUID(byteBuffer, ((FolderData) it.next()).FolderID);
         }
         byteBuffer.put((byte) this.ItemData_Fields.size());
-        Iterator<?> it2 = this.ItemData_Fields.iterator();
-        while (it2.hasNext()) {
-            packUUID(byteBuffer, ((ItemData) it2.next()).ItemID);
+        Iterator<?> iterator = this.ItemData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packUUID(byteBuffer, ((ItemData) iterator.next()).ItemID);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             this.FolderData_Fields.add(folderData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             ItemData itemData = new ItemData();
             itemData.ItemID = unpackUUID(byteBuffer);
             this.ItemData_Fields.add(itemData);

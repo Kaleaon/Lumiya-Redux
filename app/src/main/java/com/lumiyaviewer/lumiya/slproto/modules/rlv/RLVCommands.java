@@ -27,7 +27,6 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdUnsit;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdVersion;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdViewNotecard;
 
-/* loaded from: classes.dex */
 public enum RLVCommands {
     version(RLVCmdVersion.class),
     versionnew(RLVCmdVersion.class),

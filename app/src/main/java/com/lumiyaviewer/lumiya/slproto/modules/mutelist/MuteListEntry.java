@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 public class MuteListEntry {
     public static final int flagAll = 15;
     public static final int flagObjectSounds = 8;
@@ -17,10 +16,10 @@ public class MuteListEntry {
     public final MuteType type;
     public final UUID uuid;
 
-    public MuteListEntry(MuteType muteType, UUID uuid, String str, int i) {
+    public MuteListEntry(MuteType muteType, UUID uuid, String name, int flags) {
         this.type = muteType;
         this.uuid = UUIDPool.getUUID(uuid);
-        this.name = str;
-        this.flags = i;
+        this.name = name;
+        this.flags = flags;
     }
 }

@@ -16,7 +16,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyType> {
     private final Executor cacheExecutor;
     private final CachedResponseRepositoryAdapter cachedResponseRepository;
@@ -30,14 +29,14 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
         this.cachedResponseRepository = new CachedResponseRepositoryAdapter(daoSession.getCachedResponseDao(), roomDb != null ? roomDb.cachedResponseDao() : null);
         this.keyPrefix = str;
         this.pool.setCacheInvalidateHandler(this::m277xf8190129, executor);
-        this.requestHandler = new RateLimitRequestHandler<>(new RequestProcessor<KeyType, MessageType, MessageType>(this.pool, executor) { // from class: com.lumiyaviewer.lumiya.slproto.users.ResponseCacher.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        this.requestHandler = new RateLimitRequestHandler<>(new RequestProcessor<KeyType, MessageType, MessageType>(this.pool, executor) {
+            @Override
             protected boolean isRequestComplete(@Nonnull KeyType keytype, MessageType messagetype) {
                 CachedResponse cached = ResponseCacher.this.cachedResponseRepository.load(ResponseCacher.this.getKeyString(keytype));
                 return cached != null && !cached.getMustRevalidate();
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             @Nullable
             protected MessageType processRequest(@Nonnull KeyType keytype) {
                 CachedResponse load = ResponseCacher.this.cachedResponseRepository.load(ResponseCacher.this.getKeyString(keytype));
@@ -49,7 +48,7 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
                 return messagetype;
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             protected MessageType processResult(@Nonnull KeyType keytype, MessageType messagetype) {
                 Debug.Printf("%s: saving cached data for key %s", str, keytype.toString());
                 if (messagetype != null) {
@@ -60,7 +59,6 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public String getKeyString(@Nonnull KeyType keytype) {
         return this.keyPrefix + ":" + keytype.toString();
     }
@@ -83,9 +81,9 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
         }
     }
 
-    protected abstract MessageType loadCached(byte[] bArr);
+    protected abstract MessageType loadCached(byte[] bytes);
 
-    @Override // com.lumiyaviewer.lumiya.react.Refreshable
+    @Override
     public void requestUpdate(KeyType keytype) {
         this.pool.requestUpdate(keytype);
     }

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.react;
 
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public interface ResultHandler<K, T> {
     void onResultData(@Nonnull K k, T t);
 

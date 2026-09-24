@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, RequestQueue<K, T>, RequestSource<K, T>, ResultHandler<K, T> {
 
     @Nonnull
@@ -48,12 +47,12 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
                     }
                 }
                 if (this.requestsInFlight.size() < this.maxInFlight) {
-                    Iterator<K> it2 = this.pendingRequests.iterator();
-                    if (it2.hasNext()) {
-                        K next2 = it2.next();
-                        it2.remove();
-                        this.requestsInFlight.put(next2, Long.valueOf(currentTimeMillis));
-                        this.requestHandler.onRequest(next2);
+                    Iterator<K> iterator = this.pendingRequests.iterator();
+                    if (iterator.hasNext()) {
+                        K k = iterator.next();
+                        iterator.remove();
+                        this.requestsInFlight.put(k, Long.valueOf(currentTimeMillis));
+                        this.requestHandler.onRequest(k);
                     }
                 }
             }
@@ -63,7 +62,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public ResultHandler<K, T> attachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         synchronized (this.lock) {
             if (this.requestHandler != requestHandler) {
@@ -88,7 +87,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         return this;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public void detachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         synchronized (this.lock) {
             if (this.requestHandler == requestHandler) {
@@ -98,7 +97,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestQueue
+    @Override
     @Nullable
     public K getNextRequest() {
         K k = null;
@@ -113,13 +112,13 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         return k;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestQueue
+    @Override
     @Nonnull
     public ResultHandler<K, T> getResultHandler() {
         return this;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull K k) {
         Debug.Printf("UserPic: RateLimitHandler: new for %s", k.toString());
         synchronized (this.lock) {
@@ -128,7 +127,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         runPendingRequests();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull K k) {
         Debug.Printf("UserPic: RateLimitHandler: cancelled for %s", k.toString());
         synchronized (this.lock) {
@@ -140,7 +139,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         runPendingRequests();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultData(@Nonnull K k, T t) {
         synchronized (this.lock) {
             this.pendingRequests.remove(k);
@@ -150,7 +149,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         runPendingRequests();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultError(@Nonnull K k, Throwable th) {
         synchronized (this.lock) {
             this.pendingRequests.remove(k);
@@ -160,7 +159,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         runPendingRequests();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestQueue
+    @Override
     public void returnRequest(@Nonnull K k) {
         synchronized (this.lock) {
             if (this.requestsInFlight.remove(k) != null) {
@@ -170,7 +169,7 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
         runPendingRequests();
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestQueue
+    @Override
     @Nullable
     public K waitForRequest() throws InterruptedException {
         synchronized (this.lock) {

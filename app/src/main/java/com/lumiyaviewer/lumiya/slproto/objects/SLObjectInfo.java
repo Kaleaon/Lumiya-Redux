@@ -1,12 +1,8 @@
 package com.lumiyaviewer.lumiya.slproto.objects;
 
 import android.opengl.Matrix;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.render.DrawableObject;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.MatrixStack;
@@ -42,7 +38,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLObjectInfo implements Identifiable<UUID> {
     private static final int AGENT_ATTACH_MASK = 240;
     private static final int AGENT_ATTACH_OFFSET = 4;
@@ -155,28 +150,28 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         return (((i & 255) & AGENT_ATTACH_MASK) >> 4) | (((i & 255) & (-241)) << 4);
     }
 
-    private float[] calculateWorldMatrix(float[] fArr) {
-        LLQuaternion lLQuaternion = this.rotation;
-        if (lLQuaternion == null) {
+    private float[] calculateWorldMatrix(float[] floats3) {
+        LLQuaternion rotation = this.rotation;
+        if (rotation == null) {
             return null;
         }
-        float[] fArr2 = new float[16];
-        float[] fArr3 = new float[16];
-        this.objectCoords.MatrixTranslate(fArr3, 0, fArr, 0, 0);
-        Matrix.multiplyMM(fArr2, 0, fArr3, 0, lLQuaternion.getInverseMatrix(), 0);
-        return fArr2;
+        float[] floats = new float[16];
+        float[] floats2 = new float[16];
+        this.objectCoords.MatrixTranslate(floats2, 0, floats3, 0, 0);
+        Matrix.multiplyMM(floats, 0, floats2, 0, rotation.getInverseMatrix(), 0);
+        return floats;
     }
 
     public static SLObjectInfo create(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
-        SLObjectPrimInfo sLObjectPrimInfo = new SLObjectPrimInfo();
-        sLObjectPrimInfo.ApplyObjectUpdate(objectData);
-        return sLObjectPrimInfo;
+        SLObjectPrimInfo objectPrimInfo = new SLObjectPrimInfo();
+        objectPrimInfo.ApplyObjectUpdate(objectData);
+        return objectPrimInfo;
     }
 
     public static SLObjectInfo create(UUID uuid, ObjectUpdate.ObjectData objectData, UUID uuid2) {
-        SLObjectInfo sLObjectAvatarInfo = objectData.PCode == 47 ? new SLObjectAvatarInfo(uuid, UUIDPool.getUUID(objectData.FullID), uuid2.equals(objectData.FullID)) : new SLObjectPrimInfo();
-        sLObjectAvatarInfo.ApplyObjectUpdate(objectData);
-        return sLObjectAvatarInfo;
+        SLObjectInfo objectInfo = objectData.PCode == 47 ? new SLObjectAvatarInfo(uuid, UUIDPool.getUUID(objectData.FullID), uuid2.equals(objectData.FullID)) : new SLObjectPrimInfo();
+        objectInfo.ApplyObjectUpdate(objectData);
+        return objectInfo;
     }
 
     @Nullable
@@ -202,33 +197,33 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
     }
 
     private void parseNameValuePairs(String str) {
-        for (String str2 : str.split("\n")) {
-            if (str2.startsWith("AttachItemID ")) {
+        for (String part : str.split("\n")) {
+            if (part.startsWith("AttachItemID ")) {
                 int i = 0;
                 while (i < 4) {
-                    int indexOf = str2.indexOf(32);
+                    int indexOf = part.indexOf(32);
                     if (indexOf >= 0) {
-                        str2 = str2.substring(indexOf + 1);
+                        part = part.substring(indexOf + 1);
                     }
                     i++;
-                    str2 = str2.trim();
+                    part = part.trim();
                 }
                 try {
-                    this.attachedToUUID = UUIDPool.getUUID(UUID.fromString(str2));
+                    this.attachedToUUID = UUIDPool.getUUID(UUID.fromString(part));
                 } catch (Exception e) {
                     this.attachedToUUID = null;
                 }
-            } else if (str2.startsWith("DisplayName ")) {
+            } else if (part.startsWith("DisplayName ")) {
                 int i2 = 0;
                 while (i2 < 4) {
-                    int indexOf2 = str2.indexOf(32);
-                    if (indexOf2 >= 0) {
-                        str2 = str2.substring(indexOf2 + 1);
+                    int index = part.indexOf(32);
+                    if (index >= 0) {
+                        part = part.substring(index + 1);
                     }
                     i2++;
-                    str2 = str2.trim();
+                    part = part.trim();
                 }
-                this.name = str2;
+                this.name = part;
                 this.nameKnown = true;
             }
         }
@@ -258,9 +253,9 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
                 it.next().updateWorldMatrix(true);
             }
         } else {
-            Iterator<SLObjectInfo> it2 = this.treeNode.iterator();
-            while (it2.hasNext()) {
-                it2.next().updateSpatialIndex(z);
+            Iterator<SLObjectInfo> iterator = this.treeNode.iterator();
+            while (iterator.hasNext()) {
+                iterator.next().updateSpatialIndex(z);
             }
         }
     }
@@ -288,7 +283,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         }
         this.objectCoords.set(1, objectData.Scale);
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(objectData.Text);
-        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & UnsignedBytes.MAX_VALUE) | ((objectData.TextColor[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((objectData.TextColor[2] << 16) & 16711680) | ((objectData.TextColor[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK) : 0));
+        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & 0xFF) | ((objectData.TextColor[1] << 8) & 0xFF00) | ((objectData.TextColor[2] << 16) & 0xFF0000) | ((objectData.TextColor[3] << 24) & 0xFF000000) : 0));
         PrimVolumeParams createFromObjectUpdate = PrimVolumeParams.createFromObjectUpdate(objectData);
         if (createFromObjectUpdate != null && objectData.ExtraParams != null) {
             createFromObjectUpdate.unpackExtraParams(ByteBuffer.wrap(objectData.ExtraParams).order(ByteOrder.LITTLE_ENDIAN));
@@ -316,101 +311,101 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         To view partially-correct add '--show-bad-code' argument
     */
     public void ApplyObjectUpdate(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
-        SLTextureEntry sLTextureEntryCreate;
+        SLTextureEntry textureEntry;
         String str;
         this.UpdateFlags = objectData.UpdateFlags;
-        ByteBuffer byteBufferWrap = ByteBuffer.wrap(objectData.Data);
-        byteBufferWrap.order(ByteOrder.BIG_ENDIAN);
-        this.uuid = UUIDPool.setUUID(this.uuid, byteBufferWrap.getLong(), byteBufferWrap.getLong());
-        byteBufferWrap.order(ByteOrder.LITTLE_ENDIAN);
-        this.localID = byteBufferWrap.getInt();
-        byte b = byteBufferWrap.get();
+        ByteBuffer byteBuffer = ByteBuffer.wrap(objectData.Data);
+        byteBuffer.order(ByteOrder.BIG_ENDIAN);
+        this.uuid = UUIDPool.setUUID(this.uuid, byteBuffer.getLong(), byteBuffer.getLong());
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        this.localID = byteBuffer.getInt();
+        byte b = byteBuffer.get();
         if (b != 9) {
             throw new UnsupportedObjectTypeException(b);
         }
-        this.attachmentID = attachmentIDFromState(byteBufferWrap.get());
-        byteBufferWrap.position(byteBufferWrap.position() + 4 + 1 + 1);
-        LLVector3 floatVec = LLVector3.parseFloatVec(byteBufferWrap);
-        LLVector3 floatVec2 = LLVector3.parseFloatVec(byteBufferWrap);
+        this.attachmentID = attachmentIDFromState(byteBuffer.get());
+        byteBuffer.position(byteBuffer.position() + 4 + 1 + 1);
+        LLVector3 floatVec = LLVector3.parseFloatVec(byteBuffer);
+        LLVector3 floatVec2 = LLVector3.parseFloatVec(byteBuffer);
         this.objectCoords.set(1, floatVec);
         this.objectCoords.set(0, floatVec2);
-        this.rotation = LLQuaternion.parseFloatVec3(byteBufferWrap);
-        int i = byteBufferWrap.getInt();
-        byteBufferWrap.order(ByteOrder.BIG_ENDIAN);
-        long j = byteBufferWrap.getLong();
-        long j2 = byteBufferWrap.getLong();
+        this.rotation = LLQuaternion.parseFloatVec3(byteBuffer);
+        int i = byteBuffer.getInt();
+        byteBuffer.order(ByteOrder.BIG_ENDIAN);
+        long j = byteBuffer.getLong();
+        long j2 = byteBuffer.getLong();
         if (this.ownerUUID == null || (j != 0 && j2 != 0)) {
             this.ownerUUID = UUIDPool.setUUID(this.ownerUUID, j, j2);
         }
-        byteBufferWrap.order(ByteOrder.LITTLE_ENDIAN);
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         if ((i & 128) != 0) {
-            byteBufferWrap.position(byteBufferWrap.position() + 12);
+            byteBuffer.position(byteBuffer.position() + 12);
         }
         if ((i & 32) != 0) {
-            this.parentID = byteBufferWrap.getInt();
+            this.parentID = byteBuffer.getInt();
         }
         if ((i & 2) != 0) {
-            byteBufferWrap.position(byteBufferWrap.position() + 1);
+            byteBuffer.position(byteBuffer.position() + 1);
         } else if ((i & 1) != 0) {
-            byteBufferWrap.position(byteBufferWrap.get() + byteBufferWrap.position());
+            byteBuffer.position(byteBuffer.get() + byteBuffer.position());
         }
         if ((i & 4) != 0) {
-            int iPosition = byteBufferWrap.position();
+            int iPosition = byteBuffer.position();
             int i2 = 0;
-            while (iPosition + i2 < byteBufferWrap.capacity() && byteBufferWrap.get(iPosition + i2) != 0) {
+            while (iPosition + i2 < byteBuffer.capacity() && byteBuffer.get(iPosition + i2) != 0) {
                 i2++;
             }
             if (i2 != 0) {
-                byte[] bArr = new byte[i2];
-                byteBufferWrap.get(bArr, 0, i2);
+                byte[] bytes = new byte[i2];
+                byteBuffer.get(bytes, 0, i2);
                 try {
-                    str = new String(bArr, "ISO-8859-1");
+                    str = new String(bytes, "ISO-8859-1");
                 } catch (UnsupportedEncodingException e) {
                     str = null;
                 }
             } else {
                 str = null;
             }
-            byteBufferWrap.position(i2 + iPosition + 1);
-            applyHoverText(Strings.isNullOrEmpty(str) ? null : HoverText.create(str, byteBufferWrap.getInt()));
+            byteBuffer.position(i2 + iPosition + 1);
+            applyHoverText(Strings.isNullOrEmpty(str) ? null : HoverText.create(str, byteBuffer.getInt()));
         }
         if ((i & 512) != 0) {
-            while (byteBufferWrap.get() != 0) {
+            while (byteBuffer.get() != 0) {
             }
         }
         if ((i & 8) != 0) {
-            byteBufferWrap.position(byteBufferWrap.position() + 86);
+            byteBuffer.position(byteBuffer.position() + 86);
         }
-        int iPosition2 = byteBufferWrap.position();
-        int i3 = byteBufferWrap.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
-            byteBufferWrap.getShort();
-            byteBufferWrap.position(byteBufferWrap.getInt() + byteBufferWrap.position());
+        int iPosition2 = byteBuffer.position();
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
+            byteBuffer.getShort();
+            byteBuffer.position(byteBuffer.getInt() + byteBuffer.position());
         }
         if ((i & 16) != 0) {
-            byteBufferWrap.position(byteBufferWrap.position() + 16);
-            byteBufferWrap.position(byteBufferWrap.position() + 4 + 1 + 4);
+            byteBuffer.position(byteBuffer.position() + 16);
+            byteBuffer.position(byteBuffer.position() + 4 + 1 + 4);
         }
         if ((i & 256) != 0) {
-            while (byteBufferWrap.get() != 0) {
+            while (byteBuffer.get() != 0) {
             }
         }
-        PrimVolumeParams primVolumeParamsCreateFromPackedData = PrimVolumeParams.createFromPackedData(byteBufferWrap);
+        PrimVolumeParams fromPackedData = PrimVolumeParams.createFromPackedData(byteBuffer);
         try {
-            sLTextureEntryCreate = SLTextureEntry.create(byteBufferWrap, byteBufferWrap.getInt());
+            textureEntry = SLTextureEntry.create(byteBuffer, byteBuffer.getInt());
         } catch (Exception e2) {
-            sLTextureEntryCreate = null;
+            textureEntry = null;
         }
         try {
-            onTexturesUpdate(sLTextureEntryCreate);
+            onTexturesUpdate(textureEntry);
         } catch (Exception e3) {
             Debug.Log("Failed to retrieve textures in compressed update");
         }
-        if (primVolumeParamsCreateFromPackedData != null) {
-            byteBufferWrap.position(iPosition2);
-            primVolumeParamsCreateFromPackedData.unpackExtraParams(byteBufferWrap);
+        if (fromPackedData != null) {
+            byteBuffer.position(iPosition2);
+            fromPackedData.unpackExtraParams(byteBuffer);
         }
-        PrimDrawParams primDrawParams = PrimParamsPool.get(new PrimDrawParams(primVolumeParamsCreateFromPackedData != null ? PrimParamsPool.get(primVolumeParamsCreateFromPackedData) : null, sLTextureEntryCreate));
+        PrimDrawParams primDrawParams = PrimParamsPool.get(new PrimDrawParams(fromPackedData != null ? PrimParamsPool.get(fromPackedData) : null, textureEntry));
         if (!Objects.equal(this.primDrawParams, primDrawParams)) {
             this.primDrawParams = primDrawParams;
             DrawableObject drawableObject = getDrawableObject();
@@ -437,9 +432,9 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         this.rotation = LLQuaternion.parseU16Vec3(wrap, -1.0f, 1.0f);
         wrap.position(wrap.position() + 6);
         if (objectData.TextureEntry.length > 4) {
-            ByteBuffer wrap2 = ByteBuffer.wrap(objectData.TextureEntry);
-            wrap2.position(4);
-            SLTextureEntry create = SLTextureEntry.create(wrap2, wrap2.remaining());
+            ByteBuffer byteBuffer = ByteBuffer.wrap(objectData.TextureEntry);
+            byteBuffer.position(4);
+            SLTextureEntry create = SLTextureEntry.create(byteBuffer, byteBuffer.remaining());
             onTexturesUpdate(create);
             PrimDrawParams primDrawParams = this.primDrawParams;
             if (primDrawParams != null && !create.equals(primDrawParams.getTextures())) {
@@ -456,10 +451,10 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         updateSpatialIndex(false);
     }
 
-    public synchronized void addChild(SLObjectInfo sLObjectInfo) {
+    public synchronized void addChild(SLObjectInfo objectInfo) {
         SLObjectInfo attachedTo;
-        this.treeNode.addChild(sLObjectInfo.treeNode);
-        if (sLObjectInfo.isAttachment && (attachedTo = sLObjectInfo.getAttachedTo()) != null) {
+        this.treeNode.addChild(objectInfo.treeNode);
+        if (objectInfo.isAttachment && (attachedTo = objectInfo.getAttachedTo()) != null) {
             attachedTo.updateAttachments();
         }
     }
@@ -475,15 +470,15 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
 
     public LLVector3 getAbsolutePosition() {
         SLObjectInfo parentObject = getParentObject();
-        LLVector3 lLVector3 = this.objectCoords.get(0);
+        LLVector3 vector3 = this.objectCoords.get(0);
         if (parentObject == null) {
-            return lLVector3;
+            return vector3;
         }
         while (parentObject != null) {
-            parentObject.objectCoords.addToVector(0, lLVector3);
+            parentObject.objectCoords.addToVector(0, vector3);
             parentObject = parentObject.getParentObject();
         }
-        return lLVector3;
+        return vector3;
     }
 
     public SLObjectInfo getAttachedTo() {
@@ -504,8 +499,8 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         DrawListObjectEntry drawListObjectEntry = weakReference != null ? weakReference.get() : null;
         if (drawListObjectEntry == null) {
             synchronized (this) {
-                WeakReference<DrawListObjectEntry> weakReference2 = this.drawListEntry;
-                drawListObjectEntry = weakReference2 != null ? weakReference2.get() : null;
+                WeakReference<DrawListObjectEntry> drawListEntry = this.drawListEntry;
+                drawListObjectEntry = drawListEntry != null ? drawListEntry.get() : null;
                 if (drawListObjectEntry == null) {
                     drawListObjectEntry = createDrawListEntry();
                     this.drawListEntry = new WeakReference<>(drawListObjectEntry);
@@ -529,7 +524,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         return this.hoverText;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.Identifiable
+    @Override
     public UUID getId() {
         return this.uuid;
     }
@@ -542,45 +537,45 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         return this.objectCoords;
     }
 
-    public void getObjectExtents(MatrixStack matrixStack, boolean z, LLVector3 lLVector3, LLVector3 lLVector32) {
+    public void getObjectExtents(MatrixStack matrixStack, boolean z, LLVector3 vector3, LLVector3 vector33) {
         int elementOffset = this.objectCoords.getElementOffset(0);
         int elementOffset2 = this.objectCoords.getElementOffset(1);
         float[] data = this.objectCoords.getData();
         matrixStack.glPushMatrix();
         matrixStack.glTranslatef(data[elementOffset + 0], data[elementOffset + 1], data[elementOffset + 2]);
         matrixStack.glMultMatrixf(this.rotation.getInverseMatrix(), 0);
-        float[] fArr = {(-data[elementOffset2 + 0]) / 2.0f, (-data[elementOffset2 + 1]) / 2.0f, (-data[elementOffset2 + 2]) / 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-        Matrix.multiplyMV(fArr, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), fArr, 0);
+        float[] floats = {(-data[elementOffset2 + 0]) / 2.0f, (-data[elementOffset2 + 1]) / 2.0f, (-data[elementOffset2 + 2]) / 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+        Matrix.multiplyMV(floats, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), floats, 0);
         if (z) {
-            lLVector3.x = fArr[4];
-            lLVector3.y = fArr[5];
-            lLVector3.z = fArr[6];
-            lLVector32.x = fArr[4];
-            lLVector32.y = fArr[5];
-            lLVector32.z = fArr[6];
+            vector3.x = floats[4];
+            vector3.y = floats[5];
+            vector3.z = floats[6];
+            vector33.x = floats[4];
+            vector33.y = floats[5];
+            vector33.z = floats[6];
         } else {
-            lLVector3.x = Math.min(lLVector3.x, fArr[4]);
-            lLVector3.y = Math.min(lLVector3.y, fArr[5]);
-            lLVector3.z = Math.min(lLVector3.z, fArr[6]);
-            lLVector32.x = Math.max(lLVector32.x, fArr[4]);
-            lLVector32.y = Math.max(lLVector32.y, fArr[5]);
-            lLVector32.z = Math.max(lLVector32.z, fArr[6]);
+            vector3.x = Math.min(vector3.x, floats[4]);
+            vector3.y = Math.min(vector3.y, floats[5]);
+            vector3.z = Math.min(vector3.z, floats[6]);
+            vector33.x = Math.max(vector33.x, floats[4]);
+            vector33.y = Math.max(vector33.y, floats[5]);
+            vector33.z = Math.max(vector33.z, floats[6]);
         }
-        fArr[0] = data[elementOffset2 + 0] / 2.0f;
-        fArr[1] = data[elementOffset2 + 1] / 2.0f;
-        fArr[2] = data[elementOffset2 + 2] / 2.0f;
-        fArr[3] = 1.0f;
-        Matrix.multiplyMV(fArr, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), fArr, 0);
-        lLVector3.x = Math.min(lLVector3.x, fArr[4]);
-        lLVector3.y = Math.min(lLVector3.y, fArr[5]);
-        lLVector3.z = Math.min(lLVector3.z, fArr[6]);
-        lLVector32.x = Math.max(lLVector32.x, fArr[4]);
-        lLVector32.y = Math.max(lLVector32.y, fArr[5]);
-        lLVector32.z = Math.max(lLVector32.z, fArr[6]);
+        floats[0] = data[elementOffset2 + 0] / 2.0f;
+        floats[1] = data[elementOffset2 + 1] / 2.0f;
+        floats[2] = data[elementOffset2 + 2] / 2.0f;
+        floats[3] = 1.0f;
+        Matrix.multiplyMV(floats, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), floats, 0);
+        vector3.x = Math.min(vector3.x, floats[4]);
+        vector3.y = Math.min(vector3.y, floats[5]);
+        vector3.z = Math.min(vector3.z, floats[6]);
+        vector33.x = Math.max(vector33.x, floats[4]);
+        vector33.y = Math.max(vector33.y, floats[5]);
+        vector33.z = Math.max(vector33.z, floats[6]);
         try {
             Iterator<SLObjectInfo> it = this.treeNode.iterator();
             while (it.hasNext()) {
-                it.next().getObjectExtents(matrixStack, false, lLVector3, lLVector32);
+                it.next().getObjectExtents(matrixStack, false, vector3, vector33);
             }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -637,8 +632,8 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
 
     public synchronized boolean isAvatarSittingOn() {
         try {
-            for (SLObjectInfo sLObjectInfo : this.treeNode) {
-                if ((sLObjectInfo instanceof SLObjectAvatarInfo) && ((SLObjectAvatarInfo) sLObjectInfo).isMyAvatar()) {
+            for (SLObjectInfo objectInfo : this.treeNode) {
+                if ((objectInfo instanceof SLObjectAvatarInfo) && ((SLObjectAvatarInfo) objectInfo).isMyAvatar()) {
                     return true;
                 }
             }
@@ -664,15 +659,15 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         return (this.UpdateFlags & 128) != 0;
     }
 
-    protected void onTexturesUpdate(SLTextureEntry sLTextureEntry) {
+    protected void onTexturesUpdate(SLTextureEntry textureEntry) {
     }
 
-    public synchronized void removeChild(SLObjectInfo sLObjectInfo) {
+    public synchronized void removeChild(SLObjectInfo objectInfo) {
         SLObjectInfo attachedTo;
-        if (sLObjectInfo.isAttachment && (attachedTo = sLObjectInfo.getAttachedTo()) != null) {
+        if (objectInfo.isAttachment && (attachedTo = objectInfo.getAttachedTo()) != null) {
             attachedTo.updateAttachments();
         }
-        this.treeNode.removeChild(sLObjectInfo.treeNode);
+        this.treeNode.removeChild(objectInfo.treeNode);
     }
 
     public void removeFromSpatialIndex() {
@@ -689,12 +684,12 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         }
     }
 
-    public synchronized void setIsAttachmentAll(boolean z) {
-        this.isAttachment = z;
+    public synchronized void setIsAttachmentAll(boolean isAttachment) {
+        this.isAttachment = isAttachment;
         try {
-            for (SLObjectInfo sLObjectInfo : this.treeNode) {
-                if (!sLObjectInfo.isAvatar()) {
-                    sLObjectInfo.setIsAttachmentAll(z);
+            for (SLObjectInfo objectInfo : this.treeNode) {
+                if (!objectInfo.isAvatar()) {
+                    objectInfo.setIsAttachmentAll(isAttachment);
                 }
             }
         } catch (NoSuchElementException e) {
@@ -716,8 +711,8 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         if (matrix != null) {
             this.objRadius = this.objectCoords.getMaxComponent(1) / 2.0f;
             float[] calculateWorldMatrix = calculateWorldMatrix(matrix);
-            float[] fArr = this.worldMatrix;
-            if (fArr == null || !Arrays.equals(calculateWorldMatrix, fArr)) {
+            float[] worldMatrix = this.worldMatrix;
+            if (worldMatrix == null || !Arrays.equals(calculateWorldMatrix, worldMatrix)) {
                 this.worldMatrix = calculateWorldMatrix;
                 this.objectCoords.set(3, this.worldMatrix[12], this.worldMatrix[13], this.worldMatrix[14]);
                 if (z) {

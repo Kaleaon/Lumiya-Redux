@@ -1,23 +1,31 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GUIDed Sound messages
+ * SoundTrigger - Sent by simulator to viewer to trigger sound outside current region
+ *
+ * <p>Template: {@code SoundTrigger High 29 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code null_message_callback()} in indra/llmessage/message.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class SoundTrigger extends SLMessage {
     public SoundData SoundData_Field;
 
+    /** Block SoundData, Single. */
     public static class SoundData {
-        public float Gain;
-        public long Handle;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public UUID ParentID;
-        public LLVector3 Position;
-        public UUID SoundID;
+        public float Gain; // F32
+        public long Handle; // U64 - region handle
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public UUID ParentID; // LLUUID - null if this object is the parent
+        public LLVector3 Position; // LLVector3 - region local
+        public UUID SoundID; // LLUUID
     }
 
     public SoundTrigger() {
@@ -25,19 +33,20 @@ public class SoundTrigger extends SLMessage {
         this.SoundData_Field = new SoundData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 89;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSoundTrigger(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSoundTrigger(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.GS);
+        // Message number: High 29 (SoundTrigger).
+        byteBuffer.put((byte) 0x1D);
         packUUID(byteBuffer, this.SoundData_Field.SoundID);
         packUUID(byteBuffer, this.SoundData_Field.OwnerID);
         packUUID(byteBuffer, this.SoundData_Field.ObjectID);
@@ -47,7 +56,7 @@ public class SoundTrigger extends SLMessage {
         packFloat(byteBuffer, this.SoundData_Field.Gain);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SoundData_Field.SoundID = unpackUUID(byteBuffer);
         this.SoundData_Field.OwnerID = unpackUUID(byteBuffer);

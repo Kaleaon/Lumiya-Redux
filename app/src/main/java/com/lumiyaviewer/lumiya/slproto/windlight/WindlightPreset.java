@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import java.io.IOException;
 import java.io.InputStream;
 
-/* loaded from: classes.dex */
 public class WindlightPreset {
     private static final float WINDLIGHT_GAMMA = 2.2f;
     public float[] ambient;
@@ -65,31 +64,31 @@ public class WindlightPreset {
         loadFromAssetFile(str);
     }
 
-    private void darkenUnderWater(float[] fArr, float[] fArr2) {
-        for (int i = 0; i < fArr2.length; i++) {
+    private void darkenUnderWater(float[] floats, float[] floats2) {
+        for (int i = 0; i < floats2.length; i++) {
             if (i == 2 || i == 3) {
-                fArr[i] = fArr2[i];
+                floats[i] = floats2[i];
             } else {
-                fArr[i] = fArr2[i] / 2.0f;
+                floats[i] = floats2[i] / 2.0f;
             }
         }
     }
 
-    private void gammaFloatArray(float[] fArr, float f, float f2) {
-        for (int i = 0; i < fArr.length; i++) {
-            fArr[i] = ((float) Math.pow(fArr[i], 1.0f / f)) * f2;
+    private void gammaFloatArray(float[] floats, float f, float f2) {
+        for (int i = 0; i < floats.length; i++) {
+            floats[i] = ((float) Math.pow(floats[i], 1.0f / f)) * f2;
         }
     }
 
-    private void getFloatArray(LLSDNode lLSDNode, float[] fArr, float f) throws LLSDException {
-        for (int i = 0; i < fArr.length; i++) {
-            fArr[i] = ((float) lLSDNode.byIndex(i).asDouble()) / f;
+    private void getFloatArray(LLSDNode lsdNode, float[] floats, float f) throws LLSDException {
+        for (int i = 0; i < floats.length; i++) {
+            floats[i] = ((float) lsdNode.byIndex(i).asDouble()) / f;
         }
     }
 
-    private static final void lerpFloatArray(float[] fArr, float[] fArr2, float[] fArr3, float f) {
-        for (int i = 0; i < fArr.length && i < fArr2.length && i < fArr3.length; i++) {
-            fArr[i] = (fArr2[i] * (1.0f - f)) + (fArr3[i] * f);
+    private static final void lerpFloatArray(float[] floats, float[] floats2, float[] floats3, float f) {
+        for (int i = 0; i < floats.length && i < floats2.length && i < floats3.length; i++) {
+            floats[i] = (floats2[i] * (1.0f - f)) + (floats3[i] * f);
         }
     }
 

@@ -4,15 +4,14 @@ import com.google.common.base.Optional;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotificationInfo_ObjectPopupNotification extends UnreadNotificationInfo.ObjectPopupNotification {
     private final int freshObjectPopupsCount;
     private final Optional<UnreadNotificationInfo.ObjectPopupMessage> lastObjectPopup;
     private final int objectPopupsCount;
 
-    AutoValue_UnreadNotificationInfo_ObjectPopupNotification(int i, int i2, Optional<UnreadNotificationInfo.ObjectPopupMessage> optional) {
-        this.freshObjectPopupsCount = i;
-        this.objectPopupsCount = i2;
+    AutoValue_UnreadNotificationInfo_ObjectPopupNotification(int freshObjectPopupsCount, int objectPopupsCount, Optional<UnreadNotificationInfo.ObjectPopupMessage> optional) {
+        this.freshObjectPopupsCount = freshObjectPopupsCount;
+        this.objectPopupsCount = objectPopupsCount;
         if (optional == null) {
             throw new NullPointerException("Null lastObjectPopup");
         }
@@ -33,7 +32,7 @@ final class AutoValue_UnreadNotificationInfo_ObjectPopupNotification extends Unr
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupNotification
+    @Override
     public int freshObjectPopupsCount() {
         return this.freshObjectPopupsCount;
     }
@@ -42,13 +41,13 @@ final class AutoValue_UnreadNotificationInfo_ObjectPopupNotification extends Unr
         return ((((this.freshObjectPopupsCount ^ 1000003) * 1000003) ^ this.objectPopupsCount) * 1000003) ^ this.lastObjectPopup.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupNotification
+    @Override
     @Nonnull
     public Optional<UnreadNotificationInfo.ObjectPopupMessage> lastObjectPopup() {
         return this.lastObjectPopup;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupNotification
+    @Override
     public int objectPopupsCount() {
         return this.objectPopupsCount;
     }

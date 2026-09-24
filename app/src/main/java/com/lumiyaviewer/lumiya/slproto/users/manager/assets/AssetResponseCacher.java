@@ -14,7 +14,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AssetResponseCacher implements Refreshable<AssetKey> {
     private final CachedAssetDao cachedAssetDao;
     private final SubscriptionPool<AssetKey, AssetData> pool = new SubscriptionPool<>();
@@ -23,16 +22,14 @@ public class AssetResponseCacher implements Refreshable<AssetKey> {
     public AssetResponseCacher(DaoSession daoSession, Executor executor) {
         this.cachedAssetDao = daoSession.getCachedAssetDao();
         this.pool.setCacheInvalidateHandler(this::m388x50f99f72, executor);
-        this.requestHandler = new RateLimitRequestHandler<>(new RequestProcessor<AssetKey, AssetData, AssetData>(this.pool, executor) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetResponseCacher.1
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        this.requestHandler = new RateLimitRequestHandler<>(new RequestProcessor<AssetKey, AssetData, AssetData>(this.pool, executor) {
+            @Override
             public boolean isRequestComplete(@Nonnull AssetKey assetKey, AssetData assetData) {
                 CachedAsset cachedAsset = AssetResponseCacher.this.cachedAssetDao.load(assetKey.toString());
                 return cachedAsset != null && !cachedAsset.getMustRevalidate();
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             @Nullable
             public AssetData processRequest(@Nonnull AssetKey assetKey) {
                 CachedAsset load = AssetResponseCacher.this.cachedAssetDao.load(assetKey.toString());
@@ -45,8 +42,7 @@ public class AssetResponseCacher implements Refreshable<AssetKey> {
                 return assetData;
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             public AssetData processResult(@Nonnull AssetKey assetKey, AssetData assetData) {
                 Debug.Printf("AssetCache: saving cached data for key %s", assetKey.toString());
                 if (assetData != null) {
@@ -74,7 +70,7 @@ public class AssetResponseCacher implements Refreshable<AssetKey> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Refreshable
+    @Override
     public void requestUpdate(AssetKey assetKey) {
         this.pool.requestUpdate(assetKey);
     }

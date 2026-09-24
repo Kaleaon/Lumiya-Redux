@@ -4,19 +4,29 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Set godlike to 1 if you want to become godlike.
+ * Set godlike to 0 if you want to relinquish god powers.
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code RequestGodlikePowers Low 257 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RequestGodlikePowers extends SLMessage {
     public AgentData AgentData_Field;
     public RequestBlock RequestBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RequestBlock, Single. */
     public static class RequestBlock {
-        public boolean Godlike;
-        public UUID Token;
+        public boolean Godlike; // BOOL
+        public UUID Token; // LLUUID - viewer packs a null, sim packs token
     }
 
     public RequestGodlikePowers() {
@@ -25,28 +35,29 @@ public class RequestGodlikePowers extends SLMessage {
         this.RequestBlock_Field = new RequestBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestGodlikePowers(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestGodlikePowers(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 1);
+        // Message number: Low 257 (RequestGodlikePowers).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x01);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.RequestBlock_Field.Godlike);
         packUUID(byteBuffer, this.RequestBlock_Field.Token);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

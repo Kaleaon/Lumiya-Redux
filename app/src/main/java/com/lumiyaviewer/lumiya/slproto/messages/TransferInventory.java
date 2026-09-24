@@ -1,25 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> dataserver
+ * sent during agent to agent inventory transfers
+ *
+ * <p>Template: {@code TransferInventory Low 295 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class TransferInventory extends SLMessage {
     public InfoBlock InfoBlock_Field;
     public ArrayList<InventoryBlock> InventoryBlock_Fields = new ArrayList<>();
 
+    /** Block InfoBlock, Single. */
     public static class InfoBlock {
-        public UUID DestID;
-        public UUID SourceID;
-        public UUID TransactionID;
+        public UUID DestID; // LLUUID
+        public UUID SourceID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block InventoryBlock, Variable. */
     public static class InventoryBlock {
-        public UUID InventoryID;
-        public int Type;
+        public UUID InventoryID; // LLUUID
+        public int Type; // S8
     }
 
     public TransferInventory() {
@@ -27,21 +34,22 @@ public class TransferInventory extends SLMessage {
         this.InfoBlock_Field = new InfoBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.InventoryBlock_Fields.size() * 17) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferInventory(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferInventory(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 39);
+        // Message number: Low 295 (TransferInventory).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x27);
         packUUID(byteBuffer, this.InfoBlock_Field.SourceID);
         packUUID(byteBuffer, this.InfoBlock_Field.DestID);
         packUUID(byteBuffer, this.InfoBlock_Field.TransactionID);
@@ -52,13 +60,13 @@ public class TransferInventory extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.InfoBlock_Field.SourceID = unpackUUID(byteBuffer);
         this.InfoBlock_Field.DestID = unpackUUID(byteBuffer);
         this.InfoBlock_Field.TransactionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             InventoryBlock inventoryBlock = new InventoryBlock();
             inventoryBlock.InventoryID = unpackUUID(byteBuffer);
             inventoryBlock.Type = unpackByte(byteBuffer);

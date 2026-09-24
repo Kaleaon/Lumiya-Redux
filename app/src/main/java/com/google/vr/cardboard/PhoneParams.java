@@ -8,7 +8,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 import java.util.Arrays;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class PhoneParams {
     private static final boolean DEBUG = false;
     private static final String TAG = PhoneParams.class.getSimpleName();
@@ -22,13 +21,13 @@ public class PhoneParams {
         int xPpi;
         int yPpi;
 
-        PpiOverride(String str, String str2, String str3, String str4, int i, int i2) {
-            this.manufacturer = str;
-            this.device = str2;
-            this.model = str3;
-            this.hardware = str4;
-            this.xPpi = i;
-            this.yPpi = i2;
+        PpiOverride(String manufacturer, String device, String model, String hardware, int xPpi, int yPpi) {
+            this.manufacturer = manufacturer;
+            this.device = device;
+            this.model = model;
+            this.hardware = hardware;
+            this.xPpi = xPpi;
+            this.yPpi = yPpi;
         }
 
         boolean isMatching(String str, String str2, String str3, String str4) {
@@ -65,10 +64,10 @@ public class PhoneParams {
 
     static void registerOverridesInternal(List<PpiOverride> list, String str, String str2, String str3, String str4) {
         Phone.PhoneParams readPhoneParamsFromExternalStorage = ConfigUtils.readPhoneParamsFromExternalStorage();
-        Phone.PhoneParams mo6clone = readPhoneParamsFromExternalStorage != null ? readPhoneParamsFromExternalStorage.mo6clone() : new Phone.PhoneParams();
-        if (getPpiOverride(list, str, str2, str3, str4, mo6clone) && !MessageNano.messageNanoEquals(readPhoneParamsFromExternalStorage, mo6clone)) {
+        Phone.PhoneParams clone = readPhoneParamsFromExternalStorage != null ? readPhoneParamsFromExternalStorage.clone() : new Phone.PhoneParams();
+        if (getPpiOverride(list, str, str2, str3, str4, clone) && !MessageNano.messageNanoEquals(readPhoneParamsFromExternalStorage, clone)) {
             Log.i(TAG, "Applying phone param override.");
-            ConfigUtils.writePhoneParamsToExternalStorage(mo6clone);
+            ConfigUtils.writePhoneParamsToExternalStorage(clone);
         }
     }
 }

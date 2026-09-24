@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import android.content.Context;
 import android.os.Process;
 
-/* loaded from: classes.dex */
 public class PermissionUtils {
     public static boolean hasCameraPermission(Context context) {
         return hasPermission(context, "android.permission.CAMERA");

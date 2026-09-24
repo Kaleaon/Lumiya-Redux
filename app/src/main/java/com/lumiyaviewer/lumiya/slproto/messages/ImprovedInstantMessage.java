@@ -1,34 +1,51 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Instant Message
+ * ImprovedInstantMessage
+ * This message can potentially route all over the place
+ * ParentEstateID: parent estate id of the source estate
+ * RegionID: region id of the source of the IM.
+ * Position: position of the sender in region local coordinates
+ * Dialog   see llinstantmessage.h for values
+ * ID       May be used by dialog. Interpretation depends on context.
+ * BinaryBucket May be used by some dialog types
+ * reliable
+ *
+ * <p>Template: {@code ImprovedInstantMessage Low 254 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_improved_im()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ImprovedInstantMessage extends SLMessage {
     public AgentData AgentData_Field;
     public MessageBlock MessageBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block MessageBlock, Single. */
     public static class MessageBlock {
-        public byte[] BinaryBucket;
-        public int Dialog;
-        public byte[] FromAgentName;
-        public boolean FromGroup;
-        public UUID ID;
-        public byte[] Message;
-        public int Offline;
-        public int ParentEstateID;
-        public LLVector3 Position;
-        public UUID RegionID;
-        public int Timestamp;
-        public UUID ToAgentID;
+        public byte[] BinaryBucket; // Variable 2
+        public int Dialog; // U8 - IM type
+        public byte[] FromAgentName; // Variable 1
+        public boolean FromGroup; // BOOL
+        public UUID ID; // LLUUID
+        public byte[] Message; // Variable 2
+        public int Offline; // U8
+        public int ParentEstateID; // U32
+        public LLVector3 Position; // LLVector3
+        public UUID RegionID; // LLUUID
+        public int Timestamp; // U32
+        public UUID ToAgentID; // LLUUID
     }
 
     public ImprovedInstantMessage() {
@@ -37,21 +54,22 @@ public class ImprovedInstantMessage extends SLMessage {
         this.MessageBlock_Field = new MessageBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MessageBlock_Field.FromAgentName.length + 72 + 2 + this.MessageBlock_Field.Message.length + 2 + this.MessageBlock_Field.BinaryBucket.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImprovedInstantMessage(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImprovedInstantMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -2);
+        // Message number: Low 254 (ImprovedInstantMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xFE);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.MessageBlock_Field.FromGroup);
@@ -68,7 +86,7 @@ public class ImprovedInstantMessage extends SLMessage {
         packVariable(byteBuffer, this.MessageBlock_Field.BinaryBucket, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
@@ -77,8 +95,8 @@ public class ImprovedInstantMessage extends SLMessage {
         this.MessageBlock_Field.ParentEstateID = unpackInt(byteBuffer);
         this.MessageBlock_Field.RegionID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.Position = unpackLLVector3(byteBuffer);
-        this.MessageBlock_Field.Offline = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MessageBlock_Field.Offline = unpackByte(byteBuffer) & 0xFF;
+        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & 0xFF;
         this.MessageBlock_Field.ID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.Timestamp = unpackInt(byteBuffer);
         this.MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1);

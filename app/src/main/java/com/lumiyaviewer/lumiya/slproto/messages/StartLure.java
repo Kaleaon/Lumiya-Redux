@@ -1,30 +1,44 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * StartLure viewer->sim
+ * Sent from viewer to the local simulator to lure target id to near
+ * agent id. This will generate an instant message that will be routed
+ * through the space server and out to the userserver. When that IM
+ * goes through the userserver and the TargetID is online, the
+ * userserver will send an InitializeLure to the spaceserver. When that
+ * packet is acked, the original instant message is finally forwarded to
+ * TargetID.
+ *
+ * <p>Template: {@code StartLure Low 70 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class StartLure extends SLMessage {
     public AgentData AgentData_Field;
     public Info Info_Field;
     public ArrayList<TargetData> TargetData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Info, Single. */
     public static class Info {
-        public int LureType;
-        public byte[] Message;
+        public int LureType; // U8
+        public byte[] Message; // Variable 1
     }
 
+    /** Block TargetData, Variable. */
     public static class TargetData {
-        public UUID TargetID;
+        public UUID TargetID; // LLUUID
     }
 
     public StartLure() {
@@ -33,21 +47,22 @@ public class StartLure extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Info_Field.Message.length + 2 + 36 + 1 + (this.TargetData_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStartLure(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStartLure(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 70);
+        // Message number: Low 70 (StartLure).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x46);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packByte(byteBuffer, (byte) this.Info_Field.LureType);
@@ -59,14 +74,14 @@ public class StartLure extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        this.Info_Field.LureType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Info_Field.LureType = unpackByte(byteBuffer) & 0xFF;
         this.Info_Field.Message = unpackVariable(byteBuffer, 1);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             TargetData targetData = new TargetData();
             targetData.TargetID = unpackUUID(byteBuffer);
             this.TargetData_Fields.add(targetData);

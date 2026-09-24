@@ -5,28 +5,27 @@ import android.os.Parcelable;
 import android.util.Log;
 import com.google.common.logging.nano.Vr;
 
-/* loaded from: classes.dex */
 public class VREventParcelable implements Parcelable {
     private Vr.VREvent event;
     private int eventCode;
     private static final String TAG = VREventParcelable.class.getSimpleName();
-    public static final Parcelable.Creator<VREventParcelable> CREATOR = new Parcelable.Creator<VREventParcelable>() { // from class: com.google.vr.vrcore.logging.api.VREventParcelable.1
+    public static final Parcelable.Creator<VREventParcelable> CREATOR = new Parcelable.Creator<VREventParcelable>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final VREventParcelable createFromParcel(Parcel parcel) {
             return new VREventParcelable(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final VREventParcelable[] newArray(int i) {
             return new VREventParcelable[i];
         }
     };
 
-    public VREventParcelable(int i, Vr.VREvent vREvent) {
-        this.eventCode = i;
-        this.event = vREvent;
+    public VREventParcelable(int eventCode, Vr.VREvent vrEvent) {
+        this.eventCode = eventCode;
+        this.event = vrEvent;
     }
 
     private VREventParcelable(Parcel parcel) {
@@ -44,7 +43,7 @@ public class VREventParcelable implements Parcelable {
         }
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -57,7 +56,7 @@ public class VREventParcelable implements Parcelable {
         return this.eventCode;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(this.eventCode);
         if (this.event == null) {

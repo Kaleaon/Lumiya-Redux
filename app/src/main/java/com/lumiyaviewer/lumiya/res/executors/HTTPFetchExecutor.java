@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.res.executors;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import java.util.concurrent.PriorityBlockingQueue;
 
-/* loaded from: classes.dex */
 public class HTTPFetchExecutor extends WeakExecutor {
 
     private static class InstanceHolder {
@@ -17,7 +16,7 @@ public class HTTPFetchExecutor extends WeakExecutor {
         super("ResourceHTTPFetch", GlobalOptions.getInstance().getMaxTextureDownloads(), new PriorityBlockingQueue());
     }
 
-    /* synthetic */ HTTPFetchExecutor(HTTPFetchExecutor hTTPFetchExecutor) {
+    /* synthetic */ HTTPFetchExecutor(HTTPFetchExecutor httpFetchExecutor) {
         this();
     }
 

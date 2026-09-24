@@ -33,19 +33,18 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MuteListFragment extends FragmentWithTitle {
     private MuteListAdapter adapter;
 
     @BindView(R.id.muteList)
     ListView muteList;
     private Unbinder unbinder;
-    private final SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$dntbaqhB2OOLQW5t89NMwUjCLX4.2
+    private final SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            MuteListFragment.this.m659com_lumiyaviewer_lumiya_ui_myava_MuteListFragmentmthref0((ImmutableList) obj);
+            MuteListFragment.this.onMuteList((ImmutableList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -54,21 +53,21 @@ public class MuteListFragment extends FragmentWithTitle {
 
     private void askForUnblock(final MuteListEntry muteListEntry) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.unblock_confirm_message), muteListEntry.name)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$dntbaqhB2OOLQW5t89NMwUjCLX4.3
+        builder.setMessage(String.format(getString(R.string.unblock_confirm_message), muteListEntry.name)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 MuteListFragment.this.m661lambda$com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_5870((MuteListEntry) muteListEntry, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$dntbaqhB2OOLQW5t89NMwUjCLX4
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -76,7 +75,6 @@ public class MuteListFragment extends FragmentWithTitle {
         builder.create().show();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void doUnblock(MuteListEntry muteListEntry) {
         try {
             this.agentCircuit.get().getModules().muteList.Unblock(muteListEntry);
@@ -91,9 +89,7 @@ public class MuteListFragment extends FragmentWithTitle {
         return bundle;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMuteList, reason: merged with bridge method [inline-methods] */
-    public void m659com_lumiyaviewer_lumiya_ui_myava_MuteListFragmentmthref0(ImmutableList<MuteListEntry> immutableList) {
+    public void onMuteList(ImmutableList<MuteListEntry> immutableList) {
         if (this.adapter != null) {
             this.adapter.setData(immutableList);
         }
@@ -101,7 +97,7 @@ public class MuteListFragment extends FragmentWithTitle {
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_3737, reason: not valid java name */
     /* synthetic */ void m660lambda$com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_3737(AdapterView adapterView, View view, int i, long j) {
-        Toast.makeText(getContext(), getString(R.string.mute_list_dismiss_hint), 0).show();
+        Toast.makeText(getContext(), getString(R.string.mute_list_dismiss_hint), Toast.LENGTH_SHORT).show();
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_5870, reason: not valid java name */
@@ -120,7 +116,7 @@ public class MuteListFragment extends FragmentWithTitle {
         DetailsActivity.showEmbeddedDetails(activity, AvatarPickerForMute.class, AvatarPickerForMute.makeArguments(userManager.getUserID()));
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
         MuteListEntry item;
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
@@ -128,7 +124,7 @@ public class MuteListFragment extends FragmentWithTitle {
             return false;
         }
         switch (menuItem.getItemId()) {
-            case R.id.item_mute_list_delete /* 2131755825 */:
+            case R.id.item_mute_list_delete:
                 askForUnblock(item);
                 return true;
             default:
@@ -136,25 +132,25 @@ public class MuteListFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.mute_list, viewGroup, false);
         this.unbinder = ButterKnife.bind(this, inflate);
         this.adapter = new MuteListAdapter(layoutInflater.getContext());
         this.muteList.setAdapter((ListAdapter) this.adapter);
-        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = new SwipeDismissListViewTouchListener(this.muteList, new SwipeDismissListViewTouchListener.DismissCallbacks() { // from class: com.lumiyaviewer.lumiya.ui.myava.MuteListFragment.1
-            @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.DismissCallbacks
+        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = new SwipeDismissListViewTouchListener(this.muteList, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+            @Override
             public boolean canDismiss(ListView listView, int i) {
                 return true;
             }
 
-            @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.DismissCallbacks
+            @Override
             public void onDismiss(ListView listView, int i) {
                 MuteListEntry item;
                 ListAdapter adapter = listView.getAdapter();
@@ -166,12 +162,12 @@ public class MuteListFragment extends FragmentWithTitle {
         });
         this.muteList.setOnTouchListener(swipeDismissListViewTouchListener);
         this.muteList.setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
-        this.muteList.setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$dntbaqhB2OOLQW5t89NMwUjCLX4.1
+        this.muteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 MuteListFragment.this.m660lambda$com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_3737(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -180,7 +176,7 @@ public class MuteListFragment extends FragmentWithTitle {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -189,7 +185,7 @@ public class MuteListFragment extends FragmentWithTitle {
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         setTitle(getString(R.string.mute_list_fragment_title), null);
@@ -200,7 +196,7 @@ public class MuteListFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.muteListData.unsubscribe();
         this.agentCircuit.unsubscribe();

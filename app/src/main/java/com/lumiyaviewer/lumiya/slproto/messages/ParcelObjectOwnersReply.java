@@ -1,41 +1,51 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelObjectOwnersReply
+ * simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code ParcelObjectOwnersReply Low 57 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelLandObjects::processParcelObjectOwnersReply()} in indra/newview/llfloaterland.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ParcelObjectOwnersReply extends SLMessage {
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int Count;
-        public boolean IsGroupOwned;
-        public boolean OnlineStatus;
-        public UUID OwnerID;
+        public int Count; // S32
+        public boolean IsGroupOwned; // BOOL
+        public boolean OnlineStatus; // BOOL
+        public UUID OwnerID; // LLUUID
     }
 
     public ParcelObjectOwnersReply() {
         this.zeroCoded = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Data_Fields.size() * 22) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelObjectOwnersReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelObjectOwnersReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 57);
+        // Message number: Low 57 (ParcelObjectOwnersReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x39);
         byteBuffer.put((byte) this.Data_Fields.size());
         for (Data data : this.Data_Fields) {
             packUUID(byteBuffer, data.OwnerID);
@@ -45,10 +55,10 @@ public class ParcelObjectOwnersReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.OwnerID = unpackUUID(byteBuffer);
             data.IsGroupOwned = unpackBoolean(byteBuffer);

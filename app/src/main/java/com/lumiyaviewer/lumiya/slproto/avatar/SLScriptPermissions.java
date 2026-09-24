@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum SLScriptPermissions {
     SCRIPT_PERMISSION_DEBIT(2, "take Linden dollars (L$) from you"),
     SCRIPT_PERMISSION_TAKE_CONTROLS(4, "act on your control inputs"),
@@ -17,9 +16,9 @@ public enum SLScriptPermissions {
     private String message;
     private int permMask;
 
-    SLScriptPermissions(int i, String str) {
-        this.permMask = i;
-        this.message = str;
+    SLScriptPermissions(int permMask, String message) {
+        this.permMask = permMask;
+        this.message = message;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.RandomAccess;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     private final List<List<E>> chunks = new ArrayList();
     private int count = 0;
@@ -63,9 +62,9 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         checkConsistency();
     }
 
-    private void setLastChunk(int i) {
-        if (i < 0 || i >= this.count) {
-            throw new IndexOutOfBoundsException(String.format("index %d, count %d", Integer.valueOf(i), Integer.valueOf(this.count)));
+    private void setLastChunk(int lastChunk) {
+        if (lastChunk < 0 || lastChunk >= this.count) {
+            throw new IndexOutOfBoundsException(String.format("index %d, count %d", Integer.valueOf(lastChunk), Integer.valueOf(this.count)));
         }
         checkConsistency();
         if (this.lastChunk == null) {
@@ -74,17 +73,17 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();
         }
-        while (i < this.lastChunkStart) {
+        while (lastChunk < this.lastChunkStart) {
             this.lastChunkIndex--;
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();
             this.lastChunkStart -= this.lastChunkSize;
         }
-        while (i >= this.lastChunkStart + this.lastChunkSize) {
+        while (lastChunk >= this.lastChunkStart + this.lastChunkSize) {
             this.lastChunkIndex++;
             this.lastChunkStart += this.lastChunkSize;
             if (this.lastChunkIndex >= this.chunks.size()) {
-                throw new IllegalStateException(String.format("lastChunkIndex runaway, position %d, count %d, lastChunkStart %d", Integer.valueOf(i), Integer.valueOf(this.count), Integer.valueOf(this.lastChunkStart)));
+                throw new IllegalStateException(String.format("lastChunkIndex runaway, position %d, count %d, lastChunkStart %d", Integer.valueOf(lastChunk), Integer.valueOf(this.count), Integer.valueOf(this.lastChunkStart)));
             }
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();
@@ -120,14 +119,14 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         checkConsistency();
     }
 
-    @Override // java.util.AbstractList, java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public void clear() {
         this.chunks.clear();
         this.count = 0;
         resetLastPosition();
     }
 
-    @Override // java.util.AbstractList, java.util.List
+    @Override
     public E get(int i) {
         setLastChunk(i);
         if (i < this.lastChunkStart || i >= this.lastChunkStart + this.lastChunkSize) {
@@ -207,17 +206,75 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         return i3;
     }
 
+    /**
+     * Replace the element equal to {@code e} (per {@code comparator}) and
+     * return its overall index, or -1. Chunks are kept in sorted order, so
+     * the search starts at the middle chunk and walks towards the element by
+     * comparing with each chunk's first and last entries. Empty chunks are
+     * stepped over in the current direction; if the first probe is empty the
+     * walk restarts at the first non-empty chunk.
+     */
     public int replaceElement(@Nonnull E e, @Nonnull Comparator<E> comparator) {
-        for (List<E> chunk : this.chunks) {
-            int index = Collections.binarySearch(chunk, e, comparator);
-            if (index >= 0) {
-                return replaceFoundElement(chunk, index, e);
-            }
+        if (this.chunks.isEmpty()) {
+            return -1;
         }
-        return -1;
+        int chunkIndex = this.chunks.size() / 2;
+        int direction = 0;
+        while (true) {
+            List<E> chunk = this.chunks.get(chunkIndex);
+            int next;
+            if (!chunk.isEmpty()) {
+                int vsFirst = comparator.compare(e, chunk.get(0));
+                if (vsFirst == 0) {
+                    return replaceFoundElement(chunk, 0, e);
+                }
+                if (vsFirst < 0) {
+                    next = chunkIndex - 1;
+                    if (next < 0) {
+                        return -1;
+                    }
+                    direction = -1;
+                } else {
+                    int vsLast = comparator.compare(e, chunk.get(chunk.size() - 1));
+                    if (vsLast == 0) {
+                        return replaceFoundElement(chunk, chunk.size() - 1, e);
+                    }
+                    if (vsLast <= 0) {
+                        return replaceElementInChunk(chunk, e, comparator);
+                    }
+                    next = chunkIndex + 1;
+                    direction = 1;
+                    if (next >= this.chunks.size()) {
+                        return -1;
+                    }
+                }
+            } else if (direction < 0) {
+                next = chunkIndex - 1;
+                if (next < 0) {
+                    return -1;
+                }
+            } else if (direction > 0) {
+                next = chunkIndex + 1;
+                if (next >= this.chunks.size()) {
+                    return -1;
+                }
+            } else {
+                next = -1;
+                for (int i = 0; i < this.chunks.size(); i++) {
+                    if (!this.chunks.get(i).isEmpty()) {
+                        next = i;
+                        break;
+                    }
+                }
+                if (next == -1) {
+                    return -1;
+                }
+            }
+            chunkIndex = next;
+        }
     }
 
-    @Override // java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public int size() {
         return this.count;
     }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.logging.nano.Vr;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GridConnectionService;
 import com.lumiyaviewer.lumiya.dao.UserName;
@@ -130,14 +129,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueue.ICapsEventHandler {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f60x94bee140 = null;
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f61xb1d54699 = null;
     private Subscription agentNameSubscription;
     private boolean agentPaused;
 
@@ -166,78 +159,6 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     private final Set<UUID> typingUsers;
     private final UserManager userManager;
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-caps-SLCapEventQueue$CapsEventTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m133x4d1ccd1c() {
-        if (f60x94bee140 != null) {
-            return f60x94bee140;
-        }
-        int[] iArr = new int[SLCapEventQueue.CapsEventType.valuesCustom().length];
-        try {
-            iArr[SLCapEventQueue.CapsEventType.AgentGroupDataUpdate.ordinal()] = 9;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.AvatarGroupsReply.ordinal()] = 10;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.BulkUpdateInventory.ordinal()] = 11;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ChatterBoxInvitation.ordinal()] = 1;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ChatterBoxSessionStartReply.ordinal()] = 2;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.EstablishAgentCommunication.ordinal()] = 3;
-        } catch (NoSuchFieldError e6) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.ParcelProperties.ordinal()] = 12;
-        } catch (NoSuchFieldError e7) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.TeleportFailed.ordinal()] = 4;
-        } catch (NoSuchFieldError e8) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.TeleportFinish.ordinal()] = 5;
-        } catch (NoSuchFieldError e9) {
-        }
-        try {
-            iArr[SLCapEventQueue.CapsEventType.UnknownCapsEvent.ordinal()] = 13;
-        } catch (NoSuchFieldError e10) {
-        }
-        f60x94bee140 = iArr;
-        return iArr;
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m134x2680ba3d() {
-        if (f61xb1d54699 != null) {
-            return f61xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f61xb1d54699 = iArr;
-        return iArr;
-    }
-
     public SLAgentCircuit(SLGridConnection sLGridConnection, SLCircuitInfo sLCircuitInfo, SLAuthReply sLAuthReply, SLCaps sLCaps, SLTempCircuit sLTempCircuit) throws IOException {
         super(sLGridConnection, sLCircuitInfo, sLAuthReply, sLTempCircuit);
         this.eventBus = EventBus.getInstance();
@@ -251,13 +172,13 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.isEstateManager = false;
         this.lastObjectSelection = 0L;
         this.doingObjectSelection = false;
-        this.objectPropertiesRateLimiter = new EventRateLimiter(this.eventBus, 500L) { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.1
-            @Override // com.lumiyaviewer.lumiya.eventbus.EventRateLimiter
+        this.objectPropertiesRateLimiter = new EventRateLimiter(this.eventBus, 500L) {
+            @Override
             protected Object getEventToFire() {
                 return null;
             }
 
-            @Override // com.lumiyaviewer.lumiya.eventbus.EventRateLimiter
+            @Override
             protected void onActualFire() {
                 SLAgentCircuit.this.notifyObjectPropertiesChange();
             }
@@ -315,20 +236,20 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     }
 
     private void HandleCapsEvent(SLCapEventQueue.CapsEvent capsEvent) {
-        switch (m133x4d1ccd1c()[capsEvent.eventType.ordinal()]) {
-            case 1:
+        switch (capsEvent.eventType) {
+            case ChatterBoxInvitation:
                 HandleChatterBoxInvitation(capsEvent.eventBody);
                 break;
-            case 2:
+            case ChatterBoxSessionStartReply:
                 HandleChatterBoxSessionStartReply(capsEvent.eventBody);
                 break;
-            case 3:
+            case EstablishAgentCommunication:
                 HandleEstablishAgentCommunication(capsEvent.eventBody);
                 break;
-            case 4:
+            case TeleportFailed:
                 HandleTeleportFailed(capsEvent.eventBody);
                 break;
-            case 5:
+            case TeleportFinish:
                 HandleTeleportFinish(capsEvent.eventBody);
                 break;
             default:
@@ -591,7 +512,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             LLSDNode byIndex = lLSDNode.byKey("Info").byIndex(0);
             String asString = byIndex.byKey("SeedCapability").asString();
             byte[] asBinary = byIndex.byKey("SimIP").asBinary();
-            SLAuthReply sLAuthReply = new SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", Integer.valueOf(asBinary[0] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[1] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[2] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[3] & UnsignedBytes.MAX_VALUE)), byIndex.byKey("SimPort").asInt(), asString);
+            SLAuthReply sLAuthReply = new SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", Integer.valueOf(asBinary[0] & 0xFF), Integer.valueOf(asBinary[1] & 0xFF), Integer.valueOf(asBinary[2] & 0xFF), Integer.valueOf(asBinary[3] & 0xFF)), byIndex.byKey("SimPort").asInt(), asString);
             Debug.Printf("new sim address: %s", sLAuthReply.simAddress);
             this.modules.avatarControl.setEnableAgentUpdates(false);
             this.gridConn.HandleTeleportFinish(sLAuthReply);
@@ -692,7 +613,6 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         SendMessage(agentFOV);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SendCompleteAgentMovement() {
         CompleteAgentMovement completeAgentMovement = new CompleteAgentMovement();
         completeAgentMovement.AgentData_Field.CircuitCode = this.circuitInfo.circuitCode;
@@ -821,7 +741,6 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         return !chatterUUID.equals(UUIDPool.ZeroUUID) && sLMuteList.isMuted(chatterUUID, MuteType.GROUP);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void notifyObjectPropertiesChange() {
         if (this.userManager != null) {
             this.userManager.getObjectsManager().requestObjectListUpdate();
@@ -924,7 +843,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         SendMessage(objectBuy);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void CloseCircuit() {
         Debug.Printf("AgentCircuit: closing circuit.", new Object[0]);
         if (this.modules != null) {
@@ -983,7 +902,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleAgentMovementComplete(AgentMovementComplete agentMovementComplete) {
         this.regionHandle = agentMovementComplete.Data_Field.RegionHandle;
         this.modules.avatarControl.setAgentPosition(agentMovementComplete.Data_Field.Position, null);
@@ -994,12 +913,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.modules.avatarControl.setEnableAgentUpdates(true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleAlertMessage(AlertMessage alertMessage) {
         HandleChatEvent(this.localChatterID, new SLChatSystemMessageEvent(ChatMessageSourceUnknown.getInstance(), this.agentUUID, SLMessage.stringFromVariableOEM(alertMessage.AlertData_Field.Message)), true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleAvatarAnimation(AvatarAnimation avatarAnimation) {
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
         if (sLParcelInfo == null || this.modules == null) {
@@ -1008,7 +927,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         sLParcelInfo.ApplyAvatarAnimation(avatarAnimation, this.modules.avatarControl);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleAvatarAppearance(AvatarAppearance avatarAppearance) {
         Debug.Log("Got AvatarAppearance, ID = " + avatarAppearance.Sender_Field.ID.toString() + " isTrial = " + avatarAppearance.Sender_Field.IsTrial + ", our ID = " + this.circuitInfo.agentID.toString());
         if (avatarAppearance.Sender_Field.ID.equals(this.circuitInfo.agentID) && this.modules != null) {
@@ -1020,7 +939,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleAvatarInterestsReply(AvatarInterestsReply avatarInterestsReply) {
         Debug.Log("got AvatarInterestsReply: wantToText = " + SLMessage.stringFromVariableOEM(avatarInterestsReply.PropertiesData_Field.WantToText));
         Debug.Log("got AvatarInterestsReply: skillText = " + SLMessage.stringFromVariableOEM(avatarInterestsReply.PropertiesData_Field.SkillsText));
@@ -1033,7 +952,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.userManager.getChatterList().getActiveChattersManager().HandleChatEvent(chatterID, sLChatEvent, z);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleChatFromSimulator(ChatFromSimulator chatFromSimulator) {
         int i;
         SLModules modules = getModules();
@@ -1061,7 +980,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleImprovedInstantMessage(ImprovedInstantMessage improvedInstantMessage) {
         ChatMessageSource chatMessageSourceObject;
         int i = improvedInstantMessage.MessageBlock_Field.Dialog;
@@ -1080,7 +999,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         HandleIM(improvedInstantMessage, chatMessageSourceObject);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleImprovedTerseObjectUpdate(ImprovedTerseObjectUpdate improvedTerseObjectUpdate) {
         SLObjectInfo sLObjectInfo;
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
@@ -1121,7 +1040,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleKillObject(KillObject killObject) {
         boolean z;
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
@@ -1140,7 +1059,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleLayerData(LayerData layerData) {
         SLParcelInfo sLParcelInfo;
         if (layerData.LayerID_Field.Type != 76 || (sLParcelInfo = this.gridConn.parcelInfo) == null) {
@@ -1149,12 +1068,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         sLParcelInfo.terrainData.ProcessLayerData(layerData.LayerDataData_Field.Data);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleLoadURL(LoadURL loadURL) {
         HandleChatEvent(this.localChatterID, new SLChatTextEvent(new ChatMessageSourceObject(loadURL.Data_Field.ObjectID, SLMessage.stringFromVariableOEM(loadURL.Data_Field.ObjectName)), this.agentUUID, loadURL), true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleObjectProperties(ObjectProperties objectProperties) {
         UUID id;
         Debug.Log("ObjectProperties: " + objectProperties.ObjectData_Fields.size() + " ObjectSelect replies. Reqd " + this.objectNamesRequested.size() + " obj, remains " + this.gridConn.parcelInfo.objectNamesQueue.size() + " objects.");
@@ -1182,7 +1101,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.objectPropertiesRateLimiter.fire();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleObjectUpdate(ObjectUpdate objectUpdate) {
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
         boolean z = false;
@@ -1228,7 +1147,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleObjectUpdateCached(ObjectUpdateCached objectUpdateCached) {
         RequestMultipleObjects requestMultipleObjects = new RequestMultipleObjects();
         requestMultipleObjects.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -1243,7 +1162,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         SendMessage(requestMultipleObjects);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleObjectUpdateCompressed(ObjectUpdateCompressed objectUpdateCompressed) {
         boolean z;
         SLParcelInfo sLParcelInfo = this.gridConn.parcelInfo;
@@ -1290,7 +1209,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleOfflineNotification(OfflineNotification offlineNotification) {
         ArrayList arrayList = new ArrayList(offlineNotification.AgentBlock_Fields.size());
         Iterator<?> it = offlineNotification.AgentBlock_Fields.iterator();
@@ -1300,7 +1219,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.userManager.getChatterList().getFriendManager().setUsersOnline(arrayList, false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleOnlineNotification(OnlineNotification onlineNotification) {
         ArrayList arrayList = new ArrayList(onlineNotification.AgentBlock_Fields.size());
         Iterator<?> it = onlineNotification.AgentBlock_Fields.iterator();
@@ -1310,7 +1229,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.userManager.getChatterList().getFriendManager().setUsersOnline(arrayList, true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandlePayPriceReply(PayPriceReply payPriceReply) {
         SLObjectInfo sLObjectInfo = this.gridConn.parcelInfo.allObjectsNearby.get(payPriceReply.ObjectData_Field.ObjectID);
         if (sLObjectInfo != null) {
@@ -1333,7 +1252,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleRegionHandshake(RegionHandshake regionHandshake) {
         if (this.authReply.isTemporary) {
             return;
@@ -1351,12 +1270,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             this.regionID = regionHandshake.RegionInfo2_Field.RegionID;
         }
         this.isEstateManager = regionHandshake.RegionInfo_Field.IsEstateManager;
-        this.agentNameSubscription = this.userManager.getUserNames().subscribe(this.circuitInfo.agentID, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$K1xWCpEh0d4XNuVVYxGUJwEFRxU
+        this.agentNameSubscription = this.userManager.getUserNames().subscribe(this.circuitInfo.agentID, new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 SLAgentCircuit.this.m137lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593((UserName) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
@@ -1366,7 +1285,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleScriptDialog(ScriptDialog scriptDialog) {
         String[] strArr;
         boolean z;
@@ -1401,7 +1320,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleSimulatorViewerTimeMessage(SimulatorViewerTimeMessage simulatorViewerTimeMessage) {
         if (this.authReply.isTemporary || this.gridConn == null || this.gridConn.parcelInfo == null) {
             return;
@@ -1410,36 +1329,36 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.gridConn.parcelInfo.setSunHour((float) (f - Math.floor(f)));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleTeleportFailed(TeleportFailed teleportFailed) {
         Debug.Log("TeleportFailed: reason = " + SLMessage.stringFromVariableOEM(teleportFailed.Info_Field.Reason));
         this.teleportRequestSent = false;
         this.eventBus.publish(new SLTeleportResultEvent(false, SLMessage.stringFromVariableOEM(teleportFailed.Info_Field.Reason)));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleTeleportLocal(TeleportLocal teleportLocal) {
         this.teleportRequestSent = false;
         this.eventBus.publish(new SLTeleportResultEvent(true, null));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleTeleportProgress(TeleportProgress teleportProgress) {
         Debug.Log("Teleport progress: flags = " + teleportProgress.Info_Field.TeleportFlags + ", progress = " + SLMessage.stringFromVariableOEM(teleportProgress.Info_Field.Message));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleTeleportStart(TeleportStart teleportStart) {
         Debug.Log("TeleportStart: flags = " + teleportStart.Info_Field.TeleportFlags);
     }
 
     public void OfferInventoryItem(final UUID uuid, final SLInventoryEntry sLInventoryEntry) {
-        this.userManager.getInventoryManager().getExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$K1xWCpEh0d4XNuVVYxGUJwEFRxU.1
+        this.userManager.getInventoryManager().getExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLAgentCircuit.this.m138lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024((SLInventoryEntry) sLInventoryEntry, (UUID) uuid);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -1458,7 +1377,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         SendMessage(startLure);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.caps.SLCapEventQueue.ICapsEventHandler
+    @Override
     public void OnCapsEvent(SLCapEventQueue.CapsEvent capsEvent) {
         try {
             this.capsEventQueue.add(capsEvent);
@@ -1467,7 +1386,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessIdle() {
         if (this.doingObjectSelection && System.currentTimeMillis() > this.lastObjectSelection + 15000) {
             this.doingObjectSelection = false;
@@ -1489,7 +1408,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLThreadingCircuit, com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessNetworkError() {
         super.ProcessNetworkError();
         Debug.Printf("Network: Network error.", new Object[0]);
@@ -1502,7 +1421,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.gridConn.processDisconnect(false, "Network connection lost.");
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLThreadingCircuit, com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessTimeout() {
         super.ProcessTimeout();
         if (this.modules != null) {
@@ -1514,7 +1433,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         this.gridConn.processDisconnect(false, "Connection has timed out.");
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessWakeup() {
         super.ProcessWakeup();
         while (true) {
@@ -1622,15 +1541,15 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         rezObject.isReliable = true;
         if ((sLInventoryEntry.ownerMask & 32768) == 0) {
             final UUID uuid3 = sLInventoryEntry.parentUUID;
-            rezObject.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.9
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            rezObject.setEventListener(new SLMessageEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                     if (SLAgentCircuit.this.userManager != null) {
                         SLAgentCircuit.this.userManager.getInventoryManager().requestFolderUpdate(uuid3);
                     }
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+                @Override
                 public void onMessageTimeout(SLMessage sLMessage) {
                 }
             });
@@ -1639,14 +1558,14 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
     }
 
     public void SendChatMessage(@Nonnull ChatterID chatterID, String str) {
-        switch (m134x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
+        switch (chatterID.getChatterType()) {
+            case Group:
                 SendGroupInstantMessage(chatterID.getOptionalChatterUUID(), str);
                 break;
-            case 2:
+            case Local:
                 SendLocalChatMessage(str);
                 break;
-            case 3:
+            case User:
                 SendInstantMessage(chatterID.getOptionalChatterUUID(), str);
                 break;
         }
@@ -1734,14 +1653,14 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         logoutRequest.AgentData_Field.AgentID = this.circuitInfo.agentID;
         logoutRequest.AgentData_Field.SessionID = this.circuitInfo.sessionID;
         logoutRequest.isReliable = true;
-        logoutRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.7
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        logoutRequest.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 Debug.Log("Logout: Logout request acknowledged.");
                 SLAgentCircuit.this.gridConn.processDisconnect(true, "Logged out.");
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
                 Debug.Log("Logout: LogoutRequest timed out!");
                 SLAgentCircuit.this.gridConn.processDisconnect(false, "Logout request has timed out.");
@@ -1769,8 +1688,8 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         useCircuitCode.CircuitCode_Field.SessionID = this.circuitInfo.sessionID;
         useCircuitCode.CircuitCode_Field.ID = this.circuitInfo.agentID;
         useCircuitCode.isReliable = true;
-        useCircuitCode.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.2
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        useCircuitCode.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 Debug.Log("SLAgentCircuit: UseCircuitCode acknowledged.");
                 if (SLAgentCircuit.this.authReply.isTemporary) {
@@ -1788,7 +1707,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
                 }
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
                 if (SLAgentCircuit.this.authReply.fromTeleport) {
                     SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Timed out while connecting to the simulator."));
@@ -1830,12 +1749,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         teleportLocationRequest.Info_Field.Position = lLVector32;
         teleportLocationRequest.Info_Field.LookAt = lLVector33;
         teleportLocationRequest.isReliable = true;
-        teleportLocationRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.5
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        teleportLocationRequest.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
                 SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Teleport request has timed out."));
             }
@@ -1851,12 +1770,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             teleportLandmarkRequest.Info_Field.SessionID = this.circuitInfo.sessionID;
             teleportLandmarkRequest.Info_Field.LandmarkID = uuid;
             teleportLandmarkRequest.isReliable = true;
-            teleportLandmarkRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.3
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            teleportLandmarkRequest.setEventListener(new SLMessageEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+                @Override
                 public void onMessageTimeout(SLMessage sLMessage) {
                     SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Teleport request has timed out."));
                 }
@@ -1879,12 +1798,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         teleportLocationRequest.Info_Field.LookAt = new LLVector3(lLVector3);
         teleportLocationRequest.Info_Field.LookAt.x += 10.0f;
         teleportLocationRequest.isReliable = true;
-        teleportLocationRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.8
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        teleportLocationRequest.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
                 SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Teleport request has timed out."));
             }
@@ -1900,12 +1819,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         teleportLureRequest.Info_Field.SessionID = this.circuitInfo.sessionID;
         teleportLureRequest.Info_Field.LureID = uuid;
         teleportLureRequest.isReliable = true;
-        teleportLureRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.4
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        teleportLureRequest.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
                 SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Teleport request has timed out."));
             }
@@ -1924,12 +1843,12 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             teleportLocationRequest.Info_Field.Position = new LLVector3(i, i2, i3);
             teleportLocationRequest.Info_Field.LookAt = new LLVector3(0.0f, 1.0f, 0.0f);
             teleportLocationRequest.isReliable = true;
-            teleportLocationRequest.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.SLAgentCircuit.6
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            teleportLocationRequest.setEventListener(new SLMessageEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+                @Override
                 public void onMessageTimeout(SLMessage sLMessage) {
                     SLAgentCircuit.this.eventBus.publish(new SLTeleportResultEvent(false, "Teleport request has timed out."));
                 }
@@ -1999,8 +1918,8 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             return null;
         }
         LLVector3 position = this.modules.avatarControl.getAgentPosition().getPosition();
-        int i = (int) ((this.regionHandle >> 32) & 4294967295L);
-        int i2 = (int) (this.regionHandle & 4294967295L);
+        int i = (int) ((this.regionHandle >> 32) & 0xFFFFFFFFL);
+        int i2 = (int) (this.regionHandle & 0xFFFFFFFFL);
         LLVector3d lLVector3d = new LLVector3d();
         lLVector3d.x = i + position.x;
         lLVector3d.y = i2 + position.y;

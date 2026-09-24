@@ -1,12 +1,11 @@
 package com.lumiyaviewer.lumiya.slproto.events;
 
-/* loaded from: classes.dex */
 public class SLDisconnectEvent {
     public final String message;
     public final boolean normalDisconnect;
 
-    public SLDisconnectEvent(boolean z, String str) {
-        this.normalDisconnect = z;
-        this.message = str;
+    public SLDisconnectEvent(boolean normalDisconnect, String message) {
+        this.normalDisconnect = normalDisconnect;
+        this.message = message;
     }
 }

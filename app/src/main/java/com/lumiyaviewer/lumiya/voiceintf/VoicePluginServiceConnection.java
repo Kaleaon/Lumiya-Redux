@@ -72,7 +72,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoicePluginServiceConnection implements ServiceConnection {
     public static final String ACTION_VOICE_ACCEPT = "accept";
     public static final String ACTION_VOICE_REJECT = "reject";
@@ -95,105 +94,28 @@ public class VoicePluginServiceConnection implements ServiceConnection {
 
     @Nullable
     private ChatterNameRetriever ringingChatterNameRetriever = null;
-    private final Handler fromPluginHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection.1
+    private final Handler fromPluginHandler = new Handler() {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f611x5636931c = null;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m916xcae206c0() {
-            if (f611x5636931c != null) {
-                return f611x5636931c;
-            }
-            int[] iArr = new int[VoicePluginMessageType.values().length];
-            try {
-                iArr[VoicePluginMessageType.VoiceAcceptCall.ordinal()] = 6;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceAudioProperties.ordinal()] = 1;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceChannelClosed.ordinal()] = 7;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceChannelStatus.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceConnectChannel.ordinal()] = 8;
-            } catch (NoSuchFieldError e5) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceEnableMic.ordinal()] = 9;
-            } catch (NoSuchFieldError e6) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceInitialize.ordinal()] = 10;
-            } catch (NoSuchFieldError e7) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceInitializeReply.ordinal()] = 3;
-            } catch (NoSuchFieldError e8) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLogin.ordinal()] = 11;
-            } catch (NoSuchFieldError e9) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLoginStatus.ordinal()] = 4;
-            } catch (NoSuchFieldError e10) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceLogout.ordinal()] = 12;
-            } catch (NoSuchFieldError e11) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceRejectCall.ordinal()] = 13;
-            } catch (NoSuchFieldError e12) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceRinging.ordinal()] = 5;
-            } catch (NoSuchFieldError e13) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceSet3DPosition.ordinal()] = 14;
-            } catch (NoSuchFieldError e14) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceSetAudioProperties.ordinal()] = 15;
-            } catch (NoSuchFieldError e15) {
-            }
-            try {
-                iArr[VoicePluginMessageType.VoiceTerminateCall.ordinal()] = 16;
-            } catch (NoSuchFieldError e16) {
-            }
-            f611x5636931c = iArr;
-            return iArr;
-        }
-
-        @Override // android.os.Handler
+        @Override
         public void handleMessage(Message message) {
             if (message.what == 200 && (message.obj instanceof Bundle)) {
                 Bundle bundle = (Bundle) message.obj;
                 if (bundle.containsKey("message") && bundle.containsKey("messageType")) {
                     try {
-                        switch (m916xcae206c0()[VoicePluginMessageType.valueOf(bundle.getString("messageType")).ordinal()]) {
-                            case 1:
+                        switch (VoicePluginMessageType.valueOf(bundle.getString("messageType"))) {
+                            case VoiceAudioProperties:
                                 VoicePluginServiceConnection.this.onVoiceAudioProperties(new VoiceAudioProperties(bundle.getBundle("message")));
                                 break;
-                            case 2:
+                            case VoiceChannelStatus:
                                 VoicePluginServiceConnection.this.onVoiceChannelStatus(new VoiceChannelStatus(bundle.getBundle("message")));
                                 break;
-                            case 3:
+                            case VoiceInitializeReply:
                                 VoicePluginServiceConnection.this.onVoiceInitializeReply(new VoiceInitializeReply(bundle.getBundle("message")));
                                 break;
-                            case 4:
+                            case VoiceLoginStatus:
                                 VoicePluginServiceConnection.this.onVoiceLoginStatus(new VoiceLoginStatus(bundle.getBundle("message")));
                                 break;
-                            case 5:
+                            case VoiceRinging:
                                 VoicePluginServiceConnection.this.onVoiceRinging(new VoiceRinging(bundle.getBundle("message")));
                                 break;
                         }
@@ -244,7 +166,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceAudioProperties(VoiceAudioProperties voiceAudioProperties) {
         Object[] objArr = new Object[1];
         objArr[0] = voiceAudioProperties != null ? voiceAudioProperties.bluetoothState : null;
@@ -255,7 +176,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceChannelStatus(VoiceChannelStatus voiceChannelStatus) {
         SLModules modules;
         if (voiceChannelStatus.chatInfo.state == VoiceChatInfo.VoiceChatState.None) {
@@ -281,7 +201,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceInitializeReply(VoiceInitializeReply voiceInitializeReply) {
         if (!voiceInitializeReply.appVersionOk) {
             UserManager userManager = this.userManager.get();
@@ -314,7 +233,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceLoginStatus(VoiceLoginStatus voiceLoginStatus) {
         SLModules modules;
         UserManager userManager = this.userManager.get();
@@ -327,7 +245,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceRinging(final VoiceRinging voiceRinging) {
         UserManager userManager = this.userManager.get();
         if (userManager == null || voiceRinging == null || voiceRinging.agentUUID == null) {
@@ -335,12 +252,12 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
         ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(userManager.getUserID(), voiceRinging.agentUUID);
         this.voiceChannels.forcePut(userChatterID, voiceRinging.voiceChannelInfo);
-        this.ringingChatterNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA.1
+        this.ringingChatterNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoicePluginServiceConnection.this.m914x2afa1cbb((VoiceRinging) voiceRinging, chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -348,8 +265,8 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         this.ringingChatterNameRetriever.subscribe();
     }
 
-    public static void setInstallOfferDisplayed(boolean z) {
-        installOfferDisplayed.set(z);
+    public static void setInstallOfferDisplayed(boolean installOfferDisplayed2) {
+        installOfferDisplayed.set(installOfferDisplayed2);
     }
 
     public static boolean shouldDisplayInstallOffer() {
@@ -365,20 +282,20 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         To view partially-correct add '--show-bad-code' argument
     */
     private void showIncomingCallNotification(VoiceRinging voiceRinging, String str, ChatterID chatterID) {
-        Intent intentCaptureNotify;
+        Intent intent4;
         Intent intent = new Intent(this.context, (Class<?>) GridConnectionService.class);
         intent.setAction(ACTION_VOICE_REJECT);
         intent.setData(voiceRinging.toUri());
         intent.putExtra(INTENT_EXTRA_RINGING_MESSSAGE, voiceRinging.toBundle());
-        Intent intentCreateIntent = ChatFragmentActivityFactory.getInstance().createIntent(this.context, ChatFragment.makeSelection(chatterID));
-        intentCreateIntent.addFlags(536870912);
-        ActivityUtils.setActiveAgentID(intentCreateIntent, chatterID.agentUUID);
-        intentCaptureNotify = intentCreateIntent;
+        Intent intent3 = ChatFragmentActivityFactory.getInstance().createIntent(this.context, ChatFragment.makeSelection(chatterID));
+        intent3.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        ActivityUtils.setActiveAgentID(intent3, chatterID.agentUUID);
+        intent4 = intent3;
         UserManager userManager = this.userManager.get();
         if (userManager != null) {
-            intentCaptureNotify = userManager.getUnreadNotificationManager().captureNotify(UnreadNotificationInfo.create(userManager.getUserID(), 0, null, null, 1, NotificationType.Private, UnreadNotificationInfo.UnreadMessageSource.create(chatterID, null, null, 0), UnreadNotificationInfo.ObjectPopupNotification.create(0, 0, null)), intentCreateIntent);
-            if (intentCaptureNotify == null) {
-                intentCaptureNotify = intentCreateIntent;
+            intent4 = userManager.getUnreadNotificationManager().captureNotify(UnreadNotificationInfo.create(userManager.getUserID(), 0, null, null, 1, NotificationType.Private, UnreadNotificationInfo.UnreadMessageSource.create(chatterID, null, null, 0), UnreadNotificationInfo.ObjectPopupNotification.create(0, 0, null)), intent3);
+            if (intent4 == null) {
+                intent4 = intent3;
             }
         }
         Intent intent2 = new Intent(this.context, (Class<?>) GridConnectionService.class);
@@ -387,11 +304,11 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         intent2.putExtra(INTENT_EXTRA_RINGING_MESSSAGE, voiceRinging.toBundle());
         intent2.putExtra("chatterID", chatterID.toBundle());
         int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-        intent2.putExtra(INTENT_EXTRA_OPEN_CHATTER, PendingIntent.getActivity(this.context, 0, intentCaptureNotify, pendingIntentFlags));
-        Notification notificationBuild = new NotificationCompat.Builder(this.context).setSmallIcon(R.drawable.ic_incoming_voice_call).setContentTitle(str).setContentText(this.context.getString(R.string.incoming_voice_call_text)).setDefaults(-1).setPriority(1).setDeleteIntent(PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).setContentIntent(PendingIntent.getActivity(this.context, 0, intentCaptureNotify, pendingIntentFlags)).setAutoCancel(true).addAction(R.drawable.ic_voice_call_accept, this.context.getString(R.string.voice_call_accept), PendingIntent.getService(this.context, 0, intent2, pendingIntentFlags)).addAction(R.drawable.ic_voice_call_reject, this.context.getString(R.string.voice_call_reject), PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).build();
-        String str2 = voiceRinging.voiceChannelInfo.voiceChannelURI;
-        this.incomingCallNotificationTags.add(str2);
-        ((NotificationManager) this.context.getSystemService("notification")).notify(str2, 1001, notificationBuild);
+        intent2.putExtra(INTENT_EXTRA_OPEN_CHATTER, PendingIntent.getActivity(this.context, 0, intent4, pendingIntentFlags));
+        Notification notification = new NotificationCompat.Builder(this.context).setSmallIcon(R.drawable.ic_incoming_voice_call).setContentTitle(str).setContentText(this.context.getString(R.string.incoming_voice_call_text)).setDefaults(-1).setPriority(1).setDeleteIntent(PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).setContentIntent(PendingIntent.getActivity(this.context, 0, intent4, pendingIntentFlags)).setAutoCancel(true).addAction(R.drawable.ic_voice_call_accept, this.context.getString(R.string.voice_call_accept), PendingIntent.getService(this.context, 0, intent2, pendingIntentFlags)).addAction(R.drawable.ic_voice_call_reject, this.context.getString(R.string.voice_call_reject), PendingIntent.getService(this.context, 0, intent, pendingIntentFlags)).build();
+        String voiceChannelURI = voiceRinging.voiceChannelInfo.voiceChannelURI;
+        this.incomingCallNotificationTags.add(voiceChannelURI);
+        ((NotificationManager) this.context.getSystemService("notification")).notify(voiceChannelURI, 1001, notification);
     }
 
     public void acceptCall(Intent intent) {
@@ -437,12 +354,12 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     }
 
     public void disconnect() {
-        this.mainThreadHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA
+        this.mainThreadHandler.post(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 VoicePluginServiceConnection.this.m915x2afbf316();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -475,7 +392,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         this.context.unbindService(this);
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Debug.Printf("LumiyaVoice: service connected", new Object[0]);
         this.toPluginMessenger = new Messenger(iBinder);
@@ -486,7 +403,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceDisconnected(ComponentName componentName) {
         Debug.Printf("LumiyaCloud: service disconnected", new Object[0]);
         UserManager userManager = this.userManager.get();

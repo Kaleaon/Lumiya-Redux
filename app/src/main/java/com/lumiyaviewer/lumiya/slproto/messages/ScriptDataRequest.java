@@ -1,26 +1,34 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptDataRequest and ScriptDataReply are no longer used in the
+ * simulator or the dataserver. Please see "/region/<region-id>/data-request"
+ * in llscript_dataserver.cpp for the HTTP endpoint.
+ * Script on simulator asks dataserver for information
+ *
+ * <p>Template: {@code ScriptDataRequest Low 337 Trusted Unencoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class ScriptDataRequest extends SLMessage {
     public ArrayList<DataBlock> DataBlock_Fields = new ArrayList<>();
 
+    /** Block DataBlock, Variable. */
     public static class DataBlock {
-        public long Hash;
-        public byte[] Request;
-        public int RequestType;
+        public long Hash; // U64
+        public byte[] Request; // Variable 2
+        public int RequestType; // S8
     }
 
     public ScriptDataRequest() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.DataBlock_Fields.iterator();
@@ -33,16 +41,17 @@ public class ScriptDataRequest extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptDataRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptDataRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 81);
+        // Message number: Low 337 (ScriptDataRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x51);
         byteBuffer.put((byte) this.DataBlock_Fields.size());
         for (DataBlock dataBlock : this.DataBlock_Fields) {
             packLong(byteBuffer, dataBlock.Hash);
@@ -51,10 +60,10 @@ public class ScriptDataRequest extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             DataBlock dataBlock = new DataBlock();
             dataBlock.Hash = unpackLong(byteBuffer);
             dataBlock.RequestType = unpackByte(byteBuffer);

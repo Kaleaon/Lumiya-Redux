@@ -4,14 +4,13 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.types.Vector3Array;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class DrawListObjectEntry extends DrawListEntry {
 
     @Nonnull
     final SLObjectInfo objectInfo;
 
-    public DrawListObjectEntry(@Nonnull SLObjectInfo sLObjectInfo) {
-        this.objectInfo = sLObjectInfo;
+    public DrawListObjectEntry(@Nonnull SLObjectInfo objectInfo) {
+        this.objectInfo = objectInfo;
     }
 
     @Nonnull
@@ -20,33 +19,33 @@ public abstract class DrawListObjectEntry extends DrawListEntry {
     }
 
     public void updateBoundingBox() {
-        float[] fArr = this.objectInfo.worldMatrix;
-        if (fArr != null) {
+        float[] worldMatrix = this.objectInfo.worldMatrix;
+        if (worldMatrix != null) {
             Vector3Array objectCoords = this.objectInfo.getObjectCoords();
             float[] data = objectCoords.getData();
             int elementOffset = objectCoords.getElementOffset(1);
             for (int i = 0; i < 3; i++) {
-                float[] fArr2 = this.boundingBox;
-                float f = fArr[i + 12];
+                float[] boundingBox = this.boundingBox;
+                float f = worldMatrix[i + 12];
                 this.boundingBox[i + 3] = f;
-                fArr2[i] = f;
+                boundingBox[i] = f;
             }
-            for (int i2 = 0; i2 < 3; i2++) {
-                for (int i3 = 0; i3 < 3; i3++) {
-                    float f2 = fArr[(i2 * 4) + i3] * ((-data[elementOffset + i3]) / 2.0f);
-                    float f3 = fArr[(i2 * 4) + i3] * (data[elementOffset + i3] / 2.0f);
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    float f2 = worldMatrix[(j * 4) + k] * ((-data[elementOffset + k]) / 2.0f);
+                    float f3 = worldMatrix[(j * 4) + k] * (data[elementOffset + k] / 2.0f);
                     if (f2 < f3) {
-                        float[] fArr3 = this.boundingBox;
-                        fArr3[i2] = f2 + fArr3[i2];
-                        float[] fArr4 = this.boundingBox;
-                        int i4 = i2 + 3;
-                        fArr4[i4] = f3 + fArr4[i4];
+                        float[] boundingBox2 = this.boundingBox;
+                        boundingBox2[j] = f2 + boundingBox2[j];
+                        float[] boundingBox3 = this.boundingBox;
+                        int i4 = j + 3;
+                        boundingBox3[i4] = f3 + boundingBox3[i4];
                     } else {
-                        float[] fArr5 = this.boundingBox;
-                        fArr5[i2] = f3 + fArr5[i2];
-                        float[] fArr6 = this.boundingBox;
-                        int i5 = i2 + 3;
-                        fArr6[i5] = f2 + fArr6[i5];
+                        float[] boundingBox4 = this.boundingBox;
+                        boundingBox4[j] = f3 + boundingBox4[j];
+                        float[] boundingBox5 = this.boundingBox;
+                        int i5 = j + 3;
+                        boundingBox5[i5] = f2 + boundingBox5[i5];
                     }
                 }
             }

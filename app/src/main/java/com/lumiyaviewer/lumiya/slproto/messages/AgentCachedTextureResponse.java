@@ -1,27 +1,36 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AgentCachedTextureResponse
+ * response to viewer queries for cached textures on dataserver (via simulator)
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code AgentCachedTextureResponse Low 385 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AgentCachedTextureResponse extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<WearableData> WearableData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int SerialNum;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int SerialNum; // S32
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block WearableData, Variable. */
     public static class WearableData {
-        public byte[] HostName;
-        public UUID TextureID;
-        public int TextureIndex;
+        public byte[] HostName; // Variable 1
+        public UUID TextureID; // LLUUID
+        public int TextureIndex; // U8
     }
 
     public AgentCachedTextureResponse() {
@@ -29,7 +38,7 @@ public class AgentCachedTextureResponse extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 41;
         Iterator<?> it = this.WearableData_Fields.iterator();
@@ -42,16 +51,17 @@ public class AgentCachedTextureResponse extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentCachedTextureResponse(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentCachedTextureResponse(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -127);
+        // Message number: Low 385 (AgentCachedTextureResponse).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x81);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.SerialNum);
@@ -63,16 +73,16 @@ public class AgentCachedTextureResponse extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.SerialNum = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             WearableData wearableData = new WearableData();
             wearableData.TextureID = unpackUUID(byteBuffer);
-            wearableData.TextureIndex = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            wearableData.TextureIndex = unpackByte(byteBuffer) & 0xFF;
             wearableData.HostName = unpackVariable(byteBuffer, 1);
             this.WearableData_Fields.add(wearableData);
         }

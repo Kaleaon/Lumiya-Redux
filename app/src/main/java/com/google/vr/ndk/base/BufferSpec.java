@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.Point;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferSpec {
     private static final String TAG = BufferSpec.class.getSimpleName();
     long nativeBufferSpec;
@@ -25,8 +24,8 @@ public class BufferSpec {
         public static final int STENCIL_8 = 5;
     }
 
-    BufferSpec(long j) {
-        this.nativeBufferSpec = j;
+    BufferSpec(long nativeBufferSpec) {
+        this.nativeBufferSpec = nativeBufferSpec;
     }
 
     public static boolean isValidColorFormat(int i) {
@@ -59,22 +58,22 @@ public class BufferSpec {
         GvrApi.nativeBufferSpecGetSize(this.nativeBufferSpec, point);
     }
 
-    public void setColorFormat(int i) {
-        if (!isValidColorFormat(i)) {
+    public void setColorFormat(int colorFormat) {
+        if (!isValidColorFormat(colorFormat)) {
             throw new IllegalArgumentException("Invalid color format.");
         }
-        GvrApi.nativeBufferSpecSetColorFormat(this.nativeBufferSpec, i);
+        GvrApi.nativeBufferSpecSetColorFormat(this.nativeBufferSpec, colorFormat);
     }
 
-    public void setDepthStencilFormat(int i) {
-        if (!isValidDepthStencilFormat(i)) {
+    public void setDepthStencilFormat(int depthStencilFormat) {
+        if (!isValidDepthStencilFormat(depthStencilFormat)) {
             throw new IllegalArgumentException("Invalid depth-stencil format.");
         }
-        GvrApi.nativeBufferSpecSetDepthStencilFormat(this.nativeBufferSpec, i);
+        GvrApi.nativeBufferSpecSetDepthStencilFormat(this.nativeBufferSpec, depthStencilFormat);
     }
 
-    public void setSamples(int i) {
-        GvrApi.nativeBufferSpecSetSamples(this.nativeBufferSpec, i);
+    public void setSamples(int samples) {
+        GvrApi.nativeBufferSpecSetSamples(this.nativeBufferSpec, samples);
     }
 
     public void setSize(Point point) {

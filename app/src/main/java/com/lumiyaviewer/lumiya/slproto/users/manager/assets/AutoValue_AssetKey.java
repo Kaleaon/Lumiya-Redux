@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.users.manager.assets;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_AssetKey extends AssetKey {
     private final int assetType;
     private final UUID assetUUID;
@@ -13,28 +12,28 @@ final class AutoValue_AssetKey extends AssetKey {
     private final int sourceType;
     private final UUID taskUUID;
 
-    AutoValue_AssetKey(int i, int i2, @Nullable UUID uuid, int i3, @Nullable UUID uuid2, @Nullable UUID uuid3, @Nullable UUID uuid4) {
-        this.channelType = i;
-        this.sourceType = i2;
+    AutoValue_AssetKey(int channelType, int sourceType, @Nullable UUID uuid, int assetType, @Nullable UUID ownerUUID, @Nullable UUID itemUUID, @Nullable UUID taskUUID) {
+        this.channelType = channelType;
+        this.sourceType = sourceType;
         this.assetUUID = uuid;
-        this.assetType = i3;
-        this.ownerUUID = uuid2;
-        this.itemUUID = uuid3;
-        this.taskUUID = uuid4;
+        this.assetType = assetType;
+        this.ownerUUID = ownerUUID;
+        this.itemUUID = itemUUID;
+        this.taskUUID = taskUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int assetType() {
         return this.assetType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID assetUUID() {
         return this.assetUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int channelType() {
         return this.channelType;
     }
@@ -57,24 +56,24 @@ final class AutoValue_AssetKey extends AssetKey {
         return (((this.itemUUID == null ? 0 : this.itemUUID.hashCode()) ^ (((this.ownerUUID == null ? 0 : this.ownerUUID.hashCode()) ^ (((((this.assetUUID == null ? 0 : this.assetUUID.hashCode()) ^ ((((this.channelType ^ 1000003) * 1000003) ^ this.sourceType) * 1000003)) * 1000003) ^ this.assetType) * 1000003)) * 1000003)) * 1000003) ^ (this.taskUUID != null ? this.taskUUID.hashCode() : 0);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID itemUUID() {
         return this.itemUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID ownerUUID() {
         return this.ownerUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int sourceType() {
         return this.sourceType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID taskUUID() {
         return this.taskUUID;

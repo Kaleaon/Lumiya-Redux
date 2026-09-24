@@ -4,18 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ImagePacket - follow on image data for images having > 1 packet of data
+ *
+ * <p>Template: {@code ImagePacket High 10 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ImagePacket extends SLMessage {
     public ImageData ImageData_Field;
     public ImageID ImageID_Field;
 
+    /** Block ImageData, Single. */
     public static class ImageData {
-        public byte[] Data;
+        public byte[] Data; // Variable 2
     }
 
+    /** Block ImageID, Single. */
     public static class ImageID {
-        public UUID ID;
-        public int Packet;
+        public UUID ID; // LLUUID
+        public int Packet; // U16
     }
 
     public ImagePacket() {
@@ -24,25 +31,26 @@ public class ImagePacket extends SLMessage {
         this.ImageData_Field = new ImageData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ImageData_Field.Data.length + 2 + 19;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImagePacket(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImagePacket(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 10);
+        // Message number: High 10 (ImagePacket).
+        byteBuffer.put((byte) 0x0A);
         packUUID(byteBuffer, this.ImageID_Field.ID);
         packShort(byteBuffer, (short) this.ImageID_Field.Packet);
         packVariable(byteBuffer, this.ImageData_Field.Data, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ImageID_Field.ID = unpackUUID(byteBuffer);
         this.ImageID_Field.Packet = unpackShort(byteBuffer) & 65535;

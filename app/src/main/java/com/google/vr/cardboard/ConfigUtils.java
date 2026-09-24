@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class ConfigUtils {
     public static final String CARDBOARD_CONFIG_FOLDER = "Cardboard";
     private static final String CARDBOARD_DEVICE_PARAMS_FILE = "current_device_params";
@@ -99,9 +98,9 @@ public class ConfigUtils {
                 Log.e(TAG, "Error parsing param record: incorrect sentinel.");
                 return null;
             }
-            byte[] bArr = new byte[i3];
-            if (inputStream.read(bArr, 0, i3) != -1) {
-                return (T) MessageNano.mergeFrom(cls.newInstance(), bArr);
+            byte[] bytes = new byte[i3];
+            if (inputStream.read(bytes, 0, i3) != -1) {
+                return (T) MessageNano.mergeFrom(cls.newInstance(), bytes);
             }
             Log.e(TAG, "Error parsing param record: end of stream.");
             return null;
@@ -159,7 +158,7 @@ public class ConfigUtils {
 
     public static boolean writePhoneParamsToExternalStorage(Phone.PhoneParams phoneParams) {
         if (phoneParams.dEPRECATEDGyroBias != null && phoneParams.dEPRECATEDGyroBias.length == 0) {
-            phoneParams = phoneParams.mo6clone();
+            phoneParams = phoneParams.clone();
             phoneParams.dEPRECATEDGyroBias = new float[]{0.0f, 0.0f, 0.0f};
         }
         boolean writeToExternalStorage = writeToExternalStorage(phoneParams, "phone_params", CARDBOARD_PHONE_PARAMS_STREAM_SENTINEL);

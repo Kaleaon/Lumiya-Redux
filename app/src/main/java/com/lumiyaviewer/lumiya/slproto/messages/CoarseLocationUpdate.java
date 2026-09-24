@@ -1,31 +1,44 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * The CoarseLocationUpdate message is sent to notify the viewer of
+ * the location of mappable objects in the region. 1 meter resolution is
+ * sufficient for this. The index block is used to show where you are,
+ * and where someone you are tracking is located. They are -1 if not
+ * applicable.
+ *
+ * <p>Template: {@code CoarseLocationUpdate Medium 6 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLWorld::processCoarseUpdate()} in indra/newview/llworld.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class CoarseLocationUpdate extends SLMessage {
     public Index Index_Field;
     public ArrayList<Location> Location_Fields = new ArrayList<>();
     public ArrayList<AgentData> AgentData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Variable. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block Index, Single. */
     public static class Index {
-        public int Prey;
-        public int You;
+        public int Prey; // S16
+        public int You; // S16
     }
 
+    /** Block Location, Variable. */
     public static class Location {
-        public int X;
-        public int Y;
-        public int Z;
+        public int X; // U8
+        public int Y; // U8
+        public int Z; // U8 - Z in meters / 4
     }
 
     public CoarseLocationUpdate() {
@@ -33,20 +46,21 @@ public class CoarseLocationUpdate extends SLMessage {
         this.Index_Field = new Index();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Location_Fields.size() * 3) + 3 + 4 + 1 + (this.AgentData_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCoarseLocationUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCoarseLocationUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 6);
+        // Message number: Medium 6 (CoarseLocationUpdate).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x06);
         byteBuffer.put((byte) this.Location_Fields.size());
         for (Location location : this.Location_Fields) {
             packByte(byteBuffer, (byte) location.X);
@@ -62,20 +76,20 @@ public class CoarseLocationUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Location location = new Location();
-            location.X = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            location.Y = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            location.Z = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            location.X = unpackByte(byteBuffer) & 0xFF;
+            location.Y = unpackByte(byteBuffer) & 0xFF;
+            location.Z = unpackByte(byteBuffer) & 0xFF;
             this.Location_Fields.add(location);
         }
         this.Index_Field.You = unpackShort(byteBuffer);
         this.Index_Field.Prey = unpackShort(byteBuffer);
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             AgentData agentData = new AgentData();
             agentData.AgentID = unpackUUID(byteBuffer);
             this.AgentData_Fields.add(agentData);

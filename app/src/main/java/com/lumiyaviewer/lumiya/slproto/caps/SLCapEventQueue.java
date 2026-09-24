@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/* loaded from: classes.dex */
 public class SLCapEventQueue implements Runnable {
     private String capURL;
     private ICapsEventHandler eventHandler;
@@ -31,13 +30,13 @@ public class SLCapEventQueue implements Runnable {
         public LLSDNode eventBody;
         public CapsEventType eventType;
 
-        public CapsEvent(String str, LLSDNode lLSDNode) {
+        public CapsEvent(String str, LLSDNode lsdNode) {
             try {
                 this.eventType = CapsEventType.valueOf(str);
             } catch (IllegalArgumentException e) {
                 this.eventType = CapsEventType.UnknownCapsEvent;
             }
-            this.eventBody = lLSDNode;
+            this.eventBody = lsdNode;
         }
     }
 
@@ -63,87 +62,83 @@ public class SLCapEventQueue implements Runnable {
         void OnCapsEvent(CapsEvent capsEvent);
     }
 
-    public SLCapEventQueue(String str, ICapsEventHandler iCapsEventHandler) {
+    public SLCapEventQueue(String capURL, ICapsEventHandler capsEventHandler) {
         this.eventHandler = null;
-        this.capURL = str;
-        this.eventHandler = iCapsEventHandler;
+        this.capURL = capURL;
+        this.eventHandler = capsEventHandler;
         this.workingThread.start();
     }
 
-    @Override // java.lang.Runnable
+    /**
+     * EventQueueGet long-poll loop (the viewer's LLEventPoll): POST
+     * {ack: last id, done: flag} to the capability, queue the returned
+     * events, then hand them to the handler in order. After TeleportFinish
+     * the queue stops dispatching and exits once "done" has been confirmed.
+     * Every failed poll is logged and followed by the same 2.5 s pause as a
+     * normal one, so a broken connection does not spin.
+     */
+    @Override
     public void run() {
-        boolean z;
         Debug.Log("CapEventQueue: working thread starting with capURL = " + this.capURL);
-        boolean z2 = false;
+        boolean teleportFinishDispatched = false;
         while (!this.threadMustExit) {
-            LLSDMap.LLSDMapEntry[] lLSDMapEntryArr = new LLSDMap.LLSDMapEntry[2];
-            lLSDMapEntryArr[0] = new LLSDMap.LLSDMapEntry("ack", this.lastEventID != 0 ? new LLSDInt(this.lastEventID) : new LLSDUndefined());
-            lLSDMapEntryArr[1] = new LLSDMap.LLSDMapEntry("done", new LLSDBoolean(this.done));
-            LLSDNode response = null;
+            LLSDMap request = new LLSDMap(
+                    new LLSDMap.LLSDMapEntry("ack", this.lastEventID != 0 ? new LLSDInt(this.lastEventID) : new LLSDUndefined()),
+                    new LLSDMap.LLSDMapEntry("done", new LLSDBoolean(this.done)));
             try {
-                response = this.xmlReq.PerformRequest(this.capURL, new LLSDMap(lLSDMapEntryArr));
+                LLSDNode response = this.xmlReq.PerformRequest(this.capURL, request);
+                if (this.done) {
+                    Debug.Log("CapEventQueue: Done sent and confirmed, exiting gracefully.");
+                    break;
+                }
+                try {
+                    this.lastEventID = response.byKey("id").asInt();
+                    Debug.Log("CapEventQueue: new lastEventID = " + this.lastEventID);
+                    int eventCount = response.byKey("events").getCount();
+                    for (int i = 0; i < eventCount; i++) {
+                        LLSDNode event = response.byKey("events").byIndex(i);
+                        String messageName = event.byKey("message").asString();
+                        LLSDNode body = event.byKey("body");
+                        Debug.Log("CapEventQueue: event name = " + messageName);
+                        if (messageName.equalsIgnoreCase("TeleportFinish")) {
+                            // The old region's queue ends here; confirm with done=true.
+                            this.done = true;
+                            this.willExitGracefully.set(true);
+                        }
+                        this.nextQueue.add(new CapsEvent(messageName, body));
+                    }
+                } catch (LLSDException e) {
+                    Debug.Printf("CapEventQueue: failed to extract id. event was: %s" + response.serializeToXML(), new Object[0]);
+                    Debug.Warning(e);
+                }
+            } catch (FileNotFoundException e) {
+                Debug.Printf("CapEventQueue: Got file not found expection, cap queue closed?", new Object[0]);
             } catch (LLSDXMLException e) {
                 Debug.Warning(e);
-            } catch (FileNotFoundException e2) {
-                Debug.Printf("CapEventQueue: Got file not found expection, cap queue closed?", new Object[0]);
-            } catch (IOException e3) {
-                Debug.Warning(e3);
-            } catch (NullPointerException e4) {
-                Debug.Warning(e4);
+            } catch (IOException e) {
+                Debug.Warning(e);
+            } catch (NullPointerException e) {
+                Debug.Warning(e);
             }
-            if (this.done) {
-                Debug.Log("CapEventQueue: Done sent and confirmed, exiting gracefully.");
-                break;
+            if (this.threadMustExit) {
+                continue;
             }
-            try {
-                if (response == null) {
-                    continue;
-                }
-                this.lastEventID = response.byKey("id").asInt();
-                Debug.Log("CapEventQueue: new lastEventID = " + this.lastEventID);
-                int count = response.byKey("events").getCount();
-                for (int i = 0; i < count; i++) {
-                    LLSDNode byIndex = response.byKey("events").byIndex(i);
-                    String asString = byIndex.byKey("message").asString();
-                    LLSDNode byKey = byIndex.byKey("body");
-                    Debug.Log("CapEventQueue: event name = " + asString);
-                    if (asString.equalsIgnoreCase("TeleportFinish")) {
-                        this.done = true;
-                        this.willExitGracefully.set(true);
+            while (this.nextQueue.size() > 0) {
+                CapsEvent event = this.nextQueue.remove(0);
+                if (!teleportFinishDispatched && this.eventHandler != null) {
+                    if (event.eventType == CapsEventType.TeleportFinish) {
+                        teleportFinishDispatched = true;
                     }
-                    this.nextQueue.add(new CapsEvent(asString, byKey));
+                    this.eventHandler.OnCapsEvent(event);
                 }
-            } catch (LLSDException e5) {
-                Debug.Printf("CapEventQueue: failed to extract event response", new Object[0]);
-                Debug.Warning(e5);
             }
-            if (!this.threadMustExit) {
-                while (true) {
-                    z = z2;
-                    if (this.nextQueue.size() <= 0) {
-                        break;
-                    }
-                    CapsEvent remove = this.nextQueue.remove(0);
-                    if (z || this.eventHandler == null) {
-                        z2 = z;
-                    } else {
-                        if (remove.eventType == CapsEventType.TeleportFinish) {
-                            z = true;
-                        }
-                        this.eventHandler.OnCapsEvent(remove);
-                        z2 = z;
-                    }
+            if (!teleportFinishDispatched) {
+                try {
+                    Thread.sleep(2500L);
+                } catch (InterruptedException e) {
+                    Debug.Log("Interrupted");
+                    e.printStackTrace();
                 }
-                if (!z) {
-                    try {
-                        Thread.sleep(2500L);
-                    } catch (InterruptedException e6) {
-                        Debug.Log("Interrupted");
-                        e6.printStackTrace();
-                        z2 = z;
-                    }
-                }
-                z2 = z;
             }
         }
         Debug.Log("CapEventQueue: event queue thread exiting");

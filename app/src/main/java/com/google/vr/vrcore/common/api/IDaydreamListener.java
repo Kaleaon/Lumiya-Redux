@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IDaydreamListener extends IInterface {
 
     public static abstract class Stub extends Binder implements IDaydreamListener {
@@ -21,11 +20,11 @@ public interface IDaydreamListener extends IInterface {
         private static class Proxy implements IDaydreamListener {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void applyFade(int i, long j) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -38,12 +37,12 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void dumpDebugData() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -58,22 +57,22 @@ public interface IDaydreamListener extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public int getTargetApiVersion() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void recenterHeadTracking() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -84,22 +83,22 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public HeadTrackingState requestStopTracking() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() == 0 ? null : HeadTrackingState.CREATOR.createFromParcel(obtain2);
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() == 0 ? null : HeadTrackingState.CREATOR.createFromParcel(parcel);
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void resumeHeadTracking(HeadTrackingState headTrackingState) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -129,12 +128,12 @@ public interface IDaydreamListener extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IDaydreamListener)) ? (IDaydreamListener) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

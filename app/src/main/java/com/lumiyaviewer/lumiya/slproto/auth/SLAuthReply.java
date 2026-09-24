@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-/* loaded from: classes.dex */
 public final class SLAuthReply {
     public final String agentAppearanceService;
     public final UUID agentID;
@@ -42,38 +41,38 @@ public final class SLAuthReply {
         @Nonnull
         public final UUID uuid;
 
-        public Friend(@Nonnull UUID uuid, int i, int i2) {
+        public Friend(@Nonnull UUID uuid, int rightsGiven, int rightsHas) {
             this.uuid = uuid;
-            this.rightsGiven = i;
-            this.rightsHas = i2;
+            this.rightsGiven = rightsGiven;
+            this.rightsHas = rightsHas;
         }
     }
 
-    public SLAuthReply(SLAuthReply sLAuthReply, boolean z, boolean z2, UUID uuid, String str, int i, String str2) {
-        this.gridName = sLAuthReply.gridName;
-        this.loginURL = sLAuthReply.loginURL;
-        this.sessionID = sLAuthReply.sessionID;
-        this.secureSessionID = sLAuthReply.secureSessionID;
-        this.agentID = uuid == null ? sLAuthReply.agentID : uuid;
-        this.circuitCode = sLAuthReply.circuitCode;
-        this.simAddress = str;
-        this.simPort = i;
-        this.seedCapability = str2;
-        this.success = sLAuthReply.success;
-        this.message = sLAuthReply.message;
-        this.agentAppearanceService = sLAuthReply.agentAppearanceService;
-        this.inventoryRoot = sLAuthReply.inventoryRoot;
-        this.friends = sLAuthReply.friends;
-        this.isIndeterminate = sLAuthReply.isIndeterminate;
-        this.nextMethod = sLAuthReply.nextMethod;
-        this.nextURL = sLAuthReply.nextURL;
-        this.fromTeleport = z;
-        this.isTemporary = z2;
+    public SLAuthReply(SLAuthReply authReply, boolean fromTeleport, boolean isTemporary, UUID uuid, String simAddress, int simPort, String seedCapability) {
+        this.gridName = authReply.gridName;
+        this.loginURL = authReply.loginURL;
+        this.sessionID = authReply.sessionID;
+        this.secureSessionID = authReply.secureSessionID;
+        this.agentID = uuid == null ? authReply.agentID : uuid;
+        this.circuitCode = authReply.circuitCode;
+        this.simAddress = simAddress;
+        this.simPort = simPort;
+        this.seedCapability = seedCapability;
+        this.success = authReply.success;
+        this.message = authReply.message;
+        this.agentAppearanceService = authReply.agentAppearanceService;
+        this.inventoryRoot = authReply.inventoryRoot;
+        this.friends = authReply.friends;
+        this.isIndeterminate = authReply.isIndeterminate;
+        this.nextMethod = authReply.nextMethod;
+        this.nextURL = authReply.nextURL;
+        this.fromTeleport = fromTeleport;
+        this.isTemporary = isTemporary;
     }
 
-    public SLAuthReply(String str, String str2, @Nonnull XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
-        this.gridName = str;
-        this.loginURL = str2;
+    public SLAuthReply(String gridName, String loginURL, @Nonnull XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
+        this.gridName = gridName;
+        this.loginURL = loginURL;
         boolean z = false;
         String str3 = null;
         String str4 = null;
@@ -310,8 +309,8 @@ public final class SLAuthReply {
         if (!(obj instanceof SLAuthReply)) {
             return false;
         }
-        SLAuthReply sLAuthReply = (SLAuthReply) obj;
-        return this.simAddress.equals(sLAuthReply.simAddress) && this.simPort == sLAuthReply.simPort && this.agentID.equals(sLAuthReply.agentID) && this.sessionID.equals(sLAuthReply.sessionID) && this.circuitCode == sLAuthReply.circuitCode;
+        SLAuthReply authReply = (SLAuthReply) obj;
+        return this.simAddress.equals(authReply.simAddress) && this.simPort == authReply.simPort && this.agentID.equals(authReply.agentID) && this.sessionID.equals(authReply.sessionID) && this.circuitCode == authReply.circuitCode;
     }
 
     public int hashCode() {

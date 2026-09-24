@@ -6,27 +6,38 @@ import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * CrossedRegion - new way to tell a viewer it has gone across a region
+ * boundary
+ *
+ * <p>Template: {@code CrossedRegion Medium 7 Trusted Unencoded UDPBlackListed}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_crossed_region()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class CrossedRegion extends SLMessage {
     public AgentData AgentData_Field;
     public Info Info_Field;
     public RegionData RegionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Info, Single. */
     public static class Info {
-        public LLVector3 LookAt;
-        public LLVector3 Position;
+        public LLVector3 LookAt; // LLVector3
+        public LLVector3 Position; // LLVector3
     }
 
+    /** Block RegionData, Single. */
     public static class RegionData {
-        public long RegionHandle;
-        public byte[] SeedCapability;
-        public Inet4Address SimIP;
-        public int SimPort;
+        public long RegionHandle; // U64
+        public byte[] SeedCapability; // Variable 2 - URL
+        public Inet4Address SimIP; // IPADDR
+        public int SimPort; // IPPORT
     }
 
     public CrossedRegion() {
@@ -36,20 +47,21 @@ public class CrossedRegion extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.RegionData_Field.SeedCapability.length + 16 + 34 + 24;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCrossedRegion(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCrossedRegion(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 7);
+        // Message number: Medium 7 (CrossedRegion).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x07);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packIPAddress(byteBuffer, this.RegionData_Field.SimIP);
@@ -60,7 +72,7 @@ public class CrossedRegion extends SLMessage {
         packLLVector3(byteBuffer, this.Info_Field.LookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

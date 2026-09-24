@@ -4,12 +4,19 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RequestPayPrice
+ * viewer -> sim
+ *
+ * <p>Template: {@code RequestPayPrice Low 161 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RequestPayPrice extends SLMessage {
     public ObjectData ObjectData_Field;
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public UUID ObjectID;
+        public UUID ObjectID; // LLUUID
     }
 
     public RequestPayPrice() {
@@ -17,25 +24,26 @@ public class RequestPayPrice extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestPayPrice(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestPayPrice(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -95);
+        // Message number: Low 161 (RequestPayPrice).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xA1);
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ObjectData_Field.ObjectID = unpackUUID(byteBuffer);
     }

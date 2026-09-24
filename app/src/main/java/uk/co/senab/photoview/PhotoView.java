@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-/* loaded from: classes.dex */
 public class PhotoView extends ImageView implements IPhotoView {
     private PhotoViewAttacher mAttacher;
     private ImageView.ScaleType mPendingScaleType;
@@ -31,57 +30,57 @@ public class PhotoView extends ImageView implements IPhotoView {
         init();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public boolean canZoom() {
         return this.mAttacher.canZoom();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void getDisplayMatrix(Matrix matrix) {
         this.mAttacher.getDisplayMatrix(matrix);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public RectF getDisplayRect() {
         return this.mAttacher.getDisplayRect();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public IPhotoView getIPhotoViewImplementation() {
         return this.mAttacher;
     }
 
-    @Override // android.widget.ImageView
+    @Override
     public Matrix getImageMatrix() {
         return this.mAttacher.getImageMatrix();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMaximumScale() {
         return this.mAttacher.getMaximumScale();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMediumScale() {
         return this.mAttacher.getMediumScale();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMinimumScale() {
         return this.mAttacher.getMinimumScale();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getScale() {
         return this.mAttacher.getScale();
     }
 
-    @Override // android.widget.ImageView, uk.co.senab.photoview.IPhotoView
+    @Override
     public ImageView.ScaleType getScaleType() {
         return this.mAttacher.getScaleType();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public Bitmap getVisibleRectangleBitmap() {
         return this.mAttacher.getVisibleRectangleBitmap();
     }
@@ -97,30 +96,30 @@ public class PhotoView extends ImageView implements IPhotoView {
         this.mPendingScaleType = null;
     }
 
-    @Override // android.widget.ImageView, android.view.View
+    @Override
     protected void onAttachedToWindow() {
         init();
         super.onAttachedToWindow();
     }
 
-    @Override // android.widget.ImageView, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         this.mAttacher.cleanup();
         this.mAttacher = null;
         super.onDetachedFromWindow();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setAllowParentInterceptOnEdge(boolean z) {
-        this.mAttacher.setAllowParentInterceptOnEdge(z);
+    @Override
+    public void setAllowParentInterceptOnEdge(boolean allowParentInterceptOnEdge) {
+        this.mAttacher.setAllowParentInterceptOnEdge(allowParentInterceptOnEdge);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public boolean setDisplayMatrix(Matrix matrix) {
         return this.mAttacher.setDisplayMatrix(matrix);
     }
 
-    @Override // android.widget.ImageView
+    @Override
     protected boolean setFrame(int i, int i2, int i3, int i4) {
         boolean frame = super.setFrame(i, i2, i3, i4);
         if (this.mAttacher != null) {
@@ -129,7 +128,7 @@ public class PhotoView extends ImageView implements IPhotoView {
         return frame;
     }
 
-    @Override // android.widget.ImageView
+    @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
         if (this.mAttacher == null) {
@@ -138,16 +137,16 @@ public class PhotoView extends ImageView implements IPhotoView {
         this.mAttacher.update();
     }
 
-    @Override // android.widget.ImageView
-    public void setImageResource(int i) {
-        super.setImageResource(i);
+    @Override
+    public void setImageResource(int imageResource) {
+        super.setImageResource(imageResource);
         if (this.mAttacher == null) {
             return;
         }
         this.mAttacher.update();
     }
 
-    @Override // android.widget.ImageView
+    @Override
     public void setImageURI(Uri uri) {
         super.setImageURI(uri);
         if (this.mAttacher == null) {
@@ -156,87 +155,87 @@ public class PhotoView extends ImageView implements IPhotoView {
         this.mAttacher.update();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setMaximumScale(float f) {
-        this.mAttacher.setMaximumScale(f);
+    @Override
+    public void setMaximumScale(float maximumScale) {
+        this.mAttacher.setMaximumScale(maximumScale);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setMediumScale(float f) {
-        this.mAttacher.setMediumScale(f);
+    @Override
+    public void setMediumScale(float mediumScale) {
+        this.mAttacher.setMediumScale(mediumScale);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setMinimumScale(float f) {
-        this.mAttacher.setMinimumScale(f);
+    @Override
+    public void setMinimumScale(float minimumScale) {
+        this.mAttacher.setMinimumScale(minimumScale);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener onDoubleTapListener) {
         this.mAttacher.setOnDoubleTapListener(onDoubleTapListener);
     }
 
-    @Override // android.view.View, uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
         this.mAttacher.setOnLongClickListener(onLongClickListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnMatrixChangeListener(PhotoViewAttacher.OnMatrixChangedListener onMatrixChangedListener) {
         this.mAttacher.setOnMatrixChangeListener(onMatrixChangedListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
         this.mAttacher.setOnPhotoTapListener(onPhotoTapListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnScaleChangeListener(PhotoViewAttacher.OnScaleChangeListener onScaleChangeListener) {
         this.mAttacher.setOnScaleChangeListener(onScaleChangeListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnSingleFlingListener(PhotoViewAttacher.OnSingleFlingListener onSingleFlingListener) {
         this.mAttacher.setOnSingleFlingListener(onSingleFlingListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnViewTapListener(PhotoViewAttacher.OnViewTapListener onViewTapListener) {
         this.mAttacher.setOnViewTapListener(onViewTapListener);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setRotationBy(float f) {
-        this.mAttacher.setRotationBy(f);
+    @Override
+    public void setRotationBy(float rotationBy) {
+        this.mAttacher.setRotationBy(rotationBy);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setRotationTo(float f) {
-        this.mAttacher.setRotationTo(f);
+    @Override
+    public void setRotationTo(float rotationTo) {
+        this.mAttacher.setRotationTo(rotationTo);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setScale(float f) {
-        this.mAttacher.setScale(f);
+    @Override
+    public void setScale(float scale) {
+        this.mAttacher.setScale(scale);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScale(float f, float f2, float f3, boolean z) {
         this.mAttacher.setScale(f, f2, f3, z);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScale(float f, boolean z) {
         this.mAttacher.setScale(f, z);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScaleLevels(float f, float f2, float f3) {
         this.mAttacher.setScaleLevels(f, f2, f3);
     }
 
-    @Override // android.widget.ImageView, uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScaleType(ImageView.ScaleType scaleType) {
         if (this.mAttacher == null) {
             this.mPendingScaleType = scaleType;
@@ -245,13 +244,13 @@ public class PhotoView extends ImageView implements IPhotoView {
         }
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setZoomTransitionDuration(int i) {
-        this.mAttacher.setZoomTransitionDuration(i);
+    @Override
+    public void setZoomTransitionDuration(int zoomTransitionDuration) {
+        this.mAttacher.setZoomTransitionDuration(zoomTransitionDuration);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
-    public void setZoomable(boolean z) {
-        this.mAttacher.setZoomable(z);
+    @Override
+    public void setZoomable(boolean zoomable) {
+        this.mAttacher.setZoomable(zoomable);
     }
 }

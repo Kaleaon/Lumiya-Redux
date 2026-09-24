@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-/* loaded from: classes.dex */
 public class SLXferManager extends SLModule {
     private Map<String, Long> activeTransferIDs;
     private Map<Long, SLXfer> activeTransfers;
     private AtomicLong nextID;
 
-    public SLXferManager(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLXferManager(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.activeTransfers = Collections.synchronizedMap(new HashMap());
         this.activeTransferIDs = Collections.synchronizedMap(new HashMap());
         this.nextID = new AtomicLong(1L);
@@ -26,29 +25,29 @@ public class SLXferManager extends SLModule {
     @SLMessageHandler
     public synchronized void HandleSendXferPacket(SendXferPacket sendXferPacket) {
         Long valueOf = Long.valueOf(sendXferPacket.XferID_Field.ID);
-        SLXfer sLXfer = this.activeTransfers.get(valueOf);
-        if (sLXfer != null) {
-            sLXfer.HandleDataPacket(this, sendXferPacket);
-            if (sLXfer.isCompleted()) {
+        SLXfer xfer = this.activeTransfers.get(valueOf);
+        if (xfer != null) {
+            xfer.HandleDataPacket(this, sendXferPacket);
+            if (xfer.isCompleted()) {
                 this.activeTransfers.remove(valueOf);
-                this.activeTransferIDs.remove(sLXfer.getFilename());
-                sLXfer.invokeListeners();
+                this.activeTransferIDs.remove(xfer.getFilename());
+                xfer.invokeListeners();
             }
         }
     }
 
-    public synchronized void RequestXfer(String str, ELLPath eLLPath, boolean z, SLXfer.SLXferCompletionListener sLXferCompletionListener, Object obj) {
-        SLXfer sLXfer;
+    public synchronized void RequestXfer(String str, ELLPath ellPath, boolean z, SLXfer.SLXferCompletionListener xferCompletionListener, Object obj) {
+        SLXfer xfer;
         Long l = this.activeTransferIDs.get(str);
-        if (l != null && (sLXfer = this.activeTransfers.get(l)) != null) {
-            sLXfer.addListener(sLXferCompletionListener, obj);
+        if (l != null && (xfer = this.activeTransfers.get(l)) != null) {
+            xfer.addListener(xferCompletionListener, obj);
             return;
         }
         Long valueOf = Long.valueOf(this.nextID.incrementAndGet());
         this.activeTransferIDs.put(str, valueOf);
-        SLXfer sLXfer2 = new SLXfer(valueOf.longValue(), str, eLLPath, z);
-        sLXfer2.addListener(sLXferCompletionListener, obj);
-        this.activeTransfers.put(valueOf, sLXfer2);
-        sLXfer2.StartTransfer(this);
+        SLXfer xfer2 = new SLXfer(valueOf.longValue(), str, ellPath, z);
+        xfer2.addListener(xferCompletionListener, obj);
+        this.activeTransfers.put(valueOf, xfer2);
+        xfer2.StartTransfer(this);
     }
 }

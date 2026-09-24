@@ -1,37 +1,46 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim ->dataserver
+ * This message is used to send up complete parcel properties for
+ * persistance in the database.
+ * If you add something here, you should probably also change the
+ * simulator's database update query on startup.
+ *
+ * <p>Template: {@code UpdateParcel Low 221 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UpdateParcel extends SLMessage {
     public ParcelData ParcelData_Field;
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public int ActualArea;
-        public boolean AllowPublish;
-        public UUID AuthorizedBuyerID;
-        public int BillableArea;
-        public int Category;
-        public byte[] Description;
-        public boolean GroupOwned;
-        public boolean IsForSale;
-        public boolean MaturePublish;
-        public byte[] MusicURL;
-        public byte[] Name;
-        public UUID OwnerID;
-        public UUID ParcelID;
-        public long RegionHandle;
-        public float RegionX;
-        public float RegionY;
-        public int SalePrice;
-        public boolean ShowDir;
-        public UUID SnapshotID;
-        public int Status;
-        public LLVector3 UserLocation;
+        public int ActualArea; // S32
+        public boolean AllowPublish; // BOOL
+        public UUID AuthorizedBuyerID; // LLUUID
+        public int BillableArea; // S32
+        public int Category; // U8
+        public byte[] Description; // Variable 1
+        public boolean GroupOwned; // BOOL
+        public boolean IsForSale; // BOOL
+        public boolean MaturePublish; // BOOL
+        public byte[] MusicURL; // Variable 1
+        public byte[] Name; // Variable 1
+        public UUID OwnerID; // LLUUID
+        public UUID ParcelID; // LLUUID
+        public long RegionHandle; // U64
+        public float RegionX; // F32
+        public float RegionY; // F32
+        public int SalePrice; // S32
+        public boolean ShowDir; // BOOL
+        public UUID SnapshotID; // LLUUID
+        public int Status; // U8
+        public LLVector3 UserLocation; // LLVector3
     }
 
     public UpdateParcel() {
@@ -39,21 +48,22 @@ public class UpdateParcel extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ParcelData_Field.Name.length + 43 + 1 + this.ParcelData_Field.Description.length + 1 + this.ParcelData_Field.MusicURL.length + 4 + 4 + 4 + 4 + 1 + 1 + 1 + 16 + 12 + 4 + 16 + 1 + 1 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateParcel(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateParcel(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -35);
+        // Message number: Low 221 (UpdateParcel).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xDD);
         packUUID(byteBuffer, this.ParcelData_Field.ParcelID);
         packLong(byteBuffer, this.ParcelData_Field.RegionHandle);
         packUUID(byteBuffer, this.ParcelData_Field.OwnerID);
@@ -77,13 +87,13 @@ public class UpdateParcel extends SLMessage {
         packBoolean(byteBuffer, this.ParcelData_Field.MaturePublish);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ParcelData_Field.ParcelID = unpackUUID(byteBuffer);
         this.ParcelData_Field.RegionHandle = unpackLong(byteBuffer);
         this.ParcelData_Field.OwnerID = unpackUUID(byteBuffer);
         this.ParcelData_Field.GroupOwned = unpackBoolean(byteBuffer);
-        this.ParcelData_Field.Status = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.Status = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.Name = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.Description = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.MusicURL = unpackVariable(byteBuffer, 1);
@@ -93,7 +103,7 @@ public class UpdateParcel extends SLMessage {
         this.ParcelData_Field.BillableArea = unpackInt(byteBuffer);
         this.ParcelData_Field.ShowDir = unpackBoolean(byteBuffer);
         this.ParcelData_Field.IsForSale = unpackBoolean(byteBuffer);
-        this.ParcelData_Field.Category = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.Category = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.SnapshotID = unpackUUID(byteBuffer);
         this.ParcelData_Field.UserLocation = unpackLLVector3(byteBuffer);
         this.ParcelData_Field.SalePrice = unpackInt(byteBuffer);

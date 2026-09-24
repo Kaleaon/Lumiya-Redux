@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.avatar;
 
-/* loaded from: classes.dex */
 public class AnimationTiming {
     public float runningTime = 0.0f;
     public float inAnimationTime = 0.0f;

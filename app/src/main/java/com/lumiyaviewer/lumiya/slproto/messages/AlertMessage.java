@@ -1,23 +1,35 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * Simulator to Viewer Messages
+ * AlertMessage
+ * Specifies the text to be posted in an alert dialog
+ * Also sent from dataserver to simulator with AgentInfo block
+ * Simulator doesn't include AgentInfo block to viewer
+ *
+ * <p>Template: {@code AlertMessage Low 134 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_alert_message()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AlertMessage extends SLMessage {
     public AlertData AlertData_Field;
     public ArrayList<AlertInfo> AlertInfo_Fields = new ArrayList<>();
 
+    /** Block AlertData, Single. */
     public static class AlertData {
-        public byte[] Message;
+        public byte[] Message; // Variable 1
     }
 
+    /** Block AlertInfo, Variable. */
     public static class AlertInfo {
-        public byte[] ExtraParams;
-        public byte[] Message;
+        public byte[] ExtraParams; // Variable 1
+        public byte[] Message; // Variable 1
     }
 
     public AlertMessage() {
@@ -25,30 +37,31 @@ public class AlertMessage extends SLMessage {
         this.AlertData_Field = new AlertData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.AlertData_Field.Message.length + 1 + 4 + 1;
         Iterator<?> it = this.AlertInfo_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
             AlertInfo alertInfo = (AlertInfo) it.next();
-            length = alertInfo.ExtraParams.length + alertInfo.Message.length + 1 + 1 + i;
+            length = alertInfo.ExtraParams.length + alertInfo.Message.length + 1 + 1 + length2;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAlertMessage(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAlertMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -122);
+        // Message number: Low 134 (AlertMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x86);
         packVariable(byteBuffer, this.AlertData_Field.Message, 1);
         byteBuffer.put((byte) this.AlertInfo_Fields.size());
         for (AlertInfo alertInfo : this.AlertInfo_Fields) {
@@ -57,11 +70,11 @@ public class AlertMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AlertData_Field.Message = unpackVariable(byteBuffer, 1);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             AlertInfo alertInfo = new AlertInfo();
             alertInfo.Message = unpackVariable(byteBuffer, 1);
             alertInfo.ExtraParams = unpackVariable(byteBuffer, 1);

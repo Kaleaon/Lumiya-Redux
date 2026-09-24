@@ -1,29 +1,37 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Viewer -> Sim
+ * Used in "Make New Outfit"
+ *
+ * <p>Template: {@code CreateNewOutfitAttachments Low 398 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class CreateNewOutfitAttachments extends SLMessage {
     public AgentData AgentData_Field;
     public HeaderData HeaderData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block HeaderData, Single. */
     public static class HeaderData {
-        public UUID NewFolderID;
+        public UUID NewFolderID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public UUID OldFolderID;
-        public UUID OldItemID;
+        public UUID OldFolderID; // LLUUID
+        public UUID OldItemID; // LLUUID
     }
 
     public CreateNewOutfitAttachments() {
@@ -32,21 +40,22 @@ public class CreateNewOutfitAttachments extends SLMessage {
         this.HeaderData_Field = new HeaderData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 32) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCreateNewOutfitAttachments(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCreateNewOutfitAttachments(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -114);
+        // Message number: Low 398 (CreateNewOutfitAttachments).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x8E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.HeaderData_Field.NewFolderID);
@@ -57,13 +66,13 @@ public class CreateNewOutfitAttachments extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.HeaderData_Field.NewFolderID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.OldItemID = unpackUUID(byteBuffer);
             objectData.OldFolderID = unpackUUID(byteBuffer);

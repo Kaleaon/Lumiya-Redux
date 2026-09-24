@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.notify.NotificationChannels;
 
-/* loaded from: classes.dex */
 public class PreferenceSubPage extends Preference {
     private NotificationType notificationType;
     private boolean pageNotificationDetails;
@@ -75,7 +74,7 @@ public class PreferenceSubPage extends Preference {
         return this.pageResource;
     }
 
-    @Override // androidx.preference.Preference
+    @Override
     public CharSequence getSummary() {
         if (!this.pageNotificationDetails || this.notificationType == null) {
             return super.getSummary();

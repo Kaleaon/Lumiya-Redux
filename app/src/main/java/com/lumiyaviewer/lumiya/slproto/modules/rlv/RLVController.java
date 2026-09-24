@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVController extends SLModule {
     private boolean RLVEnabled;
     private String RLVEnablingCommand;
@@ -26,8 +25,8 @@ public class RLVController extends SLModule {
     private UUID RLVEnablingUUID;
     private RLVRestrictions restrictions;
 
-    public RLVController(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public RLVController(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.RLVEnabled = false;
         this.RLVEnablingOffered = false;
         this.RLVEnablingCommand = null;
@@ -45,10 +44,10 @@ public class RLVController extends SLModule {
             str2 = str.substring(indexOf + 1);
             str = str.substring(0, indexOf);
         }
-        int indexOf2 = str.indexOf(58);
-        if (indexOf2 >= 0) {
-            str3 = str.substring(indexOf2 + 1);
-            str = str.substring(0, indexOf2);
+        int index = str.indexOf(58);
+        if (index >= 0) {
+            str3 = str.substring(index + 1);
+            str = str.substring(0, index);
         }
         handleRLVCommandParsed(uuid, str, str2, str3);
     }
@@ -73,15 +72,15 @@ public class RLVController extends SLModule {
         this.agentCircuit.HandleChatEvent(this.agentCircuit.getLocalChatterID(), new SLEnableRLVOfferEvent(chatFromSimulator, this.agentCircuit.getAgentUUID()), true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleGlobalOptionsChange() {
-        boolean rLVEnabled = GlobalOptions.getInstance().getRLVEnabled();
-        if (rLVEnabled && (!this.RLVEnabled) && this.RLVEnablingOffered && this.RLVEnablingCommand != null) {
+        boolean rlvEnabled = GlobalOptions.getInstance().getRLVEnabled();
+        if (rlvEnabled && (!this.RLVEnabled) && this.RLVEnablingOffered && this.RLVEnablingCommand != null) {
             this.RLVEnablingOffered = false;
             Debug.Printf("Enabling accepted, original command: '%s'", this.RLVEnablingCommand);
             handleRLVCommands(this.RLVEnablingUUID, this.RLVEnablingCommand);
         }
-        this.RLVEnabled = rLVEnabled;
+        this.RLVEnabled = rlvEnabled;
     }
 
     public boolean autoAcceptTeleport(UUID uuid) {
@@ -89,13 +88,13 @@ public class RLVController extends SLModule {
     }
 
     public boolean canDetachItem(int i, UUID uuid) {
-        SLAttachmentPoint sLAttachmentPoint;
+        SLAttachmentPoint attachmentPoint;
         String str = null;
         if (!this.RLVEnabled) {
             return true;
         }
-        if (i >= 0 && i < 56 && (sLAttachmentPoint = SLAttachmentPoint.attachmentPoints[i]) != null) {
-            str = sLAttachmentPoint.name;
+        if (i >= 0 && i < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[i]) != null) {
+            str = attachmentPoint.name;
         }
         return str == null || this.restrictions.isAllowed(RLVRestrictionType.detach, str, uuid);
     }
@@ -124,8 +123,8 @@ public class RLVController extends SLModule {
         return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.unsit, "", null);
     }
 
-    public boolean canTakeItemOff(SLWearableType sLWearableType) {
-        return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.remoutfit, sLWearableType.getName(), null);
+    public boolean canTakeItemOff(SLWearableType wearableType) {
+        return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.remoutfit, wearableType.getName(), null);
     }
 
     public boolean canTeleportBySitting() {
@@ -148,8 +147,8 @@ public class RLVController extends SLModule {
         return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.viewnote, "", null);
     }
 
-    public boolean canWearItem(SLWearableType sLWearableType) {
-        return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.addoutfit, sLWearableType.getName(), null);
+    public boolean canWearItem(SLWearableType wearableType) {
+        return !this.RLVEnabled || this.restrictions.isAllowed(RLVRestrictionType.addoutfit, wearableType.getName(), null);
     }
 
     public SLModules getModules() {
@@ -246,9 +245,9 @@ public class RLVController extends SLModule {
         SendMessage(chatFromViewer);
     }
 
-    public void teleportToGlobalPos(UUID uuid, LLVector3 lLVector3) {
+    public void teleportToGlobalPos(UUID uuid, LLVector3 vector3) {
         if (this.RLVEnabled && this.restrictions.isAllowed(RLVRestrictionType.tploc, "", null, uuid)) {
-            this.agentCircuit.TeleportToGlobalPosition(lLVector3);
+            this.agentCircuit.TeleportToGlobalPosition(vector3);
         }
     }
 }

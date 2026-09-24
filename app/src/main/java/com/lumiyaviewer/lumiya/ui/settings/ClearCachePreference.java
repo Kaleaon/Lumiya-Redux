@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.preference.Preference;
 import android.util.AttributeSet;
 
-/* loaded from: classes.dex */
 public class ClearCachePreference extends Preference {
     public ClearCachePreference(Context context) {
         super(context);

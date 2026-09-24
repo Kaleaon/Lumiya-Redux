@@ -4,14 +4,21 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Script on simulator asks dataserver if there are any email messages
+ * waiting.
+ *
+ * <p>Template: {@code EmailMessageRequest Low 335 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class EmailMessageRequest extends SLMessage {
     public DataBlock DataBlock_Field;
 
+    /** Block DataBlock, Single. */
     public static class DataBlock {
-        public byte[] FromAddress;
-        public UUID ObjectID;
-        public byte[] Subject;
+        public byte[] FromAddress; // Variable 1
+        public UUID ObjectID; // LLUUID
+        public byte[] Subject; // Variable 1
     }
 
     public EmailMessageRequest() {
@@ -19,27 +26,28 @@ public class EmailMessageRequest extends SLMessage {
         this.DataBlock_Field = new DataBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.DataBlock_Field.FromAddress.length + 17 + 1 + this.DataBlock_Field.Subject.length + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEmailMessageRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEmailMessageRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 79);
+        // Message number: Low 335 (EmailMessageRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x4F);
         packUUID(byteBuffer, this.DataBlock_Field.ObjectID);
         packVariable(byteBuffer, this.DataBlock_Field.FromAddress, 1);
         packVariable(byteBuffer, this.DataBlock_Field.Subject, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.DataBlock_Field.ObjectID = unpackUUID(byteBuffer);
         this.DataBlock_Field.FromAddress = unpackVariable(byteBuffer, 1);

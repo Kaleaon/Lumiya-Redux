@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLTextureEntryFace {
     public static final int AttributeAll = -1;
     static final int AttributeGlow = 512;
@@ -27,45 +26,45 @@ public abstract class SLTextureEntryFace {
         return pool.intern(new AutoValue_SLTextureEntryFace(mutableSLTextureEntryFace.textureID, mutableSLTextureEntryFace.rgba, mutableSLTextureEntryFace.repeatU, mutableSLTextureEntryFace.repeatV, mutableSLTextureEntryFace.offsetU, mutableSLTextureEntryFace.offsetV, mutableSLTextureEntryFace.rotation, mutableSLTextureEntryFace.glow, mutableSLTextureEntryFace.materialb, mutableSLTextureEntryFace.mediab, mutableSLTextureEntryFace.hasAttribute));
     }
 
-    public final float getGlow(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 512) != 0 ? glow() : sLTextureEntryFace.glow();
+    public final float getGlow(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 512) != 0 ? glow() : textureEntryFace.glow();
     }
 
-    public final byte getMaterial(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 128) != 0 ? materialb() : sLTextureEntryFace.materialb();
+    public final byte getMaterial(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 128) != 0 ? materialb() : textureEntryFace.materialb();
     }
 
-    public final byte getMedia(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 256) != 0 ? mediab() : sLTextureEntryFace.mediab();
+    public final byte getMedia(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 256) != 0 ? mediab() : textureEntryFace.mediab();
     }
 
-    public final float getOffsetU(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 16) != 0 ? offsetU() : sLTextureEntryFace.offsetU();
+    public final float getOffsetU(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 16) != 0 ? offsetU() : textureEntryFace.offsetU();
     }
 
-    public final float getOffsetV(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 32) != 0 ? offsetV() : sLTextureEntryFace.offsetV();
+    public final float getOffsetV(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 32) != 0 ? offsetV() : textureEntryFace.offsetV();
     }
 
-    public final int getRGBA(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 2) != 0 ? rgba() : sLTextureEntryFace.rgba();
+    public final int getRGBA(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 2) != 0 ? rgba() : textureEntryFace.rgba();
     }
 
-    public final float getRepeatU(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 4) != 0 ? repeatU() : sLTextureEntryFace.repeatU();
+    public final float getRepeatU(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 4) != 0 ? repeatU() : textureEntryFace.repeatU();
     }
 
-    public final float getRepeatV(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 8) != 0 ? repeatV() : sLTextureEntryFace.repeatV();
+    public final float getRepeatV(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 8) != 0 ? repeatV() : textureEntryFace.repeatV();
     }
 
-    public final float getRotation(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 64) != 0 ? rotation() : sLTextureEntryFace.rotation();
+    public final float getRotation(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 64) != 0 ? rotation() : textureEntryFace.rotation();
     }
 
     @Nullable
-    public final UUID getTextureID(@Nonnull SLTextureEntryFace sLTextureEntryFace) {
-        return (hasAttribute() & 1) != 0 ? textureID() : sLTextureEntryFace.textureID();
+    public final UUID getTextureID(@Nonnull SLTextureEntryFace textureEntryFace) {
+        return (hasAttribute() & 1) != 0 ? textureID() : textureEntryFace.textureID();
     }
 
     public abstract float glow();

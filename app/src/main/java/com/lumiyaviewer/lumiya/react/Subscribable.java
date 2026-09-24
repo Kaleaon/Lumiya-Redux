@@ -5,7 +5,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public interface Subscribable<K, T> {
     Subscription<K, T> subscribe(@Nonnull K k, @Nonnull Subscription.OnData<T> onData);
 

@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class Distortion {
     private float[] coefficients;
     private static final float[] CARDBOARD_V2_2_COEFFICIENTS = {0.34f, 0.55f};
@@ -23,9 +22,9 @@ public class Distortion {
         return distortion;
     }
 
-    public static Distortion parseFromProtobuf(float[] fArr) {
+    public static Distortion parseFromProtobuf(float[] floats) {
         Distortion distortion = new Distortion();
-        distortion.setCoefficients(fArr);
+        distortion.setCoefficients(floats);
         return distortion;
     }
 
@@ -34,21 +33,21 @@ public class Distortion {
         int length2 = dArr[0].length;
         double[][] dArr3 = (double[][]) Array.newInstance((Class<?>) Double.TYPE, length2, length2);
         for (int i = 0; i < length2; i++) {
-            for (int i2 = 0; i2 < length2; i2++) {
+            for (int j = 0; j < length2; j++) {
                 double d = 0.0d;
-                for (int i3 = 0; i3 < length; i3++) {
-                    d += dArr[i3][i2] * dArr[i3][i];
+                for (int k = 0; k < length; k++) {
+                    d += dArr[k][j] * dArr[k][i];
                 }
-                dArr3[i2][i] = d;
+                dArr3[j][i] = d;
             }
         }
         double[] dArr4 = new double[length2];
-        for (int i4 = 0; i4 < length2; i4++) {
+        for (int m = 0; m < length2; m++) {
             double d2 = 0.0d;
-            for (int i5 = 0; i5 < length; i5++) {
-                d2 += dArr[i5][i4] * dArr2[i5];
+            for (int n = 0; n < length; n++) {
+                d2 += dArr[n][m] * dArr2[n];
             }
-            dArr4[i4] = d2;
+            dArr4[m] = d2;
         }
         return solveLinear(dArr3, dArr4);
     }
@@ -61,23 +60,23 @@ public class Distortion {
             if (i2 >= length - 1) {
                 break;
             }
-            for (int i3 = i2 + 1; i3 < length; i3++) {
-                double d = dArr[i3][i2] / dArr[i2][i2];
-                for (int i4 = i2 + 1; i4 < length; i4++) {
-                    double[] dArr3 = dArr[i3];
-                    dArr3[i4] = dArr3[i4] - (dArr[i2][i4] * d);
+            for (int j = i2 + 1; j < length; j++) {
+                double d = dArr[j][i2] / dArr[i2][i2];
+                for (int k = i2 + 1; k < length; k++) {
+                    double[] dArr3 = dArr[j];
+                    dArr3[k] = dArr3[k] - (dArr[i2][k] * d);
                 }
-                dArr2[i3] = dArr2[i3] - (d * dArr2[i2]);
+                dArr2[j] = dArr2[j] - (d * dArr2[i2]);
             }
             i = i2 + 1;
         }
         double[] dArr4 = new double[length];
-        for (int i5 = length - 1; i5 >= 0; i5--) {
-            double d2 = dArr2[i5];
-            for (int i6 = i5 + 1; i6 < length; i6++) {
-                d2 -= dArr[i5][i6] * dArr4[i6];
+        for (int m = length - 1; m >= 0; m--) {
+            double d2 = dArr2[m];
+            for (int n = m + 1; n < length; n++) {
+                d2 -= dArr[m][n] * dArr4[n];
             }
-            dArr4[i5] = d2 / dArr[i5][i5];
+            dArr4[m] = d2 / dArr[m][m];
         }
         return dArr4;
     }
@@ -105,9 +104,9 @@ public class Distortion {
         float f2 = 1.0f;
         float f3 = f * f;
         float f4 = 1.0f;
-        for (float f5 : this.coefficients) {
+        for (float coefficient : this.coefficients) {
             f2 *= f3;
-            f4 += f5 * f2;
+            f4 += coefficient * f2;
         }
         return f4;
     }
@@ -133,23 +132,23 @@ public class Distortion {
     public Distortion getApproximateInverseDistortion(float f, int i) {
         double[][] dArr = (double[][]) Array.newInstance((Class<?>) Double.TYPE, 100, i);
         double[] dArr2 = new double[100];
-        for (int i2 = 0; i2 < 100; i2++) {
-            float f2 = ((i2 + 1) * f) / 100.0f;
+        for (int j = 0; j < 100; j++) {
+            float f2 = ((j + 1) * f) / 100.0f;
             double distort = distort(f2);
-            double d = distort;
-            for (int i3 = 0; i3 < i; i3++) {
-                d *= distort * distort;
-                dArr[i2][i3] = d;
+            double distort2 = distort;
+            for (int k = 0; k < i; k++) {
+                distort2 *= distort * distort;
+                dArr[j][k] = distort2;
             }
-            dArr2[i2] = f2 - distort;
+            dArr2[j] = f2 - distort;
         }
         double[] solveLeastSquares = solveLeastSquares(dArr, dArr2);
-        float[] fArr = new float[solveLeastSquares.length];
-        for (int i4 = 0; i4 < solveLeastSquares.length; i4++) {
-            fArr[i4] = (float) solveLeastSquares[i4];
+        float[] floats = new float[solveLeastSquares.length];
+        for (int m = 0; m < solveLeastSquares.length; m++) {
+            floats[m] = (float) solveLeastSquares[m];
         }
         Distortion distortion = new Distortion();
-        distortion.setCoefficients(fArr);
+        distortion.setCoefficients(floats);
         return distortion;
     }
 
@@ -157,8 +156,8 @@ public class Distortion {
         return this.coefficients;
     }
 
-    public void setCoefficients(float[] fArr) {
-        this.coefficients = fArr == null ? new float[0] : (float[]) fArr.clone();
+    public void setCoefficients(float[] floats) {
+        this.coefficients = floats == null ? new float[0] : (float[]) floats.clone();
     }
 
     public float[] toProtobuf() {

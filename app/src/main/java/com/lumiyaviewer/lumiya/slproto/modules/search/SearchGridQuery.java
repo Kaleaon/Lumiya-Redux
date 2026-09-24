@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.modules.search;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class SearchGridQuery {
 
     public enum SearchType {

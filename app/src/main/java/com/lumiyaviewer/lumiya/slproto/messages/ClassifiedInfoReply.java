@@ -1,36 +1,47 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ClassifiedInfoReply
+ * dataserver -> simulator
+ * simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code ClassifiedInfoReply Low 44 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processClassifiedInfoReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ClassifiedInfoReply extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int Category;
-        public int ClassifiedFlags;
-        public UUID ClassifiedID;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Desc;
-        public int ExpirationDate;
-        public byte[] Name;
-        public UUID ParcelID;
-        public byte[] ParcelName;
-        public int ParentEstate;
-        public LLVector3d PosGlobal;
-        public int PriceForListing;
-        public byte[] SimName;
-        public UUID SnapshotID;
+        public int Category; // U32
+        public int ClassifiedFlags; // U8
+        public UUID ClassifiedID; // LLUUID
+        public int CreationDate; // U32
+        public UUID CreatorID; // LLUUID
+        public byte[] Desc; // Variable 2
+        public int ExpirationDate; // U32
+        public byte[] Name; // Variable 1
+        public UUID ParcelID; // LLUUID
+        public byte[] ParcelName; // Variable 1
+        public int ParentEstate; // U32
+        public LLVector3d PosGlobal; // LLVector3d
+        public int PriceForListing; // S32
+        public byte[] SimName; // Variable 1
+        public UUID SnapshotID; // LLUUID
     }
 
     public ClassifiedInfoReply() {
@@ -39,21 +50,22 @@ public class ClassifiedInfoReply extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.Name.length + 45 + 2 + this.Data_Field.Desc.length + 16 + 4 + 16 + 1 + this.Data_Field.SimName.length + 24 + 1 + this.Data_Field.ParcelName.length + 1 + 4 + 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleClassifiedInfoReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleClassifiedInfoReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 44);
+        // Message number: Low 44 (ClassifiedInfoReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x2C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.Data_Field.ClassifiedID);
         packUUID(byteBuffer, this.Data_Field.CreatorID);
@@ -72,7 +84,7 @@ public class ClassifiedInfoReply extends SLMessage {
         packInt(byteBuffer, this.Data_Field.PriceForListing);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.Data_Field.ClassifiedID = unpackUUID(byteBuffer);
@@ -88,7 +100,7 @@ public class ClassifiedInfoReply extends SLMessage {
         this.Data_Field.SimName = unpackVariable(byteBuffer, 1);
         this.Data_Field.PosGlobal = unpackLLVector3d(byteBuffer);
         this.Data_Field.ParcelName = unpackVariable(byteBuffer, 1);
-        this.Data_Field.ClassifiedFlags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Data_Field.ClassifiedFlags = unpackByte(byteBuffer) & 0xFF;
         this.Data_Field.PriceForListing = unpackInt(byteBuffer);
     }
 }

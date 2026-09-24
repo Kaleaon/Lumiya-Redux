@@ -4,7 +4,6 @@ import androidx.core.os.EnvironmentCompat;
 import com.google.common.collect.ImmutableMap;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public enum SLAssetType {
     AT_TEXTURE(0, "texture", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture, R.string.asset_action_view),
     AT_SOUND(1, "sound", SLInventoryType.IT_SOUND, 1, R.drawable.inv_sound, R.string.asset_type_sound, -1),
@@ -48,25 +47,25 @@ public enum SLAssetType {
         tagMap = builder.build();
     }
 
-    SLAssetType(int i, String str, SLInventoryType sLInventoryType, int i2, int i3, int i4, int i5) {
-        this.typeCode = i;
-        this.stringCode = str;
-        this.invType = sLInventoryType;
-        this.specialFolderType = i2;
-        this.drawableResource = i3;
-        this.typeDescription = i4;
-        this.actionDescription = i5;
+    SLAssetType(int typeCode, String stringCode, SLInventoryType inventoryType, int specialFolderType, int drawableResource, int typeDescription, int actionDescription) {
+        this.typeCode = typeCode;
+        this.stringCode = stringCode;
+        this.invType = inventoryType;
+        this.specialFolderType = specialFolderType;
+        this.drawableResource = drawableResource;
+        this.typeDescription = typeDescription;
+        this.actionDescription = actionDescription;
     }
 
     public static SLAssetType getByString(String str) {
-        SLAssetType sLAssetType = tagMap.get(str);
-        return sLAssetType == null ? AT_UNKNOWN : sLAssetType;
+        SLAssetType assetType = tagMap.get(str);
+        return assetType == null ? AT_UNKNOWN : assetType;
     }
 
     public static SLAssetType getByType(int i) {
-        for (SLAssetType sLAssetType : valuesCustom()) {
-            if (sLAssetType.typeCode == i) {
-                return sLAssetType;
+        for (SLAssetType assetType : valuesCustom()) {
+            if (assetType.typeCode == i) {
+                return assetType;
             }
         }
         return AT_UNKNOWN;

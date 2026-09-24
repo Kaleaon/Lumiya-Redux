@@ -3,7 +3,6 @@ package com.google.vr.cardboard;
 import android.content.Context;
 import android.view.OrientationEventListener;
 
-/* loaded from: classes.dex */
 public class ScreenOrientationDetector extends OrientationEventListener {
     private static final int DEFAULT_LANDSCAPE_TOLERANCE_DEGREES = 10;
     private static final int DEFAULT_PORTRAIT_TOLERANCE_DEGREES = 30;
@@ -31,15 +30,15 @@ public class ScreenOrientationDetector extends OrientationEventListener {
         this(context, listener, 30, 10);
     }
 
-    public ScreenOrientationDetector(Context context, Listener listener, int i, int i2) {
+    public ScreenOrientationDetector(Context context, Listener listener, int portraitToleranceDegrees, int landscapeToleranceDegrees) {
         super(context);
         this.currentScreenOrientation = -1;
-        if (i + i2 > 90) {
+        if (portraitToleranceDegrees + landscapeToleranceDegrees > 90) {
             throw new IllegalArgumentException("Portrait and landscape detection thresholds must sum to to <= 90 degrees");
         }
         this.clientListener = listener;
-        this.portraitToleranceDegrees = i;
-        this.landscapeToleranceDegrees = i2;
+        this.portraitToleranceDegrees = portraitToleranceDegrees;
+        this.landscapeToleranceDegrees = landscapeToleranceDegrees;
     }
 
     private int determineScreenOrientation(int i) {
@@ -62,13 +61,13 @@ public class ScreenOrientationDetector extends OrientationEventListener {
         return 0;
     }
 
-    @Override // android.view.OrientationEventListener
+    @Override
     public void disable() {
         super.disable();
         this.currentScreenOrientation = -1;
     }
 
-    @Override // android.view.OrientationEventListener
+    @Override
     public void enable() {
         this.currentScreenOrientation = -1;
         super.enable();
@@ -78,7 +77,7 @@ public class ScreenOrientationDetector extends OrientationEventListener {
         return this.currentScreenOrientation;
     }
 
-    @Override // android.view.OrientationEventListener
+    @Override
     public void onOrientationChanged(int i) {
         int determineScreenOrientation = determineScreenOrientation(i);
         if (determineScreenOrientation == this.currentScreenOrientation) {

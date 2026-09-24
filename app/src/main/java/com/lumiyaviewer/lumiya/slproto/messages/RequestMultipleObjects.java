@@ -1,24 +1,37 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RequestMultipleObjects
+ * viewer -> simulator
+ * reliable
+ * When the viewer gets a local_id/crc for an object that
+ * it either doesn't have, or doesn't have the current version
+ * of, it sends this upstream get get an update.
+ * CacheMissType 0 => full object (viewer doesn't have it)
+ * CacheMissType 1 => CRC mismatch only
+ *
+ * <p>Template: {@code RequestMultipleObjects Medium 3 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RequestMultipleObjects extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int CacheMissType;
-        public int ID;
+        public int CacheMissType; // U8
+        public int ID; // U32
     }
 
     public RequestMultipleObjects() {
@@ -26,20 +39,21 @@ public class RequestMultipleObjects extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 5) + 35;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestMultipleObjects(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestMultipleObjects(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 3);
+        // Message number: Medium 3 (RequestMultipleObjects).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x03);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -49,14 +63,14 @@ public class RequestMultipleObjects extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
-            objectData.CacheMissType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.CacheMissType = unpackByte(byteBuffer) & 0xFF;
             objectData.ID = unpackInt(byteBuffer);
             this.ObjectData_Fields.add(objectData);
         }

@@ -1,19 +1,18 @@
 package com.lumiyaviewer.lumiya.res.text;
 
-/* loaded from: classes.dex */
 final class AutoValue_DrawableTextParams extends DrawableTextParams {
     private final int backgroundColor;
     private final String text;
 
-    AutoValue_DrawableTextParams(String str, int i) {
-        if (str == null) {
+    AutoValue_DrawableTextParams(String text, int backgroundColor) {
+        if (text == null) {
             throw new NullPointerException("Null text");
         }
-        this.text = str;
-        this.backgroundColor = i;
+        this.text = text;
+        this.backgroundColor = backgroundColor;
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.text.DrawableTextParams
+    @Override
     public int backgroundColor() {
         return this.backgroundColor;
     }
@@ -33,7 +32,7 @@ final class AutoValue_DrawableTextParams extends DrawableTextParams {
         return ((this.text.hashCode() ^ 1000003) * 1000003) ^ this.backgroundColor;
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.text.DrawableTextParams
+    @Override
     public String text() {
         return this.text;
     }

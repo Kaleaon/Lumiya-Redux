@@ -19,7 +19,6 @@ import java.util.concurrent.Future;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class MeshCache extends ResourceFileCache<UUID, MeshData> {
     private static final int MAX_ATTEMPTS = 2;
     private static volatile File baseDir;
@@ -35,7 +34,7 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
             this.outputFile = file;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             Future<?> future = this.downloadTask;
             if (future != null) {
@@ -44,12 +43,12 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             this.downloadTask = HTTPFetchExecutor.getInstance().submit(this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             String str;
             synchronized (MeshCache.this.capURLlock) {
@@ -121,8 +120,7 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
         baseDir = null;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.res.ResourceFileCache
+    @Override
     public MeshData createResourceFromFile(UUID uuid, File file) {
         try {
             return new MeshData(file);
@@ -131,22 +129,20 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.res.ResourceFileCache
+    @Override
     public ResourceRequest<UUID, MeshData> createResourceGenRequest(UUID uuid, ResourceManager<UUID, MeshData> resourceManager, File file) {
         return new MeshDownloadRequest(uuid, resourceManager, file);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.res.ResourceFileCache
+    @Override
     public File getResourceFile(UUID uuid) {
         int hashCode = uuid.hashCode();
         return new File(getBaseDir(), String.format("%02x/%s.mesh", Integer.valueOf(((hashCode >> 24) ^ (((hashCode >> 8) ^ hashCode) ^ (hashCode >> 16))) & 255), uuid.toString()));
     }
 
-    public void setCapURL(String str) {
+    public void setCapURL(String capURL) {
         synchronized (this.capURLlock) {
-            this.capURL = str;
+            this.capURL = capURL;
             this.capURLlock.notifyAll();
         }
     }

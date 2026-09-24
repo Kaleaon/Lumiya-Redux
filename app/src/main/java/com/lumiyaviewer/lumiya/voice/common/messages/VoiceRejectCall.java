@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceRejectCall implements VoicePluginMessage {
 
     @Nonnull
@@ -17,12 +16,12 @@ public class VoiceRejectCall implements VoicePluginMessage {
         this.voiceChannelInfo = new VoiceChannelInfo(bundle.getBundle("voiceChannelInfo"));
     }
 
-    public VoiceRejectCall(@Nonnull String str, VoiceChannelInfo voiceChannelInfo) {
-        this.sessionHandle = str;
+    public VoiceRejectCall(@Nonnull String sessionHandle, VoiceChannelInfo voiceChannelInfo) {
+        this.sessionHandle = sessionHandle;
         this.voiceChannelInfo = voiceChannelInfo;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("sessionHandle", this.sessionHandle);

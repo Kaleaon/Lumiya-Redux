@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class So3Util {
     private static final double M_SQRT1_2 = 0.7071067811865476d;
     private static final double ONE_20TH = 0.1666666716337204d;
@@ -40,20 +39,20 @@ public class So3Util {
         double d2 = matrix3x3d.get(0, 0) - d;
         double d3 = matrix3x3d.get(1, 1) - d;
         double d4 = matrix3x3d.get(2, 2) - d;
-        Vector3d vector3d2 = muFromSO3R2;
+        Vector3d muFromSO3R22 = muFromSO3R2;
         if (d2 * d2 > d3 * d3 && d2 * d2 > d4 * d4) {
-            vector3d2.set(d2, (matrix3x3d.get(1, 0) + matrix3x3d.get(0, 1)) / 2.0d, (matrix3x3d.get(0, 2) + matrix3x3d.get(2, 0)) / 2.0d);
+            muFromSO3R22.set(d2, (matrix3x3d.get(1, 0) + matrix3x3d.get(0, 1)) / 2.0d, (matrix3x3d.get(0, 2) + matrix3x3d.get(2, 0)) / 2.0d);
         } else if (d3 * d3 > d4 * d4) {
-            vector3d2.set((matrix3x3d.get(1, 0) + matrix3x3d.get(0, 1)) / 2.0d, d3, (matrix3x3d.get(2, 1) + matrix3x3d.get(1, 2)) / 2.0d);
+            muFromSO3R22.set((matrix3x3d.get(1, 0) + matrix3x3d.get(0, 1)) / 2.0d, d3, (matrix3x3d.get(2, 1) + matrix3x3d.get(1, 2)) / 2.0d);
         } else {
-            vector3d2.set((matrix3x3d.get(0, 2) + matrix3x3d.get(2, 0)) / 2.0d, (matrix3x3d.get(2, 1) + matrix3x3d.get(1, 2)) / 2.0d, d4);
+            muFromSO3R22.set((matrix3x3d.get(0, 2) + matrix3x3d.get(2, 0)) / 2.0d, (matrix3x3d.get(2, 1) + matrix3x3d.get(1, 2)) / 2.0d, d4);
         }
-        if (Vector3d.dot(vector3d2, vector3d) < 0.0d) {
-            vector3d2.scale(-1.0d);
+        if (Vector3d.dot(muFromSO3R22, vector3d) < 0.0d) {
+            muFromSO3R22.scale(-1.0d);
         }
-        vector3d2.normalize();
-        vector3d2.scale(asin);
-        vector3d.set(vector3d2);
+        muFromSO3R22.normalize();
+        muFromSO3R22.scale(asin);
+        vector3d.set(muFromSO3R22);
     }
 
     private static void rodriguesSo3Exp(Vector3d vector3d, double d, double d2, Matrix3x3d matrix3x3d) {
@@ -118,17 +117,17 @@ public class So3Util {
         sO3FromTwoVecN.normalize();
         sO3FromTwoVecA.normalize();
         sO3FromTwoVecB.normalize();
-        Matrix3x3d matrix3x3d2 = sO3FromTwoVec33R1;
-        matrix3x3d2.setColumn(0, sO3FromTwoVecA);
-        matrix3x3d2.setColumn(1, sO3FromTwoVecN);
+        Matrix3x3d sO3FromTwoVec33R12 = sO3FromTwoVec33R1;
+        sO3FromTwoVec33R12.setColumn(0, sO3FromTwoVecA);
+        sO3FromTwoVec33R12.setColumn(1, sO3FromTwoVecN);
         Vector3d.cross(sO3FromTwoVecN, sO3FromTwoVecA, temp31);
-        matrix3x3d2.setColumn(2, temp31);
-        Matrix3x3d matrix3x3d3 = sO3FromTwoVec33R2;
-        matrix3x3d3.setColumn(0, sO3FromTwoVecB);
-        matrix3x3d3.setColumn(1, sO3FromTwoVecN);
+        sO3FromTwoVec33R12.setColumn(2, temp31);
+        Matrix3x3d sO3FromTwoVec33R22 = sO3FromTwoVec33R2;
+        sO3FromTwoVec33R22.setColumn(0, sO3FromTwoVecB);
+        sO3FromTwoVec33R22.setColumn(1, sO3FromTwoVecN);
         Vector3d.cross(sO3FromTwoVecN, sO3FromTwoVecB, temp31);
-        matrix3x3d3.setColumn(2, temp31);
-        matrix3x3d2.transpose();
-        Matrix3x3d.mult(matrix3x3d3, matrix3x3d2, matrix3x3d);
+        sO3FromTwoVec33R22.setColumn(2, temp31);
+        sO3FromTwoVec33R12.transpose();
+        Matrix3x3d.mult(sO3FromTwoVec33R22, sO3FromTwoVec33R12, matrix3x3d);
     }
 }

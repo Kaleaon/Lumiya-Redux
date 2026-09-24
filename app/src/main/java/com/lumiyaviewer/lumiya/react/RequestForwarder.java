@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements RequestHandler<Kup> {
 
     @Nullable
@@ -22,7 +21,6 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
     private final Object lock = new Object();
     private final Map<Kup, RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription> subscriptions = new HashMap();
 
-    /* JADX INFO: Access modifiers changed from: private */
     class DownstreamSubscription implements Subscription.OnData<Tdown>, Subscription.OnError, UnsubscribableOne {
         private final Kup key;
         private final Subscription<Kdown, Tdown> subscription;
@@ -32,16 +30,12 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
             this.subscription = RequestForwarder.this.subscribable.subscribe(kdown, RequestForwarder.this.executor, this, this);
         }
 
-        /* synthetic */ DownstreamSubscription(RequestForwarder requestForwarder, Kup obj, Kdown obj2, DownstreamSubscription downstreamSubscription) {
-            this(obj, obj2);
+            /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestForwarder$DownstreamSubscription_827, reason: not valid java name */
+        /* synthetic */ void m40x317e7a9e(Tdown tdown) {
+            RequestForwarder.this.processResultInternal(this.key, tdown);
         }
 
-        /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestForwarder$DownstreamSubscription_827, reason: not valid java name */
-        /* synthetic */ void m40x317e7a9e(Tdown obj) {
-            RequestForwarder.this.processResultInternal(this.key, obj);
-        }
-
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public void onData(final Tdown tdown) {
             if (RequestForwarder.this.executor != null) {
                 RequestForwarder.this.executor.execute(() -> m40x317e7a9e(tdown));
@@ -50,12 +44,12 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+        @Override
         public void onError(Throwable th) {
             RequestForwarder.this.resultHandler.onResultError(this.key, th);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.UnsubscribableOne
+        @Override
         public void unsubscribe() {
             this.subscription.unsubscribe();
         }
@@ -67,11 +61,10 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
         this.resultHandler = requestSource.attachRequestHandler(this);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: processRequestInternal, reason: merged with bridge method [inline-methods] */
-    public void m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(@Nonnull Kup kup) {
+    public void processRequestInternal(@Nonnull Kup kup) {
         RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription put;
-        RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription downstreamSubscription = new DownstreamSubscription(this, kup, getDownstreamKey(kup), null);
+        RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription downstreamSubscription = new DownstreamSubscription(kup, getDownstreamKey(kup));
         synchronized (this.lock) {
             put = this.subscriptions.put(kup, downstreamSubscription);
         }
@@ -80,23 +73,22 @@ public abstract class RequestForwarder<Kup, Tup, Kdown, Tdown> implements Reques
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void processResultInternal(@Nonnull Kup kup, @Nullable Tdown tdown) {
         this.resultHandler.onResultData(kup, processResult(tdown));
     }
 
     protected abstract Kdown getDownstreamKey(@Nonnull Kup kup);
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final Kup kup) {
         if (this.executor != null) {
-            this.executor.execute(() -> m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup));
+            this.executor.execute(() -> processRequestInternal(kup));
         } else {
-            m39lambda$com_lumiyaviewer_lumiya_react_RequestForwarder_2672(kup);
+            processRequestInternal(kup);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull Kup kup) {
         RequestForwarder<Kup, Tup, Kdown, Tdown>.DownstreamSubscription remove;
         synchronized (this.lock) {

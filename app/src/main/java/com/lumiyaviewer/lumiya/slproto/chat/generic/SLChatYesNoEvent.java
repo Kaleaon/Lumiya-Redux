@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.chat.generic;
 
+import android.view.View;
 import android.content.Context;
 import androidx.cardview.widget.CardView;
 import android.widget.Button;
@@ -15,11 +16,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLChatYesNoEvent extends SLChatTextEvent {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f74x99a8895a = null;
 
     @Nonnull
     private EventState eventState;
@@ -35,28 +32,6 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         public static EventState[] valuesCustom() {
             return values();
         }
-    }
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m167xa6852036() {
-        if (f74x99a8895a != null) {
-            return f74x99a8895a;
-        }
-        int[] iArr = new int[EventState.valuesCustom().length];
-        try {
-            iArr[EventState.EventAccepted.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[EventState.EventCancelled.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[EventState.EventNew.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f74x99a8895a = iArr;
-        return iArr;
     }
 
     public SLChatYesNoEvent(ChatMessage chatMessage, @Nonnull UUID uuid) {
@@ -75,7 +50,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         this.eventState = EventState.EventNew;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void bindViewHolder(ChatEventViewHolder chatEventViewHolder, UserManager userManager, @Nullable ChatEventTimestampUpdater chatEventTimestampUpdater) {
         super.bindViewHolder(chatEventViewHolder, userManager, chatEventTimestampUpdater);
         if (chatEventViewHolder instanceof ChatYesNoEventViewHolder) {
@@ -83,38 +58,38 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
             chatYesNoEventViewHolder.setEvent(this);
             TextView textView = chatYesNoEventViewHolder.questionMsg;
             Button button = chatYesNoEventViewHolder.yesButton;
-            Button button2 = chatYesNoEventViewHolder.noButton;
+            Button noButton = chatYesNoEventViewHolder.noButton;
             CardView cardView = chatYesNoEventViewHolder.cardView;
-            switch (m167xa6852036()[this.eventState.ordinal()]) {
-                case 1:
+            switch (this.eventState) {
+                case EventAccepted:
                     textView.setText(getYesMessage(textView.getContext()));
-                    button.setVisibility(8);
-                    button2.setVisibility(8);
+                    button.setVisibility(View.GONE);
+                    noButton.setVisibility(View.GONE);
                     if (getYesMessage(textView.getContext()).equals("")) {
-                        textView.setVisibility(8);
+                        textView.setVisibility(View.GONE);
                     } else {
-                        textView.setVisibility(0);
+                        textView.setVisibility(View.VISIBLE);
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
-                case 2:
+                case EventCancelled:
                     textView.setText(getNoMessage(textView.getContext()));
-                    button.setVisibility(8);
-                    button2.setVisibility(8);
+                    button.setVisibility(View.GONE);
+                    noButton.setVisibility(View.GONE);
                     if (getNoMessage(textView.getContext()).equals("")) {
-                        textView.setVisibility(8);
+                        textView.setVisibility(View.GONE);
                     } else {
-                        textView.setVisibility(0);
+                        textView.setVisibility(View.VISIBLE);
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
-                case 3:
+                case EventNew:
                     textView.setText(getQuestion(textView.getContext()));
-                    textView.setVisibility(0);
-                    button.setVisibility(0);
-                    button2.setVisibility(0);
+                    textView.setVisibility(View.VISIBLE);
+                    button.setVisibility(View.VISIBLE);
+                    noButton.setVisibility(View.VISIBLE);
                     button.setText(getYesButton(button.getContext()));
-                    button2.setText(getNoButton(button2.getContext()));
+                    noButton.setText(getNoButton(noButton.getContext()));
                     chatYesNoEventViewHolder.makeCardViewEnabled();
                     break;
             }
@@ -132,7 +107,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
 
     protected abstract String getQuestion(Context context);
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_YESNO;
     }
@@ -151,7 +126,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         notifyEventUpdated(userManager);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setEventState(Integer.valueOf(this.eventState.ordinal()));

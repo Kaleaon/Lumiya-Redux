@@ -4,24 +4,33 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPropertiesUpdate
+ * viewer -> simulator
+ * reliable
+ *
+ * <p>Template: {@code AvatarPropertiesUpdate Low 174 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AvatarPropertiesUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public PropertiesData PropertiesData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block PropertiesData, Single. */
     public static class PropertiesData {
-        public byte[] AboutText;
-        public boolean AllowPublish;
-        public byte[] FLAboutText;
-        public UUID FLImageID;
-        public UUID ImageID;
-        public boolean MaturePublish;
-        public byte[] ProfileURL;
+        public byte[] AboutText; // Variable 2 - string, up to 512
+        public boolean AllowPublish; // BOOL - whether profile is externally visible or not
+        public byte[] FLAboutText; // Variable 1
+        public UUID FLImageID; // LLUUID
+        public UUID ImageID; // LLUUID
+        public boolean MaturePublish; // BOOL - profile is "mature"
+        public byte[] ProfileURL; // Variable 1 - string
     }
 
     public AvatarPropertiesUpdate() {
@@ -30,21 +39,22 @@ public class AvatarPropertiesUpdate extends SLMessage {
         this.PropertiesData_Field = new PropertiesData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.PropertiesData_Field.AboutText.length + 34 + 1 + this.PropertiesData_Field.FLAboutText.length + 1 + 1 + 1 + this.PropertiesData_Field.ProfileURL.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -82);
+        // Message number: Low 174 (AvatarPropertiesUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xAE);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.PropertiesData_Field.ImageID);
@@ -56,7 +66,7 @@ public class AvatarPropertiesUpdate extends SLMessage {
         packVariable(byteBuffer, this.PropertiesData_Field.ProfileURL, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

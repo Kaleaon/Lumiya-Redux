@@ -1,53 +1,67 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectAdd - create new object in the world
+ * Simulator will assign ID and send message back to signal
+ * object actually created.
+ * AddFlags (see also ObjectUpdate)
+ * 0x01 - use physics
+ * 0x02 - create selected
+ * If only one ImageID is sent for an object type that has more than
+ * one face, the same image is repeated on each subsequent face.
+ * Data field is opaque type-specific data for this object
+ *
+ * <p>Template: {@code ObjectAdd Medium 1 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectAdd extends SLMessage {
     public AgentData AgentData_Field;
     public ObjectData ObjectData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public int AddFlags;
-        public int BypassRaycast;
-        public int Material;
-        public int PCode;
-        public int PathBegin;
-        public int PathCurve;
-        public int PathEnd;
-        public int PathRadiusOffset;
-        public int PathRevolutions;
-        public int PathScaleX;
-        public int PathScaleY;
-        public int PathShearX;
-        public int PathShearY;
-        public int PathSkew;
-        public int PathTaperX;
-        public int PathTaperY;
-        public int PathTwist;
-        public int PathTwistBegin;
-        public int ProfileBegin;
-        public int ProfileCurve;
-        public int ProfileEnd;
-        public int ProfileHollow;
-        public LLVector3 RayEnd;
-        public int RayEndIsIntersection;
-        public LLVector3 RayStart;
-        public UUID RayTargetID;
-        public LLQuaternion Rotation;
-        public LLVector3 Scale;
-        public int State;
+        public int AddFlags; // U32 - see object_flags.h
+        public int BypassRaycast; // U8
+        public int Material; // U8
+        public int PCode; // U8
+        public int PathBegin; // U16 - 0 to 1, quanta = 0.01
+        public int PathCurve; // U8
+        public int PathEnd; // U16 - 0 to 1, quanta = 0.01
+        public int PathRadiusOffset; // S8 - -1 to 1, quanta = 0.01
+        public int PathRevolutions; // U8 - 0 to 3, quanta = 0.015
+        public int PathScaleX; // U8 - 0 to 1, quanta = 0.01
+        public int PathScaleY; // U8 - 0 to 1, quanta = 0.01
+        public int PathShearX; // U8 - -.5 to .5, quanta = 0.01
+        public int PathShearY; // U8 - -.5 to .5, quanta = 0.01
+        public int PathSkew; // S8 - -1 to 1, quanta = 0.01
+        public int PathTaperX; // S8 - -1 to 1, quanta = 0.01
+        public int PathTaperY; // S8 - -1 to 1, quanta = 0.01
+        public int PathTwist; // S8 - -1 to 1, quanta = 0.01
+        public int PathTwistBegin; // S8 - -1 to 1, quanta = 0.01
+        public int ProfileBegin; // U16 - 0 to 1, quanta = 0.01
+        public int ProfileCurve; // U8
+        public int ProfileEnd; // U16 - 0 to 1, quanta = 0.01
+        public int ProfileHollow; // U16 - 0 to 1, quanta = 0.01
+        public LLVector3 RayEnd; // LLVector3
+        public int RayEndIsIntersection; // U8
+        public LLVector3 RayStart; // LLVector3
+        public UUID RayTargetID; // LLUUID
+        public LLQuaternion Rotation; // LLQuaternion
+        public LLVector3 Scale; // LLVector3
+        public int State; // U8
     }
 
     public ObjectAdd() {
@@ -56,20 +70,21 @@ public class ObjectAdd extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 146;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectAdd(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectAdd(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 1);
+        // Message number: Medium 1 (ObjectAdd).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x01);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -104,39 +119,39 @@ public class ObjectAdd extends SLMessage {
         packByte(byteBuffer, (byte) this.ObjectData_Field.State);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
-        this.ObjectData_Field.PCode = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.Material = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PCode = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.Material = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.AddFlags = unpackInt(byteBuffer);
-        this.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.ProfileCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.ProfileCurve = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathBegin = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.PathEnd = unpackShort(byteBuffer) & 65535;
-        this.ObjectData_Field.PathScaleX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathScaleY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathShearX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathShearY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathScaleX = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathScaleY = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathShearX = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathShearY = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathTwist = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTwistBegin = unpackByte(byteBuffer);
         this.ObjectData_Field.PathRadiusOffset = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTaperX = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTaperY = unpackByte(byteBuffer);
-        this.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathSkew = unpackByte(byteBuffer);
         this.ObjectData_Field.ProfileBegin = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.ProfileEnd = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.ProfileHollow = unpackShort(byteBuffer) & 65535;
-        this.ObjectData_Field.BypassRaycast = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.RayStart = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.RayEnd = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.RayTargetID = unpackUUID(byteBuffer);
-        this.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.Scale = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.Rotation = unpackLLQuaternion(byteBuffer);
-        this.ObjectData_Field.State = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.State = unpackByte(byteBuffer) & 0xFF;
     }
 }

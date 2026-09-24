@@ -1,36 +1,45 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Reliable
+ *
+ * <p>Template: {@code GroupAccountTransactionsReply Low 358 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelGroupLandMoney::processGroupAccountTransactionsReply()} in indra/newview/llpanelgrouplandmoney.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupAccountTransactionsReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<HistoryData> HistoryData_Fields = new ArrayList<>();
     public MoneyData MoneyData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block HistoryData, Variable. */
     public static class HistoryData {
-        public int Amount;
-        public byte[] Item;
-        public byte[] Time;
-        public int Type;
-        public byte[] User;
+        public int Amount; // S32
+        public byte[] Item; // Variable 1 - string
+        public byte[] Time; // Variable 1 - string
+        public int Type; // S32
+        public byte[] User; // Variable 1 - string
     }
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public int CurrentInterval;
-        public int IntervalDays;
-        public UUID RequestID;
-        public byte[] StartDate;
+        public int CurrentInterval; // S32
+        public int IntervalDays; // S32
+        public UUID RequestID; // LLUUID
+        public byte[] StartDate; // Variable 1 - string
     }
 
     public GroupAccountTransactionsReply() {
@@ -39,30 +48,31 @@ public class GroupAccountTransactionsReply extends SLMessage {
         this.MoneyData_Field = new MoneyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.MoneyData_Field.StartDate.length + 25 + 36 + 1;
         Iterator<?> it = this.HistoryData_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
             HistoryData historyData = (HistoryData) it.next();
-            length = historyData.Item.length + historyData.Time.length + 1 + 1 + historyData.User.length + 4 + 1 + 4 + i;
+            length = historyData.Item.length + historyData.Time.length + 1 + 1 + historyData.User.length + 4 + 1 + 4 + length2;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupAccountTransactionsReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupAccountTransactionsReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 102);
+        // Message number: Low 358 (GroupAccountTransactionsReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x66);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.MoneyData_Field.RequestID);
@@ -79,7 +89,7 @@ public class GroupAccountTransactionsReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
@@ -87,8 +97,8 @@ public class GroupAccountTransactionsReply extends SLMessage {
         this.MoneyData_Field.IntervalDays = unpackInt(byteBuffer);
         this.MoneyData_Field.CurrentInterval = unpackInt(byteBuffer);
         this.MoneyData_Field.StartDate = unpackVariable(byteBuffer, 1);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             HistoryData historyData = new HistoryData();
             historyData.Time = unpackVariable(byteBuffer, 1);
             historyData.User = unpackVariable(byteBuffer, 1);

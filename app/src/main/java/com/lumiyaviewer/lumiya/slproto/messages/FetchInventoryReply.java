@@ -1,44 +1,49 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * response to fetch inventory
+ *
+ * <p>Template: {@code FetchInventoryReply Low 280 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class FetchInventoryReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<InventoryData> InventoryData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block InventoryData, Variable. */
     public static class InventoryData {
-        public UUID AssetID;
-        public int BaseMask;
-        public int CRC;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public int Type;
+        public UUID AssetID; // LLUUID
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID - permissions
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - permissions
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public int Type; // S8
     }
 
     public FetchInventoryReply() {
@@ -46,7 +51,7 @@ public class FetchInventoryReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 21;
         Iterator<?> it = this.InventoryData_Fields.iterator();
@@ -60,16 +65,17 @@ public class FetchInventoryReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFetchInventoryReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFetchInventoryReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.CAN);
+        // Message number: Low 280 (FetchInventoryReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x18);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         byteBuffer.put((byte) this.InventoryData_Fields.size());
         for (InventoryData inventoryData : this.InventoryData_Fields) {
@@ -97,11 +103,11 @@ public class FetchInventoryReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
             inventoryData.FolderID = unpackUUID(byteBuffer);
@@ -118,7 +124,7 @@ public class FetchInventoryReply extends SLMessage {
             inventoryData.Type = unpackByte(byteBuffer);
             inventoryData.InvType = unpackByte(byteBuffer);
             inventoryData.Flags = unpackInt(byteBuffer);
-            inventoryData.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            inventoryData.SaleType = unpackByte(byteBuffer) & 0xFF;
             inventoryData.SalePrice = unpackInt(byteBuffer);
             inventoryData.Name = unpackVariable(byteBuffer, 1);
             inventoryData.Description = unpackVariable(byteBuffer, 1);

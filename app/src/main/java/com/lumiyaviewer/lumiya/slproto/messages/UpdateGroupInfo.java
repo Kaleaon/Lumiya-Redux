@@ -4,25 +4,35 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UpdateGroupInfo
+ * viewer -> simulator
+ * simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code UpdateGroupInfo Low 341 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UpdateGroupInfo extends SLMessage {
     public AgentData AgentData_Field;
     public GroupData GroupData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block GroupData, Single. */
     public static class GroupData {
-        public boolean AllowPublish;
-        public byte[] Charter;
-        public UUID GroupID;
-        public UUID InsigniaID;
-        public boolean MaturePublish;
-        public int MembershipFee;
-        public boolean OpenEnrollment;
-        public boolean ShowInList;
+        public boolean AllowPublish; // BOOL
+        public byte[] Charter; // Variable 2 - string
+        public UUID GroupID; // LLUUID
+        public UUID InsigniaID; // LLUUID
+        public boolean MaturePublish; // BOOL
+        public int MembershipFee; // S32
+        public boolean OpenEnrollment; // BOOL
+        public boolean ShowInList; // BOOL
     }
 
     public UpdateGroupInfo() {
@@ -31,21 +41,22 @@ public class UpdateGroupInfo extends SLMessage {
         this.GroupData_Field = new GroupData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.GroupData_Field.Charter.length + 18 + 1 + 16 + 4 + 1 + 1 + 1 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateGroupInfo(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateGroupInfo(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 85);
+        // Message number: Low 341 (UpdateGroupInfo).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x55);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
@@ -58,7 +69,7 @@ public class UpdateGroupInfo extends SLMessage {
         packBoolean(byteBuffer, this.GroupData_Field.MaturePublish);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

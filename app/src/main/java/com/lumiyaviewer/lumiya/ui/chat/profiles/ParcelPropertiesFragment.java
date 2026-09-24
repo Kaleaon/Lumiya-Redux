@@ -39,7 +39,6 @@ import com.lumiyaviewer.lumiya.ui.common.ImageAssetView;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ParcelPropertiesFragment extends FragmentWithTitle {
     public static final String PARCEL_DATA_KEY = "parcelData";
 
@@ -79,22 +78,22 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     private ParcelData parcelData = null;
     private UserManager userManager = null;
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
-    private final SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.3
+    private final SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ParcelPropertiesFragment.this.m512x3c670cfa((Boolean) obj);
+            ParcelPropertiesFragment.this.onIsPlayingMedia((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.4
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ParcelPropertiesFragment.this.m513x3c670cfb((SLAgentCircuit) obj);
+            ParcelPropertiesFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -110,15 +109,13 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
             this();
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Boolean doInBackground(Void... voidArr) {
-            SLAgentCircuit sLAgentCircuit = (SLAgentCircuit) ParcelPropertiesFragment.this.agentCircuit.getData();
-            return Boolean.valueOf(sLAgentCircuit != null ? sLAgentCircuit.getModules().userProfiles.SetHomeLocation() : false);
+            SLAgentCircuit agentCircuit = (SLAgentCircuit) ParcelPropertiesFragment.this.agentCircuit.getData();
+            return Boolean.valueOf(agentCircuit != null ? agentCircuit.getModules().userProfiles.SetHomeLocation() : false);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Boolean bool) {
             this.progressDialog.dismiss();
             if (bool == null || (!bool.booleanValue())) {
@@ -128,7 +125,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
             }
         }
 
-        @Override // android.os.AsyncTask
+        @Override
         protected void onPreExecute() {
             this.progressDialog = ProgressDialog.show(ParcelPropertiesFragment.this.getContext(), null, ParcelPropertiesFragment.this.getString(R.string.setting_home_location), true);
         }
@@ -141,15 +138,11 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         return bundle;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m513x3c670cfb(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         updateSimOptions();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onIsPlayingMedia, reason: merged with bridge method [inline-methods] */
-    public void m512x3c670cfa(Boolean bool) {
+    public void onIsPlayingMedia(Boolean bool) {
         updatePlayingStatus();
     }
 
@@ -157,22 +150,22 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         if (this.unbinder != null) {
             Boolean data = this.isPlayingMedia.getData();
             boolean booleanValue = data != null ? data.booleanValue() : false;
-            this.mediaPlayButton.setVisibility(booleanValue ? 8 : 0);
-            this.mediaStopButton.setVisibility(booleanValue ? 0 : 8);
+            this.mediaPlayButton.setVisibility(booleanValue ? View.GONE : View.VISIBLE);
+            this.mediaStopButton.setVisibility(booleanValue ? View.VISIBLE : View.GONE);
         }
     }
 
     private void updateSimOptions() {
         if (this.unbinder != null) {
             SLAgentCircuit data = this.agentCircuit.getData();
-            this.simRestartCardView.setVisibility(data != null && data.getIsEstateManager() ? 0 : 8);
+            this.simRestartCardView.setVisibility(data != null && data.getIsEstateManager() ? View.VISIBLE : View.GONE);
         }
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_ParcelPropertiesFragment_8181, reason: not valid java name */
-    /* synthetic */ void m514x74bd5c0c(SLAgentCircuit sLAgentCircuit, DialogInterface dialogInterface, int i) {
-        sLAgentCircuit.RestartRegion(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_INFO_READ_ERROR);
-        Toast.makeText(getContext(), R.string.region_restart_ok_message, 1).show();
+    /* synthetic */ void m514x74bd5c0c(SLAgentCircuit agentCircuit, DialogInterface dialogInterface, int i) {
+        agentCircuit.RestartRegion(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_INFO_READ_ERROR);
+        Toast.makeText(getContext(), R.string.region_restart_ok_message, Toast.LENGTH_LONG).show();
         dialogInterface.dismiss();
     }
 
@@ -182,7 +175,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         new SetHomeLocationAsyncTask(this, null).execute(new Void[0]);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.parcel_properties_fragment, viewGroup, false);
@@ -193,7 +186,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -238,21 +231,21 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     @OnClick({R.id.parcel_set_home_button})
     public void onSetHomeButton() {
         if (this.agentCircuit.getData() != null) {
-            new AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.2
+            new AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     ParcelPropertiesFragment.this.m515x74bdcccf(dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -264,21 +257,21 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     public void onSimRestartButton() {
         final SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {
-            new AlertDialog.Builder(getContext()).setMessage(R.string.restart_region_confirm_title).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.5
+            new AlertDialog.Builder(getContext()).setMessage(R.string.restart_region_confirm_title).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     ParcelPropertiesFragment.this.m514x74bd5c0c((SLAgentCircuit) data, dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.1
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -286,7 +279,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         this.userManager = UserManager.getUserManager(UUIDPool.getUUID(getArguments().getString("activeAgentUUID")));
@@ -303,13 +296,13 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         this.parcelName.setText(this.parcelData.getName());
         this.parcelArea.setText(getString(R.string.parcel_area_format, Integer.valueOf(this.parcelData.getArea())));
         this.parcelDescription.setText(Strings.isNullOrEmpty(this.parcelData.getDescription()) ? getString(R.string.asset_no_description) : this.parcelData.getDescription());
-        this.parcelMediaCardView.setVisibility(Strings.isNullOrEmpty(this.parcelData.getMediaURL()) ? 8 : 0);
+        this.parcelMediaCardView.setVisibility(Strings.isNullOrEmpty(this.parcelData.getMediaURL()) ? View.GONE : View.VISIBLE);
         this.parcelMediaURL.setText(this.parcelData.getMediaURL());
         updatePlayingStatus();
         updateSimOptions();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.userManager = null;
         this.parcelData = null;

@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserProfileFragment extends UserFunctionsFragment {
     private final Map<ProfileTab, WeakReference<Fragment>> activeFragments = new EnumMap(ProfileTab.class);
 
@@ -31,25 +30,25 @@ public class UserProfileFragment extends UserFunctionsFragment {
             super(fragmentManager);
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
+        @Override
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            ProfileTab profileTab = ProfileTab.valuesCustom()[i];
+            ProfileTab profileTab = ProfileTab.values()[i];
             if (profileTab != null) {
                 UserProfileFragment.this.activeFragments.remove(profileTab);
             }
             super.destroyItem(viewGroup, i, obj);
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public int getCount() {
-            return ProfileTab.valuesCustom().length;
+            return ProfileTab.values().length;
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter
+        @Override
         public Fragment getItem(int i) {
-            ProfileTab profileTab = ProfileTab.valuesCustom()[i];
+            ProfileTab profileTab = ProfileTab.values()[i];
             try {
-                Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
+                Fragment fragment = (Fragment) profileTab.tabClass.newInstance();
                 fragment.setArguments(UserProfileFragment.makeSelection(UserProfileFragment.this.chatterID));
                 UserProfileFragment.this.activeFragments.put(profileTab, new WeakReference(fragment));
                 return fragment;
@@ -58,12 +57,12 @@ public class UserProfileFragment extends UserFunctionsFragment {
             }
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public CharSequence getPageTitle(int i) {
-            return UserProfileFragment.this.getString(ProfileTab.valuesCustom()[i].tabCaption);
+            return UserProfileFragment.this.getString(ProfileTab.values()[i].tabCaption);
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
+        @Override
         public Parcelable saveState() {
             return null;
         }
@@ -78,8 +77,8 @@ public class UserProfileFragment extends UserFunctionsFragment {
         private final int tabCaption;
         private final Class<? extends Fragment> tabClass;
 
-        ProfileTab(int i, Class cls) {
-            this.tabCaption = i;
+        ProfileTab(int tabCaption, Class cls) {
+            this.tabCaption = tabCaption;
             this.tabClass = cls;
         }
 
@@ -93,12 +92,12 @@ public class UserProfileFragment extends UserFunctionsFragment {
         return UserFunctionsFragment.makeSelection(chatterID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.user_profile_new, viewGroup, false);
@@ -108,7 +107,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         Iterator<?> it = this.activeFragments.values().iterator();
         while (it.hasNext()) {

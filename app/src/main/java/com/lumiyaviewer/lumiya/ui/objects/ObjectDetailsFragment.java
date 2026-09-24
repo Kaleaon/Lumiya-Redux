@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
@@ -51,7 +50,6 @@ import com.lumiyaviewer.lumiya.ui.objects.ObjectDerezDialog;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectDetailsFragment extends FragmentWithTitle implements ReloadableFragment, View.OnClickListener, LoadableMonitor.OnLoadableDataChangedListener {
     private static final String LOCAL_ID_KEY = "localID";
     private static final int[] objectPayButtons = {R.id.object_pay_button1, R.id.object_pay_button2, R.id.object_pay_button3, R.id.object_pay_button4};
@@ -76,12 +74,12 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
     private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.objectProfile).withOptionalLoadables(this.balanceSubscription, this.myAvatarState).withDataChangedListener(this);
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
-    private final OnChatEventListener chatEventListener = new OnChatEventListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.3
+    private final OnChatEventListener chatEventListener = new OnChatEventListener() {
         private final /* synthetic */ void $m$0(SLChatEvent sLChatEvent) {
             ObjectDetailsFragment.this.m685xa60fd782(sLChatEvent);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.OnChatEventListener
+        @Override
         public final void onChatEvent(SLChatEvent sLChatEvent) {
             $m$0(sLChatEvent);
         }
@@ -95,21 +93,21 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.object_buy_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(sLObjectProfileData.salePrice()))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.5
+        builder.setMessage(String.format(getString(R.string.object_buy_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(sLObjectProfileData.salePrice()))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 ObjectDetailsFragment.m681x1bb1c6ad((UserManager) userManager, i, (SLObjectProfileData) sLObjectProfileData, dialogInterface, i2);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 $m$0(dialogInterface, i2);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 $m$0(dialogInterface, i2);
             }
@@ -169,21 +167,21 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.object_pay_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.6
+        builder.setMessage(String.format(getString(R.string.object_pay_confirm), sLObjectProfileData.name().or(getString(R.string.object_name_loading)), Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 ObjectDetailsFragment.m683x1bb23eb2((UserManager) userManager, (SLObjectProfileData) sLObjectProfileData, i, dialogInterface, i2);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 $m$0(dialogInterface, i2);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.2
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 $m$0(dialogInterface, i2);
             }
@@ -204,10 +202,10 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
     private void showDeadObject() {
         View view = getView();
         if (view != null) {
-            view.findViewById(R.id.no_object_selected).setVisibility(8);
-            view.findViewById(R.id.object_fail_to_load).setVisibility(0);
+            view.findViewById(R.id.no_object_selected).setVisibility(View.GONE);
+            view.findViewById(R.id.object_fail_to_load).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.object_fail_to_load)).setText(R.string.object_deleted);
-            view.findViewById(R.id.object_details).setVisibility(8);
+            view.findViewById(R.id.object_details).setVisibility(View.GONE);
         }
     }
 
@@ -224,10 +222,10 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
     private void showObjectNotLoaded() {
         View view = getView();
         if (view != null) {
-            view.findViewById(R.id.no_object_selected).setVisibility(8);
-            view.findViewById(R.id.object_fail_to_load).setVisibility(0);
+            view.findViewById(R.id.no_object_selected).setVisibility(View.GONE);
+            view.findViewById(R.id.object_fail_to_load).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.object_fail_to_load)).setText(R.string.object_profile_cannot_be_loaded);
-            view.findViewById(R.id.object_details).setVisibility(8);
+            view.findViewById(R.id.object_details).setVisibility(View.GONE);
         }
     }
 
@@ -248,15 +246,15 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         View view = getView();
         UserManager userManager = getUserManager();
         if (view != null) {
-            view.findViewById(R.id.no_object_selected).setVisibility(8);
+            view.findViewById(R.id.no_object_selected).setVisibility(View.GONE);
             if (sLObjectProfileData.isDead()) {
-                view.findViewById(R.id.object_fail_to_load).setVisibility(0);
-                view.findViewById(R.id.object_details).setVisibility(8);
+                view.findViewById(R.id.object_fail_to_load).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.object_details).setVisibility(View.GONE);
                 ((TextView) view.findViewById(R.id.object_fail_to_load)).setText(R.string.object_deleted);
             } else {
-                view.findViewById(R.id.object_details).setVisibility(0);
-                view.findViewById(R.id.object_fail_to_load).setVisibility(8);
-                view.findViewById(R.id.object_touch_button).setVisibility(sLObjectProfileData.isTouchable() ? 0 : 8);
+                view.findViewById(R.id.object_details).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.object_fail_to_load).setVisibility(View.GONE);
+                view.findViewById(R.id.object_touch_button).setVisibility(sLObjectProfileData.isTouchable() ? View.VISIBLE : View.GONE);
                 ((Button) view.findViewById(R.id.object_touch_button)).setText(Strings.isNullOrEmpty(sLObjectProfileData.touchName()) ? getString(R.string.object_touch_button) : sLObjectProfileData.touchName());
                 boolean canSit = (userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || (modules = activeAgentCircuit.getModules()) == null) ? false : modules.rlvController.canSit();
                 MyAvatarState data = this.myAvatarState.getData();
@@ -268,14 +266,14 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
                 } else {
                     z = false;
                 }
-                view.findViewById(R.id.object_sit_button).setVisibility(canSit ? 0 : 8);
-                view.findViewById(R.id.object_stand_button).setVisibility(z ? 0 : 8);
+                view.findViewById(R.id.object_sit_button).setVisibility(canSit ? View.VISIBLE : View.GONE);
+                view.findViewById(R.id.object_stand_button).setVisibility(z ? View.VISIBLE : View.GONE);
                 ((TextView) view.findViewById(R.id.object_details_name)).setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
                 ((TextView) view.findViewById(R.id.object_details_desc)).setText(sLObjectProfileData.description().or(""));
-                view.findViewById(R.id.object_owner_card_view).setVisibility(sLObjectProfileData.ownerUUID() != null ? 0 : 8);
-                view.findViewById(R.id.floating_text_card_view).setVisibility(sLObjectProfileData.floatingText().isPresent() ? 0 : 8);
+                view.findViewById(R.id.object_owner_card_view).setVisibility(sLObjectProfileData.ownerUUID() != null ? View.VISIBLE : View.GONE);
+                view.findViewById(R.id.floating_text_card_view).setVisibility(sLObjectProfileData.floatingText().isPresent() ? View.VISIBLE : View.GONE);
                 ((TextView) view.findViewById(R.id.object_hover_text)).setText(sLObjectProfileData.floatingText().or(""));
-                view.findViewById(R.id.buy_object_card_view).setVisibility(sLObjectProfileData.saleType() != 0 ? 0 : 8);
+                view.findViewById(R.id.buy_object_card_view).setVisibility(sLObjectProfileData.saleType() != 0 ? View.VISIBLE : View.GONE);
                 ((TextView) view.findViewById(R.id.object_buy_details)).setText(getString(R.string.object_buy_price_format, Integer.valueOf(sLObjectProfileData.salePrice())));
                 Integer data2 = this.balanceSubscription.getData();
                 if (data2 != null) {
@@ -292,18 +290,18 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
                             int intValue = payPrices.get(i2).intValue();
                             int defaultPayPrice = intValue == -2 ? payInfo.defaultPayPrice() : intValue;
                             if (defaultPayPrice <= 0) {
-                                view.findViewById(objectPayButtons[i2]).setVisibility(8);
+                                view.findViewById(objectPayButtons[i2]).setVisibility(View.GONE);
                                 view.findViewById(objectPayButtons[i2]).setTag(R.id.object_pay_price_tag, 0);
                             } else {
                                 ((Button) view.findViewById(objectPayButtons[i2])).setText(String.format(getString(R.string.pay_button_format), Integer.valueOf(defaultPayPrice)));
-                                view.findViewById(objectPayButtons[i2]).setVisibility(0);
+                                view.findViewById(objectPayButtons[i2]).setVisibility(View.VISIBLE);
                                 view.findViewById(objectPayButtons[i2]).setTag(R.id.object_pay_price_tag, Integer.valueOf(defaultPayPrice));
                                 i++;
                             }
                         }
-                        view.findViewById(R.id.object_quick_pay_layout).setVisibility(i != 0 ? 0 : 8);
+                        view.findViewById(R.id.object_quick_pay_layout).setVisibility(i != 0 ? View.VISIBLE : View.GONE);
                     } else {
-                        view.findViewById(R.id.object_quick_pay_layout).setVisibility(8);
+                        view.findViewById(R.id.object_quick_pay_layout).setVisibility(View.GONE);
                     }
                     if (payInfo.defaultPayPrice() != -1) {
                         if (((EditText) view.findViewById(R.id.object_pay_amount)).getText().toString().equals("")) {
@@ -313,13 +311,13 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
                                 ((EditText) view.findViewById(R.id.object_pay_amount)).setText("");
                             }
                         }
-                        view.findViewById(R.id.object_normal_pay_layout).setVisibility(0);
+                        view.findViewById(R.id.object_normal_pay_layout).setVisibility(View.VISIBLE);
                     } else {
-                        view.findViewById(R.id.object_normal_pay_layout).setVisibility(8);
+                        view.findViewById(R.id.object_normal_pay_layout).setVisibility(View.GONE);
                     }
-                    view.findViewById(R.id.pay_object_card_view).setVisibility(0);
+                    view.findViewById(R.id.pay_object_card_view).setVisibility(View.VISIBLE);
                 } else {
-                    view.findViewById(R.id.pay_object_card_view).setVisibility(8);
+                    view.findViewById(R.id.pay_object_card_view).setVisibility(View.GONE);
                 }
             }
         }
@@ -412,11 +410,11 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             if (!(source instanceof ChatMessageSourceObject) || this.objectProfileData == null || userManager == null || !Objects.equal(source.getSourceUUID(), this.objectProfileData.objectUUID())) {
                 return;
             }
-            Toast.makeText(getContext(), sLChatEvent.getPlainTextMessage(getContext(), userManager, false), 1).show();
+            Toast.makeText(getContext(), sLChatEvent.getPlainTextMessage(getContext(), userManager, false), Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         int id = view.getId();
         for (int i = 0; i < objectPayButtons.length; i++) {
@@ -425,25 +423,25 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             }
         }
         switch (id) {
-            case R.id.object_touch_button /* 2131755268 */:
+            case R.id.object_touch_button:
                 touchObject();
                 break;
-            case R.id.object_sit_button /* 2131755269 */:
+            case R.id.object_sit_button:
                 sitOnObject();
                 break;
-            case R.id.object_stand_button /* 2131755538 */:
+            case R.id.object_stand_button:
                 standUp();
                 break;
-            case R.id.object_contents_button /* 2131755539 */:
+            case R.id.object_contents_button:
                 openObjectContents();
                 break;
-            case R.id.object_owner_button /* 2131755542 */:
+            case R.id.object_owner_button:
                 showObjectOwnerInfo();
                 break;
-            case R.id.object_button_buy /* 2131755547 */:
+            case R.id.object_button_buy:
                 buyObject();
                 break;
-            case R.id.object_pay_button /* 2131755554 */:
+            case R.id.object_pay_button:
                 try {
                     View view2 = getView();
                     if (view2 != null) {
@@ -458,13 +456,13 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.object_details_menu, menu);
@@ -475,15 +473,15 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         updateOptionsMenu();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         Debug.Log("ObjectDetailsFragment: onCreateView called");
         View inflate = layoutInflater.inflate(R.layout.object_details, viewGroup, false);
         this.ownerNameDisplayer.bindViews((TextView) inflate.findViewById(R.id.object_details_owner), (ChatterPicView) inflate.findViewById(R.id.userPicView));
-        inflate.findViewById(R.id.no_object_selected).setVisibility(0);
-        inflate.findViewById(R.id.object_fail_to_load).setVisibility(8);
-        inflate.findViewById(R.id.object_details).setVisibility(8);
+        inflate.findViewById(R.id.no_object_selected).setVisibility(View.VISIBLE);
+        inflate.findViewById(R.id.object_fail_to_load).setVisibility(View.GONE);
+        inflate.findViewById(R.id.object_details).setVisibility(View.GONE);
         inflate.findViewById(R.id.object_touch_button).setOnClickListener(this);
         inflate.findViewById(R.id.object_sit_button).setOnClickListener(this);
         inflate.findViewById(R.id.object_stand_button).setOnClickListener(this);
@@ -495,8 +493,8 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
             inflate.findViewById(i).setOnClickListener(this);
         }
         final Button button = (Button) inflate.findViewById(R.id.object_pay_button);
-        ((EditText) inflate.findViewById(R.id.object_pay_amount)).addTextChangedListener(new TextWatcher() { // from class: com.lumiyaviewer.lumiya.ui.objects.ObjectDetailsFragment.1
-            @Override // android.text.TextWatcher
+        ((EditText) inflate.findViewById(R.id.object_pay_amount)).addTextChangedListener(new TextWatcher() {
+            @Override
             public void afterTextChanged(Editable editable) {
                 try {
                     Integer.parseInt(editable.toString());
@@ -506,24 +504,24 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
                 }
             }
 
-            @Override // android.text.TextWatcher
+            @Override
             public void beforeTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
             }
 
-            @Override // android.text.TextWatcher
+            @Override
             public void onTextChanged(CharSequence charSequence, int i2, int i3, int i4) {
             }
         });
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         this.ownerNameDisplayer.unbindViews();
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         Throwable error = this.objectProfile.getError();
         SLObjectProfileData data = this.objectProfile.getData();
@@ -536,44 +534,44 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         UserManager userManager = getUserManager();
         int i = getArguments().getInt(LOCAL_ID_KEY);
         if (userManager != null && this.objectLocalID != 0) {
             switch (menuItem.getItemId()) {
-                case R.id.item_object_take /* 2131755827 */:
+                case R.id.item_object_take:
                     ObjectDerezDialog.askForObjectDerez(getContext(), ObjectDerezDialog.DerezAction.Take, userManager.getUserID(), i);
                     return true;
-                case R.id.item_object_take_copy /* 2131755828 */:
+                case R.id.item_object_take_copy:
                     ObjectDerezDialog.askForObjectDerez(getContext(), ObjectDerezDialog.DerezAction.TakeCopy, userManager.getUserID(), i);
                     return true;
-                case R.id.item_object_delete /* 2131755829 */:
+                case R.id.item_object_delete:
                     ObjectDerezDialog.askForObjectDerez(getContext(), ObjectDerezDialog.DerezAction.Delete, userManager.getUserID(), i);
                     return true;
-                case R.id.item_object_block /* 2131755830 */:
+                case R.id.item_object_block:
                     final SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
                     final SLObjectProfileData data = this.objectProfile.getData();
                     final String orNull = data != null ? data.name().orNull() : null;
                     if (activeAgentCircuit != null && data != null && orNull != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setMessage(R.string.object_block_question);
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.4
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                                 ObjectDetailsFragment.m679x1ba25a88((SLAgentCircuit) activeAgentCircuit, (SLObjectProfileData) data, (String) orNull, dialogInterface, i2);
                             }
 
-                            @Override // android.content.DialogInterface.OnClickListener
+                            @Override
                             public final void onClick(DialogInterface dialogInterface, int i2) {
                                 $m$0(dialogInterface, i2);
                             }
                         });
-                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$IbcMrpWxKnmu4WU7ZN8rETVfqs8.1
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i2) {
                                 dialogInterface.cancel();
                             }
 
-                            @Override // android.content.DialogInterface.OnClickListener
+                            @Override
                             public final void onClick(DialogInterface dialogInterface, int i2) {
                                 $m$0(dialogInterface, i2);
                             }
@@ -587,7 +585,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onPause() {
         UserManager userManager = getUserManager();
         if (userManager != null) {
@@ -596,7 +594,7 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         super.onPause();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onResume() {
         super.onResume();
         UserManager userManager = getUserManager();
@@ -605,21 +603,21 @@ public class ObjectDetailsFragment extends FragmentWithTitle implements Reloadab
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         setTitle(getString(R.string.object_details_caption), null);
         showObject(getArguments().getInt(LOCAL_ID_KEY));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.loadableMonitor.unsubscribeAll();
         this.ownerNameDisplayer.setChatterID(null);
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         if (bundle != null) {
             getArguments().putAll(bundle);

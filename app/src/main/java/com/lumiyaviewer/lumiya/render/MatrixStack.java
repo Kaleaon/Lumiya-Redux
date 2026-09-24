@@ -5,7 +5,6 @@ import android.opengl.Matrix;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-/* loaded from: classes.dex */
 public class MatrixStack {
     private static final int DEFAULT_MAX_DEPTH = 32;
     private static final int MATRIX_SIZE = 16;
@@ -45,8 +44,8 @@ public class MatrixStack {
         }
     }
 
-    public void getMatrix(float[] fArr, int i) {
-        System.arraycopy(this.mMatrix, this.mTop, fArr, i, 16);
+    public void getMatrix(float[] floats, int i) {
+        System.arraycopy(this.mMatrix, this.mTop, floats, i, 16);
     }
 
     public float[] getMatrixData() {
@@ -77,8 +76,8 @@ public class MatrixStack {
         floatBuffer.get(this.mMatrix, this.mTop, 16);
     }
 
-    public void glLoadMatrixf(float[] fArr, int i) {
-        System.arraycopy(fArr, i, this.mMatrix, this.mTop, 16);
+    public void glLoadMatrixf(float[] floats, int i) {
+        System.arraycopy(floats, i, this.mMatrix, this.mTop, 16);
     }
 
     public void glLoadMatrixx(IntBuffer intBuffer) {
@@ -87,9 +86,9 @@ public class MatrixStack {
         }
     }
 
-    public void glLoadMatrixx(int[] iArr, int i) {
-        for (int i2 = 0; i2 < 16; i2++) {
-            this.mMatrix[this.mTop + i2] = fixedToFloat(iArr[i + i2]);
+    public void glLoadMatrixx(int[] ints, int i) {
+        for (int j = 0; j < 16; j++) {
+            this.mMatrix[this.mTop + j] = fixedToFloat(ints[i + j]);
         }
     }
 
@@ -98,9 +97,9 @@ public class MatrixStack {
         glMultMatrixf(this.mTemp, 16);
     }
 
-    public void glMultMatrixf(float[] fArr, int i) {
+    public void glMultMatrixf(float[] floats, int i) {
         System.arraycopy(this.mMatrix, this.mTop, this.mTemp, 0, 16);
-        Matrix.multiplyMM(this.mMatrix, this.mTop, this.mTemp, 0, fArr, i);
+        Matrix.multiplyMM(this.mMatrix, this.mTop, this.mTemp, 0, floats, i);
     }
 
     public void glMultMatrixx(IntBuffer intBuffer) {
@@ -110,9 +109,9 @@ public class MatrixStack {
         glMultMatrixf(this.mTemp, 16);
     }
 
-    public void glMultMatrixx(int[] iArr, int i) {
-        for (int i2 = 0; i2 < 16; i2++) {
-            this.mTemp[i2 + 16] = fixedToFloat(iArr[i + i2]);
+    public void glMultMatrixx(int[] ints, int i) {
+        for (int j = 0; j < 16; j++) {
+            this.mTemp[j + 16] = fixedToFloat(ints[i + j]);
         }
         glMultMatrixf(this.mTemp, 16);
     }
@@ -130,13 +129,13 @@ public class MatrixStack {
         adjust(-1);
     }
 
-    public void glPushAndLoadMatrixf(float[] fArr, int i) {
-        System.arraycopy(fArr, i, this.mMatrix, this.mTop + 16, 16);
+    public void glPushAndLoadMatrixf(float[] floats, int i) {
+        System.arraycopy(floats, i, this.mMatrix, this.mTop + 16, 16);
         this.mTop += 16;
     }
 
-    public void glPushAndMultMatrixf(float[] fArr, int i) {
-        Matrix.multiplyMM(this.mMatrix, this.mTop + 16, this.mMatrix, this.mTop, fArr, i);
+    public void glPushAndMultMatrixf(float[] floats, int i) {
+        Matrix.multiplyMM(this.mMatrix, this.mTop + 16, this.mMatrix, this.mTop, floats, i);
         this.mTop += 16;
     }
 

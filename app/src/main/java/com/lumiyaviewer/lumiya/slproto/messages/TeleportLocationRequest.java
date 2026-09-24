@@ -5,20 +5,28 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * TeleportLocationRequest
+ * viewer -> sim specifying exact teleport destination
+ *
+ * <p>Template: {@code TeleportLocationRequest Low 63 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class TeleportLocationRequest extends SLMessage {
     public AgentData AgentData_Field;
     public Info Info_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Info, Single. */
     public static class Info {
-        public LLVector3 LookAt;
-        public LLVector3 Position;
-        public long RegionHandle;
+        public LLVector3 LookAt; // LLVector3
+        public LLVector3 Position; // LLVector3
+        public long RegionHandle; // U64
     }
 
     public TeleportLocationRequest() {
@@ -27,21 +35,22 @@ public class TeleportLocationRequest extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 68;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportLocationRequest(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportLocationRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 63);
+        // Message number: Low 63 (TeleportLocationRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x3F);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packLong(byteBuffer, this.Info_Field.RegionHandle);
@@ -49,7 +58,7 @@ public class TeleportLocationRequest extends SLMessage {
         packLLVector3(byteBuffer, this.Info_Field.LookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

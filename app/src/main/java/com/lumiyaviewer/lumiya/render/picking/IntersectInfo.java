@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.picking;
 import android.opengl.Matrix;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector4;
 
-/* loaded from: classes.dex */
 public class IntersectInfo {
     public final int faceID;
     public final boolean faceKnown;
@@ -13,7 +12,7 @@ public class IntersectInfo {
     public final float u;
     public final float v;
 
-    public IntersectInfo(IntersectInfo intersectInfo, float[] fArr, int i) {
+    public IntersectInfo(IntersectInfo intersectInfo, float[] floats2, int i) {
         this.intersectPoint = intersectInfo.intersectPoint;
         this.faceID = intersectInfo.faceID;
         this.s = intersectInfo.s;
@@ -24,17 +23,17 @@ public class IntersectInfo {
             this.v = intersectInfo.v;
             return;
         }
-        float[] fArr2 = new float[8];
-        fArr2[0] = this.s;
-        fArr2[1] = this.t;
-        fArr2[3] = 1.0f;
-        Matrix.multiplyMV(fArr2, 4, fArr, i, fArr2, 0);
-        this.u = fArr2[4];
-        this.v = fArr2[5];
+        float[] floats = new float[8];
+        floats[0] = this.s;
+        floats[1] = this.t;
+        floats[3] = 1.0f;
+        Matrix.multiplyMV(floats, 4, floats2, i, floats, 0);
+        this.u = floats[4];
+        this.v = floats[5];
     }
 
-    public IntersectInfo(LLVector4 lLVector4) {
-        this.intersectPoint = lLVector4;
+    public IntersectInfo(LLVector4 intersectPoint) {
+        this.intersectPoint = intersectPoint;
         this.faceID = 0;
         this.u = 0.0f;
         this.v = 0.0f;
@@ -43,9 +42,9 @@ public class IntersectInfo {
         this.faceKnown = false;
     }
 
-    public IntersectInfo(LLVector4 lLVector4, int i, float f, float f2) {
-        this.intersectPoint = lLVector4;
-        this.faceID = i;
+    public IntersectInfo(LLVector4 intersectPoint, int faceID, float f, float f2) {
+        this.intersectPoint = intersectPoint;
+        this.faceID = faceID;
         this.u = f;
         this.v = f2;
         this.s = f;

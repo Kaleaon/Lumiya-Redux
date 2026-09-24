@@ -12,7 +12,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceChannelInfo {
     public final boolean isConference;
     public final boolean isSpatial;
@@ -30,10 +29,10 @@ public class VoiceChannelInfo {
         this.isConference = bundle.getBoolean("isConference");
     }
 
-    public VoiceChannelInfo(String str, boolean z, boolean z2) {
-        this.voiceChannelURI = str;
-        this.isSpatial = z;
-        this.isConference = z2;
+    public VoiceChannelInfo(String voiceChannelURI, boolean isSpatial, boolean isConference) {
+        this.voiceChannelURI = voiceChannelURI;
+        this.isSpatial = isSpatial;
+        this.isConference = isConference;
     }
 
     public VoiceChannelInfo(@Nonnull UUID uuid, @Nonnull String str) {
@@ -49,9 +48,9 @@ public class VoiceChannelInfo {
         if (indexOf != -1) {
             nullToEmpty = nullToEmpty.substring(indexOf + 1);
         }
-        int indexOf2 = nullToEmpty.indexOf(64);
-        if (indexOf2 != -1) {
-            nullToEmpty = nullToEmpty.substring(0, indexOf2);
+        int index = nullToEmpty.indexOf(64);
+        if (index != -1) {
+            nullToEmpty = nullToEmpty.substring(0, index);
         }
         if (nullToEmpty.startsWith("x")) {
             nullToEmpty = nullToEmpty.substring(1);

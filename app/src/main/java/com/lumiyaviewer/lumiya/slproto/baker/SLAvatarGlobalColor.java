@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.baker;
 
-/* loaded from: classes.dex */
 public enum SLAvatarGlobalColor {
     skin_color(new int[]{111, 110, 108}),
     hair_color(new int[]{114, 113, 115, 112}),
@@ -8,8 +7,8 @@ public enum SLAvatarGlobalColor {
 
     private int[] paramIDs;
 
-    SLAvatarGlobalColor(int[] iArr) {
-        this.paramIDs = iArr;
+    SLAvatarGlobalColor(int[] ints) {
+        this.paramIDs = ints;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

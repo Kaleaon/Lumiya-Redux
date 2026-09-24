@@ -43,39 +43,36 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupMainProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
     private final SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, AgentDataUpdate> agentDataUpdate = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance());
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.12
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMainProfileTab.this.m447xa875b11a((SLAgentCircuit) obj);
+            GroupMainProfileTab.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.groupProfile, this.myGroupList, this.agentDataUpdate, this.groupRoles).withDataChangedListener(this).withOptionalLoadables(this.groupTitles);
     private ChatterNameRetriever founderNameRetriever = null;
-    private final ChatterNameRetriever.OnChatterNameUpdated onFounderNameReady = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.13
+    private final ChatterNameRetriever.OnChatterNameUpdated onFounderNameReady = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             GroupMainProfileTab.this.m458xd3b61247(chatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             $m$0(chatterNameRetriever);
         }
     };
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onActiveGroupCheckboxClicked, reason: merged with bridge method [inline-methods] */
-    public void m450xa875b11d(View view) {
+    public void onActiveGroupCheckboxClicked(View view) {
         try {
             if (((CheckBox) view).isChecked()) {
                 this.agentCircuit.get().getModules().groupManager.ActivateGroup(this.groupProfile.get().GroupData_Field.GroupID);
@@ -87,9 +84,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m447xa875b11a(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         View view = getView();
         if (view != null) {
             for (int i : new int[]{R.id.show_in_profile_checkbox, R.id.active_group_checkbox, R.id.group_profile_contribution_button, R.id.group_join_button, R.id.group_leave_button, R.id.group_invite_button, R.id.group_change_role_button}) {
@@ -98,9 +93,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onChangeRoleClicked, reason: merged with bridge method [inline-methods] */
-    public void m452xa875b11f(View view) {
+    public void onChangeRoleClicked(View view) {
         int i = 0;
         try {
             this.agentCircuit.assertHasData();
@@ -115,21 +108,21 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
             }
             final AtomicInteger atomicInteger = new AtomicInteger(i2);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(R.string.select_group_role_title).setSingleChoiceItems(charSequenceArr, i2, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.2
+            builder.setTitle(R.string.select_group_role_title).setSingleChoiceItems(charSequenceArr, i2, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i4) {
                     ((AtomicInteger) atomicInteger).set(i4);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i4) {
                     $m$0(dialogInterface, i4);
                 }
-            }).setPositiveButton(R.string.set_role_dialog_ok, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.17
+            }).setPositiveButton(R.string.set_role_dialog_ok, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i4) {
                     GroupMainProfileTab.this.m457xd3a7efa5((AtomicInteger) atomicInteger, (UUID) uuid, dialogInterface, i4);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i4) {
                     $m$0(dialogInterface, i4);
                 }
@@ -140,9 +133,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onContributeLandClicked, reason: merged with bridge method [inline-methods] */
-    public void m453xa875b120(View view) {
+    public void onContributeLandClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             AvatarGroupList.AvatarGroupEntry avatarGroupEntry = this.myGroupList.get().Groups.get(this.groupProfile.get().GroupData_Field.GroupID);
@@ -152,12 +143,12 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 final View inflate = LayoutInflater.from(getContext()).inflate(R.layout.contribute_land_dialog_box_layout, (ViewGroup) getView(), false);
                 builder.setView(inflate);
                 ((EditText) inflate.findViewById(R.id.land_contribution_value)).setText(getString(R.string.generic_int_format, Integer.valueOf(avatarGroupEntry.Contribution)));
-                builder.setPositiveButton(R.string.set_land_contribution_ok_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.14
+                builder.setPositiveButton(R.string.set_land_contribution_ok_button, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         GroupMainProfileTab.this.m461xf19a4b2((View) inflate, dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -169,9 +160,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCopyGroupKeyClicked, reason: merged with bridge method [inline-methods] */
-    public void m449xa875b11c(View view) {
+    public void onCopyGroupKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
             String uuid = ((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID().toString();
             if (Build.VERSION.SDK_INT < 11) {
@@ -179,13 +168,11 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
             } else {
                 ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Group key", uuid));
             }
-            Toast.makeText(getActivity(), "Group key copied to clipboard", 0).show();
+            Toast.makeText(getActivity(), "Group key copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onInviteClicked, reason: merged with bridge method [inline-methods] */
-    public void m456xa875b123(View view) {
+    public void onInviteClicked(View view) {
         UUID uuid;
         AvatarGroupList.AvatarGroupEntry avatarGroupEntry;
         try {
@@ -198,9 +185,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onJoinClicked, reason: merged with bridge method [inline-methods] */
-    public void m454xa875b121(View view) {
+    public void onJoinClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             final UUID uuid = this.groupProfile.get().GroupData_Field.GroupID;
@@ -212,22 +197,22 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 } else {
                     builder.setMessage(getString(R.string.join_group_question_message_not_free, Integer.valueOf(this.groupProfile.get().GroupData_Field.MembershipFee)));
                 }
-                builder.setPositiveButton(R.string.yes_join_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.15
+                builder.setPositiveButton(R.string.yes_join_button, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         GroupMainProfileTab.this.m460xf191a6b((UUID) uuid, dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
                 });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -239,31 +224,29 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onLeaveClicked, reason: merged with bridge method [inline-methods] */
-    public void m455xa875b122(View view) {
+    public void onLeaveClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             final UUID uuid = this.groupProfile.get().GroupData_Field.GroupID;
             if (this.myGroupList.get().Groups.get(uuid) != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.leave_group_confirm);
-                builder.setPositiveButton(R.string.yes_leave_button, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.16
+                builder.setPositiveButton(R.string.yes_leave_button, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         GroupMainProfileTab.this.m459xf184433((UUID) uuid, dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
                 });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.1
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -275,9 +258,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onShowInProfileCheckboxClicked, reason: merged with bridge method [inline-methods] */
-    public void m451xa875b11e(View view) {
+    public void onShowInProfileCheckboxClicked(View view) {
         try {
             AvatarGroupList.AvatarGroupEntry avatarGroupEntry = this.myGroupList.get().Groups.get(this.groupProfile.get().GroupData_Field.GroupID);
             if (avatarGroupEntry != null) {
@@ -288,9 +269,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onViewProfileClicked, reason: merged with bridge method [inline-methods] */
-    public void m448xa875b11b(View view) {
+    public void onViewProfileClicked(View view) {
         UUID uuid;
         GroupProfileReply data = this.groupProfile.getData();
         if (data == null || this.chatterID == null || (uuid = data.GroupData_Field.FounderID) == null || !(!uuid.equals(UUIDPool.ZeroUUID)) || this.chatterID == null) {
@@ -351,98 +330,98 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.group_profile_tab_main, viewGroup, false);
         ((ImageAssetView) inflate.findViewById(R.id.group_pic_view)).setAlignTop(true);
         ((ImageAssetView) inflate.findViewById(R.id.group_pic_view)).setVerticalFit(true);
-        inflate.findViewById(R.id.group_profile_view_founder_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.3
+        inflate.findViewById(R.id.group_profile_view_founder_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m448xa875b11b(view);
+                GroupMainProfileTab.this.onViewProfileClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.button_copy_group_key).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.4
+        inflate.findViewById(R.id.button_copy_group_key).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m449xa875b11c(view);
+                GroupMainProfileTab.this.onCopyGroupKeyClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.active_group_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.5
+        inflate.findViewById(R.id.active_group_checkbox).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m450xa875b11d(view);
+                GroupMainProfileTab.this.onActiveGroupCheckboxClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.show_in_profile_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.6
+        inflate.findViewById(R.id.show_in_profile_checkbox).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m451xa875b11e(view);
+                GroupMainProfileTab.this.onShowInProfileCheckboxClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.group_change_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.7
+        inflate.findViewById(R.id.group_change_role_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m452xa875b11f(view);
+                GroupMainProfileTab.this.onChangeRoleClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.group_profile_contribution_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.8
+        inflate.findViewById(R.id.group_profile_contribution_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m453xa875b120(view);
+                GroupMainProfileTab.this.onContributeLandClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.group_join_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.9
+        inflate.findViewById(R.id.group_join_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m454xa875b121(view);
+                GroupMainProfileTab.this.onJoinClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.group_leave_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.10
+        inflate.findViewById(R.id.group_leave_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m455xa875b122(view);
+                GroupMainProfileTab.this.onLeaveClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        inflate.findViewById(R.id.group_invite_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.11
+        inflate.findViewById(R.id.group_invite_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m456xa875b123(view);
+                GroupMainProfileTab.this.onInviteClicked(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
@@ -453,7 +432,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         View view = getView();
         try {
@@ -464,7 +443,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
             if (view != null) {
                 ((ImageAssetView) view.findViewById(R.id.group_pic_view)).setAssetID(this.groupProfile.get().GroupData_Field.InsigniaID);
                 String stringFromVariableUTF = SLMessage.stringFromVariableUTF(this.groupProfile.get().GroupData_Field.Charter);
-                view.findViewById(R.id.group_profile_charter_card_view).setVisibility(Strings.isNullOrEmpty(stringFromVariableUTF) ? 8 : 0);
+                view.findViewById(R.id.group_profile_charter_card_view).setVisibility(Strings.isNullOrEmpty(stringFromVariableUTF) ? View.GONE : View.VISIBLE);
                 ((TextView) view.findViewById(R.id.group_profile_charter_text)).setText(stringFromVariableUTF);
                 ((TextView) view.findViewById(R.id.text_profile_member_count)).setText(getString(R.string.group_member_count_format, Integer.valueOf(this.groupProfile.get().GroupData_Field.GroupMembershipCount)));
                 ((TextView) view.findViewById(R.id.text_profile_join_fee)).setText(this.groupProfile.get().GroupData_Field.MembershipFee == 0 ? getString(R.string.group_free_to_join) : getString(R.string.group_join_fee_format, Integer.valueOf(this.groupProfile.get().GroupData_Field.MembershipFee)));
@@ -477,29 +456,29 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                 UUID uuid = this.groupProfile.get().GroupData_Field.FounderID;
                 Debug.Printf("GroupProfile: founderID = %s", uuid);
                 if (uuid == null || !(!uuid.equals(UUIDPool.ZeroUUID)) || this.chatterID == null) {
-                    view.findViewById(R.id.group_founder_card_view).setVisibility(8);
+                    view.findViewById(R.id.group_founder_card_view).setVisibility(View.GONE);
                     ((ChatterPicView) view.findViewById(R.id.group_founder_pic)).setChatterID(null, null);
                 } else {
                     ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(this.chatterID.agentUUID, uuid);
-                    view.findViewById(R.id.group_founder_card_view).setVisibility(0);
+                    view.findViewById(R.id.group_founder_card_view).setVisibility(View.VISIBLE);
                     this.founderNameRetriever = new ChatterNameRetriever(userChatterID, this.onFounderNameReady, UIThreadExecutor.getInstance());
                 }
                 if (avatarGroupEntry == null) {
                     ((TextView) view.findViewById(R.id.group_membership_caption)).setText(R.string.membership_no_member_caption);
-                    view.findViewById(R.id.group_join_button).setVisibility(this.groupProfile.get().GroupData_Field.OpenEnrollment ? 0 : 8);
-                    view.findViewById(R.id.group_leave_button).setVisibility(8);
-                    view.findViewById(R.id.group_invite_button).setVisibility(8);
-                    view.findViewById(R.id.group_change_role_button).setVisibility(8);
-                    view.findViewById(R.id.group_membership_role).setVisibility(8);
-                    view.findViewById(R.id.membership_settings_card_view).setVisibility(8);
+                    view.findViewById(R.id.group_join_button).setVisibility(this.groupProfile.get().GroupData_Field.OpenEnrollment ? View.VISIBLE : View.GONE);
+                    view.findViewById(R.id.group_leave_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.group_invite_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.group_change_role_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.group_membership_role).setVisibility(View.GONE);
+                    view.findViewById(R.id.membership_settings_card_view).setVisibility(View.GONE);
                     return;
                 }
                 ((TextView) view.findViewById(R.id.group_membership_caption)).setText(R.string.membership_caption);
-                view.findViewById(R.id.group_join_button).setVisibility(8);
-                view.findViewById(R.id.group_leave_button).setVisibility(0);
+                view.findViewById(R.id.group_join_button).setVisibility(View.GONE);
+                view.findViewById(R.id.group_leave_button).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.group_invite_button).setVisibility(((avatarGroupEntry.GroupPowers & 2) > 0L ? 1 : ((avatarGroupEntry.GroupPowers & 2) == 0L ? 0 : -1)) != 0 ? 0 : 8);
-                view.findViewById(R.id.group_change_role_button).setVisibility(0);
-                view.findViewById(R.id.group_membership_role).setVisibility(0);
+                view.findViewById(R.id.group_change_role_button).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.group_membership_role).setVisibility(View.VISIBLE);
                 String str = avatarGroupEntry.GroupTitle;
                 if (Strings.isNullOrEmpty(str) && this.groupTitles.hasData()) {
                     Iterator<?> it = this.groupTitles.get().GroupData_Fields.iterator();
@@ -515,7 +494,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
                     }
                 }
                 ((TextView) view.findViewById(R.id.group_membership_role)).setText(str);
-                view.findViewById(R.id.membership_settings_card_view).setVisibility(0);
+                view.findViewById(R.id.membership_settings_card_view).setVisibility(View.VISIBLE);
                 ((TextView) view.findViewById(R.id.land_contribution_text)).setText(avatarGroupEntry.Contribution != 0 ? getString(R.string.format_land_contribution, Integer.valueOf(avatarGroupEntry.Contribution)) : getString(R.string.no_land_contributed));
                 ((CheckBox) view.findViewById(R.id.show_in_profile_checkbox)).setChecked(avatarGroupEntry.ListInProfile);
                 ((CheckBox) view.findViewById(R.id.active_group_checkbox)).setChecked(this.agentDataUpdate.get().AgentData_Field.ActiveGroupID.equals(this.groupProfile.get().GroupData_Field.GroupID));
@@ -525,7 +504,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         View view = getView();
         this.loadableMonitor.unsubscribeAll();

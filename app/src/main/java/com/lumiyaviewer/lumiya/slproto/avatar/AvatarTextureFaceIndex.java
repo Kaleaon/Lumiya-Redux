@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum AvatarTextureFaceIndex {
     TEX_HEAD_BODYPAINT("head"),
     TEX_UPPER_SHIRT("upper"),
@@ -34,8 +33,8 @@ public enum AvatarTextureFaceIndex {
 
     private String bakedTextureName;
 
-    AvatarTextureFaceIndex(String str) {
-        this.bakedTextureName = str;
+    AvatarTextureFaceIndex(String bakedTextureName) {
+        this.bakedTextureName = bakedTextureName;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

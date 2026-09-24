@@ -1,6 +1,5 @@
 package com.google.protobuf.nano;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.google.vr.cardboard.VrSettingsProviderContract;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -8,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public final class MessageNanoPrinter {
     private static final String INDENT = "  ";
     private static final int MAX_STRING_LEN = 200;
@@ -16,14 +14,14 @@ public final class MessageNanoPrinter {
     private MessageNanoPrinter() {
     }
 
-    private static void appendQuotedBytes(byte[] bArr, StringBuffer stringBuffer) {
-        if (bArr == null) {
+    private static void appendQuotedBytes(byte[] bytes, StringBuffer stringBuffer) {
+        if (bytes == null) {
             stringBuffer.append("\"\"");
             return;
         }
         stringBuffer.append('\"');
-        for (byte b : bArr) {
-            int i = b & UnsignedBytes.MAX_VALUE;
+        for (byte b : bytes) {
+            int i = b & 0xFF;
             if (i == 92 || i == 34) {
                 stringBuffer.append('\\').append((char) i);
             } else if (i >= 32 && i < 127) {

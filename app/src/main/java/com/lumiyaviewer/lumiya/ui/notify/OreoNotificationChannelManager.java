@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @RequiresApi(api = 26)
-/* loaded from: classes.dex */
 public class OreoNotificationChannelManager implements NotificationChannelManager {
     private final ImmutableMap<NotificationChannels.Channel, NotificationChannelSettings> channelSettings;
     private final Object lock = new Object();
@@ -32,9 +31,9 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         final NotificationType notificationType;
         final boolean showBadge;
 
-        private NotificationChannelSettings(int i, boolean z, NotificationType notificationType) {
-            this.importance = i;
-            this.showBadge = z;
+        private NotificationChannelSettings(int importance, boolean showBadge, NotificationType notificationType) {
+            this.importance = importance;
+            this.showBadge = showBadge;
             this.notificationType = notificationType;
         }
 
@@ -50,12 +49,12 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         this.channelSettings = ImmutableMap.of(NotificationChannels.Channel.OnlineStatus, new NotificationChannelSettings(2, false, null, null), NotificationChannels.Channel.Local, new NotificationChannelSettings(i, z, NotificationType.LocalChat, null), NotificationChannels.Channel.Group, new NotificationChannelSettings(i, z, NotificationType.Group, null), NotificationChannels.Channel.IM, new NotificationChannelSettings(4, z, NotificationType.Private, null));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     public boolean areNotificationsSystemControlled() {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     @Nonnull
     public ImmutableSet<NotificationType> getEnabledTypes(Context context) {
         NotificationChannels notificationChannels = NotificationChannels.getInstance();
@@ -70,14 +69,14 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         return builder.build();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     @Nonnull
     public String getNotificationChannelName(@Nonnull NotificationChannels.Channel channel) {
-        String str;
+        String id;
         synchronized (this.lock) {
             NotificationChannel notificationChannel = this.channels.get(channel);
             if (notificationChannel != null) {
-                str = notificationChannel.getId();
+                id = notificationChannel.getId();
             } else {
                 Context context = LumiyaApp.getContext();
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification");
@@ -94,13 +93,13 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
                 Debug.Printf("Notifications: Creating new notification channel with id '%s'", channel.channelId);
                 notificationManager.createNotificationChannel(notificationChannel2);
                 this.channels.put(channel, notificationChannel2);
-                str = channel.channelId;
+                id = channel.channelId;
             }
         }
-        return str;
+        return id;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     @Nullable
     public String getNotificationSummary(Context context, @Nonnull NotificationChannels.Channel channel) {
         NotificationChannel notificationChannel = ((NotificationManager) context.getSystemService("notification")).getNotificationChannel(getNotificationChannelName(channel));
@@ -123,7 +122,7 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     public boolean showSystemNotificationSettings(Context context, @Nullable Fragment fragment, @Nonnull NotificationChannels.Channel channel) {
         Intent intent = new Intent("android.settings.CHANNEL_NOTIFICATION_SETTINGS");
         intent.putExtra("android.provider.extra.CHANNEL_ID", getNotificationChannelName(channel));
@@ -136,7 +135,7 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.notify.NotificationChannelManager
+    @Override
     public boolean useNotificationGroups() {
         return true;
     }

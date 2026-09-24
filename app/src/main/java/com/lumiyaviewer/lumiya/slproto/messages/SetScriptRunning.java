@@ -4,20 +4,28 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetScriptRunning - makes a script active or inactive (Enable may be
+ * true or false)
+ *
+ * <p>Template: {@code SetScriptRunning Low 245 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetScriptRunning extends SLMessage {
     public AgentData AgentData_Field;
     public Script Script_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Script, Single. */
     public static class Script {
-        public UUID ItemID;
-        public UUID ObjectID;
-        public boolean Running;
+        public UUID ItemID; // LLUUID
+        public UUID ObjectID; // LLUUID
+        public boolean Running; // BOOL
     }
 
     public SetScriptRunning() {
@@ -26,21 +34,22 @@ public class SetScriptRunning extends SLMessage {
         this.Script_Field = new Script();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 69;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetScriptRunning(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetScriptRunning(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -11);
+        // Message number: Low 245 (SetScriptRunning).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xF5);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Script_Field.ObjectID);
@@ -48,7 +57,7 @@ public class SetScriptRunning extends SLMessage {
         packBoolean(byteBuffer, this.Script_Field.Running);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class FXAAProgram extends ShaderProgram {
     public int noAAtextureSampler;
     public int texcoordOffset;
@@ -15,12 +14,12 @@ public class FXAAProgram extends ShaderProgram {
         super(Shader.FXAAVertexShader, Shader.FXAAFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         this.vPosition = GLES20.glGetAttribLocation(this.handle, "vPosition");
         this.vTexCoord = GLES20.glGetAttribLocation(this.handle, "vTexCoord");
@@ -30,7 +29,7 @@ public class FXAAProgram extends ShaderProgram {
         this.texcoordOffset = GLES20.glGetUniformLocation(this.handle, "texcoordOffset");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int getHandle() {
         return super.getHandle();
     }

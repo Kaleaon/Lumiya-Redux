@@ -27,7 +27,6 @@ import com.google.vr.vrcore.controller.api.IControllerListener;
 import com.google.vr.vrcore.controller.api.IControllerService;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class ServiceBridge implements ServiceConnection {
     private static final boolean DEBUG = false;
     public static final int FLAG_SUPPORTS_RECENTER = 1;
@@ -40,112 +39,112 @@ public class ServiceBridge implements ServiceConnection {
     private boolean isBound;
     private IControllerService service;
     private final ControllerListenerOptions options = new ControllerListenerOptions();
-    private final Runnable bindRunnable = new Runnable() { // from class: com.google.vr.internal.controller.ServiceBridge.1
-        @Override // java.lang.Runnable
+    private final Runnable bindRunnable = new Runnable() {
+        @Override
         public void run() {
             ServiceBridge.this.doBind();
         }
     };
-    private final Runnable unbindRunnable = new Runnable() { // from class: com.google.vr.internal.controller.ServiceBridge.2
-        @Override // java.lang.Runnable
+    private final Runnable unbindRunnable = new Runnable() {
+        @Override
         public void run() {
             ServiceBridge.this.doUnbind();
         }
     };
-    private final IControllerListener controllerListener = new IControllerListener.Stub() { // from class: com.google.vr.internal.controller.ServiceBridge.3
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+    private final IControllerListener controllerListener = new IControllerListener.Stub() {
+        @Override
         public void deprecatedOnControllerAccelEvent(ControllerAccelEvent controllerAccelEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerAccelEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addAccelEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerAccelEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addAccelEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerButtonEvent(ControllerButtonEvent controllerButtonEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerButtonEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addButtonEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerButtonEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addButtonEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public boolean deprecatedOnControllerButtonEventV1(ControllerButtonEvent controllerButtonEvent) {
             return true;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerGyroEvent(ControllerGyroEvent controllerGyroEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerGyroEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addGyroEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerGyroEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addGyroEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerOrientationEvent(ControllerOrientationEvent controllerOrientationEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerOrientationEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addOrientationEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerOrientationEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addOrientationEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerTouchEvent(ControllerTouchEvent controllerTouchEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerTouchEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addTouchEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerTouchEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addTouchEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public int getApiVersion() throws RemoteException {
             return 10;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public ControllerListenerOptions getOptions() throws RemoteException {
             return ServiceBridge.this.options;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket(ControllerEventPacket controllerEventPacket) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerEventPacket(controllerEventPacket);
             controllerEventPacket.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket2(ControllerEventPacket2 controllerEventPacket2) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerEventPacket(controllerEventPacket2);
             controllerEventPacket2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) {
             ServiceBridge.this.callbacks.onControllerRecentered(controllerOrientationEvent);
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerStateChanged(int i, int i2) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerStateChanged(i, i2);
         }
@@ -177,7 +176,6 @@ public class ServiceBridge implements ServiceConnection {
         this.callbacks = callbacks;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void doBind() {
         ensureOnMainThread();
         if (this.isBound) {
@@ -194,7 +192,6 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void doUnbind() {
         ensureOnMainThread();
         if (!this.isBound) {
@@ -232,7 +229,7 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         int i = 0;
         ensureOnMainThread();
@@ -281,7 +278,7 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceDisconnected(ComponentName componentName) {
         ensureOnMainThread();
         this.service = null;
@@ -299,27 +296,27 @@ public class ServiceBridge implements ServiceConnection {
     }
 
     @UsedByNative
-    public void setAccelEnabled(boolean z) {
-        this.options.enableAccel = z;
+    public void setAccelEnabled(boolean accelEnabled) {
+        this.options.enableAccel = accelEnabled;
     }
 
     @UsedByNative
-    public void setGesturesEnabled(boolean z) {
-        this.options.enableGestures = z;
+    public void setGesturesEnabled(boolean gesturesEnabled) {
+        this.options.enableGestures = gesturesEnabled;
     }
 
     @UsedByNative
-    public void setGyroEnabled(boolean z) {
-        this.options.enableGyro = z;
+    public void setGyroEnabled(boolean gyroEnabled) {
+        this.options.enableGyro = gyroEnabled;
     }
 
     @UsedByNative
-    public void setOrientationEnabled(boolean z) {
-        this.options.enableOrientation = z;
+    public void setOrientationEnabled(boolean orientationEnabled) {
+        this.options.enableOrientation = orientationEnabled;
     }
 
     @UsedByNative
-    public void setTouchEnabled(boolean z) {
-        this.options.enableTouch = z;
+    public void setTouchEnabled(boolean touchEnabled) {
+        this.options.enableTouch = touchEnabled;
     }
 }

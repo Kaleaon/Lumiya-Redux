@@ -1,35 +1,47 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupMembersReply
+ * list of uuids for the group members
+ * dataserver -> simulator
+ * reliable
+ *
+ * <p>Template: {@code GroupMembersReply Low 367 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLGroupMgr::processGroupMembersReply()} in indra/newview/llgroupmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupMembersReply extends SLMessage {
     public AgentData AgentData_Field;
     public GroupData GroupData_Field;
     public ArrayList<MemberData> MemberData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block GroupData, Single. */
     public static class GroupData {
-        public UUID GroupID;
-        public int MemberCount;
-        public UUID RequestID;
+        public UUID GroupID; // LLUUID
+        public int MemberCount; // S32
+        public UUID RequestID; // LLUUID
     }
 
+    /** Block MemberData, Variable. */
     public static class MemberData {
-        public UUID AgentID;
-        public long AgentPowers;
-        public int Contribution;
-        public boolean IsOwner;
-        public byte[] OnlineStatus;
-        public byte[] Title;
+        public UUID AgentID; // LLUUID
+        public long AgentPowers; // U64
+        public int Contribution; // S32
+        public boolean IsOwner; // BOOL
+        public byte[] OnlineStatus; // Variable 1 - string
+        public byte[] Title; // Variable 1 - string
     }
 
     public GroupMembersReply() {
@@ -38,7 +50,7 @@ public class GroupMembersReply extends SLMessage {
         this.GroupData_Field = new GroupData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 57;
         Iterator<?> it = this.MemberData_Fields.iterator();
@@ -52,16 +64,17 @@ public class GroupMembersReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupMembersReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupMembersReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 111);
+        // Message number: Low 367 (GroupMembersReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x6F);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
         packUUID(byteBuffer, this.GroupData_Field.RequestID);
@@ -77,14 +90,14 @@ public class GroupMembersReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.GroupData_Field.GroupID = unpackUUID(byteBuffer);
         this.GroupData_Field.RequestID = unpackUUID(byteBuffer);
         this.GroupData_Field.MemberCount = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             MemberData memberData = new MemberData();
             memberData.AgentID = unpackUUID(byteBuffer);
             memberData.Contribution = unpackInt(byteBuffer);

@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
-/* loaded from: classes.dex */
 public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
     private static final int MAX_USERPIC_HEIGHT = 128;
     private static final int MAX_USERPIC_WIDTH = 128;
@@ -34,8 +33,8 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
         public UserPicBitmapRequest(UUID uuid, ResourceManager<UUID, Bitmap> resourceManager) {
             super(uuid, resourceManager);
             this.compressedFile = null;
-            this.loadRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UserPicBitmapCache.UserPicBitmapRequest.1
-                @Override // java.lang.Runnable
+            this.loadRunnable = new Runnable() {
+                @Override
                 public void run() {
                     byte[] userPic = UserPicBitmapCache.this.userManager.getUserPic((UUID) UserPicBitmapRequest.this.getParams());
                     Object[] objArr = new Object[2];
@@ -49,8 +48,8 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
                     }
                 }
             };
-            this.decompressRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UserPicBitmapCache.UserPicBitmapRequest.2
-                @Override // java.lang.Runnable
+            this.decompressRunnable = new Runnable() {
+                @Override
                 public void run() {
                     try {
                         Bitmap asBitmap = new OpenJPEG(UserPicBitmapRequest.this.compressedFile, 128, 128, false).getAsBitmap();
@@ -67,7 +66,7 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
             };
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             Object[] objArr = new Object[2];
             objArr[0] = getParams();
@@ -81,22 +80,22 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             Debug.Printf("DecompressRequest: cancelled (%s)", getParams().toString());
             Future<?> future = this.decompressorFuture;
             if (future != null) {
                 future.cancel(false);
             }
-            Future<?> future2 = this.loaderFuture;
-            if (future2 != null) {
-                future2.cancel(false);
+            Future<?> loaderFuture = this.loaderFuture;
+            if (loaderFuture != null) {
+                loaderFuture.cancel(false);
             }
             TextureCache.getInstance().getTextureCompressedCache().CancelRequest(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             Debug.Printf("UserPic: Requesting load for %s", getParams());
             this.loaderFuture = LoaderExecutor.getInstance().submit(this.loadRunnable);
@@ -107,7 +106,7 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
         this.userManager = userManager;
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     protected ResourceRequest<UUID, Bitmap> CreateNewRequest(UUID uuid, ResourceManager<UUID, Bitmap> resourceManager) {
         return new UserPicBitmapRequest(uuid, resourceManager);
     }

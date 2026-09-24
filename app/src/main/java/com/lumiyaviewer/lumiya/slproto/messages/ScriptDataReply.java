@@ -1,25 +1,30 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * Data server responds with data
+ *
+ * <p>Template: {@code ScriptDataReply Low 338 Trusted Unencoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class ScriptDataReply extends SLMessage {
     public ArrayList<DataBlock> DataBlock_Fields = new ArrayList<>();
 
+    /** Block DataBlock, Variable. */
     public static class DataBlock {
-        public long Hash;
-        public byte[] Reply;
+        public long Hash; // U64
+        public byte[] Reply; // Variable 2
     }
 
     public ScriptDataReply() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.DataBlock_Fields.iterator();
@@ -32,16 +37,17 @@ public class ScriptDataReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptDataReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptDataReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 82);
+        // Message number: Low 338 (ScriptDataReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x52);
         byteBuffer.put((byte) this.DataBlock_Fields.size());
         for (DataBlock dataBlock : this.DataBlock_Fields) {
             packLong(byteBuffer, dataBlock.Hash);
@@ -49,10 +55,10 @@ public class ScriptDataReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             DataBlock dataBlock = new DataBlock();
             dataBlock.Hash = unpackLong(byteBuffer);
             dataBlock.Reply = unpackVariable(byteBuffer, 2);

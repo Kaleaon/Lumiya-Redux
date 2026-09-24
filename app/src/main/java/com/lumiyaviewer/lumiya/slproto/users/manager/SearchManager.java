@@ -13,7 +13,6 @@ import de.greenrobot.dao.query.LazyList;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SearchManager {
     private final Executor dbExecutor;
     private final SearchGridResultDao searchGridResultDao;
@@ -25,12 +24,12 @@ public class SearchManager {
         this.searchGridResultDao = daoSession.getSearchGridResultDao();
         LumiyaRoomDatabase roomDb = DaoManager.getRoomDatabase(daoSession);
         this.searchRepository = new SearchGridResultRepositoryAdapter(this.searchGridResultDao, roomDb != null ? roomDb.searchGridResultDao() : null);
-        this.searchResults.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bhNr-B7VMDi5fNhRKl1Wi5s6H9k
+        this.searchResults.setDisposeHandler(new DisposeHandler() {
             private final /* synthetic */ void $m$0(Object obj) {
                 SearchManager.m360x60619dda((LazyList) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.DisposeHandler
+            @Override
             public final void onDispose(Object obj) {
                 $m$0(obj);
             }

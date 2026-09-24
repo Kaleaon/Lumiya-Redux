@@ -1,5 +1,6 @@
 package com.google.vr.cardboard;
 
+import androidx.core.content.ContextCompat;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -10,7 +11,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class NFCUtils {
     private static final String TAG = NFCUtils.class.getSimpleName();
     Context context;
@@ -33,8 +33,8 @@ public class NFCUtils {
     public void onCreate(Activity activity) {
         this.context = activity.getApplicationContext();
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this.context);
-        this.nfcBroadcastReceiver = new BroadcastReceiver() { // from class: com.google.vr.cardboard.NFCUtils.1
-            @Override // android.content.BroadcastReceiver
+        this.nfcBroadcastReceiver = new BroadcastReceiver() {
+            @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i(NFCUtils.TAG, "Got an NFC tag!");
                 NFCUtils.this.onNFCTagDetected((Tag) intent.getParcelableExtra("android.nfc.extra.TAG"));
@@ -42,14 +42,14 @@ public class NFCUtils {
         };
         IntentFilter createNfcIntentFilter = createNfcIntentFilter();
         createNfcIntentFilter.addDataScheme("cardboard");
-        IntentFilter createNfcIntentFilter2 = createNfcIntentFilter();
-        createNfcIntentFilter2.addDataScheme("http");
-        createNfcIntentFilter2.addDataAuthority("goo.gl", null);
-        IntentFilter createNfcIntentFilter3 = createNfcIntentFilter();
-        createNfcIntentFilter3.addDataScheme("http");
-        createNfcIntentFilter3.addDataAuthority("google.com", null);
-        createNfcIntentFilter3.addDataPath("/cardboard/cfg.*", 2);
-        this.nfcIntentFilters = new IntentFilter[]{createNfcIntentFilter, createNfcIntentFilter2, createNfcIntentFilter3};
+        IntentFilter nfcIntentFilter = createNfcIntentFilter();
+        nfcIntentFilter.addDataScheme("http");
+        nfcIntentFilter.addDataAuthority("goo.gl", null);
+        IntentFilter nfcIntentFilter2 = createNfcIntentFilter();
+        nfcIntentFilter2.addDataScheme("http");
+        nfcIntentFilter2.addDataAuthority("google.com", null);
+        nfcIntentFilter2.addDataPath("/cardboard/cfg.*", 2);
+        this.nfcIntentFilters = new IntentFilter[]{createNfcIntentFilter, nfcIntentFilter, nfcIntentFilter2};
     }
 
     protected void onNFCTagDetected(Tag tag) {
@@ -63,10 +63,13 @@ public class NFCUtils {
     }
 
     public void onResume(Activity activity) {
-        activity.registerReceiver(this.nfcBroadcastReceiver, createNfcIntentFilter());
+        // Android 14: a receiver for non-system broadcasts must say whether other
+        // apps may send to it. The NFC intents arrive through this app's own
+        // PendingIntent, so the receiver is not exported.
+        ContextCompat.registerReceiver(activity, this.nfcBroadcastReceiver, createNfcIntentFilter(), ContextCompat.RECEIVER_NOT_EXPORTED);
         Intent intent = new Intent("android.nfc.action.NDEF_DISCOVERED");
         intent.setPackage(activity.getPackageName());
-        PendingIntent broadcast = PendingIntent.getBroadcast(this.context, 0, intent, 0);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this.context, 0, intent, PendingIntent.FLAG_MUTABLE);
         if (isNFCEnabled()) {
             this.nfcAdapter.enableForegroundDispatch(activity, broadcast, this.nfcIntentFilters, null);
         }

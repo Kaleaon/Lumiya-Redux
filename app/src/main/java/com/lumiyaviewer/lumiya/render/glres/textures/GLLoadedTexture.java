@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GLLoadedTexture extends GLResourceTexture {
     private final boolean hasAlphaLayer;
     private final int height;

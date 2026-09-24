@@ -4,7 +4,6 @@ import androidx.core.internal.view.SupportMenu;
 import com.lumiyaviewer.lumiya.slproto.messages.ObjectUpdate;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class PrimProfileParams {
     public static final float CUT_QUANTA = 2.0E-5f;
     public static final float HOLLOW_QUANTA = 2.0E-5f;

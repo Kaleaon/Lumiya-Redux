@@ -1,15 +1,22 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * CompletePingCheck - used to measure circuit ping times
+ *
+ * <p>Template: {@code CompletePingCheck High 2 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_complete_ping_check()} in indra/llmessage/message.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class CompletePingCheck extends SLMessage {
     public PingID PingID_Field;
 
+    /** Block PingID, Single. */
     public static class PingID {
-        public int PingID;
+        public int PingID; // U8
     }
 
     public CompletePingCheck() {
@@ -17,24 +24,25 @@ public class CompletePingCheck extends SLMessage {
         this.PingID_Field = new PingID();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCompletePingCheck(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCompletePingCheck(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 2);
+        // Message number: High 2 (CompletePingCheck).
+        byteBuffer.put((byte) 0x02);
         packByte(byteBuffer, (byte) this.PingID_Field.PingID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        this.PingID_Field.PingID = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.PingID_Field.PingID = unpackByte(byteBuffer) & 0xFF;
     }
 }

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.xfer;
 
-/* loaded from: classes.dex */
 public enum ELLPath {
     LL_PATH_NONE(0),
     LL_PATH_USER_SETTINGS(1),
@@ -23,8 +22,8 @@ public enum ELLPath {
 
     private int code;
 
-    ELLPath(int i) {
-        this.code = i;
+    ELLPath(int code) {
+        this.code = code;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

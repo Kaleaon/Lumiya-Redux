@@ -1,34 +1,42 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * ParcelAccessListUpdate
+ *
+ * <p>Template: {@code ParcelAccessListUpdate Low 217 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelAccessListUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
     public ArrayList<List> List_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int Flags;
-        public int LocalID;
-        public int Sections;
-        public int SequenceID;
-        public UUID TransactionID;
+        public int Flags; // U32
+        public int LocalID; // S32
+        public int Sections; // S32
+        public int SequenceID; // S32
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block List, Variable. */
     public static class List {
-        public int Flags;
-        public UUID ID;
-        public int Time;
+        public int Flags; // U32
+        public UUID ID; // LLUUID
+        public int Time; // S32 - time_t
     }
 
     public ParcelAccessListUpdate() {
@@ -37,21 +45,22 @@ public class ParcelAccessListUpdate extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.List_Fields.size() * 24) + 69;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelAccessListUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelAccessListUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -39);
+        // Message number: Low 217 (ParcelAccessListUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xD9);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.Data_Field.Flags);
@@ -67,7 +76,7 @@ public class ParcelAccessListUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
@@ -76,8 +85,8 @@ public class ParcelAccessListUpdate extends SLMessage {
         this.Data_Field.TransactionID = unpackUUID(byteBuffer);
         this.Data_Field.SequenceID = unpackInt(byteBuffer);
         this.Data_Field.Sections = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             List list = new List();
             list.ID = unpackUUID(byteBuffer);
             list.Time = unpackInt(byteBuffer);

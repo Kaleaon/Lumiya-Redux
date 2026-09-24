@@ -4,7 +4,6 @@ import androidx.core.os.EnvironmentCompat;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public enum SLInventoryType {
     IT_TEXTURE(0, "texture", "Texture"),
     IT_SOUND(1, "sound", "Sound"),
@@ -36,21 +35,21 @@ public enum SLInventoryType {
         }
     }
 
-    SLInventoryType(int i, String str, String str2) {
-        this.typeCode = i;
-        this.stringCode = str;
-        this.readableName = str2;
+    SLInventoryType(int typeCode, String stringCode, String readableName) {
+        this.typeCode = typeCode;
+        this.stringCode = stringCode;
+        this.readableName = readableName;
     }
 
     public static SLInventoryType getByString(String str) {
-        SLInventoryType sLInventoryType = tagMap.get(str);
-        return sLInventoryType == null ? IT_UNKNOWN : sLInventoryType;
+        SLInventoryType inventoryType = tagMap.get(str);
+        return inventoryType == null ? IT_UNKNOWN : inventoryType;
     }
 
     public static SLInventoryType getByType(int i) {
-        for (SLInventoryType sLInventoryType : valuesCustom()) {
-            if (sLInventoryType.typeCode == i) {
-                return sLInventoryType;
+        for (SLInventoryType inventoryType : valuesCustom()) {
+            if (inventoryType.typeCode == i) {
+                return inventoryType;
             }
         }
         return IT_UNKNOWN;

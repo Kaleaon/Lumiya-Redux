@@ -20,7 +20,6 @@ import com.lumiyaviewer.lumiya.ui.accounts.AccountList;
 import com.lumiyaviewer.lumiya.ui.grids.GridList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 class AccountEditDialog extends AppCompatDialog implements View.OnClickListener, TextWatcher {
     private AccountList.AccountInfo editAccount;
     private GridList gridList;
@@ -73,11 +72,11 @@ class AccountEditDialog extends AppCompatDialog implements View.OnClickListener,
         ((TextView) findViewById(R.id.loginNameText)).requestFocus();
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void afterTextChanged(Editable editable) {
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         TextView textView = (TextView) findViewById(R.id.loginPasswordText);
         if (textView.getTag() != null) {
@@ -88,53 +87,53 @@ class AccountEditDialog extends AppCompatDialog implements View.OnClickListener,
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         boolean z;
         AccountList.AccountInfo accountInfo;
         boolean z2 = false;
         switch (view.getId()) {
-            case R.id.okButton /* 2131755190 */:
+            case R.id.okButton:
                 String charSequence = ((TextView) findViewById(R.id.loginNameText)).getText().toString();
-                String charSequence2 = ((TextView) findViewById(R.id.loginPasswordText)).getText().toString();
+                String text = ((TextView) findViewById(R.id.loginPasswordText)).getText().toString();
                 String str = "";
                 Object selectedItem = ((Spinner) findViewById(R.id.spinnerGrid)).getSelectedItem();
                 UUID gridUUID = selectedItem instanceof GridList.GridInfo ? ((GridList.GridInfo) selectedItem).getGridUUID() : null;
                 if (!charSequence.equals("")) {
-                    if (charSequence2.equals("(Saved password)")) {
+                    if (text.equals("(Saved password)")) {
                         z = true;
-                    } else if (charSequence2.equals("")) {
+                    } else if (text.equals("")) {
                         str = "";
                         z = false;
                     } else {
-                        str = SLAuth.getPasswordHash(charSequence2);
+                        str = SLAuth.getPasswordHash(text);
                         z = false;
                     }
                     dismiss();
                     if (this.onAccountEditResultListener != null) {
-                        AccountList.AccountInfo accountInfo2 = this.editAccount;
-                        if (accountInfo2 == null) {
+                        AccountList.AccountInfo editAccount = this.editAccount;
+                        if (editAccount == null) {
                             z2 = true;
                             accountInfo = new AccountList.AccountInfo(charSequence, str, gridUUID);
                         } else {
-                            accountInfo2.setLoginName(charSequence);
-                            accountInfo2.setGridUUID(gridUUID);
+                            editAccount.setLoginName(charSequence);
+                            editAccount.setGridUUID(gridUUID);
                             if (z) {
-                                accountInfo = accountInfo2;
+                                accountInfo = editAccount;
                             } else {
-                                accountInfo2.setPasswordHash(str);
-                                accountInfo = accountInfo2;
+                                editAccount.setPasswordHash(str);
+                                accountInfo = editAccount;
                             }
                         }
                         this.onAccountEditResultListener.onAccountEdited(accountInfo, z2);
                         break;
                     }
                 } else {
-                    Toast.makeText(getContext(), getContext().getString(R.string.login_name_empty_error), 0).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.login_name_empty_error), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 break;
-            case R.id.cancelButton /* 2131755191 */:
+            case R.id.cancelButton:
                 dismiss();
                 if (this.onAccountEditResultListener != null) {
                     this.onAccountEditResultListener.onAccountEditCancelled();
@@ -144,7 +143,7 @@ class AccountEditDialog extends AppCompatDialog implements View.OnClickListener,
         }
     }
 
-    @Override // androidx.appcompat.app.AppCompatDialog, android.app.Dialog
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setTitle(R.string.new_account_dialog_title);
@@ -156,7 +155,7 @@ class AccountEditDialog extends AppCompatDialog implements View.OnClickListener,
         prepare();
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
     }
 

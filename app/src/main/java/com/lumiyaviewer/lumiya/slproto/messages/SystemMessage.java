@@ -1,25 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Generalized system message. Each Requst has its own protocol for
+ * the StringData block format and contents.
+ *
+ * <p>Template: {@code SystemMessage Low 404 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SystemMessage extends SLMessage {
     public MethodData MethodData_Field;
     public ArrayList<ParamList> ParamList_Fields = new ArrayList<>();
 
+    /** Block MethodData, Single. */
     public static class MethodData {
-        public byte[] Digest;
-        public UUID Invoice;
-        public byte[] Method;
+        public byte[] Digest; // Fixed 32 - 32 hex digits == 1 MD5 Digest
+        public UUID Invoice; // LLUUID
+        public byte[] Method; // Variable 1
     }
 
+    /** Block ParamList, Variable. */
     public static class ParamList {
-        public byte[] Parameter;
+        public byte[] Parameter; // Variable 1
     }
 
     public SystemMessage() {
@@ -27,29 +34,30 @@ public class SystemMessage extends SLMessage {
         this.MethodData_Field = new MethodData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 32 + 4 + 1;
         Iterator<?> it = this.ParamList_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
-            length = ((ParamList) it.next()).Parameter.length + 1 + i;
+            length = ((ParamList) it.next()).Parameter.length + 1 + length2;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSystemMessage(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSystemMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -108);
+        // Message number: Low 404 (SystemMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x94);
         packVariable(byteBuffer, this.MethodData_Field.Method, 1);
         packUUID(byteBuffer, this.MethodData_Field.Invoice);
         packFixed(byteBuffer, this.MethodData_Field.Digest, 32);
@@ -60,13 +68,13 @@ public class SystemMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.MethodData_Field.Method = unpackVariable(byteBuffer, 1);
         this.MethodData_Field.Invoice = unpackUUID(byteBuffer);
         this.MethodData_Field.Digest = unpackFixed(byteBuffer, 32);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ParamList paramList = new ParamList();
             paramList.Parameter = unpackVariable(byteBuffer, 1);
             this.ParamList_Fields.add(paramList);

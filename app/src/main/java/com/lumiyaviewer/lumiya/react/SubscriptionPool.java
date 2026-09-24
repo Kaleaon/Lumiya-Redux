@@ -14,7 +14,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable<K>, ResultHandler<K, T>, Subscribable<K, T>, RequestSource<K, T> {
 
     @Nullable
@@ -95,12 +94,12 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
             return;
         }
         if (this.disposeExecutor != null) {
-            this.disposeExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$FQ4ueWG6sVQMwgP3YGPP2nbRyFo
+            this.disposeExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     SubscriptionPool.this.m50lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8106(data);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -110,7 +109,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public ResultHandler<K, T> attachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         synchronized (this.lock) {
             this.requestHandler = requestHandler;
@@ -118,7 +117,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         return this;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public void detachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         synchronized (this.lock) {
             if (this.requestHandler == requestHandler) {
@@ -137,7 +136,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         this.cacheInvalidateHandler.requestUpdate((K) obj);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultData(@Nonnull K k, T t) {
         List<Subscription<K, T>> list;
         collectReferences();
@@ -159,7 +158,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultError(@Nonnull K k, Throwable th) {
         List<Subscription<K, T>> list;
         collectReferences();
@@ -181,17 +180,17 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Refreshable
+    @Override
     public void requestUpdate(final K k) {
         synchronized (this.lock) {
             if (this.cacheInvalidateHandler != null) {
                 if (this.cacheInvalidateExecutor != null) {
-                    this.cacheInvalidateExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$FQ4ueWG6sVQMwgP3YGPP2nbRyFo.1
+                    this.cacheInvalidateExecutor.execute(new Runnable() {
                         private final /* synthetic */ void $m$0() {
                             SubscriptionPool.this.m51lambda$com_lumiyaviewer_lumiya_react_SubscriptionPool_8749(k);
                         }
 
-                        @Override // java.lang.Runnable
+                        @Override
                         public final void run() {
                             $m$0();
                         }
@@ -251,9 +250,9 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                 }
             }
             if (hashSet2 != null) {
-                Iterator<K> it2 = hashSet2.iterator();
-                while (it2.hasNext()) {
-                    requestHandler.onRequest(it2.next());
+                Iterator<K> iterator = hashSet2.iterator();
+                while (iterator.hasNext()) {
+                    requestHandler.onRequest(iterator.next());
                 }
             }
         }
@@ -271,27 +270,27 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         return this;
     }
 
-    public SubscriptionPool<K, T> setRequestOnce(boolean z) {
-        this.requestOnce = z;
+    public SubscriptionPool<K, T> setRequestOnce(boolean requestOnce) {
+        this.requestOnce = requestOnce;
         return this;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nonnull Subscription.OnData<T> onData) {
         return subscribe(k, null, onData, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nonnull Subscription.OnData<T> onData, @Nullable Subscription.OnError onError) {
         return subscribe(k, null, onData, onError);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nullable Executor executor, @Nonnull Subscription.OnData<T> onData) {
         return subscribe(k, executor, onData, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nullable Executor executor, @Nonnull Subscription.OnData<T> onData, @Nullable Subscription.OnError onError) {
         Subscription<K, T> subscription = new Subscription<>(k, this, executor, onData, onError, this.refQueue);
         synchronized (this.lock) {
@@ -323,7 +322,7 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         return subscription;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Unsubscribable
+    @Override
     public void unsubscribe(Subscription<K, T> subscription) {
         K key = subscription.getKey();
         synchronized (this.lock) {

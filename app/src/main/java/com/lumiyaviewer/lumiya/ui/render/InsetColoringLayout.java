@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class InsetColoringLayout extends FrameLayout {
     private int backgroundColor;
     private final Paint backgroundPaint;
@@ -76,7 +75,7 @@ public class InsetColoringLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
@@ -95,7 +94,7 @@ public class InsetColoringLayout extends FrameLayout {
         }
     }
 
-    @Override // android.widget.FrameLayout, android.view.ViewGroup, android.view.View
+    @Override
     protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         View childAt;
         super.onLayout(z, i, i2, i3, i4);

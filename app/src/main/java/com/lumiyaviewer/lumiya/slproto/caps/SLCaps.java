@@ -11,15 +11,14 @@ import java.net.URL;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLCaps {
     private final Map<SLCapability, String> caps = new EnumMap(SLCapability.class);
 
     public static class NoSuchCapabilityException extends Exception {
         private static final long serialVersionUID = 1;
 
-        public NoSuchCapabilityException(SLCapability sLCapability) {
-            super("No such capability: " + sLCapability.name());
+        public NoSuchCapabilityException(SLCapability capability) {
+            super("No such capability: " + capability.name());
         }
     }
 
@@ -168,19 +167,19 @@ public class SLCaps {
             z = false;
         }
         String repairCapabilityURL = repairCapabilityURL(z, str2);
-        LLSDXMLRequest lLSDXMLRequest = new LLSDXMLRequest();
-        LLSDArray lLSDArray = new LLSDArray();
-        for (SLCapability sLCapability : SLCapability.valuesCustom()) {
-            lLSDArray.add(new LLSDString(sLCapability.name()));
+        LLSDXMLRequest llsdxmlRequest = new LLSDXMLRequest();
+        LLSDArray llsdArray = new LLSDArray();
+        for (SLCapability capability : SLCapability.values()) {
+            llsdArray.add(new LLSDString(capability.name()));
         }
-        LLSDNode PerformRequest = lLSDXMLRequest.PerformRequest(repairCapabilityURL, lLSDArray);
-        for (SLCapability sLCapability2 : SLCapability.valuesCustom()) {
-            if (PerformRequest.keyExists(sLCapability2.name())) {
-                String repairCapabilityURL2 = repairCapabilityURL(z, PerformRequest.byKey(sLCapability2.name()).asString());
-                this.caps.put(sLCapability2, repairCapabilityURL2);
-                Debug.Log("GetCapabilities: " + sLCapability2.name() + " = " + repairCapabilityURL2);
+        LLSDNode PerformRequest = llsdxmlRequest.PerformRequest(repairCapabilityURL, llsdArray);
+        for (SLCapability capability2 : SLCapability.values()) {
+            if (PerformRequest.keyExists(capability2.name())) {
+                String repairCapabilityURL2 = repairCapabilityURL(z, PerformRequest.byKey(capability2.name()).asString());
+                this.caps.put(capability2, repairCapabilityURL2);
+                Debug.Log("GetCapabilities: " + capability2.name() + " = " + repairCapabilityURL2);
             } else {
-                Debug.Log("GetCapabilities: " + sLCapability2.name() + " not supported");
+                Debug.Log("GetCapabilities: " + capability2.name() + " not supported");
             }
         }
     }
@@ -223,14 +222,14 @@ public class SLCaps {
         }
     }
 
-    public String getCapability(SLCapability sLCapability) {
-        return this.caps.get(sLCapability);
+    public String getCapability(SLCapability capability) {
+        return this.caps.get(capability);
     }
 
-    public String getCapabilityOrThrow(SLCapability sLCapability) throws NoSuchCapabilityException {
-        String str = this.caps.get(sLCapability);
+    public String getCapabilityOrThrow(SLCapability capability) throws NoSuchCapabilityException {
+        String str = this.caps.get(capability);
         if (str == null) {
-            throw new NoSuchCapabilityException(sLCapability);
+            throw new NoSuchCapabilityException(capability);
         }
         return str;
     }

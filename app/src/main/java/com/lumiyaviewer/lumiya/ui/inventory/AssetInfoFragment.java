@@ -50,7 +50,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFragment, View.OnClickListener, LoadableMonitor.OnLoadableDataChangedListener {
     private static final String ITEM_UUID_KEY = "itemUUID";
     private MenuItem menuItemCopy;
@@ -68,12 +67,12 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
     private ChatterNameRetriever ownerNameRetriever = null;
     private ChatterNameRetriever creatorNameRetriever = null;
     private ChatterNameRetriever lastOwnerNameRetriever = null;
-    private final ChatterNameRetriever.OnChatterNameUpdated onNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.1
+    private final ChatterNameRetriever.OnChatterNameUpdated onNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             AssetInfoFragment.this.m593xc7278eda(chatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             $m$0(chatterNameRetriever);
         }
@@ -92,17 +91,17 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         showEntryInfo(data);
     }
 
-    private void attachObject(SLInventoryEntry sLInventoryEntry) {
+    private void attachObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.AttachInventoryItem(sLInventoryEntry, 0, false);
+            this.agentCircuit.get().getModules().avatarAppearance.AttachInventoryItem(inventoryEntry, 0, false);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
     }
 
-    private void detachObject(SLInventoryEntry sLInventoryEntry) {
+    private void detachObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.DetachInventoryItem(sLInventoryEntry);
+            this.agentCircuit.get().getModules().avatarAppearance.DetachInventoryItem(inventoryEntry);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -127,10 +126,10 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         return bundle;
     }
 
-    private void playAnimation(SLInventoryEntry sLInventoryEntry, boolean z) {
+    private void playAnimation(SLInventoryEntry inventoryEntry, boolean z) {
         SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {
-            data.getModules().avatarControl.playAnimation(sLInventoryEntry.assetUUID, z);
+            data.getModules().avatarControl.playAnimation(inventoryEntry.assetUUID, z);
         }
     }
 
@@ -160,22 +159,22 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
             setCheckboxes(dialog, data.everyoneMask, data.ownerMask, R.id.asset_permission_cb_everyone_copy, R.id.asset_permission_cb_everyone_modify, R.id.asset_permission_cb_everyone_transfer, true);
             ((CheckBox) dialog.findViewById(R.id.asset_permission_cb_everyone_modify)).setChecked(false);
             dialog.findViewById(R.id.asset_permission_cb_everyone_modify).setEnabled(false);
-            dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.3
+            dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
                 private final /* synthetic */ void $m$0(View view) {
                     AssetInfoFragment.this.m595xc7385836((Dialog) dialog, view);
                 }
 
-                @Override // android.view.View.OnClickListener
+                @Override
                 public final void onClick(View view) {
                     $m$0(view);
                 }
             });
-            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ
+            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
                 private final /* synthetic */ void $m$0(View view) {
                     ((Dialog) dialog).dismiss();
                 }
 
-                @Override // android.view.View.OnClickListener
+                @Override
                 public final void onClick(View view) {
                     $m$0(view);
                 }
@@ -206,69 +205,69 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    private void showEntryInfo(@Nonnull SLInventoryEntry sLInventoryEntry) {
+    private void showEntryInfo(@Nonnull SLInventoryEntry inventoryEntry) {
         View view = getView();
         if (view != null) {
-            ((TextView) view.findViewById(R.id.asset_info_name)).setText(sLInventoryEntry.name);
-            ((TextView) view.findViewById(R.id.asset_info_description)).setText(!Strings.isNullOrEmpty(sLInventoryEntry.description) ? sLInventoryEntry.description : getResources().getString(R.string.asset_no_description));
-            ((TextView) view.findViewById(R.id.asset_info_type)).setText(sLInventoryEntry.getTypeDescriptionResId());
-            int drawableResource = sLInventoryEntry.getDrawableResource();
+            ((TextView) view.findViewById(R.id.asset_info_name)).setText(inventoryEntry.name);
+            ((TextView) view.findViewById(R.id.asset_info_description)).setText(!Strings.isNullOrEmpty(inventoryEntry.description) ? inventoryEntry.description : getResources().getString(R.string.asset_no_description));
+            ((TextView) view.findViewById(R.id.asset_info_type)).setText(inventoryEntry.getTypeDescriptionResId());
+            int drawableResource = inventoryEntry.getDrawableResource();
             if (drawableResource >= 0) {
                 ((ImageView) view.findViewById(R.id.asset_info_icon)).setImageResource(drawableResource);
             } else {
                 ((ImageView) view.findViewById(R.id.asset_info_icon)).setImageBitmap(null);
             }
-            int actionDescriptionResId = sLInventoryEntry.getActionDescriptionResId();
+            int actionDescriptionResId = inventoryEntry.getActionDescriptionResId();
             if (actionDescriptionResId >= 0) {
                 ((Button) view.findViewById(R.id.asset_action_button)).setText(actionDescriptionResId);
-                view.findViewById(R.id.asset_action_button).setVisibility(0);
-                view.findViewById(R.id.asset_action_button).setEnabled(this.inventoryFragmentHelper.isActionAllowed(sLInventoryEntry, actionDescriptionResId));
+                view.findViewById(R.id.asset_action_button).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.asset_action_button).setEnabled(this.inventoryFragmentHelper.isActionAllowed(inventoryEntry, actionDescriptionResId));
             } else {
-                view.findViewById(R.id.asset_action_button).setVisibility(8);
+                view.findViewById(R.id.asset_action_button).setVisibility(View.GONE);
             }
-            view.findViewById(R.id.edit_permissions_button).setVisibility((sLInventoryEntry.ownerMask & 16384) != 0 ? 0 : 8);
-            showPermissions(sLInventoryEntry.ownerMask, R.id.asset_permission_owner_copy, R.id.asset_permission_owner_modify, R.id.asset_permission_owner_transfer);
-            showPermissions(sLInventoryEntry.groupMask, R.id.asset_permission_group_copy, R.id.asset_permission_group_modify, R.id.asset_permission_group_transfer);
-            showPermissions(sLInventoryEntry.everyoneMask, R.id.asset_permission_everyone_copy, R.id.asset_permission_everyone_modify, R.id.asset_permission_everyone_transfer);
-            showPermissions(sLInventoryEntry.nextOwnerMask, R.id.asset_permission_next_owner_copy, R.id.asset_permission_next_owner_modify, R.id.asset_permission_next_owner_transfer);
+            view.findViewById(R.id.edit_permissions_button).setVisibility((inventoryEntry.ownerMask & 16384) != 0 ? View.VISIBLE : View.GONE);
+            showPermissions(inventoryEntry.ownerMask, R.id.asset_permission_owner_copy, R.id.asset_permission_owner_modify, R.id.asset_permission_owner_transfer);
+            showPermissions(inventoryEntry.groupMask, R.id.asset_permission_group_copy, R.id.asset_permission_group_modify, R.id.asset_permission_group_transfer);
+            showPermissions(inventoryEntry.everyoneMask, R.id.asset_permission_everyone_copy, R.id.asset_permission_everyone_modify, R.id.asset_permission_everyone_transfer);
+            showPermissions(inventoryEntry.nextOwnerMask, R.id.asset_permission_next_owner_copy, R.id.asset_permission_next_owner_modify, R.id.asset_permission_next_owner_transfer);
             SLAgentCircuit data = this.agentCircuit.getData();
             boolean z = data != null;
-            if (z && (sLInventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (sLInventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode() && sLInventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
-                boolean z2 = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false) != null;
-                boolean canDetachItem = z2 ? data.getModules().avatarAppearance.canDetachItem(sLInventoryEntry) : false;
-                view.findViewById(R.id.asset_attach_button).setVisibility(z2 ? 8 : 0);
-                view.findViewById(R.id.asset_detach_button).setVisibility(canDetachItem ? 0 : 8);
+            if (z && (inventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (inventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode() && inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
+                boolean z2 = inventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false) != null;
+                boolean canDetachItem = z2 ? data.getModules().avatarAppearance.canDetachItem(inventoryEntry) : false;
+                view.findViewById(R.id.asset_attach_button).setVisibility(z2 ? View.GONE : View.VISIBLE);
+                view.findViewById(R.id.asset_detach_button).setVisibility(canDetachItem ? View.VISIBLE : View.GONE);
             } else {
-                view.findViewById(R.id.asset_attach_button).setVisibility(8);
-                view.findViewById(R.id.asset_detach_button).setVisibility(8);
+                view.findViewById(R.id.asset_attach_button).setVisibility(View.GONE);
+                view.findViewById(R.id.asset_detach_button).setVisibility(View.GONE);
             }
-            if (z && sLInventoryEntry.isAnimation()) {
-                ImmutableSet<UUID> data2 = this.runningAnimations.getData();
-                view.findViewById(R.id.asset_play_anim_button).setVisibility((data2 == null || !(data2.contains(sLInventoryEntry.assetUUID) ^ true)) ? 8 : 0);
-                view.findViewById(R.id.asset_stop_anim_button).setVisibility((data2 == null || !data2.contains(sLInventoryEntry.assetUUID)) ? 8 : 0);
+            if (z && inventoryEntry.isAnimation()) {
+                ImmutableSet<UUID> uuids = this.runningAnimations.getData();
+                view.findViewById(R.id.asset_play_anim_button).setVisibility((uuids == null || !(uuids.contains(inventoryEntry.assetUUID) ^ true)) ? 8 : 0);
+                view.findViewById(R.id.asset_stop_anim_button).setVisibility((uuids == null || !uuids.contains(inventoryEntry.assetUUID)) ? View.GONE : View.VISIBLE);
             } else {
-                view.findViewById(R.id.asset_play_anim_button).setVisibility(8);
-                view.findViewById(R.id.asset_stop_anim_button).setVisibility(8);
+                view.findViewById(R.id.asset_play_anim_button).setVisibility(View.GONE);
+                view.findViewById(R.id.asset_stop_anim_button).setVisibility(View.GONE);
             }
-            if (z && sLInventoryEntry.isWearable()) {
-                Object whatIsItemWornOn = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false);
+            if (z && inventoryEntry.isWearable()) {
+                Object whatIsItemWornOn = inventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false);
                 if (whatIsItemWornOn instanceof SLWearableType) {
-                    view.findViewById(R.id.asset_wear_button).setVisibility(8);
+                    view.findViewById(R.id.asset_wear_button).setVisibility(View.GONE);
                     if (((SLWearableType) whatIsItemWornOn).isBodyPart()) {
-                        view.findViewById(R.id.asset_take_off_button).setVisibility(8);
+                        view.findViewById(R.id.asset_take_off_button).setVisibility(View.GONE);
                     } else {
-                        view.findViewById(R.id.asset_take_off_button).setVisibility(data.getModules().avatarAppearance.canTakeItemOff((SLWearableType) whatIsItemWornOn) ? 0 : 8);
+                        view.findViewById(R.id.asset_take_off_button).setVisibility(data.getModules().avatarAppearance.canTakeItemOff((SLWearableType) whatIsItemWornOn) ? View.VISIBLE : View.GONE);
                     }
-                    view.findViewById(R.id.asset_worn_text).setVisibility(view.findViewById(R.id.asset_take_off_button).getVisibility() != 0 ? 0 : 8);
+                    view.findViewById(R.id.asset_worn_text).setVisibility(view.findViewById(R.id.asset_take_off_button).getVisibility() != 0 ? View.VISIBLE : View.GONE);
                 } else {
-                    view.findViewById(R.id.asset_take_off_button).setVisibility(8);
-                    view.findViewById(R.id.asset_wear_button).setVisibility(data.getModules().avatarAppearance.canWearItem(sLInventoryEntry) ? 0 : 8);
-                    view.findViewById(R.id.asset_worn_text).setVisibility(8);
+                    view.findViewById(R.id.asset_take_off_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.asset_wear_button).setVisibility(data.getModules().avatarAppearance.canWearItem(inventoryEntry) ? View.VISIBLE : View.GONE);
+                    view.findViewById(R.id.asset_worn_text).setVisibility(View.GONE);
                 }
             } else {
-                view.findViewById(R.id.asset_wear_button).setVisibility(8);
-                view.findViewById(R.id.asset_take_off_button).setVisibility(8);
-                view.findViewById(R.id.asset_worn_text).setVisibility(8);
+                view.findViewById(R.id.asset_wear_button).setVisibility(View.GONE);
+                view.findViewById(R.id.asset_take_off_button).setVisibility(View.GONE);
+                view.findViewById(R.id.asset_worn_text).setVisibility(View.GONE);
             }
         }
         updateMenuItems();
@@ -278,22 +277,22 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         View view = getView();
         if (view != null) {
             TextView textView = (TextView) view.findViewById(i2);
-            TextView textView2 = (TextView) view.findViewById(i3);
-            TextView textView3 = (TextView) view.findViewById(i4);
+            TextView viewById = (TextView) view.findViewById(i3);
+            TextView viewById2 = (TextView) view.findViewById(i4);
             if ((32768 & i) != 0) {
                 textView.setPaintFlags(textView.getPaintFlags() & (-17));
             } else {
                 textView.setPaintFlags(textView.getPaintFlags() | 16);
             }
             if ((i & 16384) != 0) {
-                textView2.setPaintFlags(textView2.getPaintFlags() & (-17));
+                viewById.setPaintFlags(viewById.getPaintFlags() & (-17));
             } else {
-                textView2.setPaintFlags(textView2.getPaintFlags() | 16);
+                viewById.setPaintFlags(viewById.getPaintFlags() | 16);
             }
             if ((i & 8192) != 0) {
-                textView3.setPaintFlags(textView3.getPaintFlags() & (-17));
+                viewById2.setPaintFlags(viewById2.getPaintFlags() & (-17));
             } else {
-                textView3.setPaintFlags(textView3.getPaintFlags() | 16);
+                viewById2.setPaintFlags(viewById2.getPaintFlags() | 16);
             }
         }
     }
@@ -310,19 +309,19 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         View view = getView();
         if (view != null) {
             if (uuid == null || Objects.equal(uuid, UUIDPool.ZeroUUID) || chatterNameRetriever == null) {
-                view.findViewById(i).setVisibility(8);
+                view.findViewById(i).setVisibility(View.GONE);
                 return;
             }
-            view.findViewById(i).setVisibility(0);
+            view.findViewById(i).setVisibility(View.VISIBLE);
             String resolvedName = chatterNameRetriever.getResolvedName();
             ((TextView) view.findViewById(i2)).setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
             ((ChatterPicView) view.findViewById(i3)).setChatterID(chatterNameRetriever.chatterID, resolvedName);
         }
     }
 
-    private void takeOffObject(SLInventoryEntry sLInventoryEntry) {
+    private void takeOffObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.TakeItemOff(sLInventoryEntry);
+            this.agentCircuit.get().getModules().avatarAppearance.TakeItemOff(inventoryEntry);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -334,10 +333,10 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
         try {
             this.agentCircuit.assertHasData();
-            SLInventoryEntry sLInventoryEntry = this.entrySubscription.get();
+            SLInventoryEntry inventoryEntry = this.entrySubscription.get();
             this.menuItemDelete.setVisible(true);
-            this.menuItemRename.setVisible(((sLInventoryEntry.baseMask & sLInventoryEntry.ownerMask) & 16384) != 0);
-            this.menuItemShare.setVisible(((sLInventoryEntry.ownerMask & sLInventoryEntry.baseMask) & 8192) != 0);
+            this.menuItemRename.setVisible(((inventoryEntry.baseMask & inventoryEntry.ownerMask) & 16384) != 0);
+            this.menuItemShare.setVisible(((inventoryEntry.ownerMask & inventoryEntry.baseMask) & 8192) != 0);
             this.menuItemCut.setVisible(true);
             this.menuItemCopy.setVisible(true);
         } catch (SubscriptionData.DataNotReadyException e) {
@@ -349,9 +348,9 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    private void wearObject(SLInventoryEntry sLInventoryEntry) {
+    private void wearObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.WearItem(sLInventoryEntry, false);
+            this.agentCircuit.get().getModules().avatarAppearance.WearItem(inventoryEntry, false);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -381,59 +380,59 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         dialog.dismiss();
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         SLInventoryEntry data = this.entrySubscription.getData();
         if (data != null) {
             switch (view.getId()) {
-                case R.id.asset_action_button /* 2131755202 */:
+                case R.id.asset_action_button:
                     int actionDescriptionResId = data.getActionDescriptionResId();
                     if (actionDescriptionResId >= 0 && this.inventoryFragmentHelper.isActionAllowed(data, actionDescriptionResId)) {
                         this.inventoryFragmentHelper.PerformInventoryAction(data, actionDescriptionResId);
                         break;
                     }
                     break;
-                case R.id.asset_attach_button /* 2131755203 */:
+                case R.id.asset_attach_button:
                     attachObject(data);
                     break;
-                case R.id.asset_detach_button /* 2131755204 */:
+                case R.id.asset_detach_button:
                     detachObject(data);
                     break;
-                case R.id.asset_wear_button /* 2131755205 */:
+                case R.id.asset_wear_button:
                     wearObject(data);
                     break;
-                case R.id.asset_take_off_button /* 2131755206 */:
+                case R.id.asset_take_off_button:
                     takeOffObject(data);
                     break;
-                case R.id.asset_play_anim_button /* 2131755207 */:
+                case R.id.asset_play_anim_button:
                     playAnimation(data, true);
                     break;
-                case R.id.asset_stop_anim_button /* 2131755208 */:
+                case R.id.asset_stop_anim_button:
                     playAnimation(data, false);
                     break;
-                case R.id.edit_permissions_button /* 2131755225 */:
+                case R.id.edit_permissions_button:
                     showEditPermissionsDialog();
                     break;
-                case R.id.asset_owner_button /* 2131755229 */:
+                case R.id.asset_owner_button:
                     showProfile(data.ownerUUID);
                     break;
-                case R.id.asset_creator_button /* 2131755233 */:
+                case R.id.asset_creator_button:
                     showProfile(data.creatorUUID);
                     break;
-                case R.id.asset_last_owner_button /* 2131755237 */:
+                case R.id.asset_last_owner_button:
                     showProfile(data.lastOwnerUUID);
                     break;
             }
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.inventory_item_menu, menu);
         this.menuItemDelete = menu.findItem(R.id.inventory_item_delete_item);
@@ -444,7 +443,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         updateMenuItems();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.asset_info, viewGroup, false);
@@ -456,7 +455,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         inflate.findViewById(R.id.asset_last_owner_button).setOnClickListener(this);
         inflate.findViewById(R.id.asset_action_button).setOnClickListener(this);
         inflate.findViewById(R.id.edit_permissions_button).setOnClickListener(this);
-        inflate.findViewById(R.id.edit_permissions_button).setVisibility(8);
+        inflate.findViewById(R.id.edit_permissions_button).setVisibility(View.GONE);
         inflate.findViewById(R.id.asset_attach_button).setOnClickListener(this);
         inflate.findViewById(R.id.asset_detach_button).setOnClickListener(this);
         inflate.findViewById(R.id.asset_wear_button).setOnClickListener(this);
@@ -466,7 +465,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         try {
@@ -481,38 +480,38 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         if (userManager != null) {
             try {
-                SLInventoryEntry sLInventoryEntry = this.entrySubscription.get();
+                SLInventoryEntry inventoryEntry = this.entrySubscription.get();
                 switch (menuItem.getItemId()) {
-                    case R.id.inventory_item_delete_item /* 2131755813 */:
-                        this.inventoryFragmentHelper.DeleteInventoryEntry(sLInventoryEntry, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$OIe5MtmKyVPF26gruCQoZkxXroQ.2
+                    case R.id.inventory_item_delete_item:
+                        this.inventoryFragmentHelper.DeleteInventoryEntry(inventoryEntry, new Runnable() {
                             private final /* synthetic */ void $m$0() {
                                 AssetInfoFragment.this.m594xc73583d8();
                             }
 
-                            @Override // java.lang.Runnable
+                            @Override
                             public final void run() {
                                 $m$0();
                             }
                         });
                         return true;
-                    case R.id.inventory_item_rename_item /* 2131755814 */:
-                        this.inventoryFragmentHelper.RenameInventoryEntry(sLInventoryEntry);
+                    case R.id.inventory_item_rename_item:
+                        this.inventoryFragmentHelper.RenameInventoryEntry(inventoryEntry);
                         return true;
-                    case R.id.inventory_item_share_item /* 2131755815 */:
-                        this.inventoryFragmentHelper.ShareInventoryEntry(sLInventoryEntry);
+                    case R.id.inventory_item_share_item:
+                        this.inventoryFragmentHelper.ShareInventoryEntry(inventoryEntry);
                         return true;
-                    case R.id.inventory_item_cut_item /* 2131755816 */:
-                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(true, sLInventoryEntry));
-                        Toast.makeText(getContext(), R.string.copied_to_clipboard, 1).show();
+                    case R.id.inventory_item_cut_item:
+                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(true, inventoryEntry));
+                        Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                         return true;
-                    case R.id.inventory_item_copy_item /* 2131755817 */:
-                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(false, sLInventoryEntry));
-                        Toast.makeText(getContext(), R.string.copied_to_clipboard, 1).show();
+                    case R.id.inventory_item_copy_item:
+                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(false, inventoryEntry));
+                        Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                         return true;
                 }
             } catch (SubscriptionData.DataNotReadyException e) {
@@ -522,25 +521,25 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         updateMenuItems();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         showEntry(UUIDPool.getUUID(getArguments().getString(ITEM_UUID_KEY)));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         showEntry(null);
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(intent);
         if (activeAgentID != null) {

@@ -2,13 +2,12 @@ package com.google.vr.ndk.base;
 
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferViewportList {
     private static final String TAG = BufferViewportList.class.getSimpleName();
     long nativeBufferViewportList;
 
-    BufferViewportList(long j) {
-        this.nativeBufferViewportList = j;
+    BufferViewportList(long nativeBufferViewportList) {
+        this.nativeBufferViewportList = nativeBufferViewportList;
     }
 
     protected void finalize() throws Throwable {

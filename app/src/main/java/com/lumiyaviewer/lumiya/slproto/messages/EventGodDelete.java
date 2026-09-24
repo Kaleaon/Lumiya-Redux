@@ -4,26 +4,38 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * EventGodDelete
+ * viewer -> simulator
+ * simulator -> dataserver
+ * QueryData is used to resend a search result after the deletion
+ * reliable
+ *
+ * <p>Template: {@code EventGodDelete Low 183 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class EventGodDelete extends SLMessage {
     public AgentData AgentData_Field;
     public EventData EventData_Field;
     public QueryData QueryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block EventData, Single. */
     public static class EventData {
-        public int EventID;
+        public int EventID; // U32
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public int QueryFlags;
-        public UUID QueryID;
-        public int QueryStart;
-        public byte[] QueryText;
+        public int QueryFlags; // U32
+        public UUID QueryID; // LLUUID
+        public int QueryStart; // S32 - prev/next page support
+        public byte[] QueryText; // Variable 1
     }
 
     public EventGodDelete() {
@@ -33,21 +45,22 @@ public class EventGodDelete extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.QueryData_Field.QueryText.length + 17 + 4 + 4 + 40;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventGodDelete(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventGodDelete(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -73);
+        // Message number: Low 183 (EventGodDelete).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xB7);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.EventData_Field.EventID);
@@ -57,7 +70,7 @@ public class EventGodDelete extends SLMessage {
         packInt(byteBuffer, this.QueryData_Field.QueryStart);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

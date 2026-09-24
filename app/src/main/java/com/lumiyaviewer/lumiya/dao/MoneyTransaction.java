@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.dao;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MoneyTransaction {
     private UUID agentUUID;
     private Long id;
@@ -14,16 +13,16 @@ public class MoneyTransaction {
     public MoneyTransaction() {
     }
 
-    public MoneyTransaction(Long l) {
-        this.id = l;
+    public MoneyTransaction(Long id) {
+        this.id = id;
     }
 
-    public MoneyTransaction(Long l, Date date, UUID uuid, int i, int i2) {
-        this.id = l;
+    public MoneyTransaction(Long id, Date date, UUID uuid, int transactionAmount, int newBalance) {
+        this.id = id;
         this.timestamp = date;
         this.agentUUID = uuid;
-        this.transactionAmount = i;
-        this.newBalance = i2;
+        this.transactionAmount = transactionAmount;
+        this.newBalance = newBalance;
     }
 
     public UUID getAgentUUID() {
@@ -50,19 +49,19 @@ public class MoneyTransaction {
         this.agentUUID = uuid;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setNewBalance(int i) {
-        this.newBalance = i;
+    public void setNewBalance(int newBalance) {
+        this.newBalance = newBalance;
     }
 
     public void setTimestamp(Date date) {
         this.timestamp = date;
     }
 
-    public void setTransactionAmount(int i) {
-        this.transactionAmount = i;
+    public void setTransactionAmount(int transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 }

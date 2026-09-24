@@ -2,15 +2,14 @@ package com.lumiyaviewer.lumiya.slproto.events;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLJoinLeaveGroupEvent {
     public final UUID groupID;
     public final boolean isJoin;
     public final boolean success;
 
-    public SLJoinLeaveGroupEvent(UUID uuid, boolean z, boolean z2) {
+    public SLJoinLeaveGroupEvent(UUID uuid, boolean isJoin, boolean success) {
         this.groupID = uuid;
-        this.isJoin = z;
-        this.success = z2;
+        this.isJoin = isJoin;
+        this.success = success;
     }
 }

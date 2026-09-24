@@ -45,7 +45,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarControl extends SLModule {
     private static final int IDLE_AGENT_UPDATE_INTERVAL = 2000;
     public static final float MANUAL_FLY_SPEED = 1.0f;
@@ -91,19 +90,15 @@ public class SLAvatarControl extends SLModule {
     private class AgentUpdateTimerTask extends TimerTask {
         private final int scheduledInterval;
 
-        private AgentUpdateTimerTask(int i) {
-            this.scheduledInterval = i;
+        private AgentUpdateTimerTask(int scheduledInterval) {
+            this.scheduledInterval = scheduledInterval;
         }
 
-        /* synthetic */ AgentUpdateTimerTask(SLAvatarControl sLAvatarControl, int i, AgentUpdateTimerTask agentUpdateTimerTask) {
-            this(i);
-        }
-
-        int getScheduledInterval() {
+            int getScheduledInterval() {
             return this.scheduledInterval;
         }
 
-        @Override // java.util.TimerTask, java.lang.Runnable
+        @Override
         public void run() {
             if (SLAvatarControl.this.enableAgentUpdates) {
                 SLAvatarControl.this.SendAgentUpdate(SLAvatarControl.this.agentCircuit.getModules().drawDistance);
@@ -111,8 +106,8 @@ public class SLAvatarControl extends SLModule {
         }
     }
 
-    SLAvatarControl(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    SLAvatarControl(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.enableAgentUpdates = false;
         this.agentHeading = 0.0f;
         this.AgentMotionMask = 0;
@@ -133,8 +128,8 @@ public class SLAvatarControl extends SLModule {
         this.lastTurnedAngle = 0.0f;
         this.isFlying = false;
         this.agentUpdateScheduleLock = new Object();
-        this.avatarStateRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarStateRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLAvatarControl.this.myAvatarStateResultHandler != null) {
                     SLAvatarControl.this.myAvatarStateResultHandler.onResultData(subscriptionSingleKey, SLAvatarControl.this.getMyAvatarState());
@@ -172,8 +167,7 @@ public class SLAvatarControl extends SLModule {
         SendMessage(agentAnimation2);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    public void SendAgentUpdate(SLDrawDistance sLDrawDistance) {
+    public void SendAgentUpdate(SLDrawDistance drawDistance) {
         if (this.agentPosition.getPosition(this.agentUpdateCameraCenter)) {
             this.ActiveMotionMask = this.AgentMotionMask;
             AgentUpdate agentUpdate = new AgentUpdate();
@@ -190,7 +184,7 @@ public class SLAvatarControl extends SLModule {
             agentUpdate.AgentData_Field.BodyRotation = mayaQ;
             agentUpdate.AgentData_Field.HeadRotation = mayaQ;
             agentUpdate.AgentData_Field.CameraCenter = this.agentUpdateCameraCenter;
-            if (sLDrawDistance.is3DViewEnabled()) {
+            if (drawDistance.is3DViewEnabled()) {
                 agentUpdate.AgentData_Field.CameraAtAxis = new LLVector3(cos, sin, 0.0f);
                 agentUpdate.AgentData_Field.CameraLeftAxis = new LLVector3(-sin, cos, 0.0f);
                 agentUpdate.AgentData_Field.CameraUpAxis = new LLVector3(0.0f, 0.0f, 1.0f);
@@ -199,7 +193,7 @@ public class SLAvatarControl extends SLModule {
                 agentUpdate.AgentData_Field.CameraLeftAxis = new LLVector3(1.0f, 0.0f, 0.0f);
                 agentUpdate.AgentData_Field.CameraUpAxis = new LLVector3(0.0f, 1.0f, 0.0f);
             }
-            agentUpdate.AgentData_Field.Far = sLDrawDistance.getDrawDistanceForUpdate();
+            agentUpdate.AgentData_Field.Far = drawDistance.getDrawDistanceForUpdate();
             if (this.needClearAnims) {
                 agentUpdate.AgentData_Field.ControlFlags |= 49152;
             }
@@ -252,26 +246,25 @@ public class SLAvatarControl extends SLModule {
         return this.isFlying;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nonnull
     public MyAvatarState getMyAvatarState() {
-        int i;
+        int localID2;
         boolean z;
-        int i2;
+        int localID;
         boolean z2;
         boolean z3;
-        int i3;
-        SLAttachmentPoint sLAttachmentPoint;
+        int attachmentID;
+        SLAttachmentPoint attachmentPoint;
         boolean z4 = false;
         boolean isFlying = getIsFlying();
         SLObjectAvatarInfo agentAvatar = this.parcelInfo.getAgentAvatar();
         if (agentAvatar != null) {
             SLObjectInfo parentObject = agentAvatar.getParentObject();
             if (parentObject != null) {
-                i2 = parentObject.localID;
+                localID = parentObject.localID;
                 z2 = true;
             } else {
-                i2 = 0;
+                localID = 0;
                 z2 = false;
             }
             try {
@@ -282,24 +275,24 @@ public class SLAvatarControl extends SLModule {
                         break;
                     }
                     SLObjectInfo next = it.next();
-                    if (!Strings.nullToEmpty(next.getName()).startsWith("#") && (i3 = next.attachmentID) >= 0 && i3 < 56 && (sLAttachmentPoint = SLAttachmentPoint.attachmentPoints[i3]) != null && sLAttachmentPoint.isHUD) {
+                    if (!Strings.nullToEmpty(next.getName()).startsWith("#") && (attachmentID = next.attachmentID) >= 0 && attachmentID < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[attachmentID]) != null && attachmentPoint.isHUD) {
                         z3 = true;
                         break;
                     }
                 }
                 z4 = z3;
                 z = z2;
-                i = i2;
+                localID2 = localID;
             } catch (NoSuchElementException e) {
                 Debug.Warning(e);
-                i = i2;
+                localID2 = localID;
                 z = z2;
             }
         } else {
-            i = 0;
+            localID2 = 0;
             z = false;
         }
-        return MyAvatarState.create(z, i, isFlying, z4);
+        return MyAvatarState.create(z, localID2, isFlying, z4);
     }
 
     private void processStopAvatarAnimations() {
@@ -352,8 +345,8 @@ public class SLAvatarControl extends SLModule {
         if (!this.enableAgentUpdates) {
             i = 0;
         } else if (this.agentPosition.isValid()) {
-            SLDrawDistance sLDrawDistance = this.agentCircuit.getModules().drawDistance;
-            if (this.AgentMotionMask == this.ActiveMotionMask && !sLDrawDistance.needUpdateDrawDistance() && !sLDrawDistance.is3DViewEnabled() && !this.AgentWantStand && this.needFastUpdates <= 0) {
+            SLDrawDistance drawDistance = this.agentCircuit.getModules().drawDistance;
+            if (this.AgentMotionMask == this.ActiveMotionMask && !drawDistance.needUpdateDrawDistance() && !drawDistance.is3DViewEnabled() && !this.AgentWantStand && this.needFastUpdates <= 0) {
                 z = false;
             }
             i = z ? 200 : 2000;
@@ -383,14 +376,14 @@ public class SLAvatarControl extends SLModule {
                     this.agentUpdateTask = null;
                 }
                 if (i2 != 0) {
-                    this.agentUpdateTask = new AgentUpdateTimerTask(this, i2, null);
+                    this.agentUpdateTask = new AgentUpdateTimerTask(i2);
                     timer.schedule(this.agentUpdateTask, i, i2);
                 }
             }
         }
     }
 
-    public void ApplyAvatarAnimation(SLObjectAvatarInfo sLObjectAvatarInfo, AvatarAnimation avatarAnimation) {
+    public void ApplyAvatarAnimation(SLObjectAvatarInfo objectAvatarInfo, AvatarAnimation avatarAnimation) {
         HashSet hashSet = new HashSet();
         synchronized (this) {
             for (AvatarAnimation.AnimationList animationList : avatarAnimation.AnimationList_Fields) {
@@ -451,7 +444,7 @@ public class SLAvatarControl extends SLModule {
         SendMessage(agentSit);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getObjectsManager().myAvatarState().detachRequestHandler(this.avatarStateRequestHandler);
@@ -462,9 +455,9 @@ public class SLAvatarControl extends SLModule {
     @SLMessageHandler
     public void HandleScriptQuestion(ScriptQuestion scriptQuestion) {
         Debug.Log("ScriptQuestion: ItemID = " + scriptQuestion.Data_Field.ItemID + ", questions = " + String.format("%08x", Integer.valueOf(scriptQuestion.Data_Field.Questions)));
-        SLChatPermissionRequestEvent sLChatPermissionRequestEvent = new SLChatPermissionRequestEvent(scriptQuestion, this.agentCircuit.getAgentUUID());
-        if (sLChatPermissionRequestEvent.getQuestions() != 0) {
-            this.agentCircuit.HandleChatEvent(this.agentCircuit.getLocalChatterID(), sLChatPermissionRequestEvent, true);
+        SLChatPermissionRequestEvent chatPermissionRequestEvent = new SLChatPermissionRequestEvent(scriptQuestion, this.agentCircuit.getAgentUUID());
+        if (chatPermissionRequestEvent.getQuestions() != 0) {
+            this.agentCircuit.HandleChatEvent(this.agentCircuit.getLocalChatterID(), chatPermissionRequestEvent, true);
         }
     }
 
@@ -483,10 +476,10 @@ public class SLAvatarControl extends SLModule {
         if (this.agentCircuit.getModules().rlvController.canSit()) {
             try {
                 if (this.parcelInfo != null) {
-                    SLObjectInfo sLObjectInfo = this.parcelInfo.allObjectsNearby.get(uuid);
+                    SLObjectInfo objectInfo = this.parcelInfo.allObjectsNearby.get(uuid);
                     ImmutableVector immutablePosition = this.agentPosition.getImmutablePosition();
-                    if (sLObjectInfo != null && immutablePosition != null) {
-                        float distanceTo = immutablePosition.getDistanceTo(sLObjectInfo.getAbsolutePosition());
+                    if (objectInfo != null && immutablePosition != null) {
+                        float distanceTo = immutablePosition.getDistanceTo(objectInfo.getAbsolutePosition());
                         Debug.Printf("RLV: Distance to object for sitting: %f", Float.valueOf(distanceTo));
                         if (distanceTo > 1.5f) {
                             if (!this.gridConn.getModules().rlvController.canTeleportBySitting()) {
@@ -541,9 +534,9 @@ public class SLAvatarControl extends SLModule {
         rescheduleAgentUpdate();
     }
 
-    public boolean getAgentAndCameraPosition(@Nonnull LLVector3 lLVector3, @Nonnull CameraParams cameraParams) {
+    public boolean getAgentAndCameraPosition(@Nonnull LLVector3 vector3, @Nonnull CameraParams cameraParams) {
         float f;
-        this.agentPosition.getInterpolatedPosition(lLVector3);
+        this.agentPosition.getInterpolatedPosition(vector3);
         synchronized (this.turningLock) {
             if (this.isTurning) {
                 float currentTimeMillis = this.turningSpeed * ((System.currentTimeMillis() - this.turningStartTime) / 1000.0f);
@@ -560,7 +553,7 @@ public class SLAvatarControl extends SLModule {
                 if (f != 0.0f) {
                     this.cameraParams.rotate(f, 0.0f);
                 }
-                this.cameraParams.setPosition(lLVector3);
+                this.cameraParams.setPosition(vector3);
             }
         }
         cameraParams.copyFrom(this.cameraParams);
@@ -577,18 +570,18 @@ public class SLAvatarControl extends SLModule {
     }
 
     public boolean getIsManualCamming() {
-        boolean z;
+        boolean isManualCamming;
         synchronized (this.cammingLock) {
-            z = this.isManualCamming;
+            isManualCamming = this.isManualCamming;
         }
-        return z;
+        return isManualCamming;
     }
 
-    public void getVRCamera(HeadTransformCompat headTransformCompat, @Nonnull LLVector3 lLVector3, @Nonnull CameraParams cameraParams) {
-        this.agentPosition.getInterpolatedPosition(lLVector3);
+    public void getVRCamera(HeadTransformCompat headTransformCompat, @Nonnull LLVector3 vector3, @Nonnull CameraParams cameraParams) {
+        this.agentPosition.getInterpolatedPosition(vector3);
         synchronized (this.cammingLock) {
             if (!this.isManualCamming) {
-                this.cameraParams.setPosition(lLVector3);
+                this.cameraParams.setPosition(vector3);
             }
         }
         cameraParams.getVRCamera(this.cameraParams, headTransformCompat);
@@ -628,18 +621,18 @@ public class SLAvatarControl extends SLModule {
         }
     }
 
-    public void setAgentHeading(float f) {
+    public void setAgentHeading(float agentHeading) {
         synchronized (this.cammingLock) {
-            this.cameraParams.setHeading(f);
+            this.cameraParams.setHeading(agentHeading);
             this.agentHeading = this.cameraParams.getHeading();
         }
     }
 
-    public void setAgentPosition(@Nonnull LLVector3 lLVector3, @Nullable LLVector3 lLVector32) {
+    public void setAgentPosition(@Nonnull LLVector3 vector3, @Nullable LLVector3 vector33) {
         synchronized (this.cammingLock) {
-            this.agentPosition.set(lLVector3, lLVector32);
+            this.agentPosition.set(vector3, vector33);
             if (!this.cameraParams.isValid() || (!this.isCamming && (!this.isManualCamming))) {
-                this.cameraParams.setPosition(lLVector3);
+                this.cameraParams.setPosition(vector3);
             }
         }
         SLModules modules = this.agentCircuit.getModules();
@@ -648,21 +641,21 @@ public class SLAvatarControl extends SLModule {
         }
     }
 
-    public void setCameraManualControl(boolean z) {
+    public void setCameraManualControl(boolean isManualCamming) {
         synchronized (this.cammingLock) {
-            this.isManualCamming = z;
-            if (!z) {
+            this.isManualCamming = isManualCamming;
+            if (!isManualCamming) {
                 this.isCamming = false;
             }
-            if (!this.isCamming && (!z)) {
+            if (!this.isCamming && (!isManualCamming)) {
                 this.cameraParams.setPosition(this.agentPosition.getPosition(), this.agentHeading);
             }
         }
     }
 
-    public void setEnableAgentUpdates(boolean z) {
-        this.enableAgentUpdates = z;
-        if (z) {
+    public void setEnableAgentUpdates(boolean enableAgentUpdates) {
+        this.enableAgentUpdates = enableAgentUpdates;
+        if (enableAgentUpdates) {
             scheduleAgentUpdate(0, 1000);
         } else {
             scheduleAgentUpdate(0, 0);
@@ -677,11 +670,11 @@ public class SLAvatarControl extends SLModule {
         }
     }
 
-    public void startTurning(float f) {
+    public void startTurning(float turningSpeed) {
         synchronized (this.turningLock) {
-            if (!this.isTurning || this.turningSpeed != f) {
+            if (!this.isTurning || this.turningSpeed != turningSpeed) {
                 this.isTurning = true;
-                this.turningSpeed = f;
+                this.turningSpeed = turningSpeed;
                 this.turningStartTime = System.currentTimeMillis();
                 this.lastTurnedAngle = 0.0f;
             }

@@ -24,7 +24,6 @@ import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity;
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryFragment;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupNoticeFragment extends ChatterFragment {
     private static final String ATTACHED_ENTRY_KEY = "attachedEntry";
     private static final int ITEM_FOR_ATTACH_REQUEST = 1;
@@ -56,12 +55,12 @@ public class GroupNoticeFragment extends ChatterFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected String decorateFragmentTitle(String str) {
         return getString(R.string.group_notice_title_format, str);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onActivityResult(int i, int i2, Intent intent) {
         switch (i) {
             case 1:
@@ -78,7 +77,7 @@ public class GroupNoticeFragment extends ChatterFragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.group_notice, viewGroup, false);
         this.unbinder = ButterKnife.bind(this, inflate);
@@ -94,7 +93,7 @@ public class GroupNoticeFragment extends ChatterFragment {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -127,7 +126,7 @@ public class GroupNoticeFragment extends ChatterFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         Debug.Printf("GroupNotice: saved state attached entry %s", this.attachedEntry);
         if (bundle != null) {
@@ -136,7 +135,7 @@ public class GroupNoticeFragment extends ChatterFragment {
         super.onSaveInstanceState(bundle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
     }
 }

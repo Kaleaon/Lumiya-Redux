@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 @NotThreadSafe
-/* loaded from: classes.dex */
 class ChatterUserSubscription extends ChatterSubscription {
 
     @Nonnull
@@ -24,41 +23,39 @@ class ChatterUserSubscription extends ChatterSubscription {
 
     ChatterUserSubscription(@Nonnull SortedChatterList sortedChatterList, @Nonnull ChatterID.ChatterIDUser chatterIDUser, @Nonnull UserManager userManager) {
         super(sortedChatterList, chatterIDUser, userManager);
-        this.nameSubscription = userManager.getUserNames().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o
+        this.nameSubscription = userManager.getUserNames().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                ChatterUserSubscription.this.m309x593f85a7((UserName) obj);
+                ChatterUserSubscription.this.onUserName((UserName) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.onlineStatusSubscription = userManager.getChatterList().getFriendManager().getOnlineStatus().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o.1
+        this.onlineStatusSubscription = userManager.getChatterList().getFriendManager().getOnlineStatus().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                ChatterUserSubscription.this.m310x593f85a8((Boolean) obj);
+                ChatterUserSubscription.this.onOnlineStatus((Boolean) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.distanceSubscription = userManager.getChatterList().getDistanceToUser().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$o86h7H3WuAxnvPtFprunJr0Jq8o.2
+        this.distanceSubscription = userManager.getChatterList().getDistanceToUser().subscribe(chatterIDUser.getChatterUUID(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
-                ChatterUserSubscription.this.m311x593f85a9((Float) obj);
+                ChatterUserSubscription.this.onDistance((Float) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onDistance, reason: merged with bridge method [inline-methods] */
-    public void m311x593f85a9(Float f) {
+    public void onDistance(Float f) {
         if (f != null) {
             float floatValue = f.floatValue();
             if (Float.compare(floatValue, this.displayData.distanceToUser) != 0) {
@@ -67,18 +64,14 @@ class ChatterUserSubscription extends ChatterSubscription {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onOnlineStatus, reason: merged with bridge method [inline-methods] */
-    public void m310x593f85a8(Boolean bool) {
+    public void onOnlineStatus(Boolean bool) {
         if (bool == null || this.displayData.isOnline == bool.booleanValue()) {
             return;
         }
         setChatterDisplayData(this.displayData.withOnlineStatus(bool.booleanValue()));
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUserName, reason: merged with bridge method [inline-methods] */
-    public void m309x593f85a7(UserName userName) {
+    public void onUserName(UserName userName) {
         String userName2 = GlobalOptions.getInstance().isLegacyUserNames() ? userName.getUserName() : userName.getDisplayName();
         if (Objects.equal(userName2, this.displayData.displayName)) {
             return;
@@ -86,7 +79,7 @@ class ChatterUserSubscription extends ChatterSubscription {
         setChatterDisplayData(this.displayData.withDisplayName(userName2));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterSubscription
+    @Override
     public void unsubscribe() {
         this.nameSubscription.unsubscribe();
         this.onlineStatusSubscription.unsubscribe();

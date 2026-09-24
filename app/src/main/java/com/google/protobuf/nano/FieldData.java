@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: classes.dex */
 class FieldData implements Cloneable {
     private Extension<?, ?> cachedExtension;
     private List<UnknownFieldData> unknownFieldData;
@@ -23,17 +22,16 @@ class FieldData implements Cloneable {
     }
 
     private byte[] toByteArray() throws IOException {
-        byte[] bArr = new byte[computeSerializedSize()];
-        writeTo(CodedOutputByteBufferNano.newInstance(bArr));
-        return bArr;
+        byte[] bytes = new byte[computeSerializedSize()];
+        writeTo(CodedOutputByteBufferNano.newInstance(bytes));
+        return bytes;
     }
 
     void addUnknownField(UnknownFieldData unknownFieldData) {
         this.unknownFieldData.add(unknownFieldData);
     }
 
-    /* renamed from: clone, reason: merged with bridge method [inline-methods] */
-    public final FieldData m9clone() {
+    public final FieldData clone() {
         FieldData fieldData = new FieldData();
         try {
             fieldData.cachedExtension = this.cachedExtension;
@@ -44,15 +42,15 @@ class FieldData implements Cloneable {
             }
             if (this.value != null) {
                 if (this.value instanceof MessageNano) {
-                    fieldData.value = ((MessageNano) this.value).mo6clone();
+                    fieldData.value = ((MessageNano) this.value).clone();
                 } else if (this.value instanceof byte[]) {
                     fieldData.value = ((byte[]) this.value).clone();
                 } else if (this.value instanceof byte[][]) {
-                    byte[][] bArr = (byte[][]) this.value;
-                    byte[][] bArr2 = new byte[bArr.length][];
-                    fieldData.value = bArr2;
-                    for (int i = 0; i < bArr.length; i++) {
-                        bArr2[i] = (byte[]) bArr[i].clone();
+                    byte[][] value = (byte[][]) this.value;
+                    byte[][] bytesList = new byte[value.length][];
+                    fieldData.value = bytesList;
+                    for (int i = 0; i < value.length; i++) {
+                        bytesList[i] = (byte[]) value[i].clone();
                     }
                 } else if (this.value instanceof boolean[]) {
                     fieldData.value = ((boolean[]) this.value).clone();
@@ -66,10 +64,10 @@ class FieldData implements Cloneable {
                     fieldData.value = ((double[]) this.value).clone();
                 } else if (this.value instanceof MessageNano[]) {
                     MessageNano[] messageNanoArr = (MessageNano[]) this.value;
-                    MessageNano[] messageNanoArr2 = new MessageNano[messageNanoArr.length];
-                    fieldData.value = messageNanoArr2;
-                    for (int i2 = 0; i2 < messageNanoArr.length; i2++) {
-                        messageNanoArr2[i2] = messageNanoArr[i2].mo6clone();
+                    MessageNano[] messageNanos = new MessageNano[messageNanoArr.length];
+                    fieldData.value = messageNanos;
+                    for (int j = 0; j < messageNanoArr.length; j++) {
+                        messageNanos[j] = messageNanoArr[j].clone();
                     }
                 }
             }

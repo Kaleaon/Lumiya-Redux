@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class BakeProcess implements SLTextureUploadRequest.TextureUploadCompleteListener {
     private final SLAvatarAppearance avatarAppearance;
     private final Thread bakingThread;
@@ -73,7 +72,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
             this.texture = wearableTexture;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
                 this.textureData = (OpenJPEG) obj;
@@ -99,29 +98,29 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         }
     }
 
-    public BakeProcess(Table<SLWearableType, UUID, SLWearable> table, SLAvatarAppearance sLAvatarAppearance, SLTextureUploader sLTextureUploader, EventBus eventBus) {
+    public BakeProcess(Table<SLWearableType, UUID, SLWearable> table, SLAvatarAppearance avatarAppearance, SLTextureUploader textureUploader, EventBus eventBus) {
         Debug.Printf("Baking: new BakeProcess created", new Object[0]);
-        this.avatarAppearance = sLAvatarAppearance;
+        this.avatarAppearance = avatarAppearance;
         this.wornWearables = table;
-        this.uploader = sLTextureUploader;
+        this.uploader = textureUploader;
         this.eventBus = eventBus;
-        for (SLWearable sLWearable : table.values()) {
-            SLWearableData wearableData = sLWearable.getWearableData();
+        for (SLWearable wearable : table.values()) {
+            SLWearableData wearableData = wearable.getWearableData();
             if (wearableData != null) {
                 ArrayList arrayList = new ArrayList(wearableData.textures.size());
                 Iterator<SLWearableData.WearableTexture> it = wearableData.textures.iterator();
                 while (it.hasNext()) {
                     arrayList.add(new WearableTextureData(it.next()));
                 }
-                this.wearables.put(sLWearable, arrayList);
+                this.wearables.put(wearable, arrayList);
             }
         }
-        this.bakingThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.baker.-$Lambda$qb61PwDoxRPFEOdyYwns3UfUTbM
+        this.bakingThread = new Thread(new Runnable() {
             private final /* synthetic */ void $m$0() {
-                BakeProcess.this.m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0();
+                BakeProcess.this.bakeAppearance();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -132,28 +131,26 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
     private SLTextureEntry PrepareAvatarTextureEntry() {
         UUID uploadedID;
         SLTextureEntryFace create = SLTextureEntryFace.create(new MutableSLTextureEntryFace(-1));
-        SLTextureEntryFace[] sLTextureEntryFaceArr = new SLTextureEntryFace[32];
-        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.valuesCustom()) {
+        SLTextureEntryFace[] textureEntryFaces = new SLTextureEntryFace[32];
+        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.values()) {
             int ordinal = bakedTextureIndex.getFaceIndex().ordinal();
             BakedImage bakedImage = this.bakedImages.get(bakedTextureIndex);
             if (bakedImage != null && (uploadedID = bakedImage.getUploadedID()) != null) {
                 MutableSLTextureEntryFace mutableSLTextureEntryFace = new MutableSLTextureEntryFace(0);
                 mutableSLTextureEntryFace.setTextureID(uploadedID);
-                sLTextureEntryFaceArr[ordinal] = SLTextureEntryFace.create(mutableSLTextureEntryFace);
+                textureEntryFaces[ordinal] = SLTextureEntryFace.create(mutableSLTextureEntryFace);
             }
         }
-        return SLTextureEntry.create(create, sLTextureEntryFaceArr);
+        return SLTextureEntry.create(create, textureEntryFaces);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: bakeAppearance, reason: merged with bridge method [inline-methods] */
-    public void m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0() {
+    public void bakeAppearance() {
         Debug.Printf("Baking: Requesting texture data.", new Object[0]);
         Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         while (it.hasNext()) {
-            Iterator it2 = ((List) it.next()).iterator();
-            while (it2.hasNext()) {
-                ((WearableTextureData) it2.next()).requestData();
+            Iterator iterator = ((List) it.next()).iterator();
+            while (iterator.hasNext()) {
+                ((WearableTextureData) iterator.next()).requestData();
             }
         }
         synchronized (this.textureReadyLock) {
@@ -173,7 +170,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         boolean isWearingSkirt = isWearingSkirt();
         File cacheDir = GlobalOptions.getInstance().getCacheDir("baker");
         cacheDir.mkdirs();
-        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.valuesCustom()) {
+        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.values()) {
             if (Thread.interrupted()) {
                 Debug.Log("Baking: interrupted.");
                 this.eventBus.publish(new SLBakingProgressEvent(false, true, 0));
@@ -194,7 +191,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
                 try {
                     File file = new File(cacheDir, bakedTextureIndex.toString() + ".j2k");
                     bakedImage.SaveToJPEG2K(file);
-                    BakedImageUploadRequest bakedImageUploadRequest = new BakedImageUploadRequest(bakedImage, bakedTextureIndex, file);
+                    SLTextureUploadRequest bakedImageUploadRequest = new BakedImageUploadRequest(bakedImage, bakedTextureIndex, file);
                     bakedImageUploadRequest.setOnUploadComplete(this);
                     this.uploader.BeginUpload(bakedImageUploadRequest);
                 } catch (IOException e2) {
@@ -224,9 +221,9 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
                             for (SLAvatarParams.DrivenParam drivenParam : avatarParam.drivenParams) {
                                 SLAvatarParams.ParamSet paramSet2 = SLAvatarParams.paramByIDs.get(Integer.valueOf(drivenParam.drivenID));
                                 if (paramSet2 != null) {
-                                    Iterator<SLAvatarParams.AvatarParam> it2 = paramSet2.params.iterator();
-                                    while (it2.hasNext()) {
-                                        hashMap.put(Integer.valueOf(drivenParam.drivenID), Float.valueOf(AvatarSkeleton.getDrivenWeight(wearableParam.paramValue, avatarParam, drivenParam, it2.next())));
+                                    Iterator<SLAvatarParams.AvatarParam> iterator = paramSet2.params.iterator();
+                                    while (iterator.hasNext()) {
+                                        hashMap.put(Integer.valueOf(drivenParam.drivenID), Float.valueOf(AvatarSkeleton.getDrivenWeight(wearableParam.paramValue, avatarParam, drivenParam, iterator.next())));
                                     }
                                 }
                             }
@@ -238,17 +235,17 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         return hashMap;
     }
 
-    private void finishBaking(SLTextureEntry sLTextureEntry) {
-        this.avatarAppearance.finishBaking(this, sLTextureEntry);
+    private void finishBaking(SLTextureEntry textureEntry) {
+        this.avatarAppearance.finishBaking(this, textureEntry);
     }
 
     private boolean isTexturesReady() {
         Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         boolean z = true;
         while (it.hasNext()) {
-            Iterator it2 = ((List) it.next()).iterator();
-            while (it2.hasNext()) {
-                if (!((WearableTextureData) it2.next()).getTextureReady()) {
+            Iterator iterator = ((List) it.next()).iterator();
+            while (iterator.hasNext()) {
+                if (!((WearableTextureData) iterator.next()).getTextureReady()) {
                     z = false;
                 }
             }
@@ -260,25 +257,24 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         return !this.wornWearables.row(SLWearableType.WT_SKIRT).isEmpty();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void notifyTextureReady() {
         synchronized (this.textureReadyLock) {
             this.textureReadyLock.notifyAll();
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.texuploader.SLTextureUploadRequest.TextureUploadCompleteListener
-    public void OnTextureUploadComplete(SLTextureUploadRequest sLTextureUploadRequest) {
+    @Override
+    public void OnTextureUploadComplete(SLTextureUploadRequest textureUploadRequest) {
         boolean z;
         int i;
         int i2;
-        if (sLTextureUploadRequest instanceof BakedImageUploadRequest) {
-            BakedImageUploadRequest bakedImageUploadRequest = (BakedImageUploadRequest) sLTextureUploadRequest;
+        if (textureUploadRequest instanceof BakedImageUploadRequest) {
+            BakedImageUploadRequest bakedImageUploadRequest = (BakedImageUploadRequest) textureUploadRequest;
             Debug.Log("Baking: texture " + bakedImageUploadRequest.bakedIndex + " uploaded, UUID = " + bakedImageUploadRequest.getTextureID());
             bakedImageUploadRequest.bakedImage.setUploadedID(bakedImageUploadRequest.getTextureID());
             this.bakedImages.put(bakedImageUploadRequest.bakedIndex, bakedImageUploadRequest.bakedImage);
             boolean isWearingSkirt = isWearingSkirt();
-            BakedTextureIndex[] valuesCustom = BakedTextureIndex.valuesCustom();
+            BakedTextureIndex[] valuesCustom = BakedTextureIndex.values();
             int length = valuesCustom.length;
             int i3 = 0;
             boolean z2 = true;

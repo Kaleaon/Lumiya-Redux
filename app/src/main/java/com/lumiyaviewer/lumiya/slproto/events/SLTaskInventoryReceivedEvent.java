@@ -3,13 +3,12 @@ package com.lumiyaviewer.lumiya.slproto.events;
 import com.lumiyaviewer.lumiya.slproto.inventory.SLTaskInventory;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLTaskInventoryReceivedEvent {
     public final UUID taskID;
     public final SLTaskInventory taskInventory;
 
-    public SLTaskInventoryReceivedEvent(UUID uuid, SLTaskInventory sLTaskInventory) {
+    public SLTaskInventoryReceivedEvent(UUID uuid, SLTaskInventory taskInventory) {
         this.taskID = uuid;
-        this.taskInventory = sLTaskInventory;
+        this.taskInventory = taskInventory;
     }
 }

@@ -65,7 +65,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLGroupManager extends SLModule {
     private static final int RoleMemberChange_Add = 0;
     private static final int RoleMemberChange_Remove = 1;
@@ -89,25 +88,25 @@ public class SLGroupManager extends SLModule {
     private ResultHandler<UUID, GroupTitlesReply> groupTitlesResultHandler;
     private final UserManager userManager;
 
-    public SLGroupManager(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLGroupManager(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.activeGroupID = null;
-        this.groupProfileRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupProfileRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("GroupManager: [%s] network requesting for group %s", Thread.currentThread().getName(), uuid.toString());
                 SLGroupManager.this.RequestGroupProfileData(uuid);
             }
         }, false, 3, 15000L);
-        this.groupTitlesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.2
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupTitlesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("GroupTitles: [%s] network requesting for group %s", Thread.currentThread().getName(), uuid.toString());
                 SLGroupManager.this.requestGroupTitles(uuid);
             }
         }, false, 3, 15000L);
-        this.groupRolesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.3
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupRolesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("GroupRoles: [%s] network requesting for group %s", Thread.currentThread().getName(), uuid.toString());
                 GroupRoleDataRequest groupRoleDataRequest = new GroupRoleDataRequest();
@@ -119,8 +118,8 @@ public class SLGroupManager extends SLModule {
                 SLGroupManager.this.SendMessage(groupRoleDataRequest);
             }
         }, false, 3, 15000L);
-        this.groupRoleMemberListRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.4
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupRoleMemberListRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("GroupRoleMemberList: [%s] network requesting for %s", Thread.currentThread().getName(), uuid.toString());
                 GroupRoleMembersRequest groupRoleMembersRequest = new GroupRoleMembersRequest();
@@ -132,8 +131,8 @@ public class SLGroupManager extends SLModule {
                 SLGroupManager.this.SendMessage(groupRoleMembersRequest);
             }
         }, false, 3, 15000L);
-        this.groupMemberListRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.5
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupMemberListRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("GroupMemberList: [%s] network requesting for group %s", Thread.currentThread().getName(), uuid.toString());
                 GroupMembersRequest groupMembersRequest = new GroupMembersRequest();
@@ -145,8 +144,8 @@ public class SLGroupManager extends SLModule {
                 SLGroupManager.this.SendMessage(groupMembersRequest);
             }
         }, false, 3, 15000L);
-        this.groupMemberListHTTPRequestHandler = new AsyncCancellableRequestHandler(GenericHTTPExecutor.getInstance(), new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.6
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupMemberListHTTPRequestHandler = new AsyncCancellableRequestHandler(GenericHTTPExecutor.getInstance(), new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 int i;
                 Debug.Printf("GroupMemberList: [%s] network requesting for group %s", Thread.currentThread().getName(), uuid.toString());
@@ -175,20 +174,20 @@ public class SLGroupManager extends SLModule {
                         while (it.hasNext()) {
                             Map.Entry entry = (Map.Entry) it.next();
                             UUID uuid2 = UUIDPool.getUUID((String) entry.getKey());
-                            LLSDNode lLSDNode = (LLSDNode) entry.getValue();
+                            LLSDNode llsdNode = (LLSDNode) entry.getValue();
                             boolean z = false;
-                            String asString2 = lLSDNode.keyExists("title") ? byKey.byIndex(lLSDNode.byKey("title").asInt()).asString() : byKey.byIndex(0).asString();
-                            long longValue = lLSDNode.keyExists("powers") ? UnsignedLong.valueOf(lLSDNode.byKey("powers").asString(), 16).longValue() : j;
-                            String asString3 = lLSDNode.keyExists("last_login") ? lLSDNode.byKey("last_login").asString() : "Unknown";
-                            int asInt = lLSDNode.keyExists("donated_square_meters") ? lLSDNode.byKey("donated_square_meters").asInt() : 0;
-                            if (lLSDNode.keyExists("owner")) {
-                                if (lLSDNode.byKey("owner").isString()) {
-                                    String asString4 = lLSDNode.byKey("owner").asString();
+                            String asString2 = llsdNode.keyExists("title") ? byKey.byIndex(llsdNode.byKey("title").asInt()).asString() : byKey.byIndex(0).asString();
+                            long longValue = llsdNode.keyExists("powers") ? UnsignedLong.valueOf(llsdNode.byKey("powers").asString(), 16).longValue() : j;
+                            String asString3 = llsdNode.keyExists("last_login") ? llsdNode.byKey("last_login").asString() : "Unknown";
+                            int asInt = llsdNode.keyExists("donated_square_meters") ? llsdNode.byKey("donated_square_meters").asInt() : 0;
+                            if (llsdNode.keyExists("owner")) {
+                                if (llsdNode.byKey("owner").isString()) {
+                                    String asString4 = llsdNode.byKey("owner").asString();
                                     if (asString4.equalsIgnoreCase("y") || asString4.equalsIgnoreCase("yes") || asString4.equalsIgnoreCase("true") || asString4.equalsIgnoreCase("1")) {
                                         z = true;
                                     }
-                                } else if (lLSDNode.byKey("owner").isBoolean()) {
-                                    z = lLSDNode.byKey("owner").asBoolean();
+                                } else if (llsdNode.byKey("owner").isBoolean()) {
+                                    z = llsdNode.byKey("owner").asBoolean();
                                 }
                             }
                             i2++;
@@ -208,8 +207,8 @@ public class SLGroupManager extends SLModule {
                 }
             }
         });
-        this.groupMemberDataURL = sLAgentCircuit.getCaps().getCapability(SLCaps.SLCapability.GroupMemberData);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.circuitInfo.agentID);
+        this.groupMemberDataURL = agentCircuit.getCaps().getCapability(SLCaps.SLCapability.GroupMemberData);
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID);
         if (this.userManager != null) {
             this.groupMemberDao = this.userManager.getDaoSession().getGroupMemberDao();
             this.groupRoleMemberDao = this.userManager.getDaoSession().getGroupRoleMemberDao();
@@ -219,7 +218,6 @@ public class SLGroupManager extends SLModule {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void RequestGroupProfileData(UUID uuid) {
         GroupProfileRequest groupProfileRequest = new GroupProfileRequest();
         groupProfileRequest.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -240,20 +238,19 @@ public class SLGroupManager extends SLModule {
         roleChange.Change = i;
         groupRoleChanges.RoleChange_Fields.add(roleChange);
         groupRoleChanges.isReliable = true;
-        groupRoleChanges.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.8
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        groupRoleChanges.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLGroupManager.this.userManager.getChatterList().getGroupManager().requestGroupRoleMembersRefresh(uuid);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
             }
         });
         SendMessage(groupRoleChanges);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void requestGroupTitles(UUID uuid) {
         GroupTitlesRequest groupTitlesRequest = new GroupTitlesRequest();
         groupTitlesRequest.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -311,16 +308,16 @@ public class SLGroupManager extends SLModule {
         roleData.UpdateType = 5;
         groupRoleUpdate.RoleData_Fields.add(roleData);
         groupRoleUpdate.isReliable = true;
-        groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.11
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
-            public void onMessageAcknowledged(SLMessage sLMessage) {
+        groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
+            public void onMessageAcknowledged(SLMessage message) {
                 SLGroupManager.this.userManager.getGroupRoles().requestUpdate(uuid);
             }
         });
         SendMessage(groupRoleUpdate);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         if (this.userManager != null) {
             this.groupProfileResultHandler = this.userManager.getCachedGroupProfiles().getRequestSource().attachRequestHandler(this.groupProfileRequestHandler);
@@ -331,7 +328,7 @@ public class SLGroupManager extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getCachedGroupProfiles().getRequestSource().detachRequestHandler(this.groupProfileRequestHandler);
@@ -448,7 +445,7 @@ public class SLGroupManager extends SLModule {
         SendMessage(leaveGroupRequest);
     }
 
-    public void RequestMemberRoleChanges(final UUID uuid, final UUID uuid2, Collection<UUID> collection, Collection<UUID> collection2) {
+    public void RequestMemberRoleChanges(final UUID uuid, final UUID uuid2, Collection<UUID> collection, Collection<UUID> uuids) {
         final boolean equals = this.circuitInfo.agentID.equals(uuid2);
         GroupRoleChanges groupRoleChanges = new GroupRoleChanges();
         groupRoleChanges.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -462,7 +459,7 @@ public class SLGroupManager extends SLModule {
             roleChange.Change = 0;
             groupRoleChanges.RoleChange_Fields.add(roleChange);
         }
-        for (UUID uuid4 : collection2) {
+        for (UUID uuid4 : uuids) {
             Debug.Printf("GroupRoleChange: groupID %s memberID %s remove %s", uuid, uuid2, uuid4);
             GroupRoleChanges.RoleChange roleChange2 = new GroupRoleChanges.RoleChange();
             roleChange2.RoleID = uuid4;
@@ -471,8 +468,8 @@ public class SLGroupManager extends SLModule {
             groupRoleChanges.RoleChange_Fields.add(roleChange2);
         }
         groupRoleChanges.isReliable = true;
-        groupRoleChanges.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.9
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        groupRoleChanges.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLGroupManager.this.userManager.getChatterList().getGroupManager().requestGroupRoleMembersRefresh(uuid);
                 if (equals) {
@@ -482,7 +479,7 @@ public class SLGroupManager extends SLModule {
                 }
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
             }
         });
@@ -503,7 +500,7 @@ public class SLGroupManager extends SLModule {
         this.agentCircuit.HandleChatEvent(ChatterID.getGroupChatterID(this.agentCircuit.getAgentUUID(), uuid2), new SLChatGroupInvitationSentEvent(new ChatMessageSourceUser(uuid), this.agentCircuit.getAgentUUID()), true);
     }
 
-    public void SendGroupNotice(UUID uuid, String str, String str2, SLInventoryEntry sLInventoryEntry) {
+    public void SendGroupNotice(UUID uuid, String str, String str2, SLInventoryEntry inventoryEntry) {
         ImprovedInstantMessage improvedInstantMessage = new ImprovedInstantMessage();
         improvedInstantMessage.AgentData_Field.AgentID = this.circuitInfo.agentID;
         improvedInstantMessage.AgentData_Field.SessionID = this.circuitInfo.sessionID;
@@ -518,9 +515,9 @@ public class SLGroupManager extends SLModule {
         improvedInstantMessage.MessageBlock_Field.Timestamp = 0;
         improvedInstantMessage.MessageBlock_Field.FromAgentName = SLMessage.stringToVariableOEM("todo");
         improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTF(str + "|" + str2);
-        if (sLInventoryEntry != null) {
+        if (inventoryEntry != null) {
             try {
-                improvedInstantMessage.MessageBlock_Field.BinaryBucket = SLMessage.stringToVariableOEM(new LLSDMap(new LLSDMap.LLSDMapEntry("item_id", new LLSDUUID(sLInventoryEntry.uuid)), new LLSDMap.LLSDMapEntry("owner_id", new LLSDUUID(sLInventoryEntry.ownerUUID))).serializeToXML());
+                improvedInstantMessage.MessageBlock_Field.BinaryBucket = SLMessage.stringToVariableOEM(new LLSDMap(new LLSDMap.LLSDMapEntry("item_id", new LLSDUUID(inventoryEntry.uuid)), new LLSDMap.LLSDMapEntry("owner_id", new LLSDUUID(inventoryEntry.ownerUUID))).serializeToXML());
             } catch (IOException e) {
                 e.printStackTrace();
                 improvedInstantMessage.MessageBlock_Field.BinaryBucket = new byte[0];
@@ -539,8 +536,8 @@ public class SLGroupManager extends SLModule {
         setGroupContribution.Data_Field.GroupID = uuid;
         setGroupContribution.Data_Field.Contribution = i;
         setGroupContribution.isReliable = true;
-        setGroupContribution.setEventListener(new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.7
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        setGroupContribution.setEventListener(new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 AgentDataUpdateRequest agentDataUpdateRequest = new AgentDataUpdateRequest();
                 agentDataUpdateRequest.AgentData_Field.AgentID = SLGroupManager.this.circuitInfo.agentID;
@@ -549,7 +546,7 @@ public class SLGroupManager extends SLModule {
                 SLGroupManager.this.SendMessage(agentDataUpdateRequest);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
             }
         });
@@ -594,9 +591,9 @@ public class SLGroupManager extends SLModule {
         roleData.UpdateType = uuid2 != null ? 3 : 4;
         groupRoleUpdate.RoleData_Fields.add(roleData);
         groupRoleUpdate.isReliable = true;
-        groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.groups.SLGroupManager.10
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
-            public void onMessageAcknowledged(SLMessage sLMessage) {
+        groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
+            public void onMessageAcknowledged(SLMessage message) {
                 Debug.Printf("GroupRole: ack set properties for role %s", uuid2);
                 SLGroupManager.this.userManager.getGroupRoles().requestUpdate(uuid);
             }

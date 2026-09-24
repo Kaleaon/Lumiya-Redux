@@ -1,17 +1,16 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
-/* loaded from: classes.dex */
 final class AutoValue_MyAvatarState extends MyAvatarState {
     private final boolean hasHUDs;
     private final boolean isFlying;
     private final boolean isSitting;
     private final int sittingOn;
 
-    AutoValue_MyAvatarState(boolean z, int i, boolean z2, boolean z3) {
-        this.isSitting = z;
-        this.sittingOn = i;
-        this.isFlying = z2;
-        this.hasHUDs = z3;
+    AutoValue_MyAvatarState(boolean isSitting, int sittingOn, boolean isFlying, boolean hasHUDs) {
+        this.isSitting = isSitting;
+        this.sittingOn = sittingOn;
+        this.isFlying = isFlying;
+        this.hasHUDs = hasHUDs;
     }
 
     public boolean equals(Object obj) {
@@ -28,7 +27,7 @@ final class AutoValue_MyAvatarState extends MyAvatarState {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.MyAvatarState
+    @Override
     public boolean hasHUDs() {
         return this.hasHUDs;
     }
@@ -37,17 +36,17 @@ final class AutoValue_MyAvatarState extends MyAvatarState {
         return (((this.isFlying ? 1231 : 1237) ^ (((((this.isSitting ? 1231 : 1237) ^ 1000003) * 1000003) ^ this.sittingOn) * 1000003)) * 1000003) ^ (this.hasHUDs ? 1231 : 1237);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.MyAvatarState
+    @Override
     public boolean isFlying() {
         return this.isFlying;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.MyAvatarState
+    @Override
     public boolean isSitting() {
         return this.isSitting;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.MyAvatarState
+    @Override
     public int sittingOn() {
         return this.sittingOn;
     }

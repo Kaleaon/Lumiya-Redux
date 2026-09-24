@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class ChatterListSimpleAdapter extends ChatterListAdapter {
 
     @Nullable
@@ -17,12 +16,12 @@ class ChatterListSimpleAdapter extends ChatterListAdapter {
         this.data = null;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public boolean areAllItemsEnabled() {
         return true;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         if (this.data != null) {
             return this.data.size();
@@ -30,7 +29,7 @@ class ChatterListSimpleAdapter extends ChatterListAdapter {
         return 0;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public Object getItem(int i) {
         if (this.data == null || i < 0 || i >= this.data.size()) {
             return null;
@@ -38,17 +37,17 @@ class ChatterListSimpleAdapter extends ChatterListAdapter {
         return this.data.get(i);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         return 0L;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return false;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean isEmpty() {
         if (this.data != null) {
             return this.data.isEmpty();
@@ -56,7 +55,7 @@ class ChatterListSimpleAdapter extends ChatterListAdapter {
         return true;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public boolean isEnabled(int i) {
         return true;
     }

@@ -1,56 +1,65 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * return inventory segment.
+ * *NOTE: This could be compressed more since we already know the
+ * parent_id for folders and the folder_id for items, but this is
+ * reasonable until we heve server side inventory.
+ *
+ * <p>Template: {@code InventoryDescendents Low 278 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class InventoryDescendents extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
     public ArrayList<ItemData> ItemData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int Descendents;
-        public UUID FolderID;
-        public UUID OwnerID;
-        public int Version;
+        public UUID AgentID; // LLUUID
+        public int Descendents; // S32 - count to help with caching
+        public UUID FolderID; // LLUUID
+        public UUID OwnerID; // LLUUID - owner of the folders creatd.
+        public int Version; // S32 - version of the folder for caching
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
-        public byte[] Name;
-        public UUID ParentID;
-        public int Type;
+        public UUID FolderID; // LLUUID
+        public byte[] Name; // Variable 1
+        public UUID ParentID; // LLUUID
+        public int Type; // S8
     }
 
+    /** Block ItemData, Variable. */
     public static class ItemData {
-        public UUID AssetID;
-        public int BaseMask;
-        public int CRC;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public int Type;
+        public UUID AssetID; // LLUUID
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID - permissions
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - owner of the folders creatd.
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public int Type; // S8
     }
 
     public InventoryDescendents() {
@@ -58,7 +67,7 @@ public class InventoryDescendents extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i;
         int i2 = 61;
@@ -71,27 +80,28 @@ public class InventoryDescendents extends SLMessage {
             i2 = ((FolderData) it.next()).Name.length + 34 + i;
         }
         int i3 = i + 1;
-        Iterator<?> it2 = this.ItemData_Fields.iterator();
+        Iterator<?> iterator = this.ItemData_Fields.iterator();
         while (true) {
             int i4 = i3;
-            if (!it2.hasNext()) {
+            if (!iterator.hasNext()) {
                 return i4;
             }
-            ItemData itemData = (ItemData) it2.next();
+            ItemData itemData = (ItemData) iterator.next();
             i3 = itemData.Description.length + itemData.Name.length + 129 + 1 + 4 + 4 + i4;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInventoryDescendents(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInventoryDescendents(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.SYN);
+        // Message number: Low 278 (InventoryDescendents).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x16);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.FolderID);
         packUUID(byteBuffer, this.AgentData_Field.OwnerID);
@@ -130,15 +140,15 @@ public class InventoryDescendents extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.FolderID = unpackUUID(byteBuffer);
         this.AgentData_Field.OwnerID = unpackUUID(byteBuffer);
         this.AgentData_Field.Version = unpackInt(byteBuffer);
         this.AgentData_Field.Descendents = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             folderData.ParentID = unpackUUID(byteBuffer);
@@ -146,8 +156,8 @@ public class InventoryDescendents extends SLMessage {
             folderData.Name = unpackVariable(byteBuffer, 1);
             this.FolderData_Fields.add(folderData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             ItemData itemData = new ItemData();
             itemData.ItemID = unpackUUID(byteBuffer);
             itemData.FolderID = unpackUUID(byteBuffer);
@@ -164,7 +174,7 @@ public class InventoryDescendents extends SLMessage {
             itemData.Type = unpackByte(byteBuffer);
             itemData.InvType = unpackByte(byteBuffer);
             itemData.Flags = unpackInt(byteBuffer);
-            itemData.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            itemData.SaleType = unpackByte(byteBuffer) & 0xFF;
             itemData.SalePrice = unpackInt(byteBuffer);
             itemData.Name = unpackVariable(byteBuffer, 1);
             itemData.Description = unpackVariable(byteBuffer, 1);

@@ -15,7 +15,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class SLTextureUploadRequest implements Runnable {
     private static final MediaType MEDIA_TYPE_JP2 = MediaType.parse("image/x-j2c");
     private String capURL;
@@ -25,41 +24,59 @@ public class SLTextureUploadRequest implements Runnable {
     private int textureLayer;
 
     public interface TextureUploadCompleteListener {
-        void OnTextureUploadComplete(SLTextureUploadRequest sLTextureUploadRequest);
+        void OnTextureUploadComplete(SLTextureUploadRequest textureUploadRequest);
     }
 
-    public SLTextureUploadRequest(File file, int i) {
+    public SLTextureUploadRequest(File file, int textureLayer) {
         this.sourceFile = file;
-        this.textureLayer = i;
+        this.textureLayer = textureLayer;
     }
 
     public UUID getTextureID() {
         return this.textureID;
     }
 
-    @Override // java.lang.Runnable
+    /**
+     * Two-step capability upload (UploadBakedTexture): ask the capability for
+     * an uploader URL, POST the JPEG-2000 file there, and read new_asset from
+     * the LLSD reply. The listener is always called, with textureID left null
+     * when the upload failed, so a bake in progress can continue.
+     */
+    @Override
     public void run() {
         try {
-            String asString = new LLSDXMLRequest().PerformRequest(this.capURL, new LLSDUndefined()).byKey("uploader").asString();
-            Debug.Log("TextureUploader: uploader URL = " + asString);
-            try (Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder().url(asString).header(HttpHeaders.ACCEPT, "application/llsd+xml").post(RequestBody.create(MEDIA_TYPE_JP2, this.sourceFile)).build()).execute()) {
+            String uploaderURL = new LLSDXMLRequest().PerformRequest(this.capURL, new LLSDUndefined()).byKey("uploader").asString();
+            Debug.Log("TextureUploader: uploader URL = " + uploaderURL);
+            Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder()
+                    .url(uploaderURL)
+                    .header("Accept", "application/llsd+xml")
+                    .post(RequestBody.create(MEDIA_TYPE_JP2, this.sourceFile))
+                    .build()).execute();
+            if (response == null) {
+                throw new IOException("Null response");
+            }
+            try {
                 if (!response.isSuccessful()) {
                     throw new IOException("Error code " + response.code());
                 }
-                LLSDNode parseXML = LLSDNode.parseXML(response.body().byteStream(), null);
-                Debug.Log("TextureUploader: LLSD response = " + parseXML.serializeToXML());
-                this.textureID = parseXML.byKey("new_asset").asUUID();
-                if (this.onUploadComplete != null) {
-                    this.onUploadComplete.OnTextureUploadComplete(this);
-                }
+                LLSDNode reply = LLSDNode.parseXML(response.body().byteStream(), null);
+                Debug.Log("TextureUploader: LLSD response = " + reply.serializeToXML());
+                this.textureID = reply.byKey("new_asset").asUUID();
+            } finally {
+                response.close();
             }
-        } catch (LLSDException | IOException e) {
+        } catch (IOException e) {
             Debug.Warning(e);
+        } catch (LLSDException e) {
+            Debug.Warning(e);
+        }
+        if (this.onUploadComplete != null) {
+            this.onUploadComplete.OnTextureUploadComplete(this);
         }
     }
 
-    public void setCapURL(String str) {
-        this.capURL = str;
+    public void setCapURL(String capURL) {
+        this.capURL = capURL;
     }
 
     public void setOnUploadComplete(TextureUploadCompleteListener textureUploadCompleteListener) {

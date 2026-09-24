@@ -1,26 +1,35 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupNoticeAdd
+ * Add a group notice.
+ * simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code GroupNoticeAdd Low 61 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupNoticeAdd extends SLMessage {
     public AgentData AgentData_Field;
     public MessageBlock MessageBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block MessageBlock, Single. */
     public static class MessageBlock {
-        public byte[] BinaryBucket;
-        public int Dialog;
-        public byte[] FromAgentName;
-        public UUID ID;
-        public byte[] Message;
-        public UUID ToGroupID;
+        public byte[] BinaryBucket; // Variable 2
+        public int Dialog; // U8
+        public byte[] FromAgentName; // Variable 1
+        public UUID ID; // LLUUID
+        public byte[] Message; // Variable 2
+        public UUID ToGroupID; // LLUUID
     }
 
     public GroupNoticeAdd() {
@@ -29,21 +38,22 @@ public class GroupNoticeAdd extends SLMessage {
         this.MessageBlock_Field = new MessageBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MessageBlock_Field.FromAgentName.length + 34 + 2 + this.MessageBlock_Field.Message.length + 2 + this.MessageBlock_Field.BinaryBucket.length + 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupNoticeAdd(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupNoticeAdd(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 61);
+        // Message number: Low 61 (GroupNoticeAdd).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x3D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.MessageBlock_Field.ToGroupID);
         packUUID(byteBuffer, this.MessageBlock_Field.ID);
@@ -53,12 +63,12 @@ public class GroupNoticeAdd extends SLMessage {
         packVariable(byteBuffer, this.MessageBlock_Field.BinaryBucket, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.ToGroupID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.ID = unpackUUID(byteBuffer);
-        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & 0xFF;
         this.MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1);
         this.MessageBlock_Field.Message = unpackVariable(byteBuffer, 2);
         this.MessageBlock_Field.BinaryBucket = unpackVariable(byteBuffer, 2);

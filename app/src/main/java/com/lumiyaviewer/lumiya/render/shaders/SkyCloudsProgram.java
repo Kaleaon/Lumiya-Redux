@@ -4,7 +4,6 @@ import android.opengl.GLES20;
 import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.slproto.windlight.WindlightPreset;
 
-/* loaded from: classes.dex */
 public class SkyCloudsProgram extends SkyProgram {
     public int cloudAdd;
     public int cloudColor;
@@ -15,7 +14,7 @@ public class SkyCloudsProgram extends SkyProgram {
         super(Shader.SkyFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.SkyProgram
+    @Override
     public void ApplyWindlight(RenderContext renderContext) {
         super.ApplyWindlight(renderContext);
         WindlightPreset windlightPreset = renderContext.windlightPreset;
@@ -25,7 +24,7 @@ public class SkyCloudsProgram extends SkyProgram {
         GLES20.glUniform1i(this.textureSampler, 0);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.SkyProgram, com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         super.bindVariables();
         this.textureSampler = GLES20.glGetUniformLocation(this.handle, "textureSampler");
@@ -34,7 +33,7 @@ public class SkyCloudsProgram extends SkyProgram {
         this.cloudAdd = GLES20.glGetUniformLocation(this.handle, "cloudAdd");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.SkyProgram
+    @Override
     public boolean hasCloudsTexture() {
         return true;
     }

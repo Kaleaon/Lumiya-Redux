@@ -5,22 +5,29 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Postcard messages
+ * reliable
+ *
+ * <p>Template: {@code SendPostcard Low 412 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SendPostcard extends SLMessage {
     public AgentData AgentData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public boolean AllowPublish;
-        public UUID AssetID;
-        public byte[] From;
-        public boolean MaturePublish;
-        public byte[] Msg;
-        public byte[] Name;
-        public LLVector3d PosGlobal;
-        public UUID SessionID;
-        public byte[] Subject;
-        public byte[] To;
+        public UUID AgentID; // LLUUID
+        public boolean AllowPublish; // BOOL - Allow publishing on the web.
+        public UUID AssetID; // LLUUID
+        public byte[] From; // Variable 1 - src email address(es)
+        public boolean MaturePublish; // BOOL - profile is "mature"
+        public byte[] Msg; // Variable 2 - message text
+        public byte[] Name; // Variable 1 - src name
+        public LLVector3d PosGlobal; // LLVector3d - Where snapshot was taken
+        public UUID SessionID; // LLUUID
+        public byte[] Subject; // Variable 1 - mail subject
+        public byte[] To; // Variable 1 - dest email address(es)
     }
 
     public SendPostcard() {
@@ -28,21 +35,22 @@ public class SendPostcard extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.AgentData_Field.To.length + 73 + 1 + this.AgentData_Field.From.length + 1 + this.AgentData_Field.Name.length + 1 + this.AgentData_Field.Subject.length + 2 + this.AgentData_Field.Msg.length + 1 + 1 + 4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSendPostcard(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSendPostcard(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -100);
+        // Message number: Low 412 (SendPostcard).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x9C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.AssetID);
@@ -56,7 +64,7 @@ public class SendPostcard extends SLMessage {
         packBoolean(byteBuffer, this.AgentData_Field.MaturePublish);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

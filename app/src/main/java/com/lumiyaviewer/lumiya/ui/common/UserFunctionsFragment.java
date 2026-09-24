@@ -50,91 +50,66 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/* loaded from: classes.dex */
 public abstract class UserFunctionsFragment extends ChatterReloadableFragment implements ReloadableFragment {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f378xb1d54699 = null;
-    private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.9
+    private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            UserFunctionsFragment.this.m583xeb75d0e8((Boolean) obj);
+            UserFunctionsFragment.this.onVoiceLoginStatusChanged((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    protected final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.10
+    protected final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            UserFunctionsFragment.this.m584xeb75d0e9((CurrentLocationInfo) obj);
+            UserFunctionsFragment.this.onCurrentLocationChanged((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-users-ChatterID$ChatterTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m569x2680ba3d() {
-        if (f378xb1d54699 != null) {
-            return f378xb1d54699;
-        }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
-        try {
-            iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.Local.ordinal()] = 3;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ChatterID.ChatterType.User.ordinal()] = 2;
-        } catch (NoSuchFieldError e3) {
-        }
-        f378xb1d54699 = iArr;
-        return iArr;
-    }
 
     private void handleEnableVoice() {
         if (VoicePluginServiceConnection.checkPluginInstalled(getContext())) {
-            new AlertDialog.Builder(getContext()).setMessage(getContext().getString(R.string.enable_voice_question)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.1
+            new AlertDialog.Builder(getContext()).setMessage(getContext().getString(R.string.enable_voice_question)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     UserFunctionsFragment.m571x54333d46(dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.2
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
             }).setCancelable(true).create().show();
         } else {
-            new AlertDialog.Builder(getContext()).setTitle(R.string.enable_voice).setMessage(getContext().getString(R.string.enable_voice_plugin_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.7
+            new AlertDialog.Builder(getContext()).setTitle(R.string.enable_voice).setMessage(getContext().getString(R.string.enable_voice_plugin_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     UserFunctionsFragment.this.m585x54293cc7(dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -148,22 +123,22 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
 
     private void handleTeleportTo(final SLAgentCircuit sLAgentCircuit, final ChatterID.ChatterIDUser chatterIDUser) {
         if (sLAgentCircuit != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getString(R.string.teleport_to_user_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.15
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            builder.setMessage(getString(R.string.teleport_to_user_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     UserFunctionsFragment.this.m587x5441d035((SLAgentCircuit) sLAgentCircuit, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.3
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -176,12 +151,12 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         TextFieldDialogBuilder textFieldDialogBuilder = new TextFieldDialogBuilder(getContext());
         textFieldDialogBuilder.setTitle(getString(R.string.offer_friendship_title));
         textFieldDialogBuilder.setDefaultText(getString(R.string.default_friendship_message));
-        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.12
+        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() {
             private final /* synthetic */ void $m$0(String str) {
                 ((SLAgentCircuit) sLAgentCircuit).AddFriend(((ChatterID.ChatterIDUser) chatterIDUser).getChatterUUID(), str);
             }
 
-            @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder.OnTextEnteredListener
+            @Override
             public final void onTextEntered(String str) {
                 $m$0(str);
             }
@@ -215,36 +190,36 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
         String retrievedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         final String resolvedName = retrievedName != null ? retrievedName : getString(R.string.name_loading_title);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         builder.setTitle(getString(R.string.block_confirm_message, resolvedName)).setCancelable(true);
         CharSequence[] charSequenceArr = userManager.getActiveAgentCircuit() != null ? new CharSequence[]{getString(R.string.mute_action_description), getString(R.string.block_action_description)} : new CharSequence[]{getString(R.string.mute_action_description)};
         final AtomicInteger atomicInteger = new AtomicInteger(0);
-        builder.setSingleChoiceItems(charSequenceArr, 0, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.8
+        builder.setSingleChoiceItems(charSequenceArr, 0, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 ((AtomicInteger) atomicInteger).set(i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         });
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.17
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 UserFunctionsFragment.this.m586x543591ca((AtomicInteger) atomicInteger, (ChatterID) chatterID, (UserManager) userManager, (String) resolvedName, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.4
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -262,12 +237,12 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         TextFieldDialogBuilder textFieldDialogBuilder = new TextFieldDialogBuilder(getContext());
         textFieldDialogBuilder.setTitle(getString(R.string.offer_teleport_title));
         textFieldDialogBuilder.setDefaultText("Join me in " + str);
-        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.13
+        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() {
             private final /* synthetic */ void $m$0(String str2) {
                 ((SLAgentCircuit) sLAgentCircuit).OfferTeleport(((ChatterID.ChatterIDUser) chatterIDUser).getChatterUUID(), str2);
             }
 
-            @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder.OnTextEnteredListener
+            @Override
             public final void onTextEntered(String str2) {
                 $m$0(str2);
             }
@@ -284,26 +259,26 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     }
 
     private void handleUserRemoveFriend(final SLAgentCircuit sLAgentCircuit, final ChatterID.ChatterIDUser chatterIDUser) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         String resolvedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         if (resolvedName == null) {
             resolvedName = getString(R.string.name_loading_title);
         }
-        builder.setMessage(String.format(getString(R.string.delete_friend_title_format), resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.11
+        builder.setMessage(String.format(getString(R.string.delete_friend_title_format), resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 UserFunctionsFragment.m578x54375b69((SLAgentCircuit) sLAgentCircuit, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.5
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -314,12 +289,12 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     private void handleUserRequestTeleport(final SLAgentCircuit sLAgentCircuit, final ChatterID.ChatterIDUser chatterIDUser) {
         TextFieldDialogBuilder textFieldDialogBuilder = new TextFieldDialogBuilder(getContext());
         textFieldDialogBuilder.setTitle(getString(R.string.request_teleport_title));
-        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.14
+        textFieldDialogBuilder.setOnTextEnteredListener(new TextFieldDialogBuilder.OnTextEnteredListener() {
             private final /* synthetic */ void $m$0(String str) {
                 ((SLAgentCircuit) sLAgentCircuit).RequestTeleport(((ChatterID.ChatterIDUser) chatterIDUser).getChatterUUID(), str);
             }
 
-            @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder.OnTextEnteredListener
+            @Override
             public final void onTextEntered(String str) {
                 $m$0(str);
             }
@@ -338,21 +313,21 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
         String retrievedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null;
         final String resolvedName = retrievedName != null ? retrievedName : getString(R.string.name_loading_title);
-        new AlertDialog.Builder(getContext()).setMessage(getString(R.string.unblock_confirm_message, resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.16
+        new android.app.AlertDialog.Builder(getContext()).setMessage(getString(R.string.unblock_confirm_message, resolvedName)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 UserFunctionsFragment.m573x543499cf((UserManager) userManager, (ChatterID) chatterID, (String) resolvedName, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.6
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -440,11 +415,11 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         if (chatterID == null || !chatterID.isValidUUID()) {
             return;
         }
-        switch (m569x2680ba3d()[chatterID.getChatterType().ordinal()]) {
-            case 1:
+        switch (chatterID.getChatterType()) {
+            case Group:
                 DetailsActivity.showEmbeddedDetails(getActivity(), GroupProfileFragment.class, GroupProfileFragment.makeSelection(chatterID));
                 break;
-            case 2:
+            case User:
                 DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(chatterID));
                 break;
         }
@@ -493,22 +468,20 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         performTeleportTo(sLAgentCircuit, chatterIDUser);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.user_list_context_menu, menu);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @CallSuper
-    /* renamed from: onCurrentLocationChanged, reason: merged with bridge method [inline-methods] */
-    public void m584xeb75d0e9(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationChanged(CurrentLocationInfo currentLocationInfo) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.supportInvalidateOptionsMenu();
@@ -523,84 +496,84 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         UserManager userManager = this.chatterID != null ? this.chatterID.getUserManager() : null;
         if (this.chatterID != null && userManager != null) {
             SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
             switch (menuItem.getItemId()) {
-                case R.id.item_close /* 2131755779 */:
+                case R.id.item_close:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) || (this.chatterID instanceof ChatterID.ChatterIDGroup)) {
                         handleUserCloseChat(this.chatterID, false);
                     }
                     return true;
-                case R.id.item_unmute /* 2131755781 */:
+                case R.id.item_unmute:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) || (this.chatterID instanceof ChatterID.ChatterIDGroup)) {
                         handleUserUnmute(this.chatterID);
                     }
                     return true;
-                case R.id.item_close_and_mute /* 2131755846 */:
+                case R.id.item_close_and_mute:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) || (this.chatterID instanceof ChatterID.ChatterIDGroup)) {
                         handleUserMute(this.chatterID);
                     }
                     return true;
-                case R.id.item_open_chat /* 2131755860 */:
+                case R.id.item_open_chat:
                     handleUserOpenChat(this.chatterID);
                     return true;
-                case R.id.item_view_profile /* 2131755861 */:
+                case R.id.item_view_profile:
                     handleUserViewProfile(this.chatterID);
                     return true;
-                case R.id.item_start_voice /* 2131755862 */:
+                case R.id.item_start_voice:
                     handleStartVoice(this.chatterID);
                     return true;
-                case R.id.item_location_details /* 2131755863 */:
+                case R.id.item_location_details:
                     handleViewLocationDetails();
                     return true;
-                case R.id.item_play_parcel_media /* 2131755864 */:
+                case R.id.item_play_parcel_media:
                     handlePlayParcelMedia();
                     return true;
-                case R.id.item_send_group_notice /* 2131755865 */:
+                case R.id.item_send_group_notice:
                     DetailsActivity.showEmbeddedDetails(getActivity(), GroupNoticeFragment.class, GroupNoticeFragment.makeSelection(this.chatterID));
                     return true;
-                case R.id.item_offer_teleport /* 2131755866 */:
+                case R.id.item_offer_teleport:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserOfferTeleport(userManager, activeAgentCircuit, (ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_request_teleport /* 2131755867 */:
+                case R.id.item_request_teleport:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserRequestTeleport(activeAgentCircuit, (ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_teleport_to /* 2131755868 */:
+                case R.id.item_teleport_to:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleTeleportTo(activeAgentCircuit, (ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_pay_user /* 2131755869 */:
+                case R.id.item_pay_user:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserPayUser((ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_share_object /* 2131755870 */:
+                case R.id.item_share_object:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserShareObject((ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_add_friend /* 2131755871 */:
+                case R.id.item_add_friend:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserAddFriend(activeAgentCircuit, (ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_remove_friend /* 2131755872 */:
+                case R.id.item_remove_friend:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) && activeAgentCircuit != null) {
                         handleUserRemoveFriend(activeAgentCircuit, (ChatterID.ChatterIDUser) this.chatterID);
                     }
                     return true;
-                case R.id.item_enable_voice /* 2131755873 */:
+                case R.id.item_enable_voice:
                     handleEnableVoice();
                     return true;
-                case R.id.item_unblock /* 2131755874 */:
+                case R.id.item_unblock:
                     if ((this.chatterID instanceof ChatterID.ChatterIDUser) || (this.chatterID instanceof ChatterID.ChatterIDGroup)) {
                         handleUserUnblock(this.chatterID);
                     }
@@ -610,7 +583,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         boolean z;
         boolean z2;
@@ -703,58 +676,58 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
             MenuItem findItem2 = menu.findItem(i4);
             if (findItem2 != null) {
                 switch (i4) {
-                    case R.id.item_close /* 2131755779 */:
+                    case R.id.item_close:
                         findItem2.setVisible(((z6 || z7) && isInstance) ? z12 : false);
                         break;
-                    case R.id.item_unmute /* 2131755781 */:
+                    case R.id.item_unmute:
                         findItem2.setVisible(((z6 || z7) && z3) ? !z8 : false);
                         break;
-                    case R.id.item_close_and_mute /* 2131755846 */:
+                    case R.id.item_close_and_mute:
                         findItem2.setVisible(((z6 || z7) && isInstance && z12) ? !(z3 ? z8 : false) : false);
                         break;
-                    case R.id.item_open_chat /* 2131755860 */:
+                    case R.id.item_open_chat:
                         findItem2.setVisible((z6 || z7) ? !isInstance : false);
                         break;
-                    case R.id.item_view_profile /* 2131755861 */:
+                    case R.id.item_view_profile:
                         findItem2.setVisible((z6 || z7) ? !isInstance2 : false);
                         break;
-                    case R.id.item_start_voice /* 2131755862 */:
+                    case R.id.item_start_voice:
                         findItem2.setVisible(z4 ? z11 : false);
                         break;
-                    case R.id.item_location_details /* 2131755863 */:
+                    case R.id.item_location_details:
                         findItem2.setVisible(z5 ? z2 : false);
                         break;
-                    case R.id.item_play_parcel_media /* 2131755864 */:
+                    case R.id.item_play_parcel_media:
                         findItem2.setVisible((z5 && z2) ? z10 : false);
                         break;
-                    case R.id.item_send_group_notice /* 2131755865 */:
+                    case R.id.item_send_group_notice:
                         findItem2.setVisible((z7 && z4) ? z15 : false);
                         break;
-                    case R.id.item_offer_teleport /* 2131755866 */:
+                    case R.id.item_offer_teleport:
                         findItem2.setVisible(z6 ? z4 : false);
                         break;
-                    case R.id.item_request_teleport /* 2131755867 */:
+                    case R.id.item_request_teleport:
                         findItem2.setVisible(z6 ? z4 : false);
                         break;
-                    case R.id.item_teleport_to /* 2131755868 */:
+                    case R.id.item_teleport_to:
                         findItem2.setVisible((z6 && z4 && canTeleportToLocation) ? z14 : false);
                         break;
-                    case R.id.item_pay_user /* 2131755869 */:
+                    case R.id.item_pay_user:
                         findItem2.setVisible(z6 ? z4 : false);
                         break;
-                    case R.id.item_share_object /* 2131755870 */:
+                    case R.id.item_share_object:
                         findItem2.setVisible(z6 ? z4 : false);
                         break;
-                    case R.id.item_add_friend /* 2131755871 */:
+                    case R.id.item_add_friend:
                         findItem2.setVisible((z6 && z4) ? !z13 : false);
                         break;
-                    case R.id.item_remove_friend /* 2131755872 */:
+                    case R.id.item_remove_friend:
                         findItem2.setVisible((z6 && z4) ? z13 : false);
                         break;
-                    case R.id.item_enable_voice /* 2131755873 */:
+                    case R.id.item_enable_voice:
                         findItem2.setVisible(z);
                         break;
-                    case R.id.item_unblock /* 2131755874 */:
+                    case R.id.item_unblock:
                         findItem2.setVisible(((z6 || z7) && z8) ? z4 : false);
                         break;
                 }
@@ -763,7 +736,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = this.chatterID != null ? this.chatterID.getUserManager() : null;
@@ -777,7 +750,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         EventBus.getInstance().subscribe(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.voiceLoggedIn.unsubscribe();
         this.currentLocationInfo.unsubscribe();
@@ -785,10 +758,8 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         super.onStop();
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     @CallSuper
-    /* renamed from: onVoiceLoginStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m583xeb75d0e8(Boolean bool) {
+    public void onVoiceLoginStatusChanged(Boolean bool) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.supportInvalidateOptionsMenu();

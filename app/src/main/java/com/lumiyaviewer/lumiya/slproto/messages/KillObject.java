@@ -1,36 +1,44 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * KillObject - Sent by objects to the viewer to tell them to kill themselves
+ *
+ * <p>Template: {@code KillObject High 16 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_kill_object()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class KillObject extends SLMessage {
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ID;
+        public int ID; // U32
     }
 
     public KillObject() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 4) + 2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleKillObject(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleKillObject(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 16);
+        // Message number: High 16 (KillObject).
+        byteBuffer.put((byte) 0x10);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
         Iterator<?> it = this.ObjectData_Fields.iterator();
         while (it.hasNext()) {
@@ -38,10 +46,10 @@ public class KillObject extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.ID = unpackInt(byteBuffer);
             this.ObjectData_Fields.add(objectData);

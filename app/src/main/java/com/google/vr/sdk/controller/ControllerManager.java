@@ -24,7 +24,6 @@ import com.google.vr.vrcore.controller.api.IControllerListener;
 import com.google.vr.vrcore.controller.api.IControllerService;
 import java.lang.ref.WeakReference;
 
-/* loaded from: classes.dex */
 public class ControllerManager {
     private static final boolean DEBUG = false;
     private static final String LISTENER_KEY = "com.google.vr.cardboard.controller.ControllerManager";
@@ -37,8 +36,8 @@ public class ControllerManager {
     private final OuterControllerListener outerControllerListener = new OuterControllerListener(this.innerControllerListener);
     private final Controller currentControllerState = new Controller(null);
     private final Controller controller = new Controller(this);
-    private final ServiceConnection serviceConnection = new ServiceConnection() { // from class: com.google.vr.sdk.controller.ControllerManager.1
-        @Override // android.content.ServiceConnection
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             int i = 5;
             ControllerManager.this.controllerService = IControllerService.Stub.asInterface(iBinder);
@@ -73,7 +72,7 @@ public class ControllerManager {
             }
         }
 
-        @Override // android.content.ServiceConnection
+        @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.e(ControllerManager.TAG, ".onServiceDisconnected");
             ControllerManager.this.controllerService = null;
@@ -217,19 +216,19 @@ public class ControllerManager {
             for (int i = 0; i < controllerEventPacket.getButtonEventCount(); i++) {
                 innerControllerListener.handleButtonEvent(controllerEventPacket.getButtonEvent(i));
             }
-            for (int i2 = 0; i2 < controllerEventPacket.getOrientationEventCount(); i2++) {
-                innerControllerListener.handleOrientationEvent(controllerEventPacket.getOrientationEvent(i2));
+            for (int j = 0; j < controllerEventPacket.getOrientationEventCount(); j++) {
+                innerControllerListener.handleOrientationEvent(controllerEventPacket.getOrientationEvent(j));
             }
-            for (int i3 = 0; i3 < controllerEventPacket.getTouchEventCount(); i3++) {
-                innerControllerListener.handleTouchEvent(controllerEventPacket.getTouchEvent(i3));
+            for (int k = 0; k < controllerEventPacket.getTouchEventCount(); k++) {
+                innerControllerListener.handleTouchEvent(controllerEventPacket.getTouchEvent(k));
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerAccelEvent(ControllerAccelEvent controllerAccelEvent) {
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerButtonEvent(ControllerButtonEvent controllerButtonEvent) {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -237,16 +236,16 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public boolean deprecatedOnControllerButtonEventV1(ControllerButtonEvent controllerButtonEvent) {
             return true;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerGyroEvent(ControllerGyroEvent controllerGyroEvent) {
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerOrientationEvent(ControllerOrientationEvent controllerOrientationEvent) {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -254,7 +253,7 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerTouchEvent(ControllerTouchEvent controllerTouchEvent) {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -262,17 +261,17 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public int getApiVersion() throws RemoteException {
             return 11;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public ControllerListenerOptions getOptions() throws RemoteException {
             return null;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket(ControllerEventPacket controllerEventPacket) throws RemoteException {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -281,7 +280,7 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket2(ControllerEventPacket2 controllerEventPacket2) throws RemoteException {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -293,7 +292,7 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) {
             InnerControllerListener innerControllerListener = this.inner.get();
             if (innerControllerListener != null) {
@@ -301,7 +300,7 @@ public class ControllerManager {
             }
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerStateChanged(int i, int i2) throws RemoteException {
             ControllerStates.toString(i2);
             InnerControllerListener innerControllerListener = this.inner.get();

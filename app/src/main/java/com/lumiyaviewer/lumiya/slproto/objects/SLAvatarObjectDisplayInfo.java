@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarObjectDisplayInfo extends SLObjectDisplayInfo implements SLObjectDisplayInfo.HasChildrenObjects {
 
     @Nonnull
@@ -16,19 +15,19 @@ public class SLAvatarObjectDisplayInfo extends SLObjectDisplayInfo implements SL
     @Nonnull
     public final UUID uuid;
 
-    public SLAvatarObjectDisplayInfo(@Nullable String str, SLObjectInfo sLObjectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean z) {
-        super(sLObjectInfo.localID, str, f, sLObjectInfo.hierLevel);
+    public SLAvatarObjectDisplayInfo(@Nullable String str, SLObjectInfo objectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean implicitlyAdded) {
+        super(objectInfo.localID, str, f, objectInfo.hierLevel);
         this.children = immutableList;
-        this.implicitlyAdded = z;
-        this.uuid = sLObjectInfo.getId();
+        this.implicitlyAdded = implicitlyAdded;
+        this.uuid = objectInfo.getId();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo.HasChildrenObjects
+    @Override
     public ImmutableList<SLObjectDisplayInfo> getChildren() {
         return this.children;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo.HasChildrenObjects
+    @Override
     public boolean isImplicitlyAdded() {
         return this.implicitlyAdded;
     }

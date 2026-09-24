@@ -31,7 +31,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLSearch extends SLModule {
     private static final int DFQ_ADULT_SIMS_ONLY = 134217728;
     private static final int DFQ_AGENT_OWNED = 64;
@@ -69,54 +68,29 @@ public class SLSearch extends SLModule {
     private final ResultHandler<SearchGridQuery, LazyList<SearchGridResult>> searchResultHandler;
     private final UserManager userManager;
 
-    public SLSearch(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLSearch(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.currentSearchQuery = new AtomicReference<>(null);
-        this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.search.SLSearch.1
+        this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() {
 
-            /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] f129xca68d786 = null;
-
-            /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
-            private /* synthetic */ int[] m248x591f1c2a() {
-                if (f129xca68d786 != null) {
-                    return f129xca68d786;
-                }
-                int[] iArr = new int[SearchGridQuery.SearchType.valuesCustom().length];
-                try {
-                    iArr[SearchGridQuery.SearchType.Groups.ordinal()] = 1;
-                } catch (NoSuchFieldError e) {
-                }
-                try {
-                    iArr[SearchGridQuery.SearchType.People.ordinal()] = 2;
-                } catch (NoSuchFieldError e2) {
-                }
-                try {
-                    iArr[SearchGridQuery.SearchType.Places.ordinal()] = 3;
-                } catch (NoSuchFieldError e3) {
-                }
-                f129xca68d786 = iArr;
-                return iArr;
-            }
-
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+            @Override
             public void onRequest(@Nonnull SearchGridQuery searchGridQuery) {
                 SLSearch.this.currentSearchQuery.set(searchGridQuery);
-                switch (m248x591f1c2a()[searchGridQuery.searchType().ordinal()]) {
-                    case 1:
+                switch (searchGridQuery.searchType()) {
+                    case Groups:
                         SLSearch.this.SearchGroups(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
-                    case 2:
+                    case People:
                         SLSearch.this.SearchPeople(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
-                    case 3:
+                    case Places:
                         SLSearch.this.SearchPlaces(searchGridQuery.searchText(), searchGridQuery.searchUUID());
                         break;
                 }
             }
         });
-        this.parcelInfoRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.search.SLSearch.2
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.parcelInfoRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("ParcelInfo: Requesting for %s", uuid);
                 ParcelInfoRequest parcelInfoRequest = new ParcelInfoRequest();
@@ -127,7 +101,7 @@ public class SLSearch extends SLModule {
                 SLSearch.this.SendMessage(parcelInfoRequest);
             }
         }, false, 3, 15000L);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
         if (this.userManager != null) {
             this.searchResultHandler = this.userManager.getSearchManager().searchResults().attachRequestHandler(this.searchRequestHandler);
             this.parcelInfoResultHandler = this.userManager.parcelInfoData().getRequestSource().attachRequestHandler(this.parcelInfoRequestHandler);
@@ -137,7 +111,6 @@ public class SLSearch extends SLModule {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchGroups(String str, UUID uuid) {
         DirFindQuery dirFindQuery = new DirFindQuery();
         dirFindQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -150,7 +123,6 @@ public class SLSearch extends SLModule {
         SendMessage(dirFindQuery);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchPeople(String str, UUID uuid) {
         DirFindQuery dirFindQuery = new DirFindQuery();
         dirFindQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -163,7 +135,6 @@ public class SLSearch extends SLModule {
         SendMessage(dirFindQuery);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchPlaces(String str, UUID uuid) {
         DirPlacesQuery dirPlacesQuery = new DirPlacesQuery();
         dirPlacesQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -238,7 +209,7 @@ public class SLSearch extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getSearchManager().searchResults().detachRequestHandler(this.searchRequestHandler);

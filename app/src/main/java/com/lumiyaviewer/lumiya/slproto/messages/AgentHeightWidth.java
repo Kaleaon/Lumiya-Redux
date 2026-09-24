@@ -4,21 +4,29 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AgentHeightWidth - Update to height and aspect, sent as height/width to save space
+ * Usually sent when window resized or created
+ *
+ * <p>Template: {@code AgentHeightWidth Low 83 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AgentHeightWidth extends SLMessage {
     public AgentData AgentData_Field;
     public HeightWidthBlock HeightWidthBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int CircuitCode;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int CircuitCode; // U32
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block HeightWidthBlock, Single. */
     public static class HeightWidthBlock {
-        public int GenCounter;
-        public int Height;
-        public int Width;
+        public int GenCounter; // U32
+        public int Height; // U16
+        public int Width; // U16
     }
 
     public AgentHeightWidth() {
@@ -27,21 +35,22 @@ public class AgentHeightWidth extends SLMessage {
         this.HeightWidthBlock_Field = new HeightWidthBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 48;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentHeightWidth(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentHeightWidth(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 83);
+        // Message number: Low 83 (AgentHeightWidth).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x53);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.CircuitCode);
@@ -50,7 +59,7 @@ public class AgentHeightWidth extends SLMessage {
         packShort(byteBuffer, (short) this.HeightWidthBlock_Field.Width);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

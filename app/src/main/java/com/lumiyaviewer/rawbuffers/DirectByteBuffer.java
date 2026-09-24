@@ -9,7 +9,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-/* loaded from: classes.dex */
 public class DirectByteBuffer {
     private ByteBuffer buf;
 
@@ -36,9 +35,9 @@ public class DirectByteBuffer {
 
     private native ByteBuffer allocate(int i);
 
-    private native void copyByteArray(ByteBuffer byteBuffer, int i, byte[] bArr, int i2, int i3);
+    private native void copyByteArray(ByteBuffer byteBuffer, int i, byte[] bytes, int i2, int i3);
 
-    private native void copyFloatArray(ByteBuffer byteBuffer, int i, float[] fArr, int i2, int i3);
+    private native void copyFloatArray(ByteBuffer byteBuffer, int i, float[] floats, int i2, int i3);
 
     private native void copyPart(ByteBuffer byteBuffer, ByteBuffer byteBuffer2, int i, int i2, int i3);
 
@@ -48,15 +47,15 @@ public class DirectByteBuffer {
 
     private native void release(ByteBuffer byteBuffer);
 
-    public static int zeroDecode(byte[] bArr, int i, int i2, byte[] bArr2, int i3, int i4) throws IndexOutOfBoundsException {
-        int zeroDecodeArray = zeroDecodeArray(bArr, i, i2, bArr2, i3, i4);
+    public static int zeroDecode(byte[] bytes, int i, int i2, byte[] bytes2, int i3, int i4) throws IndexOutOfBoundsException {
+        int zeroDecodeArray = zeroDecodeArray(bytes, i, i2, bytes2, i3, i4);
         if (zeroDecodeArray >= 0) {
             return zeroDecodeArray;
         }
         throw new IndexOutOfBoundsException("zeroDecode: out of dest buffer, destStart " + Integer.toString(i) + " destMaxLen " + Integer.toString(i2));
     }
 
-    private static native int zeroDecodeArray(byte[] bArr, int i, int i2, byte[] bArr2, int i3, int i4);
+    private static native int zeroDecodeArray(byte[] bytes, int i, int i2, byte[] bytes2, int i3, int i4);
 
     public ByteBuffer asByteBuffer() {
         return this.buf;
@@ -106,21 +105,21 @@ public class DirectByteBuffer {
         return this.buf.getShort(i * 2);
     }
 
-    public void loadFromByteArray(int i, byte[] bArr, int i2, int i3) {
+    public void loadFromByteArray(int i, byte[] bytes, int i2, int i3) {
         int i4 = i + i3;
         if (i < 0 || i > this.buf.capacity() || i4 < 0 || i4 > this.buf.capacity()) {
             throw new IndexOutOfBoundsException(String.format("capacity %d, posStart %d, posEnd %d", Integer.valueOf(this.buf.capacity()), Integer.valueOf(i), Integer.valueOf(i4)));
         }
-        copyByteArray(this.buf, i, bArr, i2, i3);
+        copyByteArray(this.buf, i, bytes, i2, i3);
     }
 
-    public void loadFromFloatArray(int i, float[] fArr, int i2, int i3) {
+    public void loadFromFloatArray(int i, float[] floats, int i2, int i3) {
         int i4 = i * 4;
         int i5 = (i + i3) * 4;
         if (i4 < 0 || i4 > this.buf.capacity() || i5 < 0 || i5 > this.buf.capacity()) {
             throw new IndexOutOfBoundsException(String.format("capacity %d, posStart %d, posEnd %d", Integer.valueOf(this.buf.capacity()), Integer.valueOf(i4), Integer.valueOf(i5)));
         }
-        copyFloatArray(this.buf, i, fArr, i2, i3);
+        copyFloatArray(this.buf, i, floats, i2, i3);
     }
 
     public void loadFromShortArray(int i, short[] sArr, int i2, int i3) {
@@ -183,11 +182,11 @@ public class DirectByteBuffer {
 
     public void read(InputStream inputStream) throws IOException {
         ByteBuffer asByteBuffer = asByteBuffer();
-        byte[] bArr = new byte[asByteBuffer.capacity()];
-        inputStream.read(bArr);
+        byte[] bytes = new byte[asByteBuffer.capacity()];
+        inputStream.read(bytes);
         int position = asByteBuffer.position();
         asByteBuffer.position(0);
-        asByteBuffer.put(bArr);
+        asByteBuffer.put(bytes);
         asByteBuffer.position(position);
     }
 }

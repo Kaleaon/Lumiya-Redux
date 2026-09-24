@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.Arrays;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class TerrainTextures {
     private static UUID[] defaultTerrainTextures = {UUID.fromString("0bc58228-74a0-7e83-89bc-5c23464bcec5"), UUID.fromString("63338ede-0037-c4fd-855b-015d77112fc8"), UUID.fromString("303cd381-8560-7579-23f1-f0a880799740"), UUID.fromString("53a2f406-4895-1d13-d541-d2e3b86bc19c")};
     private final float[] terrainHeightRange;
@@ -45,8 +44,8 @@ public class TerrainTextures {
         this.terrainHeightRange[3] = regionInfo.TerrainHeightRange11;
     }
 
-    private static float bilinearCorners(float[] fArr, float f, float f2) {
-        return (((fArr[0] * f) + (fArr[1] * (1.0f - f))) * f2) + (((fArr[2] * f) + (fArr[3] * (1.0f - f))) * (1.0f - f2));
+    private static float bilinearCorners(float[] floats, float f, float f2) {
+        return (((floats[0] * f) + (floats[1] * (1.0f - f))) * f2) + (((floats[2] * f) + (floats[3] * (1.0f - f))) * (1.0f - f2));
     }
 
     public boolean equals(Object obj) {
@@ -60,9 +59,9 @@ public class TerrainTextures {
         return false;
     }
 
-    public int getNeededLayerMask(float[] fArr) {
+    public int getNeededLayerMask(float[] floats) {
         int i = 0;
-        for (float f : fArr) {
+        for (float f : floats) {
             int floor = (int) Math.floor(f);
             i |= 1 << floor;
             if (f - floor != 0.0f) {
@@ -72,16 +71,16 @@ public class TerrainTextures {
         return i & 15;
     }
 
-    public float[] getTextureHeightMap(float[] fArr, int i, int i2, float f, float f2, float f3, float f4) {
-        float[] fArr2 = new float[i * i2];
-        for (int i3 = 0; i3 < i2; i3++) {
-            float f5 = i3 / (i2 - 1);
-            for (int i4 = 0; i4 < i; i4++) {
-                float f6 = i4 / (i - 1);
-                fArr2[(i3 * i) + i4] = Math.min(3.0f, Math.max(0.0f, ((fArr[(i3 * i) + i4] - bilinearCorners(this.terrainStartHeight, (f6 * f3) + f, (f5 * f4) + f2)) * 4.0f) / bilinearCorners(this.terrainHeightRange, (f6 * f3) + f, (f5 * f4) + f2)));
+    public float[] getTextureHeightMap(float[] floats2, int i, int i2, float f, float f2, float f3, float f4) {
+        float[] floats = new float[i * i2];
+        for (int j = 0; j < i2; j++) {
+            float f5 = j / (i2 - 1);
+            for (int k = 0; k < i; k++) {
+                float f6 = k / (i - 1);
+                floats[(j * i) + k] = Math.min(3.0f, Math.max(0.0f, ((floats2[(j * i) + k] - bilinearCorners(this.terrainStartHeight, (f6 * f3) + f, (f5 * f4) + f2)) * 4.0f) / bilinearCorners(this.terrainHeightRange, (f6 * f3) + f, (f5 * f4) + f2)));
             }
         }
-        return fArr2;
+        return floats;
     }
 
     public UUID getTextureUUID(int i) {

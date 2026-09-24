@@ -23,7 +23,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/* loaded from: classes.dex */
 public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, OpenJPEG> {
     private File baseDir;
     private File textureTempDir;
@@ -42,41 +41,9 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
 
     private class TextureDecompressRequest extends ResourceRequest<DrawableTextureParams, OpenJPEG> implements ResourceConsumer, Runnable, HasPriority, Startable {
 
-        /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = null;
         private volatile File compressedFile;
         private volatile Future<?> decompressorFuture;
         private volatile boolean lowQualityDone;
-
-        /* renamed from: -getcom-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
-        private /* synthetic */ int[] m126x8a7b09f7() {
-            if (f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
-                return f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
-            }
-            int[] iArr = new int[TextureClass.valuesCustom().length];
-            try {
-                iArr[TextureClass.Asset.ordinal()] = 3;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                iArr[TextureClass.Baked.ordinal()] = 1;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                iArr[TextureClass.Prim.ordinal()] = 4;
-            } catch (NoSuchFieldError e3) {
-            }
-            try {
-                iArr[TextureClass.Sculpt.ordinal()] = 2;
-            } catch (NoSuchFieldError e4) {
-            }
-            try {
-                iArr[TextureClass.Terrain.ordinal()] = 5;
-            } catch (NoSuchFieldError e5) {
-            }
-            f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues = iArr;
-            return iArr;
-        }
 
         public TextureDecompressRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, OpenJPEG> resourceManager) {
             super(drawableTextureParams, resourceManager);
@@ -112,7 +79,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (!(obj instanceof File)) {
                 if (obj == null) {
@@ -128,7 +95,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             Debug.Printf("DecompressRequest: cancelled (%s)", getParams().uuid().toString());
             Future<?> future = this.decompressorFuture;
@@ -140,28 +107,28 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             TextureCache.this.textureCompressedCache.RequestResource(getParams(), (ResourceConsumer) this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.utils.HasPriority
+        @Override
         public int getPriority() {
             DrawableTextureParams params = getParams();
             if (TextureCache.this.canBeLowQuality(params) && this.lowQualityDone) {
                 return 4;
             }
-            switch (m126x8a7b09f7()[params.textureClass().ordinal()]) {
-                case 1:
+            switch (params.textureClass()) {
+                case Baked:
                     return 2;
-                case 2:
+                case Sculpt:
                     return 1;
                 default:
                     return 3;
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             DrawableTextureParams params = getParams();
             if (params.textureClass() == TextureClass.Sculpt || params.textureClass() == TextureClass.Baked) {
@@ -183,7 +150,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             TextureCache.this.memoryAwareExecutor.completeRequest(this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.executors.Startable
+        @Override
         public void start() {
             this.decompressorFuture = TextureCache.this.decompressorExecutor.submit(this);
         }
@@ -197,14 +164,14 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             this.rawFile = file;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             TextureCache.this.memoryAwareExecutor.cancelRequest(this);
             LoaderExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             if (getParams().textureClass() == TextureClass.Prim) {
                 TextureCache.this.memoryAwareExecutor.queueRequest(this);
@@ -213,7 +180,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new OpenJPEG(this.rawFile.getAbsoluteFile(), getParams().textureClass(), OpenJPEG.ImageFormat.Raw, true));
@@ -224,13 +191,12 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             TextureCache.this.memoryAwareExecutor.completeRequest(this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.executors.Startable
+        @Override
         public void start() {
             LoaderExecutor.getInstance().execute(this);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean canBeLowQuality(DrawableTextureParams drawableTextureParams) {
         return drawableTextureParams.textureClass() == TextureClass.Prim;
     }
@@ -311,17 +277,17 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
         }
     }
 
-    public void setFetcher(SLTextureFetcher sLTextureFetcher) {
-        this.textureCompressedCache.setFetcher(sLTextureFetcher);
+    public void setFetcher(SLTextureFetcher textureFetcher) {
+        this.textureCompressedCache.setFetcher(textureFetcher);
     }
 
-    public void setMaxTextureDownloads(int i) {
-        this.textureCompressedCache.setMaxTextureDownloads(i);
+    public void setMaxTextureDownloads(int maxTextureDownloads) {
+        this.textureCompressedCache.setMaxTextureDownloads(maxTextureDownloads);
     }
 
-    public void setTextureMemoryState(boolean z) {
-        if (this.isLowMemory.getAndSet(z) != z) {
-            if (z) {
+    public void setTextureMemoryState(boolean textureMemoryState) {
+        if (this.isLowMemory.getAndSet(textureMemoryState) != textureMemoryState) {
+            if (textureMemoryState) {
                 this.memoryAwareExecutor.pause();
             } else {
                 this.memoryAwareExecutor.unpause();

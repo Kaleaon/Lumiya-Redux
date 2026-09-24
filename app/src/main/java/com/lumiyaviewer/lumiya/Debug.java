@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya;
 import android.util.Log;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class Debug {
     private static final String LOG_TAG = "Lumiya";
 
@@ -16,10 +15,10 @@ public class Debug {
     public static void DumpBuffer(String str, ByteBuffer byteBuffer) {
     }
 
-    public static void DumpBuffer(String str, byte[] bArr) {
+    public static void DumpBuffer(String str, byte[] bytes) {
     }
 
-    public static void DumpBuffer(String str, byte[] bArr, int i) {
+    public static void DumpBuffer(String str, byte[] bytes, int i) {
     }
 
     public static void Log(String str) {

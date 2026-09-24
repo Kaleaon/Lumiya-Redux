@@ -19,17 +19,16 @@ import java.util.Iterator;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelable {
-    public static final Parcelable.Creator<SLInventoryEntry> CREATOR = new Parcelable.Creator<SLInventoryEntry>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry.1
+    public static final Parcelable.Creator<SLInventoryEntry> CREATOR = new Parcelable.Creator<SLInventoryEntry>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLInventoryEntry createFromParcel(Parcel parcel) {
             return new SLInventoryEntry(parcel, (SLInventoryEntry) null);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLInventoryEntry[] newArray(int i) {
             return new SLInventoryEntry[i];
         }
@@ -96,76 +95,76 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         super(cursor);
     }
 
-    public SLInventoryEntry(SQLiteDatabase sQLiteDatabase, long j) throws DBObject.DatabaseBindingException {
-        super(sQLiteDatabase, j);
+    public SLInventoryEntry(SQLiteDatabase sqLiteDatabase, long j) throws DBObject.DatabaseBindingException {
+        super(sqLiteDatabase, j);
     }
 
     private SLInventoryEntry(Parcel parcel) {
         super(parcel);
     }
 
-    /* synthetic */ SLInventoryEntry(Parcel parcel, SLInventoryEntry sLInventoryEntry) {
+    /* synthetic */ SLInventoryEntry(Parcel parcel, SLInventoryEntry inventoryEntry) {
         this(parcel);
     }
 
-    public SLInventoryEntry(DBHandle dBHandle, long j) throws DBObject.DatabaseBindingException {
-        super(dBHandle != null ? dBHandle.getDB() : null, j);
+    public SLInventoryEntry(DBHandle dbHandle, long j) throws DBObject.DatabaseBindingException {
+        super(dbHandle != null ? dbHandle.getDB() : null, j);
     }
 
-    public static SLInventoryEntry find(SQLiteDatabase sQLiteDatabase, UUID uuid) {
+    public static SLInventoryEntry find(SQLiteDatabase sqLiteDatabase, UUID uuid) {
         try {
-            Cursor query = sQLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
+            Cursor query = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
             if (!query.moveToFirst()) {
                 query.close();
                 return null;
             }
-            SLInventoryEntry sLInventoryEntry = new SLInventoryEntry(query);
+            SLInventoryEntry inventoryEntry = new SLInventoryEntry(query);
             query.close();
-            return sLInventoryEntry;
+            return inventoryEntry;
         } catch (SQLiteException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static SLInventoryEntry findOrCreate(SQLiteDatabase sQLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public static SLInventoryEntry findOrCreate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DBObject.DatabaseBindingException(SLInventoryEntry.class, "database is null");
         }
         if (uuid == null) {
             throw new DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null");
         }
-        Cursor query = sQLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
+        Cursor query = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
         if (query.moveToFirst()) {
-            SLInventoryEntry sLInventoryEntry = new SLInventoryEntry(query);
+            SLInventoryEntry inventoryEntry = new SLInventoryEntry(query);
             query.close();
-            return sLInventoryEntry;
+            return inventoryEntry;
         }
         query.close();
-        SLInventoryEntry sLInventoryEntry2 = new SLInventoryEntry();
-        sLInventoryEntry2.uuid = uuid;
-        return sLInventoryEntry2;
+        SLInventoryEntry inventoryEntry2 = new SLInventoryEntry();
+        inventoryEntry2.uuid = uuid;
+        return inventoryEntry2;
     }
 
-    public static SLInventoryEntry findOrCreateForUpdate(SQLiteDatabase sQLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public static SLInventoryEntry findOrCreateForUpdate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DBObject.DatabaseBindingException(SLInventoryEntry.class, "database is null");
         }
         if (uuid == null) {
             throw new DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null");
         }
-        Cursor query = sQLiteDatabase.query(InventoryEntryDBObject.tableName, new String[]{"_id"}, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
+        Cursor query = sqLiteDatabase.query(InventoryEntryDBObject.tableName, new String[]{"_id"}, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null);
         if (!query.moveToFirst()) {
             query.close();
-            SLInventoryEntry sLInventoryEntry = new SLInventoryEntry();
-            sLInventoryEntry.uuid = uuid;
-            return sLInventoryEntry;
+            SLInventoryEntry inventoryEntry = new SLInventoryEntry();
+            inventoryEntry.uuid = uuid;
+            return inventoryEntry;
         }
-        SLInventoryEntry sLInventoryEntry2 = new SLInventoryEntry();
-        sLInventoryEntry2._id = query.getLong(0);
-        sLInventoryEntry2.uuid = uuid;
+        SLInventoryEntry inventoryEntry2 = new SLInventoryEntry();
+        inventoryEntry2._id = query.getLong(0);
+        inventoryEntry2.uuid = uuid;
         query.close();
-        return sLInventoryEntry2;
+        return inventoryEntry2;
     }
 
     private static int getDrawableResourceForType(int i) {
@@ -210,15 +209,15 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         }
     }
 
-    public static SQLiteStatement getInsertStatement(SQLiteDatabase sQLiteDatabase) throws DBObject.DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public static SQLiteStatement getInsertStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DBObject.DatabaseBindingException("Database is closed");
         }
-        if (!sQLiteDatabase.isOpen()) {
+        if (!sqLiteDatabase.isOpen()) {
             throw new DBObject.DatabaseBindingException("Database is closed");
         }
         try {
-            return sQLiteDatabase.compileStatement(InventoryEntryDBObject.insertQuery);
+            return sqLiteDatabase.compileStatement(InventoryEntryDBObject.insertQuery);
         } catch (SQLiteException e) {
             DBObject.DatabaseBindingException databaseBindingException = new DBObject.DatabaseBindingException(e.getMessage());
             databaseBindingException.initCause(e);
@@ -226,15 +225,15 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         }
     }
 
-    public static SQLiteStatement getUpdateStatement(SQLiteDatabase sQLiteDatabase) throws DBObject.DatabaseBindingException {
-        if (sQLiteDatabase == null) {
+    public static SQLiteStatement getUpdateStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
+        if (sqLiteDatabase == null) {
             throw new DBObject.DatabaseBindingException("Database is closed");
         }
-        if (!sQLiteDatabase.isOpen()) {
+        if (!sqLiteDatabase.isOpen()) {
             throw new DBObject.DatabaseBindingException("Database is closed");
         }
         try {
-            return sQLiteDatabase.compileStatement("UPDATE Entries SET parent_id=?,uuid_high=?,uuid_low=?,parentUUID_high=?,parentUUID_low=?,name=?,isFolder=?,typeDefault=?,version=?,sessionID_high=?,sessionID_low=?,fetchFailed=?,description=?,flags=?,invType=?,assetType=?,creationDate=?,_blobField=? WHERE uuid_high = ? AND uuid_low = ?");
+            return sqLiteDatabase.compileStatement("UPDATE Entries SET parent_id=?,uuid_high=?,uuid_low=?,parentUUID_high=?,parentUUID_low=?,name=?,isFolder=?,typeDefault=?,version=?,sessionID_high=?,sessionID_low=?,fetchFailed=?,description=?,flags=?,invType=?,assetType=?,creationDate=?,_blobField=? WHERE uuid_high = ? AND uuid_low = ?");
         } catch (SQLiteException e) {
             DBObject.DatabaseBindingException databaseBindingException = new DBObject.DatabaseBindingException(e.getMessage());
             databaseBindingException.initCause(e);
@@ -242,7 +241,7 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         }
     }
 
-    private static void parsePermissions(SimpleStringParser simpleStringParser, SLInventoryEntry sLInventoryEntry) throws SimpleStringParser.StringParsingException {
+    private static void parsePermissions(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
         simpleStringParser.expectToken("{", DELIM_EOL);
         while (true) {
             String nextToken = simpleStringParser.nextToken(DELIM_ANY);
@@ -250,30 +249,30 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
                 return;
             }
             if (nextToken.equals("base_mask")) {
-                sLInventoryEntry.baseMask = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.baseMask = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("owner_mask")) {
-                sLInventoryEntry.ownerMask = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.ownerMask = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("group_mask")) {
-                sLInventoryEntry.groupMask = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.groupMask = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("everyone_mask")) {
-                sLInventoryEntry.everyoneMask = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.everyoneMask = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("next_owner_mask")) {
-                sLInventoryEntry.nextOwnerMask = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.nextOwnerMask = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("creator_id")) {
-                sLInventoryEntry.creatorUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.creatorUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("owner_id")) {
-                sLInventoryEntry.ownerUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.ownerUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("last_owner_id")) {
-                sLInventoryEntry.lastOwnerUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.lastOwnerUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("group_id")) {
-                sLInventoryEntry.groupUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.groupUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else {
                 simpleStringParser.nextToken(DELIM_EOL);
             }
         }
     }
 
-    private static void parseSaleInfo(SimpleStringParser simpleStringParser, SLInventoryEntry sLInventoryEntry) throws SimpleStringParser.StringParsingException {
+    private static void parseSaleInfo(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
         simpleStringParser.expectToken("{", DELIM_EOL);
         while (true) {
             String nextToken = simpleStringParser.nextToken(DELIM_ANY);
@@ -281,9 +280,9 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
                 return;
             }
             if (nextToken.equals("sale_type")) {
-                sLInventoryEntry.saleType = SLSaleType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
+                inventoryEntry.saleType = SLSaleType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
             } else if (nextToken.equals("sale_price")) {
-                sLInventoryEntry.salePrice = simpleStringParser.getIntToken(DELIM_EOL);
+                inventoryEntry.salePrice = simpleStringParser.getIntToken(DELIM_EOL);
             } else {
                 simpleStringParser.nextToken(DELIM_EOL);
             }
@@ -291,61 +290,61 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
     }
 
     public static SLInventoryEntry parseString(SimpleStringParser simpleStringParser) throws SimpleStringParser.StringParsingException {
-        SLInventoryEntry sLInventoryEntry = new SLInventoryEntry();
+        SLInventoryEntry inventoryEntry = new SLInventoryEntry();
         simpleStringParser.expectToken("{", DELIM_EOL);
         while (true) {
             String nextToken = simpleStringParser.nextToken(DELIM_ANY);
             if (nextToken.equals("}")) {
-                return sLInventoryEntry;
+                return inventoryEntry;
             }
             if (nextToken.equals("item_id")) {
-                sLInventoryEntry.uuid = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.uuid = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("parent_id")) {
-                sLInventoryEntry.parentUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.parentUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("asset_id")) {
-                sLInventoryEntry.assetUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
+                inventoryEntry.assetUUID = UUID.fromString(simpleStringParser.nextToken(DELIM_EOL));
             } else if (nextToken.equals("type")) {
-                sLInventoryEntry.assetType = SLAssetType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
+                inventoryEntry.assetType = SLAssetType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
             } else if (nextToken.equals("inv_type")) {
-                sLInventoryEntry.invType = SLInventoryType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
+                inventoryEntry.invType = SLInventoryType.getByString(simpleStringParser.nextToken(DELIM_EOL)).getTypeCode();
             } else if (nextToken.equals("flags")) {
-                sLInventoryEntry.flags = simpleStringParser.getHexToken(DELIM_EOL);
+                inventoryEntry.flags = simpleStringParser.getHexToken(DELIM_EOL);
             } else if (nextToken.equals("name")) {
-                sLInventoryEntry.name = simpleStringParser.getPipeTerminatedString(DELIM_EOL);
+                inventoryEntry.name = simpleStringParser.getPipeTerminatedString(DELIM_EOL);
             } else if (nextToken.equals("desc")) {
-                sLInventoryEntry.description = simpleStringParser.getPipeTerminatedString(DELIM_EOL);
+                inventoryEntry.description = simpleStringParser.getPipeTerminatedString(DELIM_EOL);
             } else if (nextToken.equals("creation_date")) {
-                sLInventoryEntry.creationDate = simpleStringParser.getIntToken(DELIM_EOL);
+                inventoryEntry.creationDate = simpleStringParser.getIntToken(DELIM_EOL);
             } else if (nextToken.equals("permissions")) {
                 simpleStringParser.nextToken(DELIM_EOL);
-                parsePermissions(simpleStringParser, sLInventoryEntry);
+                parsePermissions(simpleStringParser, inventoryEntry);
             } else if (nextToken.equals("sale_info")) {
                 simpleStringParser.nextToken(DELIM_EOL);
-                parseSaleInfo(simpleStringParser, sLInventoryEntry);
+                parseSaleInfo(simpleStringParser, inventoryEntry);
             } else {
                 simpleStringParser.nextToken(DELIM_EOL);
             }
         }
     }
 
-    public static Cursor query(SQLiteDatabase sQLiteDatabase, String str, String[] strArr, String str2) {
-        if (sQLiteDatabase == null) {
+    public static Cursor query(SQLiteDatabase sqLiteDatabase, String str, String[] strArr, String str2) {
+        if (sqLiteDatabase == null) {
             return null;
         }
         try {
-            return InventoryEntryDBObject.query(sQLiteDatabase, str, strArr, str2);
+            return InventoryEntryDBObject.query(sqLiteDatabase, str, strArr, str2);
         } catch (DBObject.DatabaseBindingException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static Cursor query(DBHandle dBHandle, String str, String[] strArr, String str2) {
-        if (dBHandle == null) {
+    public static Cursor query(DBHandle dbHandle, String str, String[] strArr, String str2) {
+        if (dbHandle == null) {
             return null;
         }
         try {
-            return InventoryEntryDBObject.query(dBHandle, str, strArr, str2);
+            return InventoryEntryDBObject.query(dbHandle, str, strArr, str2);
         } catch (DBObject.DatabaseBindingException e) {
             e.printStackTrace();
             return null;
@@ -507,15 +506,15 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         return this.assetType == SLAssetType.AT_LINK.getTypeCode() && this.invType == SLInventoryType.IT_WEARABLE.getTypeCode();
     }
 
-    public void updateOrInsert(SQLiteDatabase sQLiteDatabase) throws DBObject.DatabaseBindingException {
-        super.updateOrInsert(sQLiteDatabase, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())});
+    public void updateOrInsert(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
+        super.updateOrInsert(sqLiteDatabase, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())});
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
-    public void updateOrInsert(SQLiteStatement sQLiteStatement, SQLiteStatement sQLiteStatement2) throws DBObject.DatabaseBindingException {
-        sQLiteStatement.bindLong(19, this.uuid.getMostSignificantBits());
-        sQLiteStatement.bindLong(20, this.uuid.getLeastSignificantBits());
-        super.updateOrInsert(sQLiteStatement, sQLiteStatement2);
+    @Override
+    public void updateOrInsert(SQLiteStatement sqLiteStatement, SQLiteStatement sqLiteStatement2) throws DBObject.DatabaseBindingException {
+        sqLiteStatement.bindLong(19, this.uuid.getMostSignificantBits());
+        sqLiteStatement.bindLong(20, this.uuid.getLeastSignificantBits());
+        super.updateOrInsert(sqLiteStatement, sqLiteStatement2);
     }
 
     public Object whatIsItemWornOn(@Nullable ImmutableMap<UUID, String> immutableMap, @Nullable Table<SLWearableType, UUID, SLWearable> table, boolean z) {
@@ -525,15 +524,15 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
                     Iterator<?> it = table.cellSet().iterator();
                     while (it.hasNext()) {
                         Table.Cell cell = (Table.Cell) it.next();
-                        SLWearableType sLWearableType = (SLWearableType) cell.getRowKey();
+                        SLWearableType rowKey = (SLWearableType) cell.getRowKey();
                         UUID uuid = (UUID) cell.getColumnKey();
-                        if (sLWearableType != null && uuid != null && (!z || sLWearableType.isBodyPart())) {
+                        if (rowKey != null && uuid != null && (!z || rowKey.isBodyPart())) {
                             if (uuid.equals(this.assetUUID)) {
-                                return sLWearableType;
+                                return rowKey;
                             }
-                            SLWearable sLWearable = (SLWearable) cell.getValue();
-                            if (sLWearable != null && sLWearable.itemID.equals(this.assetUUID)) {
-                                return sLWearableType;
+                            SLWearable wearable = (SLWearable) cell.getValue();
+                            if (wearable != null && wearable.itemID.equals(this.assetUUID)) {
+                                return rowKey;
                             }
                         }
                     }

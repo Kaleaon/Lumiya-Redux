@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IPerformanceService extends IInterface {
 
     public static abstract class Stub extends Binder implements IPerformanceService {
@@ -17,26 +16,26 @@ public interface IPerformanceService extends IInterface {
         private static class Proxy implements IPerformanceService {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.performance.api.IPerformanceService
+            @Override
             public float getCurrentThrottlingRelativeTemperature() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readFloat();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readFloat();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -45,7 +44,7 @@ public interface IPerformanceService extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.performance.api.IPerformanceService
+            @Override
             public void reportFrameDrops(long j, long j2, int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -72,12 +71,12 @@ public interface IPerformanceService extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IPerformanceService)) ? (IPerformanceService) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

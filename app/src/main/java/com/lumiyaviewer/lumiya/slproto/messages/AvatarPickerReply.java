@@ -1,27 +1,36 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPickerReply
+ * List of names to select a person
+ * reliable
+ *
+ * <p>Template: {@code AvatarPickerReply Low 28 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLFloaterAvatarPicker::processAvatarPickerReply()} in indra/newview/llfloateravatarpicker.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarPickerReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID QueryID;
+        public UUID AgentID; // LLUUID
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public UUID AvatarID;
-        public byte[] FirstName;
-        public byte[] LastName;
+        public UUID AvatarID; // LLUUID
+        public byte[] FirstName; // Variable 1
+        public byte[] LastName; // Variable 1
     }
 
     public AvatarPickerReply() {
@@ -29,7 +38,7 @@ public class AvatarPickerReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -43,16 +52,17 @@ public class AvatarPickerReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPickerReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPickerReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.FS);
+        // Message number: Low 28 (AvatarPickerReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x1C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.QueryID);
         byteBuffer.put((byte) this.Data_Fields.size());
@@ -63,12 +73,12 @@ public class AvatarPickerReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.QueryID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.AvatarID = unpackUUID(byteBuffer);
             data.FirstName = unpackVariable(byteBuffer, 1);

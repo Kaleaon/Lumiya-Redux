@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class DBHandleCache {
     private final Map<String, DBOpenRef> fileMap;
     private final Map<PhantomReference<DBHandle>, DBOpenRef> refMap;
@@ -25,9 +24,9 @@ public class DBHandleCache {
         private int handleCount = 0;
         private final SQLiteDatabase sqliteDB;
 
-        public DBOpenRef(String str, SQLiteDatabase sQLiteDatabase) {
-            this.fileName = str;
-            this.sqliteDB = sQLiteDatabase;
+        public DBOpenRef(String fileName, SQLiteDatabase sqLiteDatabase) {
+            this.fileName = fileName;
+            this.sqliteDB = sqLiteDatabase;
         }
 
         public final void acquireReference() {
@@ -62,7 +61,7 @@ public class DBHandleCache {
         Debug.Printf("DBHandleCache: Initialized.", new Object[0]);
     }
 
-    /* synthetic */ DBHandleCache(DBHandleCache dBHandleCache) {
+    /* synthetic */ DBHandleCache(DBHandleCache dbHandleCache) {
         this();
     }
 
@@ -92,18 +91,18 @@ public class DBHandleCache {
         }
     }
 
-    public synchronized DBHandle OpenDB(String str, DBOpenHelper dBOpenHelper) throws SQLiteException {
-        DBHandle dBHandle;
-        DBOpenRef dBOpenRef = this.fileMap.get(str);
-        if (dBOpenRef == null) {
+    public synchronized DBHandle OpenDB(String str, DBOpenHelper dbOpenHelper) throws SQLiteException {
+        DBHandle dbHandle;
+        DBOpenRef dbOpenRef = this.fileMap.get(str);
+        if (dbOpenRef == null) {
             Debug.Printf("DBHandle: Opening db '%s'", str);
-            dBOpenRef = new DBOpenRef(str, dBOpenHelper.openOrCreateDatabase(str));
-            this.fileMap.put(str, dBOpenRef);
+            dbOpenRef = new DBOpenRef(str, dbOpenHelper.openOrCreateDatabase(str));
+            this.fileMap.put(str, dbOpenRef);
         }
-        dBHandle = new DBHandle(dBOpenRef.getDB());
-        dBOpenRef.acquireReference();
-        this.refMap.put(new PhantomReference<>(dBHandle, this.refQueue), dBOpenRef);
-        return dBHandle;
+        dbHandle = new DBHandle(dbOpenRef.getDB());
+        dbOpenRef.acquireReference();
+        this.refMap.put(new PhantomReference<>(dbHandle, this.refQueue), dbOpenRef);
+        return dbHandle;
     }
 
     public synchronized boolean hasOpenHandles() {

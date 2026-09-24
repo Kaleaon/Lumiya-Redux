@@ -39,7 +39,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UnreadNotificationManager implements ChatterNameRetriever.OnChatterNameUpdated {
     private static final long FRESH_MESSAGES_NOTIFICATION_INTERVAL = 3000;
     private static final int MASK_ENABLED_ALL = 7;
@@ -72,15 +71,15 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
 
     @Nullable
     private WeakReference<NotifyCapture> notifyCapture = null;
-    private final Runnable updateChatterDataRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationManager.1
-        @Override // java.lang.Runnable
+    private final Runnable updateChatterDataRunnable = new Runnable() {
+        @Override
         public void run() {
             UnreadNotificationManager.this.updateUnreadChatterData();
             UnreadNotificationManager.this.updateExecutor.execute(UnreadNotificationManager.this.updateNotificationDataRunnable);
         }
     };
-    private final Runnable updateNotificationDataRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationManager.2
-        @Override // java.lang.Runnable
+    private final Runnable updateNotificationDataRunnable = new Runnable() {
+        @Override
         public void run() {
             UnreadNotificationManager.this.unreadNotificationInfoPool.onResultData(UnreadNotificationManager.unreadNotificationKey, UnreadNotificationManager.this.getUnreadNotification());
         }
@@ -98,8 +97,8 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         this.chatMessageDao = daoSession.getChatMessageDao();
         this.updateExecutor = userManager.getDatabaseRunOnceExecutor();
         this.emptyNotification = UnreadNotificationInfo.create(userManager.getUserID(), 0, null, null, 0, null, null, UnreadNotificationInfo.ObjectPopupNotification.create(0, 0, null));
-        this.unreadNotificationInfoPool.attachRequestHandler(new SimpleRequestHandler<Boolean>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationManager.3
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.unreadNotificationInfoPool.attachRequestHandler(new SimpleRequestHandler<Boolean>() {
+            @Override
             public void onRequest(@Nonnull Boolean bool) {
                 UnreadNotificationManager.this.updateExecutor.execute(UnreadNotificationManager.this.updateChatterDataRunnable);
             }
@@ -108,7 +107,6 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         EventBus.getInstance().subscribe(this);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nonnull
     public UnreadNotifications getUnreadNotification() {
         int i;
@@ -222,9 +220,9 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
                     if (unreadMessagesCount > i7) {
                         unreadMessagesCount = i7;
                     }
-                    Iterator<?> it2 = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
-                    while (it2.hasNext()) {
-                        SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject((ChatMessage) it2.next(), this.userManager.getUserID());
+                    Iterator<?> iterator = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
+                    while (iterator.hasNext()) {
+                        SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject((ChatMessage) iterator.next(), this.userManager.getUserID());
                         if (loadFromDatabaseObject != null) {
                             linkedList.add(0, loadFromDatabaseObject);
                         }
@@ -256,8 +254,8 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         return UnreadNotifications.create(this.userManager.getUserID(), builder.build());
     }
 
-    private void setEnabledMask(int i) {
-        if (this.maskEnabled.getAndSet(i) != i) {
+    private void setEnabledMask(int enabledMask) {
+        if (this.maskEnabled.getAndSet(enabledMask) != enabledMask) {
             updateUnreadNotifications();
         }
     }
@@ -278,7 +276,6 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         setEnabledMask(i);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateUnreadChatterData() {
         int i = this.maskEnabled.get();
         if (i == 0) {
@@ -337,12 +334,12 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         this.totalUnreadCount.set(i3);
         this.totalSourcesCount.set(i2);
         this.mostImportantNotificationType.set(notificationType);
-        Iterator<Map.Entry<Long, ChatterNameRetriever>> it2 = this.chatterSources.entrySet().iterator();
-        while (it2.hasNext()) {
-            Map.Entry<Long, ChatterNameRetriever> next = it2.next();
+        Iterator<Map.Entry<Long, ChatterNameRetriever>> iterator = this.chatterSources.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Long, ChatterNameRetriever> next = iterator.next();
             if (hashSet == null || (!hashSet.contains(next.getKey()))) {
                 next.getValue().dispose();
-                it2.remove();
+                iterator.remove();
             }
         }
     }
@@ -406,7 +403,7 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         return this.unreadNotificationInfoPool;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         this.updateExecutor.execute(this.updateNotificationDataRunnable);
     }

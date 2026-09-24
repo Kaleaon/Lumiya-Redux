@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.settings;
 
 import com.google.common.collect.ImmutableList;
 
-/* loaded from: classes.dex */
 public enum NotificationType {
     LocalChat(0, "notify_local_chat", "enableNotifyLocalChat", "soundOnLocalChat", "notifySoundLocalChat", "notifyLEDchatIMs", "notifyLEDColorChatIMs"),
     Private(2, "notify_private_im", "enableNotifyPrivateIM", "soundOnPrivateIM", "notifySoundPrivateIM", "notifyLEDprivateIMs", "notifyLEDColorPrivateIMs"),
@@ -18,14 +17,14 @@ public enum NotificationType {
     public static ImmutableList<NotificationType> VALUES = ImmutableList.copyOf(valuesCustom());
     public static ImmutableList<NotificationType> VALUES_BY_DESCENDING_PRIORITY = ImmutableList.of(Private, Group, LocalChat);
 
-    NotificationType(int i, String str, String str2, String str3, String str4, String str5, String str6) {
-        this.priority = i;
-        this.prefScreenKey = str;
-        this.enableKey = str2;
-        this.playSoundKey = str3;
-        this.ringtoneKey = str4;
-        this.blinkKey = str5;
-        this.blinkColorKey = str6;
+    NotificationType(int priority, String prefScreenKey, String enableKey, String playSoundKey, String ringtoneKey, String blinkKey, String blinkColorKey) {
+        this.priority = priority;
+        this.prefScreenKey = prefScreenKey;
+        this.enableKey = enableKey;
+        this.playSoundKey = playSoundKey;
+        this.ringtoneKey = ringtoneKey;
+        this.blinkKey = blinkKey;
+        this.blinkColorKey = blinkColorKey;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

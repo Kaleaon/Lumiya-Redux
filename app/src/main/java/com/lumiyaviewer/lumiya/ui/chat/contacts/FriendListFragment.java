@@ -7,9 +7,8 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.ChatterListType;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.common.UserListFragment;
 
-/* loaded from: classes.dex */
 public class FriendListFragment extends UserListFragment {
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserListFragment
+    @Override
     protected ListAdapter createListAdapter(Context context, LoaderManager loaderManager, UserManager userManager) {
         return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Friends);
     }

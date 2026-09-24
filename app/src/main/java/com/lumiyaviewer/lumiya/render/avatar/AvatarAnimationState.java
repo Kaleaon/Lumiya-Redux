@@ -8,7 +8,6 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarAnimationState implements ResourceConsumer {
     private volatile AnimationData animationData;
 
@@ -70,7 +69,7 @@ public class AvatarAnimationState implements ResourceConsumer {
         AnimationCache.getInstance().RequestResource(animationSequenceInfo.animationID, this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         if (!(obj instanceof AnimationData)) {
             if (obj == null) {

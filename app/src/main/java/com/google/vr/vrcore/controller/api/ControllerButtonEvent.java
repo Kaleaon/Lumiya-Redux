@@ -3,7 +3,6 @@ package com.google.vr.vrcore.controller.api;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/* loaded from: classes.dex */
 public final class ControllerButtonEvent extends ControllerEvent {
     public static final int BUTTON_APP = 3;
     public static final int BUTTON_CLICK = 1;
@@ -12,15 +11,15 @@ public final class ControllerButtonEvent extends ControllerEvent {
     public static final int BUTTON_NONE = 0;
     public static final int BUTTON_VOLUME_DOWN = 6;
     public static final int BUTTON_VOLUME_UP = 5;
-    public static final Parcelable.Creator<ControllerButtonEvent> CREATOR = new Parcelable.Creator<ControllerButtonEvent>() { // from class: com.google.vr.vrcore.controller.api.ControllerButtonEvent.1
+    public static final Parcelable.Creator<ControllerButtonEvent> CREATOR = new Parcelable.Creator<ControllerButtonEvent>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerButtonEvent createFromParcel(Parcel parcel) {
             return new ControllerButtonEvent(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerButtonEvent[] newArray(int i) {
             return new ControllerButtonEvent[i];
         }
@@ -55,7 +54,7 @@ public final class ControllerButtonEvent extends ControllerEvent {
         }
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEvent
+    @Override
     public final void copyFrom(ControllerEvent controllerEvent) {
         if (!(controllerEvent instanceof ControllerButtonEvent)) {
             throw new IllegalStateException("Cannot copy ControllerButtonEvent from non-ControllerButtonEvent instance.");
@@ -66,24 +65,24 @@ public final class ControllerButtonEvent extends ControllerEvent {
         this.down = controllerButtonEvent.down;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public final int describeContents() {
         return 0;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEvent
+    @Override
     public final int getByteSize() {
         return super.getByteSize() + 8;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEvent
+    @Override
     public final void readFromParcel(Parcel parcel) {
         super.readFromParcel(parcel);
         this.button = parcel.readInt();
         this.down = parcel.readInt() != 0;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEvent, android.os.Parcelable
+    @Override
     public final void writeToParcel(Parcel parcel, int i) {
         super.writeToParcel(parcel, i);
         parcel.writeInt(this.button);

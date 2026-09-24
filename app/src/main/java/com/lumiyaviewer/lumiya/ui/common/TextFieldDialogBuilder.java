@@ -7,7 +7,6 @@ import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-/* loaded from: classes.dex */
 public class TextFieldDialogBuilder {
     private final Context context;
     private String title = null;
@@ -43,8 +42,8 @@ public class TextFieldDialogBuilder {
         }
     }
 
-    public TextFieldDialogBuilder setDefaultText(String str) {
-        this.defaultText = str;
+    public TextFieldDialogBuilder setDefaultText(String defaultText) {
+        this.defaultText = defaultText;
         return this;
     }
 
@@ -58,8 +57,8 @@ public class TextFieldDialogBuilder {
         return this;
     }
 
-    public TextFieldDialogBuilder setTitle(String str) {
-        this.title = str;
+    public TextFieldDialogBuilder setTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -70,29 +69,29 @@ public class TextFieldDialogBuilder {
         editText.setText(this.defaultText);
         editText.setSingleLine(true);
         FrameLayout frameLayout = new FrameLayout(this.context);
-        int applyDimension = (int) TypedValue.applyDimension(1, 10.0f, this.context.getResources().getDisplayMetrics());
+        int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, this.context.getResources().getDisplayMetrics());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-1, -2);
         layoutParams.leftMargin = applyDimension;
         layoutParams.rightMargin = applyDimension;
         editText.setLayoutParams(layoutParams);
         frameLayout.addView(editText);
         builder.setView(frameLayout);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$PTYOAfnVIwPVEdUoAgskdOeAqDw
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TextFieldDialogBuilder.this.m559x76be5af0(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
         });
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$PTYOAfnVIwPVEdUoAgskdOeAqDw.1
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TextFieldDialogBuilder.this.m560x76be6297((EditText) editText, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }

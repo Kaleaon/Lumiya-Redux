@@ -5,17 +5,16 @@ import android.os.Parcelable;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class AvatarPickKey implements Parcelable {
-    public static final Parcelable.Creator<AvatarPickKey> CREATOR = new Parcelable.Creator<AvatarPickKey>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.AvatarPickKey.1
+    public static final Parcelable.Creator<AvatarPickKey> CREATOR = new Parcelable.Creator<AvatarPickKey>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public AvatarPickKey createFromParcel(Parcel parcel) {
             return new AvatarPickKey(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public AvatarPickKey[] newArray(int i) {
             return new AvatarPickKey[i];
         }
@@ -32,12 +31,12 @@ public class AvatarPickKey implements Parcelable {
         this.pickID = UUID.fromString(parcel.readString());
     }
 
-    public AvatarPickKey(@Nonnull UUID uuid, @Nonnull UUID uuid2) {
+    public AvatarPickKey(@Nonnull UUID uuid, @Nonnull UUID pickID) {
         this.avatarID = uuid;
-        this.pickID = uuid2;
+        this.pickID = pickID;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -64,7 +63,7 @@ public class AvatarPickKey implements Parcelable {
         return "AvatarPicksKey{avatarID=" + this.avatarID + ", pickID=" + this.pickID + '}';
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(this.avatarID.toString());
         parcel.writeString(this.pickID.toString());

@@ -5,29 +5,41 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * PickInfoReply
+ * dataserver -> simulator
+ * simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code PickInfoReply Low 184 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processPickInfoReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class PickInfoReply extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public UUID CreatorID;
-        public byte[] Desc;
-        public boolean Enabled;
-        public byte[] Name;
-        public byte[] OriginalName;
-        public UUID ParcelID;
-        public UUID PickID;
-        public LLVector3d PosGlobal;
-        public byte[] SimName;
-        public UUID SnapshotID;
-        public int SortOrder;
-        public boolean TopPick;
-        public byte[] User;
+        public UUID CreatorID; // LLUUID
+        public byte[] Desc; // Variable 2
+        public boolean Enabled; // BOOL
+        public byte[] Name; // Variable 1
+        public byte[] OriginalName; // Variable 1
+        public UUID ParcelID; // LLUUID
+        public UUID PickID; // LLUUID
+        public LLVector3d PosGlobal; // LLVector3d
+        public byte[] SimName; // Variable 1
+        public UUID SnapshotID; // LLUUID
+        public int SortOrder; // S32
+        public boolean TopPick; // BOOL
+        public byte[] User; // Variable 1
     }
 
     public PickInfoReply() {
@@ -36,21 +48,22 @@ public class PickInfoReply extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.Name.length + 50 + 2 + this.Data_Field.Desc.length + 16 + 1 + this.Data_Field.User.length + 1 + this.Data_Field.OriginalName.length + 1 + this.Data_Field.SimName.length + 24 + 4 + 1 + 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickInfoReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickInfoReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -72);
+        // Message number: Low 184 (PickInfoReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xB8);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.Data_Field.PickID);
         packUUID(byteBuffer, this.Data_Field.CreatorID);
@@ -67,7 +80,7 @@ public class PickInfoReply extends SLMessage {
         packBoolean(byteBuffer, this.Data_Field.Enabled);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.Data_Field.PickID = unpackUUID(byteBuffer);

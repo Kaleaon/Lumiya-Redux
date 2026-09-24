@@ -1,19 +1,18 @@
 package com.lumiyaviewer.lumiya.slproto;
 
-/* loaded from: classes.dex */
 public interface SLMessageEventListener {
 
     public static abstract class SLMessageBaseEventListener implements SLMessageEventListener {
-        @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
-        public void onMessageAcknowledged(SLMessage sLMessage) {
+        @Override
+        public void onMessageAcknowledged(SLMessage message) {
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
-        public void onMessageTimeout(SLMessage sLMessage) {
+        @Override
+        public void onMessageTimeout(SLMessage message) {
         }
     }
 
-    void onMessageAcknowledged(SLMessage sLMessage);
+    void onMessageAcknowledged(SLMessage message);
 
-    void onMessageTimeout(SLMessage sLMessage);
+    void onMessageTimeout(SLMessage message);
 }

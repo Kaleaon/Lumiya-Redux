@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/* loaded from: classes.dex */
 public class AudioManagerWrapper implements InvocationHandler {
     public static final int AUDIOFOCUS_GAIN = 1;
     public static final int AUDIOFOCUS_GAIN_TRANSIENT = 2;
@@ -46,16 +45,18 @@ public class AudioManagerWrapper implements InvocationHandler {
                 }
             }
             if (cls == null) {
-                throw new ReflectiveOperationException("Failed to get OnAudioFocusChangeListener interface");
+                throw new Exception("Failed to get OnAudioFocusChangeListener interface");
             }
             mRequestAudioFocus = AudioManager.class.getMethod("requestAudioFocus", cls, Integer.TYPE, Integer.TYPE);
             mAbandonAudioFocus = AudioManager.class.getMethod("abandonAudioFocus", cls);
             this.audioFocusHandler = Proxy.newProxyInstance(cls.getClassLoader(), new Class[]{cls}, this);
             this.hasAudioFocusAPI = true;
-        } catch (ReflectiveOperationException e) {
+        } catch (Exception e) {
+            // 3.4.2 falls back to no audio-focus handling on any failure here
+            // (hidden API missing, proxy creation refused, ...).
             this.hasAudioFocusAPI = false;
             Debug.Log("AudioManagerWrapper: audio focus api not found");
-            Debug.Warning(e);
+            e.printStackTrace();
         }
         Debug.Log("AudioManagerWrapper: has audio focus api = " + this.hasAudioFocusAPI);
     }
@@ -76,7 +77,7 @@ public class AudioManagerWrapper implements InvocationHandler {
         }
     }
 
-    @Override // java.lang.reflect.InvocationHandler
+    @Override
     public Object invoke(Object obj, Method method, Object[] objArr) throws Throwable {
         try {
             if (method.getName().equalsIgnoreCase("onAudioFocusChange") && objArr.length >= 1 && (objArr[0] instanceof Integer)) {
@@ -100,8 +101,8 @@ public class AudioManagerWrapper implements InvocationHandler {
         }
     }
 
-    public void setHandler(Handler handler, int i) {
+    public void setHandler(Handler handler, int msgCode) {
         this.mHandler = handler;
-        this.msgCode = i;
+        this.msgCode = msgCode;
     }
 }

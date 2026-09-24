@@ -5,35 +5,48 @@ import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RoutedMoneyBalanceReply
+ * This message is used when a dataserver needs to send updated
+ * money balance information to a simulator other than the one it
+ * is connected to.  It uses the standard TransferBlock format.
+ * dataserver -> simulator -> spaceserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code RoutedMoneyBalanceReply Low 315 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class RoutedMoneyBalanceReply extends SLMessage {
     public MoneyData MoneyData_Field;
     public TargetBlock TargetBlock_Field;
     public TransactionInfo TransactionInfo_Field;
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public UUID AgentID;
-        public byte[] Description;
-        public int MoneyBalance;
-        public int SquareMetersCommitted;
-        public int SquareMetersCredit;
-        public UUID TransactionID;
-        public boolean TransactionSuccess;
+        public UUID AgentID; // LLUUID
+        public byte[] Description; // Variable 1 - string
+        public int MoneyBalance; // S32
+        public int SquareMetersCommitted; // S32
+        public int SquareMetersCredit; // S32
+        public UUID TransactionID; // LLUUID
+        public boolean TransactionSuccess; // BOOL
     }
 
+    /** Block TargetBlock, Single. */
     public static class TargetBlock {
-        public Inet4Address TargetIP;
-        public int TargetPort;
+        public Inet4Address TargetIP; // IPADDR - U32 encoded IP
+        public int TargetPort; // IPPORT
     }
 
+    /** Block TransactionInfo, Single. */
     public static class TransactionInfo {
-        public int Amount;
-        public UUID DestID;
-        public boolean IsDestGroup;
-        public boolean IsSourceGroup;
-        public byte[] ItemDescription;
-        public UUID SourceID;
-        public int TransactionType;
+        public int Amount; // S32
+        public UUID DestID; // LLUUID
+        public boolean IsDestGroup; // BOOL
+        public boolean IsSourceGroup; // BOOL
+        public byte[] ItemDescription; // Variable 1 - string
+        public UUID SourceID; // LLUUID
+        public int TransactionType; // S32 - lltransactiontype.h
     }
 
     public RoutedMoneyBalanceReply() {
@@ -43,21 +56,22 @@ public class RoutedMoneyBalanceReply extends SLMessage {
         this.TransactionInfo_Field = new TransactionInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.MoneyData_Field.Description.length + 46 + 10 + this.TransactionInfo_Field.ItemDescription.length + 43;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRoutedMoneyBalanceReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRoutedMoneyBalanceReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 59);
+        // Message number: Low 315 (RoutedMoneyBalanceReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x3B);
         packIPAddress(byteBuffer, this.TargetBlock_Field.TargetIP);
         packShort(byteBuffer, (short) this.TargetBlock_Field.TargetPort);
         packUUID(byteBuffer, this.MoneyData_Field.AgentID);
@@ -76,7 +90,7 @@ public class RoutedMoneyBalanceReply extends SLMessage {
         packVariable(byteBuffer, this.TransactionInfo_Field.ItemDescription, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TargetBlock_Field.TargetIP = unpackIPAddress(byteBuffer);
         this.TargetBlock_Field.TargetPort = unpackShort(byteBuffer) & 65535;

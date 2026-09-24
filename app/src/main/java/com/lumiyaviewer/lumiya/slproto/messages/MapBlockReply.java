@@ -1,32 +1,40 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> viewer
+ *
+ * <p>Template: {@code MapBlockReply Low 409 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLWorldMapMessage::processMapBlockReply()} in indra/newview/llworldmapmessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class MapBlockReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
     public ArrayList<Size> Size_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int Flags;
+        public UUID AgentID; // LLUUID
+        public int Flags; // U32
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int Access;
-        public int Agents;
-        public UUID MapImageID;
-        public byte[] Name;
-        public int RegionFlags;
-        public int WaterHeight;
-        public int X;
-        public int Y;
+        public int Access; // U8 - PG, mature, etc.
+        public int Agents; // U8
+        public UUID MapImageID; // LLUUID
+        public byte[] Name; // Variable 1 - string
+        public int RegionFlags; // U32
+        public int WaterHeight; // U8 - meters
+        public int X; // U16 - in region-widths
+        public int Y; // U16 - in region-widths
     }
 
     public static class Size {
@@ -39,7 +47,7 @@ public class MapBlockReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 25;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -52,16 +60,17 @@ public class MapBlockReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapBlockReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapBlockReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -103);
+        // Message number: Low 409 (MapBlockReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x99);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
         byteBuffer.put((byte) this.Data_Fields.size());
@@ -82,25 +91,25 @@ public class MapBlockReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.Flags = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.X = unpackShort(byteBuffer) & 65535;
             data.Y = unpackShort(byteBuffer) & 65535;
             data.Name = unpackVariable(byteBuffer, 1);
-            data.Access = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            data.Access = unpackByte(byteBuffer) & 0xFF;
             data.RegionFlags = unpackInt(byteBuffer);
-            data.WaterHeight = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            data.Agents = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            data.WaterHeight = unpackByte(byteBuffer) & 0xFF;
+            data.Agents = unpackByte(byteBuffer) & 0xFF;
             data.MapImageID = unpackUUID(byteBuffer);
             this.Data_Fields.add(data);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i4 = 0; i4 < i3; i4++) {
+        int i3 = byteBuffer.get() & 0xFF;
+        for (int k = 0; k < i3; k++) {
             Size size = new Size();
             size.SizeX = unpackShort(byteBuffer) & 65535;
             size.SizeY = unpackShort(byteBuffer) & 65535;

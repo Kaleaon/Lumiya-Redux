@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GPUDetection {
     public static final String GPU_FAMILY_ADRENO = "Adreno";
     public static final String GPU_FAMILY_TEGRA = "Tegra";

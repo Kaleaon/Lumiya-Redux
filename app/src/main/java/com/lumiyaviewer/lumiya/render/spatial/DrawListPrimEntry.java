@@ -7,16 +7,15 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class DrawListPrimEntry extends DrawListObjectEntry {
     private volatile WeakReference<DrawableObject> drawableObject;
 
-    public DrawListPrimEntry(@Nonnull SLObjectInfo sLObjectInfo) {
-        super(sLObjectInfo);
+    public DrawListPrimEntry(@Nonnull SLObjectInfo objectInfo) {
+        super(objectInfo);
         this.drawableObject = null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.spatial.DrawListEntry
+    @Override
     public void addToDrawList(@Nonnull DrawList drawList) {
         WeakReference<DrawableObject> weakReference = this.drawableObject;
         DrawableObject drawableObject = weakReference != null ? weakReference.get() : null;

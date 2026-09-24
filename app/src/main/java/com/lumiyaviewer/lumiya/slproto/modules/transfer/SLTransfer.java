@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/* loaded from: classes.dex */
 public class SLTransfer {
     public static final int AT_ANIMATION = 20;
     public static final int AT_BODYPART = 13;
@@ -72,12 +71,12 @@ public class SLTransfer {
     private int nextPacket = 0;
     private int currentSize = 0;
 
-    SLTransfer(UUID uuid, UUID uuid2, AssetKey assetKey, float f) {
+    SLTransfer(UUID uuid, UUID sessionID, AssetKey assetKey, float priority) {
         this.agentID = uuid;
-        this.sessionID = uuid2;
+        this.sessionID = sessionID;
         this.channelType = assetKey.channelType();
         this.sourceType = assetKey.sourceType();
-        this.priority = f;
+        this.priority = priority;
         this.assetUUID = assetKey.assetUUID();
         this.assetType = assetKey.assetType();
         this.ownerUUID = assetKey.ownerUUID();
@@ -85,7 +84,7 @@ public class SLTransfer {
         this.taskUUID = assetKey.taskUUID();
     }
 
-    private void RunQueuedPackets(SLTransferManager sLTransferManager) {
+    private void RunQueuedPackets(SLTransferManager transferManager) {
         TransferPacket transferPacket;
         if (this.statusKnown && this.status == 0) {
             while (!this.queuedPackets.isEmpty() && (transferPacket = this.queuedPackets.get(Integer.valueOf(this.nextPacket))) != null) {
@@ -102,22 +101,22 @@ public class SLTransfer {
         if (!this.statusKnown || this.status == 0) {
             return;
         }
-        sLTransferManager.EndTransfer(this);
+        transferManager.EndTransfer(this);
     }
 
-    void HandleTransferInfo(SLTransferManager sLTransferManager, TransferInfo transferInfo) {
+    void HandleTransferInfo(SLTransferManager transferManager, TransferInfo transferInfo) {
         this.statusKnown = true;
         this.status = transferInfo.TransferInfoData_Field.Status;
         this.size = transferInfo.TransferInfoData_Field.Size;
         if (this.status == 0) {
             this.data = new byte[this.size];
         }
-        RunQueuedPackets(sLTransferManager);
+        RunQueuedPackets(transferManager);
     }
 
-    void HandleTransferPacket(SLTransferManager sLTransferManager, TransferPacket transferPacket) {
+    void HandleTransferPacket(SLTransferManager transferManager, TransferPacket transferPacket) {
         this.queuedPackets.put(Integer.valueOf(transferPacket.TransferData_Field.Packet), transferPacket);
-        RunQueuedPackets(sLTransferManager);
+        RunQueuedPackets(transferManager);
     }
 
     int getAssetType() {

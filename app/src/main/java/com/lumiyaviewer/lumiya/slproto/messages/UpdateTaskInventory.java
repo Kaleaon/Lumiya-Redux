@@ -1,49 +1,57 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * These messages are viewer->simulator requests to update a task's
+ * inventory.
+ * if Key == 0, itemid is the key. if Key == 1, assetid is the key.
+ *
+ * <p>Template: {@code UpdateTaskInventory Low 286 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UpdateTaskInventory extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryData InventoryData_Field;
     public UpdateData UpdateData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Single. */
     public static class InventoryData {
-        public int BaseMask;
-        public int CRC;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public UUID TransactionID;
-        public int Type;
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID - permissions
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - permissions
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public UUID TransactionID; // LLUUID
+        public int Type; // S8
     }
 
+    /** Block UpdateData, Single. */
     public static class UpdateData {
-        public int Key;
-        public int LocalID;
+        public int Key; // U8
+        public int LocalID; // U32
     }
 
     public UpdateTaskInventory() {
@@ -53,21 +61,22 @@ public class UpdateTaskInventory extends SLMessage {
         this.InventoryData_Field = new InventoryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.InventoryData_Field.Name.length + 129 + 1 + this.InventoryData_Field.Description.length + 4 + 4 + 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateTaskInventory(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateTaskInventory(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.RS);
+        // Message number: Low 286 (UpdateTaskInventory).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x1E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.UpdateData_Field.LocalID);
@@ -95,12 +104,12 @@ public class UpdateTaskInventory extends SLMessage {
         packInt(byteBuffer, this.InventoryData_Field.CRC);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.UpdateData_Field.LocalID = unpackInt(byteBuffer);
-        this.UpdateData_Field.Key = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.UpdateData_Field.Key = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.ItemID = unpackUUID(byteBuffer);
         this.InventoryData_Field.FolderID = unpackUUID(byteBuffer);
         this.InventoryData_Field.CreatorID = unpackUUID(byteBuffer);
@@ -116,7 +125,7 @@ public class UpdateTaskInventory extends SLMessage {
         this.InventoryData_Field.Type = unpackByte(byteBuffer);
         this.InventoryData_Field.InvType = unpackByte(byteBuffer);
         this.InventoryData_Field.Flags = unpackInt(byteBuffer);
-        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.SalePrice = unpackInt(byteBuffer);
         this.InventoryData_Field.Name = unpackVariable(byteBuffer, 1);
         this.InventoryData_Field.Description = unpackVariable(byteBuffer, 1);

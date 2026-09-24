@@ -13,7 +13,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class UiUtils {
     private static final String CARDBOARD_CONFIGURE_ACTION = "com.google.vrtoolkit.cardboard.CONFIGURE";
     private static final String CARDBOARD_WEBSITE = "https://google.com/cardboard/cfg";
@@ -33,21 +32,21 @@ public class UiUtils {
         ArrayList arrayList = new ArrayList();
         Integer num = null;
         for (ResolveInfo resolveInfo : queryIntentActivities) {
-            String str = resolveInfo.activityInfo.packageName;
-            if (PackageUtils.isGooglePackage(str)) {
-                int i = resolveInfo.priority;
-                if (PackageUtils.isSystemPackage(context, str)) {
-                    i++;
+            String packageName = resolveInfo.activityInfo.packageName;
+            if (PackageUtils.isGooglePackage(packageName)) {
+                int priority = resolveInfo.priority;
+                if (PackageUtils.isSystemPackage(context, packageName)) {
+                    priority++;
                 }
                 if (num == null) {
-                    num = Integer.valueOf(i);
-                } else if (i > num.intValue()) {
-                    num = Integer.valueOf(i);
+                    num = Integer.valueOf(priority);
+                } else if (priority > num.intValue()) {
+                    num = Integer.valueOf(priority);
                     arrayList.clear();
-                } else if (i >= num.intValue()) {
+                } else if (priority >= num.intValue()) {
                 }
                 Intent intent2 = new Intent(intent);
-                intent2.setClassName(str, resolveInfo.activityInfo.name);
+                intent2.setClassName(packageName, resolveInfo.activityInfo.name);
                 arrayList.add(intent2);
             }
         }
@@ -62,27 +61,27 @@ public class UiUtils {
     }
 
     public static AlertDialog showDaydreamHelpCenterDialog(final Context context, int i, int i2, final Runnable runnable) {
-        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.UiUtils.1
-            @Override // android.content.DialogInterface.OnClickListener
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i3) {
                 try {
                     context.startActivity(new Intent("android.intent.action.VIEW", Uri.parse(UiUtils.DAYDREAM_HELP_CENTER_LINK)));
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, R.string.no_browser_text, 1).show();
+                    Toast.makeText(context, R.string.no_browser_text, Toast.LENGTH_LONG).show();
                     dialogInterface.cancel();
                 }
             }
         };
         AlertDialog.Builder createAlertDialogBuilder = createAlertDialogBuilder(context);
-        createAlertDialogBuilder.setTitle(i).setMessage(i2).setCancelable(false).setPositiveButton(R.string.dialog_button_open_help_center, onClickListener).setNegativeButton(R.string.dialog_button_got_it, new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.UiUtils.2
-            @Override // android.content.DialogInterface.OnClickListener
+        createAlertDialogBuilder.setTitle(i).setMessage(i2).setCancelable(false).setPositiveButton(R.string.dialog_button_open_help_center, onClickListener).setNegativeButton(R.string.dialog_button_got_it, new DialogInterface.OnClickListener() {
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i3) {
                 dialogInterface.cancel();
             }
         });
         if (runnable != null) {
-            createAlertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() { // from class: com.google.vr.cardboard.UiUtils.3
-                @Override // android.content.DialogInterface.OnCancelListener
+            createAlertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
                 public final void onCancel(DialogInterface dialogInterface) {
                     runnable.run();
                 }
@@ -105,13 +104,13 @@ public class UiUtils {
     }
 
     private static void showInstallDialog(final Context context) {
-        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.UiUtils.4
-            @Override // android.content.DialogInterface.OnClickListener
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     context.startActivity(new Intent("android.intent.action.VIEW", Uri.parse(UiUtils.CARDBOARD_WEBSITE)));
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, R.string.no_browser_text, 1).show();
+                    Toast.makeText(context, R.string.no_browser_text, Toast.LENGTH_LONG).show();
                 }
             }
         };

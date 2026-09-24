@@ -9,15 +9,14 @@ import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntry;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLObjectAvatarInfo extends SLObjectInfo {
 
     @Nonnull
     private final AvatarVisualState avatarVisualState;
     private final boolean isMyAvatar;
 
-    public SLObjectAvatarInfo(UUID uuid, UUID uuid2, boolean z) {
-        this.isMyAvatar = z;
+    public SLObjectAvatarInfo(UUID uuid, UUID uuid2, boolean isMyAvatar) {
+        this.isMyAvatar = isMyAvatar;
         this.avatarVisualState = new AvatarVisualState(uuid, this, uuid2);
     }
 
@@ -29,15 +28,15 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         this.avatarVisualState.ApplyAvatarAppearance(avatarAppearance);
     }
 
-    public void ApplyAvatarTextures(SLTextureEntry sLTextureEntry, boolean z) {
-        this.avatarVisualState.ApplyTextures(sLTextureEntry, z);
+    public void ApplyAvatarTextures(SLTextureEntry textureEntry, boolean z) {
+        this.avatarVisualState.ApplyTextures(textureEntry, z);
     }
 
-    public void ApplyAvatarVisualParams(int[] iArr) {
-        this.avatarVisualState.ApplyVisualParams(iArr);
+    public void ApplyAvatarVisualParams(int[] ints) {
+        this.avatarVisualState.ApplyVisualParams(ints);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     @Nonnull
     protected DrawListObjectEntry createDrawListEntry() {
         return new DrawListAvatarEntry(this);
@@ -48,12 +47,12 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         return this.avatarVisualState;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     public String getName() {
         return this.isMyAvatar ? "(my avatar)" : "(avatar)";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     public boolean isAvatar() {
         return true;
     }
@@ -62,8 +61,8 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         return this.isMyAvatar;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
-    public void onTexturesUpdate(SLTextureEntry sLTextureEntry) {
-        this.avatarVisualState.ApplyTextures(sLTextureEntry, false);
+    @Override
+    public void onTexturesUpdate(SLTextureEntry textureEntry) {
+        this.avatarVisualState.ApplyTextures(textureEntry, false);
     }
 }

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum BakedTextureIndex {
     BAKED_HEAD(AvatarTextureFaceIndex.TEX_HEAD_BAKED),
     BAKED_UPPER(AvatarTextureFaceIndex.TEX_UPPER_BAKED),

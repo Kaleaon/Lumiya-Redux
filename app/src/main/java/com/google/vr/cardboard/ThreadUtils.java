@@ -3,7 +3,6 @@ package com.google.vr.cardboard;
 import android.os.Handler;
 import android.os.Looper;
 
-/* loaded from: classes.dex */
 public class ThreadUtils {
     static final /* synthetic */ boolean $assertionsDisabled = false;
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());

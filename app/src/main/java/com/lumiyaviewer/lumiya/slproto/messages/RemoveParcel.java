@@ -1,39 +1,47 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> dataserver or space ->sim
+ * This message is used to tell the dataserver that a parcel has been
+ * removed.
+ *
+ * <p>Template: {@code RemoveParcel Low 222 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RemoveParcel extends SLMessage {
     public ArrayList<ParcelData> ParcelData_Fields = new ArrayList<>();
 
+    /** Block ParcelData, Variable. */
     public static class ParcelData {
-        public UUID ParcelID;
+        public UUID ParcelID; // LLUUID
     }
 
     public RemoveParcel() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ParcelData_Fields.size() * 16) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveParcel(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveParcel(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -34);
+        // Message number: Low 222 (RemoveParcel).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xDE);
         byteBuffer.put((byte) this.ParcelData_Fields.size());
         Iterator<?> it = this.ParcelData_Fields.iterator();
         while (it.hasNext()) {
@@ -41,10 +49,10 @@ public class RemoveParcel extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ParcelData parcelData = new ParcelData();
             parcelData.ParcelID = unpackUUID(byteBuffer);
             this.ParcelData_Fields.add(parcelData);

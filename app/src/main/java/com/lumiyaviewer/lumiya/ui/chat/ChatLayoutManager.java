@@ -9,7 +9,6 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ChatLayoutManager extends LinearLayoutManager {
     private static final float SMOOTH_SCROLL_FAST_SPEED = 20.0f;
     private static final float SMOOTH_SCROLL_SPEED = 1000.0f;
@@ -29,12 +28,12 @@ public class ChatLayoutManager extends LinearLayoutManager {
             this.scrollDp = 200.0f;
         }
 
-        @Override // androidx.recyclerview.widget.LinearSmoothScroller
+        @Override
         protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-            return getScrollMs() / TypedValue.applyDimension(1, 200.0f, displayMetrics);
+            return getScrollMs() / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200.0f, displayMetrics);
         }
 
-        @Override // androidx.recyclerview.widget.LinearSmoothScroller
+        @Override
         public PointF computeScrollVectorForPosition(int i) {
             return ChatLayoutManager.this.computeScrollVectorForPosition(i);
         }
@@ -45,25 +44,25 @@ public class ChatLayoutManager extends LinearLayoutManager {
     public ChatLayoutManager(Context context, int i, boolean z) {
         super(context, i, z);
         this.isFast = false;
-        this.smoothScroller = new SmoothScroller(context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.1
-            @Override // com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.SmoothScroller
+        this.smoothScroller = new SmoothScroller(context) {
+            @Override
             protected float getScrollMs() {
                 return ChatLayoutManager.SMOOTH_SCROLL_SPEED;
             }
         };
-        this.fastSmoothScroller = new SmoothScroller(context) { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.2
-            @Override // com.lumiyaviewer.lumiya.ui.chat.ChatLayoutManager.SmoothScroller
+        this.fastSmoothScroller = new SmoothScroller(context) {
+            @Override
             protected float getScrollMs() {
                 return 20.0f;
             }
         };
     }
 
-    public void setScrollMode(boolean z) {
-        this.isFast = z;
+    public void setScrollMode(boolean isFast) {
+        this.isFast = isFast;
     }
 
-    @Override // androidx.recyclerview.widget.LinearLayoutManager, androidx.recyclerview.widget.RecyclerView.LayoutManager
+    @Override
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
         SmoothScroller smoothScroller = this.isFast ? this.fastSmoothScroller : this.smoothScroller;
         smoothScroller.setTargetPosition(i);

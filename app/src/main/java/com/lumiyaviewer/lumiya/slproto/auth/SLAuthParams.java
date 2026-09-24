@@ -4,7 +4,6 @@ import android.content.Intent;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLAuthParams {
     public final UUID clientID;
     public final String gridName;
@@ -22,13 +21,13 @@ public class SLAuthParams {
         this.gridName = intent.getStringExtra("grid_name");
     }
 
-    public SLAuthParams(String str, String str2, UUID uuid, String str3, String str4, String str5) {
-        this.loginName = str;
-        this.passwordHash = str2;
+    public SLAuthParams(String loginName, String passwordHash, UUID uuid, String startLocation, String loginURL, String gridName) {
+        this.loginName = loginName;
+        this.passwordHash = passwordHash;
         this.clientID = uuid;
-        this.startLocation = str3;
-        this.loginURL = str4;
-        this.gridName = str5;
+        this.startLocation = startLocation;
+        this.loginURL = loginURL;
+        this.gridName = gridName;
     }
 
     public boolean equals(Object obj) {
@@ -38,23 +37,23 @@ public class SLAuthParams {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        SLAuthParams sLAuthParams = (SLAuthParams) obj;
-        if (this.loginName == null ? sLAuthParams.loginName != null : (!this.loginName.equals(sLAuthParams.loginName))) {
+        SLAuthParams authParams = (SLAuthParams) obj;
+        if (this.loginName == null ? authParams.loginName != null : (!this.loginName.equals(authParams.loginName))) {
             return false;
         }
-        if (this.passwordHash == null ? sLAuthParams.passwordHash != null : (!this.passwordHash.equals(sLAuthParams.passwordHash))) {
+        if (this.passwordHash == null ? authParams.passwordHash != null : (!this.passwordHash.equals(authParams.passwordHash))) {
             return false;
         }
-        if (this.clientID == null ? sLAuthParams.clientID != null : (!this.clientID.equals(sLAuthParams.clientID))) {
+        if (this.clientID == null ? authParams.clientID != null : (!this.clientID.equals(authParams.clientID))) {
             return false;
         }
-        if (this.startLocation == null ? sLAuthParams.startLocation != null : (!this.startLocation.equals(sLAuthParams.startLocation))) {
+        if (this.startLocation == null ? authParams.startLocation != null : (!this.startLocation.equals(authParams.startLocation))) {
             return false;
         }
-        if (this.loginURL == null ? sLAuthParams.loginURL != null : (!this.loginURL.equals(sLAuthParams.loginURL))) {
+        if (this.loginURL == null ? authParams.loginURL != null : (!this.loginURL.equals(authParams.loginURL))) {
             return false;
         }
-        return this.gridName != null ? this.gridName.equals(sLAuthParams.gridName) : sLAuthParams.gridName == null;
+        return this.gridName != null ? this.gridName.equals(authParams.gridName) : authParams.gridName == null;
     }
 
     public int hashCode() {

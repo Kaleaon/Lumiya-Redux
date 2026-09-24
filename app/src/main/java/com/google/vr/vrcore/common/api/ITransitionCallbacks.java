@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface ITransitionCallbacks extends IInterface {
 
     public static abstract class Stub extends Binder implements ITransitionCallbacks {
@@ -16,11 +15,11 @@ public interface ITransitionCallbacks extends IInterface {
         private static class Proxy implements ITransitionCallbacks {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -29,7 +28,7 @@ public interface ITransitionCallbacks extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.common.api.ITransitionCallbacks
+            @Override
             public void onTransitionComplete() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -53,12 +52,12 @@ public interface ITransitionCallbacks extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof ITransitionCallbacks)) ? (ITransitionCallbacks) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupRolesProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
     private final SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -55,11 +54,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
             this.titlesByRole = null;
         }
 
-        /* synthetic */ GroupRoleAdapter(GroupRolesProfileTab groupRolesProfileTab, GroupRoleAdapter groupRoleAdapter) {
-            this();
-        }
-
-        @Override // android.widget.Adapter
+        @Override
         public int getCount() {
             if (this.data != null) {
                 return this.data.RoleData_Fields.size();
@@ -67,7 +62,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
             return 0;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public GroupRoleDataReply.RoleData getItem(int i) {
             if (this.data == null || i < 0 || i >= this.data.RoleData_Fields.size()) {
                 return null;
@@ -75,12 +70,12 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
             return this.data.RoleData_Fields.get(i);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public long getItemId(int i) {
             return i;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             boolean z;
             boolean z2;
@@ -100,13 +95,13 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
                     z = groupData.Selected;
                     z2 = true;
                 }
-                view.findViewById(R.id.role_mine_check_mark).setVisibility(z2 ? 0 : 4);
+                view.findViewById(R.id.role_mine_check_mark).setVisibility(z2 ? View.VISIBLE : View.INVISIBLE);
                 ((TextView) view.findViewById(R.id.role_name)).setTypeface(null, z ? 1 : 0);
             }
             return view;
         }
 
-        @Override // android.widget.BaseAdapter, android.widget.Adapter
+        @Override
         public boolean hasStableIds() {
             return false;
         }
@@ -143,9 +138,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         return 0L;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAddNewRoleButton, reason: merged with bridge method [inline-methods] */
-    public void m507x6f5149fc(View view) {
+    public void onAddNewRoleButton(View view) {
         if ((getMyGroupPowers() & 16) != 0) {
             DetailsActivity.showEmbeddedDetails(getActivity(), GroupRoleDetailsFragment.class, GroupRoleDetailsFragment.makeSelection(this.chatterID, null));
         }
@@ -160,31 +153,31 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         DetailsActivity.showEmbeddedDetails(getActivity(), GroupRoleDetailsFragment.class, GroupRoleDetailsFragment.makeSelection(this.chatterID, item.RoleID));
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         GroupRoleAdapter groupRoleAdapter = null;
         View inflate = layoutInflater.inflate(R.layout.group_profile_tab_roles, viewGroup, false);
         if (this.adapter == null) {
-            this.adapter = new GroupRoleAdapter(this, groupRoleAdapter);
+            this.adapter = new GroupRoleAdapter();
         }
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setAdapter((ListAdapter) this.adapter);
-        ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$zWKNEqUupU__bUM7E0seQ8xMgmU.1
+        ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 GroupRolesProfileTab.this.m508x3dfd52a4(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
         });
-        inflate.findViewById(R.id.add_new_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$zWKNEqUupU__bUM7E0seQ8xMgmU
+        inflate.findViewById(R.id.add_new_role_button).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
-                GroupRolesProfileTab.this.m507x6f5149fc(view);
+                GroupRolesProfileTab.this.onAddNewRoleButton(view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
@@ -195,7 +188,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         try {
             if (this.myGroupList.get().Groups.get(this.groupRoles.get().GroupData_Field.GroupID) != null && !this.groupTitles.isSubscribed()) {
@@ -206,14 +199,14 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         long myGroupPowers = getMyGroupPowers();
         View view = getView();
         if (view != null) {
-            view.findViewById(R.id.add_new_role_button).setVisibility((myGroupPowers & 16) != 0 ? 0 : 8);
+            view.findViewById(R.id.add_new_role_button).setVisibility((myGroupPowers & 16) != 0 ? View.VISIBLE : View.GONE);
         }
         if (this.adapter != null) {
             this.adapter.setData(this.groupRoles.getData(), this.groupTitles.getData(), this.groupProfile.getData());
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.loadableMonitor.unsubscribeAll();
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDGroup)) {

@@ -26,7 +26,6 @@ import com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserGroupsProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
     private GroupsAdapter groupsAdapter;
     private final SubscriptionData<UUID, AvatarGroupList> avatarGroups = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -45,7 +44,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
             this(context);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public int getCount() {
             if (this.avatarGroupList != null) {
                 return this.avatarGroupList.size();
@@ -53,7 +52,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
             return 0;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public AvatarGroupList.AvatarGroupEntry getItem(int i) {
             if (this.avatarGroupList == null || i < 0 || i >= this.avatarGroupList.size()) {
                 return null;
@@ -61,12 +60,12 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
             return this.avatarGroupList.get(i);
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public long getItemId(int i) {
             return i;
         }
 
-        @Override // android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = this.inflater.inflate(R.layout.simple_list_item_1, viewGroup, false);
@@ -78,7 +77,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
             return view;
         }
 
-        @Override // android.widget.BaseAdapter, android.widget.Adapter
+        @Override
         public boolean hasStableIds() {
             return false;
         }
@@ -99,18 +98,18 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.user_profile_tab_groups, viewGroup, false);
         this.groupsAdapter = new GroupsAdapter(layoutInflater.getContext(), null);
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setAdapter((ListAdapter) this.groupsAdapter);
-        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$929W_sYALf9zQuqLbMSJpktRAzI
+        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 UserGroupsProfileTab.this.m518x4b4ac4f6(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -121,7 +120,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         try {
             this.loadableMonitor.setEmptyMessage(this.avatarGroups.get().Groups.isEmpty(), getString(com.lumiyaviewer.lumiya.R.string.no_groups));
@@ -133,7 +132,7 @@ public class UserGroupsProfileTab extends ChatterReloadableFragment implements L
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         UserManager userManager;
         this.loadableMonitor.unsubscribeAll();

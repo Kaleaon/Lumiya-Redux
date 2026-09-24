@@ -2,7 +2,6 @@ package uk.co.senab.photoview.gestures;
 
 import android.view.MotionEvent;
 
-/* loaded from: classes.dex */
 public interface GestureDetector {
     boolean isDragging();
 

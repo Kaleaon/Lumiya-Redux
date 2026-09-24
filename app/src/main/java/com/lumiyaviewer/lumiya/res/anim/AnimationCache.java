@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-/* loaded from: classes.dex */
 public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
     private final ImmutableSet<String> assetAnimations;
     private final AtomicReference<AssetResponseCacher> assetResponseCacher;
@@ -29,24 +28,24 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
     private static class AssetLoadRequest extends ResourceRequest<UUID, AnimationData> implements Runnable {
         private final String assetName;
 
-        AssetLoadRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager, String str) {
+        AssetLoadRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager, String assetName) {
             super(uuid, resourceManager);
-            this.assetName = str;
+            this.assetName = assetName;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             LoaderExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             LoaderExecutor.getInstance().execute(this);
         }
 
         /* JADX WARN: Removed duplicated region for block: B:39:0x0070 A[EXC_TOP_SPLITTER, SYNTHETIC] */
-        @Override // java.lang.Runnable
+        @Override
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
@@ -76,7 +75,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             super(uuid, resourceManager);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             Subscription<AssetKey, AssetData> subscription = this.assetSubscription;
             if (subscription != null) {
@@ -85,7 +84,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void completeRequest(AnimationData animationData) {
             Subscription<AssetKey, AssetData> subscription = this.assetSubscription;
             if (subscription != null) {
@@ -94,7 +93,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             super.completeRequest(animationData);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             AssetResponseCacher assetResponseCacher = (AssetResponseCacher) AnimationCache.this.assetResponseCacher.get();
             if (assetResponseCacher != null) {
@@ -104,7 +103,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public void onData(AssetData assetData) {
             AnimationData animationData;
             if (assetData == null || assetData.getData() == null || assetData.getStatus() != 1) {
@@ -126,7 +125,7 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
             completeRequest(animationData);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+        @Override
         public void onError(Throwable th) {
             completeRequest((AnimationData) null);
         }
@@ -166,8 +165,8 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
 
     @Override
     protected ResourceRequest<UUID, AnimationData> CreateNewRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager) {
-        String uuid2 = uuid.toString();
-        return this.assetAnimations.contains(uuid2) ? new AssetLoadRequest(uuid, resourceManager, uuid2) : new DownloadRequest(uuid, resourceManager);
+        String text = uuid.toString();
+        return this.assetAnimations.contains(text) ? new AssetLoadRequest(uuid, resourceManager, text) : new DownloadRequest(uuid, resourceManager);
     }
 
     public void setAssetResponseCacher(AssetResponseCacher assetResponseCacher) {

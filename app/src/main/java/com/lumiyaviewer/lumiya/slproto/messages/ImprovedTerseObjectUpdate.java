@@ -1,24 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * packed terse object update format
+ *
+ * <p>Template: {@code ImprovedTerseObjectUpdate High 15 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_terse_object_update_improved()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ImprovedTerseObjectUpdate extends SLMessage {
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
     public RegionData RegionData_Field;
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public byte[] Data;
-        public byte[] TextureEntry;
+        public byte[] Data; // Variable 1
+        public byte[] TextureEntry; // Variable 2
     }
 
+    /** Block RegionData, Single. */
     public static class RegionData {
-        public long RegionHandle;
-        public int TimeDilation;
+        public long RegionHandle; // U64
+        public int TimeDilation; // U16
     }
 
     public ImprovedTerseObjectUpdate() {
@@ -26,7 +34,7 @@ public class ImprovedTerseObjectUpdate extends SLMessage {
         this.RegionData_Field = new RegionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 12;
         Iterator<?> it = this.ObjectData_Fields.iterator();
@@ -40,14 +48,15 @@ public class ImprovedTerseObjectUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImprovedTerseObjectUpdate(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImprovedTerseObjectUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 15);
+        // Message number: High 15 (ImprovedTerseObjectUpdate).
+        byteBuffer.put((byte) 0x0F);
         packLong(byteBuffer, this.RegionData_Field.RegionHandle);
         packShort(byteBuffer, (short) this.RegionData_Field.TimeDilation);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -57,12 +66,12 @@ public class ImprovedTerseObjectUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);
         this.RegionData_Field.TimeDilation = unpackShort(byteBuffer) & 65535;
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.Data = unpackVariable(byteBuffer, 1);
             objectData.TextureEntry = unpackVariable(byteBuffer, 2);

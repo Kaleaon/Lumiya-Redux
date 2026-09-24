@@ -16,7 +16,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class GvrApi {
     private static final String TAG = GvrApi.class.getSimpleName();
     private static PoseTracker sPoseTrackerForTesting;
@@ -36,7 +35,7 @@ public class GvrApi {
     @UsedByNative
     public interface PoseTracker {
         @UsedByNative
-        void getHeadPoseInStartSpace(float[] fArr, long j);
+        void getHeadPoseInStartSpace(float[] floats, long j);
     }
 
     public static abstract class ViewerType {
@@ -107,7 +106,7 @@ public class GvrApi {
 
     static native int nativeBufferViewportGetTargetEye(long j);
 
-    static native void nativeBufferViewportGetTransform(long j, float[] fArr);
+    static native void nativeBufferViewportGetTransform(long j, float[] floats);
 
     private native long nativeBufferViewportListCreate(long j);
 
@@ -131,15 +130,15 @@ public class GvrApi {
 
     static native void nativeBufferViewportSetTargetEye(long j, int i);
 
-    static native void nativeBufferViewportSetTransform(long j, float[] fArr);
+    static native void nativeBufferViewportSetTransform(long j, float[] floats);
 
     private native int nativeClearError(long j);
 
-    private native float[] nativeComputeDistortedPoint(long j, int i, float[] fArr);
+    private native float[] nativeComputeDistortedPoint(long j, int i, float[] floats);
 
     private native long nativeCreate(ClassLoader classLoader, Context context, long j, int i, int i2, float f, float f2, PoseTracker poseTracker);
 
-    private native void nativeDistortToScreen(long j, int i, long j2, float[] fArr, long j3);
+    private native void nativeDistortToScreen(long j, int i, long j2, float[] floats, long j3);
 
     private native void nativeDumpDebugData(long j);
 
@@ -149,7 +148,7 @@ public class GvrApi {
 
     static native int nativeFrameGetFramebufferObject(long j, int i);
 
-    static native void nativeFrameSubmit(long j, long j2, float[] fArr);
+    static native void nativeFrameSubmit(long j, long j2, float[] floats);
 
     static native void nativeFrameUnbind(long j);
 
@@ -161,9 +160,9 @@ public class GvrApi {
 
     private static native String nativeGetErrorString(int i);
 
-    private native void nativeGetEyeFromHeadMatrix(long j, int i, float[] fArr);
+    private native void nativeGetEyeFromHeadMatrix(long j, int i, float[] floats);
 
-    private native void nativeGetHeadSpaceFromStartSpaceRotation(long j, float[] fArr, long j2);
+    private native void nativeGetHeadSpaceFromStartSpaceRotation(long j, float[] floats, long j2);
 
     private native void nativeGetMaximumEffectiveRenderTargetSize(long j, Point point);
 
@@ -207,7 +206,7 @@ public class GvrApi {
 
     private native void nativeResume(long j);
 
-    private native void nativeResumeTracking(long j, byte[] bArr);
+    private native void nativeResumeTracking(long j, byte[] bytes);
 
     private native boolean nativeSetAsyncReprojectionEnabled(long j, boolean z);
 
@@ -223,11 +222,11 @@ public class GvrApi {
 
     private native void nativeSetSurfaceSize(long j, int i, int i2);
 
-    private native boolean nativeSetViewerParams(long j, byte[] bArr);
+    private native boolean nativeSetViewerParams(long j, byte[] bytes);
 
     static native long nativeSwapChainAcquireFrame(long j);
 
-    static native long nativeSwapChainCreate(long j, long[] jArr);
+    static native long nativeSwapChainCreate(long j, long[] longs);
 
     static native void nativeSwapChainDestroy(long j);
 
@@ -237,7 +236,7 @@ public class GvrApi {
 
     static native void nativeSwapChainResizeBuffer(long j, int i, int i2, int i3);
 
-    private native void nativeUpdateSurfaceReprojectionThread(long j, int i, int i2, long j2, float[] fArr);
+    private native void nativeUpdateSurfaceReprojectionThread(long j, int i, int i2, long j2, float[] floats);
 
     static native int nativeUserPrefsGetControllerHandedness(long j);
 
@@ -247,8 +246,8 @@ public class GvrApi {
         sPoseTrackerForTesting = poseTracker;
     }
 
-    private boolean setViewerParams(byte[] bArr) {
-        return nativeSetViewerParams(this.nativeGvrContext, bArr);
+    private boolean setViewerParams(byte[] bytes) {
+        return nativeSetViewerParams(this.nativeGvrContext, bytes);
     }
 
     public int clearError() {
@@ -259,8 +258,8 @@ public class GvrApi {
         return DisplayUtils.getDisplayMetricsLandscapeWithOverride(this.displaySynchronizer != null ? this.displaySynchronizer.getDisplay() : DisplayUtils.getDefaultDisplay(this.context), this.vrParamsProvider.readPhoneParams());
     }
 
-    public float[] computeDistortedPoint(int i, float[] fArr) {
-        float[] nativeComputeDistortedPoint = nativeComputeDistortedPoint(this.nativeGvrContext, i, fArr);
+    public float[] computeDistortedPoint(int i, float[] floats) {
+        float[] nativeComputeDistortedPoint = nativeComputeDistortedPoint(this.nativeGvrContext, i, floats);
         if (nativeComputeDistortedPoint.length == 6) {
             return nativeComputeDistortedPoint;
         }
@@ -280,20 +279,20 @@ public class GvrApi {
     }
 
     public SwapChain createSwapChain(BufferSpec[] bufferSpecArr) {
-        long[] jArr = new long[bufferSpecArr.length];
+        long[] longs = new long[bufferSpecArr.length];
         for (int i = 0; i < bufferSpecArr.length; i++) {
-            jArr[i] = bufferSpecArr[i].nativeBufferSpec;
+            longs[i] = bufferSpecArr[i].nativeBufferSpec;
         }
-        SwapChain swapChain = new SwapChain(nativeSwapChainCreate(this.nativeGvrContext, jArr));
+        SwapChain swapChain = new SwapChain(nativeSwapChainCreate(this.nativeGvrContext, longs));
         this.swapChainRefs.add(new WeakReference<>(swapChain));
         return swapChain;
     }
 
-    public void distortToScreen(int i, BufferViewportList bufferViewportList, float[] fArr, long j) {
-        if (fArr == null) {
+    public void distortToScreen(int i, BufferViewportList bufferViewportList, float[] floats, long j) {
+        if (floats == null) {
             throw new IllegalArgumentException("Head pose must not be null.");
         }
-        nativeDistortToScreen(this.nativeGvrContext, i, bufferViewportList.nativeBufferViewportList, fArr, j);
+        nativeDistortToScreen(this.nativeGvrContext, i, bufferViewportList.nativeBufferViewportList, floats, j);
     }
 
     void dumpDebugData() {
@@ -323,22 +322,22 @@ public class GvrApi {
         return nativeGetError(this.nativeGvrContext);
     }
 
-    public void getEyeFromHeadMatrix(int i, float[] fArr) {
-        nativeGetEyeFromHeadMatrix(this.nativeGvrContext, i, fArr);
+    public void getEyeFromHeadMatrix(int i, float[] floats) {
+        nativeGetEyeFromHeadMatrix(this.nativeGvrContext, i, floats);
     }
 
     @Deprecated
     public float[] getEyeFromHeadMatrix(int i) {
-        float[] fArr = new float[16];
-        getEyeFromHeadMatrix(i, fArr);
-        return fArr;
+        float[] floats = new float[16];
+        getEyeFromHeadMatrix(i, floats);
+        return floats;
     }
 
-    public void getHeadSpaceFromStartSpaceRotation(float[] fArr, long j) {
-        if (fArr == null || fArr.length != 16) {
+    public void getHeadSpaceFromStartSpaceRotation(float[] floats, long j) {
+        if (floats == null || floats.length != 16) {
             throw new IllegalArgumentException("Invalid head rotation argument, must be a float[16].");
         }
-        nativeGetHeadSpaceFromStartSpaceRotation(this.nativeGvrContext, fArr, j);
+        nativeGetHeadSpaceFromStartSpaceRotation(this.nativeGvrContext, floats, j);
     }
 
     public void getMaximumEffectiveRenderTargetSize(Point point) {
@@ -456,32 +455,32 @@ public class GvrApi {
         nativeResumeTracking(this.nativeGvrContext, null);
     }
 
-    public void resumeTrackingSetState(byte[] bArr) {
-        if (bArr != null) {
-            nativeResumeTracking(this.nativeGvrContext, bArr);
+    public void resumeTrackingSetState(byte[] bytes) {
+        if (bytes != null) {
+            nativeResumeTracking(this.nativeGvrContext, bytes);
         } else {
             nativeResumeTracking(this.nativeGvrContext, null);
         }
     }
 
-    boolean setAsyncReprojectionEnabled(boolean z) {
-        return nativeSetAsyncReprojectionEnabled(this.nativeGvrContext, z);
+    boolean setAsyncReprojectionEnabled(boolean asyncReprojectionEnabled) {
+        return nativeSetAsyncReprojectionEnabled(this.nativeGvrContext, asyncReprojectionEnabled);
     }
 
     public void setDefaultFramebufferActive() {
         nativeSetDefaultFramebufferActive(this.nativeGvrContext);
     }
 
-    public boolean setDefaultViewerProfile(String str) {
-        return nativeSetDefaultViewerProfile(this.nativeGvrContext, str);
+    public boolean setDefaultViewerProfile(String defaultViewerProfile) {
+        return nativeSetDefaultViewerProfile(this.nativeGvrContext, defaultViewerProfile);
     }
 
     public void setDisplayMetrics(DisplayMetrics displayMetrics) {
         nativeSetDisplayMetrics(this.nativeGvrContext, displayMetrics.widthPixels, displayMetrics.heightPixels, displayMetrics.xdpi, displayMetrics.ydpi);
     }
 
-    void setIgnoreManualTrackerPauseResume(boolean z) {
-        nativeSetIgnoreManualPauseResumeTracker(this.nativeGvrContext, z);
+    void setIgnoreManualTrackerPauseResume(boolean ignoreManualTrackerPauseResume) {
+        nativeSetIgnoreManualPauseResumeTracker(this.nativeGvrContext, ignoreManualTrackerPauseResume);
     }
 
     public void setLensOffset(float f, float f2) {
@@ -514,8 +513,8 @@ public class GvrApi {
         }
     }
 
-    public void updateSurfaceReprojectionThread(int i, int i2, long j, float[] fArr) {
-        nativeUpdateSurfaceReprojectionThread(this.nativeGvrContext, i, i2, j, fArr);
+    public void updateSurfaceReprojectionThread(int i, int i2, long j, float[] floats) {
+        nativeUpdateSurfaceReprojectionThread(this.nativeGvrContext, i, i2, j, floats);
     }
 
     boolean usingVrDisplayService() {

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.mesh;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class MeshWeightsBuffer {
 
     @Nonnull

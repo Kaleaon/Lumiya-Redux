@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.utils;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/* loaded from: classes.dex */
 public class LinkedTreeNode<T> implements Iterable<T> {
     private T dataObject;
     private LinkedTreeNode<T> firstChild;
@@ -19,12 +18,12 @@ public class LinkedTreeNode<T> implements Iterable<T> {
             this.node = linkedTreeNode;
         }
 
-        @Override // java.util.Iterator
+        @Override
         public boolean hasNext() {
             return this.isFirst ? ((LinkedTreeNode) this.node).firstChild != null : ((LinkedTreeNode) this.node).nextChild != null;
         }
 
-        @Override // java.util.Iterator
+        @Override
         public T next() {
             if (this.node == null) {
                 throw new NoSuchElementException();
@@ -41,7 +40,7 @@ public class LinkedTreeNode<T> implements Iterable<T> {
             return (T) ((LinkedTreeNode) this.node).dataObject;
         }
 
-        @Override // java.util.Iterator
+        @Override
         public void remove() {
             throw new UnsupportedOperationException("remove() not supported by LinkedTreeNode");
         }
@@ -91,7 +90,7 @@ public class LinkedTreeNode<T> implements Iterable<T> {
         return this.firstChild != null;
     }
 
-    @Override // java.lang.Iterable
+    @Override
     public Iterator<T> iterator() {
         return new LinkedTreeIterator(this);
     }

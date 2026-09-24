@@ -1,29 +1,39 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupNoticesListReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code GroupNoticesListReply Low 59 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelGroupNotices::processGroupNoticesListReply()} in indra/newview/llpanelgroupnotices.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupNoticesListReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int AssetType;
-        public byte[] FromName;
-        public boolean HasAttachment;
-        public UUID NoticeID;
-        public byte[] Subject;
-        public int Timestamp;
+        public int AssetType; // U8
+        public byte[] FromName; // Variable 2
+        public boolean HasAttachment; // BOOL
+        public UUID NoticeID; // LLUUID
+        public byte[] Subject; // Variable 2
+        public int Timestamp; // U32
     }
 
     public GroupNoticesListReply() {
@@ -31,7 +41,7 @@ public class GroupNoticesListReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -45,16 +55,17 @@ public class GroupNoticesListReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupNoticesListReply(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupNoticesListReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 59);
+        // Message number: Low 59 (GroupNoticesListReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x3B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         byteBuffer.put((byte) this.Data_Fields.size());
@@ -68,19 +79,19 @@ public class GroupNoticesListReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
-        for (int i2 = 0; i2 < i; i2++) {
+        int i = byteBuffer.get() & 0xFF;
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.NoticeID = unpackUUID(byteBuffer);
             data.Timestamp = unpackInt(byteBuffer);
             data.FromName = unpackVariable(byteBuffer, 2);
             data.Subject = unpackVariable(byteBuffer, 2);
             data.HasAttachment = unpackBoolean(byteBuffer);
-            data.AssetType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            data.AssetType = unpackByte(byteBuffer) & 0xFF;
             this.Data_Fields.add(data);
         }
     }

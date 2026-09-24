@@ -18,7 +18,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import de.greenrobot.dao.query.LazyList;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,7 +26,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/* loaded from: classes.dex */
 public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResult> implements DialogInterface.OnCancelListener {
     private static final String forbiddenChars = "./\\*?:\"'~";
     private final Context context;
@@ -36,12 +34,12 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
     private final Condition nameReadyCondition = this.nameReadyLock.newCondition();
     private final AtomicBoolean isNameReady = new AtomicBoolean();
     private final AtomicReference<String> gotChatterName = new AtomicReference<>();
-    private final ChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$D705oXX7BTh_Xc4P_mIDvS9cOZI
+    private final ChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             ExportChatHistoryTask.this.m431x863366ea(chatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             $m$0(chatterNameRetriever);
         }
@@ -73,15 +71,14 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
         return trim.isEmpty() ? "Chat Log" : trim;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // android.os.AsyncTask
-    public ExportResult doInBackground(ChatterID... chatterIDArr) {
+    @Override
+    public ExportResult doInBackground(ChatterID... chatterID2) {
         ChatterID chatterID;
         UserManager userManager;
         File file = null;
         FileOutputStream fileOutputStream;
         LazyList<ChatMessage> lazyList;
-        if (chatterIDArr.length != 1 || (userManager = (chatterID = chatterIDArr[0]).getUserManager()) == null) {
+        if (chatterID2.length != 1 || (userManager = (chatterID = chatterID2[0]).getUserManager()) == null) {
             return null;
         }
         ChatterNameRetriever chatterNameRetriever = new ChatterNameRetriever(chatterID, this.onChatterNameUpdated, UIThreadExecutor.getInstance());
@@ -136,12 +133,12 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                                 fileOutputStream.close();
                             }
                             file = file4;
-                        } catch (Throwable th2) {
-                            Debug.Warning(th2);
+                        } catch (Throwable e) {
+                            Debug.Warning(e);
                             lazyList = null;
                         }
-                    } catch (Throwable th3) {
-                        Debug.Warning(th3);
+                    } catch (Throwable e5) {
+                        Debug.Warning(e5);
                         fileOutputStream = null;
                         lazyList = null;
                     }
@@ -160,26 +157,26 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                     StringBuilder sb = new StringBuilder();
                     LazyList<ChatMessage> messages = userManager.getChatterList().getActiveChattersManager().getMessages(chatterID);
                     if (messages != null) {
-                        Iterator<ChatMessage> it2 = messages.iterator();
-                        while (it2.hasNext()) {
-                            SLChatEvent loadFromDatabaseObject2 = SLChatEvent.loadFromDatabaseObject(it2.next(), userManager.getUserID());
-                            if (loadFromDatabaseObject2 != null) {
-                                sb.append("[").append(dateTimeInstance.format(loadFromDatabaseObject2.getTimestamp())).append("] ").append(loadFromDatabaseObject2.getPlainTextMessage(this.context, userManager, false).toString()).append("\n");
+                        Iterator<ChatMessage> iterator = messages.iterator();
+                        while (iterator.hasNext()) {
+                            SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(iterator.next(), userManager.getUserID());
+                            if (fromDatabaseObject != null) {
+                                sb.append("[").append(dateTimeInstance.format(fromDatabaseObject.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, userManager, false).toString()).append("\n");
                             }
                             if (isCancelled()) {
                                 break;
                             }
                         }
                     }
-                    String sb2 = sb.toString();
+                    String text = sb.toString();
                     if (!isCancelled()) {
-                        return new ExportResult(null, sb2, str);
+                        return new ExportResult(null, text, str);
                     }
                 }
                 return null;
-            } catch (Throwable th4) {
+            } catch (Throwable e6) {
                 this.nameReadyLock.unlock();
-                throw th4;
+                throw e6;
             }
         } catch (InterruptedException e4) {
             return null;
@@ -198,7 +195,7 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
         }
     }
 
-    @Override // android.content.DialogInterface.OnCancelListener
+    @Override
     public void onCancel(DialogInterface dialogInterface) {
         cancel(false);
         try {
@@ -209,15 +206,14 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
         }
     }
 
-    @Override // android.os.AsyncTask
+    @Override
     protected void onCancelled() {
         if (this.progressDialog != null) {
             this.progressDialog.dismiss();
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // android.os.AsyncTask
+    @Override
     public void onPostExecute(ExportResult exportResult) {
         if (this.progressDialog != null) {
             this.progressDialog.dismiss();
@@ -238,7 +234,7 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
         }
     }
 
-    @Override // android.os.AsyncTask
+    @Override
     protected void onPreExecute() {
         this.progressDialog = ProgressDialog.show(this.context, this.context.getString(R.string.please_wait_title), this.context.getString(R.string.exporting_chat_history), true, true, this);
     }

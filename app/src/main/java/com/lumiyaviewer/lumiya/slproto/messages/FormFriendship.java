@@ -4,13 +4,19 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * FormFriendship
+ *
+ * <p>Template: {@code FormFriendship Low 299 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class FormFriendship extends SLMessage {
     public AgentBlock AgentBlock_Field;
 
+    /** Block AgentBlock, Single. */
     public static class AgentBlock {
-        public UUID DestID;
-        public UUID SourceID;
+        public UUID DestID; // LLUUID
+        public UUID SourceID; // LLUUID
     }
 
     public FormFriendship() {
@@ -18,26 +24,27 @@ public class FormFriendship extends SLMessage {
         this.AgentBlock_Field = new AgentBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFormFriendship(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFormFriendship(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 43);
+        // Message number: Low 299 (FormFriendship).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x2B);
         packUUID(byteBuffer, this.AgentBlock_Field.SourceID);
         packUUID(byteBuffer, this.AgentBlock_Field.DestID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentBlock_Field.SourceID = unpackUUID(byteBuffer);
         this.AgentBlock_Field.DestID = unpackUUID(byteBuffer);

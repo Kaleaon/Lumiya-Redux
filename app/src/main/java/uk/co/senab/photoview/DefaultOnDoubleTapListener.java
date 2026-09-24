@@ -5,7 +5,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-/* loaded from: classes.dex */
 public class DefaultOnDoubleTapListener implements GestureDetector.OnDoubleTapListener {
     private PhotoViewAttacher photoViewAttacher;
 
@@ -13,7 +12,7 @@ public class DefaultOnDoubleTapListener implements GestureDetector.OnDoubleTapLi
         setPhotoViewAttacher(photoViewAttacher);
     }
 
-    @Override // android.view.GestureDetector.OnDoubleTapListener
+    @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         if (this.photoViewAttacher == null) {
             return false;
@@ -34,12 +33,12 @@ public class DefaultOnDoubleTapListener implements GestureDetector.OnDoubleTapLi
         return true;
     }
 
-    @Override // android.view.GestureDetector.OnDoubleTapListener
+    @Override
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
         return false;
     }
 
-    @Override // android.view.GestureDetector.OnDoubleTapListener
+    @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         RectF displayRect;
         if (this.photoViewAttacher == null) {

@@ -14,7 +14,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/* loaded from: classes.dex */
 public class PriorityBinQueue<T> implements BlockingQueue<T> {
     private final Map<T, Integer> allItems = new IdentityHashMap();
     private final Lock lock = new ReentrantLock();
@@ -22,33 +21,33 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     private final int numBins;
     private final Set<T>[] queues;
 
-    public PriorityBinQueue(int i) {
-        this.numBins = i;
-        this.queues = new Set[i];
-        for (int i2 = 0; i2 < i; i2++) {
-            this.queues[i2] = new HashSet();
+    public PriorityBinQueue(int numBins) {
+        this.numBins = numBins;
+        this.queues = new Set[numBins];
+        for (int j = 0; j < numBins; j++) {
+            this.queues[j] = new HashSet();
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Queue, java.util.Collection
+    @Override
     public boolean add(T t) {
-        int i;
+        int priority;
         this.lock.lock();
         try {
             if (t instanceof HasPriority) {
-                i = ((HasPriority) t).getPriority();
-                if (i < 0) {
-                    i = 0;
-                } else if (i > this.numBins - 1) {
-                    i = this.numBins - 1;
+                priority = ((HasPriority) t).getPriority();
+                if (priority < 0) {
+                    priority = 0;
+                } else if (priority > this.numBins - 1) {
+                    priority = this.numBins - 1;
                 }
             } else {
                 Debug.Printf("Thread %s added item %s without a priority", Thread.currentThread().getName(), t.toString());
-                i = 0;
+                priority = 0;
             }
-            boolean add = this.queues[i].add(t);
-            this.allItems.put(t, Integer.valueOf(i));
-            Debug.Printf("Thread %s added item to the queue, bin %d/%d", Thread.currentThread().getName(), Integer.valueOf(i), Integer.valueOf(this.numBins));
+            boolean add = this.queues[priority].add(t);
+            this.allItems.put(t, Integer.valueOf(priority));
+            Debug.Printf("Thread %s added item to the queue, bin %d/%d", Thread.currentThread().getName(), Integer.valueOf(priority), Integer.valueOf(this.numBins));
             this.notEmpty.signalAll();
             return add;
         } finally {
@@ -56,7 +55,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean addAll(Collection<? extends T> collection) {
         boolean z = false;
         Iterator<? extends T> it = collection.iterator();
@@ -66,7 +65,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         return z;
     }
 
-    @Override // java.util.Collection
+    @Override
     public void clear() {
         this.lock.lock();
         try {
@@ -79,7 +78,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Collection
+    @Override
     public boolean contains(Object obj) {
         this.lock.lock();
         try {
@@ -89,7 +88,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean containsAll(Collection<?> collection) {
         this.lock.lock();
         boolean z = true;
@@ -110,15 +109,15 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int drainTo(Collection<? super T> collection) {
         this.lock.lock();
         try {
             int i = 0;
-            for (int i2 = 0; i2 < this.numBins; i2++) {
-                i += this.queues[i2].size();
-                collection.addAll(this.queues[i2]);
-                this.queues[i2].clear();
+            for (int j = 0; j < this.numBins; j++) {
+                i += this.queues[j].size();
+                collection.addAll(this.queues[j]);
+                this.queues[j].clear();
             }
             this.allItems.clear();
             return i;
@@ -127,7 +126,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int drainTo(Collection<? super T> collection, int i) {
         if (collection == this) throw new IllegalArgumentException("Cannot drain a queue into itself");
         this.lock.lock();
@@ -145,7 +144,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Queue
+    @Override
     public T element() {
         T peek = peek();
         if (peek == null) {
@@ -154,7 +153,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         return peek;
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean isEmpty() {
         this.lock.lock();
         try {
@@ -164,22 +163,22 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection, java.lang.Iterable
+    @Override
     public Iterator<T> iterator() {
         throw new UnsupportedOperationException("Iterator not supported");
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Queue
+    @Override
     public boolean offer(T t) {
         return add(t);
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public boolean offer(T t, long j, TimeUnit timeUnit) throws InterruptedException {
         return add(t);
     }
 
-    @Override // java.util.Queue
+    @Override
     public T peek() {
         this.lock.lock();
         try {
@@ -190,7 +189,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Queue
+    @Override
     public T poll() {
         this.lock.lock();
         try {
@@ -200,17 +199,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:12:0x002b, code lost:
-    
-        r2.remove();
-        r7.allItems.remove(r0);
-        com.lumiyaviewer.lumiya.Debug.Printf("Thread %s got item with priority %d", java.lang.Thread.currentThread().getName(), java.lang.Integer.valueOf(r1));
-     */
-    @Override // java.util.concurrent.BlockingQueue
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
+    @Override
     public T poll(long j, TimeUnit timeUnit) throws InterruptedException {
         long remaining = timeUnit.toNanos(j);
         this.lock.lockInterruptibly();
@@ -226,17 +215,17 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public void put(T t) throws InterruptedException {
         add(t);
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int remainingCapacity() {
         return Integer.MAX_VALUE;
     }
 
-    @Override // java.util.Queue
+    @Override
     public T remove() {
         T poll = poll();
         if (poll == null) {
@@ -245,7 +234,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         return poll;
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Collection
+    @Override
     public boolean remove(Object obj) {
         this.lock.lock();
         try {
@@ -256,7 +245,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean removeAll(Collection<?> collection) {
         boolean z = false;
         Iterator<?> it = collection.iterator();
@@ -266,7 +255,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         return z;
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean retainAll(Collection<?> collection) {
         this.lock.lock();
         try {
@@ -281,7 +270,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public int size() {
         this.lock.lock();
         try {
@@ -291,7 +280,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public T take() throws InterruptedException {
         this.lock.lockInterruptibly();
         try {
@@ -303,13 +292,13 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public Object[] toArray() {
         throw new UnsupportedOperationException();
     }
 
-    @Override // java.util.Collection
-    public <T> T[] toArray(T[] tArr) {
+    @Override
+    public <T> T[] toArray(T[] ts) {
         throw new UnsupportedOperationException();
     }
 

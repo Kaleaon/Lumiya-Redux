@@ -4,17 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * SimulatorViewerTimeMessage - Allows viewer to resynch to world time
+ *
+ * <p>Template: {@code SimulatorViewerTimeMessage Low 150 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_time_synch()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class SimulatorViewerTimeMessage extends SLMessage {
     public TimeInfo TimeInfo_Field;
 
+    /** Block TimeInfo, Single. */
     public static class TimeInfo {
-        public int SecPerDay;
-        public int SecPerYear;
-        public LLVector3 SunAngVelocity;
-        public LLVector3 SunDirection;
-        public float SunPhase;
-        public long UsecSinceStart;
+        public int SecPerDay; // U32
+        public int SecPerYear; // U32
+        public LLVector3 SunAngVelocity; // LLVector3
+        public LLVector3 SunDirection; // LLVector3
+        public float SunPhase; // F32
+        public long UsecSinceStart; // U64
     }
 
     public SimulatorViewerTimeMessage() {
@@ -22,21 +30,22 @@ public class SimulatorViewerTimeMessage extends SLMessage {
         this.TimeInfo_Field = new TimeInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 48;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorViewerTimeMessage(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorViewerTimeMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -106);
+        // Message number: Low 150 (SimulatorViewerTimeMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x96);
         packLong(byteBuffer, this.TimeInfo_Field.UsecSinceStart);
         packInt(byteBuffer, this.TimeInfo_Field.SecPerDay);
         packInt(byteBuffer, this.TimeInfo_Field.SecPerYear);
@@ -45,7 +54,7 @@ public class SimulatorViewerTimeMessage extends SLMessage {
         packLLVector3(byteBuffer, this.TimeInfo_Field.SunAngVelocity);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TimeInfo_Field.UsecSinceStart = unpackLong(byteBuffer);
         this.TimeInfo_Field.SecPerDay = unpackInt(byteBuffer);

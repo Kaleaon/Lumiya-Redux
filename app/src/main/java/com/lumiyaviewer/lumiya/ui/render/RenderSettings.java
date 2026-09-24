@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.render;
 
 import android.content.SharedPreferences;
 
-/* loaded from: classes.dex */
 public class RenderSettings {
     public final int avatarCountLimit;
     public final int drawDistance;

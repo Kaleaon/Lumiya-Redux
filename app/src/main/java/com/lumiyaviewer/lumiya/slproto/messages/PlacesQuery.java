@@ -1,31 +1,44 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * PlacesQuery
+ * Used for getting a list of places for the group land panel
+ * and the user land holdings panel.  NOT for the directory.
+ * The dataserver now implements the "/agent/<agent-id>/owned-land"
+ * endpoint as a replacement for PlacesQuery and PlacesReply.
+ * This has not yet been exposed in the viewer through a capability...
+ * but this message's days are numbered.
+ *
+ * <p>Template: {@code PlacesQuery Low 29 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class PlacesQuery extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public TransactionData TransactionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID QueryID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID QueryID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public int Category;
-        public int QueryFlags;
-        public byte[] QueryText;
-        public byte[] SimName;
+        public int Category; // S8
+        public int QueryFlags; // U32
+        public byte[] QueryText; // Variable 1
+        public byte[] SimName; // Variable 1
     }
 
+    /** Block TransactionData, Single. */
     public static class TransactionData {
-        public UUID TransactionID;
+        public UUID TransactionID; // LLUUID
     }
 
     public PlacesQuery() {
@@ -35,21 +48,22 @@ public class PlacesQuery extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.QueryData_Field.QueryText.length + 1 + 4 + 1 + 1 + this.QueryData_Field.SimName.length + 68;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePlacesQuery(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePlacesQuery(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.GS);
+        // Message number: Low 29 (PlacesQuery).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x1D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.QueryID);
@@ -60,7 +74,7 @@ public class PlacesQuery extends SLMessage {
         packVariable(byteBuffer, this.QueryData_Field.SimName, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

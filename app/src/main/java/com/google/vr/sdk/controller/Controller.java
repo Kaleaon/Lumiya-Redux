@@ -2,7 +2,6 @@ package com.google.vr.sdk.controller;
 
 import android.graphics.PointF;
 
-/* loaded from: classes.dex */
 public class Controller {
     private static final int DURATION_REQUIRED_TO_RECENTER_NS = 600000000;
     static final int MIN_VRCORE_API_WITH_RECENTERING = 8;
@@ -78,8 +77,8 @@ public class Controller {
         this.controllerEventListener = eventListener;
     }
 
-    boolean setHomeButtonState(boolean z) {
-        this.homeButtonState = z;
+    boolean setHomeButtonState(boolean homeButtonState) {
+        this.homeButtonState = homeButtonState;
         if (!this.enableRecenterShim) {
             return false;
         }

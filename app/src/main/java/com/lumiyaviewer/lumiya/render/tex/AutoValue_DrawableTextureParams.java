@@ -4,14 +4,13 @@ import com.lumiyaviewer.lumiya.slproto.avatar.AvatarTextureFaceIndex;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
     private final AvatarTextureFaceIndex avatarFaceIndex;
     private final UUID avatarUUID;
     private final TextureClass textureClass;
     private final UUID uuid;
 
-    AutoValue_DrawableTextureParams(UUID uuid, TextureClass textureClass, @Nullable AvatarTextureFaceIndex avatarTextureFaceIndex, @Nullable UUID uuid2) {
+    AutoValue_DrawableTextureParams(UUID uuid, TextureClass textureClass, @Nullable AvatarTextureFaceIndex avatarTextureFaceIndex, @Nullable UUID avatarUUID) {
         if (uuid == null) {
             throw new NullPointerException("Null uuid");
         }
@@ -21,16 +20,16 @@ final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
         }
         this.textureClass = textureClass;
         this.avatarFaceIndex = avatarTextureFaceIndex;
-        this.avatarUUID = uuid2;
+        this.avatarUUID = avatarUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams
+    @Override
     @Nullable
     public AvatarTextureFaceIndex avatarFaceIndex() {
         return this.avatarFaceIndex;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams
+    @Override
     @Nullable
     public UUID avatarUUID() {
         return this.avatarUUID;
@@ -54,7 +53,7 @@ final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
         return (((this.avatarFaceIndex == null ? 0 : this.avatarFaceIndex.hashCode()) ^ ((((this.uuid.hashCode() ^ 1000003) * 1000003) ^ this.textureClass.hashCode()) * 1000003)) * 1000003) ^ (this.avatarUUID != null ? this.avatarUUID.hashCode() : 0);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams
+    @Override
     public TextureClass textureClass() {
         return this.textureClass;
     }
@@ -63,7 +62,7 @@ final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
         return "DrawableTextureParams{uuid=" + this.uuid + ", textureClass=" + this.textureClass + ", avatarFaceIndex=" + this.avatarFaceIndex + ", avatarUUID=" + this.avatarUUID + "}";
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams
+    @Override
     public UUID uuid() {
         return this.uuid;
     }

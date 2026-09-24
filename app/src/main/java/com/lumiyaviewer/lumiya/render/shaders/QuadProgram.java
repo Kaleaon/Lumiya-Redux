@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class QuadProgram extends ShaderProgram {
     public int sTexture;
     public int uColor;
@@ -17,12 +16,12 @@ public class QuadProgram extends ShaderProgram {
         super(Shader.QuadVertexShader, Shader.QuadFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         this.vPosition = GLES20.glGetAttribLocation(this.handle, "vPosition");
         this.vTexCoord = GLES20.glGetAttribLocation(this.handle, "vTexCoord");
@@ -34,7 +33,7 @@ public class QuadProgram extends ShaderProgram {
         this.uPostTranslate = GLES20.glGetUniformLocation(this.handle, "uPostTranslate");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int getHandle() {
         return super.getHandle();
     }

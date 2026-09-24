@@ -1,26 +1,32 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Get inventory segment.
+ *
+ * <p>Template: {@code FetchInventoryDescendents Low 277 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class FetchInventoryDescendents extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryData InventoryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Single. */
     public static class InventoryData {
-        public boolean FetchFolders;
-        public boolean FetchItems;
-        public UUID FolderID;
-        public UUID OwnerID;
-        public int SortOrder;
+        public boolean FetchFolders; // BOOL - false will omit folders in query
+        public boolean FetchItems; // BOOL - false will omit items in query
+        public UUID FolderID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public int SortOrder; // S32 - 0 = name, 1 = time
     }
 
     public FetchInventoryDescendents() {
@@ -29,21 +35,22 @@ public class FetchInventoryDescendents extends SLMessage {
         this.InventoryData_Field = new InventoryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 74;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFetchInventoryDescendents(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFetchInventoryDescendents(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.NAK);
+        // Message number: Low 277 (FetchInventoryDescendents).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x15);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.InventoryData_Field.FolderID);
@@ -53,7 +60,7 @@ public class FetchInventoryDescendents extends SLMessage {
         packBoolean(byteBuffer, this.InventoryData_Field.FetchItems);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

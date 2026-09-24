@@ -1,79 +1,91 @@
 package com.google.vrtoolkit.cardboard;
 
-import java.lang.reflect.Array;
-
-/* loaded from: classes.dex */
 class SensorReadingStats {
-    private static final String TAG = SensorReadingStats.class.getSimpleName();
-    private int numAxes;
-    private float[][] sampleBuf;
-    private int sampleBufSize;
-    private int samplesAdded;
-    private int writePos;
+   private static final String TAG = SensorReadingStats.class.getSimpleName();
+   private int numAxes;
+   private float[][] sampleBuf;
+   private int sampleBufSize;
+   private int samplesAdded;
+   private int writePos;
 
-    SensorReadingStats(int i, int i2) {
-        this.sampleBufSize = i;
-        this.numAxes = i2;
-        if (i <= 0) {
-            throw new IllegalArgumentException("sampleBufSize is invalid.");
-        }
-        if (i2 <= 0) {
+   SensorReadingStats(int sampleBufSize, int numAxes) {
+      this.sampleBufSize = sampleBufSize;
+      this.numAxes = numAxes;
+      if (sampleBufSize > 0) {
+         if (numAxes > 0) {
+            this.sampleBuf = new float[sampleBufSize][numAxes];
+         } else {
             throw new IllegalArgumentException("numAxes is invalid.");
-        }
-        this.sampleBuf = (float[][]) Array.newInstance((Class<?>) Float.TYPE, i, i2);
-    }
+         }
+      } else {
+         throw new IllegalArgumentException("sampleBufSize is invalid.");
+      }
+   }
 
-    void addSample(float[] fArr) {
-        if (fArr.length < this.numAxes) {
-            throw new IllegalArgumentException("values.length is less than # of axes.");
-        }
-        this.writePos = (this.writePos + 1) % this.sampleBufSize;
-        for (int i = 0; i < this.numAxes; i++) {
-            this.sampleBuf[this.writePos][i] = fArr[i];
-        }
-        this.samplesAdded++;
-    }
+   void addSample(float[] floats) {
+      if (floats.length < this.numAxes) {
+         throw new IllegalArgumentException("values.length is less than # of axes.");
+      } else {
+         this.writePos = (this.writePos + 1) % this.sampleBufSize;
 
-    float getAverage(int i) {
-        if (!statsAvailable()) {
-            throw new IllegalStateException("Average not available. Not enough samples.");
-        }
-        if (i < 0 || i >= this.numAxes) {
-            throw new IllegalStateException(new StringBuilder(38).append("axis must be between 0 and ").append(this.numAxes - 1).toString());
-        }
-        float f = 0.0f;
-        for (int i2 = 0; i2 < this.sampleBufSize; i2++) {
-            f += this.sampleBuf[i2][i];
-        }
-        return f / this.sampleBufSize;
-    }
+         for (int var2 = 0; var2 < this.numAxes; var2++) {
+            this.sampleBuf[this.writePos][var2] = floats[var2];
+         }
 
-    float getMaxAbsoluteDeviation() {
-        float f = 0.0f;
-        for (int i = 0; i < this.numAxes; i++) {
-            f = Math.max(f, getMaxAbsoluteDeviation(i));
-        }
-        return f;
-    }
+         this.samplesAdded++;
+      }
+   }
 
-    float getMaxAbsoluteDeviation(int i) {
-        if (i < 0 || i >= this.numAxes) {
-            throw new IllegalStateException(new StringBuilder(38).append("axis must be between 0 and ").append(this.numAxes - 1).toString());
-        }
-        float average = getAverage(i);
-        float f = 0.0f;
-        for (int i2 = 0; i2 < this.sampleBufSize; i2++) {
-            f = Math.max(Math.abs(this.sampleBuf[i2][i] - average), f);
-        }
-        return f;
-    }
+   float getAverage(int var1) {
+      int var3 = 0;
+      if (!this.statsAvailable()) {
+         throw new IllegalStateException("Average not available. Not enough samples.");
+      } else if (var1 >= 0 && var1 < this.numAxes) {
+         float var2;
+         for (var2 = 0.0F; var3 < this.sampleBufSize; var3++) {
+            var2 += this.sampleBuf[var3][var1];
+         }
 
-    void reset() {
-        this.samplesAdded = 0;
-        this.writePos = 0;
-    }
+         return var2 / this.sampleBufSize;
+      } else {
+         var1 = this.numAxes;
+         throw new IllegalStateException(new StringBuilder(38).append("axis must be between 0 and ").append(var1 - 1).toString());
+      }
+   }
 
-    boolean statsAvailable() {
-        return this.samplesAdded >= this.sampleBufSize;
-    }
+   float getMaxAbsoluteDeviation() {
+      float var1 = 0.0F;
+
+      for (int var2 = 0; var2 < this.numAxes; var2++) {
+         var1 = Math.max(var1, this.getMaxAbsoluteDeviation(var2));
+      }
+
+      return var1;
+   }
+
+   float getMaxAbsoluteDeviation(int var1) {
+      int var4 = 0;
+      if (var1 >= 0 && var1 < this.numAxes) {
+         float average = this.getAverage(var1);
+
+         float var2;
+         for (var2 = 0.0F; var4 < this.sampleBufSize; var4++) {
+            var2 = Math.max(Math.abs(this.sampleBuf[var4][var1] - average), var2);
+         }
+
+         return var2;
+      } else {
+         var1 = this.numAxes;
+         throw new IllegalStateException(new StringBuilder(38).append("axis must be between 0 and ").append(var1 - 1).toString());
+      }
+   }
+
+   void reset() {
+      this.samplesAdded = 0;
+      this.writePos = 0;
+   }
+
+   boolean statsAvailable() {
+      return this.samplesAdded >= this.sampleBufSize;
+   }
 }

@@ -7,7 +7,6 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 
-/* loaded from: classes.dex */
 public class UserPicDao extends AbstractDao<UserPic, Long> {
     public static final String TABLENAME = "USER_PIC";
 
@@ -25,35 +24,34 @@ public class UserPicDao extends AbstractDao<UserPic, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'USER_PIC' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'BITMAP' BLOB);");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_USER_PIC_UUID ON USER_PIC (UUID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'USER_PIC' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'BITMAP' BLOB);");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_USER_PIC_UUID ON USER_PIC (UUID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'USER_PIC'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'USER_PIC'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
-    public void bindValues(SQLiteStatement sQLiteStatement, UserPic userPic) {
-        sQLiteStatement.clearBindings();
+    @Override
+    public void bindValues(SQLiteStatement sqLiteStatement, UserPic userPic) {
+        sqLiteStatement.clearBindings();
         Long id = userPic.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
         String uuid = userPic.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(2, uuid);
+            sqLiteStatement.bindString(2, uuid);
         }
         byte[] bitmap = userPic.getBitmap();
         if (bitmap != null) {
-            sQLiteStatement.bindBlob(3, bitmap);
+            sqLiteStatement.bindBlob(3, bitmap);
         }
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long getKey(UserPic userPic) {
         if (userPic != null) {
             return userPic.getId();
@@ -61,18 +59,18 @@ public class UserPicDao extends AbstractDao<UserPic, Long> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UserPic readEntity(Cursor cursor, int i) {
         return new UserPic(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)), cursor.isNull(i + 1) ? null : cursor.getString(i + 1), cursor.isNull(i + 2) ? null : cursor.getBlob(i + 2));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, UserPic userPic, int i) {
         userPic.setId(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)));
         userPic.setUuid(cursor.isNull(i + 1) ? null : cursor.getString(i + 1));
@@ -80,7 +78,7 @@ public class UserPicDao extends AbstractDao<UserPic, Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -88,8 +86,7 @@ public class UserPicDao extends AbstractDao<UserPic, Long> {
         return Long.valueOf(cursor.getLong(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long updateKeyAfterInsert(UserPic userPic, long j) {
         userPic.setId(Long.valueOf(j));
         return Long.valueOf(j);

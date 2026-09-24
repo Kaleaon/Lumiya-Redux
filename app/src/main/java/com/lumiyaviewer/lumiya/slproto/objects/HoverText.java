@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 import com.google.common.base.Objects;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class HoverText {
     public static HoverText create(String str, int i) {
         return new AutoValue_HoverText(str, i);

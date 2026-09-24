@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.Point;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class Frame {
     private static final String TAG = Frame.class.getSimpleName();
     private long nativeFrame = 0;
@@ -46,13 +45,13 @@ public class Frame {
         return this.nativeFrame;
     }
 
-    void setNativeFrame(long j) {
-        this.nativeFrame = j;
+    void setNativeFrame(long nativeFrame) {
+        this.nativeFrame = nativeFrame;
     }
 
-    public void submit(BufferViewportList bufferViewportList, float[] fArr) {
+    public void submit(BufferViewportList bufferViewportList, float[] floats) {
         checkAccess();
-        GvrApi.nativeFrameSubmit(this.nativeFrame, bufferViewportList.nativeBufferViewportList, fArr);
+        GvrApi.nativeFrameSubmit(this.nativeFrame, bufferViewportList.nativeBufferViewportList, floats);
         this.nativeFrame = 0L;
     }
 

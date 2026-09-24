@@ -4,7 +4,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.Signature;
 import android.util.Base64;
 
-/* loaded from: classes.dex */
 public class SignatureUtils {
     public static final Signature VRCORE_RELEASE_SIGNATURE = signatureFromBase64("MIIDuTCCAqGgAwIBAgIJAJ5sYs0DwTtAMA0GCSqGSIb3DQEBBQUAMHMxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQHDA1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKDAtHb29nbGUgSW5jLjEQMA4GA1UECwwHQW5kcm9pZDEPMA0GA1UEAwwGdnJjb3JlMB4XDTE2MDEyMDA1MjE0NVoXDTQzMDYwNzA1MjE0NVowczELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDU1vdW50YWluIFZpZXcxFDASBgNVBAoMC0dvb2dsZSBJbmMuMRAwDgYDVQQLDAdBbmRyb2lkMQ8wDQYDVQQDDAZ2cmNvcmUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDOWHL268X/9Rb3z5JMO2gfGKzYkaZbWpa5rkJGYxk97U13ptjJWCmLj6GCwFgb4E3XOY+dT+Lwtpypu8HWuC88v28yHrP4db3idvqZgRGt7pqCsZ8OwLO0axt7lZbHmyjDXMhGZv6b3gU26QSiJl90U7q0kJDE7puyln05PTbkQQuAK3BwGQfPahLvzYiKPpOoQ15Ly7D74+uz7iw77CYLQsr3aQveeJCC1CCdC9K3pWqaszaIPu2IhjLeVBGD1clWbJ29bS58eCsCFR4hQpOU7NndrJ+CiyibNZ07EmQxX25qjdgu6WRxp7fHMw+aZJy/u90WfXcb6/ArpSLdEjY1AgMBAAGjUDBOMB0GA1UdDgQWBBTg9K8anPkFlHUNEBENPAqgTvm50DAfBgNVHSMEGDAWgBTg9K8anPkFlHUNEBENPAqgTvm50DAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQA/Pm+xcYEJZm7bbLabnEYLeWcB/OkDoE5rggmaEB3hJuy4pqcpNo8FaTvuQaEPwIZxdr+wyJdTR4ZouCsDOISAySddYL0vFDtR1DeT8GpJX0PIQpebbO7Hp9tgl4RYecoznZXO/MRlKztLRYQ8QfRyZ+gz+dXazxjempI0ibzSUG7lDC1tbVzVd5r3ZOZB5PteEPUbL/odpd3qJQ/pQcqA3bWo+rhHTmjuzOdLLvZvwjz6JCK0V9ts+x2DCrpNvou1Kaqu0PR4WNik5YqBwOaU6D+KZ1Rd59XOCbYlf5ga33SEtJ5Xe4+9J5sTcE/jXLYj3IyI98QDKPtiJq5p4DpZ");
     public static final Signature VRCORE_DEBUG_SIGNATURE = signatureFromBase64("MIIDuTCCAqGgAwIBAgIJAOyCeaG1M1i8MA0GCSqGSIb3DQEBBQUAMHMxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQHDA1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKDAtHb29nbGUgSW5jLjEQMA4GA1UECwwHQW5kcm9pZDEPMA0GA1UEAwwGdnJjb3JlMB4XDTE2MDEyMDA1MjE0NFoXDTQzMDYwNzA1MjE0NFowczELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDU1vdW50YWluIFZpZXcxFDASBgNVBAoMC0dvb2dsZSBJbmMuMRAwDgYDVQQLDAdBbmRyb2lkMQ8wDQYDVQQDDAZ2cmNvcmUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC4bQmXAJecoOHgskWm0YHQkGifyF7j3d6RfYFX9mgY9miqg2LPbRXFgUnT10EhKQ+vcZtyhkxPMIs1cxudOQeeURurZ/+ufH0GZyfgWBd6km9Ee4VW7vGr1ZPgv2AbAgDD+PK324cJWD1G6SOlpTO1p9dCLsflWvpu5XnJV0/s4/TvaooL2Mo//h+xglhM7lV9UzZGdcde0K/qhR5z6l1AJ6fVBf551YJ6PV7hek/XO0HQZstfLxaSPdOO4Kk0RxzNBbcnKOkoNMZ2DczGl/p2T8QElWz4qYvTYvNjJjfw1CZvMMrVPvfqW88aKoQpdzfH0Rydgw3Y2ixtNgIZtB5/AgMBAAGjUDBOMB0GA1UdDgQWBBRguTHVQL8376tckHNrBr9d1ofOkTAfBgNVHSMEGDAWgBRguTHVQL8376tckHNrBr9d1ofOkTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQAsJHzMpt1EVeo0IYg1otZAt2VMATYsG1QRa3zsw/4SsTJsUrJesDGJUIzJCMLxvTGXGrW3yD1l6XufFMNFW+42Dai9NiJbbhRbOSFzYXuw9jxUP6WXNhGk9OjlApZK0ZZSWJD0CKHRl6k7rrx2Z5wPAnzWSfzPRY1Gk7gNoORQzql4QzZKlRvoljhOAyNsjPdo3TGBxgtT1M2J0GlR/6/+TTUyjiv1zqecRd7UAMshlz/dNDvgC+uaIy6NT++B8vOVZZhBYWjECawkBy9qH4ZXUwWJ+luhSnDk9R0GEDG0PZ3TLi9FYQKemaG1ORCsQIIxcOsw2IszL/dEJ2CEf/HT");
@@ -17,9 +16,9 @@ public class SignatureUtils {
         return new Signature(Base64.decode(str, 0));
     }
 
-    public static boolean verifySignature(PackageInfo packageInfo, Signature... signatureArr) {
+    public static boolean verifySignature(PackageInfo packageInfo, Signature... signature3) {
         for (Signature signature : packageInfo.signatures) {
-            for (Signature signature2 : signatureArr) {
+            for (Signature signature2 : signature3) {
                 if (signature2.equals(signature)) {
                     return true;
                 }

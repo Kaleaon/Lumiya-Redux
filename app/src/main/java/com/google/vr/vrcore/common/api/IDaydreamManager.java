@@ -10,7 +10,6 @@ import android.os.RemoteException;
 import com.google.vr.vrcore.common.api.IDaydreamListener;
 import com.google.vr.vrcore.common.api.ITransitionCallbacks;
 
-/* loaded from: classes.dex */
 public interface IDaydreamManager extends IInterface {
 
     public static abstract class Stub extends Binder implements IDaydreamManager {
@@ -31,19 +30,19 @@ public interface IDaydreamManager extends IInterface {
         private static class Proxy implements IDaydreamManager {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public boolean deprecatedLaunchInVr(PendingIntent pendingIntent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -52,19 +51,19 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         pendingIntent.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(4, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public boolean exitFromVr(PendingIntent pendingIntent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -73,11 +72,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         pendingIntent.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(10, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(10, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -86,19 +85,19 @@ public interface IDaydreamManager extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
-            public void handleInsertionIntoHeadset(byte[] bArr) throws RemoteException {
+            @Override
+            public void handleInsertionIntoHeadset(byte[] bytes) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeByteArray(bArr);
+                    obtain.writeByteArray(bytes);
                     this.mRemote.transact(11, obtain, null, 1);
                 } finally {
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public void handleRemovalFromHeadset() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -109,10 +108,10 @@ public interface IDaydreamManager extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public boolean launchInVr(PendingIntent pendingIntent, ComponentName componentName) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -127,50 +126,50 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(7, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(7, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public boolean launchVrHome() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(8, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(8, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
-            public boolean launchVrTransition(ITransitionCallbacks iTransitionCallbacks) throws RemoteException {
+            @Override
+            public boolean launchVrTransition(ITransitionCallbacks transitionCallbacks) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iTransitionCallbacks != null ? iTransitionCallbacks.asBinder() : null);
-                    this.mRemote.transact(9, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    obtain.writeStrongBinder(transitionCallbacks != null ? transitionCallbacks.asBinder() : null);
+                    this.mRemote.transact(9, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public int prepareVr(ComponentName componentName, HeadTrackingState headTrackingState) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -179,20 +178,20 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    int readInt = obtain2.readInt();
-                    if (obtain2.readInt() != 0) {
-                        headTrackingState.readFromParcel(obtain2);
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
+                    int readInt = parcel.readInt();
+                    if (parcel.readInt() != 0) {
+                        headTrackingState.readFromParcel(parcel);
                     }
                     return readInt;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public void registerDaydreamIntent(PendingIntent pendingIntent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -209,10 +208,10 @@ public interface IDaydreamManager extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
-            public boolean registerListener(ComponentName componentName, IDaydreamListener iDaydreamListener) throws RemoteException {
+            @Override
+            public boolean registerListener(ComponentName componentName, IDaydreamListener daydreamListener) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -221,17 +220,17 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    obtain.writeStrongBinder(iDaydreamListener != null ? iDaydreamListener.asBinder() : null);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    obtain.writeStrongBinder(daydreamListener != null ? daydreamListener.asBinder() : null);
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public void unregisterDaydreamIntent() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -242,10 +241,10 @@ public interface IDaydreamManager extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamManager
+            @Override
             public boolean unregisterListener(ComponentName componentName) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -254,11 +253,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -276,12 +275,12 @@ public interface IDaydreamManager extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IDaydreamManager)) ? (IDaydreamManager) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:
@@ -365,7 +364,7 @@ public interface IDaydreamManager extends IInterface {
 
     boolean exitFromVr(PendingIntent pendingIntent) throws RemoteException;
 
-    void handleInsertionIntoHeadset(byte[] bArr) throws RemoteException;
+    void handleInsertionIntoHeadset(byte[] bytes) throws RemoteException;
 
     void handleRemovalFromHeadset() throws RemoteException;
 
@@ -373,13 +372,13 @@ public interface IDaydreamManager extends IInterface {
 
     boolean launchVrHome() throws RemoteException;
 
-    boolean launchVrTransition(ITransitionCallbacks iTransitionCallbacks) throws RemoteException;
+    boolean launchVrTransition(ITransitionCallbacks transitionCallbacks) throws RemoteException;
 
     int prepareVr(ComponentName componentName, HeadTrackingState headTrackingState) throws RemoteException;
 
     void registerDaydreamIntent(PendingIntent pendingIntent) throws RemoteException;
 
-    boolean registerListener(ComponentName componentName, IDaydreamListener iDaydreamListener) throws RemoteException;
+    boolean registerListener(ComponentName componentName, IDaydreamListener daydreamListener) throws RemoteException;
 
     void unregisterDaydreamIntent() throws RemoteException;
 

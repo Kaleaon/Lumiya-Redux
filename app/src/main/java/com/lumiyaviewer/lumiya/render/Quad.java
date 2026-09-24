@@ -7,7 +7,6 @@ import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-/* loaded from: classes.dex */
 public class Quad {
     private final GLLoadableBuffer indexBuffer;
     private final GLLoadableBuffer vertexBuffer;

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class Chatter {
     private boolean active;
     private Long id;
@@ -16,19 +15,19 @@ public class Chatter {
     public Chatter() {
     }
 
-    public Chatter(Long l) {
-        this.id = l;
+    public Chatter(Long id) {
+        this.id = id;
     }
 
-    public Chatter(Long l, int i, UUID uuid, boolean z, boolean z2, int i2, Long l2, UUID uuid2) {
-        this.id = l;
-        this.type = i;
+    public Chatter(Long id, int type, UUID uuid, boolean active, boolean muted, int unreadCount, Long lastMessageID, UUID lastSessionID) {
+        this.id = id;
+        this.type = type;
         this.uuid = uuid;
-        this.active = z;
-        this.muted = z2;
-        this.unreadCount = i2;
-        this.lastMessageID = l2;
-        this.lastSessionID = uuid2;
+        this.active = active;
+        this.muted = muted;
+        this.unreadCount = unreadCount;
+        this.lastMessageID = lastMessageID;
+        this.lastSessionID = lastSessionID;
     }
 
     public boolean getActive() {
@@ -63,32 +62,32 @@ public class Chatter {
         return this.uuid;
     }
 
-    public void setActive(boolean z) {
-        this.active = z;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setLastMessageID(Long l) {
-        this.lastMessageID = l;
+    public void setLastMessageID(Long lastMessageID) {
+        this.lastMessageID = lastMessageID;
     }
 
     public void setLastSessionID(UUID uuid) {
         this.lastSessionID = uuid;
     }
 
-    public void setMuted(boolean z) {
-        this.muted = z;
+    public void setMuted(boolean muted) {
+        this.muted = muted;
     }
 
-    public void setType(int i) {
-        this.type = i;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public void setUnreadCount(int i) {
-        this.unreadCount = i;
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
 
     public void setUuid(UUID uuid) {

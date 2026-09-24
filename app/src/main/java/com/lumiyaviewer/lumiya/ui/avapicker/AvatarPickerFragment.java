@@ -25,11 +25,7 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class AvatarPickerFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener {
-
-    /* renamed from: -com-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f234x76a4d210 = null;
 
     public class AvatarPickerPagerAdapter extends PagerAdapter {
         private final Context context;
@@ -38,7 +34,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             this.context = context;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
             if (obj instanceof View) {
                 if (obj instanceof ListView) {
@@ -48,25 +44,25 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             }
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public int getCount() {
-            return ContactListType.valuesCustom().length;
+            return ContactListType.values().length;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public CharSequence getPageTitle(int i) {
-            if (i < 0 || i >= ContactListType.valuesCustom().length) {
+            if (i < 0 || i >= ContactListType.values().length) {
                 return null;
             }
-            return ContactListType.valuesCustom()[i].toString();
+            return ContactListType.values()[i].toString();
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public Object instantiateItem(ViewGroup viewGroup, int i) {
-            if (i < 0 || i >= ContactListType.valuesCustom().length) {
+            if (i < 0 || i >= ContactListType.values().length) {
                 return null;
             }
-            ContactListType contactListType = ContactListType.valuesCustom()[i];
+            ContactListType contactListType = ContactListType.values()[i];
             ListView listView = new ListView(this.context);
             listView.setOnItemClickListener(AvatarPickerFragment.this);
             listView.setAdapter(AvatarPickerFragment.this.createListAdapter(AvatarPickerFragment.this.getContext(), ActivityUtils.getUserManager(AvatarPickerFragment.this.getArguments()), contactListType));
@@ -74,7 +70,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             return listView;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public boolean isViewFromObject(View view, Object obj) {
             return view == obj;
         }
@@ -87,8 +83,8 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
 
         public final int drawableId;
 
-        ContactListType(int i) {
-            this.drawableId = i;
+        ContactListType(int drawableId) {
+            this.drawableId = drawableId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -105,43 +101,20 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             this();
         }
 
-        @Override // com.google.common.base.Predicate
+        @Override
         public boolean apply(@Nullable ChatterDisplayData chatterDisplayData) {
             return chatterDisplayData != null && (chatterDisplayData.chatterID instanceof ChatterID.ChatterIDUser) && chatterDisplayData.chatterID.isValidUUID();
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m398x55b16b4() {
-        if (f234x76a4d210 != null) {
-            return f234x76a4d210;
-        }
-        int[] iArr = new int[ContactListType.valuesCustom().length];
-        try {
-            iArr[ContactListType.Friends.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[ContactListType.Nearby.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[ContactListType.Recent.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        f234x76a4d210 = iArr;
-        return iArr;
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
     @Nonnull
     public ListAdapter createListAdapter(Context context, UserManager userManager, @Nonnull ContactListType contactListType) {
-        switch (m398x55b16b4()[contactListType.ordinal()]) {
-            case 1:
+        switch (contactListType) {
+            case Friends:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Friends);
-            case 2:
+            case Nearby:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Nearby);
-            case 3:
+            case Recent:
                 return new ChatterListSubscriptionAdapter(context, userManager, ChatterListType.Active, new UsersOnlyPredicate(null));
             default:
                 throw new IllegalArgumentException("Unknown contact list type");
@@ -151,12 +124,12 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
     protected void createExtraView(LayoutInflater layoutInflater, FrameLayout frameLayout) {
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     public abstract String getTitle();
 
     protected abstract void onAvatarSelected(ChatterID chatterID, @Nullable String str);
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.avatar_picker, viewGroup, false);
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.avatar_picker_pager);
@@ -166,7 +139,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         return inflate;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         ChatterID chatterID;
         Object itemAtPosition = adapterView.getItemAtPosition(i);

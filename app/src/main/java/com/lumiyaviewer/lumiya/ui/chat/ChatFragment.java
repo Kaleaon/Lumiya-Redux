@@ -45,7 +45,6 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatFragment extends UserFunctionsFragment implements View.OnClickListener, View.OnKeyListener, ChatRecyclerAdapter.OnAdapterDataChanged, ChatRecyclerAdapter.OnUserPicClickedListener {
     private static final int PERMISSION_REQUEST_CODE = 500;
     private static final long typingTimeout = 5000;
@@ -71,53 +70,53 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
 
     @Nullable
     private MenuItem clearChatHistoryMenuItem = null;
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.2
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0((SLAgentCircuit) obj);
+            ChatFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.3
+    private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1((ChatterID) obj);
+            ChatFragment.this.onVoiceActiveChatter((ChatterID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.4
+    private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2((VoiceChatInfo) obj);
+            ChatFragment.this.onVoiceChatInfo((VoiceChatInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatFragment.1
-        @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
+    private final RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int i) {
             if (i == 0 || i == 1) {
                 ChatFragment.this.scrollToBottomNeeded = false;
             }
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
+        @Override
         public void onScrolled(RecyclerView recyclerView, int i, int i2) {
             ChatFragment.this.updateVisibleRange();
         }
     };
     private boolean updateRunnablePosted = false;
     private final Handler mHandler = new Handler();
-    private final Runnable updateVisibleRangeRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatFragment.2
-        @Override // java.lang.Runnable
+    private final Runnable updateVisibleRangeRunnable = new Runnable() {
+        @Override
         public void run() {
             ChatFragment.this.updateRunnablePosted = false;
             View view = ChatFragment.this.getView();
@@ -142,8 +141,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     };
     private boolean scrollToBottomRunnablePosted = false;
     private boolean scrollToBottomForceDown = false;
-    private final Runnable scrollToBottomRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatFragment.3
-        @Override // java.lang.Runnable
+    private final Runnable scrollToBottomRunnable = new Runnable() {
+        @Override
         public void run() {
             ChatFragment.this.scrollToBottomRunnablePosted = false;
             if (ChatFragment.this.getView() != null) {
@@ -170,16 +169,16 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
             }
         }
     };
-    private final TextWatcher textWatcher = new TextWatcher() { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatFragment.4
-        @Override // android.text.TextWatcher
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
         public void afterTextChanged(Editable editable) {
         }
 
-        @Override // android.text.TextWatcher
+        @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         }
 
-        @Override // android.text.TextWatcher
+        @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() != 0) {
                 ChatFragment.this.setTypingNotify(true);
@@ -190,21 +189,21 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     };
 
     private void clearChatHistory() {
-        new AlertDialog.Builder(getContext()).setMessage(R.string.clear_chat_history_confirm).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.1
+        new AlertDialog.Builder(getContext()).setMessage(R.string.clear_chat_history_confirm).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 ChatFragment.this.m423lambda$com_lumiyaviewer_lumiya_ui_chat_ChatFragment_22290(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -227,22 +226,18 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         return makeSelection;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         View view = getView();
         if (view != null) {
             Object[] objArr = new Object[1];
-            objArr[0] = sLAgentCircuit != null ? "present" : "not present";
+            objArr[0] = agentCircuit != null ? "present" : "not present";
             Debug.Printf("agentCircuit is now %s", objArr);
-            view.findViewById(R.id.sendMessageButton).setVisibility((sLAgentCircuit == null || !(this.vrMode ^ true)) ? 8 : 0);
-            view.findViewById(R.id.chat_speak_button).setVisibility((sLAgentCircuit == null || !this.vrMode) ? 8 : 0);
+            view.findViewById(R.id.sendMessageButton).setVisibility((agentCircuit == null || !(this.vrMode ^ true)) ? View.GONE : View.VISIBLE);
+            view.findViewById(R.id.chat_speak_button).setVisibility((agentCircuit == null || !this.vrMode) ? View.GONE : View.VISIBLE);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceActiveChatter, reason: merged with bridge method [inline-methods] */
-    public void m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1(ChatterID chatterID) {
+    public void onVoiceActiveChatter(ChatterID chatterID) {
         if (chatterID == null || this.userManager == null || !this.vrMode) {
             this.voiceChatInfo.unsubscribe();
         } else {
@@ -251,9 +246,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         updateVrModeControls();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
         updateVrModeControls();
     }
 
@@ -295,9 +288,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         return true;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    public void setTypingNotify(boolean z) {
-        if (!z) {
+    public void setTypingNotify(boolean typingNotify) {
+        if (!typingNotify) {
             if (this.typingNotifiedChatter != null) {
                 sendTypingNotify(this.typingNotifiedChatter, false);
                 this.typingNotifiedChatter = null;
@@ -335,7 +327,6 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateHasMoreItems() {
         View view = getView();
         if (view != null) {
@@ -350,11 +341,10 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
                     this.hasMoreItems = findLastVisibleItemPosition >= itemCount + (-2) ? this.adapter.hasMoreItemsAtBottom() : true;
                 }
             }
-            view.findViewById(R.id.scroll_to_bottom_btn).setVisibility(this.hasMoreItems ? 0 : 8);
+            view.findViewById(R.id.scroll_to_bottom_btn).setVisibility(this.hasMoreItems ? View.VISIBLE : View.GONE);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateVisibleRange() {
         if (this.adapter == null || this.layoutManager == null || getView() == null || !(!this.updateRunnablePosted)) {
             return;
@@ -370,10 +360,10 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         View view = getView();
         if (view != null) {
             if (!this.vrMode) {
-                view.findViewById(R.id.chat_vr_mode_controls).setVisibility(8);
+                view.findViewById(R.id.chat_vr_mode_controls).setVisibility(View.GONE);
                 return;
             }
-            view.findViewById(R.id.chat_vr_mode_controls).setVisibility(0);
+            view.findViewById(R.id.chat_vr_mode_controls).setVisibility(View.VISIBLE);
             if (isVoiceLoggedIn()) {
                 if (this.voiceActiveChatter.getData() != null) {
                     VoiceChatInfo data = this.voiceChatInfo.getData();
@@ -392,8 +382,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
                 z = false;
                 z2 = false;
             }
-            view.findViewById(R.id.chat_speak_button).setVisibility(z ? 8 : 0);
-            view.findViewById(R.id.chat_voice_call_button).setVisibility(z2 ? 0 : 8);
+            view.findViewById(R.id.chat_speak_button).setVisibility(z ? View.GONE : View.VISIBLE);
+            view.findViewById(R.id.chat_voice_call_button).setVisibility(z2 ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -408,7 +398,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatRecyclerAdapter.OnAdapterDataChanged
+    @Override
     public void onAdapterDataAddedAtEnd() {
         if (this.layoutManager != null && (!this.hasMoreItems || this.layoutManager.isSmoothScrolling() || this.scrollToBottomNeeded)) {
             scrollToBottom(false);
@@ -416,20 +406,20 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         updateChatHistoryExists();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatRecyclerAdapter.OnAdapterDataChanged
+    @Override
     public void onAdapterDataChanged() {
         updateVisibleRange();
         updateChatHistoryExists();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatRecyclerAdapter.OnAdapterDataChanged
+    @Override
     public void onAdapterDataReloaded() {
         this.scrollToBottomNeeded = false;
         updateVisibleRange();
         updateChatHistoryExists();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment, com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         super.onChatterNameUpdated(chatterNameRetriever);
         View view = getView();
@@ -439,32 +429,32 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.scroll_to_bottom_btn /* 2131755290 */:
+            case R.id.scroll_to_bottom_btn:
                 scrollToBottom(true);
                 break;
-            case R.id.chat_speak_button /* 2131755292 */:
+            case R.id.chat_speak_button:
                 FragmentActivity activity = getActivity();
                 if ((activity instanceof CardboardActivity) && this.chatterID != null) {
                     ((CardboardActivity) activity).startDictation(this.chatterID);
                     break;
                 }
                 break;
-            case R.id.chat_voice_call_button /* 2131755293 */:
+            case R.id.chat_voice_call_button:
                 if (this.chatterID != null) {
                     handleStartVoice(this.chatterID);
                     break;
                 }
                 break;
-            case R.id.sendMessageButton /* 2131755295 */:
+            case R.id.sendMessageButton:
                 sendMessage();
                 break;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment, com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
@@ -475,7 +465,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         this.vrMode = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment, androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.chat_history_menu, menu);
@@ -484,7 +474,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         updateChatHistoryExists();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.chat, viewGroup, false);
@@ -501,21 +491,19 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         EditText editText = (EditText) inflate.findViewById(R.id.sendMessageText);
         editText.setOnKeyListener(this);
         editText.addTextChangedListener(this.textWatcher);
-        editText.setVisibility(this.vrMode ? 8 : 0);
-        inflate.findViewById(R.id.sendMessageButton).setVisibility(this.vrMode ? 8 : 0);
-        inflate.findViewById(R.id.chat_vr_mode_controls).setVisibility(this.vrMode ? 0 : 8);
+        editText.setVisibility(this.vrMode ? View.GONE : View.VISIBLE);
+        inflate.findViewById(R.id.sendMessageButton).setVisibility(this.vrMode ? View.GONE : View.VISIBLE);
+        inflate.findViewById(R.id.chat_vr_mode_controls).setVisibility(this.vrMode ? View.VISIBLE : View.GONE);
         return inflate;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment
-    /* renamed from: onCurrentLocationChanged */
-    public void m584xeb75d0e9(CurrentLocationInfo currentLocationInfo) {
-        super.m584xeb75d0e9(currentLocationInfo);
+    @Override
+    public void onCurrentLocationChanged(CurrentLocationInfo currentLocationInfo) {
+        super.onCurrentLocationChanged(currentLocationInfo);
         updateVrModeControls();
     }
 
-    @Override // android.view.View.OnKeyListener
+    @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
         if (keyEvent.getAction() == 0 && i == 66) {
             sendMessage();
@@ -531,13 +519,13 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment, androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_chat_history_export /* 2131755769 */:
+            case R.id.item_chat_history_export:
                 exportChatHistory();
                 return true;
-            case R.id.item_chat_history_clear /* 2131755770 */:
+            case R.id.item_chat_history_clear:
                 clearChatHistory();
                 return true;
             default:
@@ -545,7 +533,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onPause() {
         if (this.markDisplayedChatterID != null) {
             UserManager userManager = this.markDisplayedChatterID.getUserManager();
@@ -558,20 +546,20 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         super.onPause();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment, androidx.fragment.app.Fragment
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         updateChatHistoryExists();
     }
 
-    @Override // androidx.fragment.app.Fragment
-    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] iArr) {
-        if (i == 500 && iArr.length > 0 && iArr[0] == 0) {
+    @Override
+    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] ints) {
+        if (i == 500 && ints.length > 0 && ints[0] == 0) {
             new ExportChatHistoryTask(getActivity()).execute(this.chatterID);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onResume() {
         UserManager userManager;
         super.onResume();
@@ -583,7 +571,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         updateChatHistoryExists();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         UserManager userManager;
         UserManager userManager2;
@@ -638,7 +626,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         setTypingNotify(false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatRecyclerAdapter.OnUserPicClickedListener
+    @Override
     public void onUserPicClicked(ChatMessageSource chatMessageSource) {
         int objectLocalID;
         if (this.userManager != null) {
@@ -657,11 +645,9 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment
-    /* renamed from: onVoiceLoginStatusChanged */
-    public void m583xeb75d0e8(Boolean bool) {
-        super.m583xeb75d0e8(bool);
+    @Override
+    public void onVoiceLoginStatusChanged(Boolean bool) {
+        super.onVoiceLoginStatusChanged(bool);
         updateVrModeControls();
     }
 }

@@ -1,13 +1,9 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-import com.google.common.primitives.UnsignedBytes;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class LLQuaternion {
 
-    /* renamed from: -com-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] f143xae1ac4c9 = null;
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     private float[] inverseMatrix;
     private float[] matrix;
@@ -30,40 +26,6 @@ public class LLQuaternion {
         }
     }
 
-    /* renamed from: -getcom-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */
-    private static /* synthetic */ int[] m268xd25893a5() {
-        if (f143xae1ac4c9 != null) {
-            return f143xae1ac4c9;
-        }
-        int[] iArr = new int[Order.valuesCustom().length];
-        try {
-            iArr[Order.XYZ.ordinal()] = 1;
-        } catch (NoSuchFieldError e) {
-        }
-        try {
-            iArr[Order.XZY.ordinal()] = 2;
-        } catch (NoSuchFieldError e2) {
-        }
-        try {
-            iArr[Order.YXZ.ordinal()] = 3;
-        } catch (NoSuchFieldError e3) {
-        }
-        try {
-            iArr[Order.YZX.ordinal()] = 4;
-        } catch (NoSuchFieldError e4) {
-        }
-        try {
-            iArr[Order.ZXY.ordinal()] = 5;
-        } catch (NoSuchFieldError e5) {
-        }
-        try {
-            iArr[Order.ZYX.ordinal()] = 6;
-        } catch (NoSuchFieldError e6) {
-        }
-        f143xae1ac4c9 = iArr;
-        return iArr;
-    }
-
     public LLQuaternion() {
         this.matrix = null;
         this.inverseMatrix = null;
@@ -73,57 +35,57 @@ public class LLQuaternion {
         this.w = 1.0f;
     }
 
-    public LLQuaternion(float f, float f2, float f3, float f4) {
+    public LLQuaternion(float x, float y, float z, float w) {
         this.matrix = null;
         this.inverseMatrix = null;
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
-        this.w = f4;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
     }
 
-    public LLQuaternion(LLQuaternion lLQuaternion) {
+    public LLQuaternion(LLQuaternion quaternion) {
         this.matrix = null;
         this.inverseMatrix = null;
-        this.x = lLQuaternion.x;
-        this.y = lLQuaternion.y;
-        this.z = lLQuaternion.z;
-        this.w = lLQuaternion.w;
+        this.x = quaternion.x;
+        this.y = quaternion.y;
+        this.z = quaternion.z;
+        this.w = quaternion.w;
     }
 
-    public LLQuaternion(float[] fArr) {
+    public LLQuaternion(float[] floats) {
         this.matrix = null;
         this.inverseMatrix = null;
-        float f = fArr[0] + 1.0f + fArr[5] + fArr[10];
+        float f = floats[0] + 1.0f + floats[5] + floats[10];
         if (f > 0.5f) {
             float sqrt = (float) (Math.sqrt(f) * 2.0d);
-            this.x = (fArr[9] - fArr[6]) / sqrt;
-            this.y = (fArr[2] - fArr[8]) / sqrt;
-            this.z = (fArr[4] - fArr[1]) / sqrt;
+            this.x = (floats[9] - floats[6]) / sqrt;
+            this.y = (floats[2] - floats[8]) / sqrt;
+            this.z = (floats[4] - floats[1]) / sqrt;
             this.w = sqrt * 0.25f;
             return;
         }
-        if (fArr[0] > fArr[5] && fArr[0] > fArr[10]) {
-            float sqrt2 = (float) (Math.sqrt(((fArr[0] + 1.0f) - fArr[5]) - fArr[10]) * 2.0d);
+        if (floats[0] > floats[5] && floats[0] > floats[10]) {
+            float sqrt2 = (float) (Math.sqrt(((floats[0] + 1.0f) - floats[5]) - floats[10]) * 2.0d);
             this.x = 0.25f * sqrt2;
-            this.y = (fArr[4] + fArr[1]) / sqrt2;
-            this.z = (fArr[2] + fArr[8]) / sqrt2;
-            this.w = (fArr[9] - fArr[6]) / sqrt2;
+            this.y = (floats[4] + floats[1]) / sqrt2;
+            this.z = (floats[2] + floats[8]) / sqrt2;
+            this.w = (floats[9] - floats[6]) / sqrt2;
             return;
         }
-        if (fArr[5] > fArr[10]) {
-            float sqrt3 = (float) (Math.sqrt(((fArr[5] + 1.0f) - fArr[0]) - fArr[10]) * 2.0d);
-            this.x = (fArr[4] + fArr[1]) / sqrt3;
+        if (floats[5] > floats[10]) {
+            float sqrt3 = (float) (Math.sqrt(((floats[5] + 1.0f) - floats[0]) - floats[10]) * 2.0d);
+            this.x = (floats[4] + floats[1]) / sqrt3;
             this.y = 0.25f * sqrt3;
-            this.z = (fArr[9] + fArr[6]) / sqrt3;
-            this.w = (fArr[2] - fArr[8]) / sqrt3;
+            this.z = (floats[9] + floats[6]) / sqrt3;
+            this.w = (floats[2] - floats[8]) / sqrt3;
             return;
         }
-        float sqrt4 = (float) (Math.sqrt(((fArr[10] + 1.0f) - fArr[0]) - fArr[5]) * 2.0d);
-        this.x = (fArr[2] + fArr[8]) / sqrt4;
-        this.y = (fArr[9] + fArr[6]) / sqrt4;
+        float sqrt4 = (float) (Math.sqrt(((floats[10] + 1.0f) - floats[0]) - floats[5]) * 2.0d);
+        this.x = (floats[2] + floats[8]) / sqrt4;
+        this.y = (floats[9] + floats[6]) / sqrt4;
         this.z = 0.25f * sqrt4;
-        this.w = (fArr[4] - fArr[1]) / sqrt4;
+        this.w = (floats[4] - floats[1]) / sqrt4;
     }
 
     public static LLQuaternion fromEuler(float f, float f2, float f3) {
@@ -138,43 +100,43 @@ public class LLQuaternion {
         return new LLQuaternion((float) ((sin * cos2 * cos3) + (cos * sin2 * sin3)), (float) (((cos * sin2) * cos3) - ((sin * cos2) * sin3)), (float) ((d * sin3) + (d2 * cos3)), (float) ((d * cos3) - (d2 * sin3)));
     }
 
-    public static LLQuaternion lerp(LLQuaternion lLQuaternion, LLQuaternion lLQuaternion2, float f) {
-        return new LLQuaternion(lLQuaternion.x + ((lLQuaternion2.x - lLQuaternion.x) * f), lLQuaternion.y + ((lLQuaternion2.y - lLQuaternion.y) * f), lLQuaternion.z + ((lLQuaternion2.z - lLQuaternion.z) * f), lLQuaternion.w + ((lLQuaternion2.w - lLQuaternion.w) * f));
+    public static LLQuaternion lerp(LLQuaternion quaternion, LLQuaternion quaternion2, float f) {
+        return new LLQuaternion(quaternion.x + ((quaternion2.x - quaternion.x) * f), quaternion.y + ((quaternion2.y - quaternion.y) * f), quaternion.z + ((quaternion2.z - quaternion.z) * f), quaternion.w + ((quaternion2.w - quaternion.w) * f));
     }
 
     public static LLQuaternion mayaQ(float xRot, float yRot, float zRot, Order order) {
         final float DEG_TO_RAD = 0.017453292f;
         LLQuaternion xQ = new LLQuaternion();
         LLQuaternion yQ = new LLQuaternion();
-        LLQuaternion zQ = new LLQuaternion();
+        LLQuaternion quaternion = new LLQuaternion();
         xQ.setQuat(xRot * DEG_TO_RAD, new LLVector3(1.0f, 0.0f, 0.0f));
         yQ.setQuat(yRot * DEG_TO_RAD, new LLVector3(0.0f, 1.0f, 0.0f));
-        zQ.setQuat(zRot * DEG_TO_RAD, new LLVector3(0.0f, 0.0f, 1.0f));
+        quaternion.setQuat(zRot * DEG_TO_RAD, new LLVector3(0.0f, 0.0f, 1.0f));
         LLQuaternion tmp = new LLQuaternion();
         LLQuaternion ret = new LLQuaternion();
         switch (order) {
             case XYZ:
                 tmp.setMul(xQ, yQ);
-                ret.setMul(tmp, zQ);
+                ret.setMul(tmp, quaternion);
                 break;
             case YZX:
-                tmp.setMul(yQ, zQ);
+                tmp.setMul(yQ, quaternion);
                 ret.setMul(tmp, xQ);
                 break;
             case ZXY:
-                tmp.setMul(zQ, xQ);
+                tmp.setMul(quaternion, xQ);
                 ret.setMul(tmp, yQ);
                 break;
             case XZY:
-                tmp.setMul(xQ, zQ);
+                tmp.setMul(xQ, quaternion);
                 ret.setMul(tmp, yQ);
                 break;
             case YXZ:
                 tmp.setMul(yQ, xQ);
-                ret.setMul(tmp, zQ);
+                ret.setMul(tmp, quaternion);
                 break;
             case ZYX:
-                tmp.setMul(zQ, yQ);
+                tmp.setMul(quaternion, yQ);
                 ret.setMul(tmp, xQ);
                 break;
         }
@@ -194,76 +156,76 @@ public class LLQuaternion {
     }
 
     public static LLQuaternion parseU8Vec3(ByteBuffer byteBuffer, float f, float f2) {
-        return new LLQuaternion(LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2));
+        return new LLQuaternion(LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2));
     }
 
-    public static LLQuaternion shortestArc(LLVector3 lLVector3, LLVector3 lLVector32) {
-        LLVector3 lLVector33 = new LLVector3(lLVector3);
-        LLVector3 lLVector34 = new LLVector3(lLVector32);
-        float normVec = lLVector33.normVec();
-        float normVec2 = lLVector34.normVec();
+    public static LLQuaternion shortestArc(LLVector3 vector35, LLVector3 vector36) {
+        LLVector3 vector3 = new LLVector3(vector35);
+        LLVector3 vector37 = new LLVector3(vector36);
+        float normVec = vector3.normVec();
+        float normVec2 = vector37.normVec();
         if (normVec < 1.0E-7f || normVec2 < 1.0E-7f) {
             return new LLQuaternion();
         }
-        LLVector3 cross = LLVector3.cross(lLVector33, lLVector34);
-        float dot = lLVector33.dot(lLVector34);
+        LLVector3 cross = LLVector3.cross(vector3, vector37);
+        float dot = vector3.dot(vector37);
         if (dot > 0.9999999f) {
             return new LLQuaternion();
         }
         if (dot >= -0.9999999f) {
             float acos = (float) Math.acos(dot);
-            LLQuaternion lLQuaternion = new LLQuaternion();
-            lLQuaternion.setQuat(acos, cross);
-            return lLQuaternion;
+            LLQuaternion quaternion = new LLQuaternion();
+            quaternion.setQuat(acos, cross);
+            return quaternion;
         }
-        LLVector3 lLVector35 = new LLVector3(lLVector33);
-        lLVector35.mul(lLVector33.x / lLVector33.dot(lLVector33));
-        LLVector3 lLVector36 = new LLVector3(1.0f, 0.0f, 0.0f);
-        lLVector36.sub(lLVector35);
-        if (lLVector36.normVec() < 1.0E-7f) {
-            lLVector36.set(0.0f, 0.0f, 1.0f);
+        LLVector3 vector38 = new LLVector3(vector3);
+        vector38.mul(vector3.x / vector3.dot(vector3));
+        LLVector3 vector39 = new LLVector3(1.0f, 0.0f, 0.0f);
+        vector39.sub(vector38);
+        if (vector39.normVec() < 1.0E-7f) {
+            vector39.set(0.0f, 0.0f, 1.0f);
         }
-        return new LLQuaternion(lLVector36.x, lLVector36.y, lLVector36.z, 0.0f);
+        return new LLQuaternion(vector39.x, vector39.y, vector39.z, 0.0f);
     }
 
-    public static LLQuaternion unpackFromVector3(LLVector3 lLVector3) {
-        float magVecSquared = 1.0f - lLVector3.magVecSquared();
-        return new LLQuaternion(lLVector3.x, lLVector3.y, lLVector3.z, magVecSquared > 0.0f ? (float) Math.sqrt(magVecSquared) : 0.0f);
+    public static LLQuaternion unpackFromVector3(LLVector3 vector3) {
+        float magVecSquared = 1.0f - vector3.magVecSquared();
+        return new LLQuaternion(vector3.x, vector3.y, vector3.z, magVecSquared > 0.0f ? (float) Math.sqrt(magVecSquared) : 0.0f);
     }
 
-    public void addMul(LLQuaternion lLQuaternion, float f) {
-        this.x += lLQuaternion.x * f;
-        this.y += lLQuaternion.y * f;
-        this.z += lLQuaternion.z * f;
-        this.w += lLQuaternion.w * f;
+    public void addMul(LLQuaternion quaternion, float f) {
+        this.x += quaternion.x * f;
+        this.y += quaternion.y * f;
+        this.z += quaternion.z * f;
+        this.w += quaternion.w * f;
     }
 
     public LLQuaternion conjQuat() {
         return new LLQuaternion(this.x * (-1.0f), this.y * (-1.0f), this.z * (-1.0f), this.w);
     }
 
-    public float getAngleAxis(LLVector3 lLVector3) {
-        float f = this.w;
-        if (f > 1.0f) {
-            f = 1.0f;
+    public float getAngleAxis(LLVector3 vector3) {
+        float w = this.w;
+        if (w > 1.0f) {
+            w = 1.0f;
         }
-        float f2 = f >= -1.0f ? f : -1.0f;
+        float f2 = w >= -1.0f ? w : -1.0f;
         float sqrt = (float) Math.sqrt(1.0f - (f2 * f2));
         float f3 = Math.abs(sqrt) < 5.0E-4f ? 1.0f : 1.0f / sqrt;
         float acos = ((float) Math.acos(f2)) * 2.0f;
         if (acos > 3.1415927f) {
-            lLVector3.x = (-this.x) * f3;
-            lLVector3.y = (-this.y) * f3;
-            lLVector3.z = f3 * (-this.z);
+            vector3.x = (-this.x) * f3;
+            vector3.y = (-this.y) * f3;
+            vector3.z = f3 * (-this.z);
             return 6.2831855f - acos;
         }
-        lLVector3.x = this.x * f3;
-        lLVector3.y = this.y * f3;
-        lLVector3.z = f3 * this.z;
+        vector3.x = this.x * f3;
+        vector3.y = this.y * f3;
+        vector3.z = f3 * this.z;
         return acos;
     }
 
-    public void getInverseMatrix(float[] fArr, int i) {
+    public void getInverseMatrix(float[] floats, int i) {
         float f = this.x * this.x;
         float f2 = this.y * this.y;
         float f3 = this.z * this.z;
@@ -273,22 +235,22 @@ public class LLQuaternion {
         float f7 = this.w * (-this.x);
         float f8 = this.w * (-this.y);
         float f9 = this.w * (-this.z);
-        fArr[i + 0] = 1.0f - ((f2 + f3) * 2.0f);
-        fArr[i + 1] = (f4 - f9) * 2.0f;
-        fArr[i + 2] = (f5 + f8) * 2.0f;
-        fArr[i + 3] = 0.0f;
-        fArr[i + 4] = (f4 + f9) * 2.0f;
-        fArr[i + 5] = 1.0f - ((f3 + f) * 2.0f);
-        fArr[i + 6] = (f6 - f7) * 2.0f;
-        fArr[i + 7] = 0.0f;
-        fArr[i + 8] = (f5 - f8) * 2.0f;
-        fArr[i + 9] = (f6 + f7) * 2.0f;
-        fArr[i + 10] = 1.0f - ((f + f2) * 2.0f);
-        fArr[i + 11] = 0.0f;
-        fArr[i + 12] = 0.0f;
-        fArr[i + 13] = 0.0f;
-        fArr[i + 14] = 0.0f;
-        fArr[i + 15] = 1.0f;
+        floats[i + 0] = 1.0f - ((f2 + f3) * 2.0f);
+        floats[i + 1] = (f4 - f9) * 2.0f;
+        floats[i + 2] = (f5 + f8) * 2.0f;
+        floats[i + 3] = 0.0f;
+        floats[i + 4] = (f4 + f9) * 2.0f;
+        floats[i + 5] = 1.0f - ((f3 + f) * 2.0f);
+        floats[i + 6] = (f6 - f7) * 2.0f;
+        floats[i + 7] = 0.0f;
+        floats[i + 8] = (f5 - f8) * 2.0f;
+        floats[i + 9] = (f6 + f7) * 2.0f;
+        floats[i + 10] = 1.0f - ((f + f2) * 2.0f);
+        floats[i + 11] = 0.0f;
+        floats[i + 12] = 0.0f;
+        floats[i + 13] = 0.0f;
+        floats[i + 14] = 0.0f;
+        floats[i + 15] = 1.0f;
     }
 
     public float[] getInverseMatrix() {
@@ -344,11 +306,11 @@ public class LLQuaternion {
         return sqrt;
     }
 
-    public void set(LLQuaternion lLQuaternion) {
-        this.x = lLQuaternion.x;
-        this.y = lLQuaternion.y;
-        this.z = lLQuaternion.z;
-        this.w = lLQuaternion.w;
+    public void set(LLQuaternion quaternion) {
+        this.x = quaternion.x;
+        this.y = quaternion.y;
+        this.z = quaternion.z;
+        this.w = quaternion.w;
         this.matrix = null;
         this.inverseMatrix = null;
     }
@@ -360,59 +322,59 @@ public class LLQuaternion {
         this.w = 1.0f;
     }
 
-    public void setLerp(LLQuaternion lLQuaternion, float f, LLQuaternion lLQuaternion2, float f2) {
-        this.x = (lLQuaternion.x * f) + (lLQuaternion2.x * f2);
-        this.y = (lLQuaternion.y * f) + (lLQuaternion2.y * f2);
-        this.z = (lLQuaternion.z * f) + (lLQuaternion2.z * f2);
-        this.w = (lLQuaternion.w * f) + (lLQuaternion2.w * f2);
+    public void setLerp(LLQuaternion quaternion, float f, LLQuaternion quaternion2, float f2) {
+        this.x = (quaternion.x * f) + (quaternion2.x * f2);
+        this.y = (quaternion.y * f) + (quaternion2.y * f2);
+        this.z = (quaternion.z * f) + (quaternion2.z * f2);
+        this.w = (quaternion.w * f) + (quaternion2.w * f2);
         this.matrix = null;
         this.inverseMatrix = null;
     }
 
-    public void setMul(LLQuaternion lLQuaternion, LLQuaternion lLQuaternion2) {
-        this.x = (((lLQuaternion2.w * lLQuaternion.x) + (lLQuaternion2.x * lLQuaternion.w)) + (lLQuaternion2.y * lLQuaternion.z)) - (lLQuaternion2.z * lLQuaternion.y);
-        this.y = (((lLQuaternion2.w * lLQuaternion.y) + (lLQuaternion2.y * lLQuaternion.w)) + (lLQuaternion2.z * lLQuaternion.x)) - (lLQuaternion2.x * lLQuaternion.z);
-        this.z = (((lLQuaternion2.w * lLQuaternion.z) + (lLQuaternion2.z * lLQuaternion.w)) + (lLQuaternion2.x * lLQuaternion.y)) - (lLQuaternion2.y * lLQuaternion.x);
-        this.w = (((lLQuaternion2.w * lLQuaternion.w) - (lLQuaternion2.x * lLQuaternion.x)) - (lLQuaternion2.y * lLQuaternion.y)) - (lLQuaternion2.z * lLQuaternion.z);
+    public void setMul(LLQuaternion quaternion, LLQuaternion quaternion2) {
+        this.x = (((quaternion2.w * quaternion.x) + (quaternion2.x * quaternion.w)) + (quaternion2.y * quaternion.z)) - (quaternion2.z * quaternion.y);
+        this.y = (((quaternion2.w * quaternion.y) + (quaternion2.y * quaternion.w)) + (quaternion2.z * quaternion.x)) - (quaternion2.x * quaternion.z);
+        this.z = (((quaternion2.w * quaternion.z) + (quaternion2.z * quaternion.w)) + (quaternion2.x * quaternion.y)) - (quaternion2.y * quaternion.x);
+        this.w = (((quaternion2.w * quaternion.w) - (quaternion2.x * quaternion.x)) - (quaternion2.y * quaternion.y)) - (quaternion2.z * quaternion.z);
         this.matrix = null;
         this.inverseMatrix = null;
     }
 
     public void setQuat(float f, float f2, float f3, float f4) {
-        LLVector3 lLVector3 = new LLVector3(f2, f3, f4);
-        lLVector3.normVec();
+        LLVector3 vector3 = new LLVector3(f2, f3, f4);
+        vector3.normVec();
         float f5 = 0.5f * f;
         float cos = (float) Math.cos(f5);
         float sin = (float) Math.sin(f5);
-        this.x = lLVector3.x * sin;
-        this.y = lLVector3.y * sin;
-        this.z = lLVector3.z * sin;
+        this.x = vector3.x * sin;
+        this.y = vector3.y * sin;
+        this.z = vector3.z * sin;
         this.w = cos;
         normalize();
         this.matrix = null;
         this.inverseMatrix = null;
     }
 
-    public void setQuat(float f, LLVector3 lLVector3) {
-        LLVector3 lLVector32 = new LLVector3(lLVector3);
-        lLVector32.normVec();
+    public void setQuat(float f, LLVector3 vector33) {
+        LLVector3 vector3 = new LLVector3(vector33);
+        vector3.normVec();
         float f2 = 0.5f * f;
         float cos = (float) Math.cos(f2);
         float sin = (float) Math.sin(f2);
-        this.x = lLVector32.x * sin;
-        this.y = lLVector32.y * sin;
-        this.z = lLVector32.z * sin;
+        this.x = vector3.x * sin;
+        this.y = vector3.y * sin;
+        this.z = vector3.z * sin;
         this.w = cos;
         normalize();
         this.matrix = null;
         this.inverseMatrix = null;
     }
 
-    public void setRaw(float f, float f2, float f3, float f4) {
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
-        this.w = f4;
+    public void setRaw(float x, float y, float z, float w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
     }
 
     public void setZero() {

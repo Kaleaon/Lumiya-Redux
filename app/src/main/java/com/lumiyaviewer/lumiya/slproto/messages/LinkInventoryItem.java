@@ -4,25 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Link inventory
+ *
+ * <p>Template: {@code LinkInventoryItem Low 426 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class LinkInventoryItem extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryBlock InventoryBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryBlock, Single. */
     public static class InventoryBlock {
-        public int CallbackID;
-        public byte[] Description;
-        public UUID FolderID;
-        public int InvType;
-        public byte[] Name;
-        public UUID OldItemID;
-        public UUID TransactionID;
-        public int Type;
+        public int CallbackID; // U32 - Async Response
+        public byte[] Description; // Variable 1
+        public UUID FolderID; // LLUUID
+        public int InvType; // S8
+        public byte[] Name; // Variable 1
+        public UUID OldItemID; // LLUUID
+        public UUID TransactionID; // LLUUID - Going to become TransactionID
+        public int Type; // S8
     }
 
     public LinkInventoryItem() {
@@ -31,21 +38,22 @@ public class LinkInventoryItem extends SLMessage {
         this.InventoryBlock_Field = new InventoryBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.InventoryBlock_Field.Name.length + 55 + 1 + this.InventoryBlock_Field.Description.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLinkInventoryItem(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLinkInventoryItem(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -86);
+        // Message number: Low 426 (LinkInventoryItem).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0xAA);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.InventoryBlock_Field.CallbackID);
@@ -58,7 +66,7 @@ public class LinkInventoryItem extends SLMessage {
         packVariable(byteBuffer, this.InventoryBlock_Field.Description, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

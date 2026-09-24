@@ -14,7 +14,6 @@ import com.lumiyaviewer.lumiya.utils.HasPriority;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
-/* loaded from: classes.dex */
 public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, OpenJPEG> {
     public static final int TextureResolution = 256;
 
@@ -28,12 +27,12 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
         private class TerrainRawTextureRequest implements ResourceConsumer {
             private final int layer;
 
-            public TerrainRawTextureRequest(UUID uuid, int i) {
-                this.layer = i;
+            public TerrainRawTextureRequest(UUID uuid, int layer) {
+                this.layer = layer;
                 TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuid, TextureClass.Terrain), this);
             }
 
-            @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+            @Override
             public void OnResourceReady(Object obj, boolean z) {
                 if (obj instanceof OpenJPEG) {
                     TerrainTextureRequest.this.onLayerReady(this.layer, (OpenJPEG) obj);
@@ -50,7 +49,7 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
             this.bakingFuture = null;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             synchronized (this) {
                 for (int i = 0; i < 4; i++) {
@@ -64,7 +63,7 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             this.layerNeededMask = getParams().getLayerMask();
             this.layerReadyMask = 0;
@@ -81,7 +80,7 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.utils.HasPriority
+        @Override
         public int getPriority() {
             return 0;
         }
@@ -120,7 +119,7 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 TerrainPatchInfo params = getParams();

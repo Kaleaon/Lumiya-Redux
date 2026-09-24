@@ -1,49 +1,56 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Rez a script onto an object
+ *
+ * <p>Template: {@code RezScript Low 304 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RezScript extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryBlock InventoryBlock_Field;
     public UpdateBlock UpdateBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryBlock, Single. */
     public static class InventoryBlock {
-        public int BaseMask;
-        public int CRC;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public UUID TransactionID;
-        public int Type;
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - permissions
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public UUID TransactionID; // LLUUID
+        public int Type; // S8
     }
 
+    /** Block UpdateBlock, Single. */
     public static class UpdateBlock {
-        public boolean Enabled;
-        public int ObjectLocalID;
+        public boolean Enabled; // BOOL - is script rezzed in enabled?
+        public int ObjectLocalID; // U32 - object id in world
     }
 
     public RezScript() {
@@ -53,21 +60,22 @@ public class RezScript extends SLMessage {
         this.InventoryBlock_Field = new InventoryBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.InventoryBlock_Field.Name.length + 129 + 1 + this.InventoryBlock_Field.Description.length + 4 + 4 + 57;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezScript(this);
+    @Override
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezScript(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 48);
+        // Message number: Low 304 (RezScript).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x30);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -96,7 +104,7 @@ public class RezScript extends SLMessage {
         packInt(byteBuffer, this.InventoryBlock_Field.CRC);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
@@ -118,7 +126,7 @@ public class RezScript extends SLMessage {
         this.InventoryBlock_Field.Type = unpackByte(byteBuffer);
         this.InventoryBlock_Field.InvType = unpackByte(byteBuffer);
         this.InventoryBlock_Field.Flags = unpackInt(byteBuffer);
-        this.InventoryBlock_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.InventoryBlock_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.InventoryBlock_Field.SalePrice = unpackInt(byteBuffer);
         this.InventoryBlock_Field.Name = unpackVariable(byteBuffer, 1);
         this.InventoryBlock_Field.Description = unpackVariable(byteBuffer, 1);

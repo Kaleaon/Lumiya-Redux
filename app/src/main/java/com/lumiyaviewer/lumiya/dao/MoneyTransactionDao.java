@@ -9,7 +9,6 @@ import de.greenrobot.dao.internal.DaoConfig;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
     public static final String TABLENAME = "MONEY_TRANSACTION";
 
@@ -29,32 +28,31 @@ public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MONEY_TRANSACTION' ('_id' INTEGER PRIMARY KEY ,'TIMESTAMP' INTEGER NOT NULL ,'AGENT_UUID' TEXT,'TRANSACTION_AMOUNT' INTEGER NOT NULL ,'NEW_BALANCE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MONEY_TRANSACTION' ('_id' INTEGER PRIMARY KEY ,'TIMESTAMP' INTEGER NOT NULL ,'AGENT_UUID' TEXT,'TRANSACTION_AMOUNT' INTEGER NOT NULL ,'NEW_BALANCE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MONEY_TRANSACTION'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MONEY_TRANSACTION'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
-    public void bindValues(SQLiteStatement sQLiteStatement, MoneyTransaction moneyTransaction) {
-        sQLiteStatement.clearBindings();
+    @Override
+    public void bindValues(SQLiteStatement sqLiteStatement, MoneyTransaction moneyTransaction) {
+        sqLiteStatement.clearBindings();
         Long id = moneyTransaction.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindLong(2, moneyTransaction.getTimestamp().getTime());
+        sqLiteStatement.bindLong(2, moneyTransaction.getTimestamp().getTime());
         UUID agentUUID = moneyTransaction.getAgentUUID();
         if (agentUUID != null) {
-            sQLiteStatement.bindString(3, agentUUID.toString());
+            sqLiteStatement.bindString(3, agentUUID.toString());
         }
-        sQLiteStatement.bindLong(4, moneyTransaction.getTransactionAmount());
-        sQLiteStatement.bindLong(5, moneyTransaction.getNewBalance());
+        sqLiteStatement.bindLong(4, moneyTransaction.getTransactionAmount());
+        sqLiteStatement.bindLong(5, moneyTransaction.getNewBalance());
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long getKey(MoneyTransaction moneyTransaction) {
         if (moneyTransaction != null) {
             return moneyTransaction.getId();
@@ -62,18 +60,18 @@ public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public MoneyTransaction readEntity(Cursor cursor, int i) {
         return new MoneyTransaction(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)), new Date(cursor.getLong(i + 1)), cursor.isNull(i + 2) ? null : UUID.fromString(cursor.getString(i + 2)), cursor.getInt(i + 3), cursor.getInt(i + 4));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, MoneyTransaction moneyTransaction, int i) {
         moneyTransaction.setId(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)));
         moneyTransaction.setTimestamp(new Date(cursor.getLong(i + 1)));
@@ -83,7 +81,7 @@ public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -91,8 +89,7 @@ public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
         return Long.valueOf(cursor.getLong(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long updateKeyAfterInsert(MoneyTransaction moneyTransaction, long j) {
         moneyTransaction.setId(Long.valueOf(j));
         return Long.valueOf(j);

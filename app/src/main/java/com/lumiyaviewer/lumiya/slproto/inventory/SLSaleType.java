@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.inventory;
 
 import androidx.core.os.EnvironmentCompat;
 
-/* loaded from: classes.dex */
 public enum SLSaleType {
     FS_NOT(0, "not"),
     FS_ORIGINAL(1, "orig"),
@@ -13,24 +12,24 @@ public enum SLSaleType {
     private String stringCode;
     private int typeCode;
 
-    SLSaleType(int i, String str) {
-        this.typeCode = i;
-        this.stringCode = str;
+    SLSaleType(int typeCode, String stringCode) {
+        this.typeCode = typeCode;
+        this.stringCode = stringCode;
     }
 
     public static SLSaleType getByString(String str) {
-        for (SLSaleType sLSaleType : valuesCustom()) {
-            if (sLSaleType.stringCode.equalsIgnoreCase(str)) {
-                return sLSaleType;
+        for (SLSaleType saleType : valuesCustom()) {
+            if (saleType.stringCode.equalsIgnoreCase(str)) {
+                return saleType;
             }
         }
         return FS_UNKNOWN;
     }
 
     public static SLSaleType getByType(int i) {
-        for (SLSaleType sLSaleType : valuesCustom()) {
-            if (sLSaleType.typeCode == i) {
-                return sLSaleType;
+        for (SLSaleType saleType : valuesCustom()) {
+            if (saleType.typeCode == i) {
+                return saleType;
             }
         }
         return FS_UNKNOWN;

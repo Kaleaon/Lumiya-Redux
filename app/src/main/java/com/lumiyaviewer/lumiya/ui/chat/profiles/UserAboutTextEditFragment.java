@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.messages.AvatarPropertiesReply;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.common.ChatterFragment;
 
-/* loaded from: classes.dex */
 public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
     private static final String IS_FIRST_LIFE_KEY = "isFirstLife";
     private AvatarPropertiesReply avatarProperties;
@@ -28,25 +27,24 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
         return makeSelection;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected String decorateFragmentTitle(String str) {
         return getString(R.string.edit_about_title, str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected String getFieldHint(Context context) {
         return getString(R.string.edit_about_hint);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.profiles.ProfileTextFieldEditFragment
-    /* renamed from: onAvatarProperties */
-    public void m517x7aa22308(AvatarPropertiesReply avatarPropertiesReply) {
+    @Override
+    public void onAvatarProperties(AvatarPropertiesReply avatarPropertiesReply) {
         this.avatarProperties = avatarPropertiesReply;
         setOriginalText(isFirstLife() ? SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.FLAboutText) : SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
-    protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
+    @Override
+    protected void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str) {
         if (this.avatarProperties != null) {
             String stringFromVariableUTF = SLMessage.stringFromVariableUTF(this.avatarProperties.PropertiesData_Field.AboutText);
             String stringFromVariableOEM = SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.FLAboutText);
@@ -55,7 +53,7 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
             } else {
                 stringFromVariableUTF = str;
             }
-            sLAgentCircuit.getModules().userProfiles.UpdateAvatarProperties(this.avatarProperties.PropertiesData_Field.ImageID, this.avatarProperties.PropertiesData_Field.FLImageID, stringFromVariableUTF, stringFromVariableOEM, (this.avatarProperties.PropertiesData_Field.Flags & 1) != 0, (this.avatarProperties.PropertiesData_Field.Flags & 2) != 0, SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.ProfileURL));
+            agentCircuit.getModules().userProfiles.UpdateAvatarProperties(this.avatarProperties.PropertiesData_Field.ImageID, this.avatarProperties.PropertiesData_Field.FLImageID, stringFromVariableUTF, stringFromVariableOEM, (this.avatarProperties.PropertiesData_Field.Flags & 1) != 0, (this.avatarProperties.PropertiesData_Field.Flags & 2) != 0, SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.ProfileURL));
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public class LLVector2 {
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     public float x;
@@ -11,31 +10,31 @@ public class LLVector2 {
         this.y = 0.0f;
     }
 
-    public LLVector2(float f, float f2) {
-        this.x = f;
-        this.y = f2;
+    public LLVector2(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public LLVector2(LLVector2 lLVector2) {
-        this.x = lLVector2.x;
-        this.y = lLVector2.y;
+    public LLVector2(LLVector2 vector2) {
+        this.x = vector2.x;
+        this.y = vector2.y;
     }
 
-    public static LLVector2 sub(LLVector2 lLVector2, LLVector2 lLVector22) {
-        return new LLVector2(lLVector2.x - lLVector22.x, lLVector2.y - lLVector22.y);
+    public static LLVector2 sub(LLVector2 vector2, LLVector2 vector23) {
+        return new LLVector2(vector2.x - vector23.x, vector2.y - vector23.y);
     }
 
-    public static LLVector2 sum(LLVector2 lLVector2, LLVector2 lLVector22) {
-        return new LLVector2(lLVector2.x + lLVector22.x, lLVector2.y + lLVector22.y);
+    public static LLVector2 sum(LLVector2 vector2, LLVector2 vector23) {
+        return new LLVector2(vector2.x + vector23.x, vector2.y + vector23.y);
     }
 
-    public void add(LLVector2 lLVector2) {
-        this.x += lLVector2.x;
-        this.y += lLVector2.y;
+    public void add(LLVector2 vector2) {
+        this.x += vector2.x;
+        this.y += vector2.y;
     }
 
-    public float dot(LLVector2 lLVector2) {
-        return (this.x * lLVector2.x) + (this.y * lLVector2.y);
+    public float dot(LLVector2 vector2) {
+        return (this.x * vector2.x) + (this.y * vector2.y);
     }
 
     public boolean equals(Object obj) {
@@ -45,8 +44,8 @@ public class LLVector2 {
         if (!(obj instanceof LLVector2)) {
             return false;
         }
-        LLVector2 lLVector2 = (LLVector2) obj;
-        return this.x == lLVector2.x && this.y == lLVector2.y;
+        LLVector2 vector2 = (LLVector2) obj;
+        return this.x == vector2.x && this.y == vector2.y;
     }
 
     public int hashCode() {
@@ -75,19 +74,19 @@ public class LLVector2 {
         return sqrt;
     }
 
-    public void set(float f, float f2) {
-        this.x = f;
-        this.y = f2;
+    public void set(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void setMax(LLVector2 lLVector2) {
-        this.x = Math.max(this.x, lLVector2.x);
-        this.y = Math.max(this.y, lLVector2.y);
+    public void setMax(LLVector2 max) {
+        this.x = Math.max(this.x, max.x);
+        this.y = Math.max(this.y, max.y);
     }
 
-    public void setMin(LLVector2 lLVector2) {
-        this.x = Math.min(this.x, lLVector2.x);
-        this.y = Math.min(this.y, lLVector2.y);
+    public void setMin(LLVector2 min) {
+        this.x = Math.min(this.x, min.x);
+        this.y = Math.min(this.y, min.y);
     }
 
     public String toString() {

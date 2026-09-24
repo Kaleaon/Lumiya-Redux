@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-/* loaded from: classes.dex */
 public class CardboardControlsPlaceholder extends ViewGroup {
     private int fixedHeight;
     private int fixedWidth;
@@ -47,28 +46,28 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         this.onViewInvalidateListener = null;
     }
 
-    @Override // android.view.ViewGroup, android.view.ViewParent
-    public ViewParent invalidateChildInParent(int[] iArr, Rect rect) {
-        ViewParent invalidateChildInParent = super.invalidateChildInParent(iArr, rect);
+    @Override
+    public ViewParent invalidateChildInParent(int[] ints, Rect rect) {
+        ViewParent invalidateChildInParent = super.invalidateChildInParent(ints, rect);
         if (this.onViewInvalidateListener != null) {
             this.onViewInvalidateListener.onViewInvalidated();
         }
         return invalidateChildInParent;
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int childCount = getChildCount();
-        for (int i5 = 0; i5 < childCount; i5++) {
-            getChildAt(i5).layout(0, 0, this.fixedWidth, this.fixedHeight);
+        for (int j = 0; j < childCount; j++) {
+            getChildAt(j).layout(0, 0, this.fixedWidth, this.fixedHeight);
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onMeasure(int i, int i2) {
         int childCount = getChildCount();
-        for (int i3 = 0; i3 < childCount; i3++) {
-            View childAt = getChildAt(i3);
+        for (int j = 0; j < childCount; j++) {
+            View childAt = getChildAt(j);
             if (childAt.getVisibility() != 8) {
                 measureChild(childAt, View.MeasureSpec.makeMeasureSpec(this.fixedWidth, 1073741824), View.MeasureSpec.makeMeasureSpec(this.fixedHeight, 1073741824));
             }
@@ -76,9 +75,9 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         setMeasuredDimension(0, 0);
     }
 
-    public void setFixedSize(int i, int i2) {
-        this.fixedWidth = i;
-        this.fixedHeight = i2;
+    public void setFixedSize(int fixedWidth, int fixedHeight) {
+        this.fixedWidth = fixedWidth;
+        this.fixedHeight = fixedHeight;
         requestLayout();
     }
 

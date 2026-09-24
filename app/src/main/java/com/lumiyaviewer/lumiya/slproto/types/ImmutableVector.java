@@ -3,22 +3,21 @@ package com.lumiyaviewer.lumiya.slproto.types;
 import android.annotation.SuppressLint;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ImmutableVector {
     public final float x;
     public final float y;
     public final float z;
 
-    public ImmutableVector(float f, float f2, float f3) {
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
+    public ImmutableVector(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public ImmutableVector(LLVector3 lLVector3) {
-        this.x = lLVector3.x;
-        this.y = lLVector3.y;
-        this.z = lLVector3.z;
+    public ImmutableVector(LLVector3 vector3) {
+        this.x = vector3.x;
+        this.y = vector3.y;
+        this.z = vector3.z;
     }
 
     public float distanceTo(float f, float f2, float f3) {
@@ -49,13 +48,13 @@ public class ImmutableVector {
         return this.x == immutableVector.x && this.y == immutableVector.y && this.z == immutableVector.z;
     }
 
-    public float getDistanceTo(@Nullable LLVector3 lLVector3) {
-        if (lLVector3 == null) {
+    public float getDistanceTo(@Nullable LLVector3 vector3) {
+        if (vector3 == null) {
             return Float.NaN;
         }
-        float f = this.x - lLVector3.x;
-        float f2 = this.y - lLVector3.y;
-        float f3 = this.z - lLVector3.z;
+        float f = this.x - vector3.x;
+        float f2 = this.y - vector3.y;
+        float f3 = this.z - vector3.z;
         return (float) Math.sqrt((f * f) + (f2 * f2) + (f3 * f3));
     }
 

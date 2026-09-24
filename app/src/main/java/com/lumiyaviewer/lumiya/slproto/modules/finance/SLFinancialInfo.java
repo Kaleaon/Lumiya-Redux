@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/* loaded from: classes.dex */
 public class SLFinancialInfo extends SLModule {
     private static final int DEFAULT_UPLOAD_COST = 10;
     private int balance;
@@ -30,13 +29,13 @@ public class SLFinancialInfo extends SLModule {
     private final AtomicInteger uploadCost;
     private final UserManager userManager;
 
-    public SLFinancialInfo(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLFinancialInfo(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.balanceLock = new Object();
         this.balanceKnown = false;
         this.balance = 0;
         this.uploadCost = new AtomicInteger(10);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
         if (this.userManager == null) {
             this.moneyTransactionDao = null;
         } else {
@@ -51,13 +50,13 @@ public class SLFinancialInfo extends SLModule {
         SendMessage(economyDataRequest);
     }
 
-    private void setKnownBalance(int i) {
+    private void setKnownBalance(int balance) {
         synchronized (this.balanceLock) {
             this.balanceKnown = true;
-            this.balance = i;
+            this.balance = balance;
         }
         if (this.userManager != null) {
-            this.userManager.getBalanceManager().updateBalance(i);
+            this.userManager.getBalanceManager().updateBalance(balance);
         }
     }
 
@@ -102,14 +101,14 @@ public class SLFinancialInfo extends SLModule {
         SendMessage(moneyTransferRequest);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         super.HandleCircuitReady();
         AskForMoneyBalance();
         RequestEconomyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getBalanceManager().clearFinancialInfo(this);
@@ -127,9 +126,9 @@ public class SLFinancialInfo extends SLModule {
     public void HandleMoneyBalanceReply(MoneyBalanceReply moneyBalanceReply) {
         int i;
         UUID uuid;
-        SLBalanceChangedEvent sLBalanceChangedEvent = new SLBalanceChangedEvent(this.balanceKnown, this.balance, moneyBalanceReply.MoneyData_Field.MoneyBalance);
+        SLBalanceChangedEvent balanceChangedEvent = new SLBalanceChangedEvent(this.balanceKnown, this.balance, moneyBalanceReply.MoneyData_Field.MoneyBalance);
         setKnownBalance(moneyBalanceReply.MoneyData_Field.MoneyBalance);
-        if (sLBalanceChangedEvent.oldBalanceValid && sLBalanceChangedEvent.oldBalance != sLBalanceChangedEvent.newBalance) {
+        if (balanceChangedEvent.oldBalanceValid && balanceChangedEvent.oldBalance != balanceChangedEvent.newBalance) {
             if (moneyBalanceReply.TransactionInfo_Field.SourceID.equals(this.circuitInfo.agentID)) {
                 uuid = !moneyBalanceReply.TransactionInfo_Field.IsDestGroup ? moneyBalanceReply.TransactionInfo_Field.DestID : null;
                 i = -moneyBalanceReply.TransactionInfo_Field.Amount;
@@ -137,12 +136,12 @@ public class SLFinancialInfo extends SLModule {
                 uuid = !moneyBalanceReply.TransactionInfo_Field.IsSourceGroup ? moneyBalanceReply.TransactionInfo_Field.SourceID : null;
                 i = moneyBalanceReply.TransactionInfo_Field.Amount;
             } else {
-                i = sLBalanceChangedEvent.newBalance - sLBalanceChangedEvent.oldBalance;
+                i = balanceChangedEvent.newBalance - balanceChangedEvent.oldBalance;
                 uuid = null;
             }
-            this.agentCircuit.GenerateChatMoneyEvent((uuid == null || !uuid.equals(UUIDPool.ZeroUUID)) ? uuid : null, i, sLBalanceChangedEvent.newBalance);
+            this.agentCircuit.GenerateChatMoneyEvent((uuid == null || !uuid.equals(UUIDPool.ZeroUUID)) ? uuid : null, i, balanceChangedEvent.newBalance);
         }
-        this.eventBus.publish(sLBalanceChangedEvent);
+        this.eventBus.publish(balanceChangedEvent);
     }
 
     public void RecordChatEvent(UUID uuid, int i, int i2) {
@@ -155,19 +154,19 @@ public class SLFinancialInfo extends SLModule {
     }
 
     public int getBalance() {
-        int i;
+        int balance;
         synchronized (this.balanceLock) {
-            i = this.balance;
+            balance = this.balance;
         }
-        return i;
+        return balance;
     }
 
     public boolean getBalanceKnown() {
-        boolean z;
+        boolean balanceKnown;
         synchronized (this.balanceLock) {
-            z = this.balanceKnown;
+            balanceKnown = this.balanceKnown;
         }
-        return z;
+        return balanceKnown;
     }
 
     public int getUploadCost() {
