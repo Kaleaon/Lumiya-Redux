@@ -159,7 +159,7 @@ tasks.named('lint').configure {
 tasks.withType(JavaCompile).configureEach {
     // The decompilation warns on every other line; turn the noise down so
     // real problems are visible.
-    options.compilerArgs += ['-Xlint:none', '-Xmaxwarns', '10']
+    options.compilerArgs += ['-Xlint:none', '-Xmaxwarns', '10', '-Xmaxerrs', '100000']
     options.encoding = 'UTF-8'
 
     // ButterKnife's annotation processor (butterknife-compiler 10.2.3)

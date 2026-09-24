@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -111,7 +110,7 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         this.HistoryItemData_Field.Majority = unpackFloat(byteBuffer);
         this.HistoryItemData_Field.Quorum = unpackInt(byteBuffer);
         this.HistoryItemData_Field.ProposalText = unpackVariable(byteBuffer, 2);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             VoteItem voteItem = new VoteItem();
             voteItem.CandidateID = unpackUUID(byteBuffer);

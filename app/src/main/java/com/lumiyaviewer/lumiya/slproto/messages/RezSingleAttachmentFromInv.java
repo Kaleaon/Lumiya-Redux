@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -67,7 +66,7 @@ public class RezSingleAttachmentFromInv extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.ObjectData_Field.ItemID = unpackUUID(byteBuffer);
         this.ObjectData_Field.OwnerID = unpackUUID(byteBuffer);
-        this.ObjectData_Field.AttachmentPt = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.AttachmentPt = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.ItemFlags = unpackInt(byteBuffer);
         this.ObjectData_Field.GroupMask = unpackInt(byteBuffer);
         this.ObjectData_Field.EveryoneMask = unpackInt(byteBuffer);

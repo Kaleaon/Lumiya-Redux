@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -55,7 +54,7 @@ public class AvatarPickerRequestBackend extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.QueryID = unpackUUID(byteBuffer);
-        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & 0xFF;
         this.Data_Field.Name = unpackVariable(byteBuffer, 1);
     }
 }

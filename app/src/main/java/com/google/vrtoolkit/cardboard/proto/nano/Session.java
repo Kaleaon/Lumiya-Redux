@@ -72,9 +72,9 @@ public interface Session {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final TrackerState mo6clone() {
+        public final TrackerState clone() {
             try {
-                TrackerState trackerState = (TrackerState) super.mo6clone();
+                TrackerState trackerState = (TrackerState) super.clone();
                 if (this.q != null && this.q.length > 0) {
                     trackerState.q = (double[]) this.q.clone();
                 }

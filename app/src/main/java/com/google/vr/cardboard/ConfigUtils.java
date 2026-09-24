@@ -159,7 +159,7 @@ public class ConfigUtils {
 
     public static boolean writePhoneParamsToExternalStorage(Phone.PhoneParams phoneParams) {
         if (phoneParams.dEPRECATEDGyroBias != null && phoneParams.dEPRECATEDGyroBias.length == 0) {
-            phoneParams = phoneParams.mo6clone();
+            phoneParams = phoneParams.clone();
             phoneParams.dEPRECATEDGyroBias = new float[]{0.0f, 0.0f, 0.0f};
         }
         boolean writeToExternalStorage = writeToExternalStorage(phoneParams, "phone_params", CARDBOARD_PHONE_PARAMS_STREAM_SENTINEL);

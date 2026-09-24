@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -158,7 +157,7 @@ public class ParcelProperties extends SLMessage {
         this.ParcelData_Field.AABBMax = unpackLLVector3(byteBuffer);
         this.ParcelData_Field.Bitmap = unpackVariable(byteBuffer, 2);
         this.ParcelData_Field.Area = unpackInt(byteBuffer);
-        this.ParcelData_Field.Status = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.Status = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.SimWideMaxPrims = unpackInt(byteBuffer);
         this.ParcelData_Field.SimWideTotalPrims = unpackInt(byteBuffer);
         this.ParcelData_Field.MaxPrims = unpackInt(byteBuffer);
@@ -176,16 +175,16 @@ public class ParcelProperties extends SLMessage {
         this.ParcelData_Field.MusicURL = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.MediaURL = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.MediaID = unpackUUID(byteBuffer);
-        this.ParcelData_Field.MediaAutoScale = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.MediaAutoScale = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.GroupID = unpackUUID(byteBuffer);
         this.ParcelData_Field.PassPrice = unpackInt(byteBuffer);
         this.ParcelData_Field.PassHours = unpackFloat(byteBuffer);
-        this.ParcelData_Field.Category = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.Category = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.AuthBuyerID = unpackUUID(byteBuffer);
         this.ParcelData_Field.SnapshotID = unpackUUID(byteBuffer);
         this.ParcelData_Field.UserLocation = unpackLLVector3(byteBuffer);
         this.ParcelData_Field.UserLookAt = unpackLLVector3(byteBuffer);
-        this.ParcelData_Field.LandingType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.LandingType = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.RegionPushOverride = unpackBoolean(byteBuffer);
         this.ParcelData_Field.RegionDenyAnonymous = unpackBoolean(byteBuffer);
         this.ParcelData_Field.RegionDenyIdentified = unpackBoolean(byteBuffer);

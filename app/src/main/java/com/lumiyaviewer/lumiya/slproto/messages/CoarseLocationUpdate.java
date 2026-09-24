@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -64,17 +63,17 @@ public class CoarseLocationUpdate extends SLMessage {
 
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             Location location = new Location();
-            location.X = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            location.Y = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            location.Z = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            location.X = unpackByte(byteBuffer) & 0xFF;
+            location.Y = unpackByte(byteBuffer) & 0xFF;
+            location.Z = unpackByte(byteBuffer) & 0xFF;
             this.Location_Fields.add(location);
         }
         this.Index_Field.You = unpackShort(byteBuffer);
         this.Index_Field.Prey = unpackShort(byteBuffer);
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             AgentData agentData = new AgentData();
             agentData.AgentID = unpackUUID(byteBuffer);

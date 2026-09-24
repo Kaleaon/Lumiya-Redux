@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -56,9 +55,9 @@ public class ChatFromSimulator extends SLMessage {
         this.ChatData_Field.FromName = unpackVariable(byteBuffer, 1);
         this.ChatData_Field.SourceID = unpackUUID(byteBuffer);
         this.ChatData_Field.OwnerID = unpackUUID(byteBuffer);
-        this.ChatData_Field.SourceType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ChatData_Field.ChatType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ChatData_Field.Audible = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ChatData_Field.SourceType = unpackByte(byteBuffer) & 0xFF;
+        this.ChatData_Field.ChatType = unpackByte(byteBuffer) & 0xFF;
+        this.ChatData_Field.Audible = unpackByte(byteBuffer) & 0xFF;
         this.ChatData_Field.Position = unpackLLVector3(byteBuffer);
         this.ChatData_Field.Message = unpackVariable(byteBuffer, 2);
     }

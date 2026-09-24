@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public class LandStatReply extends SLMessage {
         this.RequestData_Field.ReportType = unpackInt(byteBuffer);
         this.RequestData_Field.RequestFlags = unpackInt(byteBuffer);
         this.RequestData_Field.TotalObjectCount = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ReportData reportData = new ReportData();
             reportData.TaskLocalID = unpackInt(byteBuffer);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -63,9 +62,9 @@ public class StartLure extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        this.Info_Field.LureType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Info_Field.LureType = unpackByte(byteBuffer) & 0xFF;
         this.Info_Field.Message = unpackVariable(byteBuffer, 1);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             TargetData targetData = new TargetData();
             targetData.TargetID = unpackUUID(byteBuffer);

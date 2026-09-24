@@ -1152,7 +1152,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     @Override // com.lumiyaviewer.lumiya.ui.ThemeMapper
     public int mapThemeResourceId(int i) {
-        return i == 2131427372 ? R.style.Theme_Lumiya_Light_NoActionBar : i == 2131427375 ? R.style.Theme_Lumiya_Pink_NoActionBar : R.style.Theme_Lumiya_NoActionBar;
+        return i == com.lumiyaviewer.lumiya.R.style.Theme_Lumiya_Light ? R.style.Theme_Lumiya_Light_NoActionBar : i == com.lumiyaviewer.lumiya.R.style.Theme_Lumiya_Pink ? R.style.Theme_Lumiya_Pink_NoActionBar : R.style.Theme_Lumiya_NoActionBar;
     }
 
     public void moveTouchEvent(int i, MotionEvent motionEvent) {

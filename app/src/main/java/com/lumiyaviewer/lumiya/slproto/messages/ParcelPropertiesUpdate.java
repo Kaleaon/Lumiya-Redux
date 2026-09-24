@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -95,15 +94,15 @@ public class ParcelPropertiesUpdate extends SLMessage {
         this.ParcelData_Field.MusicURL = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.MediaURL = unpackVariable(byteBuffer, 1);
         this.ParcelData_Field.MediaID = unpackUUID(byteBuffer);
-        this.ParcelData_Field.MediaAutoScale = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.MediaAutoScale = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.GroupID = unpackUUID(byteBuffer);
         this.ParcelData_Field.PassPrice = unpackInt(byteBuffer);
         this.ParcelData_Field.PassHours = unpackFloat(byteBuffer);
-        this.ParcelData_Field.Category = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.Category = unpackByte(byteBuffer) & 0xFF;
         this.ParcelData_Field.AuthBuyerID = unpackUUID(byteBuffer);
         this.ParcelData_Field.SnapshotID = unpackUUID(byteBuffer);
         this.ParcelData_Field.UserLocation = unpackLLVector3(byteBuffer);
         this.ParcelData_Field.UserLookAt = unpackLLVector3(byteBuffer);
-        this.ParcelData_Field.LandingType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ParcelData_Field.LandingType = unpackByte(byteBuffer) & 0xFF;
     }
 }

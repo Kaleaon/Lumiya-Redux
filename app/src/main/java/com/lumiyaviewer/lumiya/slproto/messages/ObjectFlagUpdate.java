@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -75,10 +74,10 @@ public class ObjectFlagUpdate extends SLMessage {
         this.AgentData_Field.IsTemporary = unpackBoolean(byteBuffer);
         this.AgentData_Field.IsPhantom = unpackBoolean(byteBuffer);
         this.AgentData_Field.CastsShadows = unpackBoolean(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ExtraPhysics extraPhysics = new ExtraPhysics();
-            extraPhysics.PhysicsShapeType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            extraPhysics.PhysicsShapeType = unpackByte(byteBuffer) & 0xFF;
             extraPhysics.Density = unpackFloat(byteBuffer);
             extraPhysics.Friction = unpackFloat(byteBuffer);
             extraPhysics.Restitution = unpackFloat(byteBuffer);

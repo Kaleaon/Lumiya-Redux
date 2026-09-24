@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -119,7 +118,7 @@ public class RegionHandshake extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionInfo_Field.RegionFlags = unpackInt(byteBuffer);
-        this.RegionInfo_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.RegionInfo_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
         this.RegionInfo_Field.SimName = unpackVariable(byteBuffer, 1);
         this.RegionInfo_Field.SimOwner = unpackUUID(byteBuffer);
         this.RegionInfo_Field.IsEstateManager = unpackBoolean(byteBuffer);
@@ -148,7 +147,7 @@ public class RegionHandshake extends SLMessage {
         this.RegionInfo3_Field.ColoName = unpackVariable(byteBuffer, 1);
         this.RegionInfo3_Field.ProductSKU = unpackVariable(byteBuffer, 1);
         this.RegionInfo3_Field.ProductName = unpackVariable(byteBuffer, 1);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             RegionInfo4 regionInfo4 = new RegionInfo4();
             regionInfo4.RegionFlagsExtended = unpackLong(byteBuffer);

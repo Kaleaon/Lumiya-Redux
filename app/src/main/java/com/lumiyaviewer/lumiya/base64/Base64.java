@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.base64;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import java.util.Arrays;
 
 /* loaded from: classes.dex */
@@ -84,7 +83,7 @@ public class Base64 {
         int length = bArr.length;
         int i = 0;
         for (byte b : bArr) {
-            if (IA[b & UnsignedBytes.MAX_VALUE] < 0) {
+            if (IA[b & 0xFF] < 0) {
                 i++;
             }
         }
@@ -95,7 +94,7 @@ public class Base64 {
         int i3 = 0;
         while (i2 > 1) {
             i2--;
-            if (IA[bArr[i2] & UnsignedBytes.MAX_VALUE] > 0) {
+            if (IA[bArr[i2] & 0xFF] > 0) {
                 break;
             }
             if (bArr[i2] == 61) {
@@ -112,7 +111,7 @@ public class Base64 {
             int i9 = 0;
             while (i9 < 4) {
                 int i10 = i8 + 1;
-                int i11 = IA[bArr[i8] & UnsignedBytes.MAX_VALUE];
+                int i11 = IA[bArr[i8] & 0xFF];
                 if (i11 < 0) {
                     i9--;
                 } else {
@@ -272,11 +271,11 @@ public class Base64 {
         }
         int i2 = length - 1;
         int i3 = 0;
-        while (i3 < i2 && IA[bArr[i3] & UnsignedBytes.MAX_VALUE] < 0) {
+        while (i3 < i2 && IA[bArr[i3] & 0xFF] < 0) {
             i3++;
         }
         int i4 = i2;
-        while (i4 > 0 && IA[bArr[i4] & UnsignedBytes.MAX_VALUE] < 0) {
+        while (i4 > 0 && IA[bArr[i4] & 0xFF] < 0) {
             i4--;
         }
         int i5 = bArr[i4] != 61 ? 0 : bArr[i4 + (-1)] != 61 ? 1 : 2;
@@ -405,9 +404,9 @@ public class Base64 {
         while (i6 < i) {
             int i7 = i6 + 1;
             int i8 = i7 + 1;
-            int i9 = ((bArr[i7] & UnsignedBytes.MAX_VALUE) << 8) | ((bArr[i6] & UnsignedBytes.MAX_VALUE) << 16);
+            int i9 = ((bArr[i7] & 0xFF) << 8) | ((bArr[i6] & 0xFF) << 16);
             i6 = i8 + 1;
-            int i10 = i9 | (bArr[i8] & UnsignedBytes.MAX_VALUE);
+            int i10 = i9 | (bArr[i8] & 0xFF);
             int i11 = i5 + 1;
             bArr2[i5] = (byte) CA[(i10 >>> 18) & 63];
             int i12 = i11 + 1;
@@ -426,7 +425,7 @@ public class Base64 {
         }
         int i15 = length - i;
         if (i15 > 0) {
-            int i16 = ((bArr[i] & UnsignedBytes.MAX_VALUE) << 10) | (i15 == 2 ? (bArr[length - 1] & UnsignedBytes.MAX_VALUE) << 2 : 0);
+            int i16 = ((bArr[i] & 0xFF) << 10) | (i15 == 2 ? (bArr[length - 1] & 0xFF) << 2 : 0);
             bArr2[i3 - 4] = (byte) CA[i16 >> 12];
             bArr2[i3 - 3] = (byte) CA[(i16 >>> 6) & 63];
             bArr2[i3 - 2] = i15 != 2 ? (byte) 61 : (byte) CA[i16 & 63];
@@ -450,9 +449,9 @@ public class Base64 {
         while (i6 < i) {
             int i7 = i6 + 1;
             int i8 = i7 + 1;
-            int i9 = ((bArr[i7] & UnsignedBytes.MAX_VALUE) << 8) | ((bArr[i6] & UnsignedBytes.MAX_VALUE) << 16);
+            int i9 = ((bArr[i7] & 0xFF) << 8) | ((bArr[i6] & 0xFF) << 16);
             i6 = i8 + 1;
-            int i10 = i9 | (bArr[i8] & UnsignedBytes.MAX_VALUE);
+            int i10 = i9 | (bArr[i8] & 0xFF);
             int i11 = i5 + 1;
             cArr[i5] = CA[(i10 >>> 18) & 63];
             int i12 = i11 + 1;
@@ -471,7 +470,7 @@ public class Base64 {
         }
         int i15 = length - i;
         if (i15 > 0) {
-            int i16 = ((bArr[i] & UnsignedBytes.MAX_VALUE) << 10) | (i15 == 2 ? (bArr[length - 1] & UnsignedBytes.MAX_VALUE) << 2 : 0);
+            int i16 = ((bArr[i] & 0xFF) << 10) | (i15 == 2 ? (bArr[length - 1] & 0xFF) << 2 : 0);
             cArr[i3 - 4] = CA[i16 >> 12];
             cArr[i3 - 3] = CA[(i16 >>> 6) & 63];
             cArr[i3 - 2] = i15 != 2 ? '=' : CA[i16 & 63];

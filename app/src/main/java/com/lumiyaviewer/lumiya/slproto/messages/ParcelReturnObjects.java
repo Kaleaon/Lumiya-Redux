@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -75,13 +74,13 @@ public class ParcelReturnObjects extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.ParcelData_Field.LocalID = unpackInt(byteBuffer);
         this.ParcelData_Field.ReturnType = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             TaskIDs taskIDs = new TaskIDs();
             taskIDs.TaskID = unpackUUID(byteBuffer);
             this.TaskIDs_Fields.add(taskIDs);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             OwnerIDs ownerIDs = new OwnerIDs();
             ownerIDs.OwnerID = unpackUUID(byteBuffer);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -82,7 +81,7 @@ public class ObjectDuplicateOnRay extends SLMessage {
         this.AgentData_Field.CopyRotates = unpackBoolean(byteBuffer);
         this.AgentData_Field.RayTargetID = unpackUUID(byteBuffer);
         this.AgentData_Field.DuplicateFlags = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectLocalID = unpackInt(byteBuffer);

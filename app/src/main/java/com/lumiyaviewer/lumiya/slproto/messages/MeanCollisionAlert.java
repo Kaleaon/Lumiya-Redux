@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -49,14 +48,14 @@ public class MeanCollisionAlert extends SLMessage {
 
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             MeanCollision meanCollision = new MeanCollision();
             meanCollision.Victim = unpackUUID(byteBuffer);
             meanCollision.Perp = unpackUUID(byteBuffer);
             meanCollision.Time = unpackInt(byteBuffer);
             meanCollision.Mag = unpackFloat(byteBuffer);
-            meanCollision.Type = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            meanCollision.Type = unpackByte(byteBuffer) & 0xFF;
             this.MeanCollision_Fields.add(meanCollision);
         }
     }

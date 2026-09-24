@@ -44,7 +44,7 @@ class FieldData implements Cloneable {
             }
             if (this.value != null) {
                 if (this.value instanceof MessageNano) {
-                    fieldData.value = ((MessageNano) this.value).mo6clone();
+                    fieldData.value = ((MessageNano) this.value).clone();
                 } else if (this.value instanceof byte[]) {
                     fieldData.value = ((byte[]) this.value).clone();
                 } else if (this.value instanceof byte[][]) {
@@ -69,7 +69,7 @@ class FieldData implements Cloneable {
                     MessageNano[] messageNanoArr2 = new MessageNano[messageNanoArr.length];
                     fieldData.value = messageNanoArr2;
                     for (int i2 = 0; i2 < messageNanoArr.length; i2++) {
-                        messageNanoArr2[i2] = messageNanoArr[i2].mo6clone();
+                        messageNanoArr2[i2] = messageNanoArr[i2].clone();
                     }
                 }
             }

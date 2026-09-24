@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.net.Inet4Address;
@@ -98,12 +97,12 @@ public class SimulatorPresentAtLocation extends SLMessage {
             this.NeighborBlock_Fields[i].Port = unpackShort(byteBuffer) & 65535;
         }
         this.SimulatorBlock_Field.SimName = unpackVariable(byteBuffer, 1);
-        this.SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
         this.SimulatorBlock_Field.RegionFlags = unpackInt(byteBuffer);
         this.SimulatorBlock_Field.RegionID = unpackUUID(byteBuffer);
         this.SimulatorBlock_Field.EstateID = unpackInt(byteBuffer);
         this.SimulatorBlock_Field.ParentEstateID = unpackInt(byteBuffer);
-        int i2 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i2 = byteBuffer.get() & 0xFF;
         for (int i3 = 0; i3 < i2; i3++) {
             TelehubBlock telehubBlock = new TelehubBlock();
             telehubBlock.HasTelehub = unpackBoolean(byteBuffer);

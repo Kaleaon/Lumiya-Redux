@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -152,34 +151,34 @@ public class ObjectUpdate extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);
         this.RegionData_Field.TimeDilation = unpackShort(byteBuffer) & 65535;
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ObjectData objectData = new ObjectData();
             objectData.ID = unpackInt(byteBuffer);
-            objectData.State = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.State = unpackByte(byteBuffer) & 0xFF;
             objectData.FullID = unpackUUID(byteBuffer);
             objectData.CRC = unpackInt(byteBuffer);
-            objectData.PCode = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.Material = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.ClickAction = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PCode = unpackByte(byteBuffer) & 0xFF;
+            objectData.Material = unpackByte(byteBuffer) & 0xFF;
+            objectData.ClickAction = unpackByte(byteBuffer) & 0xFF;
             objectData.Scale = unpackLLVector3(byteBuffer);
             objectData.ObjectData = unpackVariable(byteBuffer, 1);
             objectData.ParentID = unpackInt(byteBuffer);
             objectData.UpdateFlags = unpackInt(byteBuffer);
-            objectData.PathCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.ProfileCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathCurve = unpackByte(byteBuffer) & 0xFF;
+            objectData.ProfileCurve = unpackByte(byteBuffer) & 0xFF;
             objectData.PathBegin = unpackShort(byteBuffer) & 65535;
             objectData.PathEnd = unpackShort(byteBuffer) & 65535;
-            objectData.PathScaleX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathScaleY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathScaleX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathScaleY = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearY = unpackByte(byteBuffer) & 0xFF;
             objectData.PathTwist = unpackByte(byteBuffer);
             objectData.PathTwistBegin = unpackByte(byteBuffer);
             objectData.PathRadiusOffset = unpackByte(byteBuffer);
             objectData.PathTaperX = unpackByte(byteBuffer);
             objectData.PathTaperY = unpackByte(byteBuffer);
-            objectData.PathRevolutions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathRevolutions = unpackByte(byteBuffer) & 0xFF;
             objectData.PathSkew = unpackByte(byteBuffer);
             objectData.ProfileBegin = unpackShort(byteBuffer) & 65535;
             objectData.ProfileEnd = unpackShort(byteBuffer) & 65535;
@@ -196,9 +195,9 @@ public class ObjectUpdate extends SLMessage {
             objectData.Sound = unpackUUID(byteBuffer);
             objectData.OwnerID = unpackUUID(byteBuffer);
             objectData.Gain = unpackFloat(byteBuffer);
-            objectData.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.Flags = unpackByte(byteBuffer) & 0xFF;
             objectData.Radius = unpackFloat(byteBuffer);
-            objectData.JointType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.JointType = unpackByte(byteBuffer) & 0xFF;
             objectData.JointPivot = unpackLLVector3(byteBuffer);
             objectData.JointAxisOrAnchor = unpackLLVector3(byteBuffer);
             this.ObjectData_Fields.add(objectData);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -80,7 +79,7 @@ public class ObjectGrabUpdate extends SLMessage {
         this.ObjectData_Field.GrabOffsetInitial = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.GrabPosition = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.TimeSinceLast = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             SurfaceInfo surfaceInfo = new SurfaceInfo();
             surfaceInfo.UVCoord = unpackLLVector3(byteBuffer);

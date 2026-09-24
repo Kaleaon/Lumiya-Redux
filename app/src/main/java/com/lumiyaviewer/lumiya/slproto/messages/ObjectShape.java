@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -88,24 +87,24 @@ public class ObjectShape extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectLocalID = unpackInt(byteBuffer);
-            objectData.PathCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.ProfileCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathCurve = unpackByte(byteBuffer) & 0xFF;
+            objectData.ProfileCurve = unpackByte(byteBuffer) & 0xFF;
             objectData.PathBegin = unpackShort(byteBuffer) & 65535;
             objectData.PathEnd = unpackShort(byteBuffer) & 65535;
-            objectData.PathScaleX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathScaleY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.PathShearY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathScaleX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathScaleY = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearX = unpackByte(byteBuffer) & 0xFF;
+            objectData.PathShearY = unpackByte(byteBuffer) & 0xFF;
             objectData.PathTwist = unpackByte(byteBuffer);
             objectData.PathTwistBegin = unpackByte(byteBuffer);
             objectData.PathRadiusOffset = unpackByte(byteBuffer);
             objectData.PathTaperX = unpackByte(byteBuffer);
             objectData.PathTaperY = unpackByte(byteBuffer);
-            objectData.PathRevolutions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.PathRevolutions = unpackByte(byteBuffer) & 0xFF;
             objectData.PathSkew = unpackByte(byteBuffer);
             objectData.ProfileBegin = unpackShort(byteBuffer) & 65535;
             objectData.ProfileEnd = unpackShort(byteBuffer) & 65535;

@@ -55,9 +55,9 @@ public interface Nfc {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final NfcParams mo6clone() {
+        public final NfcParams clone() {
             try {
-                return (NfcParams) super.mo6clone();
+                return (NfcParams) super.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }

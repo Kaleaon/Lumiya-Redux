@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -100,7 +99,7 @@ public class UpdateTaskInventory extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.UpdateData_Field.LocalID = unpackInt(byteBuffer);
-        this.UpdateData_Field.Key = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.UpdateData_Field.Key = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.ItemID = unpackUUID(byteBuffer);
         this.InventoryData_Field.FolderID = unpackUUID(byteBuffer);
         this.InventoryData_Field.CreatorID = unpackUUID(byteBuffer);
@@ -116,7 +115,7 @@ public class UpdateTaskInventory extends SLMessage {
         this.InventoryData_Field.Type = unpackByte(byteBuffer);
         this.InventoryData_Field.InvType = unpackByte(byteBuffer);
         this.InventoryData_Field.Flags = unpackInt(byteBuffer);
-        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.SalePrice = unpackInt(byteBuffer);
         this.InventoryData_Field.Name = unpackVariable(byteBuffer, 1);
         this.InventoryData_Field.Description = unpackVariable(byteBuffer, 1);

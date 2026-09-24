@@ -1,7 +1,6 @@
 package com.google.protobuf.nano;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import java.io.IOException;
 
 /* loaded from: classes.dex */
@@ -237,7 +236,7 @@ public final class CodedInputByteBufferNano {
     }
 
     public int readRawLittleEndian32() throws IOException {
-        return (readRawByte() & UnsignedBytes.MAX_VALUE) | ((readRawByte() & UnsignedBytes.MAX_VALUE) << 8) | ((readRawByte() & UnsignedBytes.MAX_VALUE) << 16) | ((readRawByte() & UnsignedBytes.MAX_VALUE) << 24);
+        return (readRawByte() & 0xFF) | ((readRawByte() & 0xFF) << 8) | ((readRawByte() & 0xFF) << 16) | ((readRawByte() & 0xFF) << 24);
     }
 
     public long readRawLittleEndian64() throws IOException {

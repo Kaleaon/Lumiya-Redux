@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class EstateOwnerMessage extends SLMessage {
         this.AgentData_Field.TransactionID = unpackUUID(byteBuffer);
         this.MethodData_Field.Method = unpackVariable(byteBuffer, 1);
         this.MethodData_Field.Invoice = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ParamList paramList = new ParamList();
             paramList.Parameter = unpackVariable(byteBuffer, 1);

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -47,6 +46,6 @@ public class UpdateSimulator extends SLMessage {
         this.SimulatorInfo_Field.RegionID = unpackUUID(byteBuffer);
         this.SimulatorInfo_Field.SimName = unpackVariable(byteBuffer, 1);
         this.SimulatorInfo_Field.EstateID = unpackInt(byteBuffer);
-        this.SimulatorInfo_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.SimulatorInfo_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
     }
 }

@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto;
 
 import android.os.SystemClock;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.eventbus.EventBus;
 import com.lumiyaviewer.lumiya.slproto.auth.SLAuthReply;
@@ -109,7 +108,7 @@ public class SLCircuit extends SLMessageHandler {
         StringBuilder sb = new StringBuilder();
         sb.append(str).append(": ");
         for (int i = 0; i < byteBuffer.limit(); i++) {
-            sb.append(Integer.toHexString(byteBuffer.get(i) & UnsignedBytes.MAX_VALUE));
+            sb.append(Integer.toHexString(byteBuffer.get(i) & 0xFF));
         }
         Debug.Log(sb.toString());
     }

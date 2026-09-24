@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -123,7 +122,7 @@ public class RezObject extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.RezData_Field.FromTaskID = unpackUUID(byteBuffer);
-        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF;
         this.RezData_Field.RayStart = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayEnd = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayTargetID = unpackUUID(byteBuffer);
@@ -149,7 +148,7 @@ public class RezObject extends SLMessage {
         this.InventoryData_Field.Type = unpackByte(byteBuffer);
         this.InventoryData_Field.InvType = unpackByte(byteBuffer);
         this.InventoryData_Field.Flags = unpackInt(byteBuffer);
-        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.SalePrice = unpackInt(byteBuffer);
         this.InventoryData_Field.Name = unpackVariable(byteBuffer, 1);
         this.InventoryData_Field.Description = unpackVariable(byteBuffer, 1);

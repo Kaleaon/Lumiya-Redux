@@ -6,7 +6,6 @@ import androidx.core.internal.view.SupportMenu;
 import androidx.core.view.MotionEventCompat;
 import androidx.core.view.ViewCompat;
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageFactory;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler;
@@ -81,7 +80,7 @@ public abstract class SLMessage implements Parcelable {
         if (b2 != -1) {
             return b2 | 65280;
         }
-        return ((byteBuffer.get() << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & UnsignedBytes.MAX_VALUE);
+        return ((byteBuffer.get() << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & 0xFF);
     }
 
     private void PackPayloadLE(ByteBuffer byteBuffer) {
@@ -177,7 +176,7 @@ public abstract class SLMessage implements Parcelable {
     }
 
     public static int flipBytes(int i) {
-        return (((byte) (i >>> 24)) & UnsignedBytes.MAX_VALUE) | ((((byte) (i >>> 16)) << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((((byte) (i >>> 8)) << 16) & 16711680) | ((((byte) (i >>> 0)) << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
+        return (((byte) (i >>> 24)) & 0xFF) | ((((byte) (i >>> 16)) << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((((byte) (i >>> 8)) << 16) & 16711680) | ((((byte) (i >>> 0)) << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
     }
 
     public static String stringFromVariableOEM(byte[] bArr) {
@@ -465,7 +464,7 @@ public abstract class SLMessage implements Parcelable {
     }
 
     protected byte[] unpackVariable(ByteBuffer byteBuffer, int i) {
-        byte[] bArr = new byte[i == 1 ? byteBuffer.get() & UnsignedBytes.MAX_VALUE : (byteBuffer.get() & UnsignedBytes.MAX_VALUE) | ((byteBuffer.get() & UnsignedBytes.MAX_VALUE) << 8)];
+        byte[] bArr = new byte[i == 1 ? byteBuffer.get() & 0xFF : (byteBuffer.get() & 0xFF) | ((byteBuffer.get() & 0xFF) << 8)];
         byteBuffer.get(bArr);
         return bArr;
     }

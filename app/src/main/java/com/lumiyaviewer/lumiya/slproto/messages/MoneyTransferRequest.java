@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -65,10 +64,10 @@ public class MoneyTransferRequest extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.MoneyData_Field.SourceID = unpackUUID(byteBuffer);
         this.MoneyData_Field.DestID = unpackUUID(byteBuffer);
-        this.MoneyData_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MoneyData_Field.Flags = unpackByte(byteBuffer) & 0xFF;
         this.MoneyData_Field.Amount = unpackInt(byteBuffer);
-        this.MoneyData_Field.AggregatePermNextOwner = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.MoneyData_Field.AggregatePermInventory = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MoneyData_Field.AggregatePermNextOwner = unpackByte(byteBuffer) & 0xFF;
+        this.MoneyData_Field.AggregatePermInventory = unpackByte(byteBuffer) & 0xFF;
         this.MoneyData_Field.TransactionType = unpackInt(byteBuffer);
         this.MoneyData_Field.Description = unpackVariable(byteBuffer, 1);
     }

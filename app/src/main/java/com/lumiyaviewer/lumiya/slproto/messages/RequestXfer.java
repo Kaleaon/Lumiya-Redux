@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -52,7 +51,7 @@ public class RequestXfer extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.XferID_Field.ID = unpackLong(byteBuffer);
         this.XferID_Field.Filename = unpackVariable(byteBuffer, 1);
-        this.XferID_Field.FilePath = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.XferID_Field.FilePath = unpackByte(byteBuffer) & 0xFF;
         this.XferID_Field.DeleteOnCompletion = unpackBoolean(byteBuffer);
         this.XferID_Field.UseBigPackets = unpackBoolean(byteBuffer);
         this.XferID_Field.VFileID = unpackUUID(byteBuffer);

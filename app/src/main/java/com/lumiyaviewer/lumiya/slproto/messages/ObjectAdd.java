@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
@@ -109,34 +108,34 @@ public class ObjectAdd extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
-        this.ObjectData_Field.PCode = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.Material = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PCode = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.Material = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.AddFlags = unpackInt(byteBuffer);
-        this.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.ProfileCurve = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.ProfileCurve = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathBegin = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.PathEnd = unpackShort(byteBuffer) & 65535;
-        this.ObjectData_Field.PathScaleX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathScaleY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathShearX = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ObjectData_Field.PathShearY = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathScaleX = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathScaleY = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathShearX = unpackByte(byteBuffer) & 0xFF;
+        this.ObjectData_Field.PathShearY = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathTwist = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTwistBegin = unpackByte(byteBuffer);
         this.ObjectData_Field.PathRadiusOffset = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTaperX = unpackByte(byteBuffer);
         this.ObjectData_Field.PathTaperY = unpackByte(byteBuffer);
-        this.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.PathSkew = unpackByte(byteBuffer);
         this.ObjectData_Field.ProfileBegin = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.ProfileEnd = unpackShort(byteBuffer) & 65535;
         this.ObjectData_Field.ProfileHollow = unpackShort(byteBuffer) & 65535;
-        this.ObjectData_Field.BypassRaycast = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.RayStart = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.RayEnd = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.RayTargetID = unpackUUID(byteBuffer);
-        this.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.Scale = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.Rotation = unpackLLQuaternion(byteBuffer);
-        this.ObjectData_Field.State = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.State = unpackByte(byteBuffer) & 0xFF;
     }
 }

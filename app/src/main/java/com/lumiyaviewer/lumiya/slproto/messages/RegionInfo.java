@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -110,8 +109,8 @@ public class RegionInfo extends SLMessage {
         this.RegionInfoData_Field.EstateID = unpackInt(byteBuffer);
         this.RegionInfoData_Field.ParentEstateID = unpackInt(byteBuffer);
         this.RegionInfoData_Field.RegionFlags = unpackInt(byteBuffer);
-        this.RegionInfoData_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.RegionInfoData_Field.MaxAgents = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.RegionInfoData_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
+        this.RegionInfoData_Field.MaxAgents = unpackByte(byteBuffer) & 0xFF;
         this.RegionInfoData_Field.BillableFactor = unpackFloat(byteBuffer);
         this.RegionInfoData_Field.ObjectBonusFactor = unpackFloat(byteBuffer);
         this.RegionInfoData_Field.WaterHeight = unpackFloat(byteBuffer);
@@ -127,7 +126,7 @@ public class RegionInfo extends SLMessage {
         this.RegionInfo2_Field.MaxAgents32 = unpackInt(byteBuffer);
         this.RegionInfo2_Field.HardMaxAgents = unpackInt(byteBuffer);
         this.RegionInfo2_Field.HardMaxObjects = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             RegionInfo3 regionInfo3 = new RegionInfo3();
             regionInfo3.RegionFlagsExtended = unpackLong(byteBuffer);

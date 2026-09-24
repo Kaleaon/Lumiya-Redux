@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
@@ -70,6 +69,6 @@ public class ScriptSensorRequest extends SLMessage {
         this.Requester_Field.Range = unpackFloat(byteBuffer);
         this.Requester_Field.Arc = unpackFloat(byteBuffer);
         this.Requester_Field.RegionHandle = unpackLong(byteBuffer);
-        this.Requester_Field.SearchRegions = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Requester_Field.SearchRegions = unpackByte(byteBuffer) & 0xFF;
     }
 }

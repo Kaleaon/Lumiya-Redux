@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -105,7 +104,7 @@ public class UpdateAttachment extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        this.AttachmentBlock_Field.AttachmentPoint = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AttachmentBlock_Field.AttachmentPoint = unpackByte(byteBuffer) & 0xFF;
         this.OperationData_Field.AddItem = unpackBoolean(byteBuffer);
         this.OperationData_Field.UseExistingAsset = unpackBoolean(byteBuffer);
         this.InventoryData_Field.ItemID = unpackUUID(byteBuffer);
@@ -123,7 +122,7 @@ public class UpdateAttachment extends SLMessage {
         this.InventoryData_Field.Type = unpackByte(byteBuffer);
         this.InventoryData_Field.InvType = unpackByte(byteBuffer);
         this.InventoryData_Field.Flags = unpackInt(byteBuffer);
-        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.InventoryData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.InventoryData_Field.SalePrice = unpackInt(byteBuffer);
         this.InventoryData_Field.Name = unpackVariable(byteBuffer, 1);
         this.InventoryData_Field.Description = unpackVariable(byteBuffer, 1);

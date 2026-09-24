@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -77,8 +76,8 @@ public class ImprovedInstantMessage extends SLMessage {
         this.MessageBlock_Field.ParentEstateID = unpackInt(byteBuffer);
         this.MessageBlock_Field.RegionID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.Position = unpackLLVector3(byteBuffer);
-        this.MessageBlock_Field.Offline = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MessageBlock_Field.Offline = unpackByte(byteBuffer) & 0xFF;
+        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & 0xFF;
         this.MessageBlock_Field.ID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.Timestamp = unpackInt(byteBuffer);
         this.MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1);

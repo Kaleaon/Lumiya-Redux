@@ -56,7 +56,7 @@ public abstract class MessageNano {
     }
 
     /* renamed from: clone, reason: merged with bridge method [inline-methods] */
-    public MessageNano mo6clone() throws CloneNotSupportedException {
+    public MessageNano clone() throws CloneNotSupportedException {
         return (MessageNano) super.clone();
     }
 

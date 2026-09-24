@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-import com.google.common.primitives.UnsignedBytes;
 import java.nio.ByteBuffer;
 
 /* loaded from: classes.dex */
@@ -194,7 +193,7 @@ public class LLQuaternion {
     }
 
     public static LLQuaternion parseU8Vec3(ByteBuffer byteBuffer, float f, float f2) {
-        return new LLQuaternion(LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2));
+        return new LLQuaternion(LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2));
     }
 
     public static LLQuaternion shortestArc(LLVector3 lLVector3, LLVector3 lLVector32) {

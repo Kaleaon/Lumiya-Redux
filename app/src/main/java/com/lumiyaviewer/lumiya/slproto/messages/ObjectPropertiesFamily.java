@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -77,7 +76,7 @@ public class ObjectPropertiesFamily extends SLMessage {
         this.ObjectData_Field.EveryoneMask = unpackInt(byteBuffer);
         this.ObjectData_Field.NextOwnerMask = unpackInt(byteBuffer);
         this.ObjectData_Field.OwnershipCost = unpackInt(byteBuffer);
-        this.ObjectData_Field.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ObjectData_Field.SaleType = unpackByte(byteBuffer) & 0xFF;
         this.ObjectData_Field.SalePrice = unpackInt(byteBuffer);
         this.ObjectData_Field.Category = unpackInt(byteBuffer);
         this.ObjectData_Field.LastOwnerID = unpackUUID(byteBuffer);

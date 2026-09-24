@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.prims;
 
 import androidx.core.internal.view.SupportMenu;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.messages.ObjectUpdate;
 import com.lumiyaviewer.lumiya.slproto.types.LLTersePacking;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
@@ -73,8 +72,8 @@ public class PrimPathParams {
         this.CurveType = byteBuffer.get();
         this.Begin = (byteBuffer.getShort() & 65535) * 2.0E-5f;
         this.End = (50000 - (byteBuffer.getShort() & 65535)) * 2.0E-5f;
-        this.ScaleX = (200 - (byteBuffer.get() & UnsignedBytes.MAX_VALUE)) * 0.01f;
-        this.ScaleY = (200 - (byteBuffer.get() & UnsignedBytes.MAX_VALUE)) * 0.01f;
+        this.ScaleX = (200 - (byteBuffer.get() & 0xFF)) * 0.01f;
+        this.ScaleY = (200 - (byteBuffer.get() & 0xFF)) * 0.01f;
         this.ShearX = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.ShearY = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TwistEnd = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
@@ -82,7 +81,7 @@ public class PrimPathParams {
         this.RadiusOffset = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TaperX = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
         this.TaperY = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
-        this.Revolutions = ((byteBuffer.get() & UnsignedBytes.MAX_VALUE) * 0.015f) + 1.0f;
+        this.Revolutions = ((byteBuffer.get() & 0xFF) * 0.015f) + 1.0f;
         this.Skew = LLTersePacking.getSignedByte(byteBuffer.get()) * 0.01f;
     }
 

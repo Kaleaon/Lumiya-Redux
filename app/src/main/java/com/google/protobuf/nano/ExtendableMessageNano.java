@@ -9,8 +9,8 @@ public abstract class ExtendableMessageNano<M extends ExtendableMessageNano<M>> 
 
     @Override // com.google.protobuf.nano.MessageNano
     /* renamed from: clone */
-    public M mo6clone() throws CloneNotSupportedException {
-        M m = (M) super.mo6clone();
+    public M clone() throws CloneNotSupportedException {
+        M m = (M) super.clone();
         InternalNano.cloneUnknownFieldData(this, m);
         return m;
     }

@@ -6,7 +6,6 @@ import androidx.core.view.ViewCompat;
 import com.google.common.base.Ascii;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.render.DrawableObject;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.MatrixStack;
@@ -288,7 +287,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         }
         this.objectCoords.set(1, objectData.Scale);
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(objectData.Text);
-        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & UnsignedBytes.MAX_VALUE) | ((objectData.TextColor[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((objectData.TextColor[2] << 16) & 16711680) | ((objectData.TextColor[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK) : 0));
+        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & 0xFF) | ((objectData.TextColor[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((objectData.TextColor[2] << 16) & 16711680) | ((objectData.TextColor[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK) : 0));
         PrimVolumeParams createFromObjectUpdate = PrimVolumeParams.createFromObjectUpdate(objectData);
         if (createFromObjectUpdate != null && objectData.ExtraParams != null) {
             createFromObjectUpdate.unpackExtraParams(ByteBuffer.wrap(objectData.ExtraParams).order(ByteOrder.LITTLE_ENDIAN));
@@ -382,7 +381,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
             byteBufferWrap.position(byteBufferWrap.position() + 86);
         }
         int iPosition2 = byteBufferWrap.position();
-        int i3 = byteBufferWrap.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBufferWrap.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             byteBufferWrap.getShort();
             byteBufferWrap.position(byteBufferWrap.getInt() + byteBufferWrap.position());

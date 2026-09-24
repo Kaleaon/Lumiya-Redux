@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
@@ -64,13 +63,13 @@ public class AgentUpdate extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.BodyRotation = unpackLLQuaternion(byteBuffer);
         this.AgentData_Field.HeadRotation = unpackLLQuaternion(byteBuffer);
-        this.AgentData_Field.State = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.State = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.CameraCenter = unpackLLVector3(byteBuffer);
         this.AgentData_Field.CameraAtAxis = unpackLLVector3(byteBuffer);
         this.AgentData_Field.CameraLeftAxis = unpackLLVector3(byteBuffer);
         this.AgentData_Field.CameraUpAxis = unpackLLVector3(byteBuffer);
         this.AgentData_Field.Far = unpackFloat(byteBuffer);
         this.AgentData_Field.ControlFlags = unpackInt(byteBuffer);
-        this.AgentData_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.Flags = unpackByte(byteBuffer) & 0xFF;
     }
 }

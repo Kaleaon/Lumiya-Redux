@@ -1,6 +1,5 @@
 package com.google.protobuf.nano;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.google.vr.cardboard.VrSettingsProviderContract;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -23,7 +22,7 @@ public final class MessageNanoPrinter {
         }
         stringBuffer.append('\"');
         for (byte b : bArr) {
-            int i = b & UnsignedBytes.MAX_VALUE;
+            int i = b & 0xFF;
             if (i == 92 || i == 34) {
                 stringBuffer.append('\\').append((char) i);
             } else if (i >= 32 && i < 127) {

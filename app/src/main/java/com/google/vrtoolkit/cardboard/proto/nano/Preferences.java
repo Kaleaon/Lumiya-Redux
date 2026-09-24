@@ -71,9 +71,9 @@ public interface Preferences {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final DeveloperPrefs mo6clone() {
+        public final DeveloperPrefs clone() {
             try {
-                return (DeveloperPrefs) super.mo6clone();
+                return (DeveloperPrefs) super.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }
@@ -227,11 +227,11 @@ public interface Preferences {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final UserPrefs mo6clone() {
+        public final UserPrefs clone() {
             try {
-                UserPrefs userPrefs = (UserPrefs) super.mo6clone();
+                UserPrefs userPrefs = (UserPrefs) super.clone();
                 if (this.developerPrefs != null) {
-                    userPrefs.developerPrefs = this.developerPrefs.mo6clone();
+                    userPrefs.developerPrefs = this.developerPrefs.clone();
                 }
                 return userPrefs;
             } catch (CloneNotSupportedException e) {

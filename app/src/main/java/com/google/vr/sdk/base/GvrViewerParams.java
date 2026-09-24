@@ -82,7 +82,7 @@ public class GvrViewerParams {
     public GvrViewerParams(CardboardDevice.DeviceParams deviceParams) {
         setDefaultValues();
         if (deviceParams != null) {
-            this.originalDeviceProto = deviceParams.mo6clone();
+            this.originalDeviceProto = deviceParams.clone();
             this.vendor = deviceParams.getVendor();
             this.model = deviceParams.getModel();
             this.interLensDistance = deviceParams.getInterLensDistance();
@@ -288,7 +288,7 @@ public class GvrViewerParams {
     }
 
     public CardboardDevice.DeviceParams toProtobuf() {
-        CardboardDevice.DeviceParams deviceParams = this.originalDeviceProto == null ? new CardboardDevice.DeviceParams() : this.originalDeviceProto.mo6clone();
+        CardboardDevice.DeviceParams deviceParams = this.originalDeviceProto == null ? new CardboardDevice.DeviceParams() : this.originalDeviceProto.clone();
         deviceParams.setVendor(this.vendor);
         deviceParams.setModel(this.model);
         deviceParams.setInterLensDistance(this.interLensDistance);

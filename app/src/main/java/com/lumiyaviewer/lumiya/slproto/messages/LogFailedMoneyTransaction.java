@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
@@ -65,11 +64,11 @@ public class LogFailedMoneyTransaction extends SLMessage {
         this.TransactionData_Field.TransactionType = unpackInt(byteBuffer);
         this.TransactionData_Field.SourceID = unpackUUID(byteBuffer);
         this.TransactionData_Field.DestID = unpackUUID(byteBuffer);
-        this.TransactionData_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.TransactionData_Field.Flags = unpackByte(byteBuffer) & 0xFF;
         this.TransactionData_Field.Amount = unpackInt(byteBuffer);
         this.TransactionData_Field.SimulatorIP = unpackIPAddress(byteBuffer);
         this.TransactionData_Field.GridX = unpackInt(byteBuffer);
         this.TransactionData_Field.GridY = unpackInt(byteBuffer);
-        this.TransactionData_Field.FailureType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.TransactionData_Field.FailureType = unpackByte(byteBuffer) & 0xFF;
     }
 }

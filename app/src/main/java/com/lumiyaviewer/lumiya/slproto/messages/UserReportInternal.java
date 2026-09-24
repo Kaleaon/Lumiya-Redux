@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -72,8 +71,8 @@ public class UserReportInternal extends SLMessage {
 
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public void UnpackPayload(ByteBuffer byteBuffer) {
-        this.ReportData_Field.ReportType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ReportData_Field.Category = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ReportData_Field.ReportType = unpackByte(byteBuffer) & 0xFF;
+        this.ReportData_Field.Category = unpackByte(byteBuffer) & 0xFF;
         this.ReportData_Field.ReporterID = unpackUUID(byteBuffer);
         this.ReportData_Field.ViewerPosition = unpackLLVector3(byteBuffer);
         this.ReportData_Field.AgentPosition = unpackLLVector3(byteBuffer);

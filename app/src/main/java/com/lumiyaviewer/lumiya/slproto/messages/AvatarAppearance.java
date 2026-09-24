@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -75,16 +74,16 @@ public class AvatarAppearance extends SLMessage {
         this.Sender_Field.ID = unpackUUID(byteBuffer);
         this.Sender_Field.IsTrial = unpackBoolean(byteBuffer);
         this.ObjectData_Field.TextureEntry = unpackVariable(byteBuffer, 2);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             VisualParam visualParam = new VisualParam();
-            visualParam.ParamValue = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            visualParam.ParamValue = unpackByte(byteBuffer) & 0xFF;
             this.VisualParam_Fields.add(visualParam);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             AppearanceData appearanceData = new AppearanceData();
-            appearanceData.AppearanceVersion = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            appearanceData.AppearanceVersion = unpackByte(byteBuffer) & 0xFF;
             appearanceData.CofVersion = unpackInt(byteBuffer);
             appearanceData.Flags = unpackInt(byteBuffer);
             this.AppearanceData_Fields.add(appearanceData);

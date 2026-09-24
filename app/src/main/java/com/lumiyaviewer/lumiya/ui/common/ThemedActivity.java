@@ -18,7 +18,7 @@ public class ThemedActivity extends AppCompatActivity {
     private int selectedThemeId = -1;
 
     protected boolean isLightTheme() {
-        return this.selectedThemeId != 2131427371;
+        return this.selectedThemeId != com.lumiyaviewer.lumiya.R.style.Theme_Lumiya;
     }
 
     /* JADX WARN: Multi-variable type inference failed */

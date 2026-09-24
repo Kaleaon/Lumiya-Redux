@@ -77,9 +77,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Application mo6clone() {
+            public final Application clone() {
                 try {
-                    return (Application) super.mo6clone();
+                    return (Application) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -191,14 +191,14 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final AudioStats mo6clone() {
+            public final AudioStats clone() {
                 try {
-                    AudioStats audioStats = (AudioStats) super.mo6clone();
+                    AudioStats audioStats = (AudioStats) super.clone();
                     if (this.renderingTimePerBufferMilliseconds != null && this.renderingTimePerBufferMilliseconds.length > 0) {
                         audioStats.renderingTimePerBufferMilliseconds = new HistogramBucket[this.renderingTimePerBufferMilliseconds.length];
                         for (int i = 0; i < this.renderingTimePerBufferMilliseconds.length; i++) {
                             if (this.renderingTimePerBufferMilliseconds[i] != null) {
-                                audioStats.renderingTimePerBufferMilliseconds[i] = this.renderingTimePerBufferMilliseconds[i].mo6clone();
+                                audioStats.renderingTimePerBufferMilliseconds[i] = this.renderingTimePerBufferMilliseconds[i].clone();
                             }
                         }
                     }
@@ -206,7 +206,7 @@ public interface Vr {
                         audioStats.numberOfSimultaneousSoundObjects = new HistogramBucket[this.numberOfSimultaneousSoundObjects.length];
                         for (int i2 = 0; i2 < this.numberOfSimultaneousSoundObjects.length; i2++) {
                             if (this.numberOfSimultaneousSoundObjects[i2] != null) {
-                                audioStats.numberOfSimultaneousSoundObjects[i2] = this.numberOfSimultaneousSoundObjects[i2].mo6clone();
+                                audioStats.numberOfSimultaneousSoundObjects[i2] = this.numberOfSimultaneousSoundObjects[i2].clone();
                             }
                         }
                     }
@@ -214,7 +214,7 @@ public interface Vr {
                         audioStats.numberOfSimultaneousSoundFields = new HistogramBucket[this.numberOfSimultaneousSoundFields.length];
                         for (int i3 = 0; i3 < this.numberOfSimultaneousSoundFields.length; i3++) {
                             if (this.numberOfSimultaneousSoundFields[i3] != null) {
-                                audioStats.numberOfSimultaneousSoundFields[i3] = this.numberOfSimultaneousSoundFields[i3].mo6clone();
+                                audioStats.numberOfSimultaneousSoundFields[i3] = this.numberOfSimultaneousSoundFields[i3].clone();
                             }
                         }
                     }
@@ -222,7 +222,7 @@ public interface Vr {
                         audioStats.cpuMeasurementsPercent = new HistogramBucket[this.cpuMeasurementsPercent.length];
                         for (int i4 = 0; i4 < this.cpuMeasurementsPercent.length; i4++) {
                             if (this.cpuMeasurementsPercent[i4] != null) {
-                                audioStats.cpuMeasurementsPercent[i4] = this.cpuMeasurementsPercent[i4].mo6clone();
+                                audioStats.cpuMeasurementsPercent[i4] = this.cpuMeasurementsPercent[i4].clone();
                             }
                         }
                     }
@@ -506,9 +506,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Capture mo6clone() {
+                public final Capture clone() {
                     try {
-                        return (Capture) super.mo6clone();
+                        return (Capture) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -660,9 +660,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Share mo6clone() {
+                public final Share clone() {
                     try {
-                        return (Share) super.mo6clone();
+                        return (Share) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -774,9 +774,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final ShareStart mo6clone() {
+                public final ShareStart clone() {
                     try {
-                        return (ShareStart) super.mo6clone();
+                        return (ShareStart) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -878,9 +878,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final View mo6clone() {
+                public final View clone() {
                     try {
-                        return (View) super.mo6clone();
+                        return (View) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -988,20 +988,20 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Cyclops mo6clone() {
+            public final Cyclops clone() {
                 try {
-                    Cyclops cyclops = (Cyclops) super.mo6clone();
+                    Cyclops cyclops = (Cyclops) super.clone();
                     if (this.capture != null) {
-                        cyclops.capture = this.capture.mo6clone();
+                        cyclops.capture = this.capture.clone();
                     }
                     if (this.view != null) {
-                        cyclops.view = this.view.mo6clone();
+                        cyclops.view = this.view.clone();
                     }
                     if (this.share != null) {
-                        cyclops.share = this.share.mo6clone();
+                        cyclops.share = this.share.clone();
                     }
                     if (this.shareStart != null) {
-                        cyclops.shareStart = this.shareStart.mo6clone();
+                        cyclops.shareStart = this.shareStart.clone();
                     }
                     return cyclops;
                 } catch (CloneNotSupportedException e) {
@@ -1130,9 +1130,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final DoublePrecisionTransform mo6clone() {
+            public final DoublePrecisionTransform clone() {
                 try {
-                    return (DoublePrecisionTransform) super.mo6clone();
+                    return (DoublePrecisionTransform) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -1289,11 +1289,11 @@ public interface Vr {
 
                     @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                     /* renamed from: clone */
-                    public final ControllerState mo6clone() {
+                    public final ControllerState clone() {
                         try {
-                            ControllerState controllerState = (ControllerState) super.mo6clone();
+                            ControllerState controllerState = (ControllerState) super.clone();
                             if (this.startFromControllerTransform != null) {
-                                controllerState.startFromControllerTransform = this.startFromControllerTransform.mo6clone();
+                                controllerState.startFromControllerTransform = this.startFromControllerTransform.clone();
                             }
                             return controllerState;
                         } catch (CloneNotSupportedException e) {
@@ -1386,17 +1386,17 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Actor mo6clone() {
+                public final Actor clone() {
                     try {
-                        Actor actor = (Actor) super.mo6clone();
+                        Actor actor = (Actor) super.clone();
                         if (this.startFromHeadTransform != null) {
-                            actor.startFromHeadTransform = this.startFromHeadTransform.mo6clone();
+                            actor.startFromHeadTransform = this.startFromHeadTransform.clone();
                         }
                         if (this.controllerStates != null && this.controllerStates.length > 0) {
                             actor.controllerStates = new ControllerState[this.controllerStates.length];
                             for (int i = 0; i < this.controllerStates.length; i++) {
                                 if (this.controllerStates[i] != null) {
-                                    actor.controllerStates[i] = this.controllerStates[i].mo6clone();
+                                    actor.controllerStates[i] = this.controllerStates[i].clone();
                                 }
                             }
                         }
@@ -1517,9 +1517,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final AppState mo6clone() {
+                public final AppState clone() {
                     try {
-                        return (AppState) super.mo6clone();
+                        return (AppState) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -1602,11 +1602,11 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final ControllerState mo6clone() {
+                public final ControllerState clone() {
                     try {
-                        ControllerState controllerState = (ControllerState) super.mo6clone();
+                        ControllerState controllerState = (ControllerState) super.clone();
                         if (this.startFromControllerTransform != null) {
-                            controllerState.startFromControllerTransform = this.startFromControllerTransform.mo6clone();
+                            controllerState.startFromControllerTransform = this.startFromControllerTransform.clone();
                         }
                         return controllerState;
                     } catch (CloneNotSupportedException e) {
@@ -1702,11 +1702,11 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Environment mo6clone() {
+                public final Environment clone() {
                     try {
-                        Environment environment = (Environment) super.mo6clone();
+                        Environment environment = (Environment) super.clone();
                         if (this.startFromEnvironmentTransform != null) {
-                            environment.startFromEnvironmentTransform = this.startFromEnvironmentTransform.mo6clone();
+                            environment.startFromEnvironmentTransform = this.startFromEnvironmentTransform.clone();
                         }
                         return environment;
                     } catch (CloneNotSupportedException e) {
@@ -1791,9 +1791,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Menu mo6clone() {
+                public final Menu clone() {
                     try {
-                        return (Menu) super.mo6clone();
+                        return (Menu) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -1926,9 +1926,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Preferences mo6clone() {
+                public final Preferences clone() {
                     try {
-                        return (Preferences) super.mo6clone();
+                        return (Preferences) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -2080,9 +2080,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final SplashScreen mo6clone() {
+                public final SplashScreen clone() {
                     try {
-                        return (SplashScreen) super.mo6clone();
+                        return (SplashScreen) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -2192,9 +2192,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Tour mo6clone() {
+                public final Tour clone() {
                     try {
-                        return (Tour) super.mo6clone();
+                        return (Tour) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -2281,9 +2281,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Tutorial mo6clone() {
+                public final Tutorial clone() {
                     try {
-                        return (Tutorial) super.mo6clone();
+                        return (Tutorial) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -2378,11 +2378,11 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final View mo6clone() {
+                public final View clone() {
                     try {
-                        View view = (View) super.mo6clone();
+                        View view = (View) super.clone();
                         if (this.startFromKeyholeTransform != null) {
-                            view.startFromKeyholeTransform = this.startFromKeyholeTransform.mo6clone();
+                            view.startFromKeyholeTransform = this.startFromKeyholeTransform.clone();
                         }
                         return view;
                     } catch (CloneNotSupportedException e) {
@@ -2495,54 +2495,54 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final EarthVr mo6clone() {
+            public final EarthVr clone() {
                 try {
-                    EarthVr earthVr = (EarthVr) super.mo6clone();
+                    EarthVr earthVr = (EarthVr) super.clone();
                     if (this.startFromKeyholeTransform != null) {
-                        earthVr.startFromKeyholeTransform = this.startFromKeyholeTransform.mo6clone();
+                        earthVr.startFromKeyholeTransform = this.startFromKeyholeTransform.clone();
                     }
                     if (this.startFromHeadTransform != null) {
-                        earthVr.startFromHeadTransform = this.startFromHeadTransform.mo6clone();
+                        earthVr.startFromHeadTransform = this.startFromHeadTransform.clone();
                     }
                     if (this.controllerStates != null && this.controllerStates.length > 0) {
                         earthVr.controllerStates = new ControllerState[this.controllerStates.length];
                         for (int i = 0; i < this.controllerStates.length; i++) {
                             if (this.controllerStates[i] != null) {
-                                earthVr.controllerStates[i] = this.controllerStates[i].mo6clone();
+                                earthVr.controllerStates[i] = this.controllerStates[i].clone();
                             }
                         }
                     }
                     if (this.appState != null) {
-                        earthVr.appState = this.appState.mo6clone();
+                        earthVr.appState = this.appState.clone();
                     }
                     if (this.view != null) {
-                        earthVr.view = this.view.mo6clone();
+                        earthVr.view = this.view.clone();
                     }
                     if (this.menu != null) {
-                        earthVr.menu = this.menu.mo6clone();
+                        earthVr.menu = this.menu.clone();
                     }
                     if (this.preferences != null) {
-                        earthVr.preferences = this.preferences.mo6clone();
+                        earthVr.preferences = this.preferences.clone();
                     }
                     if (this.tour != null) {
-                        earthVr.tour = this.tour.mo6clone();
+                        earthVr.tour = this.tour.clone();
                     }
                     if (this.tutorial != null) {
-                        earthVr.tutorial = this.tutorial.mo6clone();
+                        earthVr.tutorial = this.tutorial.clone();
                     }
                     if (this.actors != null && this.actors.length > 0) {
                         earthVr.actors = new Actor[this.actors.length];
                         for (int i2 = 0; i2 < this.actors.length; i2++) {
                             if (this.actors[i2] != null) {
-                                earthVr.actors[i2] = this.actors[i2].mo6clone();
+                                earthVr.actors[i2] = this.actors[i2].clone();
                             }
                         }
                     }
                     if (this.environment != null) {
-                        earthVr.environment = this.environment.mo6clone();
+                        earthVr.environment = this.environment.clone();
                     }
                     if (this.splashScreen != null) {
-                        earthVr.splashScreen = this.splashScreen.mo6clone();
+                        earthVr.splashScreen = this.splashScreen.clone();
                     }
                     return earthVr;
                 } catch (CloneNotSupportedException e) {
@@ -2809,9 +2809,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Pano mo6clone() {
+                public final Pano clone() {
                     try {
-                        return (Pano) super.mo6clone();
+                        return (Pano) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -2922,9 +2922,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Video mo6clone() {
+                public final Video clone() {
                     try {
-                        return (Video) super.mo6clone();
+                        return (Video) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -3038,14 +3038,14 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final EmbedVrWidget mo6clone() {
+            public final EmbedVrWidget clone() {
                 try {
-                    EmbedVrWidget embedVrWidget = (EmbedVrWidget) super.mo6clone();
+                    EmbedVrWidget embedVrWidget = (EmbedVrWidget) super.clone();
                     if (this.pano != null) {
-                        embedVrWidget.pano = this.pano.mo6clone();
+                        embedVrWidget.pano = this.pano.clone();
                     }
                     if (this.video != null) {
-                        embedVrWidget.video = this.video.mo6clone();
+                        embedVrWidget.video = this.video.clone();
                     }
                     return embedVrWidget;
                 } catch (CloneNotSupportedException e) {
@@ -3362,9 +3362,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final HeadMount mo6clone() {
+            public final HeadMount clone() {
                 try {
-                    return (HeadMount) super.mo6clone();
+                    return (HeadMount) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -3451,9 +3451,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final HistogramBucket mo6clone() {
+            public final HistogramBucket clone() {
                 try {
-                    return (HistogramBucket) super.mo6clone();
+                    return (HistogramBucket) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -3556,14 +3556,14 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final KeyboardEvent mo6clone() {
+                public final KeyboardEvent clone() {
                     try {
-                        KeyboardEvent keyboardEvent = (KeyboardEvent) super.mo6clone();
+                        KeyboardEvent keyboardEvent = (KeyboardEvent) super.clone();
                         if (this.textEntry != null) {
-                            keyboardEvent.textEntry = this.textEntry.mo6clone();
+                            keyboardEvent.textEntry = this.textEntry.clone();
                         }
                         if (this.keyboardService != null) {
-                            keyboardEvent.keyboardService = this.keyboardService.mo6clone();
+                            keyboardEvent.keyboardService = this.keyboardService.clone();
                         }
                         if (this.systemLanguages != null && this.systemLanguages.length > 0) {
                             keyboardEvent.systemLanguages = (String[]) this.systemLanguages.clone();
@@ -3822,9 +3822,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final KeyboardTextEntry mo6clone() {
+                public final KeyboardTextEntry clone() {
                     try {
-                        return (KeyboardTextEntry) super.mo6clone();
+                        return (KeyboardTextEntry) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -3935,14 +3935,14 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Keyboard mo6clone() {
+            public final Keyboard clone() {
                 try {
-                    Keyboard keyboard = (Keyboard) super.mo6clone();
+                    Keyboard keyboard = (Keyboard) super.clone();
                     if (this.keyboardEvents != null && this.keyboardEvents.length > 0) {
                         keyboard.keyboardEvents = new KeyboardEvent[this.keyboardEvents.length];
                         for (int i = 0; i < this.keyboardEvents.length; i++) {
                             if (this.keyboardEvents[i] != null) {
-                                keyboard.keyboardEvents[i] = this.keyboardEvents[i].mo6clone();
+                                keyboard.keyboardEvents[i] = this.keyboardEvents[i].clone();
                             }
                         }
                     }
@@ -4058,9 +4058,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Launcher mo6clone() {
+            public final Launcher clone() {
                 try {
-                    return (Launcher) super.mo6clone();
+                    return (Launcher) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -4168,9 +4168,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final LoadTime mo6clone() {
+                public final LoadTime clone() {
                     try {
-                        return (LoadTime) super.mo6clone();
+                        return (LoadTime) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -4302,11 +4302,11 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Lullaby mo6clone() {
+            public final Lullaby clone() {
                 try {
-                    Lullaby lullaby = (Lullaby) super.mo6clone();
+                    Lullaby lullaby = (Lullaby) super.clone();
                     if (this.loadTime != null) {
-                        lullaby.loadTime = this.loadTime.mo6clone();
+                        lullaby.loadTime = this.loadTime.clone();
                     }
                     return lullaby;
                 } catch (CloneNotSupportedException e) {
@@ -4487,25 +4487,25 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final PerformanceStats mo6clone() {
+            public final PerformanceStats clone() {
                 try {
-                    PerformanceStats performanceStats = (PerformanceStats) super.mo6clone();
+                    PerformanceStats performanceStats = (PerformanceStats) super.clone();
                     if (this.frameTime != null && this.frameTime.length > 0) {
                         performanceStats.frameTime = new HistogramBucket[this.frameTime.length];
                         for (int i = 0; i < this.frameTime.length; i++) {
                             if (this.frameTime[i] != null) {
-                                performanceStats.frameTime[i] = this.frameTime[i].mo6clone();
+                                performanceStats.frameTime[i] = this.frameTime[i].clone();
                             }
                         }
                     }
                     if (this.timeSeriesData != null) {
-                        performanceStats.timeSeriesData = this.timeSeriesData.mo6clone();
+                        performanceStats.timeSeriesData = this.timeSeriesData.clone();
                     }
                     if (this.appRenderTime != null && this.appRenderTime.length > 0) {
                         performanceStats.appRenderTime = new HistogramBucket[this.appRenderTime.length];
                         for (int i2 = 0; i2 < this.appRenderTime.length; i2++) {
                             if (this.appRenderTime[i2] != null) {
-                                performanceStats.appRenderTime[i2] = this.appRenderTime[i2].mo6clone();
+                                performanceStats.appRenderTime[i2] = this.appRenderTime[i2].clone();
                             }
                         }
                     }
@@ -4513,7 +4513,7 @@ public interface Vr {
                         performanceStats.presentTime = new HistogramBucket[this.presentTime.length];
                         for (int i3 = 0; i3 < this.presentTime.length; i3++) {
                             if (this.presentTime[i3] != null) {
-                                performanceStats.presentTime[i3] = this.presentTime[i3].mo6clone();
+                                performanceStats.presentTime[i3] = this.presentTime[i3].clone();
                             }
                         }
                     }
@@ -4521,7 +4521,7 @@ public interface Vr {
                         performanceStats.totalRenderTime = new HistogramBucket[this.totalRenderTime.length];
                         for (int i4 = 0; i4 < this.totalRenderTime.length; i4++) {
                             if (this.totalRenderTime[i4] != null) {
-                                performanceStats.totalRenderTime[i4] = this.totalRenderTime[i4].mo6clone();
+                                performanceStats.totalRenderTime[i4] = this.totalRenderTime[i4].clone();
                             }
                         }
                     }
@@ -4529,7 +4529,7 @@ public interface Vr {
                         performanceStats.postFrameTime = new HistogramBucket[this.postFrameTime.length];
                         for (int i5 = 0; i5 < this.postFrameTime.length; i5++) {
                             if (this.postFrameTime[i5] != null) {
-                                performanceStats.postFrameTime[i5] = this.postFrameTime[i5].mo6clone();
+                                performanceStats.postFrameTime[i5] = this.postFrameTime[i5].clone();
                             }
                         }
                     }
@@ -4537,7 +4537,7 @@ public interface Vr {
                         performanceStats.consecutiveDroppedFrames = new HistogramBucket[this.consecutiveDroppedFrames.length];
                         for (int i6 = 0; i6 < this.consecutiveDroppedFrames.length; i6++) {
                             if (this.consecutiveDroppedFrames[i6] != null) {
-                                performanceStats.consecutiveDroppedFrames[i6] = this.consecutiveDroppedFrames[i6].mo6clone();
+                                performanceStats.consecutiveDroppedFrames[i6] = this.consecutiveDroppedFrames[i6].clone();
                             }
                         }
                     }
@@ -4545,7 +4545,7 @@ public interface Vr {
                         performanceStats.scanlineRacingVsyncOvershootUs = new HistogramBucket[this.scanlineRacingVsyncOvershootUs.length];
                         for (int i7 = 0; i7 < this.scanlineRacingVsyncOvershootUs.length; i7++) {
                             if (this.scanlineRacingVsyncOvershootUs[i7] != null) {
-                                performanceStats.scanlineRacingVsyncOvershootUs[i7] = this.scanlineRacingVsyncOvershootUs[i7].mo6clone();
+                                performanceStats.scanlineRacingVsyncOvershootUs[i7] = this.scanlineRacingVsyncOvershootUs[i7].clone();
                             }
                         }
                     }
@@ -5200,9 +5200,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final OpenMedia mo6clone() {
+                public final OpenMedia clone() {
                     try {
-                        return (OpenMedia) super.mo6clone();
+                        return (OpenMedia) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -5311,9 +5311,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final WarmWelcome mo6clone() {
+                public final WarmWelcome clone() {
                     try {
-                        return (WarmWelcome) super.mo6clone();
+                        return (WarmWelcome) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -5387,14 +5387,14 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Photos mo6clone() {
+            public final Photos clone() {
                 try {
-                    Photos photos = (Photos) super.mo6clone();
+                    Photos photos = (Photos) super.clone();
                     if (this.openMedia != null) {
-                        photos.openMedia = this.openMedia.mo6clone();
+                        photos.openMedia = this.openMedia.clone();
                     }
                     if (this.warmWelcome != null) {
-                        photos.warmWelcome = this.warmWelcome.mo6clone();
+                        photos.warmWelcome = this.warmWelcome.clone();
                     }
                     return photos;
                 } catch (CloneNotSupportedException e) {
@@ -5504,9 +5504,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final QrCodeScan mo6clone() {
+            public final QrCodeScan clone() {
                 try {
-                    return (QrCodeScan) super.mo6clone();
+                    return (QrCodeScan) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -5602,9 +5602,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Renderer mo6clone() {
+            public final Renderer clone() {
                 try {
-                    return (Renderer) super.mo6clone();
+                    return (Renderer) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -5719,9 +5719,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final AsyncReprojectionConfig mo6clone() {
+                public final AsyncReprojectionConfig clone() {
                     try {
-                        return (AsyncReprojectionConfig) super.mo6clone();
+                        return (AsyncReprojectionConfig) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -5815,11 +5815,11 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final SdkConfigurationParams mo6clone() {
+            public final SdkConfigurationParams clone() {
                 try {
-                    SdkConfigurationParams sdkConfigurationParams = (SdkConfigurationParams) super.mo6clone();
+                    SdkConfigurationParams sdkConfigurationParams = (SdkConfigurationParams) super.clone();
                     if (this.asyncReprojectionConfig != null) {
-                        sdkConfigurationParams.asyncReprojectionConfig = this.asyncReprojectionConfig.mo6clone();
+                        sdkConfigurationParams.asyncReprojectionConfig = this.asyncReprojectionConfig.clone();
                     }
                     return sdkConfigurationParams;
                 } catch (CloneNotSupportedException e) {
@@ -5980,20 +5980,20 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final GyroscopeStats mo6clone() {
+                public final GyroscopeStats clone() {
                     try {
-                        GyroscopeStats gyroscopeStats = (GyroscopeStats) super.mo6clone();
+                        GyroscopeStats gyroscopeStats = (GyroscopeStats) super.clone();
                         if (this.bias != null) {
-                            gyroscopeStats.bias = this.bias.mo6clone();
+                            gyroscopeStats.bias = this.bias.clone();
                         }
                         if (this.lowerBound != null) {
-                            gyroscopeStats.lowerBound = this.lowerBound.mo6clone();
+                            gyroscopeStats.lowerBound = this.lowerBound.clone();
                         }
                         if (this.upperBound != null) {
-                            gyroscopeStats.upperBound = this.upperBound.mo6clone();
+                            gyroscopeStats.upperBound = this.upperBound.clone();
                         }
                         if (this.standardDeviation != null) {
-                            gyroscopeStats.standardDeviation = this.standardDeviation.mo6clone();
+                            gyroscopeStats.standardDeviation = this.standardDeviation.clone();
                         }
                         return gyroscopeStats;
                     } catch (CloneNotSupportedException e) {
@@ -6114,9 +6114,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Vector3 mo6clone() {
+                public final Vector3 clone() {
                     try {
-                        return (Vector3) super.mo6clone();
+                        return (Vector3) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -6206,11 +6206,11 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final SensorStats mo6clone() {
+            public final SensorStats clone() {
                 try {
-                    SensorStats sensorStats = (SensorStats) super.mo6clone();
+                    SensorStats sensorStats = (SensorStats) super.clone();
                     if (this.gyroscopeStats != null) {
-                        sensorStats.gyroscopeStats = this.gyroscopeStats.mo6clone();
+                        sensorStats.gyroscopeStats = this.gyroscopeStats.clone();
                     }
                     return sensorStats;
                 } catch (CloneNotSupportedException e) {
@@ -6316,9 +6316,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final PanoSession mo6clone() {
+                public final PanoSession clone() {
                     try {
-                        return (PanoSession) super.mo6clone();
+                        return (PanoSession) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -6461,11 +6461,11 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final StreetView mo6clone() {
+            public final StreetView clone() {
                 try {
-                    StreetView streetView = (StreetView) super.mo6clone();
+                    StreetView streetView = (StreetView) super.clone();
                     if (this.panoSession != null) {
-                        streetView.panoSession = this.panoSession.mo6clone();
+                        streetView.panoSession = this.panoSession.clone();
                     }
                     return streetView;
                 } catch (CloneNotSupportedException e) {
@@ -6567,9 +6567,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final TimeIntervalData mo6clone() {
+                public final TimeIntervalData clone() {
                     try {
-                        TimeIntervalData timeIntervalData = (TimeIntervalData) super.mo6clone();
+                        TimeIntervalData timeIntervalData = (TimeIntervalData) super.clone();
                         if (this.cpuTemperature != null && this.cpuTemperature.length > 0) {
                             timeIntervalData.cpuTemperature = (float[]) this.cpuTemperature.clone();
                         }
@@ -6814,14 +6814,14 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final TimeSeriesData mo6clone() {
+            public final TimeSeriesData clone() {
                 try {
-                    TimeSeriesData timeSeriesData = (TimeSeriesData) super.mo6clone();
+                    TimeSeriesData timeSeriesData = (TimeSeriesData) super.clone();
                     if (this.timeIntervalData != null && this.timeIntervalData.length > 0) {
                         timeSeriesData.timeIntervalData = new TimeIntervalData[this.timeIntervalData.length];
                         for (int i = 0; i < this.timeIntervalData.length; i++) {
                             if (this.timeIntervalData[i] != null) {
-                                timeSeriesData.timeIntervalData[i] = this.timeIntervalData[i].mo6clone();
+                                timeSeriesData.timeIntervalData[i] = this.timeIntervalData[i].clone();
                             }
                         }
                     }
@@ -6951,9 +6951,9 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final Transform mo6clone() {
+            public final Transform clone() {
                 try {
-                    return (Transform) super.mo6clone();
+                    return (Transform) super.clone();
                 } catch (CloneNotSupportedException e) {
                     throw new AssertionError(e);
                 }
@@ -7127,9 +7127,9 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Controller mo6clone() {
+                public final Controller clone() {
                     try {
-                        return (Controller) super.mo6clone();
+                        return (Controller) super.clone();
                     } catch (CloneNotSupportedException e) {
                         throw new AssertionError(e);
                     }
@@ -7394,17 +7394,17 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final VrCore mo6clone() {
+            public final VrCore clone() {
                 try {
-                    VrCore vrCore = (VrCore) super.mo6clone();
+                    VrCore vrCore = (VrCore) super.clone();
                     if (this.foregroundApplication != null) {
-                        vrCore.foregroundApplication = this.foregroundApplication.mo6clone();
+                        vrCore.foregroundApplication = this.foregroundApplication.clone();
                     }
                     if (this.previousForegroundApplication != null) {
-                        vrCore.previousForegroundApplication = this.previousForegroundApplication.mo6clone();
+                        vrCore.previousForegroundApplication = this.previousForegroundApplication.clone();
                     }
                     if (this.controller != null) {
-                        vrCore.controller = this.controller.mo6clone();
+                        vrCore.controller = this.controller.clone();
                     }
                     return vrCore;
                 } catch (CloneNotSupportedException e) {
@@ -7635,9 +7635,9 @@ public interface Vr {
 
                     @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                     /* renamed from: clone */
-                    public final StepStateChange mo6clone() {
+                    public final StepStateChange clone() {
                         try {
-                            return (StepStateChange) super.mo6clone();
+                            return (StepStateChange) super.clone();
                         } catch (CloneNotSupportedException e) {
                             throw new AssertionError(e);
                         }
@@ -7760,9 +7760,9 @@ public interface Vr {
 
                     @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                     /* renamed from: clone */
-                    public final View mo6clone() {
+                    public final View clone() {
                         try {
-                            return (View) super.mo6clone();
+                            return (View) super.clone();
                         } catch (CloneNotSupportedException e) {
                             throw new AssertionError(e);
                         }
@@ -7856,14 +7856,14 @@ public interface Vr {
 
                 @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
                 /* renamed from: clone */
-                public final Setup mo6clone() {
+                public final Setup clone() {
                     try {
-                        Setup setup = (Setup) super.mo6clone();
+                        Setup setup = (Setup) super.clone();
                         if (this.view != null) {
-                            setup.view = this.view.mo6clone();
+                            setup.view = this.view.clone();
                         }
                         if (this.stepStateChange != null) {
-                            setup.stepStateChange = this.stepStateChange.mo6clone();
+                            setup.stepStateChange = this.stepStateChange.clone();
                         }
                         return setup;
                     } catch (CloneNotSupportedException e) {
@@ -7952,11 +7952,11 @@ public interface Vr {
 
             @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
             /* renamed from: clone */
-            public final VrHome mo6clone() {
+            public final VrHome clone() {
                 try {
-                    VrHome vrHome = (VrHome) super.mo6clone();
+                    VrHome vrHome = (VrHome) super.clone();
                     if (this.setup != null) {
-                        vrHome.setup = this.setup.mo6clone();
+                        vrHome.setup = this.setup.clone();
                     }
                     return vrHome;
                 } catch (CloneNotSupportedException e) {
@@ -8053,70 +8053,70 @@ public interface Vr {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final VREvent mo6clone() {
+        public final VREvent clone() {
             try {
-                VREvent vREvent = (VREvent) super.mo6clone();
+                VREvent vREvent = (VREvent) super.clone();
                 if (this.headMount != null) {
-                    vREvent.headMount = this.headMount.mo6clone();
+                    vREvent.headMount = this.headMount.clone();
                 }
                 if (this.application != null) {
-                    vREvent.application = this.application.mo6clone();
+                    vREvent.application = this.application.clone();
                 }
                 if (this.installedVrApplications != null && this.installedVrApplications.length > 0) {
                     vREvent.installedVrApplications = new Application[this.installedVrApplications.length];
                     for (int i = 0; i < this.installedVrApplications.length; i++) {
                         if (this.installedVrApplications[i] != null) {
-                            vREvent.installedVrApplications[i] = this.installedVrApplications[i].mo6clone();
+                            vREvent.installedVrApplications[i] = this.installedVrApplications[i].clone();
                         }
                     }
                 }
                 if (this.cyclops != null) {
-                    vREvent.cyclops = this.cyclops.mo6clone();
+                    vREvent.cyclops = this.cyclops.clone();
                 }
                 if (this.qrCodeScan != null) {
-                    vREvent.qrCodeScan = this.qrCodeScan.mo6clone();
+                    vREvent.qrCodeScan = this.qrCodeScan.clone();
                 }
                 if (this.performanceStats != null) {
-                    vREvent.performanceStats = this.performanceStats.mo6clone();
+                    vREvent.performanceStats = this.performanceStats.clone();
                 }
                 if (this.sensorStats != null) {
-                    vREvent.sensorStats = this.sensorStats.mo6clone();
+                    vREvent.sensorStats = this.sensorStats.clone();
                 }
                 if (this.audioStats != null) {
-                    vREvent.audioStats = this.audioStats.mo6clone();
+                    vREvent.audioStats = this.audioStats.clone();
                 }
                 if (this.embedVrWidget != null) {
-                    vREvent.embedVrWidget = this.embedVrWidget.mo6clone();
+                    vREvent.embedVrWidget = this.embedVrWidget.clone();
                 }
                 if (this.vrCore != null) {
-                    vREvent.vrCore = this.vrCore.mo6clone();
+                    vREvent.vrCore = this.vrCore.clone();
                 }
                 if (this.earthVr != null) {
-                    vREvent.earthVr = this.earthVr.mo6clone();
+                    vREvent.earthVr = this.earthVr.clone();
                 }
                 if (this.launcher != null) {
-                    vREvent.launcher = this.launcher.mo6clone();
+                    vREvent.launcher = this.launcher.clone();
                 }
                 if (this.keyboard != null) {
-                    vREvent.keyboard = this.keyboard.mo6clone();
+                    vREvent.keyboard = this.keyboard.clone();
                 }
                 if (this.renderer != null) {
-                    vREvent.renderer = this.renderer.mo6clone();
+                    vREvent.renderer = this.renderer.clone();
                 }
                 if (this.lullaby != null) {
-                    vREvent.lullaby = this.lullaby.mo6clone();
+                    vREvent.lullaby = this.lullaby.clone();
                 }
                 if (this.streetView != null) {
-                    vREvent.streetView = this.streetView.mo6clone();
+                    vREvent.streetView = this.streetView.clone();
                 }
                 if (this.photos != null) {
-                    vREvent.photos = this.photos.mo6clone();
+                    vREvent.photos = this.photos.clone();
                 }
                 if (this.vrHome != null) {
-                    vREvent.vrHome = this.vrHome.mo6clone();
+                    vREvent.vrHome = this.vrHome.clone();
                 }
                 if (this.sdkConfiguration != null) {
-                    vREvent.sdkConfiguration = this.sdkConfiguration.mo6clone();
+                    vREvent.sdkConfiguration = this.sdkConfiguration.clone();
                 }
                 return vREvent;
             } catch (CloneNotSupportedException e) {

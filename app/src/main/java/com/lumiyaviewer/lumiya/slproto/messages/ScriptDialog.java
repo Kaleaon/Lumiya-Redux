@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -87,13 +86,13 @@ public class ScriptDialog extends SLMessage {
         this.Data_Field.Message = unpackVariable(byteBuffer, 2);
         this.Data_Field.ChatChannel = unpackInt(byteBuffer);
         this.Data_Field.ImageID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             Buttons buttons = new Buttons();
             buttons.ButtonLabel = unpackVariable(byteBuffer, 1);
             this.Buttons_Fields.add(buttons);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             OwnerData ownerData = new OwnerData();
             ownerData.OwnerID = unpackUUID(byteBuffer);

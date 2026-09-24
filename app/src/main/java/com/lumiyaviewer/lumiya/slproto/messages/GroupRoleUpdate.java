@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class GroupRoleUpdate extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             RoleData roleData = new RoleData();
             roleData.RoleID = unpackUUID(byteBuffer);
@@ -83,7 +82,7 @@ public class GroupRoleUpdate extends SLMessage {
             roleData.Description = unpackVariable(byteBuffer, 1);
             roleData.Title = unpackVariable(byteBuffer, 1);
             roleData.Powers = unpackLong(byteBuffer);
-            roleData.UpdateType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            roleData.UpdateType = unpackByte(byteBuffer) & 0xFF;
             this.RoleData_Fields.add(roleData);
         }
     }

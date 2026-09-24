@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
@@ -59,7 +58,7 @@ public class TeleportFinish extends SLMessage {
         this.Info_Field.SimPort = unpackShort(byteBuffer) & 65535;
         this.Info_Field.RegionHandle = unpackLong(byteBuffer);
         this.Info_Field.SeedCapability = unpackVariable(byteBuffer, 2);
-        this.Info_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Info_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
         this.Info_Field.TeleportFlags = unpackInt(byteBuffer);
     }
 }

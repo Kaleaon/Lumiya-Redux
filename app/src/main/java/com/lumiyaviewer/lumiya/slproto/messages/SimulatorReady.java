@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -59,7 +58,7 @@ public class SimulatorReady extends SLMessage {
     @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SimulatorBlock_Field.SimName = unpackVariable(byteBuffer, 1);
-        this.SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;
         this.SimulatorBlock_Field.RegionFlags = unpackInt(byteBuffer);
         this.SimulatorBlock_Field.RegionID = unpackUUID(byteBuffer);
         this.SimulatorBlock_Field.EstateID = unpackInt(byteBuffer);

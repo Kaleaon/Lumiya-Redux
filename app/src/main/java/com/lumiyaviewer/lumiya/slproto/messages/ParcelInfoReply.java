@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -80,7 +79,7 @@ public class ParcelInfoReply extends SLMessage {
         this.Data_Field.Desc = unpackVariable(byteBuffer, 1);
         this.Data_Field.ActualArea = unpackInt(byteBuffer);
         this.Data_Field.BillableArea = unpackInt(byteBuffer);
-        this.Data_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Data_Field.Flags = unpackByte(byteBuffer) & 0xFF;
         this.Data_Field.GlobalX = unpackFloat(byteBuffer);
         this.Data_Field.GlobalY = unpackFloat(byteBuffer);
         this.Data_Field.GlobalZ = unpackFloat(byteBuffer);

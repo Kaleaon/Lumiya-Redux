@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -54,7 +53,7 @@ public class ChatFromViewer extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.ChatData_Field.Message = unpackVariable(byteBuffer, 2);
-        this.ChatData_Field.Type = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ChatData_Field.Type = unpackByte(byteBuffer) & 0xFF;
         this.ChatData_Field.Channel = unpackInt(byteBuffer);
     }
 }

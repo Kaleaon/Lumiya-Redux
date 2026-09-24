@@ -83,7 +83,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     /* renamed from: -com-lumiyaviewer-lumiya-utils-LEDActionSwitchesValues, reason: not valid java name */
     private static /* synthetic */ int[] f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues = null;
     public static final String LOGIN_ACTION = "com.lumiyaviewer.lumiya.ACTION_LOGIN";
-    private static final int REQUEST_CODE_UNREAD_NOTIFY = 2131755072;
+    private static final int REQUEST_CODE_UNREAD_NOTIFY = com.lumiyaviewer.lumiya.R.id.unread_notify_request_code;
     private Subscription<Boolean, UnreadNotifications> unreadNotifySubscription;
     private static WeakReference<GridConnectionService> serviceInstance = null;
     private static boolean onlineNotify = false;

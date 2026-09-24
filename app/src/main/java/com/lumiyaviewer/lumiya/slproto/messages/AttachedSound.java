@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -50,6 +49,6 @@ public class AttachedSound extends SLMessage {
         this.DataBlock_Field.ObjectID = unpackUUID(byteBuffer);
         this.DataBlock_Field.OwnerID = unpackUUID(byteBuffer);
         this.DataBlock_Field.Gain = unpackFloat(byteBuffer);
-        this.DataBlock_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.DataBlock_Field.Flags = unpackByte(byteBuffer) & 0xFF;
     }
 }

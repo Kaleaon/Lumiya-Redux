@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -74,7 +73,7 @@ public class RequestParcelTransfer extends SLMessage {
         this.Data_Field.SourceID = unpackUUID(byteBuffer);
         this.Data_Field.DestID = unpackUUID(byteBuffer);
         this.Data_Field.OwnerID = unpackUUID(byteBuffer);
-        this.Data_Field.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Data_Field.Flags = unpackByte(byteBuffer) & 0xFF;
         this.Data_Field.TransactionType = unpackInt(byteBuffer);
         this.Data_Field.Amount = unpackInt(byteBuffer);
         this.Data_Field.BillableArea = unpackInt(byteBuffer);

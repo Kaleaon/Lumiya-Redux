@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -108,7 +107,7 @@ public class UpdateCreateInventoryItem extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SimApproved = unpackBoolean(byteBuffer);
         this.AgentData_Field.TransactionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
@@ -127,7 +126,7 @@ public class UpdateCreateInventoryItem extends SLMessage {
             inventoryData.Type = unpackByte(byteBuffer);
             inventoryData.InvType = unpackByte(byteBuffer);
             inventoryData.Flags = unpackInt(byteBuffer);
-            inventoryData.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            inventoryData.SaleType = unpackByte(byteBuffer) & 0xFF;
             inventoryData.SalePrice = unpackInt(byteBuffer);
             inventoryData.Name = unpackVariable(byteBuffer, 1);
             inventoryData.Description = unpackVariable(byteBuffer, 1);

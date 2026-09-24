@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class SimStats extends SLMessage {
         this.Region_Field.RegionY = unpackInt(byteBuffer);
         this.Region_Field.RegionFlags = unpackInt(byteBuffer);
         this.Region_Field.ObjectCapacity = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             Stat stat = new Stat();
             stat.StatID = unpackInt(byteBuffer);
@@ -85,7 +84,7 @@ public class SimStats extends SLMessage {
             this.Stat_Fields.add(stat);
         }
         this.PidStat_Field.PID = unpackInt(byteBuffer);
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             RegionInfo regionInfo = new RegionInfo();
             regionInfo.RegionFlagsExtended = unpackLong(byteBuffer);

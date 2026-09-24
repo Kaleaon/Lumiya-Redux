@@ -74,9 +74,9 @@ public interface Phone {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final PhoneParams mo6clone() {
+        public final PhoneParams clone() {
             try {
-                PhoneParams phoneParams = (PhoneParams) super.mo6clone();
+                PhoneParams phoneParams = (PhoneParams) super.clone();
                 if (this.dEPRECATEDGyroBias != null && this.dEPRECATEDGyroBias.length > 0) {
                     phoneParams.dEPRECATEDGyroBias = (float[]) this.dEPRECATEDGyroBias.clone();
                 }

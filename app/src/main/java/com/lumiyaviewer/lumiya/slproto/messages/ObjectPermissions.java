@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -66,12 +65,12 @@ public class ObjectPermissions extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.HeaderData_Field.Override = unpackBoolean(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectLocalID = unpackInt(byteBuffer);
-            objectData.Field = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-            objectData.Set = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            objectData.Field = unpackByte(byteBuffer) & 0xFF;
+            objectData.Set = unpackByte(byteBuffer) & 0xFF;
             objectData.Mask = unpackInt(byteBuffer);
             this.ObjectData_Fields.add(objectData);
         }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.logging.nano.Vr;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GridConnectionService;
 import com.lumiyaviewer.lumiya.dao.UserName;
@@ -591,7 +590,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
             LLSDNode byIndex = lLSDNode.byKey("Info").byIndex(0);
             String asString = byIndex.byKey("SeedCapability").asString();
             byte[] asBinary = byIndex.byKey("SimIP").asBinary();
-            SLAuthReply sLAuthReply = new SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", Integer.valueOf(asBinary[0] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[1] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[2] & UnsignedBytes.MAX_VALUE), Integer.valueOf(asBinary[3] & UnsignedBytes.MAX_VALUE)), byIndex.byKey("SimPort").asInt(), asString);
+            SLAuthReply sLAuthReply = new SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", Integer.valueOf(asBinary[0] & 0xFF), Integer.valueOf(asBinary[1] & 0xFF), Integer.valueOf(asBinary[2] & 0xFF), Integer.valueOf(asBinary[3] & 0xFF)), byIndex.byKey("SimPort").asInt(), asString);
             Debug.Printf("new sim address: %s", sLAuthReply.simAddress);
             this.modules.avatarControl.setEnableAgentUpdates(false);
             this.gridConn.HandleTeleportFinish(sLAuthReply);

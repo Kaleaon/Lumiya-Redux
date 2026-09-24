@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public class DirEventsReply extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             QueryReplies queryReplies = new QueryReplies();
             queryReplies.OwnerID = unpackUUID(byteBuffer);
@@ -98,7 +97,7 @@ public class DirEventsReply extends SLMessage {
             queryReplies.EventFlags = unpackInt(byteBuffer);
             this.QueryReplies_Fields.add(queryReplies);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             StatusData statusData = new StatusData();
             statusData.Status = unpackInt(byteBuffer);

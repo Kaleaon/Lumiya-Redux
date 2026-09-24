@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.llsd.types;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.base64.Base64;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import java.io.DataOutputStream;
@@ -28,7 +27,7 @@ public class LLSDBinary extends LLSDNode {
     public int asInt() {
         int i = 0;
         for (int i2 = 0; i2 < 4 && i2 < this.value.length; i2++) {
-            i = (i << 8) | (this.value[i2] & UnsignedBytes.MAX_VALUE);
+            i = (i << 8) | (this.value[i2] & 0xFF);
         }
         return i;
     }
@@ -37,7 +36,7 @@ public class LLSDBinary extends LLSDNode {
     public long asLong() {
         long j = 0;
         for (int i = 0; i < 8 && i < this.value.length; i++) {
-            j = (j << 8) | (this.value[i] & UnsignedBytes.MAX_VALUE);
+            j = (j << 8) | (this.value[i] & 0xFF);
         }
         return j;
     }

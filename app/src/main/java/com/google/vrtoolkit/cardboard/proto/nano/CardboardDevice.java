@@ -101,9 +101,9 @@ public interface CardboardDevice {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final CardboardInternalParams mo6clone() {
+        public final CardboardInternalParams clone() {
             try {
-                CardboardInternalParams cardboardInternalParams = (CardboardInternalParams) super.mo6clone();
+                CardboardInternalParams cardboardInternalParams = (CardboardInternalParams) super.clone();
                 if (this.eyeOrientations != null && this.eyeOrientations.length > 0) {
                     cardboardInternalParams.eyeOrientations = (int[]) this.eyeOrientations.clone();
                 }
@@ -416,14 +416,14 @@ public interface CardboardDevice {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final DaydreamInternalParams mo6clone() {
+        public final DaydreamInternalParams clone() {
             try {
-                DaydreamInternalParams daydreamInternalParams = (DaydreamInternalParams) super.mo6clone();
+                DaydreamInternalParams daydreamInternalParams = (DaydreamInternalParams) super.clone();
                 if (this.alignmentMarkers != null && this.alignmentMarkers.length > 0) {
                     daydreamInternalParams.alignmentMarkers = new ScreenAlignmentMarker[this.alignmentMarkers.length];
                     for (int i = 0; i < this.alignmentMarkers.length; i++) {
                         if (this.alignmentMarkers[i] != null) {
-                            daydreamInternalParams.alignmentMarkers[i] = this.alignmentMarkers[i].mo6clone();
+                            daydreamInternalParams.alignmentMarkers[i] = this.alignmentMarkers[i].clone();
                         }
                     }
                 }
@@ -641,9 +641,9 @@ public interface CardboardDevice {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final DeviceParams mo6clone() {
+        public final DeviceParams clone() {
             try {
-                DeviceParams deviceParams = (DeviceParams) super.mo6clone();
+                DeviceParams deviceParams = (DeviceParams) super.clone();
                 if (this.leftEyeFieldOfViewAngles != null && this.leftEyeFieldOfViewAngles.length > 0) {
                     deviceParams.leftEyeFieldOfViewAngles = (float[]) this.leftEyeFieldOfViewAngles.clone();
                 }
@@ -651,10 +651,10 @@ public interface CardboardDevice {
                     deviceParams.distortionCoefficients = (float[]) this.distortionCoefficients.clone();
                 }
                 if (this.internal != null) {
-                    deviceParams.internal = this.internal.mo6clone();
+                    deviceParams.internal = this.internal.clone();
                 }
                 if (this.daydreamInternal != null) {
-                    deviceParams.daydreamInternal = this.daydreamInternal.mo6clone();
+                    deviceParams.daydreamInternal = this.daydreamInternal.clone();
                 }
                 return deviceParams;
             } catch (CloneNotSupportedException e) {
@@ -1060,9 +1060,9 @@ public interface CardboardDevice {
 
         @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
         /* renamed from: clone */
-        public final ScreenAlignmentMarker mo6clone() {
+        public final ScreenAlignmentMarker clone() {
             try {
-                return (ScreenAlignmentMarker) super.mo6clone();
+                return (ScreenAlignmentMarker) super.clone();
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }

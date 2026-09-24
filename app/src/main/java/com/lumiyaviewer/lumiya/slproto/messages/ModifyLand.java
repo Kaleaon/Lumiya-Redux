@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -84,11 +83,11 @@ public class ModifyLand extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        this.ModifyBlock_Field.Action = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
-        this.ModifyBlock_Field.BrushSize = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.ModifyBlock_Field.Action = unpackByte(byteBuffer) & 0xFF;
+        this.ModifyBlock_Field.BrushSize = unpackByte(byteBuffer) & 0xFF;
         this.ModifyBlock_Field.Seconds = unpackFloat(byteBuffer);
         this.ModifyBlock_Field.Height = unpackFloat(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ParcelData parcelData = new ParcelData();
             parcelData.LocalID = unpackInt(byteBuffer);
@@ -98,7 +97,7 @@ public class ModifyLand extends SLMessage {
             parcelData.North = unpackFloat(byteBuffer);
             this.ParcelData_Fields.add(parcelData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             ModifyBlockExtended modifyBlockExtended = new ModifyBlockExtended();
             modifyBlockExtended.BrushSize = unpackFloat(byteBuffer);

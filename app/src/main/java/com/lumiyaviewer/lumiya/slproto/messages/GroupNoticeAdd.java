@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -58,7 +57,7 @@ public class GroupNoticeAdd extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.ToGroupID = unpackUUID(byteBuffer);
         this.MessageBlock_Field.ID = unpackUUID(byteBuffer);
-        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.MessageBlock_Field.Dialog = unpackByte(byteBuffer) & 0xFF;
         this.MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1);
         this.MessageBlock_Field.Message = unpackVariable(byteBuffer, 2);
         this.MessageBlock_Field.BinaryBucket = unpackVariable(byteBuffer, 2);

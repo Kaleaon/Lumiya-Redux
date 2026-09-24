@@ -65,10 +65,10 @@ public class PhoneParams {
 
     static void registerOverridesInternal(List<PpiOverride> list, String str, String str2, String str3, String str4) {
         Phone.PhoneParams readPhoneParamsFromExternalStorage = ConfigUtils.readPhoneParamsFromExternalStorage();
-        Phone.PhoneParams mo6clone = readPhoneParamsFromExternalStorage != null ? readPhoneParamsFromExternalStorage.mo6clone() : new Phone.PhoneParams();
-        if (getPpiOverride(list, str, str2, str3, str4, mo6clone) && !MessageNano.messageNanoEquals(readPhoneParamsFromExternalStorage, mo6clone)) {
+        Phone.PhoneParams clone = readPhoneParamsFromExternalStorage != null ? readPhoneParamsFromExternalStorage.clone() : new Phone.PhoneParams();
+        if (getPpiOverride(list, str, str2, str3, str4, clone) && !MessageNano.messageNanoEquals(readPhoneParamsFromExternalStorage, clone)) {
             Log.i(TAG, "Applying phone param override.");
-            ConfigUtils.writePhoneParamsToExternalStorage(mo6clone);
+            ConfigUtils.writePhoneParamsToExternalStorage(clone);
         }
     }
 }

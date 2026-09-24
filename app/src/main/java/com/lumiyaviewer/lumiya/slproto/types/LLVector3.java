@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDouble;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap;
@@ -56,7 +55,7 @@ public class LLVector3 {
     }
 
     public static LLVector3 parseU8Vec(ByteBuffer byteBuffer, float f, float f2, float f3, float f4) {
-        return new LLVector3(LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & UnsignedBytes.MAX_VALUE, f3, f4));
+        return new LLVector3(LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f3, f4));
     }
 
     public static LLVector3 scaleFromMatrix(float[] fArr) {

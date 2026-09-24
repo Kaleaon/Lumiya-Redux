@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import java.nio.ByteBuffer;
@@ -88,7 +87,7 @@ public class ClassifiedInfoReply extends SLMessage {
         this.Data_Field.SimName = unpackVariable(byteBuffer, 1);
         this.Data_Field.PosGlobal = unpackLLVector3d(byteBuffer);
         this.Data_Field.ParcelName = unpackVariable(byteBuffer, 1);
-        this.Data_Field.ClassifiedFlags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.Data_Field.ClassifiedFlags = unpackByte(byteBuffer) & 0xFF;
         this.Data_Field.PriceForListing = unpackInt(byteBuffer);
     }
 }

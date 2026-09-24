@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public class GroupActiveProposalItemReply extends SLMessage {
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.TransactionData_Field.TransactionID = unpackUUID(byteBuffer);
         this.TransactionData_Field.TotalNumItems = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ProposalData proposalData = new ProposalData();
             proposalData.VoteID = unpackUUID(byteBuffer);

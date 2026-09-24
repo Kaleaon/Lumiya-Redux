@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
@@ -58,7 +57,7 @@ public class FindAgent extends SLMessage {
         this.AgentBlock_Field.Hunter = unpackUUID(byteBuffer);
         this.AgentBlock_Field.Prey = unpackUUID(byteBuffer);
         this.AgentBlock_Field.SpaceIP = unpackIPAddress(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             LocationBlock locationBlock = new LocationBlock();
             locationBlock.GlobalX = unpackDouble(byteBuffer);

@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class ObjectUpdateCached extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);
         this.RegionData_Field.TimeDilation = unpackShort(byteBuffer) & 65535;
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             ObjectData objectData = new ObjectData();
             objectData.ID = unpackInt(byteBuffer);

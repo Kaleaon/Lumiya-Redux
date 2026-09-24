@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class TransferInventory extends SLMessage {
         this.InfoBlock_Field.SourceID = unpackUUID(byteBuffer);
         this.InfoBlock_Field.DestID = unpackUUID(byteBuffer);
         this.InfoBlock_Field.TransactionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             InventoryBlock inventoryBlock = new InventoryBlock();
             inventoryBlock.InventoryID = unpackUUID(byteBuffer);

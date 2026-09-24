@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
 import com.lumiyaviewer.lumiya.render.GLTexture;
@@ -77,7 +76,7 @@ public class SLPolyMorphData {
         }
         for (int i4 = 0; i4 < this.numVertices; i4++) {
             int i5 = asIntBuffer.get(i4);
-            float f2 = z ? ((byteBuffer.get(((int) Math.floor(asFloatBuffer4.get((i5 * 2) + 0) * i)) + ((((int) Math.floor(asFloatBuffer4.get((i5 * 2) + 1) * i2)) * i) + i3)) & UnsignedBytes.MAX_VALUE) / 255.0f) * f : f;
+            float f2 = z ? ((byteBuffer.get(((int) Math.floor(asFloatBuffer4.get((i5 * 2) + 0) * i)) + ((((int) Math.floor(asFloatBuffer4.get((i5 * 2) + 1) * i2)) * i) + i3)) & 0xFF) / 255.0f) * f : f;
             for (int i6 = 0; i6 < 6; i6++) {
                 asFloatBuffer3.put((i5 * 6) + i6, asFloatBuffer3.get((i5 * 6) + i6) + (asFloatBuffer.get((i4 * 6) + i6) * f2));
             }

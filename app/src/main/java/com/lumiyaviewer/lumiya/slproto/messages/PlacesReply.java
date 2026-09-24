@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -95,7 +94,7 @@ public class PlacesReply extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.QueryID = unpackUUID(byteBuffer);
         this.TransactionData_Field.TransactionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             QueryData queryData = new QueryData();
             queryData.OwnerID = unpackUUID(byteBuffer);
@@ -103,7 +102,7 @@ public class PlacesReply extends SLMessage {
             queryData.Desc = unpackVariable(byteBuffer, 1);
             queryData.ActualArea = unpackInt(byteBuffer);
             queryData.BillableArea = unpackInt(byteBuffer);
-            queryData.Flags = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            queryData.Flags = unpackByte(byteBuffer) & 0xFF;
             queryData.GlobalX = unpackFloat(byteBuffer);
             queryData.GlobalY = unpackFloat(byteBuffer);
             queryData.GlobalZ = unpackFloat(byteBuffer);

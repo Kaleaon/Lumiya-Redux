@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
@@ -131,7 +130,7 @@ public class ViewerStats extends SLMessage {
         this.AgentData_Field.RunTime = unpackFloat(byteBuffer);
         this.AgentData_Field.SimFPS = unpackFloat(byteBuffer);
         this.AgentData_Field.FPS = unpackFloat(byteBuffer);
-        this.AgentData_Field.AgentsInView = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.AgentData_Field.AgentsInView = unpackByte(byteBuffer) & 0xFF;
         this.AgentData_Field.Ping = unpackFloat(byteBuffer);
         this.AgentData_Field.MetersTraveled = unpackDouble(byteBuffer);
         this.AgentData_Field.RegionsVisited = unpackInt(byteBuffer);
@@ -154,7 +153,7 @@ public class ViewerStats extends SLMessage {
         this.FailStats_Field.FailedResends = unpackInt(byteBuffer);
         this.FailStats_Field.OffCircuit = unpackInt(byteBuffer);
         this.FailStats_Field.Invalid = unpackInt(byteBuffer);
-        int i2 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i2 = byteBuffer.get() & 0xFF;
         for (int i3 = 0; i3 < i2; i3++) {
             MiscStats miscStats = new MiscStats();
             miscStats.Type = unpackInt(byteBuffer);

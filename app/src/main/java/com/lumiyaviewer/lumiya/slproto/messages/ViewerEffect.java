@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -70,12 +69,12 @@ public class ViewerEffect extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             Effect effect = new Effect();
             effect.ID = unpackUUID(byteBuffer);
             effect.AgentID = unpackUUID(byteBuffer);
-            effect.Type = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            effect.Type = unpackByte(byteBuffer) & 0xFF;
             effect.Duration = unpackFloat(byteBuffer);
             effect.Color = unpackFixed(byteBuffer, 4);
             effect.TypeData = unpackVariable(byteBuffer, 1);

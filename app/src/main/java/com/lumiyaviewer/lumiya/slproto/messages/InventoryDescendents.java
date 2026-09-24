@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.google.common.base.Ascii;
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -137,7 +136,7 @@ public class InventoryDescendents extends SLMessage {
         this.AgentData_Field.OwnerID = unpackUUID(byteBuffer);
         this.AgentData_Field.Version = unpackInt(byteBuffer);
         this.AgentData_Field.Descendents = unpackInt(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
@@ -146,7 +145,7 @@ public class InventoryDescendents extends SLMessage {
             folderData.Name = unpackVariable(byteBuffer, 1);
             this.FolderData_Fields.add(folderData);
         }
-        int i3 = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i3 = byteBuffer.get() & 0xFF;
         for (int i4 = 0; i4 < i3; i4++) {
             ItemData itemData = new ItemData();
             itemData.ItemID = unpackUUID(byteBuffer);
@@ -164,7 +163,7 @@ public class InventoryDescendents extends SLMessage {
             itemData.Type = unpackByte(byteBuffer);
             itemData.InvType = unpackByte(byteBuffer);
             itemData.Flags = unpackInt(byteBuffer);
-            itemData.SaleType = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+            itemData.SaleType = unpackByte(byteBuffer) & 0xFF;
             itemData.SalePrice = unpackInt(byteBuffer);
             itemData.Name = unpackVariable(byteBuffer, 1);
             itemData.Description = unpackVariable(byteBuffer, 1);

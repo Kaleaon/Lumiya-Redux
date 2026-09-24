@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.primitives.UnsignedBytes;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
@@ -97,7 +96,7 @@ public class RezObjectFromNotecard extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.RezData_Field.FromTaskID = unpackUUID(byteBuffer);
-        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & UnsignedBytes.MAX_VALUE;
+        this.RezData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF;
         this.RezData_Field.RayStart = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayEnd = unpackLLVector3(byteBuffer);
         this.RezData_Field.RayTargetID = unpackUUID(byteBuffer);
@@ -110,7 +109,7 @@ public class RezObjectFromNotecard extends SLMessage {
         this.RezData_Field.NextOwnerMask = unpackInt(byteBuffer);
         this.NotecardData_Field.NotecardItemID = unpackUUID(byteBuffer);
         this.NotecardData_Field.ObjectID = unpackUUID(byteBuffer);
-        int i = byteBuffer.get() & UnsignedBytes.MAX_VALUE;
+        int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
