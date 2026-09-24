@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base;
 
-/* loaded from: classes.dex */
 public final class R {
 
     public static final class color {

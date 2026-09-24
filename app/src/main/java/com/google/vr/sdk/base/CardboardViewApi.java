@@ -5,7 +5,6 @@ import android.view.View;
 import com.google.vr.ndk.base.GvrSurfaceView;
 import com.google.vr.sdk.base.GvrView;
 
-/* loaded from: classes.dex */
 public interface CardboardViewApi {
     void enableCardboardTriggerEmulation();
 

@@ -1,10 +1,8 @@
 package com.lumiyaviewer.lumiya.slproto.prims;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class PrimFlexibleParams {
     public float AirFriction;
     public float Gravity;
@@ -16,8 +14,8 @@ public class PrimFlexibleParams {
     public PrimFlexibleParams(ByteBuffer byteBuffer, int i) {
         byte b = byteBuffer.get();
         byte b2 = byteBuffer.get();
-        this.Tension = (b & Ascii.DEL) / 10.0f;
-        this.AirFriction = (b2 & Ascii.DEL) / 10.0f;
+        this.Tension = (b & 0x7F) / 10.0f;
+        this.AirFriction = (b2 & 0x7F) / 10.0f;
         int i2 = (b & 128) != 0 ? 2 : 0;
         this.NumFlexiSections = (1 << ((b2 & 128) != 0 ? i2 | 1 : i2)) + 1;
         this.Gravity = ((byteBuffer.get() & 0xFF) / 10.0f) - 10.0f;

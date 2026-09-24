@@ -4,14 +4,22 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AssetUploadComplete
+ *
+ * <p>Template: {@code AssetUploadComplete Low 334 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processUploadComplete()} in indra/llmessage/llassetstorage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AssetUploadComplete extends SLMessage {
     public AssetBlock AssetBlock_Field;
 
+    /** Block AssetBlock, Single. */
     public static class AssetBlock {
-        public boolean Success;
-        public int Type;
-        public UUID UUID;
+        public boolean Success; // BOOL
+        public int Type; // S8
+        public UUID UUID; // LLUUID
     }
 
     public AssetUploadComplete() {
@@ -19,27 +27,28 @@ public class AssetUploadComplete extends SLMessage {
         this.AssetBlock_Field = new AssetBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 22;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAssetUploadComplete(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 78);
+        // Message number: Low 334 (AssetUploadComplete).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x4E);
         packUUID(byteBuffer, this.AssetBlock_Field.UUID);
         packByte(byteBuffer, (byte) this.AssetBlock_Field.Type);
         packBoolean(byteBuffer, this.AssetBlock_Field.Success);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AssetBlock_Field.UUID = unpackUUID(byteBuffer);
         this.AssetBlock_Field.Type = unpackByte(byteBuffer);

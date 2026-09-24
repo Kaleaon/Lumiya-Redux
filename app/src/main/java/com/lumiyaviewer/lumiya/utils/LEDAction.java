@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.utils;
 
-/* loaded from: classes.dex */
 public enum LEDAction {
     None("none"),
     Slow("slow"),

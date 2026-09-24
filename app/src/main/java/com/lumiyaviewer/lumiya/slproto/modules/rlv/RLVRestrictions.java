@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVRestrictions {
     private Map<RLVRestrictionType, RLVRestrictionList> restrictions = new EnumMap(RLVRestrictionType.class);
 

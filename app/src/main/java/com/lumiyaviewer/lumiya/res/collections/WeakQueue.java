@@ -15,7 +15,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class WeakQueue<T> implements BlockingQueue<T> {
     private final Set<T> queue = Collections.newSetFromMap(new WeakHashMap());
     private final Set<T> lowPriorityQueue = Collections.newSetFromMap(new WeakHashMap());
@@ -25,7 +24,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
     public interface LowPriority {
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Queue, java.util.Collection
+    @Override
     public boolean add(T t) {
         if (t == null) {
             return false;
@@ -44,7 +43,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean addAll(Collection<? extends T> collection) {
         this.lock.lock();
         try {
@@ -62,7 +61,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public void clear() {
         this.lock.lock();
         try {
@@ -73,7 +72,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Collection
+    @Override
     public boolean contains(Object obj) {
         this.lock.lock();
         try {
@@ -83,7 +82,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean containsAll(Collection<?> collection) {
         this.lock.lock();
         try {
@@ -93,7 +92,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int drainTo(Collection<? super T> collection) {
         this.lock.lock();
         int i = 0;
@@ -118,7 +117,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int drainTo(Collection<? super T> collection, int i) {
         this.lock.lock();
         int i2 = 0;
@@ -147,7 +146,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Queue
+    @Override
     public T element() {
         T peek = peek();
         if (peek == null) {
@@ -156,7 +155,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         return peek;
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean isEmpty() {
         this.lock.lock();
         try {
@@ -166,22 +165,22 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection, java.lang.Iterable
+    @Override
     public Iterator<T> iterator() {
         throw new UnsupportedOperationException("Iterating over WeakQueue is not supported");
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Queue
+    @Override
     public boolean offer(T t) {
         return add(t);
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public boolean offer(T t, long j, TimeUnit timeUnit) throws InterruptedException {
         return add(t);
     }
 
-    @Override // java.util.Queue
+    @Override
     public T peek() {
         this.lock.lock();
         try {
@@ -205,7 +204,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Queue
+    @Override
     public T poll() {
         this.lock.lock();
         try {
@@ -235,7 +234,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public T poll(long j, TimeUnit timeUnit) throws InterruptedException {
         this.lock.lock();
         do {
@@ -251,17 +250,17 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         return null;
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public void put(T t) throws InterruptedException {
         add(t);
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public int remainingCapacity() {
         return Integer.MAX_VALUE;
     }
 
-    @Override // java.util.Queue
+    @Override
     public T remove() {
         T poll = poll();
         if (poll == null) {
@@ -270,7 +269,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         return poll;
     }
 
-    @Override // java.util.concurrent.BlockingQueue, java.util.Collection
+    @Override
     public boolean remove(Object obj) {
         this.lock.lock();
         try {
@@ -280,7 +279,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean removeAll(@Nonnull Collection<?> collection) {
         this.lock.lock();
         try {
@@ -290,7 +289,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public boolean retainAll(Collection<?> collection) {
         this.lock.lock();
         try {
@@ -300,7 +299,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public int size() {
         this.lock.lock();
         try {
@@ -310,7 +309,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.concurrent.BlockingQueue
+    @Override
     public T take() throws InterruptedException {
         this.lock.lock();
         while (true) {
@@ -326,7 +325,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public Object[] toArray() {
         this.lock.lock();
         try {
@@ -336,7 +335,7 @@ public class WeakQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    @Override // java.util.Collection
+    @Override
     public <T1> T1[] toArray(T1[] t1Arr) {
         this.lock.lock();
         try {

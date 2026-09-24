@@ -4,32 +4,43 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupProfileReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code GroupProfileReply Low 352 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLGroupMgr::processGroupPropertiesReply()} in indra/newview/llgroupmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupProfileReply extends SLMessage {
     public AgentData AgentData_Field;
     public GroupData GroupData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block GroupData, Single. */
     public static class GroupData {
-        public boolean AllowPublish;
-        public byte[] Charter;
-        public UUID FounderID;
-        public UUID GroupID;
-        public int GroupMembershipCount;
-        public int GroupRolesCount;
-        public UUID InsigniaID;
-        public boolean MaturePublish;
-        public byte[] MemberTitle;
-        public int MembershipFee;
-        public int Money;
-        public byte[] Name;
-        public boolean OpenEnrollment;
-        public UUID OwnerRole;
-        public long PowersMask;
-        public boolean ShowInList;
+        public boolean AllowPublish; // BOOL
+        public byte[] Charter; // Variable 2 - string
+        public UUID FounderID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public int GroupMembershipCount; // S32
+        public int GroupRolesCount; // S32
+        public UUID InsigniaID; // LLUUID
+        public boolean MaturePublish; // BOOL
+        public byte[] MemberTitle; // Variable 1 - string
+        public int MembershipFee; // S32
+        public int Money; // S32
+        public byte[] Name; // Variable 1 - string
+        public boolean OpenEnrollment; // BOOL
+        public UUID OwnerRole; // LLUUID
+        public long PowersMask; // U64
+        public boolean ShowInList; // BOOL
     }
 
     public GroupProfileReply() {
@@ -38,21 +49,22 @@ public class GroupProfileReply extends SLMessage {
         this.GroupData_Field = new GroupData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.GroupData_Field.Name.length + 17 + 2 + this.GroupData_Field.Charter.length + 1 + 1 + this.GroupData_Field.MemberTitle.length + 8 + 16 + 16 + 4 + 1 + 4 + 4 + 4 + 1 + 1 + 16 + 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupProfileReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 96);
+        // Message number: Low 352 (GroupProfileReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x60);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
         packVariable(byteBuffer, this.GroupData_Field.Name, 1);
@@ -72,7 +84,7 @@ public class GroupProfileReply extends SLMessage {
         packUUID(byteBuffer, this.GroupData_Field.OwnerRole);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.GroupData_Field.GroupID = unpackUUID(byteBuffer);

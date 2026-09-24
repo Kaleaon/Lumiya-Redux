@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.orm.DBHandleCache;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/* loaded from: classes.dex */
 public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
     private static final int DB_VERSION = 21;
 
@@ -98,7 +97,7 @@ public class SLInventoryOpenHelper implements DBHandleCache.DBOpenHelper {
         return DBHandleCache.getInstance().OpenDB(str, this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBHandleCache.DBOpenHelper
+    @Override
     public SQLiteDatabase openOrCreateDatabase(String str) throws SQLiteException {
         SQLiteDatabase openOrCreateDatabase = SQLiteDatabase.openOrCreateDatabase(str, (SQLiteDatabase.CursorFactory) null);
         if (openOrCreateDatabase == null) {

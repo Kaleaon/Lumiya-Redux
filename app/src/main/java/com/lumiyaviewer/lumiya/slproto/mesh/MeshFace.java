@@ -11,7 +11,6 @@ import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class MeshFace {
     private final DirectByteBuffer indexBuffer;
     private final int numIndices;

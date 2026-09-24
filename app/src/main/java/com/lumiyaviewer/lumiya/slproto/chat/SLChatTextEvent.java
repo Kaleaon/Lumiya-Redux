@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLChatTextEvent extends SLChatEvent {
     protected final String text;
 
@@ -41,7 +40,7 @@ public class SLChatTextEvent extends SLChatEvent {
         this.text = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.Text;
@@ -51,22 +50,22 @@ public class SLChatTextEvent extends SLChatEvent {
         return (this.text == null || !this.text.startsWith("/me ")) ? this.text : this.text.substring(4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         return (this.text == null || !this.text.startsWith("/me ")) ? this.text : this.text.substring(4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return this.text != null && this.text.startsWith("/me ");
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setMessageText(this.text);

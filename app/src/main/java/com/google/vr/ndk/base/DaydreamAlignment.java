@@ -12,7 +12,6 @@ import com.google.vr.cardboard.VrParamsProviderFactory;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 
-/* loaded from: classes.dex */
 class DaydreamAlignment {
     private static final double MAX_TOUCH_DISTANCE_SQUARED_METERS = 2.25E-4d;
     private static final String TAG = "DaydreamAlignment";
@@ -42,7 +41,7 @@ class DaydreamAlignment {
             this.gvrApi = gvrApi;
         }
 
-        @Override // android.view.View.OnTouchListener
+        @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (!this.daydreamAlignment.processMotionEvent(motionEvent)) {
                 return false;
@@ -68,20 +67,17 @@ class DaydreamAlignment {
         private FinishInitilizationTask() {
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Phone.PhoneParams doInBackground(Void... voidArr) {
             return DaydreamAlignment.this.vrParamsProvider.readPhoneParams();
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Phone.PhoneParams phoneParams) {
             DaydreamAlignment.this.init(DisplayUtils.getDisplayMetricsLandscapeWithOverride(this.display, phoneParams), phoneParams);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onProgressUpdate(Void... voidArr) {
         }
     }
@@ -90,14 +86,12 @@ class DaydreamAlignment {
         private RefreshViewerProfileTask() {
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public CardboardDevice.DeviceParams doInBackground(Void... voidArr) {
             return DaydreamAlignment.this.vrParamsProvider.readDeviceParams();
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(CardboardDevice.DeviceParams deviceParams) {
             if (deviceParams == null || deviceParams.daydreamInternal == null || deviceParams.daydreamInternal.alignmentMarkers == null) {
                 DaydreamAlignment.this.markersInPixels = null;
@@ -115,8 +109,7 @@ class DaydreamAlignment {
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onProgressUpdate(Void... voidArr) {
         }
     }
@@ -139,7 +132,6 @@ class DaydreamAlignment {
         init(displayMetrics, phoneParams);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void init(DisplayMetrics displayMetrics, Phone.PhoneParams phoneParams) {
         this.displayMetrics = displayMetrics;
         this.borderSizeMeters = DisplayUtils.getBorderSizeMeters(phoneParams);

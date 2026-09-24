@@ -9,21 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AccountList {
     private ArrayList<AccountInfo> accounts = new ArrayList<>();
     private Context context;
 
     public static class AccountInfo implements Parcelable {
-        public static final Parcelable.Creator<AccountInfo> CREATOR = new Parcelable.Creator<AccountInfo>() { // from class: com.lumiyaviewer.lumiya.ui.accounts.AccountList.AccountInfo.1
+        public static final Parcelable.Creator<AccountInfo> CREATOR = new Parcelable.Creator<AccountInfo>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public AccountInfo createFromParcel(Parcel parcel) {
                 return new AccountInfo(parcel, (AccountInfo) null);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public AccountInfo[] newArray(int i) {
                 return new AccountInfo[i];
             }
@@ -59,7 +58,7 @@ public class AccountList {
             this.GridUUID = uuid;
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public int describeContents() {
             return 0;
         }
@@ -94,7 +93,7 @@ public class AccountList {
             this.PasswordHash = str;
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public void writeToParcel(Parcel parcel, int i) {
             parcel.writeString(this.LoginName);
             parcel.writeString(this.PasswordHash);

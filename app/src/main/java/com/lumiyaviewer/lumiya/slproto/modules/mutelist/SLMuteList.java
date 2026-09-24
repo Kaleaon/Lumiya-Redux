@@ -27,7 +27,6 @@ import java.util.UUID;
 import java.util.zip.CRC32;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListener {
     private Integer cachedCRC;
     private final MuteListCachedDataDao muteListCachedDataDao;
@@ -40,8 +39,8 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
         super(sLAgentCircuit);
         this.muteListData = new MuteListData();
         this.cachedCRC = null;
-        this.muteListRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.SLMuteList.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.muteListRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLMuteList.this.muteListResultHandler != null) {
                     SLMuteList.this.muteListResultHandler.onResultData(SubscriptionSingleKey.Value, SLMuteList.this.getMuteList());
@@ -83,7 +82,7 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
         this.userManager.muteListPool().requestUpdate(SubscriptionSingleKey.Value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         super.HandleCircuitReady();
         if (this.muteListCachedDataDao != null) {
@@ -100,7 +99,7 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.muteListPool().detachRequestHandler(this.muteListRequestHandler);
@@ -151,7 +150,7 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
         return this.muteListData.isMutedByName(str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.xfer.SLXfer.SLXferCompletionListener
+    @Override
     public void onXferComplete(Object obj, String str, byte[] bArr) {
         if (bArr != null) {
             this.muteListData = new MuteListData(bArr);

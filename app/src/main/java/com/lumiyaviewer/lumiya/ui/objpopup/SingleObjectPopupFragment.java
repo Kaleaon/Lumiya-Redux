@@ -19,25 +19,24 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SingleObjectPopupFragment extends Fragment {
-    private final View.OnClickListener frameClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objpopup.-$Lambda$gmgx9kG_frukRCwYiu6KI4GSv6k
+    private final View.OnClickListener frameClickListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             SingleObjectPopupFragment.this.m704x1a9dd8df(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
     };
-    private final SwipeDismissAdvancedBehavior.OnDismissListener dismissListener = new SwipeDismissAdvancedBehavior.OnDismissListener() { // from class: com.lumiyaviewer.lumiya.ui.objpopup.SingleObjectPopupFragment.1
-        @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissAdvancedBehavior.OnDismissListener
+    private final SwipeDismissAdvancedBehavior.OnDismissListener dismissListener = new SwipeDismissAdvancedBehavior.OnDismissListener() {
+        @Override
         public void onDismiss(View view) {
             SingleObjectPopupFragment.this.hideAndDismiss();
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissAdvancedBehavior.OnDismissListener
+        @Override
         public void onDragStateChanged(int i) {
         }
     };
@@ -62,7 +61,6 @@ public class SingleObjectPopupFragment extends Fragment {
         return ActivityUtils.getUserManager(getArguments());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void hideAndDismiss() {
         FragmentActivity activity = getActivity();
         if (activity instanceof ConnectedActivity) {
@@ -75,7 +73,7 @@ public class SingleObjectPopupFragment extends Fragment {
         hideAndDismiss();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         boolean z;
@@ -120,7 +118,7 @@ public class SingleObjectPopupFragment extends Fragment {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onResume() {
         super.onResume();
         if (getEvent() == null) {
@@ -128,7 +126,7 @@ public class SingleObjectPopupFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         if (getEvent() == null) {

@@ -8,7 +8,6 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 import androidx.core.os.EnvironmentCompat;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
@@ -58,7 +57,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-/* loaded from: classes.dex */
 public class RenderContext {
     public static final float NEAR_PLANE = 0.5f;
     public static final int UNIFORM_BLOCK_ANIMATION_DATA = 1;

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.common;
 
 import androidx.fragment.app.Fragment;
 
-/* loaded from: classes.dex */
 public class StateAwareFragment extends Fragment {
     private boolean fragmentStarted = false;
     private boolean fragmentVisible = false;
@@ -15,25 +14,25 @@ public class StateAwareFragment extends Fragment {
         return this.fragmentVisible;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onPause() {
         this.fragmentVisible = false;
         super.onPause();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onResume() {
         super.onResume();
         this.fragmentVisible = true;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         this.fragmentStarted = true;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.fragmentStarted = false;
         super.onStop();

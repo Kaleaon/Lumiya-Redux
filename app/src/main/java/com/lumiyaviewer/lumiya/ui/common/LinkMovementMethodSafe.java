@@ -6,7 +6,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-/* loaded from: classes.dex */
 public class LinkMovementMethodSafe extends LinkMovementMethod {
     private OnLinkOpenErrorListener onLinkOpenErrorListener = null;
 
@@ -14,7 +13,7 @@ public class LinkMovementMethodSafe extends LinkMovementMethod {
         void OnLinkOpenError(String str);
     }
 
-    @Override // android.text.method.BaseMovementMethod, android.text.method.MovementMethod
+    @Override
     public boolean onKeyDown(TextView textView, Spannable spannable, int i, KeyEvent keyEvent) {
         try {
             return super.onKeyDown(textView, spannable, i, keyEvent);
@@ -27,7 +26,7 @@ public class LinkMovementMethodSafe extends LinkMovementMethod {
         }
     }
 
-    @Override // android.text.method.BaseMovementMethod, android.text.method.MovementMethod
+    @Override
     public boolean onKeyUp(TextView textView, Spannable spannable, int i, KeyEvent keyEvent) {
         try {
             return super.onKeyUp(textView, spannable, i, keyEvent);
@@ -40,7 +39,7 @@ public class LinkMovementMethodSafe extends LinkMovementMethod {
         }
     }
 
-    @Override // android.text.method.LinkMovementMethod, android.text.method.ScrollingMovementMethod, android.text.method.BaseMovementMethod, android.text.method.MovementMethod
+    @Override
     public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
         try {
             return super.onTouchEvent(textView, spannable, motionEvent);
@@ -53,7 +52,7 @@ public class LinkMovementMethodSafe extends LinkMovementMethod {
         }
     }
 
-    @Override // android.text.method.BaseMovementMethod, android.text.method.MovementMethod
+    @Override
     public boolean onTrackballEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
         try {
             return super.onTrackballEvent(textView, spannable, motionEvent);

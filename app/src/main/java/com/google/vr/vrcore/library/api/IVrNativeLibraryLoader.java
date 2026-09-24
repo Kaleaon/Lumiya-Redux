@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IVrNativeLibraryLoader extends IInterface {
 
     public static abstract class Stub extends Binder implements IVrNativeLibraryLoader {
@@ -21,12 +20,12 @@ public interface IVrNativeLibraryLoader extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrNativeLibraryLoader
+            @Override
             public void closeNativeGvrLibrary(long j) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -45,7 +44,7 @@ public interface IVrNativeLibraryLoader extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrNativeLibraryLoader
+            @Override
             public long loadNativeGvrLibrary(int i, int i2, int i3) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -76,12 +75,12 @@ public interface IVrNativeLibraryLoader extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IVrNativeLibraryLoader)) ? (IVrNativeLibraryLoader) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 2:

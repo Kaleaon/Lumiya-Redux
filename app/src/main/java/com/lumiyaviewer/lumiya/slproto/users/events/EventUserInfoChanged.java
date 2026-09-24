@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.users.events;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class EventUserInfoChanged {
     public static final int CHANGED_NAME = 2;
     public static final int CHANGED_PROFILE = 4;

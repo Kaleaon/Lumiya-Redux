@@ -1,39 +1,46 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Presense messages
+ * sim -> dataserver
+ *
+ * <p>Template: {@code RegionPresenceRequestByRegionID Low 14 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RegionPresenceRequestByRegionID extends SLMessage {
     public ArrayList<RegionData> RegionData_Fields = new ArrayList<>();
 
+    /** Block RegionData, Variable. */
     public static class RegionData {
-        public UUID RegionID;
+        public UUID RegionID; // LLUUID
     }
 
     public RegionPresenceRequestByRegionID() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.RegionData_Fields.size() * 16) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRegionPresenceRequestByRegionID(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.SO);
+        // Message number: Low 14 (RegionPresenceRequestByRegionID).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x0E);
         byteBuffer.put((byte) this.RegionData_Fields.size());
         Iterator<?> it = this.RegionData_Fields.iterator();
         while (it.hasNext()) {
@@ -41,7 +48,7 @@ public class RegionPresenceRequestByRegionID extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

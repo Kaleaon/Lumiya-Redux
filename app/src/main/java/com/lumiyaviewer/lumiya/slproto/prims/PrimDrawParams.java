@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.prims;
 
 import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntry;
 
-/* loaded from: classes.dex */
 public class PrimDrawParams {
     private final SLTextureEntry textures;
     private final PrimVolumeParams volumeParams;

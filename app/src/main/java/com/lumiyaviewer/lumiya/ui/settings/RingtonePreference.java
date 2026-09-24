@@ -11,7 +11,6 @@ import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.media.NotificationSounds;
 
-/* loaded from: classes.dex */
 public class RingtonePreference extends Preference {
     private int defaultRawResource;
 
@@ -51,7 +50,7 @@ public class RingtonePreference extends Preference {
         return this.defaultRawResource;
     }
 
-    @Override // androidx.preference.Preference
+    @Override
     public CharSequence getSummary() {
         String string = getSharedPreferences().getString(getKey(), null);
         if (string == null) {

@@ -11,7 +11,6 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChatterNameUpdated {
     private final UUID agentUUID;
 
@@ -71,7 +70,7 @@ public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChat
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         OnChatterNameUpdated onChatterNameUpdated = this.listener.get();
         if (onChatterNameUpdated != null) {

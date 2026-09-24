@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ObjectDerezDialog {
 
     public enum DerezAction {
@@ -35,8 +34,8 @@ public class ObjectDerezDialog {
     public static void askForObjectDerez(Context context, @Nonnull final DerezAction derezAction, final UUID uuid, final int i) {
         int i2 = derezAction.derezQuestionId;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(context.getString(i2)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.ObjectDerezDialog.1
-            @Override // android.content.DialogInterface.OnClickListener
+        builder.setMessage(context.getString(i2)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialogInterface, int i3) {
                 SLAgentCircuit activeAgentCircuit;
                 dialogInterface.dismiss();
@@ -46,8 +45,8 @@ public class ObjectDerezDialog {
                 }
                 activeAgentCircuit.DerezObject(i, derezAction.deRezDestination);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.ObjectDerezDialog.2
-            @Override // android.content.DialogInterface.OnClickListener
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialogInterface, int i3) {
                 dialogInterface.cancel();
             }

@@ -6,20 +6,28 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * System operations and maintenance
+ * spaceserver -> sim
+ * tell a particular simulator to rename a parcel
+ *
+ * <p>Template: {@code ParcelRename Low 402 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelRename extends SLMessage {
     public ArrayList<ParcelData> ParcelData_Fields = new ArrayList<>();
 
+    /** Block ParcelData, Variable. */
     public static class ParcelData {
-        public byte[] NewName;
-        public UUID ParcelID;
+        public byte[] NewName; // Variable 1 - string
+        public UUID ParcelID; // LLUUID
     }
 
     public ParcelRename() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.ParcelData_Fields.iterator();
@@ -32,16 +40,17 @@ public class ParcelRename extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelRename(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -110);
+        // Message number: Low 402 (ParcelRename).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x92);
         byteBuffer.put((byte) this.ParcelData_Fields.size());
         for (ParcelData parcelData : this.ParcelData_Fields) {
             packUUID(byteBuffer, parcelData.ParcelID);
@@ -49,7 +58,7 @@ public class ParcelRename extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

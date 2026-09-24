@@ -15,7 +15,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class FriendManager {
 
     @Nonnull
@@ -27,14 +26,14 @@ public class FriendManager {
     @Nonnull
     private final UserManager userManager;
     private final SubscriptionPool<UUID, Boolean> onlineStatus = new SubscriptionPool<>();
-    private final OnListUpdated onFriendListUpdated = new OnListUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.FriendManager.1
-        @Override // com.lumiyaviewer.lumiya.slproto.users.manager.OnListUpdated
+    private final OnListUpdated onFriendListUpdated = new OnListUpdated() {
+        @Override
         public void onListUpdated() {
             FriendManager.this.chatterList.notifyListUpdated(ChatterListType.Friends);
         }
     };
-    private final OnListUpdated onFriendsOnlineListUpdated = new OnListUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.FriendManager.2
-        @Override // com.lumiyaviewer.lumiya.slproto.users.manager.OnListUpdated
+    private final OnListUpdated onFriendsOnlineListUpdated = new OnListUpdated() {
+        @Override
         public void onListUpdated() {
             FriendManager.this.chatterList.notifyListUpdated(ChatterListType.FriendsOnline);
         }
@@ -44,9 +43,8 @@ public class FriendManager {
         this.userManager = userManager;
         this.friendDao = daoSession.getFriendDao();
         this.chatterList = chatterList;
-        new RequestFinalProcessor<UUID, Boolean>(this.onlineStatus, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.FriendManager.3
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+        new RequestFinalProcessor<UUID, Boolean>(this.onlineStatus, userManager.getDatabaseExecutor()) {
+            @Override
             public Boolean processRequest(@Nonnull UUID uuid) {
                 Friend load = FriendManager.this.friendDao.load(uuid);
                 if (load != null) {

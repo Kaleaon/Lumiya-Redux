@@ -24,7 +24,6 @@ import com.lumiyaviewer.lumiya.ui.grids.GridList;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class ManageGridsActivity extends ThemedActivity implements GridEditDialog.OnGridEditResultListener, AdapterView.OnItemClickListener {
     private GridListAdapter adapter;
 
@@ -38,7 +37,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
             super(context, R.layout.grid_list_item, list);
         }
 
-        @Override // android.widget.ArrayAdapter, android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             LayoutInflater from = LayoutInflater.from(getContext());
             if (view == null) {
@@ -51,7 +50,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
                 GridList.GridInfo gridInfo = item;
                 textView.setText(gridInfo.getGridName());
                 textView2.setText(gridInfo.getLoginURL());
-                view.findViewById(R.id.gridLockedIcon).setVisibility(gridInfo.isPredefinedGrid() ? 0 : 4);
+                view.findViewById(R.id.gridLockedIcon).setVisibility(gridInfo.isPredefinedGrid() ? View.VISIBLE : View.INVISIBLE);
             }
             return view;
         }
@@ -80,34 +79,34 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         gridEditDialog.show();
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
         GridList.GridInfo item = this.adapter.getItem(((AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo()).position);
         if (item != null) {
             final GridList.GridInfo gridInfo = item;
             switch (menuItem.getItemId()) {
-                case R.id.item_grid_edit /* 2131755774 */:
+                case R.id.item_grid_edit:
                     GridEditDialog gridEditDialog = new GridEditDialog(this, this.gridList, gridInfo);
                     gridEditDialog.setOnGridEditResultListener(this);
                     gridEditDialog.show();
                     return true;
-                case R.id.item_grid_delete /* 2131755775 */:
+                case R.id.item_grid_delete:
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(getString(R.string.grid_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.grids.-$Lambda$mB53054QosfH2NBejFMOD8VFF4s.1
+                    builder.setMessage(getString(R.string.grid_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                             ManageGridsActivity.this.m591x6c23f39d((GridList.GridInfo) gridInfo, dialogInterface, i);
                         }
 
-                        @Override // android.content.DialogInterface.OnClickListener
+                        @Override
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             $m$0(dialogInterface, i);
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.grids.-$Lambda$mB53054QosfH2NBejFMOD8VFF4s
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
                         }
 
-                        @Override // android.content.DialogInterface.OnClickListener
+                        @Override
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             $m$0(dialogInterface, i);
                         }
@@ -119,7 +118,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         return super.onContextItemSelected(menuItem);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.manage_grids);
@@ -132,7 +131,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         registerForContextMenu(this.gridListView);
     }
 
-    @Override // android.app.Activity, android.view.View.OnCreateContextMenuListener
+    @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
         GridList.GridInfo item = this.adapter.getItem(((AdapterView.AdapterContextMenuInfo) contextMenuInfo).position);
@@ -142,7 +141,7 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         getMenuInflater().inflate(R.menu.grid_list_context_menu, contextMenu);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridAdded(GridList.GridInfo gridInfo, boolean z) {
         if (z) {
             this.gridList.addNewGrid(gridInfo);
@@ -157,16 +156,16 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridDeleted(GridList.GridInfo gridInfo) {
         deleteGrid(gridInfo);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridEditCancelled() {
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         GridList.GridInfo item;
         if (this.adapter == null || (item = this.adapter.getItem(i)) == null || item.isPredefinedGrid()) {

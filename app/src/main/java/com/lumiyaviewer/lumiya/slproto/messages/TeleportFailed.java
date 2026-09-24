@@ -6,19 +6,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * TeleportFailed somewhere->sim->viewer
+ * announce failure of teleport request
+ *
+ * <p>Template: {@code TeleportFailed Low 74 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_teleport_failed()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class TeleportFailed extends SLMessage {
     public ArrayList<AlertInfo> AlertInfo_Fields = new ArrayList<>();
     public Info Info_Field;
 
+    /** Block AlertInfo, Variable. */
     public static class AlertInfo {
-        public byte[] ExtraParams;
-        public byte[] Message;
+        public byte[] ExtraParams; // Variable 1 - llsd extra parameters
+        public byte[] Message; // Variable 1 - string id
     }
 
+    /** Block Info, Single. */
     public static class Info {
-        public UUID AgentID;
-        public byte[] Reason;
+        public UUID AgentID; // LLUUID
+        public byte[] Reason; // Variable 1 - string
     }
 
     public TeleportFailed() {
@@ -26,7 +36,7 @@ public class TeleportFailed extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.Info_Field.Reason.length + 17 + 4 + 1;
         Iterator<?> it = this.AlertInfo_Fields.iterator();
@@ -40,16 +50,17 @@ public class TeleportFailed extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleTeleportFailed(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 74);
+        // Message number: Low 74 (TeleportFailed).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x4A);
         packUUID(byteBuffer, this.Info_Field.AgentID);
         packVariable(byteBuffer, this.Info_Field.Reason, 1);
         byteBuffer.put((byte) this.AlertInfo_Fields.size());
@@ -59,7 +70,7 @@ public class TeleportFailed extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Info_Field.AgentID = unpackUUID(byteBuffer);
         this.Info_Field.Reason = unpackVariable(byteBuffer, 1);

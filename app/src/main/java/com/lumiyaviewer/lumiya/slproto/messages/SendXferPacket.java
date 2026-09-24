@@ -1,21 +1,29 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * SendXferPacket - send an additional packet of an arbitrary xfer from sim -> viewer
+ *
+ * <p>Template: {@code SendXferPacket High 18 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code continue_file_receive()} in indra/llmessage/llxfermanager.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class SendXferPacket extends SLMessage {
     public DataPacket DataPacket_Field;
     public XferID XferID_Field;
 
+    /** Block DataPacket, Single. */
     public static class DataPacket {
-        public byte[] Data;
+        public byte[] Data; // Variable 2
     }
 
+    /** Block XferID, Single. */
     public static class XferID {
-        public long ID;
-        public int Packet;
+        public long ID; // U64
+        public int Packet; // U32
     }
 
     public SendXferPacket() {
@@ -24,25 +32,26 @@ public class SendXferPacket extends SLMessage {
         this.DataPacket_Field = new DataPacket();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.DataPacket_Field.Data.length + 2 + 13;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSendXferPacket(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.DC2);
+        // Message number: High 18 (SendXferPacket).
+        byteBuffer.put((byte) 0x12);
         packLong(byteBuffer, this.XferID_Field.ID);
         packInt(byteBuffer, this.XferID_Field.Packet);
         packVariable(byteBuffer, this.DataPacket_Field.Data, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.XferID_Field.ID = unpackLong(byteBuffer);
         this.XferID_Field.Packet = unpackInt(byteBuffer);

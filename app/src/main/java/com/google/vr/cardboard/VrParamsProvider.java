@@ -6,7 +6,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 import com.google.vrtoolkit.cardboard.proto.nano.Preferences;
 
-/* loaded from: classes.dex */
 public interface VrParamsProvider {
     void close();
 

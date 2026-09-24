@@ -22,14 +22,12 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.vr.cardboard.TransitionView;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.eventbus.EventBus;
 import com.lumiyaviewer.lumiya.eventbus.EventHandler;
 import com.lumiyaviewer.lumiya.licensing.LicenseChecker;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -37,7 +35,6 @@ import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
 import com.lumiyaviewer.lumiya.slproto.auth.SLAuthParams;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.chat.SLVoiceUpgradeEvent;
 import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent;
 import com.lumiyaviewer.lumiya.slproto.events.SLConnectionStateChangedEvent;
@@ -74,7 +71,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class GridConnectionService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */
@@ -103,12 +99,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private UserManager cloudSyncUserManager = null;
     private boolean cloudPluginReceiverRegistered = false;
     private boolean voicePluginReceiverRegistered = false;
-    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0
+    private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             GridConnectionService.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -118,23 +114,23 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private OnlineNotificationInfo onlineNotificationInfo = new OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, this.connectedAgentNameRetriever, null);
     private WifiManager.WifiLock wifiLock = null;
     private final IBinder mBinder = new GridServiceBinder();
-    private Handler licenseCheckHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.GridConnectionService.1
-        @Override // android.os.Handler
+    private Handler licenseCheckHandler = new Handler() {
+        @Override
         public void handleMessage(Message message) {
             switch (message.what) {
-                case R.id.msg_licensing_allow /* 2131755033 */:
+                case R.id.msg_licensing_allow:
                     Debug.Printf("License: License check ok.", new Object[0]);
                     if (message.obj instanceof SLAuthParams) {
                         GridConnectionService.this.performLogin((SLAuthParams) message.obj);
                         break;
                     }
                     break;
-                case R.id.msg_licensing_app_error /* 2131755034 */:
+                case R.id.msg_licensing_app_error:
                     String str = message.obj instanceof String ? (String) message.obj : "Internal application error";
                     Debug.Printf("License: License check app error: %s", str);
                     GridConnectionService.this.eventBus.publish(new SLLoginResultEvent(false, "License check failed: " + str + ".", null));
                     break;
-                case R.id.msg_licensing_dont_allow /* 2131755035 */:
+                case R.id.msg_licensing_dont_allow:
                     Debug.Printf("License: License check failed.", new Object[0]);
                     GridConnectionService.this.eventBus.publish(new SLLoginResultEvent(false, "You don't have valid license to use this application.", null));
                     break;
@@ -145,8 +141,8 @@ public class GridConnectionService extends Service implements SharedPreferences.
     public static void startServiceCompat(Context context, Intent intent) {
         ContextCompat.startForegroundService(context, intent);
     }
-    private final BroadcastReceiver cloudPluginInstalledReceiver = new BroadcastReceiver() { // from class: com.lumiyaviewer.lumiya.GridConnectionService.2
-        @Override // android.content.BroadcastReceiver
+    private final BroadcastReceiver cloudPluginInstalledReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             UUID activeAgentUUID;
             UserManager userManager;
@@ -156,8 +152,8 @@ public class GridConnectionService extends Service implements SharedPreferences.
             GridConnectionService.this.startCloudSync(userManager);
         }
     };
-    private final BroadcastReceiver voicePluginInstalledReceiver = new BroadcastReceiver() { // from class: com.lumiyaviewer.lumiya.GridConnectionService.3
-        @Override // android.content.BroadcastReceiver
+    private final BroadcastReceiver voicePluginInstalledReceiver = new BroadcastReceiver() {
+        @Override
         public void onReceive(Context context, Intent intent) {
             UUID activeAgentUUID;
             UserManager userManager;
@@ -171,12 +167,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
     };
     private CloudSyncServiceConnection cloudSyncServiceConnection = null;
     private VoicePluginServiceConnection voicePluginServiceConnection = null;
-    private final ChatterNameRetriever.OnChatterNameUpdated onActiveAgentNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.2
+    private final ChatterNameRetriever.OnChatterNameUpdated onActiveAgentNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             GridConnectionService.this.m19lambda$com_lumiyaviewer_lumiya_GridConnectionService_20777(chatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             $m$0(chatterNameRetriever);
         }
@@ -331,6 +327,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
     }
 
+    /**
+     * LED / sound settings for an unread-message notification of the given type.
+     * Group chat and private IMs have their own settings; everything else uses
+     * the local chat settings (3.4.2 behaviour; the decompiled source had lost
+     * the cases and returned local chat settings for every type).
+     */
     private static NotificationSettings notifySettingsByType(NotificationType notificationType) {
         switch (notificationType) {
             case Group:
@@ -343,19 +345,14 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocationInfo, reason: merged with bridge method [inline-methods] */
     public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         updateOnlineNotification();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUnreadNotification, reason: merged with bridge method [inline-methods] */
     public void onUnreadNotification(UnreadNotifications unreadNotifications) {
         showUnreadNotification(unreadNotifications);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void performLogin(SLAuthParams sLAuthParams) {
         gridName = sLAuthParams.gridName;
         gridConnection.Connect(sLAuthParams);
@@ -455,7 +452,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         UserManager userManager = UserManager.getUserManager(unreadNotificationInfo.agentUUID());
         UnreadNotificationInfo.UnreadMessageSource unreadMessageSource3 = unreadNotificationInfo.unreadSources().size() == 1 ? unreadNotificationInfo.unreadSources().get(0) : null;
         Intent createIntent = ChatFragmentActivityFactory.getInstance().createIntent(this, unreadMessageSource3 != null ? ChatFragment.makeSelection(unreadMessageSource3.chatterID()) : null);
-        createIntent.addFlags(536870912);
+        createIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         ActivityUtils.setActiveAgentID(createIntent, unreadNotificationInfo.agentUUID());
         UnreadNotificationInfo.UnreadMessageSource unreadMessageSource4 = null;
         if (unreadNotificationInfo.singleFreshSource().isPresent()) {
@@ -597,7 +594,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
         builder.setOngoing(false);
         builder.setNumber(unreadNotificationInfo.totalUnreadCount());
-        builder.setContentIntent(PendingIntent.getActivity(this, R.id.unread_notify_request_code, intent, SLMoveEvents.AGENT_CONTROL_AWAY));
+        builder.setContentIntent(PendingIntent.getActivity(this, R.id.unread_notify_request_code, intent, PendingIntent.FLAG_UPDATE_CURRENT));
         builder.setDefaults(0);
         if (str5 != null) {
             builder.setTicker(str5);
@@ -651,7 +648,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
         notificationManager.notify(i, builder.build());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void startCloudSync(UserManager userManager) {
         this.cloudSyncUserManager = userManager;
         updateCloudSyncStatus();
@@ -778,12 +774,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
     public void handleConnectEvent(SLLoginResultEvent sLLoginResultEvent) {
         UserManager userManager = UserManager.getUserManager(sLLoginResultEvent.activeAgentUUID);
         if (userManager != null) {
-            this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe(UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.1
+            this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe(UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() {
                 private final /* synthetic */ void $m$0(Object obj) {
                     GridConnectionService.this.onUnreadNotification((UnreadNotifications) obj);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+                @Override
                 public final void onData(Object obj) {
                     $m$0(obj);
                 }
@@ -822,12 +818,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
         updateOnlineNotification();
     }
 
-    @Override // android.app.Service
+    @Override
     public IBinder onBind(Intent intent) {
         return this.mBinder;
     }
 
-    @Override // android.app.Service
+    @Override
     public void onCreate() {
         super.onCreate();
         serviceInstance = new WeakReference<>(this);
@@ -837,7 +833,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         updateOnlineNotification();
     }
 
-    @Override // android.app.Service
+    @Override
     public void onDestroy() {
         if (this.prefs != null) {
             this.prefs.unregisterOnSharedPreferenceChangeListener(this);
@@ -858,13 +854,13 @@ public class GridConnectionService extends Service implements SharedPreferences.
         readPreferences(globalOptionsChangedEvent.preferences);
     }
 
-    @Override // android.content.SharedPreferences.OnSharedPreferenceChangeListener
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String str) {
         readPreferences(sharedPreferences);
         updateOnlineNotification();
     }
 
-    @Override // android.app.Service
+    @Override
     public int onStartCommand(Intent intent, int i, int i2) {
         Object[] objArr = new Object[2];
         objArr[0] = intent != null ? "not null" : "null";
@@ -877,7 +873,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         return 2;
     }
 
-    @Override // android.app.Service
+    @Override
     public boolean onUnbind(Intent intent) {
         Debug.Log("GridConnectionService: onUnbind called, connection state = " + gridConnection.getConnectionState());
         if (gridConnection.getConnectionState() == SLGridConnection.ConnectionState.Idle) {

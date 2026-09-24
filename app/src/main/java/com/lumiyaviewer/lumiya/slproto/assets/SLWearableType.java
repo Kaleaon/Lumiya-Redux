@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.assets;
 
 import com.lumiyaviewer.lumiya.slproto.inventory.SLAssetType;
 
-/* loaded from: classes.dex */
 public enum SLWearableType {
     WT_SHAPE(0, SLAssetType.AT_BODYPART, true, "Shape"),
     WT_SKIN(1, SLAssetType.AT_BODYPART, true, "Skin"),

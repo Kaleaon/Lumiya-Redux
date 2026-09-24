@@ -6,25 +6,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GodlikeMessage - generalized construct for Gods to send messages
+ * around the system. Each Request has it's own internal protocol.
+ *
+ * <p>Template: {@code GodlikeMessage Low 259 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GodlikeMessage extends SLMessage {
     public AgentData AgentData_Field;
     public MethodData MethodData_Field;
     public ArrayList<ParamList> ParamList_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
-        public UUID TransactionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block MethodData, Single. */
     public static class MethodData {
-        public UUID Invoice;
-        public byte[] Method;
+        public UUID Invoice; // LLUUID
+        public byte[] Method; // Variable 1
     }
 
+    /** Block ParamList, Variable. */
     public static class ParamList {
-        public byte[] Parameter;
+        public byte[] Parameter; // Variable 1
     }
 
     public GodlikeMessage() {
@@ -33,7 +42,7 @@ public class GodlikeMessage extends SLMessage {
         this.MethodData_Field = new MethodData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 52 + 1;
         Iterator<?> it = this.ParamList_Fields.iterator();
@@ -46,16 +55,17 @@ public class GodlikeMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGodlikeMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 3);
+        // Message number: Low 259 (GodlikeMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x03);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.TransactionID);
@@ -68,7 +78,7 @@ public class GodlikeMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

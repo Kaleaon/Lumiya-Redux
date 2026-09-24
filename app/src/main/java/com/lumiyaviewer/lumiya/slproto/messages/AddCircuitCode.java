@@ -4,14 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * space->sim
+ * sim->sim
+ * AddCircuitCode - Tells the recipient's messaging system that this code
+ * is for a legal circuit
+ *
+ * <p>Template: {@code AddCircuitCode Low 2 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLMessageSystem::processAddCircuitCode()} in indra/llmessage/message.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AddCircuitCode extends SLMessage {
     public CircuitCode CircuitCode_Field;
 
+    /** Block CircuitCode, Single. */
     public static class CircuitCode {
-        public UUID AgentID;
-        public int Code;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID - WARNING - may be null in valid message
+        public int Code; // U32
+        public UUID SessionID; // LLUUID
     }
 
     public AddCircuitCode() {
@@ -19,27 +30,28 @@ public class AddCircuitCode extends SLMessage {
         this.CircuitCode_Field = new CircuitCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 40;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAddCircuitCode(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 2);
+        // Message number: Low 2 (AddCircuitCode).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x02);
         packInt(byteBuffer, this.CircuitCode_Field.Code);
         packUUID(byteBuffer, this.CircuitCode_Field.SessionID);
         packUUID(byteBuffer, this.CircuitCode_Field.AgentID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.CircuitCode_Field.Code = unpackInt(byteBuffer);
         this.CircuitCode_Field.SessionID = unpackUUID(byteBuffer);

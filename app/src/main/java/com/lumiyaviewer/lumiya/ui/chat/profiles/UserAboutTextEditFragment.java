@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.messages.AvatarPropertiesReply;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.common.ChatterFragment;
 
-/* loaded from: classes.dex */
 public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
     private static final String IS_FIRST_LIFE_KEY = "isFirstLife";
     private AvatarPropertiesReply avatarProperties;
@@ -28,24 +27,23 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
         return makeSelection;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected String decorateFragmentTitle(String str) {
         return getString(R.string.edit_about_title, str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected String getFieldHint(Context context) {
         return getString(R.string.edit_about_hint);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.profiles.ProfileTextFieldEditFragment
-    /* renamed from: onAvatarProperties */
+    @Override
     public void onAvatarProperties(AvatarPropertiesReply avatarPropertiesReply) {
         this.avatarProperties = avatarPropertiesReply;
         setOriginalText(isFirstLife() ? SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.FLAboutText) : SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
         if (this.avatarProperties != null) {
             String stringFromVariableUTF = SLMessage.stringFromVariableUTF(this.avatarProperties.PropertiesData_Field.AboutText);

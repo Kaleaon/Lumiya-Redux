@@ -39,7 +39,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLParcelInfo {
     private volatile UserManager userManager;
     private float drawDistance = 0.0f;
@@ -54,14 +53,14 @@ public class SLParcelInfo {
     private final Map<Integer, SLObjectInfo> rootObjects = new ConcurrentHashMap(128, 0.75f, 1);
     private final Map<Integer, LinkedList<SLObjectInfo>> orphanObjects = new HashMap();
     public final Map<UUID, SLObjectInfo> objectNamesQueue = Collections.synchronizedMap(new LinkedHashMap());
-    private final Comparator<SLObjectDisplayInfo> objectDisplayInfoComparator = new Comparator() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$1YF5tPpIlUnjvWeNVttYc5eIlFY
+    private final Comparator<SLObjectDisplayInfo> objectDisplayInfoComparator = new Comparator() {
         private final /* synthetic */ int $m$0(Object obj, Object obj2) {
             int compare;
             compare = Float.compare(((SLObjectDisplayInfo) obj).distance, ((SLObjectDisplayInfo) obj2).distance);
             return compare;
         }
 
-        @Override // java.util.Comparator
+        @Override
         public final int compare(Object obj, Object obj2) {
             return $m$0(obj, obj2);
         }

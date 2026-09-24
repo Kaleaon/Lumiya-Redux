@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class GenericHTTPExecutor extends ThreadPoolExecutor {
 
     private static class InstanceHolder {
@@ -18,8 +17,8 @@ public class GenericHTTPExecutor extends ThreadPoolExecutor {
     }
 
     private GenericHTTPExecutor() {
-        super(1, 3, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue(), new ThreadFactory() { // from class: com.lumiyaviewer.lumiya.slproto.https.GenericHTTPExecutor.1
-            @Override // java.util.concurrent.ThreadFactory
+        super(1, 3, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue(), new ThreadFactory() {
+            @Override
             public Thread newThread(@Nonnull Runnable runnable) {
                 return new Thread(runnable, "HTTPAccess");
             }

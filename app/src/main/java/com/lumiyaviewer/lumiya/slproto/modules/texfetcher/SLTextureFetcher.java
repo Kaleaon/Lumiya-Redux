@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/* loaded from: classes.dex */
 public class SLTextureFetcher extends SLModule implements SLIdleHandler {
     private static final int MAX_UDP_TRANSFERS = 2;
     private String agentAppearanceService;
@@ -73,7 +72,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         RunUDPQueue();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         StopFetching();
         super.HandleCloseCircuit();
@@ -137,7 +136,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         sLTextureFetchRequest.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLIdleHandler
+    @Override
     public void ProcessIdle() {
         HashSet hashSet;
         HashSet hashSet2 = null;

@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.vr.cardboard.ConfigUtils;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 
-/* loaded from: classes.dex */
 public class GvrViewerParams {
     private static final float CARDBOARD_V1_INTER_LENS_DISTANCE = 0.06f;
     private static final String CARDBOARD_V1_MODEL = "Cardboard v1";

@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class AvatarAnimationList {
 
     @Nonnull

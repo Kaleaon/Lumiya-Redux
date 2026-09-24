@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class SLMeshData {
     protected DirectByteBuffer indexBuffer;
     protected int numFaces;

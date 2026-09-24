@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.llsd;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public enum LLSDNodeType {
     llsdRoot("llsd"),
     llsdUndef("undef"),

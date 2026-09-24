@@ -1,5 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.chat.generic;
 
+import android.view.View;
 import android.content.Context;
 import androidx.cardview.widget.CardView;
 import android.widget.Button;
@@ -15,7 +16,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLChatYesNoEvent extends SLChatTextEvent {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatYesNoEvent$EventStateSwitchesValues, reason: not valid java name */
@@ -75,7 +75,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         this.eventState = EventState.EventNew;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void bindViewHolder(ChatEventViewHolder chatEventViewHolder, UserManager userManager, @Nullable ChatEventTimestampUpdater chatEventTimestampUpdater) {
         super.bindViewHolder(chatEventViewHolder, userManager, chatEventTimestampUpdater);
         if (chatEventViewHolder instanceof ChatYesNoEventViewHolder) {
@@ -88,31 +88,31 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
             switch (m167xa6852036()[this.eventState.ordinal()]) {
                 case 1:
                     textView.setText(getYesMessage(textView.getContext()));
-                    button.setVisibility(8);
-                    button2.setVisibility(8);
+                    button.setVisibility(View.GONE);
+                    button2.setVisibility(View.GONE);
                     if (getYesMessage(textView.getContext()).equals("")) {
-                        textView.setVisibility(8);
+                        textView.setVisibility(View.GONE);
                     } else {
-                        textView.setVisibility(0);
+                        textView.setVisibility(View.VISIBLE);
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
                 case 2:
                     textView.setText(getNoMessage(textView.getContext()));
-                    button.setVisibility(8);
-                    button2.setVisibility(8);
+                    button.setVisibility(View.GONE);
+                    button2.setVisibility(View.GONE);
                     if (getNoMessage(textView.getContext()).equals("")) {
-                        textView.setVisibility(8);
+                        textView.setVisibility(View.GONE);
                     } else {
-                        textView.setVisibility(0);
+                        textView.setVisibility(View.VISIBLE);
                     }
                     chatYesNoEventViewHolder.makeCardViewDisabled();
                     break;
                 case 3:
                     textView.setText(getQuestion(textView.getContext()));
-                    textView.setVisibility(0);
-                    button.setVisibility(0);
-                    button2.setVisibility(0);
+                    textView.setVisibility(View.VISIBLE);
+                    button.setVisibility(View.VISIBLE);
+                    button2.setVisibility(View.VISIBLE);
                     button.setText(getYesButton(button.getContext()));
                     button2.setText(getNoButton(button2.getContext()));
                     chatYesNoEventViewHolder.makeCardViewEnabled();
@@ -132,7 +132,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
 
     protected abstract String getQuestion(Context context);
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_YESNO;
     }
@@ -151,7 +151,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         notifyEventUpdated(userManager);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setEventState(Integer.valueOf(this.eventState.ordinal()));

@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/* loaded from: classes.dex */
 public class SLCapEventQueue implements Runnable {
     private String capURL;
     private ICapsEventHandler eventHandler;
@@ -70,7 +69,7 @@ public class SLCapEventQueue implements Runnable {
         this.workingThread.start();
     }
 
-    @Override // java.lang.Runnable
+    @Override
     public void run() {
         boolean z;
         Debug.Log("CapEventQueue: working thread starting with capURL = " + this.capURL);

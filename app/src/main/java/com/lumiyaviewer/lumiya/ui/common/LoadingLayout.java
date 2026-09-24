@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.lumiyaviewer.lumiya.R;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LoadingLayout extends FrameLayout {
     private boolean butteryBarVisible;
 
@@ -87,15 +86,15 @@ public class LoadingLayout extends FrameLayout {
         if (this.withButteryProgressBar && Build.VERSION.SDK_INT >= 14) {
             this.butteryProgressBar = new ButteryProgressBar(context);
             this.butteryProgressBar.setId(R.id.loading_layout_buttery_progress_bar_id);
-            this.butteryProgressBar.setVisibility(8);
+            this.butteryProgressBar.setVisibility(View.GONE);
             addView(this.butteryProgressBar, new FrameLayout.LayoutParams(-1, -2, 48));
         }
         this.progressBar.setId(R.id.loading_layout_progress_bar_id);
-        this.progressBar.setVisibility(8);
+        this.progressBar.setVisibility(View.GONE);
         this.progressBar.setIndeterminate(true);
         addView(this.progressBar, new FrameLayout.LayoutParams(-2, -2, 17));
         this.textView.setId(R.id.loading_layout_message_view_id);
-        this.textView.setVisibility(8);
+        this.textView.setVisibility(View.GONE);
         addView(this.textView, new FrameLayout.LayoutParams(-2, -2, 17));
     }
 
@@ -104,13 +103,13 @@ public class LoadingLayout extends FrameLayout {
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
             if (childAt == this.progressBar) {
-                childAt.setVisibility(z ? 0 : 8);
+                childAt.setVisibility(z ? View.VISIBLE : View.GONE);
             } else if (childAt == this.textView) {
-                childAt.setVisibility(z2 ? 0 : 8);
+                childAt.setVisibility(z2 ? View.VISIBLE : View.GONE);
             } else if (childAt != this.butteryProgressBar || this.butteryProgressBar == null) {
-                childAt.setVisibility(z3 ? 0 : 8);
+                childAt.setVisibility(z3 ? View.VISIBLE : View.GONE);
             } else {
-                childAt.setVisibility(this.butteryBarVisible ? 0 : 8);
+                childAt.setVisibility(this.butteryBarVisible ? View.VISIBLE : View.GONE);
             }
         }
         if (this.swipeRefreshLayout != null) {
@@ -125,7 +124,7 @@ public class LoadingLayout extends FrameLayout {
     public void setButteryProgressBar(boolean z) {
         this.butteryBarVisible = z;
         if (this.butteryProgressBar != null) {
-            this.butteryProgressBar.setVisibility(z ? 0 : 8);
+            this.butteryProgressBar.setVisibility(z ? View.VISIBLE : View.GONE);
         }
     }
 

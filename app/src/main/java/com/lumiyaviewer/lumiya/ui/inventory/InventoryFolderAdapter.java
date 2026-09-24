@@ -23,7 +23,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickListener {
     private InventoryDB database;
     private final LayoutInflater inflater;
@@ -60,17 +59,17 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
         return sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false) != null;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         return this.data.size();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public SLInventoryEntry getItem(int i) {
         return this.data.get(i);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         SLInventoryEntry item = getItem(i);
         if (item != null) {
@@ -79,7 +78,7 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
         return -1L;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         SLInventoryEntry sLInventoryEntry;
         int i2;
@@ -142,36 +141,36 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
                                 z = !isBodyPart;
                             }
                         }
-                        view.findViewById(R.id.item_worn_checkbox).setVisibility(0);
+                        view.findViewById(R.id.item_worn_checkbox).setVisibility(View.VISIBLE);
                         view.findViewById(R.id.item_worn_checkbox).setTag(R.id.tag_outfit_object, item);
                         ((CheckBox) view.findViewById(R.id.item_worn_checkbox)).setChecked(z2);
                         view.findViewById(R.id.item_worn_checkbox).setEnabled(z);
                         view.findViewById(R.id.item_worn_checkbox).setOnClickListener(this);
                     }
                     z = false;
-                    view.findViewById(R.id.item_worn_checkbox).setVisibility(0);
+                    view.findViewById(R.id.item_worn_checkbox).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.item_worn_checkbox).setTag(R.id.tag_outfit_object, item);
                     ((CheckBox) view.findViewById(R.id.item_worn_checkbox)).setChecked(z2);
                     view.findViewById(R.id.item_worn_checkbox).setEnabled(z);
                     view.findViewById(R.id.item_worn_checkbox).setOnClickListener(this);
                 } else {
-                    view.findViewById(R.id.item_worn_checkbox).setVisibility(8);
+                    view.findViewById(R.id.item_worn_checkbox).setVisibility(View.GONE);
                     view.findViewById(R.id.item_worn_checkbox).setTag(R.id.tag_outfit_object, null);
                 }
             } else {
-                view.findViewById(R.id.item_worn_checkbox).setVisibility(8);
-                view.findViewById(R.id.itemWornIcon).setVisibility(isItemWorn(item) ? 0 : 8);
+                view.findViewById(R.id.item_worn_checkbox).setVisibility(View.GONE);
+                view.findViewById(R.id.itemWornIcon).setVisibility(isItemWorn(item) ? View.VISIBLE : View.GONE);
             }
         }
         return view;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return true;
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         if (this.onItemCheckboxClickListener != null) {
             Object tag = view.getTag(R.id.tag_outfit_object);

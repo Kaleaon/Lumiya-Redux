@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.RandomAccess;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
     private final List<List<E>> chunks = new ArrayList();
     private int count = 0;
@@ -120,14 +119,14 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         checkConsistency();
     }
 
-    @Override // java.util.AbstractList, java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public void clear() {
         this.chunks.clear();
         this.count = 0;
         resetLastPosition();
     }
 
-    @Override // java.util.AbstractList, java.util.List
+    @Override
     public E get(int i) {
         setLastChunk(i);
         if (i < this.lastChunkStart || i >= this.lastChunkStart + this.lastChunkSize) {
@@ -217,7 +216,7 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         return -1;
     }
 
-    @Override // java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public int size() {
         return this.count;
     }

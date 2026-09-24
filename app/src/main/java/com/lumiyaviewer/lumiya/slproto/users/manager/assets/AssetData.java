@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager.assets;
 
-/* loaded from: classes.dex */
 public class AssetData {
     private final byte[] data;
     private final int status;

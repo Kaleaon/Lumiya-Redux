@@ -14,7 +14,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 import com.google.vrtoolkit.cardboard.proto.nano.Preferences;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class VrParamsProviderJni {
     private static final String TAG = "VrParamsProviderJni";
     private static volatile DisplayMetrics displayMetricsOverride = null;

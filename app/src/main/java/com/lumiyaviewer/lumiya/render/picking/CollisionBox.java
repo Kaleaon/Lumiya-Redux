@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.picking;
 
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 
-/* loaded from: classes.dex */
 public class CollisionBox {
     public final LLVector3[] vertices;
 

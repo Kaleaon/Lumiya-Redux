@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 class SLInventoryUDPFetchRequest extends SLInventoryFetchRequest {
     private final Set<UUID> existingChildren;
     private int receivedCount;
@@ -122,11 +121,11 @@ class SLInventoryUDPFetchRequest extends SLInventoryFetchRequest {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void cancel() {
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void start() {
         Debug.Log("Inventory: UDP fetching folder " + this.folderUUID.toString());
         FetchInventoryDescendents fetchInventoryDescendents = new FetchInventoryDescendents();

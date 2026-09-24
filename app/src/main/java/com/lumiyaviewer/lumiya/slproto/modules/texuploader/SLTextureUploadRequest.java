@@ -15,7 +15,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class SLTextureUploadRequest implements Runnable {
     private static final MediaType MEDIA_TYPE_JP2 = MediaType.parse("image/x-j2c");
     private String capURL;
@@ -37,7 +36,7 @@ public class SLTextureUploadRequest implements Runnable {
         return this.textureID;
     }
 
-    @Override // java.lang.Runnable
+    @Override
     public void run() {
         try {
             String asString = new LLSDXMLRequest().PerformRequest(this.capURL, new LLSDUndefined()).byKey("uploader").asString();

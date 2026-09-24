@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
-/* loaded from: classes.dex */
 public abstract class MyAvatarState {
     public static MyAvatarState create(boolean z, int i, boolean z2, boolean z3) {
         return new AutoValue_MyAvatarState(z, i, z2, z3);

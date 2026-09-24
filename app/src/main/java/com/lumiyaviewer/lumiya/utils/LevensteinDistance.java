@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.utils;
 
 import java.lang.reflect.Array;
 
-/* loaded from: classes.dex */
 public class LevensteinDistance {
     public static int computeLevensteinDistance(CharSequence charSequence, CharSequence charSequence2) {
         int[][] iArr = (int[][]) Array.newInstance((Class<?>) Integer.TYPE, charSequence.length() + 1, charSequence2.length() + 1);

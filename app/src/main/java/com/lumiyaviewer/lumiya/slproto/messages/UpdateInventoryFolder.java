@@ -1,27 +1,33 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UpdateInventoryFolder
+ *
+ * <p>Template: {@code UpdateInventoryFolder Low 274 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UpdateInventoryFolder extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
-        public byte[] Name;
-        public UUID ParentID;
-        public int Type;
+        public UUID FolderID; // LLUUID
+        public byte[] Name; // Variable 1
+        public UUID ParentID; // LLUUID
+        public int Type; // S8
     }
 
     public UpdateInventoryFolder() {
@@ -29,7 +35,7 @@ public class UpdateInventoryFolder extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.FolderData_Fields.iterator();
@@ -42,16 +48,17 @@ public class UpdateInventoryFolder extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleUpdateInventoryFolder(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.DC2);
+        // Message number: Low 274 (UpdateInventoryFolder).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x12);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.FolderData_Fields.size());
@@ -63,7 +70,7 @@ public class UpdateInventoryFolder extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLObjectFilterInfo {
     public static SLObjectFilterInfo create() {
         return new AutoValue_SLObjectFilterInfo("", false, false, false, 0.0f);

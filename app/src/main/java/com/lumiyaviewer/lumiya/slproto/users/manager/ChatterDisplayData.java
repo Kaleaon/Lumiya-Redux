@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterItemViewBuilder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatterDisplayData implements ChatterDisplayInfo, Comparable<ChatterDisplayData> {
     public final ChatterID chatterID;
     public final String displayName;
@@ -32,7 +31,7 @@ public class ChatterDisplayData implements ChatterDisplayInfo, Comparable<Chatte
         this.voiceActive = z2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public void buildView(Context context, ChatterItemViewBuilder chatterItemViewBuilder, UserManager userManager) {
         chatterItemViewBuilder.setLabel(this.displayName);
         chatterItemViewBuilder.setThumbnailChatterID(this.chatterID, this.displayName);
@@ -47,7 +46,7 @@ public class ChatterDisplayData implements ChatterDisplayInfo, Comparable<Chatte
         chatterItemViewBuilder.setDistance(this.distanceToUser);
     }
 
-    @Override // java.lang.Comparable
+    @Override
     public int compareTo(@Nonnull ChatterDisplayData chatterDisplayData) {
         int compare = Booleans.compare(Strings.isNullOrEmpty(this.displayName), Strings.isNullOrEmpty(chatterDisplayData.displayName));
         if (compare != 0) {
@@ -57,12 +56,12 @@ public class ChatterDisplayData implements ChatterDisplayInfo, Comparable<Chatte
         return compareTo != 0 ? compareTo : this.chatterID.compareTo(chatterDisplayData.chatterID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public ChatterID getChatterID(UserManager userManager) {
         return this.chatterID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     @Nullable
     public String getDisplayName() {
         return this.displayName;

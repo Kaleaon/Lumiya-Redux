@@ -18,7 +18,6 @@ import com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatterPicView extends View {
 
     @Nullable
@@ -105,7 +104,7 @@ public class ChatterPicView extends View {
         return this.attachedMessageSource;
     }
 
-    @Override // android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.thumbnailData != null || this.chatterID == null) {
@@ -114,7 +113,7 @@ public class ChatterPicView extends View {
         this.thumbnailData = new ChatterThumbnailData(this.chatterID, this);
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.thumbnailData != null) {
@@ -123,7 +122,7 @@ public class ChatterPicView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         int i;
         String str;

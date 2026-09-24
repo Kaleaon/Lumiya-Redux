@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
-/* loaded from: classes.dex */
 public class CupcakeGestureDetector implements GestureDetector {
     private static final String LOG_TAG = "CupcakeGestureDetector";
     private boolean mIsDragging;
@@ -31,12 +30,12 @@ public class CupcakeGestureDetector implements GestureDetector {
         return motionEvent.getY();
     }
 
-    @Override // uk.co.senab.photoview.gestures.GestureDetector
+    @Override
     public boolean isDragging() {
         return this.mIsDragging;
     }
 
-    @Override // uk.co.senab.photoview.gestures.GestureDetector
+    @Override
     public boolean isScaling() {
         return false;
     }
@@ -46,7 +45,7 @@ public class CupcakeGestureDetector implements GestureDetector {
     
         return true;
      */
-    @Override // uk.co.senab.photoview.gestures.GestureDetector
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -109,7 +108,7 @@ public class CupcakeGestureDetector implements GestureDetector {
         }
     }
 
-    @Override // uk.co.senab.photoview.gestures.GestureDetector
+    @Override
     public void setOnGestureListener(OnGestureListener onGestureListener) {
         this.mListener = onGestureListener;
     }

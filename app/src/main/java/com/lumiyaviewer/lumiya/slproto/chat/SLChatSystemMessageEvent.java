@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatSystemMessageEvent extends SLChatEvent {
 
     @Nonnull
@@ -24,28 +23,28 @@ public final class SLChatSystemMessageEvent extends SLChatEvent {
         this.text = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.SystemMessage;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         return this.text;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_PLAIN;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setMessageText(this.text);

@@ -6,14 +6,13 @@ import com.lumiyaviewer.lumiya.render.TextureMemoryTracker;
 import com.lumiyaviewer.lumiya.render.glres.GLLoadQueue;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class GLSyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadHandler {
     private static final int MAX_LOADS_PER_FRAME = 16;
     private static final int MAX_SIZE_PER_FRAME = 4194304;
     private static final int WAIT_FRAMES_AFTER_LOAD = 3;
     private int framesWait = 0;
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadHandler
+    @Override
     public void GLResourceLoaded(GLLoadQueue.GLLoadable gLLoadable) {
         gLLoadable.GLCompleteLoad();
     }
@@ -23,7 +22,7 @@ public class GLSyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadHa
         r3 = r1;
         r1 = r0;
      */
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument

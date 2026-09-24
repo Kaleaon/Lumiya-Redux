@@ -13,7 +13,6 @@ import com.lumiyaviewer.lumiya.ui.common.TeleportProgressDialog;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatLureEvent extends SLChatYesNoEvent {
     private final UUID lureID;
 
@@ -27,38 +26,38 @@ public final class SLChatLureEvent extends SLChatYesNoEvent {
         this.lureID = improvedInstantMessage.MessageBlock_Field.ID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.Lure;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.teleport_lure_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.teleport_lure_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return context.getString(R.string.teleport_lure_question);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.teleport_lure_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.teleport_lure_accepted);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         super.onYesAction(context, userManager);
         SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
@@ -68,7 +67,7 @@ public final class SLChatLureEvent extends SLChatYesNoEvent {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setSessionID(this.lureID);

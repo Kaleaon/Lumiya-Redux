@@ -4,7 +4,6 @@ import android.os.Bundle;
 import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceInitializeReply implements VoicePluginMessage {
     public final boolean appVersionOk;
 
@@ -24,7 +23,7 @@ public class VoiceInitializeReply implements VoicePluginMessage {
         this.appVersionOk = bundle.getBoolean("appVersionOk");
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("pluginVersionCode", this.pluginVersionCode);

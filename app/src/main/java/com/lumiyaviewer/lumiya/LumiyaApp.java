@@ -15,7 +15,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-/* loaded from: classes.dex */
 public class LumiyaApp extends Application {
     private static DisplayMetrics displayMetrics = new DisplayMetrics();
     private static Context mContext;
@@ -72,11 +71,11 @@ public class LumiyaApp extends Application {
     }
 
     public static void restartApp() {
-        ((AlarmManager) getContext().getSystemService(NotificationCompat.CATEGORY_ALARM)).set(1, System.currentTimeMillis() + 1000, PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), (Class<?>) LauncherActivity.class), 268435456));
+        ((AlarmManager) getContext().getSystemService(NotificationCompat.CATEGORY_ALARM)).set(1, System.currentTimeMillis() + 1000, PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), (Class<?>) LauncherActivity.class), PendingIntent.FLAG_CANCEL_CURRENT));
         System.exit(0);
     }
 
-    @Override // android.app.Application
+    @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;

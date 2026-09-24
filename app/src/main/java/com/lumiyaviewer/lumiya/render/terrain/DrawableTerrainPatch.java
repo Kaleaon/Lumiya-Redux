@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.res.ResourceConsumer;
 import com.lumiyaviewer.lumiya.res.terrain.TerrainGeometryCache;
 import com.lumiyaviewer.lumiya.slproto.terrain.TerrainPatchInfo;
 
-/* loaded from: classes.dex */
 public class DrawableTerrainPatch implements ResourceConsumer {
     private volatile TerrainPatchGeometry geometry;
     private final float[] objWorldMatrix = new float[16];
@@ -35,7 +34,7 @@ public class DrawableTerrainPatch implements ResourceConsumer {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         Object[] objArr = new Object[1];
         objArr[0] = obj != null ? obj.toString() : "null";

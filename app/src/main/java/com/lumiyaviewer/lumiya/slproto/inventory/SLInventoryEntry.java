@@ -19,17 +19,16 @@ import java.util.Iterator;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelable {
-    public static final Parcelable.Creator<SLInventoryEntry> CREATOR = new Parcelable.Creator<SLInventoryEntry>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry.1
+    public static final Parcelable.Creator<SLInventoryEntry> CREATOR = new Parcelable.Creator<SLInventoryEntry>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLInventoryEntry createFromParcel(Parcel parcel) {
             return new SLInventoryEntry(parcel, (SLInventoryEntry) null);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLInventoryEntry[] newArray(int i) {
             return new SLInventoryEntry[i];
         }
@@ -511,7 +510,7 @@ public class SLInventoryEntry extends InventoryEntryDBObject implements Parcelab
         super.updateOrInsert(sQLiteDatabase, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())});
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public void updateOrInsert(SQLiteStatement sQLiteStatement, SQLiteStatement sQLiteStatement2) throws DBObject.DatabaseBindingException {
         sQLiteStatement.bindLong(19, this.uuid.getMostSignificantBits());
         sQLiteStatement.bindLong(20, this.uuid.getLeastSignificantBits());

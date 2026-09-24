@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.inventory;
 
 import androidx.core.os.EnvironmentCompat;
 
-/* loaded from: classes.dex */
 public enum SLSaleType {
     FS_NOT(0, "not"),
     FS_ORIGINAL(1, "orig"),

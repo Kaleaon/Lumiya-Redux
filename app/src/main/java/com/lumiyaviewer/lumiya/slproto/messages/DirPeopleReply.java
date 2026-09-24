@@ -6,27 +6,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirPeopleReply
+ *
+ * <p>Template: {@code DirPeopleReply Low 36 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelDirBrowser::processDirPeopleReply()} in indra/newview/llpaneldirbrowser.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class DirPeopleReply extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public UUID AgentID;
-        public byte[] FirstName;
-        public byte[] Group;
-        public byte[] LastName;
-        public boolean Online;
-        public int Reputation;
+        public UUID AgentID; // LLUUID
+        public byte[] FirstName; // Variable 1
+        public byte[] Group; // Variable 1
+        public byte[] LastName; // Variable 1
+        public boolean Online; // BOOL
+        public int Reputation; // S32
     }
 
     public DirPeopleReply() {
@@ -35,7 +45,7 @@ public class DirPeopleReply extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
@@ -49,16 +59,17 @@ public class DirPeopleReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirPeopleReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 36);
+        // Message number: Low 36 (DirPeopleReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x24);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         byteBuffer.put((byte) this.QueryReplies_Fields.size());
@@ -72,7 +83,7 @@ public class DirPeopleReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

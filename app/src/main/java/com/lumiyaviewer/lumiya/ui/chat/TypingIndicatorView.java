@@ -1,19 +1,18 @@
 package com.lumiyaviewer.lumiya.ui.chat;
 
+import android.view.View;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.google.common.base.Objects;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TypingIndicatorView extends ImageView {
 
     @Nullable
@@ -47,8 +46,6 @@ public class TypingIndicatorView extends ImageView {
         this.subscription = null;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUserTypingStatus, reason: merged with bridge method [inline-methods] */
     public void onUserTypingStatus(Boolean bool) {
         if (bool == null || this.subscription == null || !(this.chatterID instanceof ChatterID.ChatterIDUser)) {
             return;
@@ -58,7 +55,7 @@ public class TypingIndicatorView extends ImageView {
         } else if (!bool.booleanValue() && getVisibility() == 0) {
             ((AnimationDrawable) getDrawable()).stop();
         }
-        setVisibility(bool.booleanValue() ? 0 : 4);
+        setVisibility(bool.booleanValue() ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setChatterID(@Nullable ChatterID chatterID) {
@@ -71,19 +68,19 @@ public class TypingIndicatorView extends ImageView {
             this.subscription = null;
         }
         if ((chatterID instanceof ChatterID.ChatterIDUser) && chatterID.getUserManager() != null) {
-            this.subscription = chatterID.getUserManager().getChatterList().getUserTypingStatus().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$XDRgkFjV-FoS0WpW8v6lPNgts7Q
+            this.subscription = chatterID.getUserManager().getChatterList().getUserTypingStatus().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
                 private final /* synthetic */ void $m$0(Object obj) {
                     TypingIndicatorView.this.onUserTypingStatus((Boolean) obj);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+                @Override
                 public final void onData(Object obj) {
                     $m$0(obj);
                 }
             });
         }
         if (this.subscription == null) {
-            setVisibility(4);
+            setVisibility(View.INVISIBLE);
         }
     }
 }

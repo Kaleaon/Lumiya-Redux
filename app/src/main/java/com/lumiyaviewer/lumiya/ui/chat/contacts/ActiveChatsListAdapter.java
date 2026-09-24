@@ -9,9 +9,7 @@ import android.widget.TextView;
 import com.google.common.collect.ImmutableList;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
-import com.lumiyaviewer.lumiya.react.SubscriptionPool;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
@@ -31,7 +29,6 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, DismissableAdapter {
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_HEADER = 1;
@@ -74,7 +71,7 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
             this(chatterID);
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+        @Override
         public void buildView(Context context, ChatterItemViewBuilder chatterItemViewBuilder, UserManager userManager) {
             boolean z = false;
             StringBuilder sb = new StringBuilder(context.getString(R.string.local_chat_item_title));
@@ -99,12 +96,12 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
             chatterItemViewBuilder.setVoiceActive(z);
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+        @Override
         public ChatterID getChatterID(UserManager userManager) {
             return this.chatterID;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+        @Override
         @Nullable
         public String getDisplayName() {
             return ActiveChatsListAdapter.this.context.getString(R.string.local_chat_item_title);
@@ -146,70 +143,70 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         this.userManager = userManager;
         this.inflater = LayoutInflater.from(context);
         this.localChatItem = new LocalChatItem(this, ChatterID.getLocalChatterID(userManager.getUserID()), null);
-        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ
+        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m438x73a3bdf5((ImmutableList) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.onlineFriendsSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.FriendsOnline, UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.1
+        this.onlineFriendsSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.FriendsOnline, UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m439x73a3c8f6((ImmutableList) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
         Debug.Printf("currentLocationInfo subscribing", new Object[0]);
-        this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.2
+        this.currentLocationInfoSubscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m440x73a4270f((CurrentLocationInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.localChatUnreadCountSubscription = userManager.getChatterList().getActiveChattersManager().getUnreadCounts().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.3
+        this.localChatUnreadCountSubscription = userManager.getChatterList().getActiveChattersManager().getUnreadCounts().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m441x73a43657((UnreadMessageInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.localVoiceChatSubscription = userManager.getVoiceChatInfo().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.contacts.-$Lambda$6auIiCEAvthJH-C9LU_XlJZMtEQ.4
+        this.localVoiceChatSubscription = userManager.getVoiceChatInfo().subscribe(this.localChatItem.getChatterID(userManager), UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ActiveChatsListAdapter.this.m442x73a44176((VoiceChatInfo) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public boolean areAllItemsEnabled() {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DismissableAdapter
+    @Override
     public boolean canDismiss(int i) {
         return i > 0 && i <= this.activeChatters.size();
     }
 
-    @Override // java.io.Closeable, java.lang.AutoCloseable
+    @Override
     public void close() throws IOException {
         this.activeChattersSubscription.unsubscribe();
         this.onlineFriendsSubscription.unsubscribe();
@@ -218,12 +215,12 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         this.localVoiceChatSubscription.unsubscribe();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         return this.activeChatters.size() + 1 + 1 + this.onlineFriends.size();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public Object getItem(int i) {
         int size = this.activeChatters.size();
         if (i == 0) {
@@ -241,17 +238,17 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         return null;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         return 0L;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public int getItemViewType(int i) {
         return i == this.activeChatters.size() + 1 ? 1 : 0;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         Object item = getItem(i);
         if (item == this.onlineFriendsHeader) {
@@ -269,22 +266,22 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         return view2;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public int getViewTypeCount() {
         return 2;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return false;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean isEmpty() {
         return false;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public boolean isEnabled(int i) {
         return i != this.activeChatters.size() + 1;
     }
@@ -321,7 +318,7 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
         notifyDataSetChanged();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DismissableAdapter
+    @Override
     public void onDismiss(int i) {
         ChatterID chatterID;
         Object item = getItem(i);

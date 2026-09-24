@@ -79,7 +79,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class SLInventory extends SLModule {
 
     @SuppressLint({"UseSparseArrays"})
@@ -148,20 +147,20 @@ public class SLInventory extends SLModule {
         this.udpFetchPendingRequests = Collections.synchronizedMap(new HashMap());
         this.fetchRequests = new ConcurrentHashMap();
         this.fetchEntireInventoryRequested = new AtomicBoolean(false);
-        this.folderLoadingRequestHandler = new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.folderLoadingRequestHandler = new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 SLInventory.this.updateFolderLoadingStatus(uuid);
             }
         };
-        this.searchRunningRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.2
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.searchRunningRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 SLInventory.this.updateSearchRunningStatus();
             }
         };
-        this.folderRequestHandler = new RequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.3
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.folderRequestHandler = new RequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 try {
                     Debug.Printf("Inventory: folderRequestHandler: folderId = '%s'", uuid);
@@ -174,7 +173,7 @@ public class SLInventory extends SLModule {
                 }
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+            @Override
             public void onRequestCancelled(@Nonnull UUID uuid) {
                 SLInventoryFetchRequest sLInventoryFetchRequest = (SLInventoryFetchRequest) SLInventory.this.fetchRequests.remove(uuid);
                 SLInventory.this.updateFolderLoadingStatus(uuid);
@@ -183,26 +182,26 @@ public class SLInventory extends SLModule {
                 }
             }
         };
-        this.searchRequestHandler = new RequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.4
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.searchRequestHandler = new RequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 SLInventory.this.fetchEntireInventoryRequested.set(true);
                 SLInventory.this.fetchNextFolder();
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+            @Override
             public void onRequestCancelled(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 SLInventory.this.fetchEntireInventoryRequested.set(false);
                 SLInventory.this.updateSearchRunningStatus();
             }
         };
-        this.reloadEvent = new SLMessageEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.5
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        this.reloadEvent = new SLMessageEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.eventBus.publish(new SLInventoryUpdatedEvent(null, null, true));
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            @Override
             public void onMessageTimeout(SLMessage sLMessage) {
             }
         };
@@ -244,32 +243,32 @@ public class SLInventory extends SLModule {
         this.folderLoadingResultHandler = this.userManager.getInventoryManager().getFolderLoadingRequestSource().attachRequestHandler(new AsyncRequestHandler(this.dbExecutor, this.folderLoadingRequestHandler));
         this.seachRunningResultHandler = this.userManager.getInventoryManager().getSearchRunning().attachRequestHandler(new AsyncRequestHandler(this.dbExecutor, this.searchRunningRequestHandler));
         this.searchProcessResultHandler = this.userManager.getInventoryManager().getSearchProcessRequestSource().attachRequestHandler(new AsyncRequestHandler(this.dbExecutor, this.searchRequestHandler));
-        this.nextFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs
+        this.nextFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 SLInventory.this.onNextFolderFetched((SLInventoryEntry) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
-        }, new Subscription.OnError() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.2
+        }, new Subscription.OnError() {
             private final /* synthetic */ void $m$0(Throwable th) {
                 SLInventory.this.onNextFolderError(th);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+            @Override
             public final void onError(Throwable th) {
                 $m$0(th);
             }
         });
         if (this.rootFolderFetchNeeded) {
-            this.rootFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.1
+            this.rootFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() {
                 private final /* synthetic */ void $m$0(Object obj) {
                     SLInventory.this.onRootFolderFetched((SLInventoryEntry) obj);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+                @Override
                 public final void onData(Object obj) {
                     $m$0(obj);
                 }
@@ -327,8 +326,8 @@ public class SLInventory extends SLModule {
         updateInventoryItem.InventoryData_Fields.add(inventoryData);
         updateInventoryItem.isReliable = true;
         Debug.Printf("Update inventory callback %d", Integer.valueOf(inventoryData.CallbackID));
-        updateInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.13
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        updateInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 super.onMessageAcknowledged(sLMessage);
                 onInventoryCallbackListener.onInventoryCallback(sLInventoryEntry);
@@ -370,7 +369,6 @@ public class SLInventory extends SLModule {
         SendMessage(updateTaskInventory);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void MoveTaskInventory(UUID uuid, int i, UUID uuid2) {
         MoveTaskInventory moveTaskInventory = new MoveTaskInventory();
         moveTaskInventory.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -382,14 +380,13 @@ public class SLInventory extends SLModule {
         SendMessage(moveTaskInventory);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void StartUploadingNotecardContents(final SLInventoryEntry sLInventoryEntry, @Nullable final UUID uuid, final boolean z, final byte[] bArr, final OnNotecardUpdatedListener onNotecardUpdatedListener) {
-        GenericHTTPExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.9
+        GenericHTTPExecutor.getInstance().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLInventory.this.m190x8292c7bb((SLInventoryEntry) sLInventoryEntry, (byte[]) bArr, (UUID) uuid, z, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -483,7 +480,6 @@ public class SLInventory extends SLModule {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void fetchNextFolder() {
         if (!this.fetchEntireInventoryRequested.get()) {
             updateSearchRunningStatus();
@@ -518,22 +514,16 @@ public class SLInventory extends SLModule {
         return this.nextCallbackID.getAndIncrement();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onNextFolderError, reason: merged with bridge method [inline-methods] */
     public void onNextFolderError(Throwable th) {
         fetchNextFolder();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onNextFolderFetched, reason: merged with bridge method [inline-methods] */
     public void onNextFolderFetched(SLInventoryEntry sLInventoryEntry) {
         if (Objects.equal(sLInventoryEntry.sessionID, this.circuitInfo.sessionID)) {
             fetchNextFolder();
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onRootFolderFetched, reason: merged with bridge method [inline-methods] */
     public void onRootFolderFetched(SLInventoryEntry sLInventoryEntry) {
         this.rootFolderFetchNeeded = false;
         if (this.rootFolderSubscription != null) {
@@ -542,14 +532,12 @@ public class SLInventory extends SLModule {
         Debug.Printf("Inventory: Fetched root folder.", new Object[0]);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateFolderLoadingStatus(@Nonnull UUID uuid) {
         if (this.folderLoadingResultHandler != null) {
             this.folderLoadingResultHandler.onResultData(uuid, Boolean.valueOf(this.fetchRequests.containsKey(uuid)));
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateSearchRunningStatus() {
         if (this.searchRunningRequestHandler != null) {
             this.seachRunningResultHandler.onResultData(SubscriptionSingleKey.Value, Boolean.valueOf(this.fetchEntireInventoryRequested.get() ? this.nextFolderSubscription.isSubscribed() : false));
@@ -575,12 +563,12 @@ public class SLInventory extends SLModule {
     }
 
     public void CopyInventoryFromNotecard(final UUID uuid, final UUID uuid2, final UUID uuid3, @Nullable final Runnable runnable) {
-        GenericHTTPExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.5
+        GenericHTTPExecutor.getInstance().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLInventory.this.m193x829dc330((UUID) uuid, (UUID) uuid2, (UUID) uuid3, (Runnable) runnable);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -607,12 +595,12 @@ public class SLInventory extends SLModule {
             function.apply(null);
         } else {
             final ImmutableSet copyOf = ImmutableSet.copyOf((Collection) set);
-            this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.6
+            this.dbExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     SLInventory.this.m194x829e9985((String) str, (ImmutableSet) copyOf, i, (Function) function);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -629,8 +617,8 @@ public class SLInventory extends SLModule {
             folderData.FolderID = sLInventoryEntry.uuid;
             removeInventoryFolder.FolderData_Fields.add(folderData);
             removeInventoryFolder.isReliable = true;
-            removeInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.6
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            removeInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                     SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.parentUUID);
                 }
@@ -645,8 +633,8 @@ public class SLInventory extends SLModule {
         inventoryData.ItemID = sLInventoryEntry.uuid;
         removeInventoryItem.InventoryData_Fields.add(inventoryData);
         removeInventoryItem.isReliable = true;
-        removeInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.7
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        removeInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.parentUUID);
             }
@@ -676,8 +664,8 @@ public class SLInventory extends SLModule {
             removeInventoryObjects.ItemData_Fields.add(itemData);
         }
         removeInventoryObjects.isReliable = true;
-        removeInventoryObjects.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.8
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        removeInventoryObjects.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.uuid);
             }
@@ -714,8 +702,8 @@ public class SLInventory extends SLModule {
         createInventoryFolder.FolderData_Field.Type = -1;
         createInventoryFolder.FolderData_Field.Name = SLMessage.stringToVariableOEM(str);
         createInventoryFolder.isReliable = true;
-        createInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.16
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        createInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 Debug.Printf("Inventory: new folder created with uuid = %s, parent %s", randomUUID, sLInventoryEntry.uuid);
                 if (SLInventory.this.userManager != null) {
@@ -857,7 +845,7 @@ public class SLInventory extends SLModule {
         this.eventBus.publish(sLInventoryNewContentsEvent);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         super.HandleCircuitReady();
         if (!this.rootFolderFetchNeeded || this.rootFolderSubscription == null || this.rootFolder == null || this.userManager == null) {
@@ -867,7 +855,7 @@ public class SLInventory extends SLModule {
         this.rootFolderSubscription.subscribe(this.userManager.getInventoryManager().getFolderEntryPool(), this.rootFolder.uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.rootFolderSubscription != null) {
             this.rootFolderSubscription.unsubscribe();
@@ -969,8 +957,8 @@ public class SLInventory extends SLModule {
         linkInventoryItem.InventoryBlock_Field.Name = SLMessage.stringToVariableOEM(str);
         linkInventoryItem.InventoryBlock_Field.Description = SLMessage.stringToVariableOEM(str2);
         linkInventoryItem.isReliable = true;
-        linkInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.9
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        linkInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.uuid);
             }
@@ -991,8 +979,8 @@ public class SLInventory extends SLModule {
             folderData.Name = SLMessage.stringToVariableUTF(sLInventoryEntry.name);
             updateInventoryFolder.FolderData_Fields.add(folderData);
             updateInventoryFolder.isReliable = true;
-            updateInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.10
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            updateInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                     SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(uuid);
                     SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry2.uuid);
@@ -1012,8 +1000,8 @@ public class SLInventory extends SLModule {
         inventoryData.NewName = SLMessage.stringToVariableUTF(sLInventoryEntry.name);
         moveInventoryItem.InventoryData_Fields.add(inventoryData);
         moveInventoryItem.isReliable = true;
-        moveInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.11
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        moveInventoryItem.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(uuid);
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry2.uuid);
@@ -1045,12 +1033,12 @@ public class SLInventory extends SLModule {
             Debug.Warning(e);
         }
         if (!sLInventoryEntry.isFolder) {
-            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.3
+            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() {
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
                     SLInventory.this.m188x827623db((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
+                @Override
                 public final void onInventoryCallback(SLInventoryEntry sLInventoryEntry2) {
                     $m$0(sLInventoryEntry2);
                 }
@@ -1067,8 +1055,8 @@ public class SLInventory extends SLModule {
         folderData.Name = SLMessage.stringToVariableUTF(str);
         updateInventoryFolder.FolderData_Fields.add(folderData);
         updateInventoryFolder.isReliable = true;
-        updateInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.12
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        updateInventoryFolder.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.uuid);
                 SLInventory.this.userManager.getInventoryManager().requestFolderUpdate(sLInventoryEntry.parentUUID);
@@ -1098,8 +1086,8 @@ public class SLInventory extends SLModule {
             }
             sLInventoryEntry.name = str;
             sLInventoryEntry.description = str2;
-            DoUpdateTaskInventoryItem(sLInventoryEntry, i, new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.14
-                @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+            DoUpdateTaskInventoryItem(sLInventoryEntry, i, new SLMessageEventListener.SLMessageBaseEventListener() {
+                @Override
                 public void onMessageAcknowledged(SLMessage sLMessage) {
                     SLInventory.this.userManager.getObjectsManager().requestTaskInventoryUpdate(i);
                     SLInventory.this.StartUploadingNotecardContents(sLInventoryEntry, uuid2, z, bArr, onNotecardUpdatedListener);
@@ -1109,12 +1097,12 @@ public class SLInventory extends SLModule {
         }
         if (sLInventoryEntry == null) {
             Debug.Printf("Notecard: Creating new inventory entry.", new Object[0]);
-            DoCreateInventoryItem(uuid, z ? SLAssetType.AT_LSL_TEXT.getTypeCode() : SLAssetType.AT_NOTECARD.getTypeCode(), z ? SLInventoryType.IT_LSL.getTypeCode() : SLInventoryType.IT_NOTECARD.getTypeCode(), str, str2, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.7
+            DoCreateInventoryItem(uuid, z ? SLAssetType.AT_LSL_TEXT.getTypeCode() : SLAssetType.AT_NOTECARD.getTypeCode(), z ? SLInventoryType.IT_LSL.getTypeCode() : SLInventoryType.IT_NOTECARD.getTypeCode(), str, str2, new OnInventoryCallbackListener() {
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
                     SLInventory.this.m191x82934f61(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
+                @Override
                 public final void onInventoryCallback(SLInventoryEntry sLInventoryEntry2) {
                     $m$0(sLInventoryEntry2);
                 }
@@ -1132,12 +1120,12 @@ public class SLInventory extends SLModule {
                 Debug.Warning(e);
             }
             Debug.Printf("Notecard: Updating existing inventory entry %s", sLInventoryEntry.uuid);
-            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.8
+            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() {
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
                     SLInventory.this.m192x829d436f(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
+                @Override
                 public final void onInventoryCallback(SLInventoryEntry sLInventoryEntry2) {
                     $m$0(sLInventoryEntry2);
                 }
@@ -1148,12 +1136,12 @@ public class SLInventory extends SLModule {
     public void UpdateStoreInventoryItem(final SLInventoryEntry sLInventoryEntry) {
         try {
             this.db.saveEntry(sLInventoryEntry);
-            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.4
+            DoUpdateInventoryItem(sLInventoryEntry, new OnInventoryCallbackListener() {
                 private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
                     SLInventory.this.m189x82901fe6((SLInventoryEntry) sLInventoryEntry, sLInventoryEntry2);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnInventoryCallbackListener
+                @Override
                 public final void onInventoryCallback(SLInventoryEntry sLInventoryEntry2) {
                     $m$0(sLInventoryEntry2);
                 }
@@ -1275,8 +1263,8 @@ public class SLInventory extends SLModule {
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_53068, reason: not valid java name */
     /* synthetic */ void m194x829e9985(String str, final ImmutableSet immutableSet, final int i, final Function function) {
-        DoCreateNewFolder(this.rootFolder, str, true, new Function<UUID, Void>() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.15
-            @Override // com.google.common.base.Function
+        DoCreateNewFolder(this.rootFolder, str, true, new Function<UUID, Void>() {
+            @Override
             @Nullable
             public Void apply(@Nullable UUID uuid) {
                 if (uuid != null) {
@@ -1293,12 +1281,12 @@ public class SLInventory extends SLModule {
 
     void onFetchComplete(SLInventoryFetchRequest sLInventoryFetchRequest, final UUID uuid, final long j, final boolean z, final boolean z2) {
         if (this.dbExecutor != null) {
-            this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.10
+            this.dbExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     SLInventory.this.m187x8264e904(j, (UUID) uuid, z, z2);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }

@@ -6,24 +6,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DEPRECATED: DirPopularReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code DirPopularReply Low 53 Trusted Zerocoded Deprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class DirPopularReply extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public float Dwell;
-        public byte[] Name;
-        public UUID ParcelID;
+        public float Dwell; // F32
+        public byte[] Name; // Variable 1
+        public UUID ParcelID; // LLUUID
     }
 
     public DirPopularReply() {
@@ -32,7 +42,7 @@ public class DirPopularReply extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
@@ -45,16 +55,17 @@ public class DirPopularReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirPopularReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 53);
+        // Message number: Low 53 (DirPopularReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x35);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         byteBuffer.put((byte) this.QueryReplies_Fields.size());
@@ -65,7 +76,7 @@ public class DirPopularReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

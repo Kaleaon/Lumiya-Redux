@@ -7,17 +7,16 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class SLURL implements Parcelable {
-    public static final Parcelable.Creator<SLURL> CREATOR = new Parcelable.Creator<SLURL>() { // from class: com.lumiyaviewer.lumiya.slproto.SLURL.1
+    public static final Parcelable.Creator<SLURL> CREATOR = new Parcelable.Creator<SLURL>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLURL createFromParcel(Parcel parcel) {
             return new SLURL(parcel, null);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLURL[] newArray(int i) {
             return new SLURL[i];
         }
@@ -86,7 +85,7 @@ public class SLURL implements Parcelable {
         this(parcel);
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -111,7 +110,7 @@ public class SLURL implements Parcelable {
         return "uri:" + TextUtils.htmlEncode(this.locationName) + "&amp;" + Integer.toString(this.locationX) + "&amp;" + Integer.toString(this.locationY) + "&amp;" + Integer.toString(this.locationZ);
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(this.locationName);
         parcel.writeInt(this.locationX);

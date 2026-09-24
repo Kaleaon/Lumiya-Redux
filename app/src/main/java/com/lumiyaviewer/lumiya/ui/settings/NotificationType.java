@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.settings;
 
 import com.google.common.collect.ImmutableList;
 
-/* loaded from: classes.dex */
 public enum NotificationType {
     LocalChat(0, "notify_local_chat", "enableNotifyLocalChat", "soundOnLocalChat", "notifySoundLocalChat", "notifyLEDchatIMs", "notifyLEDColorChatIMs"),
     Private(2, "notify_private_im", "enableNotifyPrivateIM", "soundOnPrivateIM", "notifySoundPrivateIM", "notifyLEDprivateIMs", "notifyLEDColorPrivateIMs"),

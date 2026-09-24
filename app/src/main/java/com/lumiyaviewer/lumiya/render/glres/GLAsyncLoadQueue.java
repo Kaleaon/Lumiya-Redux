@@ -18,7 +18,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-/* loaded from: classes.dex */
 public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadHandler {
     private final EGL10 egl10;
     private final EGLContext eglBaseContext;
@@ -69,7 +68,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
             return eglCreateContext;
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             RenderContext andSet = this.renderContext.getAndSet(null);
             EGLContext createContext = createContext();
@@ -151,12 +150,12 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue.GLLoadHandler
+    @Override
     public void GLResourceLoaded(GLLoadQueue.GLLoadable gLLoadable) {
         this.loadedQueue.offer(gLLoadable);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     public void RunLoadQueue(@Nonnull RenderContext renderContext) {
         while (true) {
             GLLoadQueue.GLLoadable poll = this.loadedQueue.poll();
@@ -168,7 +167,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     public void StopLoadQueue() {
         Debug.Printf("TexLoad: StopLoadQueue called.", new Object[0]);
         this.mustExit.set(true);
@@ -181,7 +180,7 @@ public class GLAsyncLoadQueue extends GLLoadQueue implements GLLoadQueue.GLLoadH
         Debug.Printf("TexLoad: StopLoadQueue exiting.", new Object[0]);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLLoadQueue
+    @Override
     public void remove(@Nonnull GLLoadQueue.GLLoadable gLLoadable) {
         this.loadedQueue.remove(gLLoadable);
         super.remove(gLLoadable);

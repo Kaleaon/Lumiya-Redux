@@ -6,22 +6,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AgentGroupDataUpdate
+ * Updates a viewer or simulator's impression of the groups an agent is in.
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code AgentGroupDataUpdate Low 389 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAgent::processAgentGroupDataUpdate()} in indra/newview/llagent.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AgentGroupDataUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<GroupData> GroupData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block GroupData, Variable. */
     public static class GroupData {
-        public boolean AcceptNotices;
-        public int Contribution;
-        public UUID GroupID;
-        public UUID GroupInsigniaID;
-        public byte[] GroupName;
-        public long GroupPowers;
+        public boolean AcceptNotices; // BOOL
+        public int Contribution; // S32
+        public UUID GroupID; // LLUUID
+        public UUID GroupInsigniaID; // LLUUID
+        public byte[] GroupName; // Variable 1 - string
+        public long GroupPowers; // U64
     }
 
     public AgentGroupDataUpdate() {
@@ -29,7 +41,7 @@ public class AgentGroupDataUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 21;
         Iterator<?> it = this.GroupData_Fields.iterator();
@@ -42,16 +54,17 @@ public class AgentGroupDataUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAgentGroupDataUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -123);
+        // Message number: Low 389 (AgentGroupDataUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x85);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         byteBuffer.put((byte) this.GroupData_Fields.size());
         for (GroupData groupData : this.GroupData_Fields) {
@@ -64,7 +77,7 @@ public class AgentGroupDataUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;

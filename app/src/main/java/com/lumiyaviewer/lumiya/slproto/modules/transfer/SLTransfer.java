@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/* loaded from: classes.dex */
 public class SLTransfer {
     public static final int AT_ANIMATION = 20;
     public static final int AT_BODYPART = 13;

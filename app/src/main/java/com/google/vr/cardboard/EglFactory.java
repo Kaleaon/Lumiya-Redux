@@ -10,7 +10,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-/* loaded from: classes.dex */
 public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceView.EGLWindowSurfaceFactory {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
     private static final int EGL_CONTEXT_PRIORITY_HIGH = 12545;
@@ -26,7 +25,7 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
         return egl10.eglQueryString(eGLDisplay, 12373).contains("EGL_EXT_protected_content");
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLContextFactory
+    @Override
     public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
         IntBuffer allocate = IntBuffer.allocate(8);
         allocate.put(EGL_CONTEXT_CLIENT_VERSION);
@@ -51,7 +50,7 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
         return egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, allocate.array());
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
+    @Override
     public EGLSurface createWindowSurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, Object obj) {
         try {
             return egl10.eglCreateWindowSurface(eGLDisplay, eGLConfig, obj, (this.useProtected && supportsProtectedContent(egl10, eGLDisplay)) ? new int[]{EGL_PROTECTED_CONTENT_EXT, 1, 12344} : null);
@@ -61,12 +60,12 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
         }
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLContextFactory
+    @Override
     public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
         egl10.eglDestroyContext(eGLDisplay, eGLContext);
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
+    @Override
     public void destroySurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLSurface eGLSurface) {
         egl10.eglDestroySurface(eGLDisplay, eGLSurface);
     }

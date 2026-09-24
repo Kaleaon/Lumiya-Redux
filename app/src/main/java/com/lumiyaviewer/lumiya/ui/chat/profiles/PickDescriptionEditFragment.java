@@ -15,15 +15,14 @@ import com.lumiyaviewer.lumiya.ui.common.ChatterFragment;
 import com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class PickDescriptionEditFragment extends TextFieldEditFragment {
     private static final String AVATAR_PICK_KEY = "avatarPickKey";
-    private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$Y7Ne2VWglUcvjFUgJydWWKVgIXM
+    private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             PickDescriptionEditFragment.this.onPickInfoReply((PickInfoReply) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -43,20 +42,18 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
         return makeSelection;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onPickInfoReply, reason: merged with bridge method [inline-methods] */
     public void onPickInfoReply(PickInfoReply pickInfoReply) {
         if (pickInfoReply != null) {
             setOriginalText(SLMessage.stringFromVariableUTF(pickInfoReply.Data_Field.Desc));
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected String getFieldHint(Context context) {
         return getString(R.string.pick_description_edit_hint);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         AvatarPickKey pickKey = getPickKey();
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDUser) || pickKey == null) {
@@ -66,7 +63,7 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment
+    @Override
     protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
         AvatarPickKey pickKey = getPickKey();
         PickInfoReply data = this.pickInfo.getData();

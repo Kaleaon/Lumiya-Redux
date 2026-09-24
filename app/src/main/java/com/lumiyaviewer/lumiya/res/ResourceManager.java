@@ -16,14 +16,13 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class ResourceManager<ResourceParams, ResourceType> {
     private final Object lock = new Object();
     private volatile ScheduledFuture<?> cleanupFuture = null;
     private final Queue<ResourceRequest<ResourceParams, ResourceType>> cancelledRequests = new ConcurrentLinkedQueue();
-    private final RemovalListener<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>> removalListener = new RemovalListener<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>>() { // from class: com.lumiyaviewer.lumiya.res.ResourceManager.1
+    private final RemovalListener<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>> removalListener = new RemovalListener<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>>() {
         /* JADX WARN: Multi-variable type inference failed */
-        @Override // com.google.common.cache.RemovalListener
+        @Override
         public void onRemoval(@Nonnull RemovalNotification<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>> removalNotification) {
             ResourceConsumer key = removalNotification.getKey();
             ResourceRequest<ResourceParams, ResourceType> value = removalNotification.getValue();
@@ -43,15 +42,15 @@ public abstract class ResourceManager<ResourceParams, ResourceType> {
         }
     };
     private final Cache<ResourceConsumer, ResourceRequest<ResourceParams, ResourceType>> consumerMap = CacheBuilder.newBuilder().weakKeys().removalListener(this.removalListener).build();
-    private final LoadingCache<ResourceParams, ResourceRequest<ResourceParams, ResourceType>> requestMap = (LoadingCache<ResourceParams, ResourceRequest<ResourceParams, ResourceType>>) CacheBuilder.newBuilder().weakValues().build(new CacheLoader<ResourceParams, ResourceRequest<ResourceParams, ResourceType>>() { // from class: com.lumiyaviewer.lumiya.res.ResourceManager.2
-        @Override // com.google.common.cache.CacheLoader
+    private final LoadingCache<ResourceParams, ResourceRequest<ResourceParams, ResourceType>> requestMap = (LoadingCache<ResourceParams, ResourceRequest<ResourceParams, ResourceType>>) CacheBuilder.newBuilder().weakValues().build(new CacheLoader<ResourceParams, ResourceRequest<ResourceParams, ResourceType>>() {
+        @Override
         public ResourceRequest<ResourceParams, ResourceType> load(@Nonnull ResourceParams resourceparams) throws Exception {
             return ResourceManager.this.CreateNewRequest(resourceparams, ResourceManager.this);
         }
 
     });
-    private final Runnable cleanup = new Runnable() { // from class: com.lumiyaviewer.lumiya.res.ResourceManager.3
-        @Override // java.lang.Runnable
+    private final Runnable cleanup = new Runnable() {
+        @Override
         public void run() {
             ResourceManager.this.collectReferences();
         }

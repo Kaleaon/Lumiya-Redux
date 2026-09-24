@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.terrain.TerrainPatchInfo;
 import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class DrawListTerrainEntry extends DrawListEntry {
     private volatile WeakReference<DrawableTerrainPatch> drawablePatch;
 
@@ -20,7 +19,7 @@ class DrawListTerrainEntry extends DrawListEntry {
         updatePatchInfo(terrainPatchInfo);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.spatial.DrawListEntry
+    @Override
     public void addToDrawList(@Nonnull DrawList drawList) {
         WeakReference<DrawableTerrainPatch> weakReference = this.drawablePatch;
         DrawableTerrainPatch drawableTerrainPatch = weakReference != null ? weakReference.get() : null;

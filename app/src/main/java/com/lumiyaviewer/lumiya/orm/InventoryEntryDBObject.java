@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.orm.DBObject;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class InventoryEntryDBObject extends DBObject implements Parcelable {
     public static final String insertQuery = "INSERT INTO Entries (parent_id,uuid_high,uuid_low,parentUUID_high,parentUUID_low,name,isFolder,typeDefault,version,sessionID_high,sessionID_low,fetchFailed,description,flags,invType,assetType,creationDate,_blobField) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     public static final int insertUpdateParamCount = 18;
@@ -54,15 +53,15 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
     // - _blobField packs agent/asset/creator/owner/group UUIDs, permission masks,
     //   and sale info from message_template inventory update payloads.
     protected static final String[] fieldNames = {"_id", "parent_id", "uuid_high", "uuid_low", "parentUUID_high", "parentUUID_low", "name", "isFolder", "typeDefault", "version", "sessionID_high", "sessionID_low", "fetchFailed", "description", "flags", "invType", "assetType", "creationDate", "_blobField"};
-    public static final Parcelable.Creator<InventoryEntryDBObject> CREATOR = new Parcelable.Creator<InventoryEntryDBObject>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryEntryDBObject.1
+    public static final Parcelable.Creator<InventoryEntryDBObject> CREATOR = new Parcelable.Creator<InventoryEntryDBObject>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryEntryDBObject createFromParcel(Parcel parcel) {
             return new InventoryEntryDBObject(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryEntryDBObject[] newArray(int i) {
             return new InventoryEntryDBObject[i];
         }
@@ -129,7 +128,7 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         return dBHandle.getDB().queryWithFactory(dBHandle, false, tableName, fieldNames, str, strArr, null, null, str2, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public void bindInsertOrUpdate(SQLiteStatement sQLiteStatement) {
         sQLiteStatement.bindLong(1, this.parent_id);
         if (this.uuid != null) {
@@ -225,12 +224,12 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         sQLiteStatement.bindBlob(18, wrap.array());
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public ContentValues getContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("parent_id", Long.valueOf(this.parent_id));
@@ -320,17 +319,17 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         return contentValues;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public String[] getFieldNames() {
         return fieldNames;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public String getTableName() {
         return tableName;
     }
 
-    @Override // com.lumiyaviewer.lumiya.orm.DBObject
+    @Override
     public void loadFromCursor(Cursor cursor) {
         this._id = cursor.getLong(0);
         this.parent_id = cursor.getLong(1);
@@ -364,7 +363,7 @@ public class InventoryEntryDBObject extends DBObject implements Parcelable {
         this.salePrice = wrap.getInt();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(this._id);
         parcel.writeLong(this.parent_id);

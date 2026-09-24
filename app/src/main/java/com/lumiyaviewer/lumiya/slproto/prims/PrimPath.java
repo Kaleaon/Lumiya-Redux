@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class PrimPath {
     private static final int MIN_DETAIL_FACES = 6;
     private static float[] tableScale = {1.0f, 1.0f, 1.0f, 0.5f, 0.707107f, 0.53f, 0.525f, 0.5f};

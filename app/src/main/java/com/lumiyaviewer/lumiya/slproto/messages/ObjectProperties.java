@@ -6,45 +6,55 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectProperties
+ * Extended information such as creator, permissions, etc.
+ * Medium because potentially driven by mouse hover events.
+ *
+ * <p>Template: {@code ObjectProperties Medium 9 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLSelectMgr::processObjectProperties()} in indra/newview/llselectmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ObjectProperties extends SLMessage {
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int AggregatePermTextures;
-        public int AggregatePermTexturesOwner;
-        public int AggregatePerms;
-        public int BaseMask;
-        public int Category;
-        public long CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public UUID FolderID;
-        public UUID FromTaskID;
-        public UUID GroupID;
-        public int GroupMask;
-        public int InventorySerial;
-        public UUID ItemID;
-        public UUID LastOwnerID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int OwnershipCost;
-        public int SalePrice;
-        public int SaleType;
-        public byte[] SitName;
-        public byte[] TextureID;
-        public byte[] TouchName;
+        public int AggregatePermTextures; // U8
+        public int AggregatePermTexturesOwner; // U8
+        public int AggregatePerms; // U8
+        public int BaseMask; // U32
+        public int Category; // U32 - LLCategory
+        public long CreationDate; // U64
+        public UUID CreatorID; // LLUUID
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32
+        public UUID FolderID; // LLUUID
+        public UUID FromTaskID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public int GroupMask; // U32
+        public int InventorySerial; // S16
+        public UUID ItemID; // LLUUID
+        public UUID LastOwnerID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public int OwnerMask; // U32
+        public int OwnershipCost; // S32
+        public int SalePrice; // S32
+        public int SaleType; // U8 - > EForSale
+        public byte[] SitName; // Variable 1
+        public byte[] TextureID; // Variable 1
+        public byte[] TouchName; // Variable 1
     }
 
     public ObjectProperties() {
         this.zeroCoded = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 3;
         Iterator<?> it = this.ObjectData_Fields.iterator();
@@ -58,15 +68,16 @@ public class ObjectProperties extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectProperties(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 9);
+        // Message number: Medium 9 (ObjectProperties).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x09);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
         for (ObjectData objectData : this.ObjectData_Fields) {
             packUUID(byteBuffer, objectData.ObjectID);
@@ -99,7 +110,7 @@ public class ObjectProperties extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

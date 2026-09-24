@@ -1,7 +1,6 @@
 package com.google.protobuf.nano;
 
 import com.google.common.logging.nano.Vr;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.users.SLGroupInfo;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
@@ -9,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ReadOnlyBufferException;
 
-/* loaded from: classes.dex */
 public final class CodedOutputByteBufferNano {
     public static final int LITTLE_ENDIAN_32_SIZE = 4;
     public static final int LITTLE_ENDIAN_64_SIZE = 8;
@@ -294,7 +292,7 @@ public final class CodedOutputByteBufferNano {
                 bArr[i6] = (byte) charAt;
             } else if (charAt < 2048 && i6 <= i5 - 2) {
                 int i7 = i6 + 1;
-                bArr[i6] = (byte) ((charAt >>> 6) | SLMoveEvents.AGENT_CONTROL_ROTATION);
+                bArr[i6] = (byte) ((charAt >>> 6) | 0x3C0);
                 i3 = i7 + 1;
                 bArr[i7] = (byte) ((charAt & '?') | 128);
             } else {
@@ -357,7 +355,7 @@ public final class CodedOutputByteBufferNano {
             if (charAt < 128) {
                 byteBuffer.put((byte) charAt);
             } else if (charAt < 2048) {
-                byteBuffer.put((byte) ((charAt >>> 6) | SLMoveEvents.AGENT_CONTROL_ROTATION));
+                byteBuffer.put((byte) ((charAt >>> 6) | 0x3C0));
                 byteBuffer.put((byte) ((charAt & '?') | 128));
             } else {
                 if (charAt >= 55296 && 57343 >= charAt) {

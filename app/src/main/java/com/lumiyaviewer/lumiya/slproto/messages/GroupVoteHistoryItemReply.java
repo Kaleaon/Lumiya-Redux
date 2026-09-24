@@ -6,40 +6,51 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupVoteHistoryItemReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code GroupVoteHistoryItemReply Low 362 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupVoteHistoryItemReply extends SLMessage {
     public AgentData AgentData_Field;
     public HistoryItemData HistoryItemData_Field;
     public TransactionData TransactionData_Field;
     public ArrayList<VoteItem> VoteItem_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block HistoryItemData, Single. */
     public static class HistoryItemData {
-        public byte[] EndDateTime;
-        public float Majority;
-        public byte[] ProposalText;
-        public int Quorum;
-        public byte[] StartDateTime;
-        public byte[] TerseDateID;
-        public UUID VoteID;
-        public UUID VoteInitiator;
-        public byte[] VoteResult;
-        public byte[] VoteType;
+        public byte[] EndDateTime; // Variable 1 - string
+        public float Majority; // F32
+        public byte[] ProposalText; // Variable 2 - string
+        public int Quorum; // S32
+        public byte[] StartDateTime; // Variable 1 - string
+        public byte[] TerseDateID; // Variable 1 - string
+        public UUID VoteID; // LLUUID
+        public UUID VoteInitiator; // LLUUID
+        public byte[] VoteResult; // Variable 1 - string
+        public byte[] VoteType; // Variable 1 - string
     }
 
+    /** Block TransactionData, Single. */
     public static class TransactionData {
-        public int TotalNumItems;
-        public UUID TransactionID;
+        public int TotalNumItems; // U32
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block VoteItem, Variable. */
     public static class VoteItem {
-        public UUID CandidateID;
-        public int NumVotes;
-        public byte[] VoteCast;
+        public UUID CandidateID; // LLUUID
+        public int NumVotes; // S32
+        public byte[] VoteCast; // Variable 1 - string
     }
 
     public GroupVoteHistoryItemReply() {
@@ -49,7 +60,7 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         this.HistoryItemData_Field = new HistoryItemData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.HistoryItemData_Field.TerseDateID.length + 17 + 1 + this.HistoryItemData_Field.StartDateTime.length + 1 + this.HistoryItemData_Field.EndDateTime.length + 16 + 1 + this.HistoryItemData_Field.VoteType.length + 1 + this.HistoryItemData_Field.VoteResult.length + 4 + 4 + 2 + this.HistoryItemData_Field.ProposalText.length + 56 + 1;
         Iterator<?> it = this.VoteItem_Fields.iterator();
@@ -62,16 +73,17 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupVoteHistoryItemReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 106);
+        // Message number: Low 362 (GroupVoteHistoryItemReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x6A);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.TransactionData_Field.TransactionID);
@@ -94,7 +106,7 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);

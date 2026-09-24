@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.textures;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_SLTextureEntryFace extends SLTextureEntryFace {
     private final float glow;
     private final int hasAttribute;
@@ -47,12 +46,12 @@ final class AutoValue_SLTextureEntryFace extends SLTextureEntryFace {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float glow() {
         return this.glow;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public int hasAttribute() {
         return this.hasAttribute;
     }
@@ -61,47 +60,47 @@ final class AutoValue_SLTextureEntryFace extends SLTextureEntryFace {
         return (((((((((((((((((((((this.textureID == null ? 0 : this.textureID.hashCode()) ^ 1000003) * 1000003) ^ this.rgba) * 1000003) ^ Float.floatToIntBits(this.repeatU)) * 1000003) ^ Float.floatToIntBits(this.repeatV)) * 1000003) ^ Float.floatToIntBits(this.offsetU)) * 1000003) ^ Float.floatToIntBits(this.offsetV)) * 1000003) ^ Float.floatToIntBits(this.rotation)) * 1000003) ^ Float.floatToIntBits(this.glow)) * 1000003) ^ this.materialb) * 1000003) ^ this.mediab) * 1000003) ^ this.hasAttribute;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public byte materialb() {
         return this.materialb;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public byte mediab() {
         return this.mediab;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float offsetU() {
         return this.offsetU;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float offsetV() {
         return this.offsetV;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float repeatU() {
         return this.repeatU;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float repeatV() {
         return this.repeatV;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public int rgba() {
         return this.rgba;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     public float rotation() {
         return this.rotation;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
+    @Override
     @Nullable
     public UUID textureID() {
         return this.textureID;

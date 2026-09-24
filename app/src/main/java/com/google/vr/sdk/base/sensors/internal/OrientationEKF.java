@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class OrientationEKF {
     static final /* synthetic */ boolean $assertionsDisabled;
     private static final double MAX_ACCEL_NOISE_SIGMA = 7.0d;

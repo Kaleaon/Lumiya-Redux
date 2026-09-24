@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 class WeakRequestSet<T> {
     private final Map<T, Set<WeakReference<Object>>> requests = new HashMap();
     private final Object lock = new Object();

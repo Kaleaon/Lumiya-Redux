@@ -1,5 +1,6 @@
 package com.google.vr.sdk.base;
 
+import android.view.Window;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -9,7 +10,6 @@ import com.google.vr.cardboard.AndroidNCompat;
 import com.google.vr.cardboard.FullscreenMode;
 import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 
-/* loaded from: classes.dex */
 public class GvrActivity extends Activity {
     private boolean androidVrModeEnabled;
     private GvrView cardboardView;
@@ -30,14 +30,14 @@ public class GvrActivity extends Activity {
     public void onCardboardTrigger() {
     }
 
-    @Override // android.app.Activity
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        requestWindowFeature(1);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.fullscreenMode = new FullscreenMode(getWindow());
     }
 
-    @Override // android.app.Activity
+    @Override
     protected void onDestroy() {
         if (this.cardboardView != null) {
             this.cardboardView.setOnCardboardTriggerListener(null);
@@ -47,17 +47,17 @@ public class GvrActivity extends Activity {
         super.onDestroy();
     }
 
-    @Override // android.app.Activity, android.view.KeyEvent.Callback
+    @Override
     public boolean onKeyDown(int i, KeyEvent keyEvent) {
         return shouldSuppressKey(i) || super.onKeyDown(i, keyEvent);
     }
 
-    @Override // android.app.Activity, android.view.KeyEvent.Callback
+    @Override
     public boolean onKeyUp(int i, KeyEvent keyEvent) {
         return shouldSuppressKey(i) || super.onKeyUp(i, keyEvent);
     }
 
-    @Override // android.app.Activity
+    @Override
     protected void onPause() {
         super.onPause();
         if (this.cardboardView != null) {
@@ -66,7 +66,7 @@ public class GvrActivity extends Activity {
         this.screenOnFlagHelper.stop();
     }
 
-    @Override // android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         if (this.cardboardView != null) {
@@ -76,13 +76,13 @@ public class GvrActivity extends Activity {
         this.screenOnFlagHelper.start();
     }
 
-    @Override // android.app.Activity, android.view.Window.Callback
+    @Override
     public void onWindowFocusChanged(boolean z) {
         super.onWindowFocusChanged(z);
         this.fullscreenMode.onWindowFocusChanged(z);
     }
 
-    @Override // android.app.Activity
+    @Override
     public void setContentView(View view) {
         if (view instanceof GvrView) {
             setGvrView((GvrView) view);
@@ -90,7 +90,7 @@ public class GvrActivity extends Activity {
         super.setContentView(view);
     }
 
-    @Override // android.app.Activity
+    @Override
     public void setContentView(View view, ViewGroup.LayoutParams layoutParams) {
         if (view instanceof GvrView) {
             setGvrView((GvrView) view);
@@ -111,8 +111,8 @@ public class GvrActivity extends Activity {
             boolean z2 = gvrView != null;
             this.androidVrModeEnabled = AndroidNCompat.setVrModeEnabled(this, z2, !z ? 0 : 1) && z2;
             if (gvrView != null) {
-                gvrView.setOnCardboardTriggerListener(new Runnable() { // from class: com.google.vr.sdk.base.GvrActivity.1
-                    @Override // java.lang.Runnable
+                gvrView.setOnCardboardTriggerListener(new Runnable() {
+                    @Override
                     public void run() {
                         GvrActivity.this.onCardboardTrigger();
                     }

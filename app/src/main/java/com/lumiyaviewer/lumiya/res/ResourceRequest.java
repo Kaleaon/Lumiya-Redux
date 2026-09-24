@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-/* loaded from: classes.dex */
 public abstract class ResourceRequest<ResourceParams, ResourceType> {
     private final ResourceManager<ResourceParams, ResourceType> manager;
     private final ResourceParams params;

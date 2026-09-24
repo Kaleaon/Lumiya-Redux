@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
 import com.lumiyaviewer.lumiya.ui.chat.TypingIndicatorView;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatterItemViewBuilder {
     private float distance;
     private boolean isActiveGroup;
@@ -40,14 +39,14 @@ public class ChatterItemViewBuilder {
             View findViewById = inflate.findViewById(R.id.onlineUserIcon);
             if (findViewById != null) {
                 if (this.onlineVisible) {
-                    findViewById.setVisibility(0);
+                    findViewById.setVisibility(View.VISIBLE);
                 } else {
-                    findViewById.setVisibility(8);
+                    findViewById.setVisibility(View.GONE);
                 }
             }
             View findViewById2 = inflate.findViewById(R.id.activeVoiceIcon);
             if (findViewById2 != null) {
-                findViewById2.setVisibility(this.voiceActive ? 0 : 8);
+                findViewById2.setVisibility(this.voiceActive ? View.VISIBLE : View.GONE);
             }
             TextView textView = (TextView) inflate.findViewById(z ? R.id.userDistanceInlineTextView : R.id.userDistanceTextView);
             if (textView != null) {
@@ -58,10 +57,10 @@ public class ChatterItemViewBuilder {
                     } else {
                         textView.setTypeface(Typeface.create(textView.getTypeface(), 0));
                     }
-                    textView.setVisibility(0);
+                    textView.setVisibility(View.VISIBLE);
                 } else {
                     textView.setText((CharSequence) null);
-                    textView.setVisibility(z ? 8 : 4);
+                    textView.setVisibility(z ? View.GONE : View.INVISIBLE);
                 }
             }
             if (z) {
@@ -69,35 +68,35 @@ public class ChatterItemViewBuilder {
             }
             View findViewById3 = inflate.findViewById(i);
             if (findViewById3 != null) {
-                findViewById3.setVisibility(8);
+                findViewById3.setVisibility(View.GONE);
             }
             TextView textView2 = (TextView) inflate.findViewById(R.id.unreadCountTextView);
             if (textView2 != null) {
                 textView2.setText(Integer.toString(this.unreadCount));
                 if (this.unreadCount != 0) {
-                    textView2.setVisibility(0);
+                    textView2.setVisibility(View.VISIBLE);
                 } else {
-                    textView2.setVisibility(8);
+                    textView2.setVisibility(View.GONE);
                 }
             }
             TextView textView3 = (TextView) inflate.findViewById(R.id.lastMessageText);
             if (textView3 != null) {
                 if (this.lastMessage != null) {
                     textView3.setText(this.lastMessage);
-                    textView3.setVisibility(0);
+                    textView3.setVisibility(View.VISIBLE);
                 } else {
-                    textView3.setVisibility(8);
+                    textView3.setVisibility(View.GONE);
                 }
             }
             View findViewById4 = inflate.findViewById(R.id.activeGroupIcon);
             if (findViewById4 != null) {
-                findViewById4.setVisibility(this.isActiveGroup ? 0 : 8);
+                findViewById4.setVisibility(this.isActiveGroup ? View.VISIBLE : View.GONE);
             }
             ChatterPicView chatterPicView = (ChatterPicView) inflate.findViewById(R.id.userPicView);
             if (chatterPicView != null) {
                 chatterPicView.setDefaultIcon(this.thumbnailDefaultIcon, false);
                 chatterPicView.setChatterID(this.thumbnailChatterID, this.thumbnailLabel);
-                chatterPicView.setVisibility((this.thumbnailChatterID == null && this.thumbnailDefaultIcon == -1) ? 8 : 0);
+                chatterPicView.setVisibility((this.thumbnailChatterID == null && this.thumbnailDefaultIcon == -1) ? View.GONE : View.VISIBLE);
             }
             TypingIndicatorView typingIndicatorView = (TypingIndicatorView) inflate.findViewById(R.id.typing_indicator);
             if (typingIndicatorView != null) {

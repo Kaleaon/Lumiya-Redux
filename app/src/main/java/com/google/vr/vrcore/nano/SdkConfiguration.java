@@ -9,7 +9,6 @@ import com.google.protobuf.nano.InvalidProtocolBufferNanoException;
 import com.google.protobuf.nano.MessageNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface SdkConfiguration {
 
     public static final class SdkConfigurationRequest extends ExtendableMessageNano<SdkConfigurationRequest> {
@@ -48,7 +47,7 @@ public interface SdkConfiguration {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if (this.sdkVersion != null) {
@@ -57,7 +56,7 @@ public interface SdkConfiguration {
             return this.requestedParams == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(2, this.requestedParams);
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final SdkConfigurationRequest mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -82,7 +81,7 @@ public interface SdkConfiguration {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if (this.sdkVersion != null) {
                 codedOutputByteBufferNano.writeString(1, this.sdkVersion);

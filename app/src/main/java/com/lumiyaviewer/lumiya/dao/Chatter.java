@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class Chatter {
     private boolean active;
     private Long id;

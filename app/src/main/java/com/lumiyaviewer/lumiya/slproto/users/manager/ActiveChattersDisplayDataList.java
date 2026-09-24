@@ -9,13 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class ActiveChattersDisplayDataList extends ChatterDisplayDataList {
     public ActiveChattersDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated) {
         super(userManager, onListUpdated, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterDisplayDataList
+    @Override
     protected List<ChatterID> getChatters() {
         List<Chatter> list = this.userManager.getDaoSession().getChatterDao().queryBuilder().where(ChatterDao.Properties.Active.notEq(false), new WhereCondition[0]).list();
         ArrayList arrayList = new ArrayList(list.size());

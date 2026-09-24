@@ -1,6 +1,5 @@
 package com.google.vr.ndk.base;
 
-/* loaded from: classes.dex */
 final class SerializationConstants {
     static final int BOUNDS_LENGTH = 4;
     static final int EYE_TYPE_LENGTH = 1;

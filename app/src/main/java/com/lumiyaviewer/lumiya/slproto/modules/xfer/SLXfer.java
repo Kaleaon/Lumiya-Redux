@@ -1,8 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.xfer;
 
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.messages.ConfirmXferPacket;
@@ -13,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLXfer {
     private boolean deleteOnCompletion;
     private String fileName;
@@ -65,7 +61,7 @@ public class SLXfer {
                 if (sendXferPacket.DataPacket_Field.Data.length < 4) {
                     return;
                 }
-                this.expectedDataLen = (sendXferPacket.DataPacket_Field.Data[0] & 0xFF) | ((sendXferPacket.DataPacket_Field.Data[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((sendXferPacket.DataPacket_Field.Data[2] << 16) & 16711680) | ((sendXferPacket.DataPacket_Field.Data[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
+                this.expectedDataLen = (sendXferPacket.DataPacket_Field.Data[0] & 0xFF) | ((sendXferPacket.DataPacket_Field.Data[1] << 8) & 0xFF00) | ((sendXferPacket.DataPacket_Field.Data[2] << 16) & 0xFF0000) | ((sendXferPacket.DataPacket_Field.Data[3] << 24) & 0xFF000000);
                 Debug.Printf("XferPacket: expected data len = %d (0x%x)", Integer.valueOf(this.expectedDataLen), Integer.valueOf(this.expectedDataLen));
                 this.receivedData = new byte[this.expectedDataLen];
                 length = sendXferPacket.DataPacket_Field.Data.length - 4;

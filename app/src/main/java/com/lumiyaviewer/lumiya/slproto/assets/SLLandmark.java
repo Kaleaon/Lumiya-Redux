@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLLandmark {
     public LLVector3 localPos;
     public UUID regionUUID;

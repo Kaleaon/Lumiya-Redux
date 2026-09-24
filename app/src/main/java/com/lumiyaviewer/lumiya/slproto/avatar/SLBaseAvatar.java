@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLBaseAvatar {
     private Map<MeshIndex, MeshEntry> meshes;
 

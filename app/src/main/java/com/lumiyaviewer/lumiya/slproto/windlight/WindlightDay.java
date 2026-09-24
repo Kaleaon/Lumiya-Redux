@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.windlight;
 
-/* loaded from: classes.dex */
 public class WindlightDay {
     private WindlightPreset[] presets = new WindlightPreset[defaultPresets.length];
     private static final float[] hourTable = {0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f};

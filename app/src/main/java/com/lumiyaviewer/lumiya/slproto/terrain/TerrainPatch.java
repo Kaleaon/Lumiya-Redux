@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.terrain;
 
 import com.lumiyaviewer.lumiya.utils.BitBuffer;
 
-/* loaded from: classes.dex */
 public class TerrainPatch {
     public static final int END_OF_PATCHES = 97;
     float DCOffset;

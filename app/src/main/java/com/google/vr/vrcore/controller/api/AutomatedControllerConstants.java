@@ -1,6 +1,5 @@
 package com.google.vr.vrcore.controller.api;
 
-/* loaded from: classes.dex */
 public final class AutomatedControllerConstants {
     public static final String EVENT_TYPE_KEY = "event-type";
     public static final String PAPRIKA_DATA_KEY = "paprika-data";

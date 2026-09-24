@@ -5,24 +5,34 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * InviteGroupRequest
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code InviteGroupRequest Low 349 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class InviteGroupRequest extends SLMessage {
     public AgentData AgentData_Field;
     public GroupData GroupData_Field;
     public ArrayList<InviteData> InviteData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID - UUID of inviting agent
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block GroupData, Single. */
     public static class GroupData {
-        public UUID GroupID;
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block InviteData, Variable. */
     public static class InviteData {
-        public UUID InviteeID;
-        public UUID RoleID;
+        public UUID InviteeID; // LLUUID
+        public UUID RoleID; // LLUUID
     }
 
     public InviteGroupRequest() {
@@ -31,21 +41,22 @@ public class InviteGroupRequest extends SLMessage {
         this.GroupData_Field = new GroupData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.InviteData_Fields.size() * 32) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleInviteGroupRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 93);
+        // Message number: Low 349 (InviteGroupRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x5D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
@@ -56,7 +67,7 @@ public class InviteGroupRequest extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

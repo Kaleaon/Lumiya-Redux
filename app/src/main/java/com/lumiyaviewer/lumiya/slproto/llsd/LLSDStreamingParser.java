@@ -23,7 +23,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-/* loaded from: classes.dex */
 public class LLSDStreamingParser {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */
@@ -45,25 +44,25 @@ public class LLSDStreamingParser {
     }
 
     public static class LLSDDefaultContentHandler implements LLSDContentHandler {
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException {
             return new LLSDDefaultContentHandler();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onArrayEnd(String str) throws LLSDXMLException {
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
             return new LLSDDefaultContentHandler();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
         }
     }

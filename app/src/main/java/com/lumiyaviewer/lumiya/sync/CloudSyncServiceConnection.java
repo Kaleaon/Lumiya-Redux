@@ -26,13 +26,11 @@ import com.lumiyaviewer.lumiya.cloud.common.LogSyncStart;
 import com.lumiyaviewer.lumiya.cloud.common.LogSyncStatus;
 import com.lumiyaviewer.lumiya.cloud.common.MessageType;
 import com.lumiyaviewer.lumiya.licensing.LicenseChecker;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class CloudSyncServiceConnection implements ServiceConnection {
 
     /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-LogSyncStatus$StatusSwitchesValues, reason: not valid java name */
@@ -45,7 +43,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     private final UserManager userManager;
     private final Handler mainThreadHandler = new Handler();
     private final AtomicBoolean syncingStarted = new AtomicBoolean(false);
-    private final Handler fromPluginHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.sync.CloudSyncServiceConnection.1
+    private final Handler fromPluginHandler = new Handler() {
 
         /* renamed from: -com-lumiyaviewer-lumiya-cloud-common-MessageTypeSwitchesValues, reason: not valid java name */
         private /* synthetic */ int[] f230comlumiyaviewerlumiyacloudcommonMessageTypeSwitchesValues = null;
@@ -84,7 +82,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
             return iArr;
         }
 
-        @Override // android.os.Handler
+        @Override
         public void handleMessage(Message message) {
             if (message.what == 100 && (message.obj instanceof Bundle)) {
                 Bundle bundle = (Bundle) message.obj;
@@ -144,7 +142,6 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         return queryIntentServices != null && queryIntentServices.size() > 0;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onLogMessagesCompleted(LogMessagesCompleted logMessagesCompleted) {
         Debug.Printf("LumiyaCloud: written messages until %d for agent %s", Long.valueOf(logMessagesCompleted.lastWrittenMessageID), logMessagesCompleted.agentUUID);
         if (this.userManager.getUserID().equals(logMessagesCompleted.agentUUID)) {
@@ -152,7 +149,6 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onLogMessagesFlushed(LogMessagesFlushed logMessagesFlushed) {
         Debug.Printf("LumiyaCloud: flushed some messages for agent %s", logMessagesFlushed.agentUUID);
         if (this.userManager.getUserID().equals(logMessagesFlushed.agentUUID)) {
@@ -160,7 +156,6 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onLogSyncStatus(LogSyncStatus logSyncStatus) {
         Debug.Printf("LumiyaCloud: got logSyncStatus %s, plugin version %d", logSyncStatus.status, Integer.valueOf(logSyncStatus.pluginVersionCode));
         if (this.toPluginMessenger != null) {
@@ -191,12 +186,12 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     }
 
     public void disconnect() {
-        this.mainThreadHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.sync.-$Lambda$WmOOQW2pFqpMpXOyAP45N3kh7mE
+        this.mainThreadHandler.post(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 CloudSyncServiceConnection.this.m393x59c24a30();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -209,7 +204,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         this.context.unbindService(this);
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Debug.Printf("LumiyaCloud: service connected", new Object[0]);
         this.toPluginMessenger = new Messenger(iBinder);
@@ -220,7 +215,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceDisconnected(ComponentName componentName) {
         Debug.Printf("LumiyaCloud: service disconnected", new Object[0]);
     }
@@ -234,7 +229,7 @@ public class CloudSyncServiceConnection implements ServiceConnection {
 
     public void showSyncingError(String str, String str2, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context);
-        builder.setSmallIcon(R.drawable.ic_cloud_sync_notify).setContentTitle(str).setContentText(str2).setDefaults(0).setOngoing(false).setAutoCancel(true).setContentIntent(PendingIntent.getActivity(this.context, 0, intent, SLMoveEvents.AGENT_CONTROL_AWAY)).setOnlyAlertOnce(true);
+        builder.setSmallIcon(R.drawable.ic_cloud_sync_notify).setContentTitle(str).setContentText(str2).setDefaults(0).setOngoing(false).setAutoCancel(true).setContentIntent(PendingIntent.getActivity(this.context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)).setOnlyAlertOnce(true);
         ((NotificationManager) this.context.getSystemService("notification")).notify(R.id.google_drive_problem_notify, builder.build());
     }
 

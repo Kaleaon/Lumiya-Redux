@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class FlexiPrimProgram extends PrimProgram {
     public int uNumSectionMatrices;
     public int uSectionMatrices;
@@ -11,7 +10,7 @@ public class FlexiPrimProgram extends PrimProgram {
         super(Shader.FlexiVertexShader, z ? Shader.PrimOpaqueFragmentShader : Shader.PrimFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.PrimProgram, com.lumiyaviewer.lumiya.render.shaders.BasicPrimProgram, com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         super.bindVariables();
         this.uSectionMatrices = GLES20.glGetUniformLocation(this.handle, "uSectionMatrices");

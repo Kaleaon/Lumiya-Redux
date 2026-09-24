@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.grids.GridList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GridEditDialog extends AppCompatDialog implements View.OnClickListener {
     private GridList.GridInfo editGrid;
     private GridList gridList;
@@ -39,30 +38,30 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
             ((TextView) findViewById(R.id.gridNameText)).setText(this.editGrid.getGridName());
             ((TextView) findViewById(R.id.gridLoginURIText)).setText(this.editGrid.getLoginURL());
             ((Button) findViewById(R.id.okButton)).setText(R.string.save_changes);
-            findViewById(R.id.deleteButton).setVisibility(0);
+            findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
             setTitle(R.string.edit_grid_dialog_title);
         } else {
             ((TextView) findViewById(R.id.gridNameText)).setText("");
             ((TextView) findViewById(R.id.gridLoginURIText)).setText("");
             ((Button) findViewById(R.id.okButton)).setText(R.string.add_new_grid);
-            findViewById(R.id.deleteButton).setVisibility(8);
+            findViewById(R.id.deleteButton).setVisibility(View.GONE);
             setTitle(R.string.new_grid_dialog_title);
         }
         findViewById(R.id.gridNameText).requestFocus();
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         boolean z = false;
         switch (view.getId()) {
-            case R.id.okButton /* 2131755190 */:
+            case R.id.okButton:
                 String charSequence = ((TextView) findViewById(R.id.gridNameText)).getText().toString();
                 String charSequence2 = ((TextView) findViewById(R.id.gridLoginURIText)).getText().toString();
                 if (!charSequence.equals("")) {
                     if (!charSequence2.equals("")) {
                         GridList.GridInfo gridByName = this.gridList.getGridByName(charSequence);
                         if (gridByName != null && gridByName != this.editGrid) {
-                            Toast.makeText(getContext(), getContext().getString(R.string.grid_exists_error), 0).show();
+                            Toast.makeText(getContext(), getContext().getString(R.string.grid_exists_error), Toast.LENGTH_SHORT).show();
                             break;
                         } else {
                             dismiss();
@@ -80,22 +79,22 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
                             }
                         }
                     } else {
-                        Toast.makeText(getContext(), getContext().getString(R.string.grid_uri_empty_error), 0).show();
+                        Toast.makeText(getContext(), getContext().getString(R.string.grid_uri_empty_error), Toast.LENGTH_SHORT).show();
                         break;
                     }
                 } else {
-                    Toast.makeText(getContext(), getContext().getString(R.string.grid_name_empty_error), 0).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.grid_name_empty_error), Toast.LENGTH_SHORT).show();
                     break;
                 }
                 break;
-            case R.id.cancelButton /* 2131755191 */:
+            case R.id.cancelButton:
                 dismiss();
                 if (this.onGridEditResultListener != null) {
                     this.onGridEditResultListener.onGridEditCancelled();
                     break;
                 }
                 break;
-            case R.id.deleteButton /* 2131755359 */:
+            case R.id.deleteButton:
                 dismiss();
                 if (this.onGridEditResultListener != null && this.editGrid != null) {
                     this.onGridEditResultListener.onGridDeleted(this.editGrid);
@@ -105,7 +104,7 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
         }
     }
 
-    @Override // androidx.appcompat.app.AppCompatDialog, android.app.Dialog
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setTitle(R.string.new_grid_dialog_title);

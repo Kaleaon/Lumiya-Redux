@@ -16,7 +16,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.Arrays;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class DrawableAvatarPart implements ResourceConsumer {
     public static final UUID DEFAULT_AVATAR_TEXTURE = UUID.fromString("c228d1cf-4b5d-4ba8-84f4-899a0796aa97");
     private final UUID avatarUUID;
@@ -30,8 +29,8 @@ public class DrawableAvatarPart implements ResourceConsumer {
     private volatile DrawableFaceTexture texture;
     private volatile UUID textureUUID;
     private final Object updateLock = new Object();
-    private final Runnable meshUpdate = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.avatar.DrawableAvatarPart.1
-        @Override // java.lang.Runnable
+    private final Runnable meshUpdate = new Runnable() {
+        @Override
         public void run() {
             OpenJPEG openJPEG;
             float[] fArr;
@@ -87,7 +86,7 @@ public class DrawableAvatarPart implements ResourceConsumer {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         Object[] objArr = new Object[2];
         objArr[0] = this.faceIndex.toString();

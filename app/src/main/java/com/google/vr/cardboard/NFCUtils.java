@@ -10,7 +10,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class NFCUtils {
     private static final String TAG = NFCUtils.class.getSimpleName();
     Context context;
@@ -33,8 +32,8 @@ public class NFCUtils {
     public void onCreate(Activity activity) {
         this.context = activity.getApplicationContext();
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this.context);
-        this.nfcBroadcastReceiver = new BroadcastReceiver() { // from class: com.google.vr.cardboard.NFCUtils.1
-            @Override // android.content.BroadcastReceiver
+        this.nfcBroadcastReceiver = new BroadcastReceiver() {
+            @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i(NFCUtils.TAG, "Got an NFC tag!");
                 NFCUtils.this.onNFCTagDetected((Tag) intent.getParcelableExtra("android.nfc.extra.TAG"));

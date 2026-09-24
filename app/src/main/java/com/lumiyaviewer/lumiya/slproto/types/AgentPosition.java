@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 public class AgentPosition {
     private final Object lock = new Object();
     private boolean isValid = false;

@@ -6,27 +6,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Reliable
+ *
+ * <p>Template: {@code GroupAccountDetailsReply Low 356 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelGroupLandMoney::processGroupAccountDetailsReply()} in indra/newview/llpanelgrouplandmoney.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupAccountDetailsReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<HistoryData> HistoryData_Fields = new ArrayList<>();
     public MoneyData MoneyData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block HistoryData, Variable. */
     public static class HistoryData {
-        public int Amount;
-        public byte[] Description;
+        public int Amount; // S32
+        public byte[] Description; // Variable 1 - string
     }
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public int CurrentInterval;
-        public int IntervalDays;
-        public UUID RequestID;
-        public byte[] StartDate;
+        public int CurrentInterval; // S32
+        public int IntervalDays; // S32
+        public UUID RequestID; // LLUUID
+        public byte[] StartDate; // Variable 1 - string
     }
 
     public GroupAccountDetailsReply() {
@@ -35,7 +45,7 @@ public class GroupAccountDetailsReply extends SLMessage {
         this.MoneyData_Field = new MoneyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.MoneyData_Field.StartDate.length + 25 + 36 + 1;
         Iterator<?> it = this.HistoryData_Fields.iterator();
@@ -48,16 +58,17 @@ public class GroupAccountDetailsReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupAccountDetailsReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 100);
+        // Message number: Low 356 (GroupAccountDetailsReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x64);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.MoneyData_Field.RequestID);
@@ -71,7 +82,7 @@ public class GroupAccountDetailsReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);

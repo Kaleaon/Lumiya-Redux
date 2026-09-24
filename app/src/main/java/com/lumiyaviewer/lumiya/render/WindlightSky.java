@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render;
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
-import androidx.core.view.InputDeviceCompat;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
@@ -18,7 +17,6 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 
 @SuppressLint({"InlinedApi"})
-/* loaded from: classes.dex */
 public class WindlightSky {
     private static final int NumStars = 500;
     private static final int SKY_INDEX_BUFFER = 1;
@@ -145,7 +143,7 @@ public class WindlightSky {
         }
         GLES20.glEnable(2884);
         GLES20.glEnable(3042);
-        GLES20.glDepthFunc(InputDeviceCompat.SOURCE_DPAD);
+        GLES20.glDepthFunc(GLES20.GL_LESS);
         this.skyMatrix.glPopMatrix();
     }
 

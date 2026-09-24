@@ -35,7 +35,6 @@ import com.lumiyaviewer.lumiya.ui.objpopup.ObjectPopupsFragment;
 import com.lumiyaviewer.lumiya.ui.objpopup.SingleObjectPopupFragment;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ConnectedActivity extends ThemedActivity implements ObjectPopupsActionProvider.ObjectPopupsClickListener, ObjectPopupsManager.ObjectPopupListener {
     public static final String OBJECT_POPUP_NOTIFICATION = "objectPopupNotification";
     private NavDrawerActivityHelper navDrawerHelper;
@@ -45,12 +44,12 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
     private boolean objectPopupsDisplayed = false;
     private boolean singleObjectPopupsDisplayed = false;
     private boolean wantedShowObjectPopups = false;
-    private final View.OnClickListener reconnectButtonListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$Zi2fvFRNZlQXFOmQ50cSiiV_3Qw
+    private final View.OnClickListener reconnectButtonListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             ConnectedActivity.this.m537lambda$com_lumiyaviewer_lumiya_ui_common_ConnectedActivity_3108(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
@@ -119,27 +118,27 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
             SLGridConnection gridConnection = GridConnectionService.getGridConnection();
             SLGridConnection.ConnectionState connectionState = gridConnection.getConnectionState();
             if (connectionState == SLGridConnection.ConnectionState.Connected) {
-                findViewById.setVisibility(8);
+                findViewById.setVisibility(View.GONE);
                 return;
             }
             if (connectionState != SLGridConnection.ConnectionState.Connecting) {
                 if (connectionState == SLGridConnection.ConnectionState.Idle) {
-                    findViewById.setVisibility(0);
+                    findViewById.setVisibility(View.VISIBLE);
                     ((TextView) findViewById.findViewById(R.id.offline_notify_message)).setText(R.string.disconnnected_message);
                     ((Button) findViewById.findViewById(R.id.offline_connect_button)).setText(R.string.offline_connect_button);
-                    findViewById.findViewById(R.id.offline_notify_reconnect).setVisibility(8);
+                    findViewById.findViewById(R.id.offline_notify_reconnect).setVisibility(View.GONE);
                     return;
                 }
                 return;
             }
-            findViewById.setVisibility(0);
+            findViewById.setVisibility(View.VISIBLE);
             if (gridConnection.getIsReconnecting()) {
                 ((TextView) findViewById.findViewById(R.id.offline_notify_message)).setText(getString(R.string.reconnecting_offline_message, new Object[]{Integer.valueOf(gridConnection.getReconnectAttempt())}));
             } else {
                 ((TextView) findViewById.findViewById(R.id.offline_notify_message)).setText(R.string.connecting_message);
             }
             ((Button) findViewById.findViewById(R.id.offline_connect_button)).setText(R.string.cancel);
-            findViewById.findViewById(R.id.offline_notify_reconnect).setVisibility(0);
+            findViewById.findViewById(R.id.offline_notify_reconnect).setVisibility(View.VISIBLE);
         }
     }
 
@@ -191,7 +190,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     public void onBackPressed() {
         if (this.navDrawerHelper.onBackPressed()) {
             return;
@@ -202,13 +201,13 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         super.onBackPressed();
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity, android.content.ComponentCallbacks
+    @Override
     public void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
         this.navDrawerHelper.onConfigurationChanged(configuration);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         if (handleConnectionEvents()) {
@@ -222,7 +221,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Debug.Printf("ObjectPopup: createOptionsMenu", new Object[0]);
         if (!handleConnectionEvents()) {
@@ -244,7 +243,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         return true;
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (handleConnectionEvents()) {
@@ -260,7 +259,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ObjectPopupsManager.ObjectPopupListener
+    @Override
     public void onNewObjectPopup(SLChatEvent sLChatEvent) {
         UUID activeAgentID;
         if (findViewById(R.id.object_popups_container) == null || (activeAgentID = ActivityUtils.getActiveAgentID(getIntent())) == null) {
@@ -293,7 +292,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ObjectPopupsManager.ObjectPopupListener
+    @Override
     public void onObjectPopupCountChanged(int i) {
         if (this.objectPopupsActionProvider != null) {
             this.objectPopupsActionProvider.setObjectPopupCount(i);
@@ -311,7 +310,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.objpopup.ObjectPopupsActionProvider.ObjectPopupsClickListener
+    @Override
     public void onObjectPopupsClicked() {
         if (findViewById(R.id.object_popups_container) != null) {
             FragmentManager supportFragmentManager = getSupportFragmentManager();
@@ -330,7 +329,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (this.navDrawerHelper.onOptionsItemSelected(menuItem)) {
             return true;
@@ -338,7 +337,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         return super.onOptionsItemSelected(menuItem);
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onPause() {
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
         if (userManager != null && handleConnectionEvents()) {
@@ -348,7 +347,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         super.onPause();
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, android.app.Activity
+    @Override
     protected void onPostCreate(@Nullable Bundle bundle) {
         super.onPostCreate(bundle);
         if (handleConnectionEvents()) {
@@ -361,7 +360,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         this.navDrawerHelper.syncState();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
@@ -382,7 +381,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         updateConnectionStatus();
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         if (handleConnectionEvents()) {

@@ -7,9 +7,8 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdRedirChat implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         if (str2 == null) {
             str2 = "";

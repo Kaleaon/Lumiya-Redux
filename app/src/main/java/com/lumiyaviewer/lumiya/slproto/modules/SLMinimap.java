@@ -37,7 +37,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLMinimap extends SLModule {
     public static final float CHAT_RANGE = 20.0f;
     private static final int parcelBitmapSize = 256;
@@ -137,8 +136,8 @@ public class SLMinimap extends SLModule {
         this.myAvatarPosition = null;
         this.afterTeleport = false;
         this.myAvatarParcelDataIndex = -1;
-        this.userLocationRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLMinimap.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.userLocationRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLMinimap.this.userLocationsResultHandler != null) {
                     SLMinimap.this.userLocationsResultHandler.onResultData(subscriptionSingleKey, new UserLocations(SLMinimap.this.myAvatarPosition, SLMinimap.this.getMyAvatarHeading(), SLMinimap.this.userPositions));
@@ -154,7 +153,6 @@ public class SLMinimap extends SLModule {
         this.afterTeleport = sLAgentCircuit.getAuthReply().fromTeleport ? !sLAgentCircuit.getAuthReply().isTemporary : false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public float getMyAvatarHeading() {
         return (this.agentCircuit.getModules().avatarControl.getAgentHeading() * 3.1415927f) / 180.0f;
     }
@@ -170,8 +168,6 @@ public class SLMinimap extends SLModule {
         return ((floor2 >= 0 ? floor2 >= 64 ? 63 : floor2 : 0) * 64) + floor;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: updateAvatarParcelData, reason: merged with bridge method [inline-methods] */
     public void updateAvatarParcelData() {
         ParcelData parcelData = this.myAvatarParcelDataIndex >= 0 ? this.parcels.get(Integer.valueOf(this.parcelIDs[this.myAvatarParcelDataIndex])) : null;
         if (parcelData != null && this.afterTeleport) {
@@ -185,7 +181,7 @@ public class SLMinimap extends SLModule {
         this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, sLVoice.getCurrentParcelVoiceChannel()));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getUserLocationsPool().detachRequestHandler(this.userLocationRequestHandler);
@@ -443,12 +439,12 @@ public class SLMinimap extends SLModule {
     }
 
     public void requestUpdateAvatarParcelData() {
-        this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$eaDiotW55nmaHN5_b1ikeJpLLsk
+        this.agentCircuit.execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLMinimap.this.updateAvatarParcelData();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
 import com.lumiyaviewer.lumiya.dao.UserName;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class MessageSourceNameResolver {
 
     @Nonnull
@@ -22,8 +20,8 @@ public class MessageSourceNameResolver {
     private final UserManager userManager;
     private final Object lock = new Object();
     private final Map<UUID, NameRequestEntry> requestEntryMap = new ConcurrentHashMap();
-    private final Subscription.OnData<UserName> onUserName = new Subscription.OnData<UserName>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.MessageSourceNameResolver.1
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    private final Subscription.OnData<UserName> onUserName = new Subscription.OnData<UserName>() {
+        @Override
         public void onData(UserName userName) {
             NameRequestEntry nameRequestEntry;
             HashSet hashSet = null;

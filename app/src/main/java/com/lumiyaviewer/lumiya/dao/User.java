@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo;
 import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterItemViewBuilder;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class User implements ChatterDisplayInfo {
     private boolean badUUID;
     private String displayName;
@@ -36,7 +35,7 @@ public class User implements ChatterDisplayInfo {
         this.rightsHas = i2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public void buildView(Context context, ChatterItemViewBuilder chatterItemViewBuilder, UserManager userManager) {
         chatterItemViewBuilder.setLabel(this.displayName);
         chatterItemViewBuilder.setThumbnailChatterID(getChatterID(userManager), this.displayName);
@@ -46,12 +45,12 @@ public class User implements ChatterDisplayInfo {
         return this.badUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public ChatterID getChatterID(UserManager userManager) {
         return ChatterID.getUserChatterID(userManager.getUserID(), this.uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
+    @Override
     public String getDisplayName() {
         return this.displayName;
     }

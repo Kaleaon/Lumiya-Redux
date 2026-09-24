@@ -6,13 +6,12 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdRemoveOutfit extends RLVCmdGenericRestriction {
     public RLVCmdRemoveOutfit() {
         super(RLVRestrictionType.remoutfit, true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdGenericRestriction
+    @Override
     protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
         SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
         for (SLWearableType sLWearableType : SLWearableType.values()) {

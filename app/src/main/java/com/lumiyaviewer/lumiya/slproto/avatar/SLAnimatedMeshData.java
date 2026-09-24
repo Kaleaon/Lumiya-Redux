@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.render.drawable.DrawableFaceTexture;
 import com.lumiyaviewer.lumiya.render.glres.buffers.GLLoadableBuffer;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class SLAnimatedMeshData extends SLMeshData {
     private static final int BUF_INDEX = 1;
     private static final int BUF_TEXCOORD = 2;

@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.render.glres.GLGenericResource;
 import com.lumiyaviewer.lumiya.render.glres.GLResourceManager;
 
 @TargetApi(18)
-/* loaded from: classes.dex */
 public class GLVertexArrayObject implements GLGenericResource {
     public final int size;
     private final int[] vaoIndices;
@@ -19,7 +18,7 @@ public class GLVertexArrayObject implements GLGenericResource {
             this.vaoIndices = iArr;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLResourceManager.GLGenericResourceReference
+        @Override
         public void GLFree() {
             GLES30.glDeleteVertexArrays(this.vaoIndices.length, this.vaoIndices, 0);
         }

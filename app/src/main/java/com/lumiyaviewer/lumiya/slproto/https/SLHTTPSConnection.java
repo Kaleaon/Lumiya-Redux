@@ -29,27 +29,26 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class SLHTTPSConnection {
     private static final long CONNECT_TIMEOUT = 60;
     private static final long READ_TIMEOUT = 60;
-    private static final X509TrustManager trustEverythingManager = new X509TrustManager() { // from class: com.lumiyaviewer.lumiya.slproto.https.SLHTTPSConnection.1
-        @Override // javax.net.ssl.X509TrustManager
+    private static final X509TrustManager trustEverythingManager = new X509TrustManager() {
+        @Override
         public void checkClientTrusted(X509Certificate[] x509CertificateArr, String str) throws CertificateException {
         }
 
-        @Override // javax.net.ssl.X509TrustManager
+        @Override
         public void checkServerTrusted(X509Certificate[] x509CertificateArr, String str) throws CertificateException {
         }
 
-        @Override // javax.net.ssl.X509TrustManager
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             return new X509Certificate[0];
         }
     };
     private static TrustManager[] trustAllCerts = {trustEverythingManager};
-    private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().proxy(Proxy.NO_PROXY).dns(new SLDNS()).connectionPool(new ConnectionPool(8, 5, TimeUnit.MINUTES)).connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).hostnameVerifier(new HostnameVerifier() { // from class: com.lumiyaviewer.lumiya.slproto.https.SLHTTPSConnection.2
-        @Override // javax.net.ssl.HostnameVerifier
+    private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().proxy(Proxy.NO_PROXY).dns(new SLDNS()).connectionPool(new ConnectionPool(8, 5, TimeUnit.MINUTES)).connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).hostnameVerifier(new HostnameVerifier() {
+        @Override
         public boolean verify(String str, SSLSession sSLSession) {
             return true;
         }
@@ -59,7 +58,7 @@ public class SLHTTPSConnection {
         CharsetStripInterceptor() {
         }
 
-        @Override // okhttp3.Interceptor
+        @Override
         public Response intercept(Interceptor.Chain chain) throws IOException {
             Request request = chain.request();
             String header = request.header(HttpHeaders.CONTENT_TYPE);
@@ -80,7 +79,7 @@ public class SLHTTPSConnection {
         DNSforDNS() {
         }
 
-        @Override // okhttp3.Dns
+        @Override
         public List<InetAddress> lookup(String str) throws UnknownHostException {
             try {
                 List<InetAddress> lookup = this.systemDns.lookup(str);
@@ -156,7 +155,7 @@ public class SLHTTPSConnection {
             }
         }
 
-        @Override // okhttp3.Dns
+        @Override
         public List<InetAddress> lookup(String str) throws UnknownHostException {
             try {
                 List<InetAddress> lookup = this.systemDns.lookup(str);

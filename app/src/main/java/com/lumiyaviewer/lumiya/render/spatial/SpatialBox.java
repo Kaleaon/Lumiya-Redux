@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.spatial;
 
-/* loaded from: classes.dex */
 public class SpatialBox {
     protected final float s;
     protected final float x;

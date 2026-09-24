@@ -14,7 +14,6 @@ import com.google.vr.sdk.base.sensors.internal.OrientationEKF;
 import com.google.vr.sdk.base.sensors.internal.Vector3d;
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class HeadTracker implements SensorEventListener {
     private static final float DEFAULT_NECK_HORIZONTAL_OFFSET = 0.08f;
     private static final float DEFAULT_NECK_MODEL_FACTOR = 1.0f;
@@ -109,11 +108,11 @@ public class HeadTracker implements SensorEventListener {
         return f;
     }
 
-    @Override // android.hardware.SensorEventListener
+    @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
     }
 
-    @Override // android.hardware.SensorEventListener
+    @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == 1) {
             this.latestAcc.set(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2]);

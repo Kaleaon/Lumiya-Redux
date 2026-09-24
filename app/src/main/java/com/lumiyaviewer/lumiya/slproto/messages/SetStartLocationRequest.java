@@ -5,21 +5,31 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetStartLocationRequest
+ * viewer -> sim
+ * failure checked at sim and triggers ImprovedInstantMessage
+ * success triggers SetStartLocation
+ *
+ * <p>Template: {@code SetStartLocationRequest Low 324 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetStartLocationRequest extends SLMessage {
     public AgentData AgentData_Field;
     public StartLocationData StartLocationData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block StartLocationData, Single. */
     public static class StartLocationData {
-        public int LocationID;
-        public LLVector3 LocationLookAt;
-        public LLVector3 LocationPos;
-        public byte[] SimName;
+        public int LocationID; // U32
+        public LLVector3 LocationLookAt; // LLVector3
+        public LLVector3 LocationPos; // LLVector3 - region coords
+        public byte[] SimName; // Variable 1 - string
     }
 
     public SetStartLocationRequest() {
@@ -28,21 +38,22 @@ public class SetStartLocationRequest extends SLMessage {
         this.StartLocationData_Field = new StartLocationData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.StartLocationData_Field.SimName.length + 1 + 4 + 12 + 12 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetStartLocationRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 68);
+        // Message number: Low 324 (SetStartLocationRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x44);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packVariable(byteBuffer, this.StartLocationData_Field.SimName, 1);
@@ -51,7 +62,7 @@ public class SetStartLocationRequest extends SLMessage {
         packLLVector3(byteBuffer, this.StartLocationData_Field.LocationLookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

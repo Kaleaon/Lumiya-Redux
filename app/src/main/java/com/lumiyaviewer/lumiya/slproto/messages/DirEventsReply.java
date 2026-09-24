@@ -6,32 +6,43 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirEventsReply
+ *
+ * <p>Template: {@code DirEventsReply Low 37 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelDirBrowser::processDirEventsReply()} in indra/newview/llpaneldirbrowser.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class DirEventsReply extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
     public ArrayList<StatusData> StatusData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public byte[] Date;
-        public int EventFlags;
-        public int EventID;
-        public byte[] Name;
-        public UUID OwnerID;
-        public int UnixTime;
+        public byte[] Date; // Variable 1
+        public int EventFlags; // U32
+        public int EventID; // U32
+        public byte[] Name; // Variable 1
+        public UUID OwnerID; // LLUUID
+        public int UnixTime; // U32
     }
 
+    /** Block StatusData, Variable. */
     public static class StatusData {
-        public int Status;
+        public int Status; // U32
     }
 
     public DirEventsReply() {
@@ -40,7 +51,7 @@ public class DirEventsReply extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
@@ -54,16 +65,17 @@ public class DirEventsReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirEventsReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 37);
+        // Message number: Low 37 (DirEventsReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x25);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         byteBuffer.put((byte) this.QueryReplies_Fields.size());
@@ -82,7 +94,7 @@ public class DirEventsReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

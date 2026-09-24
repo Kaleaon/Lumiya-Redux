@@ -3,12 +3,21 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * TeleportLandingStatusChanged
+ * sim->dataserver
+ * Sent from the region to the data server
+ * to note that the region's teleportation landing status has changed
+ *
+ * <p>Template: {@code TeleportLandingStatusChanged Low 147 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class TeleportLandingStatusChanged extends SLMessage {
     public RegionData RegionData_Field;
 
+    /** Block RegionData, Single. */
     public static class RegionData {
-        public long RegionHandle;
+        public long RegionHandle; // U64
     }
 
     public TeleportLandingStatusChanged() {
@@ -16,25 +25,26 @@ public class TeleportLandingStatusChanged extends SLMessage {
         this.RegionData_Field = new RegionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 12;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleTeleportLandingStatusChanged(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -109);
+        // Message number: Low 147 (TeleportLandingStatusChanged).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x93);
         packLong(byteBuffer, this.RegionData_Field.RegionHandle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);
     }

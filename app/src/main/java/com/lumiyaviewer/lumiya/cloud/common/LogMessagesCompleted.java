@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.cloud.common;
 import android.os.Bundle;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class LogMessagesCompleted implements Bundleable {
     public final UUID agentUUID;
     public final long lastWrittenMessageID;
@@ -18,7 +17,7 @@ public class LogMessagesCompleted implements Bundleable {
         this.lastWrittenMessageID = j;
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("agentUUID", this.agentUUID.toString());

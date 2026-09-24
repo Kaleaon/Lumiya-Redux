@@ -15,7 +15,6 @@ import com.lumiyaviewer.lumiya.react.AsyncRequestHandler;
 import com.lumiyaviewer.lumiya.react.RequestHandler;
 import com.lumiyaviewer.lumiya.react.ResultHandler;
 import com.lumiyaviewer.lumiya.react.SimpleRequestHandler;
-import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
@@ -67,7 +66,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearableStatusChangeListener {
     private static final int Param_agentSizeVPHeadSize = 682;
     private static final int Param_agentSizeVPHeelHeight = 198;
@@ -179,8 +177,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         this.cofReady = false;
         this.multiLayerDone = false;
         this.cofFolderUUID = new AtomicReference<>();
-        this.wornItemsRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLAvatarAppearance.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.wornItemsRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLAvatarAppearance.this.wornItemsResultHandler != null) {
                     SLAvatarAppearance.this.wornItemsResultHandler.onResultData(subscriptionSingleKey, SLAvatarAppearance.this.getWornItems());
@@ -529,12 +527,12 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         if (this.serverSideAppearanceUpdateTask != null) {
             this.serverSideAppearanceUpdateTask.cancel(true);
         }
-        this.serverSideAppearanceUpdateTask = GenericHTTPExecutor.getInstance().submit(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$Jp5Too8LbDpaKzeYKjkvQvC1hZo.2
+        this.serverSideAppearanceUpdateTask = GenericHTTPExecutor.getInstance().submit(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 m212x366f8fcf(i, (String) str);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -778,7 +776,6 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return iArr;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public ImmutableList<WornItem> getWornItems() {
         SLObjectAvatarInfo agentAvatar;
         ImmutableList.Builder builder = ImmutableList.builder();
@@ -806,8 +803,6 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, z) != null;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCofFolderEntry, reason: merged with bridge method [inline-methods] */
     public void onCofFolderEntry(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
             for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
@@ -821,8 +816,6 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentOutfitFolder, reason: merged with bridge method [inline-methods] */
     public void onCurrentOutfitFolder(InventoryEntryList inventoryEntryList) {
         SLInventoryEntry folder;
         if (inventoryEntryList == null || (folder = inventoryEntryList.getFolder()) == null || !Objects.equal(folder.sessionID, this.agentCircuit.circuitInfo.sessionID)) {
@@ -1235,7 +1228,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         SLInventoryEntry findSpecialFolder;
         boolean z = true;
@@ -1257,7 +1250,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         this.findCofFolder.unsubscribe();
         this.currentOutfitFolder.unsubscribe();
@@ -1489,7 +1482,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.assets.SLWearable.OnWearableStatusChangeListener
+    @Override
     public void onWearableStatusChanged(SLWearable sLWearable) {
         updateIfWearablesReady();
     }

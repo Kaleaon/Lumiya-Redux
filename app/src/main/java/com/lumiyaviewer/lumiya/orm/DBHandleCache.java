@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class DBHandleCache {
     private final Map<String, DBOpenRef> fileMap;
     private final Map<PhantomReference<DBHandle>, DBOpenRef> refMap;

@@ -3,9 +3,6 @@ package com.lumiyaviewer.lumiya.slproto;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.core.internal.view.SupportMenu;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageFactory;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler;
@@ -24,11 +21,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public abstract class SLMessage implements Parcelable {
-    public static final Parcelable.Creator<SLMessage> CREATOR = new Parcelable.Creator<SLMessage>() { // from class: com.lumiyaviewer.lumiya.slproto.SLMessage.1
+    public static final Parcelable.Creator<SLMessage> CREATOR = new Parcelable.Creator<SLMessage>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLMessage createFromParcel(Parcel parcel) {
             byte[] bArr = new byte[parcel.readInt()];
             parcel.readByteArray(bArr);
@@ -42,7 +38,7 @@ public abstract class SLMessage implements Parcelable {
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public SLMessage[] newArray(int i) {
             return null;
         }
@@ -68,7 +64,7 @@ public abstract class SLMessage implements Parcelable {
             return b;
         }
         byte b2 = byteBuffer.get();
-        return b2 != -1 ? b2 | 65280 : byteBuffer.getShort() | (-65536);
+        return b2 != -1 ? b2 | 0xFF00 : byteBuffer.getShort() | (-65536);
     }
 
     public static int DecodeMessageIDGeneric(ByteBuffer byteBuffer) {
@@ -78,9 +74,9 @@ public abstract class SLMessage implements Parcelable {
         }
         byte b2 = byteBuffer.get();
         if (b2 != -1) {
-            return b2 | 65280;
+            return b2 | 0xFF00;
         }
-        return ((byteBuffer.get() << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & 0xFF);
+        return ((byteBuffer.get() << 8) & 0xFF00) | SupportMenu.CATEGORY_MASK | (byteBuffer.get() & 0xFF);
     }
 
     private void PackPayloadLE(ByteBuffer byteBuffer) {
@@ -176,7 +172,7 @@ public abstract class SLMessage implements Parcelable {
     }
 
     public static int flipBytes(int i) {
-        return (((byte) (i >>> 24)) & 0xFF) | ((((byte) (i >>> 16)) << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((((byte) (i >>> 8)) << 16) & 16711680) | ((((byte) (i >>> 0)) << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK);
+        return (((byte) (i >>> 24)) & 0xFF) | ((((byte) (i >>> 16)) << 8) & 0xFF00) | ((((byte) (i >>> 8)) << 16) & 0xFF0000) | ((((byte) (i >>> 0)) << 24) & 0xFF000000);
     }
 
     public static String stringFromVariableOEM(byte[] bArr) {
@@ -267,7 +263,7 @@ public abstract class SLMessage implements Parcelable {
 
     public abstract void UnpackPayload(ByteBuffer byteBuffer);
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -469,7 +465,7 @@ public abstract class SLMessage implements Parcelable {
         return bArr;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         int CalcPayloadSize = CalcPayloadSize();
         byte[] bArr = new byte[CalcPayloadSize];

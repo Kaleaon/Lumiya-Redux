@@ -9,7 +9,6 @@ import android.os.Parcelable;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public abstract class DBObject implements Parcelable {
     protected long _id;
 

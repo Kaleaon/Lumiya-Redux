@@ -6,19 +6,27 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectRotation
+ * viewer -> simulator
+ *
+ * <p>Template: {@code ObjectRotation Low 93 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectRotation extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ObjectLocalID;
-        public LLQuaternion Rotation;
+        public int ObjectLocalID; // U32
+        public LLQuaternion Rotation; // LLQuaternion
     }
 
     public ObjectRotation() {
@@ -26,21 +34,22 @@ public class ObjectRotation extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 16) + 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectRotation(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 93);
+        // Message number: Low 93 (ObjectRotation).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x5D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -50,7 +59,7 @@ public class ObjectRotation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

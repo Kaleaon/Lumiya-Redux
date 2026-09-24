@@ -44,7 +44,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 public class SLUserProfiles extends SLModule {
     public static final int AVATAR_AGEVERIFIED = 32;
     public static final int AVATAR_ALLOW_PUBLISH = 1;
@@ -72,8 +71,8 @@ public class SLUserProfiles extends SLModule {
     SLUserProfiles(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
         super(sLAgentCircuit);
         this.requestedNewGroupData = false;
-        this.avatarPropertiesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarPropertiesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("AvatarGroupList: Requesting avatar properties for %s", uuid.toString());
                 AvatarPropertiesRequest avatarPropertiesRequest = new AvatarPropertiesRequest();
@@ -87,26 +86,26 @@ public class SLUserProfiles extends SLModule {
                 }
             }
         }, false, 3, 15000L);
-        this.agentDataUpdateRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.2
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.agentDataUpdateRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 SLUserProfiles.this.requestAgentDataUpdate();
             }
         }, false, 3, 15000L);
-        this.avatarNotesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.3
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarNotesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarnotesrequest", new String[]{uuid.toString()});
             }
         }, false, 3, 15000L);
-        this.avatarPicksRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.4
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarPicksRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarpicksrequest", new String[]{uuid.toString()});
             }
         }, false, 3, 15000L);
-        this.avatarPickInfosRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<AvatarPickKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.5
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarPickInfosRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<AvatarPickKey>() {
+            @Override
             public void onRequest(@Nonnull AvatarPickKey avatarPickKey) {
                 SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", new String[]{avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()});
             }
@@ -121,8 +120,8 @@ public class SLUserProfiles extends SLModule {
         pickDelete.AgentData_Field.SessionID = this.circuitInfo.sessionID;
         pickDelete.Data_Field.PickID = uuid;
         pickDelete.isReliable = true;
-        pickDelete.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.7
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        pickDelete.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 super.onMessageAcknowledged(sLMessage);
                 if (SLUserProfiles.this.userManager != null) {
@@ -212,7 +211,7 @@ public class SLUserProfiles extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         if (this.userManager != null) {
             this.avatarPropertiesResultHandler = this.userManager.getAvatarProperties().getRequestSource().attachRequestHandler(this.avatarPropertiesRequestHandler);
@@ -224,7 +223,7 @@ public class SLUserProfiles extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getAvatarProperties().getRequestSource().detachRequestHandler(this.avatarPropertiesRequestHandler);
@@ -291,8 +290,8 @@ public class SLUserProfiles extends SLModule {
         avatarPropertiesUpdate.PropertiesData_Field.MaturePublish = z2;
         avatarPropertiesUpdate.PropertiesData_Field.ProfileURL = SLMessage.stringToVariableOEM(str3);
         avatarPropertiesUpdate.isReliable = true;
-        avatarPropertiesUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.6
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        avatarPropertiesUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 super.onMessageAcknowledged(sLMessage);
                 if (SLUserProfiles.this.userManager != null) {
@@ -318,8 +317,8 @@ public class SLUserProfiles extends SLModule {
         pickInfoUpdate.Data_Field.SortOrder = i;
         pickInfoUpdate.Data_Field.Enabled = z;
         pickInfoUpdate.isReliable = true;
-        pickInfoUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserProfiles.8
-            @Override // com.lumiyaviewer.lumiya.slproto.SLMessageEventListener.SLMessageBaseEventListener, com.lumiyaviewer.lumiya.slproto.SLMessageEventListener
+        pickInfoUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
+            @Override
             public void onMessageAcknowledged(SLMessage sLMessage) {
                 super.onMessageAcknowledged(sLMessage);
                 if (SLUserProfiles.this.userManager != null) {

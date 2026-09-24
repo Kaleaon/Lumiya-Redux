@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatOnlineOfflineEvent extends SLChatEvent {
     private final boolean wentOnline;
 
@@ -23,28 +22,28 @@ public final class SLChatOnlineOfflineEvent extends SLChatEvent {
         this.wentOnline = z;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return this.wentOnline ? SLChatEvent.ChatMessageType.WentOnline : SLChatEvent.ChatMessageType.WentOffline;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         return context.getString(this.wentOnline ? R.string.went_online : R.string.went_offline);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
     }

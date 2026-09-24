@@ -6,9 +6,8 @@ import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.common.ThemedActivity;
 
-/* loaded from: classes.dex */
 public class WhatsNewActivity extends ThemedActivity {
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.whats_new);

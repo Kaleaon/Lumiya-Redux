@@ -4,14 +4,22 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPropertiesRequest
+ * viewer -> simulator
+ * reliable
+ *
+ * <p>Template: {@code AvatarPropertiesRequest Low 169 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AvatarPropertiesRequest extends SLMessage {
     public AgentData AgentData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID AvatarID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID AvatarID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
     public AvatarPropertiesRequest() {
@@ -19,27 +27,28 @@ public class AvatarPropertiesRequest extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAvatarPropertiesRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -87);
+        // Message number: Low 169 (AvatarPropertiesRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xA9);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.AvatarID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -10,7 +10,6 @@ import de.greenrobot.dao.internal.DaoConfig;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     public static final String TABLENAME = "CHAT_MESSAGE";
 
@@ -66,8 +65,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHAT_MESSAGE'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, ChatMessage chatMessage) {
         sQLiteStatement.clearBindings();
         Long id = chatMessage.getId();
@@ -168,7 +166,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         sQLiteStatement.bindLong(30, chatMessage.getSyncedToGoogleDrive() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long getKey(ChatMessage chatMessage) {
         if (chatMessage != null) {
             return chatMessage.getId();
@@ -176,13 +174,13 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public ChatMessage readEntity(Cursor cursor, int i) {
         Boolean valueOf;
         Boolean valueOf2;
@@ -225,7 +223,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         return new ChatMessage(valueOf4, j, date, i2, date2, valueOf, fromString, valueOf5, string, string2, string3, i3, valueOf6, valueOf7, fromString2, fromString3, string4, valueOf8, valueOf9, valueOf10, valueOf11, valueOf2, valueOf3, cursor.isNull(i + 23) ? null : UUID.fromString(cursor.getString(i + 23)), cursor.isNull(i + 24) ? null : cursor.getString(i + 24), cursor.isNull(i + 25) ? null : Integer.valueOf(cursor.getInt(i + 25)), cursor.isNull(i + 26) ? null : cursor.getBlob(i + 26), cursor.isNull(i + 27) ? null : cursor.getString(i + 27), cursor.isNull(i + 28) ? null : Integer.valueOf(cursor.getInt(i + 28)), cursor.getShort(i + 29) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, ChatMessage chatMessage, int i) {
         Boolean valueOf;
         Boolean valueOf2;
@@ -278,7 +276,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -286,8 +284,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         return Long.valueOf(cursor.getLong(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long updateKeyAfterInsert(ChatMessage chatMessage, long j) {
         chatMessage.setId(Long.valueOf(j));
         return Long.valueOf(j);

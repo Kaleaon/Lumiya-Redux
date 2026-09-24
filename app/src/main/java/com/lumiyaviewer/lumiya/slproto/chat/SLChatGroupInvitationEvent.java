@@ -16,7 +16,6 @@ import java.nio.ByteOrder;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
     private final UUID groupID;
     private final int joinFee;
@@ -51,33 +50,33 @@ public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
         activeAgentCircuit.getModules().groupManager.AcceptGroupInvite(uuid, uuid2, z);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.GroupInvitation;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.join_group_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.join_group_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return this.joinFee == 0 ? context.getString(R.string.join_group_question_free) : context.getString(R.string.join_group_question_not_free, Integer.valueOf(this.joinFee));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.join_group_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.join_group_accepted);
     }
@@ -88,13 +87,13 @@ public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
         DoAcceptGroupInvite(this.groupID, this.sessionID, true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     protected void onNoAction(Context context, UserManager userManager) {
         super.onNoAction(context, userManager);
         DoAcceptGroupInvite(this.groupID, this.sessionID, false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         super.onYesAction(context, userManager);
         if (this.joinFee == 0) {
@@ -102,21 +101,21 @@ public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(context.getString(R.string.join_group_confirm, Integer.valueOf(this.joinFee))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.-$Lambda$hXLxI3fDexZfuKx5RzOoCtsGy3I.1
+        builder.setMessage(context.getString(R.string.join_group_confirm, Integer.valueOf(this.joinFee))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 SLChatGroupInvitationEvent.this.m153x2b58eb32(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.-$Lambda$hXLxI3fDexZfuKx5RzOoCtsGy3I
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -124,7 +123,7 @@ public final class SLChatGroupInvitationEvent extends SLChatYesNoEvent {
         builder.create().show();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setTransactionAmount(Integer.valueOf(this.joinFee));

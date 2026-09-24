@@ -1,6 +1,5 @@
 package uk.co.senab.photoview.gestures;
 
-/* loaded from: classes.dex */
 public interface OnGestureListener {
     void onDrag(float f, float f2);
 

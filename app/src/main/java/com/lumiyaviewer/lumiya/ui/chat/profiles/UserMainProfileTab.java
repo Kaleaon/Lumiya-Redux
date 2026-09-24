@@ -41,7 +41,6 @@ import java.util.Date;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserMainProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
     @BindView(R.id.about_edit_button)
@@ -103,12 +102,12 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     private final SubscriptionData<UUID, Boolean> onlineStatus = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.avatarProperties, this.avatarNotes, this.onlineStatus).withDataChangedListener(this);
     private ChatterNameRetriever partnerNameRetriever = null;
-    private final ChatterNameRetriever.OnChatterNameUpdated onPartnerNameReady = new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$wqoLfTfjESd1OUBLJEQMKRim4S0
+    private final ChatterNameRetriever.OnChatterNameUpdated onPartnerNameReady = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             UserMainProfileTab.this.m519x9d89034f(chatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             $m$0(chatterNameRetriever);
         }
@@ -153,7 +152,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         getContext().startActivity(InventoryActivity.makeSelectActionIntent(getContext(), this.chatterID.agentUUID, InventoryActivity.SelectAction.applyUserProfile, bundle, SLAssetType.AT_TEXTURE));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment, com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         super.onChatterNameUpdated(chatterNameRetriever);
         View view = getView();
@@ -173,11 +172,11 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
             } else {
                 ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Agent key", uuid));
             }
-            Toast.makeText(getActivity(), "Agent key copied to clipboard", 0).show();
+            Toast.makeText(getActivity(), "Agent key copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.user_profile_tab_main, viewGroup, false);
@@ -190,7 +189,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -206,7 +205,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         if (getView() != null) {
             try {
@@ -220,30 +219,30 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
                 }
                 UUID uuid = avatarPropertiesReply.PropertiesData_Field.PartnerID;
                 if (uuid == null || !(!uuid.equals(UUIDPool.ZeroUUID)) || this.chatterID == null) {
-                    this.userPartnerCardView.setVisibility(8);
+                    this.userPartnerCardView.setVisibility(View.GONE);
                     this.userProfilePartnerPic.setChatterID(null, null);
                 } else {
                     ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(this.chatterID.agentUUID, uuid);
-                    this.userPartnerCardView.setVisibility(0);
+                    this.userPartnerCardView.setVisibility(View.VISIBLE);
                     this.partnerNameRetriever = new ChatterNameRetriever(userChatterID, this.onPartnerNameReady, UIThreadExecutor.getInstance());
                 }
                 String trim = SLMessage.stringFromVariableOEM(avatarPropertiesReply.PropertiesData_Field.ProfileURL).trim();
                 if (trim.isEmpty()) {
-                    this.userWebProfileCardView.setVisibility(8);
+                    this.userWebProfileCardView.setVisibility(View.GONE);
                 } else {
                     this.userWebProfileLink.setText(trim);
                     Linkify.addLinks(this.userWebProfileLink, 15);
-                    this.userWebProfileCardView.setVisibility(0);
+                    this.userWebProfileCardView.setVisibility(View.VISIBLE);
                 }
                 String trim2 = SLMessage.stringFromVariableUTF(this.avatarNotes.get().Data_Field.Notes).trim();
                 if (trim2.isEmpty()) {
                     this.textProfileNotesText.setText(R.string.user_notes_no_notes);
                     this.textProfileNotesText.setTypeface(null, 2);
-                    this.userProfileNotesCaption.setVisibility(8);
+                    this.userProfileNotesCaption.setVisibility(View.GONE);
                 } else {
                     this.textProfileNotesText.setText(trim2);
                     this.textProfileNotesText.setTypeface(null, 0);
-                    this.userProfileNotesCaption.setVisibility(0);
+                    this.userProfileNotesCaption.setVisibility(View.VISIBLE);
                 }
                 this.textProfileOnline.setText(getString(this.onlineStatus.get().booleanValue() ? R.string.profile_user_online : R.string.profile_user_offline));
             } catch (SubscriptionData.DataNotReadyException e) {
@@ -252,7 +251,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         View view = getView();
         this.loadableMonitor.unsubscribeAll();
@@ -263,8 +262,8 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDUser)) {
             if (view != null) {
                 this.textProfileAgentKey.setText("");
-                this.aboutEditButton.setVisibility(8);
-                this.changePicButton.setVisibility(8);
+                this.aboutEditButton.setVisibility(View.GONE);
+                this.changePicButton.setVisibility(View.GONE);
                 return;
             }
             return;
@@ -276,8 +275,8 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         if (view != null) {
             this.textProfileAgentKey.setText(chatterUUID.toString());
             boolean equals = chatterUUID.equals(this.userManager.getUserID());
-            this.aboutEditButton.setVisibility(equals ? 0 : 8);
-            this.changePicButton.setVisibility(equals ? 0 : 8);
+            this.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+            this.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
         }
     }
 

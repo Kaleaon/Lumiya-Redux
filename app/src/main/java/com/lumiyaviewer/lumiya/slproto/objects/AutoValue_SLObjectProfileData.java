@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
     private final Optional<String> description;
     private final Optional<String> floatingText;
@@ -47,7 +46,7 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
         this.isModifiable = z5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public Optional<String> description() {
         return this.description;
     }
@@ -68,7 +67,7 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public Optional<String> floatingText() {
         return this.floatingText;
     }
@@ -77,60 +76,60 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
         return (((((((this.isDead ? 1231 : 1237) ^ (((this.isCopyable ? 1231 : 1237) ^ (((((((this.isPayable ? 1231 : 1237) ^ (((this.touchName == null ? 0 : this.touchName.hashCode()) ^ (((this.isTouchable ? 1231 : 1237) ^ (((this.ownerUUID == null ? 0 : this.ownerUUID.hashCode()) ^ (((((((this.objectUUID == null ? 0 : this.objectUUID.hashCode()) ^ 1000003) * 1000003) ^ this.name.hashCode()) * 1000003) ^ this.description.hashCode()) * 1000003)) * 1000003)) * 1000003)) * 1000003)) * 1000003) ^ this.saleType) * 1000003) ^ this.salePrice) * 1000003)) * 1000003)) * 1000003) ^ this.floatingText.hashCode()) * 1000003) ^ (this.payInfo != null ? this.payInfo.hashCode() : 0)) * 1000003) ^ (this.isModifiable ? 1231 : 1237);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public boolean isCopyable() {
         return this.isCopyable;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public boolean isDead() {
         return this.isDead;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public boolean isModifiable() {
         return this.isModifiable;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public boolean isPayable() {
         return this.isPayable;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public boolean isTouchable() {
         return this.isTouchable;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public Optional<String> name() {
         return this.name;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     @Nullable
     public UUID objectUUID() {
         return this.objectUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     @Nullable
     public UUID ownerUUID() {
         return this.ownerUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     @Nullable
     public PayInfo payInfo() {
         return this.payInfo;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public int salePrice() {
         return this.salePrice;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     public byte saleType() {
         return this.saleType;
     }
@@ -139,7 +138,7 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
         return "SLObjectProfileData{objectUUID=" + this.objectUUID + ", name=" + this.name + ", description=" + this.description + ", ownerUUID=" + this.ownerUUID + ", isTouchable=" + this.isTouchable + ", touchName=" + this.touchName + ", isPayable=" + this.isPayable + ", saleType=" + ((int) this.saleType) + ", salePrice=" + this.salePrice + ", isCopyable=" + this.isCopyable + ", isDead=" + this.isDead + ", floatingText=" + this.floatingText + ", payInfo=" + this.payInfo + ", isModifiable=" + this.isModifiable + "}";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectProfileData
+    @Override
     @Nullable
     public String touchName() {
         return this.touchName;

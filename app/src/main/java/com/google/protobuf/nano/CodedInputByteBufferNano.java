@@ -1,9 +1,7 @@
 package com.google.protobuf.nano;
 
-import com.google.common.base.Ascii;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public final class CodedInputByteBufferNano {
     private static final int DEFAULT_RECURSION_LIMIT = 64;
     private static final int DEFAULT_SIZE_LIMIT = 67108864;
@@ -248,24 +246,24 @@ public final class CodedInputByteBufferNano {
         if (readRawByte >= 0) {
             return readRawByte;
         }
-        int i = readRawByte & Ascii.DEL;
+        int i = readRawByte & 0x7F;
         byte readRawByte2 = readRawByte();
         if (readRawByte2 >= 0) {
             return i | (readRawByte2 << 7);
         }
-        int i2 = i | ((readRawByte2 & Ascii.DEL) << 7);
+        int i2 = i | ((readRawByte2 & 0x7F) << 7);
         byte readRawByte3 = readRawByte();
         if (readRawByte3 >= 0) {
-            return i2 | (readRawByte3 << Ascii.SO);
+            return i2 | (readRawByte3 << 14);
         }
-        int i3 = i2 | ((readRawByte3 & Ascii.DEL) << 14);
+        int i3 = i2 | ((readRawByte3 & 0x7F) << 14);
         byte readRawByte4 = readRawByte();
         if (readRawByte4 >= 0) {
-            return i3 | (readRawByte4 << Ascii.NAK);
+            return i3 | (readRawByte4 << 21);
         }
-        int i4 = i3 | ((readRawByte4 & Ascii.DEL) << 21);
+        int i4 = i3 | ((readRawByte4 & 0x7F) << 21);
         byte readRawByte5 = readRawByte();
-        int i5 = i4 | (readRawByte5 << Ascii.FS);
+        int i5 = i4 | (readRawByte5 << 28);
         if (readRawByte5 >= 0) {
             return i5;
         }
@@ -281,7 +279,7 @@ public final class CodedInputByteBufferNano {
         long j = 0;
         for (int i = 0; i < 64; i += 7) {
             byte readRawByte = readRawByte();
-            j |= (long) ((readRawByte & Ascii.DEL) << i);
+            j |= (long) ((readRawByte & 0x7F) << i);
             if ((readRawByte & 128) == 0) {
                 return j;
             }

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.types;
 
 import android.opengl.Matrix;
 
-/* loaded from: classes.dex */
 public class Vector3Array extends VectorArray {
     public Vector3Array(int i) {
         super(3, i);

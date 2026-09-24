@@ -7,17 +7,16 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventorySaveInfo implements Parcelable {
-    public static final Parcelable.Creator<InventorySaveInfo> CREATOR = new Parcelable.Creator<InventorySaveInfo>() { // from class: com.lumiyaviewer.lumiya.ui.inventory.InventorySaveInfo.1
+    public static final Parcelable.Creator<InventorySaveInfo> CREATOR = new Parcelable.Creator<InventorySaveInfo>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventorySaveInfo createFromParcel(Parcel parcel) {
             return new InventorySaveInfo(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventorySaveInfo[] newArray(int i) {
             return new InventorySaveInfo[i];
         }
@@ -79,12 +78,12 @@ public class InventorySaveInfo implements Parcelable {
         this.inventoryOfferMessageId = j;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(this.saveType.ordinal());
         if (this.saveItemUUID != null) {

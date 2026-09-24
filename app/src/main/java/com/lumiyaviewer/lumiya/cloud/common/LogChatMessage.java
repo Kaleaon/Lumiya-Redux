@@ -4,7 +4,6 @@ import android.os.Bundle;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LogChatMessage implements Bundleable {
     public final String chatterName;
     public final int chatterType;
@@ -30,7 +29,7 @@ public class LogChatMessage implements Bundleable {
         this.messageText = bundle.getString("messageText");
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("chatterType", this.chatterType);

@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.utils.Identifiable;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ChatMessage implements Identifiable<Long> {
     private Boolean accepted;
     private Integer assetType;
@@ -110,7 +109,7 @@ public class ChatMessage implements Identifiable<Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // com.lumiyaviewer.lumiya.utils.Identifiable
+    @Override
     public Long getId() {
         return this.id;
     }

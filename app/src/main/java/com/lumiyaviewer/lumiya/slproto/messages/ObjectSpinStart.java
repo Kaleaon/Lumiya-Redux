@@ -4,18 +4,25 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectSpinStart
+ *
+ * <p>Template: {@code ObjectSpinStart Low 120 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectSpinStart extends SLMessage {
     public AgentData AgentData_Field;
     public ObjectData ObjectData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public UUID ObjectID;
+        public UUID ObjectID; // LLUUID
     }
 
     public ObjectSpinStart() {
@@ -24,27 +31,28 @@ public class ObjectSpinStart extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectSpinStart(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 120);
+        // Message number: Low 120 (ObjectSpinStart).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x78);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -5,17 +5,24 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetStartLocation
+ * sim -> dataserver
+ *
+ * <p>Template: {@code SetStartLocation Low 325 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetStartLocation extends SLMessage {
     public StartLocationData StartLocationData_Field;
 
+    /** Block StartLocationData, Single. */
     public static class StartLocationData {
-        public UUID AgentID;
-        public int LocationID;
-        public LLVector3 LocationLookAt;
-        public LLVector3 LocationPos;
-        public long RegionHandle;
-        public UUID RegionID;
+        public UUID AgentID; // LLUUID
+        public int LocationID; // U32
+        public LLVector3 LocationLookAt; // LLVector3
+        public LLVector3 LocationPos; // LLVector3 - region coords
+        public long RegionHandle; // U64
+        public UUID RegionID; // LLUUID
     }
 
     public SetStartLocation() {
@@ -23,21 +30,22 @@ public class SetStartLocation extends SLMessage {
         this.StartLocationData_Field = new StartLocationData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 72;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetStartLocation(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 69);
+        // Message number: Low 325 (SetStartLocation).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x45);
         packUUID(byteBuffer, this.StartLocationData_Field.AgentID);
         packUUID(byteBuffer, this.StartLocationData_Field.RegionID);
         packInt(byteBuffer, this.StartLocationData_Field.LocationID);
@@ -46,7 +54,7 @@ public class SetStartLocation extends SLMessage {
         packLLVector3(byteBuffer, this.StartLocationData_Field.LocationLookAt);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.StartLocationData_Field.AgentID = unpackUUID(byteBuffer);
         this.StartLocationData_Field.RegionID = unpackUUID(byteBuffer);

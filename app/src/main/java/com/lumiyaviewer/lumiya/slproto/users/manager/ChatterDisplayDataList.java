@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 abstract class ChatterDisplayDataList {
     private final SortedChatterList chatters;
 
@@ -21,12 +20,12 @@ abstract class ChatterDisplayDataList {
     protected final UserManager userManager;
     private final Map<ChatterID, ChatterSubscription> chatterSubscriptions = new HashMap();
     private final AtomicBoolean needsRefresh = new AtomicBoolean(false);
-    private final Runnable refreshRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n0kmAon3UDOV6Jcsw0ejXq6u0xA
+    private final Runnable refreshRunnable = new Runnable() {
         private final /* synthetic */ void $m$0() {
             ChatterDisplayDataList.this.m298x2aebe54e();
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public final void run() {
             $m$0();
         }

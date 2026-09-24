@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base;
 
-/* loaded from: classes.dex */
 public class HeadMountedDisplay {
     private GvrViewerParams cardboardDevice;
     private ScreenParams screen;

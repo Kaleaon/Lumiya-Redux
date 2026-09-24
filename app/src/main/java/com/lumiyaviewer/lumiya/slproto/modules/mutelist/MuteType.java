@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.mutelist;
 
-/* loaded from: classes.dex */
 public enum MuteType {
     BY_NAME(2),
     AGENT(0),

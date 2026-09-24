@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DrawList {
     public final int avatarCountLimit;
 

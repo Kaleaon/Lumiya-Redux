@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceAudioDevice;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceSetAudioProperties implements VoicePluginMessage {
 
     @Nullable
@@ -35,7 +34,7 @@ public class VoiceSetAudioProperties implements VoicePluginMessage {
         this.audioDevice = voiceAudioDevice;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         if (this.speakerVolumeValid) {

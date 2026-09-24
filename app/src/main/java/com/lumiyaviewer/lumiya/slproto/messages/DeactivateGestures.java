@@ -5,20 +5,28 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Tell the database some gestures are no longer active
+ * viewer -> sim -> data
+ *
+ * <p>Template: {@code DeactivateGestures Low 317 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class DeactivateGestures extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int Flags;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int Flags; // U32
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public int GestureFlags;
-        public UUID ItemID;
+        public int GestureFlags; // U32
+        public UUID ItemID; // LLUUID
     }
 
     public DeactivateGestures() {
@@ -26,21 +34,22 @@ public class DeactivateGestures extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.Data_Fields.size() * 20) + 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDeactivateGestures(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 61);
+        // Message number: Low 317 (DeactivateGestures).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x3D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.Flags);
@@ -51,7 +60,7 @@ public class DeactivateGestures extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

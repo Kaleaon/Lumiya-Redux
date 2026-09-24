@@ -6,24 +6,33 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AgentAnimation - Update animation state
+ * viewer --> simulator
+ *
+ * <p>Template: {@code AgentAnimation High 5 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AgentAnimation extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<AnimationList> AnimationList_Fields = new ArrayList<>();
     public ArrayList<PhysicalAvatarEventList> PhysicalAvatarEventList_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block AnimationList, Variable. */
     public static class AnimationList {
-        public UUID AnimID;
-        public boolean StartAnim;
+        public UUID AnimID; // LLUUID
+        public boolean StartAnim; // BOOL
     }
 
+    /** Block PhysicalAvatarEventList, Variable. */
     public static class PhysicalAvatarEventList {
-        public byte[] TypeData;
+        public byte[] TypeData; // Variable 1
     }
 
     public AgentAnimation() {
@@ -31,7 +40,7 @@ public class AgentAnimation extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int size = (this.AnimationList_Fields.size() * 17) + 34 + 1;
         Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
@@ -44,14 +53,15 @@ public class AgentAnimation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAgentAnimation(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 5);
+        // Message number: High 5 (AgentAnimation).
+        byteBuffer.put((byte) 0x05);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.AnimationList_Fields.size());
@@ -66,7 +76,7 @@ public class AgentAnimation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

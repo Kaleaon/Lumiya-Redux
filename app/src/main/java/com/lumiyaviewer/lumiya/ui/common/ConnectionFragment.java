@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ConnectionFragment extends Fragment {
     public static final String EXTRA_ACTIVE_AGENT_UUID = "activeAgentUUID";
 

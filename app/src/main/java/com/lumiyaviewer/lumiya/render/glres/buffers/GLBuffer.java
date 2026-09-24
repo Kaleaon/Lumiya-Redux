@@ -7,11 +7,9 @@ import com.lumiyaviewer.lumiya.render.glres.GLResource;
 import com.lumiyaviewer.lumiya.render.glres.GLResourceManager;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class GLBuffer extends GLResource {
-    private static ThreadLocal<int[]> idBuffer = new ThreadLocal<int[]>() { // from class: com.lumiyaviewer.lumiya.render.glres.buffers.GLBuffer.1
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // java.lang.ThreadLocal
+    private static ThreadLocal<int[]> idBuffer = new ThreadLocal<int[]>() {
+        @Override
         public int[] initialValue() {
             return new int[1];
         }
@@ -26,7 +24,7 @@ public class GLBuffer extends GLResource {
             this.rawBuffer = directByteBuffer;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLResourceManager.GLGenericResourceReference
+        @Override
         public void GLFree() {
             int[] iArr = (int[]) GLBuffer.idBuffer.get();
             iArr[0] = this.handle;
@@ -47,7 +45,7 @@ public class GLBuffer extends GLResource {
         new GLResourceBufferReference(this, this.handle, gLResourceManager, this.rawBuffer);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLResource
+    @Override
     protected int Allocate(GLResourceManager gLResourceManager) {
         int[] iArr = idBuffer.get();
         GLES11.glGenBuffers(1, iArr, 0);

@@ -14,19 +14,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class InventoryQuery implements Parcelable {
     private static final int ASSET_TYPE_ANY = -1;
-    public static final Parcelable.Creator<InventoryQuery> CREATOR = new Parcelable.Creator<InventoryQuery>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryQuery.1
+    public static final Parcelable.Creator<InventoryQuery> CREATOR = new Parcelable.Creator<InventoryQuery>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryQuery createFromParcel(Parcel parcel) {
             Bundle readBundle = parcel.readBundle(getClass().getClassLoader());
             return InventoryQuery.create(UUIDPool.getUUID(readBundle.getString("folderId")), readBundle.getString("containsString"), readBundle.getBoolean("includeFolders"), readBundle.getBoolean("includeItems"), readBundle.getBoolean("newestFirst"), readBundle.getInt("assetType", -1));
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public InventoryQuery[] newArray(int i) {
             return new InventoryQuery[i];
         }
@@ -50,7 +49,7 @@ public abstract class InventoryQuery implements Parcelable {
     @Nullable
     public abstract String containsString();
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -95,7 +94,7 @@ public abstract class InventoryQuery implements Parcelable {
         return new InventoryEntryList(sLInventoryEntry != null ? sLInventoryEntry.name : null, sLInventoryEntry, SLInventoryEntry.query(inventoryDB.getDatabase(), Joiner.on(" AND ").join(arrayList), (String[]) Iterables.toArray(arrayList2, String.class), "isFolder DESC, (isFolder AND (typeDefault >= 0)) DESC, (assetType == 25) DESC, " + (newestFirst() ? "creationDate DESC, name" : "name, creationDate DESC")));
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         Bundle bundle = new Bundle();
         UUID folderId = folderId();

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.spatial;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.utils.InlineList;
 
-/* loaded from: classes.dex */
 class SpatialTree {
     static final int INVALID_BIN = -1;
     private final SpatialTreeNode[] bins;

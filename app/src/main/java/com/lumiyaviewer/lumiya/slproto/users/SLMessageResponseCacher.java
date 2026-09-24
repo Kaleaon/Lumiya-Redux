@@ -2,8 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.users;
 
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.dao.DaoSession;
-import com.lumiyaviewer.lumiya.react.RequestSource;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.messages.SLMessageFactory;
 import java.nio.ByteBuffer;
@@ -11,14 +9,12 @@ import java.nio.ByteOrder;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends ResponseCacher<Key, MessageType> {
     public SLMessageResponseCacher(DaoSession daoSession, Executor executor, String str) {
         super(daoSession, executor, str);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
+    @Override
     public MessageType loadCached(byte[] bArr) {
         ByteBuffer order = ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder());
         int DecodeMessageIDGeneric = SLMessage.DecodeMessageIDGeneric(order);
@@ -31,8 +27,7 @@ public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends
         return null;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
+    @Override
     public byte[] storeCached(@Nonnull MessageType messagetype) {
         byte[] bArr = new byte[messagetype.CalcPayloadSize()];
         messagetype.PackPayload(ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder()));

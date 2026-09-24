@@ -13,7 +13,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class WeakExecutor extends ThreadPoolExecutor {
     private final boolean usePriorities;
 
@@ -31,7 +30,7 @@ public class WeakExecutor extends ThreadPoolExecutor {
                 this(callable);
             }
 
-            @Override // java.util.concurrent.Callable
+            @Override
             public T call() throws Exception {
                 Callable<T> callable = this.callableRef.get();
                 if (callable != null) {
@@ -52,7 +51,7 @@ public class WeakExecutor extends ThreadPoolExecutor {
                 this(runnable);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public void run() {
                 Runnable runnable = this.runnableRef.get();
                 if (runnable != null) {
@@ -79,7 +78,7 @@ public class WeakExecutor extends ThreadPoolExecutor {
             }
         }
 
-        @Override // java.lang.Comparable
+        @Override
         public int compareTo(@Nonnull ComparableFutureTask<T> comparableFutureTask) {
             if (comparableFutureTask == this) {
                 return 0;
@@ -89,12 +88,12 @@ public class WeakExecutor extends ThreadPoolExecutor {
     }
 
     WeakExecutor(final String str, int i) {
-        super(i, i, 60L, TimeUnit.SECONDS, new WeakQueue(), new ThreadFactory() { // from class: com.lumiyaviewer.lumiya.res.executors.-$Lambda$paN_qX4OegT79dFg6kmGbliJfA0
+        super(i, i, 60L, TimeUnit.SECONDS, new WeakQueue(), new ThreadFactory() {
             private final /* synthetic */ Thread $m$0(Runnable runnable) {
                 return WeakExecutor.m118lambda$com_lumiyaviewer_lumiya_res_executors_WeakExecutor_531((String) str, runnable);
             }
 
-            @Override // java.util.concurrent.ThreadFactory
+            @Override
             public final Thread newThread(Runnable runnable) {
                 return $m$0(runnable);
             }
@@ -105,12 +104,12 @@ public class WeakExecutor extends ThreadPoolExecutor {
     }
 
     public WeakExecutor(final String str, int i, BlockingQueue<Runnable> blockingQueue) {
-        super(i, i, 60L, TimeUnit.SECONDS, blockingQueue, new ThreadFactory() { // from class: com.lumiyaviewer.lumiya.res.executors.-$Lambda$paN_qX4OegT79dFg6kmGbliJfA0.1
+        super(i, i, 60L, TimeUnit.SECONDS, blockingQueue, new ThreadFactory() {
             private final /* synthetic */ Thread $m$0(Runnable runnable) {
                 return WeakExecutor.m117lambda$com_lumiyaviewer_lumiya_res_executors_WeakExecutor_1106((String) str, runnable);
             }
 
-            @Override // java.util.concurrent.ThreadFactory
+            @Override
             public final Thread newThread(Runnable runnable) {
                 return $m$0(runnable);
             }
@@ -136,12 +135,12 @@ public class WeakExecutor extends ThreadPoolExecutor {
         return thread;
     }
 
-    @Override // java.util.concurrent.AbstractExecutorService
+    @Override
     protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T t) {
         return this.usePriorities ? new ComparableFutureTask(runnable, t) : super.newTaskFor(runnable, t);
     }
 
-    @Override // java.util.concurrent.AbstractExecutorService
+    @Override
     protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
         return this.usePriorities ? new ComparableFutureTask(callable) : super.newTaskFor(callable);
     }

@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractList<E> implements ChunkedList.ChunkFactory<E>, RandomAccess {
 
     @Nonnull
@@ -49,8 +48,8 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
     @Nullable
     private LoadResult<E> loadBelowResult = null;
     private final Map<Long, E> updatedElements = new HashMap();
-    private final Runnable loadMoreData = new Runnable() { // from class: com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.1
-        @Override // java.lang.Runnable
+    private final Runnable loadMoreData = new Runnable() {
+        @Override
         public void run() {
             boolean z;
             long j;
@@ -94,8 +93,8 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
             }
         }
     };
-    private final Runnable processUpdate = new Runnable() { // from class: com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.2
-        @Override // java.lang.Runnable
+    private final Runnable processUpdate = new Runnable() {
+        @Override
         public void run() {
             LoadResult loadResult;
             int i;
@@ -203,14 +202,14 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
             }
         }
     };
-    private final Comparator<E> chatMessageComparator = new Comparator() { // from class: com.lumiyaviewer.lumiya.utils.wlist.-$Lambda$QDlX9uefQr1Wq8gtt1O6M2wUNME
+    private final Comparator<E> chatMessageComparator = new Comparator() {
         private final /* synthetic */ int $m$0(Object obj, Object obj2) {
             int signum;
             signum = Long.signum(((Long) ((Identifiable) obj).getId()).longValue() - ((Long) ((Identifiable) obj2).getId()).longValue());
             return signum;
         }
 
-        @Override // java.util.Comparator
+        @Override
         public final int compare(Object obj, Object obj2) {
             return $m$0(obj, obj2);
         }
@@ -256,7 +255,6 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
         this.listenerExecutor = eventListener.getListEventsExecutor();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void postUpdate() {
         if (!this.updatePosted.compareAndSet(false, true)) {
             Debug.Printf("ChatView: processUpdate () already requested", new Object[0]);
@@ -272,12 +270,12 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
         postUpdate();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedList.ChunkFactory
+    @Override
     public List<E> createEmptyChunk() {
         return new ArrayList(this.windowSize);
     }
 
-    @Override // java.util.AbstractList, java.util.List
+    @Override
     public E get(int i) {
         return this.items.get(i);
     }
@@ -410,7 +408,7 @@ public class ChunkedListLoader<E extends Identifiable<Long>> extends AbstractLis
         }
     }
 
-    @Override // java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public int size() {
         return this.items.size();
     }

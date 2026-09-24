@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLAttachmentPoint {
     public static final int NON_HUD_ATTACHMENT_POINTS = 47;
     public static final int NUM_ATTACHMENT_POINTS = 56;

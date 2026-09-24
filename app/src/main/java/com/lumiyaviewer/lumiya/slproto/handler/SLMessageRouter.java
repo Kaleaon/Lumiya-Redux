@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLMessageRouter {
     private Map<Class<?>, HandlerList> messageHandlers = new HashMap();
     private Map<SLCapEventQueue.CapsEventType, HandlerList> eventQueueMessageHandlers = new HashMap();

@@ -8,12 +8,10 @@ import com.lumiyaviewer.lumiya.render.glres.GLResourceManager;
 import javax.annotation.Nonnull;
 
 @TargetApi(18)
-/* loaded from: classes.dex */
 public class GLQuery extends GLResource {
     private static final int MIN_OCCLUSION_QUERY_FRAMES = 0;
-    private static ThreadLocal<int[]> idQuery = new ThreadLocal<int[]>() { // from class: com.lumiyaviewer.lumiya.render.glres.GLQuery.1
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // java.lang.ThreadLocal
+    private static ThreadLocal<int[]> idQuery = new ThreadLocal<int[]>() {
+        @Override
         public int[] initialValue() {
             return new int[1];
         }
@@ -29,7 +27,7 @@ public class GLQuery extends GLResource {
             super(gLResource, i, gLResourceManager);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.glres.GLResourceManager.GLGenericResourceReference
+        @Override
         public void GLFree() {
             int[] iArr = (int[]) GLQuery.idQuery.get();
             iArr[0] = this.handle;
@@ -57,7 +55,7 @@ public class GLQuery extends GLResource {
         new GLQueryReference(this, this.handle, gLResourceManager);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLResource
+    @Override
     protected int Allocate(GLResourceManager gLResourceManager) {
         int[] iArr = idQuery.get();
         GLES30.glGenQueries(1, iArr, 0);

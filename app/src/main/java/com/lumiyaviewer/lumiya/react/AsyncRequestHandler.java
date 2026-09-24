@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.react;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class AsyncRequestHandler<K> implements RequestHandler<K> {
 
     @Nonnull
@@ -27,12 +26,12 @@ public class AsyncRequestHandler<K> implements RequestHandler<K> {
         this.baseHandler.onRequestCancelled(obj);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final K k) {
         this.executor.execute(() -> m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(k));
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull final K k) {
         this.executor.execute(() -> m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(k));
     }

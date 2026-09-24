@@ -6,31 +6,42 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectGrabUpdate
+ * TODO: Quantize this data, reduce message size.
+ * TimeSinceLast could go to 1 byte, since capped
+ * at 100 on sim.
+ *
+ * <p>Template: {@code ObjectGrabUpdate Low 118 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectGrabUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ObjectData ObjectData_Field;
     public ArrayList<SurfaceInfo> SurfaceInfo_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public LLVector3 GrabOffsetInitial;
-        public LLVector3 GrabPosition;
-        public UUID ObjectID;
-        public int TimeSinceLast;
+        public LLVector3 GrabOffsetInitial; // LLVector3
+        public LLVector3 GrabPosition; // LLVector3 - , region local
+        public UUID ObjectID; // LLUUID
+        public int TimeSinceLast; // U32
     }
 
+    /** Block SurfaceInfo, Variable. */
     public static class SurfaceInfo {
-        public LLVector3 Binormal;
-        public int FaceIndex;
-        public LLVector3 Normal;
-        public LLVector3 Position;
-        public LLVector3 STCoord;
-        public LLVector3 UVCoord;
+        public LLVector3 Binormal; // LLVector3
+        public int FaceIndex; // S32
+        public LLVector3 Normal; // LLVector3
+        public LLVector3 Position; // LLVector3
+        public LLVector3 STCoord; // LLVector3
+        public LLVector3 UVCoord; // LLVector3
     }
 
     public ObjectGrabUpdate() {
@@ -39,21 +50,22 @@ public class ObjectGrabUpdate extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.SurfaceInfo_Fields.size() * 64) + 81;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectGrabUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 118);
+        // Message number: Low 118 (ObjectGrabUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x76);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
@@ -71,7 +83,7 @@ public class ObjectGrabUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

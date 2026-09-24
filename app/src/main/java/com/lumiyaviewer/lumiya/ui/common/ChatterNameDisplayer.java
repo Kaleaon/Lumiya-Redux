@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatterNameDisplayer implements ChatterNameRetriever.OnChatterNameUpdated {
 
     @Nullable
@@ -67,7 +66,7 @@ public class ChatterNameDisplayer implements ChatterNameRetriever.OnChatterNameU
         return resolvedName != null ? resolvedName : context.getString(R.string.name_loading_title);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         if (chatterNameRetriever == this.nameRetriever) {
             this.alreadyUpdated = true;

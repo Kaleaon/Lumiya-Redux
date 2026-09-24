@@ -12,9 +12,25 @@ shipped `lumiya3.4.2.apk` and rebuilds from there.
 | `recovered/` | Raw reverse-engineering outputs — see `recovered/README.md`. |
 | `recovered/reference/` | Upstream Second Life references pulled for cross-checking (e.g. `message_template.msg` from `secondlife/master-message-template`). |
 | `tools/migrate_androidx.py` | The `android.support.*` → `androidx.*` rewriter. |
+| `tools/verify/` | Bytecode verifier against the original APK (`dexdiff.py`), link checker, before/after identity checker. |
+| `tools/recover/` | Decompiler-bug fixers, candidate swapping, protocol labelling, original-bytecode jar builder. |
+| `docs/recovery/` | [How the recovery is verified](docs/recovery/verified_recovery.md) and the [coding standard](docs/recovery/coding_standard.md) for recovered code. |
 | `ARCHITECTURE.md` | Package-by-package tour of the codebase with links to `github.com/secondlife` reference repos. |
 | `docs/protocol_migration_conformance.md` | Required migration safety mappings for message templates, LLSD/inventory semantics, and protocol-derived schema annotations. |
 | `BUILD_STATUS.md` | What compiles, what doesn't, and the pattern-level description of every remaining error. |
+
+## Verified against the original APK
+
+Decompilers damage code quietly, so nothing here is taken on trust. Every
+class in the build is checked against the bytecode of the shipped
+`Lumiya_3.4.2.apk`. Classes whose source does not yet reproduce that bytecode
+ship as the original compiled code. Current result: **0 damaged classes, 0
+unresolved links**. See [docs/recovery/verified_recovery.md](docs/recovery/verified_recovery.md).
+
+```bash
+tools/recover/legacy/build_legacy_jar.sh /path/to/Lumiya_3.4.2.apk
+tools/verify/verify_against_apk.sh      /path/to/Lumiya_3.4.2.apk
+```
 
 ## Quick start
 

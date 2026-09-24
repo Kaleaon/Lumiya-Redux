@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/* loaded from: classes.dex */
 public class SpatialObjectIndex {
     private static final int NUM_DEPTH_BINS = 16;
     private static final float REGION_SIZE_XY = 256.0f;
@@ -39,8 +38,8 @@ public class SpatialObjectIndex {
     private volatile FrustrumPlanes frustrumPlanes = null;
     private final DrawListUpdateTask drawListUpdateTask = new DrawListUpdateTask(this, null);
     private final ObjectsUpdateTask objectsUpdateTask = new ObjectsUpdateTask();
-    private final Runnable terrainUpdate = new Runnable() { // from class: com.lumiyaviewer.lumiya.render.spatial.SpatialObjectIndex.1
-        @Override // java.lang.Runnable
+    private final Runnable terrainUpdate = new Runnable() {
+        @Override
         public void run() {
             TerrainData terrainData;
             int i;
@@ -115,7 +114,7 @@ public class SpatialObjectIndex {
             this();
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             if (SpatialObjectIndex.this.initialUpdateCompleted && (!SpatialObjectIndex.this.indexDisabled)) {
                 if (!SpatialObjectIndex.this.frustrumChanged.getAndSet(false) ? SpatialObjectIndex.this.spatialTree.isTreeWalkNeeded() : true) {
@@ -140,7 +139,7 @@ public class SpatialObjectIndex {
             this();
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             DrawListObjectEntry[] drawListObjectEntryArr;
             DrawListObjectEntry[] drawListObjectEntryArr2;
@@ -173,7 +172,6 @@ public class SpatialObjectIndex {
         this.objectsInFrustrum = DrawList.create(drawableStore, null, i);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public DrawList getObjectsInCells(int i) {
         DrawList create = DrawList.create(this.drawableStore, this.objectsInFrustrum, i);
         this.spatialTree.addDrawables(create);
@@ -181,14 +179,12 @@ public class SpatialObjectIndex {
         return create;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean handleRemoveObject(DrawListObjectEntry drawListObjectEntry) {
         this.spatialTree.removeObject(drawListObjectEntry);
         drawListObjectEntry.getObjectInfo().clearDrawListEntry();
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean handleUpdateObject(DrawListObjectEntry drawListObjectEntry) {
         drawListObjectEntry.updateBoundingBox();
         this.spatialTree.updateObject(drawListObjectEntry);

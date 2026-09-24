@@ -1,28 +1,34 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ChildAgentPositionUpdate
+ * sent to child agents just to keep them alive
+ *
+ * <p>Template: {@code ChildAgentPositionUpdate High 27 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ChildAgentPositionUpdate extends SLMessage {
     public AgentData AgentData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public LLVector3 AgentPos;
-        public LLVector3 AgentVel;
-        public LLVector3 AtAxis;
-        public LLVector3 Center;
-        public boolean ChangedGrid;
-        public LLVector3 LeftAxis;
-        public long RegionHandle;
-        public UUID SessionID;
-        public LLVector3 Size;
-        public LLVector3 UpAxis;
-        public int ViewerCircuitCode;
+        public UUID AgentID; // LLUUID
+        public LLVector3 AgentPos; // LLVector3
+        public LLVector3 AgentVel; // LLVector3
+        public LLVector3 AtAxis; // LLVector3
+        public LLVector3 Center; // LLVector3
+        public boolean ChangedGrid; // BOOL
+        public LLVector3 LeftAxis; // LLVector3
+        public long RegionHandle; // U64
+        public UUID SessionID; // LLUUID
+        public LLVector3 Size; // LLVector3
+        public LLVector3 UpAxis; // LLVector3
+        public int ViewerCircuitCode; // U32
     }
 
     public ChildAgentPositionUpdate() {
@@ -30,19 +36,20 @@ public class ChildAgentPositionUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 130;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleChildAgentPositionUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.ESC);
+        // Message number: High 27 (ChildAgentPositionUpdate).
+        byteBuffer.put((byte) 0x1B);
         packLong(byteBuffer, this.AgentData_Field.RegionHandle);
         packInt(byteBuffer, this.AgentData_Field.ViewerCircuitCode);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
@@ -57,7 +64,7 @@ public class ChildAgentPositionUpdate extends SLMessage {
         packBoolean(byteBuffer, this.AgentData_Field.ChangedGrid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.RegionHandle = unpackLong(byteBuffer);
         this.AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer);

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.voice.common.messages;
 import android.os.Bundle;
 import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 
-/* loaded from: classes.dex */
 public class VoiceEnableMic implements VoicePluginMessage {
     public final boolean enableMic;
 
@@ -15,7 +14,7 @@ public class VoiceEnableMic implements VoicePluginMessage {
         this.enableMic = z;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBoolean("enableMic", this.enableMic);

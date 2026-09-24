@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TextureMemoryTracker {
     private static final int PAGE_SIZE = 4096;
     private static final int RELEASE_DELAY_FRAMES = 4;

@@ -11,7 +11,6 @@ import com.google.vr.vrcore.base.api.VrCoreNotAvailableException;
 import com.google.vr.vrcore.performance.api.IPerformanceService;
 import com.google.vr.vrcore.performance.api.PerformanceServiceConsts;
 
-/* loaded from: classes.dex */
 public class PerfMonitor implements AutoCloseable {
     private static final int STATUS_CONNECTED = 2;
     private static final int STATUS_CONNECTING = 1;
@@ -20,8 +19,8 @@ public class PerfMonitor implements AutoCloseable {
     private IPerformanceService perfService;
     private final Object lock = new Object();
     private int status = 1;
-    private final ServiceConnection connection = new ServiceConnection() { // from class: com.google.vr.cardboard.PerfMonitor.1
-        @Override // android.content.ServiceConnection
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             synchronized (PerfMonitor.this.lock) {
                 PerfMonitor.this.perfService = IPerformanceService.Stub.asInterface(iBinder);
@@ -30,7 +29,7 @@ public class PerfMonitor implements AutoCloseable {
             }
         }
 
-        @Override // android.content.ServiceConnection
+        @Override
         public void onServiceDisconnected(ComponentName componentName) {
             synchronized (PerfMonitor.this.lock) {
                 PerfMonitor.this.perfService = null;
@@ -54,7 +53,7 @@ public class PerfMonitor implements AutoCloseable {
         return null;
     }
 
-    @Override // java.lang.AutoCloseable
+    @Override
     public void close() {
         this.context.unbindService(this.connection);
     }

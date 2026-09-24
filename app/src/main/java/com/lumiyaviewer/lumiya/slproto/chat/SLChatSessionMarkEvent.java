@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLChatSessionMarkEvent extends SLChatEvent {
 
     @Nullable
@@ -42,28 +41,28 @@ public class SLChatSessionMarkEvent extends SLChatEvent {
         this.description = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.SessionMark;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         return this.sessionMarkType == SessionMarkType.Teleport ? context.getString(R.string.teleport_complete_format, this.description) : context.getString(R.string.new_session_mark_format, DateFormat.getDateTimeInstance(3, 3).format(getTimestamp()));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_SESSION_MARK;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setMessageText(this.description);

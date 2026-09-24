@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceChannelStatus implements VoicePluginMessage {
 
     @Nonnull
@@ -31,7 +30,7 @@ public class VoiceChannelStatus implements VoicePluginMessage {
         this.errorMessage = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle("channelInfo", this.channelInfo.toBundle());

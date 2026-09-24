@@ -1,0 +1,792 @@
+{
+ "AbortXfer": {
+  "handler": "process_abort_xfer",
+  "defined_in": "indra/llmessage/llxfermanager.cpp",
+  "registered_in": "indra/llmessage/llxfermanager.cpp"
+ },
+ "AcceptCallingCard": {
+  "handler": "process_accept_callingcard",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AckAddCircuitCode": {
+  "handler": "ack_add_circuit_code",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "AddCircuitCode": {
+  "handler": "LLMessageSystem::processAddCircuitCode",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "AddModifyAbility": {
+  "handler": "LLAgent::processAddModifyAbility",
+  "defined_in": null,
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AgentAlertMessage": {
+  "handler": "process_agent_alert_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AgentDataUpdate": {
+  "handler": "LLAgent::processAgentDataUpdate",
+  "defined_in": "indra/newview/llagent.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AgentDropGroup": {
+  "handler": "LLAgent::processAgentDropGroup",
+  "defined_in": "indra/newview/llagent.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AgentGroupDataUpdate": {
+  "handler": "LLAgent::processAgentGroupDataUpdate",
+  "defined_in": "indra/newview/llagent.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AgentMovementComplete": {
+  "handler": "process_agent_movement_complete",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AlertMessage": {
+  "handler": "process_alert_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AssetUploadComplete": {
+  "handler": "processUploadComplete",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/llassetstorage.cpp"
+ },
+ "AssignCircuitCode": {
+  "handler": "LLMessageSystem::processAssignCircuitCode",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "AttachedSound": {
+  "handler": "null_message_callback",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AttachedSoundGainChange": {
+  "handler": "process_attached_sound_gain_change",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarAnimation": {
+  "handler": "process_avatar_animation",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarAppearance": {
+  "handler": "process_avatar_appearance",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarClassifiedReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarClassifiedsReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarGroupsReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarGroupsReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarInterestsReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarInterestsReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarNotesReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarNotesReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarPickerReply": {
+  "handler": "LLFloaterAvatarPicker::processAvatarPickerReply",
+  "defined_in": "indra/newview/llfloateravatarpicker.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarPicksReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarPicksReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarPropertiesReply": {
+  "handler": "LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "AvatarSitResponse": {
+  "handler": "process_avatar_sit_response",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "BulkUpdateInventory": {
+  "handler": "processBulkUpdateInventory",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "CameraConstraint": {
+  "handler": "process_camera_constraint",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ChangeUserRights": {
+  "handler": "processChangeUserRights",
+  "defined_in": null,
+  "registered_in": "indra/newview/llcallingcard.cpp"
+ },
+ "ChatFromSimulator": {
+  "handler": "process_chat_from_simulator",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ClassifiedInfoReply": {
+  "handler": "LLAvatarPropertiesProcessor::processClassifiedInfoReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ClearFollowCamProperties": {
+  "handler": "process_clear_follow_cam_properties",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "CloseCircuit": {
+  "handler": "close_circuit",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "CoarseLocationUpdate": {
+  "handler": "LLWorld::processCoarseUpdate",
+  "defined_in": "indra/newview/llworld.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "CompletePingCheck": {
+  "handler": "process_complete_ping_check",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "ConfirmXferPacket": {
+  "handler": "process_confirm_packet",
+  "defined_in": "indra/llmessage/llxfermanager.cpp",
+  "registered_in": "indra/llmessage/llxfermanager.cpp"
+ },
+ "CreateGroupReply": {
+  "handler": "LLGroupMgr::processCreateGroupReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "CreateTrustedCircuit": {
+  "handler": "process_create_trusted_circuit",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "CrossedRegion": {
+  "handler": "process_crossed_region",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DeRezAck": {
+  "handler": "process_derez_ack",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DeclineCallingCard": {
+  "handler": "process_decline_callingcard",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DenyTrustedCircuit": {
+  "handler": "process_deny_trusted_circuit",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "DerezContainer": {
+  "handler": "process_derez_container",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirClassifiedReply": {
+  "handler": "LLPanelDirBrowser::processDirClassifiedReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirEventsReply": {
+  "handler": "LLPanelDirBrowser::processDirEventsReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirGroupsReply": {
+  "handler": "LLPanelDirBrowser::processDirGroupsReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirLandReply": {
+  "handler": "LLPanelDirBrowser::processDirLandReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirPeopleReply": {
+  "handler": "LLPanelDirBrowser::processDirPeopleReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DirPlacesReply": {
+  "handler": "LLPanelDirBrowser::processDirPlacesReply",
+  "defined_in": "indra/newview/llpaneldirbrowser.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "DisableSimulator": {
+  "handler": "process_disable_simulator",
+  "defined_in": "indra/newview/llworld.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "EconomyData": {
+  "handler": "process_economy_data",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "EjectGroupMemberReply": {
+  "handler": "LLGroupMgr::processEjectGroupMemberReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "EnableSimulator": {
+  "handler": "process_enable_simulator",
+  "defined_in": "indra/newview/llworld.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "Error": {
+  "handler": "LLMessageSystem::processError",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "EstateCovenantReply": {
+  "handler": "process_covenant_reply",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "EstateOwnerMessage": {
+  "handler": "processEstateOwnerRequest",
+  "defined_in": null,
+  "registered_in": "indra/newview/llfloaterregioninfo.cpp"
+ },
+ "EventInfoReply": {
+  "handler": "LLEventNotifier::processEventInfoReply",
+  "defined_in": "indra/newview/lleventnotifier.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "FeatureDisabled": {
+  "handler": "process_feature_disabled_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "FindAgent": {
+  "handler": "processAgentFound",
+  "defined_in": null,
+  "registered_in": "indra/newview/llcallingcard.cpp"
+ },
+ "ForceObjectSelect": {
+  "handler": "LLSelectMgr::processForceObjectSelect",
+  "defined_in": "indra/newview/llselectmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GenericMessage": {
+  "handler": "process_generic_message",
+  "defined_in": "indra/newview/llviewergenericmessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GenericStreamingMessage": {
+  "handler": "process_generic_streaming_message",
+  "defined_in": "indra/newview/llviewergenericmessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GrantGodlikePowers": {
+  "handler": "process_grant_godlike_powers",
+  "defined_in": "indra/newview/llviewermenu.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupAccountDetailsReply": {
+  "handler": "LLPanelGroupLandMoney::processGroupAccountDetailsReply",
+  "defined_in": "indra/newview/llpanelgrouplandmoney.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupAccountSummaryReply": {
+  "handler": "LLPanelGroupLandMoney::processGroupAccountSummaryReply",
+  "defined_in": "indra/newview/llpanelgrouplandmoney.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupAccountTransactionsReply": {
+  "handler": "LLPanelGroupLandMoney::processGroupAccountTransactionsReply",
+  "defined_in": "indra/newview/llpanelgrouplandmoney.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupMembersReply": {
+  "handler": "LLGroupMgr::processGroupMembersReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupNoticesListReply": {
+  "handler": "LLPanelGroupNotices::processGroupNoticesListReply",
+  "defined_in": "indra/newview/llpanelgroupnotices.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupProfileReply": {
+  "handler": "LLGroupMgr::processGroupPropertiesReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupRoleDataReply": {
+  "handler": "LLGroupMgr::processGroupRoleDataReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupRoleMembersReply": {
+  "handler": "LLGroupMgr::processGroupRoleMembersReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "GroupTitlesReply": {
+  "handler": "LLGroupMgr::processGroupTitlesReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "HealthMessage": {
+  "handler": "process_health_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ImageNotInDatabase": {
+  "handler": "LLViewerTextureList::processImageNotInDatabase",
+  "defined_in": "indra/newview/llviewertexturelist.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ImprovedInstantMessage": {
+  "handler": "process_improved_im",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ImprovedTerseObjectUpdate": {
+  "handler": "process_terse_object_update_improved",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "InitiateDownload": {
+  "handler": "process_initiate_download",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "JoinGroupReply": {
+  "handler": "LLGroupMgr::processJoinGroupReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "KickUser": {
+  "handler": "process_kick_user",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "KillObject": {
+  "handler": "process_kill_object",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LandStatReply": {
+  "handler": "LLFloaterTopObjects::handle_land_reply",
+  "defined_in": "indra/newview/llfloatertopobjects.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LargeGenericMessage": {
+  "handler": "process_large_generic_message",
+  "defined_in": "indra/newview/llviewergenericmessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LayerData": {
+  "handler": "process_layer_data",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LeaveGroupReply": {
+  "handler": "LLGroupMgr::processLeaveGroupReply",
+  "defined_in": "indra/newview/llgroupmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LoadURL": {
+  "handler": "process_load_url",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "LogMessages": {
+  "handler": "process_log_messages",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "LogoutReply": {
+  "handler": "process_logout_reply",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "MapBlockReply": {
+  "handler": "LLWorldMapMessage::processMapBlockReply",
+  "defined_in": "indra/newview/llworldmapmessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "MapItemReply": {
+  "handler": "LLWorldMapMessage::processMapItemReply",
+  "defined_in": "indra/newview/llworldmapmessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "MeanCollisionAlert": {
+  "handler": "process_mean_collision_alert_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "MoneyBalanceReply": {
+  "handler": "process_money_balance_reply",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "MoveInventoryItem": {
+  "handler": "processMoveInventoryItem",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "NameValuePair": {
+  "handler": "process_name_value",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectAnimation": {
+  "handler": "process_object_animation",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectProperties": {
+  "handler": "LLSelectMgr::processObjectProperties",
+  "defined_in": "indra/newview/llselectmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectPropertiesFamily": {
+  "handler": "LLSelectMgr::processObjectPropertiesFamily",
+  "defined_in": "indra/newview/llselectmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectUpdate": {
+  "handler": "process_object_update",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectUpdateCached": {
+  "handler": "process_cached_object_update",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ObjectUpdateCompressed": {
+  "handler": "process_compressed_object_update",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "OfferCallingCard": {
+  "handler": "process_offer_callingcard",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "OfflineNotification": {
+  "handler": "processOfflineNotification",
+  "defined_in": null,
+  "registered_in": "indra/newview/llcallingcard.cpp"
+ },
+ "OnlineNotification": {
+  "handler": "processOnlineNotification",
+  "defined_in": null,
+  "registered_in": "indra/newview/llcallingcard.cpp"
+ },
+ "OpenCircuit": {
+  "handler": "open_circuit",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "PacketAck": {
+  "handler": "process_packet_ack",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "ParcelAccessListReply": {
+  "handler": "LLViewerParcelMgr::processParcelAccessListReply",
+  "defined_in": "indra/newview/llviewerparcelmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ParcelDwellReply": {
+  "handler": "LLViewerParcelMgr::processParcelDwellReply",
+  "defined_in": "indra/newview/llviewerparcelmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ParcelInfoReply": {
+  "handler": "LLRemoteParcelInfoProcessor::processParcelInfoReply",
+  "defined_in": "indra/newview/llremoteparcelrequest.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ParcelMediaCommandMessage": {
+  "handler": "parcelMediaCommandMessageHandler",
+  "defined_in": null,
+  "registered_in": "indra/newview/llviewerparcelmedia.cpp"
+ },
+ "ParcelMediaUpdate": {
+  "handler": "parcelMediaUpdateHandler",
+  "defined_in": null,
+  "registered_in": "indra/newview/llviewerparcelmedia.cpp"
+ },
+ "ParcelObjectOwnersReply": {
+  "handler": "LLPanelLandObjects::processParcelObjectOwnersReply",
+  "defined_in": "indra/newview/llfloaterland.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ParcelOverlay": {
+  "handler": "LLViewerParcelMgr::processParcelOverlay",
+  "defined_in": "indra/newview/llviewerparcelmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ParcelProperties": {
+  "handler": "LLViewerParcelMgr::processParcelProperties",
+  "defined_in": "indra/newview/llviewerparcelmgr.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "PayPriceReply": {
+  "handler": "0",
+  "defined_in": null,
+  "registered_in": "indra/newview/llfloaterpay.cpp"
+ },
+ "PickInfoReply": {
+  "handler": "LLAvatarPropertiesProcessor::processPickInfoReply",
+  "defined_in": "indra/newview/llavatarpropertiesprocessor.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "PlacesReply": {
+  "handler": "process_places_reply",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "PreloadSound": {
+  "handler": "process_preload_sound",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "RegionHandshake": {
+  "handler": "process_region_handshake",
+  "defined_in": "indra/newview/llworld.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "RegionInfo": {
+  "handler": "LLViewerRegion::processRegionInfo",
+  "defined_in": "indra/newview/llviewerregion.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "RemoveInventoryFolder": {
+  "handler": "processRemoveInventoryFolder",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "RemoveInventoryItem": {
+  "handler": "processRemoveInventoryItem",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "RemoveInventoryObjects": {
+  "handler": "processRemoveInventoryObjects",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "RemoveModifyAbility": {
+  "handler": "LLAgent::processRemoveModifyAbility",
+  "defined_in": null,
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "RemoveNameValuePair": {
+  "handler": "process_remove_name_value",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ReplyTaskInventory": {
+  "handler": "LLViewerObject::processTaskInv",
+  "defined_in": "indra/newview/llviewerobject.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ReputationIndividualReply": {
+  "handler": "LLFloaterRate::processReputationIndividualReply",
+  "defined_in": null,
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "RequestTrustedCircuit": {
+  "handler": "null_message_callback",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "RequestXfer": {
+  "handler": "process_request_xfer",
+  "defined_in": "indra/llmessage/llxfermanager.cpp",
+  "registered_in": "indra/llmessage/llxfermanager.cpp"
+ },
+ "SaveAssetIntoInventory": {
+  "handler": "processSaveAssetIntoInventory",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "ScriptControlChange": {
+  "handler": "LLAgent::processScriptControlChange",
+  "defined_in": "indra/newview/llagent.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ScriptDialog": {
+  "handler": "process_script_dialog",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ScriptQuestion": {
+  "handler": "process_script_question",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ScriptRunningReply": {
+  "handler": "LLLiveLSLEditor::processScriptRunningReply",
+  "defined_in": "indra/newview/llpreviewscript.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ScriptTeleportRequest": {
+  "handler": "process_script_teleport_request",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "SendXferPacket": {
+  "handler": "continue_file_receive",
+  "defined_in": "indra/llmessage/llxfermanager.cpp",
+  "registered_in": "indra/llmessage/llxfermanager.cpp"
+ },
+ "SetFollowCamProperties": {
+  "handler": "process_set_follow_cam_properties",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "SimStats": {
+  "handler": "process_sim_stats",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "SimulatorViewerTimeMessage": {
+  "handler": "process_time_synch",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "SoundTrigger": {
+  "handler": "null_message_callback",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "StartPingCheck": {
+  "handler": "process_start_ping_check",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "TelehubInfo": {
+  "handler": "processTelehubInfo",
+  "defined_in": null,
+  "registered_in": "indra/newview/llfloatertelehub.cpp"
+ },
+ "TeleportFailed": {
+  "handler": "process_teleport_failed",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "TeleportFinish": {
+  "handler": "process_teleport_finish",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "TeleportLocal": {
+  "handler": "process_teleport_local",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "TeleportProgress": {
+  "handler": "process_teleport_progress",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "TeleportStart": {
+  "handler": "process_teleport_start",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "TerminateFriendship": {
+  "handler": "processTerminateFriendship",
+  "defined_in": null,
+  "registered_in": "indra/newview/llcallingcard.cpp"
+ },
+ "TransferAbort": {
+  "handler": "processTransferAbort",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/lltransfermanager.cpp"
+ },
+ "TransferInfo": {
+  "handler": "processTransferInfo",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/lltransfermanager.cpp"
+ },
+ "TransferPacket": {
+  "handler": "processTransferPacket",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/lltransfermanager.cpp"
+ },
+ "TransferRequest": {
+  "handler": "processTransferRequest",
+  "defined_in": null,
+  "registered_in": "indra/llmessage/lltransfermanager.cpp"
+ },
+ "UUIDGroupNameReply": {
+  "handler": "handleUUIDGroupNameReply",
+  "defined_in": "indra/llmessage/llcachename.cpp",
+  "registered_in": "indra/llmessage/llcachename.cpp"
+ },
+ "UUIDGroupNameRequest": {
+  "handler": "handleUUIDGroupNameRequest",
+  "defined_in": "indra/llmessage/llcachename.cpp",
+  "registered_in": "indra/llmessage/llcachename.cpp"
+ },
+ "UUIDNameReply": {
+  "handler": "handleUUIDNameReply",
+  "defined_in": "indra/llmessage/llcachename.cpp",
+  "registered_in": "indra/llmessage/llcachename.cpp"
+ },
+ "UUIDNameRequest": {
+  "handler": "handleUUIDNameRequest",
+  "defined_in": "indra/llmessage/llcachename.cpp",
+  "registered_in": "indra/llmessage/llcachename.cpp"
+ },
+ "UpdateCreateInventoryItem": {
+  "handler": "processUpdateCreateInventoryItem",
+  "defined_in": null,
+  "registered_in": "indra/newview/llinventorymodel.cpp"
+ },
+ "UseCircuitCode": {
+  "handler": "LLMessageSystem::processUseCircuitCode",
+  "defined_in": "indra/llmessage/message.cpp",
+  "registered_in": "indra/llmessage/message.cpp"
+ },
+ "UserInfoReply": {
+  "handler": "process_user_info_reply",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ViewerEffect": {
+  "handler": "LLHUDManager::processViewerEffect",
+  "defined_in": "indra/newview/llhudmanager.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ },
+ "ViewerFrozenMessage": {
+  "handler": "process_frozen_message",
+  "defined_in": "indra/newview/llviewermessage.cpp",
+  "registered_in": "indra/newview/llstartup.cpp"
+ }
+}

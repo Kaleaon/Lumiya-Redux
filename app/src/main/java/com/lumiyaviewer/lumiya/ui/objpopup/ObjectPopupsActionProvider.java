@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.lumiyaviewer.lumiya.R;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectPopupsActionProvider extends ActionProvider implements View.OnClickListener {
     private int objectPopupCount;
 
@@ -30,19 +29,19 @@ public class ObjectPopupsActionProvider extends ActionProvider implements View.O
         this.objectPopupsClickListener = null;
     }
 
-    @Override // androidx.core.view.ActionProvider
+    @Override
     public boolean isVisible() {
         return this.objectPopupCount != 0;
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         if (this.objectPopupsClickListener != null) {
             this.objectPopupsClickListener.onObjectPopupsClicked();
         }
     }
 
-    @Override // androidx.core.view.ActionProvider
+    @Override
     public View onCreateActionView() {
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.object_popups_action_provider, (ViewGroup) null);
         this.popupCountTextView = (TextView) inflate.findViewById(R.id.popupCountTextView);
@@ -53,7 +52,7 @@ public class ObjectPopupsActionProvider extends ActionProvider implements View.O
         return inflate;
     }
 
-    @Override // androidx.core.view.ActionProvider
+    @Override
     public boolean overridesItemVisibility() {
         return true;
     }

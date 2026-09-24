@@ -3,12 +3,21 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * TeleportStart sim->viewer
+ * announce a successful teleport request to the viewer.
+ *
+ * <p>Template: {@code TeleportStart Low 73 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_teleport_start()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class TeleportStart extends SLMessage {
     public Info Info_Field;
 
+    /** Block Info, Single. */
     public static class Info {
-        public int TeleportFlags;
+        public int TeleportFlags; // U32
     }
 
     public TeleportStart() {
@@ -16,25 +25,26 @@ public class TeleportStart extends SLMessage {
         this.Info_Field = new Info();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 8;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleTeleportStart(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 73);
+        // Message number: Low 73 (TeleportStart).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x49);
         packInt(byteBuffer, this.Info_Field.TeleportFlags);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Info_Field.TeleportFlags = unpackInt(byteBuffer);
     }

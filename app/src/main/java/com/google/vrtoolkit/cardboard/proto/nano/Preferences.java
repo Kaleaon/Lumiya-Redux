@@ -8,7 +8,6 @@ import com.google.protobuf.nano.InvalidProtocolBufferNanoException;
 import com.google.protobuf.nano.MessageNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Preferences {
 
     public static final class DeveloperPrefs extends ExtendableMessageNano<DeveloperPrefs> implements Cloneable {
@@ -69,8 +68,7 @@ public interface Preferences {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final DeveloperPrefs clone() {
             try {
                 return (DeveloperPrefs) super.clone();
@@ -79,7 +77,7 @@ public interface Preferences {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -115,7 +113,7 @@ public interface Preferences {
             return (this.bitField0_ & 2) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final DeveloperPrefs mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -161,7 +159,7 @@ public interface Preferences {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeBool(1, this.performanceMonitoringEnabled_);
@@ -225,8 +223,7 @@ public interface Preferences {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final UserPrefs clone() {
             try {
                 UserPrefs userPrefs = (UserPrefs) super.clone();
@@ -239,7 +236,7 @@ public interface Preferences {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -256,7 +253,7 @@ public interface Preferences {
             return (this.bitField0_ & 1) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final UserPrefs mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -293,7 +290,7 @@ public interface Preferences {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeInt32(1, this.controllerHandedness_);

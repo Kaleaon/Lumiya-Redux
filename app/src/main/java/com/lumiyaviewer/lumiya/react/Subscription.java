@@ -6,7 +6,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class Subscription<K, T> implements RefreshableOne {
 
     @Nullable
@@ -81,12 +80,12 @@ public class Subscription<K, T> implements RefreshableOne {
 
     void onData(final T t) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$CF5cnl0on0-506QrOcvyL8_AER8
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     Subscription.this.m48lambda$com_lumiyaviewer_lumiya_react_Subscription_1719(t);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -99,12 +98,12 @@ public class Subscription<K, T> implements RefreshableOne {
     void onError(final Throwable th) {
         if (this.onError != null) {
             if (this.executor != null) {
-                this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$CF5cnl0on0-506QrOcvyL8_AER8.1
+                this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     Subscription.this.m49lambda$com_lumiyaviewer_lumiya_react_Subscription_1938(th);
                 }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -115,7 +114,7 @@ public class Subscription<K, T> implements RefreshableOne {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RefreshableOne
+    @Override
     public void requestRefresh() {
         if (this.subscriptionPool instanceof Refreshable) {
             ((Refreshable) this.subscriptionPool).requestUpdate(this.key);

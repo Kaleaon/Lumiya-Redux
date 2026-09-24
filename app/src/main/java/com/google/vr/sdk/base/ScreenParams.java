@@ -5,7 +5,6 @@ import android.view.Display;
 import com.google.vr.cardboard.DisplayUtils;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 
-/* loaded from: classes.dex */
 public class ScreenParams {
     private float borderSizeMeters;
     private int height;

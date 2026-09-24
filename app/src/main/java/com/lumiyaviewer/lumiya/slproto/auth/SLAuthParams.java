@@ -4,7 +4,6 @@ import android.content.Intent;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLAuthParams {
     public final UUID clientID;
     public final String gridName;

@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class GvrLayout extends FrameLayout {
     private static final boolean DEBUG = false;
     private static final int EXTERNAL_PRESENTATION_MIN_API = 16;
@@ -191,7 +190,7 @@ public class GvrLayout extends FrameLayout {
             setDisplay(null);
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayAdded(int i) {
             Display display = this.displayManager.getDisplay(i);
             if (isValidExternalDisplay(display)) {
@@ -199,11 +198,11 @@ public class GvrLayout extends FrameLayout {
             }
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayChanged(int i) {
         }
 
-        @Override // android.hardware.display.DisplayManager.DisplayListener
+        @Override
         public void onDisplayRemoved(int i) {
             if (this.presentation != null && this.presentation.getDisplay().getDisplayId() == i) {
                 setDisplay(null);
@@ -265,8 +264,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -279,8 +278,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -293,8 +292,8 @@ public class GvrLayout extends FrameLayout {
         this.isResumed = false;
         this.videoSurfaceId = -1;
         this.stereoModeEnabled = true;
-        this.showRenderingViewsRunnable = new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.1
-            @Override // java.lang.Runnable
+        this.showRenderingViewsRunnable = new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.updateRenderingViewsVisibility(0);
             }
@@ -316,7 +315,7 @@ public class GvrLayout extends FrameLayout {
             this.scanlineRacingView.setEGLWindowSurfaceFactory(this.eglFactory);
             if (!this.stereoModeEnabled) {
                 Log.w(TAG, "Disabling stereo mode with async reprojection enabled may not work properly.");
-                this.scanlineRacingView.setVisibility(8);
+                this.scanlineRacingView.setVisibility(View.GONE);
             }
             if (this.scanlineRacingRenderer == null) {
                 this.scanlineRacingRenderer = new ScanlineRacingRenderer(this.gvrApi);
@@ -410,7 +409,6 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateRenderingViewsVisibility(int i) {
         if (this.presentationView != null) {
             this.presentationView.setVisibility(this.stereoModeEnabled ? i : 0);
@@ -441,8 +439,8 @@ public class GvrLayout extends FrameLayout {
     }
 
     protected VrCoreSdkClient createVrCoreSdkClient(Context context, GvrApi gvrApi, DaydreamUtilsWrapper daydreamUtilsWrapper, FadeOverlayView fadeOverlayView) {
-        return new VrCoreSdkClient(context, gvrApi, ContextUtils.getActivity(context).getComponentName(), daydreamUtilsWrapper, new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.3
-            @Override // java.lang.Runnable
+        return new VrCoreSdkClient(context, gvrApi, ContextUtils.getActivity(context).getComponentName(), daydreamUtilsWrapper, new Runnable() {
+            @Override
             public void run() {
                 GvrLayout.this.uiLayout.invokeCloseButtonListener();
             }
@@ -532,13 +530,13 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
         this.displaySynchronizer.onConfigurationChanged();
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.presentationHelper == null) {
@@ -552,8 +550,8 @@ public class GvrLayout extends FrameLayout {
         try {
             this.gvrApi.pause();
             if (this.scanlineRacingView != null) {
-                this.scanlineRacingView.queueEvent(new Runnable() { // from class: com.google.vr.ndk.base.GvrLayout.2
-                    @Override // java.lang.Runnable
+                this.scanlineRacingView.queueEvent(new Runnable() {
+                    @Override
                     public void run() {
                         GvrLayout.this.scanlineRacingRenderer.onPause();
                     }
@@ -605,7 +603,7 @@ public class GvrLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.presentationView != null && isPresenting() && this.presentationView.dispatchTouchEvent(motionEvent)) {
             return true;
@@ -613,7 +611,7 @@ public class GvrLayout extends FrameLayout {
         return super.onTouchEvent(motionEvent);
     }
 
-    @Override // android.view.View
+    @Override
     public void onWindowVisibilityChanged(int i) {
         super.onWindowVisibilityChanged(i);
         updateFadeVisibility();

@@ -5,55 +5,70 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RegionHandshake
+ * Sent by region to viewer after it has received UseCircuitCode
+ * from that viewer.
+ * sim -> viewer
+ * reliable
+ *
+ * <p>Template: {@code RegionHandshake Low 148 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_region_handshake()} in indra/newview/llworld.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class RegionHandshake extends SLMessage {
     public RegionInfo2 RegionInfo2_Field;
     public RegionInfo3 RegionInfo3_Field;
     public ArrayList<RegionInfo4> RegionInfo4_Fields = new ArrayList<>();
     public RegionInfo RegionInfo_Field;
 
+    /** Block RegionInfo, Single. */
     public static class RegionInfo {
-        public float BillableFactor;
-        public UUID CacheID;
-        public boolean IsEstateManager;
-        public int RegionFlags;
-        public int SimAccess;
-        public byte[] SimName;
-        public UUID SimOwner;
-        public UUID TerrainBase0;
-        public UUID TerrainBase1;
-        public UUID TerrainBase2;
-        public UUID TerrainBase3;
-        public UUID TerrainDetail0;
-        public UUID TerrainDetail1;
-        public UUID TerrainDetail2;
-        public UUID TerrainDetail3;
-        public float TerrainHeightRange00;
-        public float TerrainHeightRange01;
-        public float TerrainHeightRange10;
-        public float TerrainHeightRange11;
-        public float TerrainStartHeight00;
-        public float TerrainStartHeight01;
-        public float TerrainStartHeight10;
-        public float TerrainStartHeight11;
-        public float WaterHeight;
+        public float BillableFactor; // F32
+        public UUID CacheID; // LLUUID
+        public boolean IsEstateManager; // BOOL - this agent, for this sim
+        public int RegionFlags; // U32
+        public int SimAccess; // U8
+        public byte[] SimName; // Variable 1 - string
+        public UUID SimOwner; // LLUUID
+        public UUID TerrainBase0; // LLUUID
+        public UUID TerrainBase1; // LLUUID
+        public UUID TerrainBase2; // LLUUID
+        public UUID TerrainBase3; // LLUUID
+        public UUID TerrainDetail0; // LLUUID
+        public UUID TerrainDetail1; // LLUUID
+        public UUID TerrainDetail2; // LLUUID
+        public UUID TerrainDetail3; // LLUUID
+        public float TerrainHeightRange00; // F32
+        public float TerrainHeightRange01; // F32
+        public float TerrainHeightRange10; // F32
+        public float TerrainHeightRange11; // F32
+        public float TerrainStartHeight00; // F32
+        public float TerrainStartHeight01; // F32
+        public float TerrainStartHeight10; // F32
+        public float TerrainStartHeight11; // F32
+        public float WaterHeight; // F32
     }
 
+    /** Block RegionInfo2, Single. */
     public static class RegionInfo2 {
-        public UUID RegionID;
+        public UUID RegionID; // LLUUID
     }
 
+    /** Block RegionInfo3, Single. */
     public static class RegionInfo3 {
-        public int CPUClassID;
-        public int CPURatio;
-        public byte[] ColoName;
-        public byte[] ProductName;
-        public byte[] ProductSKU;
+        public int CPUClassID; // S32
+        public int CPURatio; // S32
+        public byte[] ColoName; // Variable 1 - string
+        public byte[] ProductName; // Variable 1 - string
+        public byte[] ProductSKU; // Variable 1 - string
     }
 
+    /** Block RegionInfo4, Variable. */
     public static class RegionInfo4 {
-        public long RegionFlagsExtended;
-        public long RegionProtocols;
+        public long RegionFlagsExtended; // U64
+        public long RegionProtocols; // U64
     }
 
     public RegionHandshake() {
@@ -63,21 +78,22 @@ public class RegionHandshake extends SLMessage {
         this.RegionInfo3_Field = new RegionInfo3();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.RegionInfo_Field.SimName.length + 6 + 16 + 1 + 4 + 4 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 16 + this.RegionInfo3_Field.ColoName.length + 9 + 1 + this.RegionInfo3_Field.ProductSKU.length + 1 + this.RegionInfo3_Field.ProductName.length + 1 + (this.RegionInfo4_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRegionHandshake(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -108);
+        // Message number: Low 148 (RegionHandshake).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x94);
         packInt(byteBuffer, this.RegionInfo_Field.RegionFlags);
         packByte(byteBuffer, (byte) this.RegionInfo_Field.SimAccess);
         packVariable(byteBuffer, this.RegionInfo_Field.SimName, 1);
@@ -115,7 +131,7 @@ public class RegionHandshake extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionInfo_Field.RegionFlags = unpackInt(byteBuffer);
         this.RegionInfo_Field.SimAccess = unpackByte(byteBuffer) & 0xFF;

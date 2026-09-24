@@ -28,7 +28,6 @@ import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserFirstLifeProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
     @BindView(R.id.about_edit_button)
@@ -73,7 +72,7 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
         getContext().startActivity(InventoryActivity.makeSelectActionIntent(getContext(), this.chatterID.agentUUID, InventoryActivity.SelectAction.applyFirstLife, bundle, SLAssetType.AT_TEXTURE));
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.user_profile_tab_first, viewGroup, false);
@@ -84,7 +83,7 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -93,7 +92,7 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         if (getView() != null) {
             try {
@@ -109,7 +108,7 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.loadableMonitor.unsubscribeAll();
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDUser)) {
@@ -119,8 +118,8 @@ public class UserFirstLifeProfileTab extends ChatterReloadableFragment implement
         this.avatarProperties.subscribe(this.userManager.getAvatarProperties().getPool(), chatterUUID);
         if (this.unbinder != null) {
             boolean equals = chatterUUID.equals(this.userManager.getUserID());
-            this.aboutEditButton.setVisibility(equals ? 0 : 8);
-            this.changePicButton.setVisibility(equals ? 0 : 8);
+            this.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+            this.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
         }
     }
 }

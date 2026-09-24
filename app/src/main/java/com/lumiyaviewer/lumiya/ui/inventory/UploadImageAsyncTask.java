@@ -27,7 +27,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, UploadImageResult> {
     private static final MediaType MEDIA_TYPE_JP2 = MediaType.parse("image/jp2");
     private final UUID agentUUID;
@@ -55,9 +54,8 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
         this.agentUUID = uuid;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     /* JADX WARN: Removed duplicated region for block: B:83:0x0253  */
-    @Override // android.os.AsyncTask
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
     */
@@ -185,8 +183,7 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
         return new UploadImageResult(z2, str2, null);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // android.os.AsyncTask
+    @Override
     public void onPostExecute(UploadImageResult uploadImageResult) {
         UUID uuidFindSpecialFolder;
         super.onPostExecute((UploadImageAsyncTask) uploadImageResult);
@@ -200,12 +197,12 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
             if (string == null) {
                 string = this.context.getString(com.lumiyaviewer.lumiya.R.string.failed_to_upload_picture);
             }
-            builder.setMessage(string).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$zdXuDSYysFkzF70MB3S4I5y4LlM
+            builder.setMessage(string).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -220,7 +217,7 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
         userManager.getInventoryManager().requestFolderUpdate(uuidFindSpecialFolder);
     }
 
-    @Override // android.os.AsyncTask
+    @Override
     protected void onPreExecute() {
         super.onPreExecute();
         this.progressDialog = new ProgressDialog(this.context);

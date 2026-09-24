@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.users.manager.ChatterDisplayData;
@@ -15,7 +14,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.io.Closeable;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public class ChatterListSubscriptionAdapter extends ChatterListSimpleAdapter implements Subscription.OnData<ImmutableList<ChatterDisplayData>>, Closeable {
     private final Predicate<ChatterDisplayData> predicate;
     private final Subscription<ChatterListType, ImmutableList<ChatterDisplayData>> subscription;
@@ -32,52 +30,52 @@ public class ChatterListSubscriptionAdapter extends ChatterListSimpleAdapter imp
         this.subscription = userManager.getChatterList().getChatterList().subscribe(chatterListType, UIThreadExecutor.getInstance(), (Subscription.OnData<ImmutableList<ChatterDisplayData>>) this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public /* bridge */ /* synthetic */ boolean areAllItemsEnabled() {
         return super.areAllItemsEnabled();
     }
 
-    @Override // java.io.Closeable, java.lang.AutoCloseable
+    @Override
     public void close() throws IOException {
         this.subscription.unsubscribe();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ int getCount() {
         return super.getCount();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ Object getItem(int i) {
         return super.getItem(i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ long getItemId(int i) {
         return super.getItemId(i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ View getView(int i, View view, ViewGroup viewGroup) {
         return super.getView(i, view, viewGroup);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ boolean hasStableIds() {
         return super.hasStableIds();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public /* bridge */ /* synthetic */ boolean isEmpty() {
         return super.isEmpty();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterListSimpleAdapter, android.widget.BaseAdapter, android.widget.ListAdapter
+    @Override
     public /* bridge */ /* synthetic */ boolean isEnabled(int i) {
         return super.isEnabled(i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    @Override
     public void onData(ImmutableList<ChatterDisplayData> immutableList) {
         if (this.predicate == null) {
             setData(immutableList);

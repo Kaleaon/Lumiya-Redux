@@ -5,7 +5,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public class CloudSyncMessenger {
     public static boolean sendMessage(Messenger messenger, MessageType messageType, Bundleable bundleable, Messenger messenger2) {
         if (messenger == null) {

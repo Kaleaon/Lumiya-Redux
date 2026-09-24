@@ -5,21 +5,30 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupRoleChanges
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code GroupRoleChanges Low 342 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupRoleChanges extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<RoleChange> RoleChange_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RoleChange, Variable. */
     public static class RoleChange {
-        public int Change;
-        public UUID MemberID;
-        public UUID RoleID;
+        public int Change; // U32
+        public UUID MemberID; // LLUUID
+        public UUID RoleID; // LLUUID
     }
 
     public GroupRoleChanges() {
@@ -27,21 +36,22 @@ public class GroupRoleChanges extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.RoleChange_Fields.size() * 36) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupRoleChanges(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 86);
+        // Message number: Low 342 (GroupRoleChanges).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x56);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -53,7 +63,7 @@ public class GroupRoleChanges extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

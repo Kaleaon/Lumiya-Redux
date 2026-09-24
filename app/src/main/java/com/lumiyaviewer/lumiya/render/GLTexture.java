@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render;
 import android.graphics.Bitmap;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public interface GLTexture {
     int SetAsTexture();
 

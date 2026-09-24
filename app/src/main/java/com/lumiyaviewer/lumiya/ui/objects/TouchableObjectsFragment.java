@@ -20,16 +20,15 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class TouchableObjectsFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String OBJECT_UUID_KEY = "objectUUID";
     private TouchableObjectListAdapter listAdapter;
-    private final SubscriptionData<UUID, ImmutableList<SLObjectInfo>> touchableObjects = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$LilZ3G1QEr_14fK4lPNJzUyzlBg
+    private final SubscriptionData<UUID, ImmutableList<SLObjectInfo>> touchableObjects = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             TouchableObjectsFragment.this.onTouchableObjects((ImmutableList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -50,15 +49,13 @@ public class TouchableObjectsFragment extends Fragment implements AdapterView.On
         return bundle;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onTouchableObjects, reason: merged with bridge method [inline-methods] */
     public void onTouchableObjects(ImmutableList<SLObjectInfo> immutableList) {
         if (this.listAdapter != null) {
             this.listAdapter.setData(immutableList);
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.touchable_object_list, viewGroup, false);
@@ -69,7 +66,7 @@ public class TouchableObjectsFragment extends Fragment implements AdapterView.On
         return inflate;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         if (this.listAdapter != null) {
             SLObjectInfo item = this.listAdapter.getItem(i);
@@ -82,7 +79,7 @@ public class TouchableObjectsFragment extends Fragment implements AdapterView.On
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
@@ -94,7 +91,7 @@ public class TouchableObjectsFragment extends Fragment implements AdapterView.On
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.touchableObjects.unsubscribe();
         super.onStop();

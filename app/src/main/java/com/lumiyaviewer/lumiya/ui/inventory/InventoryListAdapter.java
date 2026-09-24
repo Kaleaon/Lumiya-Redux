@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry;
 import com.lumiyaviewer.lumiya.slproto.modules.SLAvatarAppearance;
 
-/* loaded from: classes.dex */
 public class InventoryListAdapter extends CursorAdapter {
     private SLAvatarAppearance avatarAppearance;
 
@@ -21,7 +20,7 @@ public class InventoryListAdapter extends CursorAdapter {
         this.avatarAppearance = sLAvatarAppearance;
     }
 
-    @Override // android.widget.CursorAdapter
+    @Override
     public void bindView(View view, Context context, Cursor cursor) {
         SLInventoryEntry sLInventoryEntry = new SLInventoryEntry(cursor);
         ((TextView) view.findViewById(R.id.itemNameTextView)).setText(sLInventoryEntry.name);
@@ -39,13 +38,13 @@ public class InventoryListAdapter extends CursorAdapter {
             ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageBitmap(null);
         }
         if (this.avatarAppearance != null) {
-            view.findViewById(R.id.itemWornIcon).setVisibility(this.avatarAppearance.isItemWorn(sLInventoryEntry) ? 0 : 8);
+            view.findViewById(R.id.itemWornIcon).setVisibility(this.avatarAppearance.isItemWorn(sLInventoryEntry) ? View.VISIBLE : View.GONE);
         } else {
-            view.findViewById(R.id.itemWornIcon).setVisibility(8);
+            view.findViewById(R.id.itemWornIcon).setVisibility(View.GONE);
         }
     }
 
-    @Override // android.widget.CursorAdapter
+    @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         return ((LayoutInflater) context.getSystemService("layout_inflater")).inflate(R.layout.inventory_item, viewGroup, false);
     }

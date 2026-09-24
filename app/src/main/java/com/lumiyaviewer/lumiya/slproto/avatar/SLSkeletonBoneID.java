@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.avatar;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.logging.nano.Vr;
 
-/* loaded from: classes.dex */
 public enum SLSkeletonBoneID {
     mPelvis(true, false, 0),
     mTorso(true, false, 1),

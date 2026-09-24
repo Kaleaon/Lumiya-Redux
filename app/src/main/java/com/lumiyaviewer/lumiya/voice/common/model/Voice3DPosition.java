@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 public class Voice3DPosition {
 
     @Nonnull

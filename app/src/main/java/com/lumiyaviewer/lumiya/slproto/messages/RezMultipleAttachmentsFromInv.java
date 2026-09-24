@@ -6,33 +6,41 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RezMultipleAttachmentsFromInv
+ *
+ * <p>Template: {@code RezMultipleAttachmentsFromInv Low 396 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RezMultipleAttachmentsFromInv extends SLMessage {
     public AgentData AgentData_Field;
     public HeaderData HeaderData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block HeaderData, Single. */
     public static class HeaderData {
-        public UUID CompoundMsgID;
-        public boolean FirstDetachAll;
-        public int TotalObjects;
+        public UUID CompoundMsgID; // LLUUID - All messages a single "compound msg" must have the same id
+        public boolean FirstDetachAll; // BOOL
+        public int TotalObjects; // U8
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int AttachmentPt;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int GroupMask;
-        public int ItemFlags;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
+        public int AttachmentPt; // U8 - 0 for default
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32
+        public int GroupMask; // U32
+        public int ItemFlags; // U32
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32
+        public UUID OwnerID; // LLUUID
     }
 
     public RezMultipleAttachmentsFromInv() {
@@ -41,7 +49,7 @@ public class RezMultipleAttachmentsFromInv extends SLMessage {
         this.HeaderData_Field = new HeaderData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 55;
         Iterator<?> it = this.ObjectData_Fields.iterator();
@@ -55,16 +63,17 @@ public class RezMultipleAttachmentsFromInv extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRezMultipleAttachmentsFromInv(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -116);
+        // Message number: Low 396 (RezMultipleAttachmentsFromInv).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x8C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.HeaderData_Field.CompoundMsgID);
@@ -84,7 +93,7 @@ public class RezMultipleAttachmentsFromInv extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -4,7 +4,6 @@ import android.opengl.Matrix;
 import com.google.vr.cardboard.UsedByNative;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class HeadTransform {
     private static final float GIMBAL_LOCK_EPSILON = 0.01f;
     private final float[] headView = new float[16];

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render;
 
 import android.opengl.GLES10;
 import android.opengl.Matrix;
-import androidx.core.view.InputDeviceCompat;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.openjpeg.OpenJPEG;
@@ -25,7 +24,6 @@ import com.lumiyaviewer.lumiya.slproto.prims.PrimFlexibleInfo;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DrawableObject implements IntersectPickable, ResourceConsumer {
     private static final int INVISIBLE_FRAMES_APPEAR = 10;
     private static final int INVISIBLE_FRAMES_DISAPPEAR = 10;
@@ -128,7 +126,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
             renderContext.glPushObjectScale(f, f2, f3);
             GLES10.glDepthFunc(515);
             drawablePrim.Draw(renderContext, true, primFlexibleInfo, 3);
-            GLES10.glDepthFunc(InputDeviceCompat.SOURCE_DPAD);
+            GLES10.glDepthFunc(GLES10.GL_LESS);
             renderContext.glPopObjectScale();
             renderContext.glObjWorldPopMatrix();
         }
@@ -153,7 +151,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         return drawablePrim.DrawRigged30(renderContext, i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         if (obj instanceof DrawablePrim) {
             DrawablePrim drawablePrim = (DrawablePrim) obj;
@@ -165,7 +163,7 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.picking.IntersectPickable
+    @Override
     public ObjectIntersectInfo PickObject(RenderContext renderContext, float f, float f2, float f3) {
         IntersectInfo IntersectRay;
         DrawablePrim drawablePrim = this.drawablePrim;

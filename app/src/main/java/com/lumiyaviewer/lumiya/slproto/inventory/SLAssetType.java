@@ -4,7 +4,6 @@ import androidx.core.os.EnvironmentCompat;
 import com.google.common.collect.ImmutableMap;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public enum SLAssetType {
     AT_TEXTURE(0, "texture", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture, R.string.asset_action_view),
     AT_SOUND(1, "sound", SLInventoryType.IT_SOUND, 1, R.drawable.inv_sound, R.string.asset_type_sound, -1),

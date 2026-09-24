@@ -1,34 +1,46 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Avatar information
+ * AvatarAnimation - Update animation state
+ * simulator --> viewer
+ *
+ * <p>Template: {@code AvatarAnimation High 20 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_avatar_animation()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarAnimation extends SLMessage {
     public ArrayList<AnimationList> AnimationList_Fields = new ArrayList<>();
     public ArrayList<AnimationSourceList> AnimationSourceList_Fields = new ArrayList<>();
     public ArrayList<PhysicalAvatarEventList> PhysicalAvatarEventList_Fields = new ArrayList<>();
     public Sender Sender_Field;
 
+    /** Block AnimationList, Variable. */
     public static class AnimationList {
-        public UUID AnimID;
-        public int AnimSequenceID;
+        public UUID AnimID; // LLUUID
+        public int AnimSequenceID; // S32
     }
 
+    /** Block AnimationSourceList, Variable. */
     public static class AnimationSourceList {
-        public UUID ObjectID;
+        public UUID ObjectID; // LLUUID
     }
 
+    /** Block PhysicalAvatarEventList, Variable. */
     public static class PhysicalAvatarEventList {
-        public byte[] TypeData;
+        public byte[] TypeData; // Variable 1
     }
 
+    /** Block Sender, Single. */
     public static class Sender {
-        public UUID ID;
+        public UUID ID; // LLUUID
     }
 
     public AvatarAnimation() {
@@ -36,7 +48,7 @@ public class AvatarAnimation extends SLMessage {
         this.Sender_Field = new Sender();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int size = (this.AnimationList_Fields.size() * 20) + 18 + 1 + (this.AnimationSourceList_Fields.size() * 16) + 1;
         Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
@@ -49,14 +61,15 @@ public class AvatarAnimation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAvatarAnimation(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.DC4);
+        // Message number: High 20 (AvatarAnimation).
+        byteBuffer.put((byte) 0x14);
         packUUID(byteBuffer, this.Sender_Field.ID);
         byteBuffer.put((byte) this.AnimationList_Fields.size());
         for (AnimationList animationList : this.AnimationList_Fields) {
@@ -75,7 +88,7 @@ public class AvatarAnimation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Sender_Field.ID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;

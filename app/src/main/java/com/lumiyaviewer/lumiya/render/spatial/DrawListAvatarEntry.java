@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectAvatarInfo;
 import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class DrawListAvatarEntry extends DrawListObjectEntry {
     private WeakReference<DrawableAvatar> drawableAvatar;
     private WeakReference<DrawableAvatarStub> drawableAvatarStub;
@@ -21,7 +20,7 @@ public class DrawListAvatarEntry extends DrawListObjectEntry {
         this.objectAvatarInfo = sLObjectAvatarInfo;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.spatial.DrawListEntry
+    @Override
     public void addToDrawList(@Nonnull DrawList drawList) {
         if (drawList.avatars.size() >= drawList.avatarCountLimit && !this.objectAvatarInfo.isMyAvatar()) {
             WeakReference<DrawableAvatarStub> weakReference = this.drawableAvatarStub;

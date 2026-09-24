@@ -8,7 +8,6 @@ import com.google.vr.cardboard.ContextUtils;
 import com.google.vr.cardboard.UiLayer;
 import com.google.vr.cardboard.UiUtils;
 
-/* loaded from: classes.dex */
 public class GvrUiLayout extends FrameLayout {
     private static final float DAYDREAM_ALIGNMENT_MARKER_SCALE = 0.35f;
     private boolean daydreamModeEnabled;
@@ -33,13 +32,13 @@ public class GvrUiLayout extends FrameLayout {
 
     private static Runnable createDefaultCloseButtonRunnable(Context context, DaydreamUtilsWrapper daydreamUtilsWrapper) {
         final Activity activity = ContextUtils.getActivity(context);
-        return !daydreamUtilsWrapper.isDaydreamActivity(activity) ? new Runnable() { // from class: com.google.vr.ndk.base.GvrUiLayout.2
-            @Override // java.lang.Runnable
+        return !daydreamUtilsWrapper.isDaydreamActivity(activity) ? new Runnable() {
+            @Override
             public final void run() {
                 activity.onBackPressed();
             }
-        } : new Runnable() { // from class: com.google.vr.ndk.base.GvrUiLayout.1
-            @Override // java.lang.Runnable
+        } : new Runnable() {
+            @Override
             public final void run() {
                 Intent intent = new Intent("android.intent.action.MAIN");
                 intent.addCategory("android.intent.category.HOME");
@@ -90,7 +89,7 @@ public class GvrUiLayout extends FrameLayout {
         }
     }
 
-    @Override // android.view.View
+    @Override
     public void setEnabled(boolean z) {
         this.uiLayer.setEnabled(z);
     }

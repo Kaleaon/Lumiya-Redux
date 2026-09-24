@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-/* loaded from: classes.dex */
 public final class SLAuthReply {
     public final String agentAppearanceService;
     public final UUID agentID;

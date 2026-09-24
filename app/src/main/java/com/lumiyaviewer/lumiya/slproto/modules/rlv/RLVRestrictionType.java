@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.rlv;
 
-/* loaded from: classes.dex */
 public enum RLVRestrictionType {
     detach(RLVRuleMatchType.TargetSpecifiesRestriction),
     sendchat(RLVRuleMatchType.TargetNoExceptions),

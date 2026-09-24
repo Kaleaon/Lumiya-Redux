@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.inventory;
 
 import android.database.sqlite.SQLiteStatement;
-import android.os.Build;
 import com.lumiyaviewer.lumiya.orm.DBObject;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDArray;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDBoolean;
@@ -27,7 +26,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/* loaded from: classes.dex */
 class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
     private final String capURL;
     private final AtomicReference<Future<?>> futureRef;
@@ -59,7 +57,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         /* JADX WARN: Removed duplicated region for block: B:40:0x0074  */
         /* JADX WARN: Removed duplicated region for block: B:42:0x0079  */
         /* JADX WARN: Removed duplicated region for block: B:48:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
-        @Override // java.lang.Thread, java.lang.Runnable
+        @Override
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
@@ -125,22 +123,22 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this(databaseCommitThread);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onArrayBegin(String str) throws LLSDXMLException {
-            return str.equals("categories") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.FolderDataContentHandler.1
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            return str.equals("categories") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str2) throws LLSDXMLException {
                     return SLInventoryHTTPFetchRequest.this.new FolderEntryContentHandler(FolderDataContentHandler.this.commitThread);
                 }
-            } : str.equals("items") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.FolderDataContentHandler.2
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            } : str.equals("items") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str2) throws LLSDXMLException {
                     return SLInventoryHTTPFetchRequest.this.new ItemEntryContentHandler(FolderDataContentHandler.this.commitThread);
                 }
             } : super.onArrayBegin(str);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.gotUUID == null || !this.gotUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID) || this.gotVersion == SLInventoryHTTPFetchRequest.this.folderEntry.version) {
                 return;
@@ -149,7 +147,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(SLInventoryHTTPFetchRequest.this.folderEntry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
             Debug.Printf("InvFetch: FolderDataContentHandler: key '%s' value '%s'", str, lLSDNode);
             if (str.equals("version")) {
@@ -218,7 +216,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.entry.isFolder = true;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.entry.parentUUID == null) {
                 this.entry.parentUUID = SLInventoryHTTPFetchRequest.this.folderEntry.parentUUID;
@@ -230,7 +228,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(this.entry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
             FolderValueKey byTag = FolderValueKey.byTag(str);
             if (byTag == null) {
@@ -323,7 +321,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$ItemValueKeySwitchesValues, reason: not valid java name */
         private /* synthetic */ int[] f112xeca6ff43 = null;
         private final DatabaseCommitThread commitThread;
-        private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.ItemEntryContentHandler.1
+        private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLInventoryHTTPFetchRequest$PermissionsValueKeySwitchesValues, reason: not valid java name */
             private /* synthetic */ int[] f113xc291c278 = null;
@@ -378,7 +376,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 return iArr;
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            @Override
             public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
                 PermissionsValueKey byTag = PermissionsValueKey.byTag(str);
                 if (byTag == null) {
@@ -419,8 +417,8 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 }
             }
         };
-        private final LLSDStreamingParser.LLSDContentHandler saleInfoHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.ItemEntryContentHandler.2
-            @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        private final LLSDStreamingParser.LLSDContentHandler saleInfoHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
+            @Override
             public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
                 if (str.equals("sale_type")) {
                     if (lLSDNode.isString()) {
@@ -495,12 +493,12 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.entry.isFolder = false;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
             return str.equals("permissions") ? this.permissionsHandler : str.equals("sale_info") ? this.saleInfoHandler : super.onMapBegin(str);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onMapEnd(String str) throws LLSDXMLException, InterruptedException {
             if (this.entry.parentUUID == null) {
                 this.entry.parentUUID = SLInventoryHTTPFetchRequest.this.folderEntry.parentUUID;
@@ -512,7 +510,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.commitThread.addEntry(this.entry);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
             ItemValueKey byTag = ItemValueKey.byTag(str);
             if (byTag == null) {
@@ -647,13 +645,13 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this(databaseCommitThread);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+        @Override
         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str) throws LLSDXMLException {
-            return new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.RootContentHandler.1
-                @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+            return new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                @Override
                 public LLSDStreamingParser.LLSDContentHandler onArrayBegin(String str2) throws LLSDXMLException {
-                    return str2.equals("folders") ? new LLSDStreamingParser.LLSDDefaultContentHandler() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.RootContentHandler.1.1
-                        @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDDefaultContentHandler, com.lumiyaviewer.lumiya.slproto.llsd.LLSDStreamingParser.LLSDContentHandler
+                    return str2.equals("folders") ? new LLSDStreamingParser.LLSDDefaultContentHandler() {
+                        @Override
                         public LLSDStreamingParser.LLSDContentHandler onMapBegin(String str3) throws LLSDXMLException {
                             return new FolderDataContentHandler(SLInventoryHTTPFetchRequest.this, RootContentHandler.this.commitThread, null);
                         }
@@ -668,12 +666,12 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         this.futureRef = new AtomicReference<>(null);
         this.streamingXmlReqRef = new AtomicReference<>(null);
         this.isCancelled = new AtomicBoolean(false);
-        this.httpRequest = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryHTTPFetchRequest.1
+        this.httpRequest = new Runnable() {
             /* JADX WARN: Removed duplicated region for block: B:21:0x00f9  */
             /* JADX WARN: Removed duplicated region for block: B:24:0x0114  */
             /* JADX WARN: Removed duplicated region for block: B:28:0x0172  */
             /* JADX WARN: Removed duplicated region for block: B:29:0x0170  */
-            @Override // java.lang.Runnable
+            @Override
             /*
                 Code decompiled incorrectly, please refer to instructions dump.
                 To view partially-correct add '--show-bad-code' argument
@@ -721,7 +719,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         this.capURL = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void cancel() {
         this.isCancelled.set(true);
         LLSDStreamingXMLRequest lLSDStreamingXMLRequest = this.streamingXmlReqRef.get();
@@ -734,7 +732,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryFetchRequest
+    @Override
     public void start() {
         if (this.isCancelled.get() || this.futureRef.get() != null) {
             return;

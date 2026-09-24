@@ -4,26 +4,33 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RezSingleAttachmentFromInv
+ *
+ * <p>Template: {@code RezSingleAttachmentFromInv Low 395 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RezSingleAttachmentFromInv extends SLMessage {
     public AgentData AgentData_Field;
     public ObjectData ObjectData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public int AttachmentPt;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int GroupMask;
-        public int ItemFlags;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
+        public int AttachmentPt; // U8 - 0 for default
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32
+        public int GroupMask; // U32
+        public int ItemFlags; // U32
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32
+        public UUID OwnerID; // LLUUID
     }
 
     public RezSingleAttachmentFromInv() {
@@ -32,21 +39,22 @@ public class RezSingleAttachmentFromInv extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ObjectData_Field.Name.length + 50 + 1 + this.ObjectData_Field.Description.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRezSingleAttachmentFromInv(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -117);
+        // Message number: Low 395 (RezSingleAttachmentFromInv).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x8B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.ObjectData_Field.ItemID);
@@ -60,7 +68,7 @@ public class RezSingleAttachmentFromInv extends SLMessage {
         packVariable(byteBuffer, this.ObjectData_Field.Description, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

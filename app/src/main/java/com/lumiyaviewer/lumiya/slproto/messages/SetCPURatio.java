@@ -3,12 +3,19 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * SetChildCount - Sent to launcher to adjust nominal child count
+ * Simulator sends this increase the sim/cpu ratio on startup
+ *
+ * <p>Template: {@code SetCPURatio Low 327 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetCPURatio extends SLMessage {
     public Data Data_Field;
 
+    /** Block Data, Single. */
     public static class Data {
-        public int Ratio;
+        public int Ratio; // U8
     }
 
     public SetCPURatio() {
@@ -16,25 +23,26 @@ public class SetCPURatio extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetCPURatio(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 71);
+        // Message number: Low 327 (SetCPURatio).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x47);
         packByte(byteBuffer, (byte) this.Data_Field.Ratio);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Data_Field.Ratio = unpackByte(byteBuffer) & 0xFF;
     }

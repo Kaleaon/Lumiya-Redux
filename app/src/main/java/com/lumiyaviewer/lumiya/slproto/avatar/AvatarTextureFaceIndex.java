@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum AvatarTextureFaceIndex {
     TEX_HEAD_BODYPAINT("head"),
     TEX_UPPER_SHIRT("upper"),

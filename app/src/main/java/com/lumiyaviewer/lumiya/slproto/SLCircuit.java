@@ -28,7 +28,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/* loaded from: classes.dex */
 public class SLCircuit extends SLMessageHandler {
     private static final int DEFAULT_IDLE_INTERVAL = 1000;
     private static final int FAST_IDLE_INTERVAL = 100;
@@ -164,7 +163,7 @@ public class SLCircuit extends SLMessageHandler {
         Debug.Log("Unhandled event queue msg: type = " + capsEventType);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void DefaultMessageHandler(SLMessage sLMessage) {
         this.messageRouter.handleMessage(sLMessage);
     }
@@ -173,7 +172,7 @@ public class SLCircuit extends SLMessageHandler {
         sLMessage.Handle(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandlePacketAck(PacketAck packetAck) {
         Iterator<?> it = packetAck.Packets_Fields.iterator();
         while (it.hasNext()) {
@@ -181,7 +180,7 @@ public class SLCircuit extends SLMessageHandler {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void HandleStartPingCheck(StartPingCheck startPingCheck) {
         CompletePingCheck completePingCheck = new CompletePingCheck();
         completePingCheck.PingID_Field.PingID = startPingCheck.PingID_Field.PingID;

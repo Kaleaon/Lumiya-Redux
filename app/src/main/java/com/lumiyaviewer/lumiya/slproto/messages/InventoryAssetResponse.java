@@ -1,18 +1,24 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * response to RequestInventoryAsset
+ * lluuid will be null if agentid in the request above cannot read asset
+ *
+ * <p>Template: {@code InventoryAssetResponse Low 283 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class InventoryAssetResponse extends SLMessage {
     public QueryData QueryData_Field;
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID AssetID;
-        public boolean IsReadable;
-        public UUID QueryID;
+        public UUID AssetID; // LLUUID
+        public boolean IsReadable; // BOOL
+        public UUID QueryID; // LLUUID
     }
 
     public InventoryAssetResponse() {
@@ -20,27 +26,28 @@ public class InventoryAssetResponse extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleInventoryAssetResponse(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.ESC);
+        // Message number: Low 283 (InventoryAssetResponse).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x1B);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         packUUID(byteBuffer, this.QueryData_Field.AssetID);
         packBoolean(byteBuffer, this.QueryData_Field.IsReadable);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);
         this.QueryData_Field.AssetID = unpackUUID(byteBuffer);

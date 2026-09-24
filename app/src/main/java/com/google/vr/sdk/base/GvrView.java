@@ -9,7 +9,6 @@ import com.google.vr.cardboard.UsedByNative;
 import com.google.vr.ndk.base.GvrSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 
-/* loaded from: classes.dex */
 public class GvrView extends FrameLayout {
     private CardboardViewApi cardboardViewApi;
 
@@ -116,7 +115,7 @@ public class GvrView extends FrameLayout {
         this.cardboardViewApi.onResume();
     }
 
-    @Override // android.view.View
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.cardboardViewApi.onTouchEvent(motionEvent)) {
             return true;

@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory;
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
 
-/* loaded from: classes.dex */
 public class ObjectListNewActivity extends MasterDetailsActivity {
 
     public static class ObjectDetailsActivityFactory implements FragmentActivityFactory {
@@ -27,7 +26,7 @@ public class ObjectListNewActivity extends MasterDetailsActivity {
             return InstanceHolder.Instance;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+        @Override
         public Intent createIntent(Context context, Bundle bundle) {
             Intent intent = new Intent(context, (Class<?>) ObjectListNewActivity.class);
             intent.putExtra(MasterDetailsActivity.INTENT_SELECTION_KEY, bundle);
@@ -35,18 +34,18 @@ public class ObjectListNewActivity extends MasterDetailsActivity {
             return intent;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+        @Override
         public Class<? extends Fragment> getFragmentClass() {
             return ObjectDetailsFragment.class;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected FragmentActivityFactory getDetailsFragmentFactory() {
         return ObjectDetailsActivityFactory.getInstance();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean isRootDetailsFragment(Class<? extends Fragment> cls) {
         if (cls != UserProfileFragment.class) {
             return super.isRootDetailsFragment(cls);
@@ -54,13 +53,13 @@ public class ObjectListNewActivity extends MasterDetailsActivity {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setDefaultTitle(getString(R.string.objects_activity_caption), null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle) {
         return ObjectSelectorFragment.newInstance(ActivityUtils.makeFragmentArguments(ActivityUtils.getActiveAgentID(intent), null));
     }

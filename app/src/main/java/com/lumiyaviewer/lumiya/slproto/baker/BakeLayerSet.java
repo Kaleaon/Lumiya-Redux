@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.baker;
 
 import com.lumiyaviewer.lumiya.slproto.avatar.BakedTextureIndex;
 
-/* loaded from: classes.dex */
 public class BakeLayerSet {
     public BakedTextureIndex bakedTextureIndex;
     public boolean clear_alpha;

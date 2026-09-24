@@ -20,7 +20,6 @@ import com.lumiyaviewer.lumiya.res.text.DrawableTextCache;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectAvatarInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class DrawableStore {
     public final GLTerrainTextureCache glTerrainTextureCache;
     public final GLTextureCache glTextureCache;
@@ -29,14 +28,14 @@ public class DrawableStore {
     public final SpatialObjectIndex spatialObjectIndex;
     public final GLTextTextureCache textTextureCache;
     public final TerrainGeometryCache terrainGeometryCache = new TerrainGeometryCache();
-    public final LoadingCache<SLObjectAvatarInfo, DrawableAvatar> drawableAvatarCache = CacheBuilder.newBuilder().weakKeys().weakValues().build(new CacheLoader<SLObjectAvatarInfo, DrawableAvatar>() { // from class: com.lumiyaviewer.lumiya.render.DrawableStore.1
-        @Override // com.google.common.cache.CacheLoader
+    public final LoadingCache<SLObjectAvatarInfo, DrawableAvatar> drawableAvatarCache = CacheBuilder.newBuilder().weakKeys().weakValues().build(new CacheLoader<SLObjectAvatarInfo, DrawableAvatar>() {
+        @Override
         public DrawableAvatar load(@Nonnull SLObjectAvatarInfo sLObjectAvatarInfo) {
             return sLObjectAvatarInfo.getAvatarVisualState().createDrawableAvatar(DrawableStore.this);
         }
     });
-    public final LoadingCache<SLObjectAvatarInfo, DrawableAvatarStub> drawableAvatarStubCache = CacheBuilder.newBuilder().weakKeys().weakValues().build(new CacheLoader<SLObjectAvatarInfo, DrawableAvatarStub>() { // from class: com.lumiyaviewer.lumiya.render.DrawableStore.2
-        @Override // com.google.common.cache.CacheLoader
+    public final LoadingCache<SLObjectAvatarInfo, DrawableAvatarStub> drawableAvatarStubCache = CacheBuilder.newBuilder().weakKeys().weakValues().build(new CacheLoader<SLObjectAvatarInfo, DrawableAvatarStub>() {
+        @Override
         public DrawableAvatarStub load(@Nonnull SLObjectAvatarInfo sLObjectAvatarInfo) {
             return sLObjectAvatarInfo.getAvatarVisualState().createDrawableAvatarStub(DrawableStore.this);
         }

@@ -7,12 +7,11 @@ import android.opengl.GLES11;
 import android.view.Surface;
 
 @TargetApi(15)
-/* loaded from: classes.dex */
 public class GLExternalTexture {
     private final int handle;
     private final int height;
-    private final SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener = new SurfaceTexture.OnFrameAvailableListener() { // from class: com.lumiyaviewer.lumiya.render.glres.textures.GLExternalTexture.1
-        @Override // android.graphics.SurfaceTexture.OnFrameAvailableListener
+    private final SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener = new SurfaceTexture.OnFrameAvailableListener() {
+        @Override
         public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         }
     };

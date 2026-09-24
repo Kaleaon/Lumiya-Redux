@@ -5,27 +5,35 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectFlagUpdate
+ * viewer -> simulator
+ *
+ * <p>Template: {@code ObjectFlagUpdate Low 94 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectFlagUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ExtraPhysics> ExtraPhysics_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public boolean CastsShadows;
-        public boolean IsPhantom;
-        public boolean IsTemporary;
-        public int ObjectLocalID;
-        public UUID SessionID;
-        public boolean UsePhysics;
+        public UUID AgentID; // LLUUID
+        public boolean CastsShadows; // BOOL
+        public boolean IsPhantom; // BOOL
+        public boolean IsTemporary; // BOOL
+        public int ObjectLocalID; // U32
+        public UUID SessionID; // LLUUID
+        public boolean UsePhysics; // BOOL
     }
 
+    /** Block ExtraPhysics, Variable. */
     public static class ExtraPhysics {
-        public float Density;
-        public float Friction;
-        public float GravityMultiplier;
-        public int PhysicsShapeType;
-        public float Restitution;
+        public float Density; // F32
+        public float Friction; // F32
+        public float GravityMultiplier; // F32
+        public int PhysicsShapeType; // U8
+        public float Restitution; // F32
     }
 
     public ObjectFlagUpdate() {
@@ -33,21 +41,22 @@ public class ObjectFlagUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ExtraPhysics_Fields.size() * 17) + 45;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectFlagUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 94);
+        // Message number: Low 94 (ObjectFlagUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x5E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.ObjectLocalID);
@@ -65,7 +74,7 @@ public class ObjectFlagUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

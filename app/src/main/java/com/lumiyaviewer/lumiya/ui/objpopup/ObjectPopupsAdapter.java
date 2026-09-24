@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.SubscribableList;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.common.RecyclerSubscribableListAdapter;
 
-/* loaded from: classes.dex */
 public class ObjectPopupsAdapter extends RecyclerSubscribableListAdapter<SLChatEvent> {
     private final Context context;
     private final LayoutInflater layoutInflater;
@@ -23,21 +22,19 @@ public class ObjectPopupsAdapter extends RecyclerSubscribableListAdapter<SLChatE
         this.layoutInflater = LayoutInflater.from(context);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.ui.common.RecyclerSubscribableListAdapter
+    @Override
     public void bindObjectViewHolder(RecyclerView.ViewHolder viewHolder, SLChatEvent sLChatEvent) {
         if (viewHolder instanceof ChatEventViewHolder) {
             sLChatEvent.bindViewHolder((ChatEventViewHolder) viewHolder, this.userManager, null);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.RecyclerSubscribableListAdapter
+    @Override
     protected RecyclerView.ViewHolder createObjectViewHolder(ViewGroup viewGroup, int i) {
         return SLChatEvent.createViewHolder(this.layoutInflater, i, viewGroup, this);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.ui.common.RecyclerSubscribableListAdapter
+    @Override
     public int getObjectViewType(SLChatEvent sLChatEvent) {
         return sLChatEvent.getViewType().ordinal();
     }

@@ -28,7 +28,6 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import com.lumiyaviewer.lumiya.ui.outfits.OutfitsFragment;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-myava-MyAvatarDetailsPagesSwitchesValues, reason: not valid java name */
@@ -44,12 +43,12 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     ChatterPicView myAvatarPic;
     private Unbinder unbinder;
     private ChatterNameRetriever myAvatarNameRetriever = null;
-    private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$E97LbIKTNF028fQGuPv0gXqIQrc
+    private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             MyAvatarFragment.this.onMyBalance((Integer) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -90,7 +89,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
             super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.values());
         }
 
-        @Override // android.widget.ArrayAdapter, android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View view2 = super.getView(i, view, viewGroup);
             MyAvatarDetailsPages item = getItem(i);
@@ -151,8 +150,6 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         return myAvatarFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onMyBalance, reason: merged with bridge method [inline-methods] */
     public void onMyBalance(Integer num) {
         if (this.unbinder != null) {
             ListAdapter adapter = this.myAvatarOptionsList.getAdapter();
@@ -162,7 +159,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         if (this.unbinder != null) {
@@ -172,7 +169,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         setTitle(resolvedName, null);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.my_avatar, viewGroup, false);
@@ -182,7 +179,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -191,7 +188,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         super.onDestroyView();
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         UUID agentUUID = getAgentUUID();
         Object itemAtPosition = adapterView.getItemAtPosition(i);
@@ -214,7 +211,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UUID agentUUID = getAgentUUID();
@@ -227,7 +224,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.myAvatarNameRetriever != null) {
             this.myAvatarNameRetriever.dispose();

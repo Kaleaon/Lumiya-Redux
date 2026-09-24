@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public class VectorArray {
     protected float[] data;
     protected int length;

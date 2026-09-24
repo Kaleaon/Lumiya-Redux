@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.settings;
 
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public enum SettingsPage {
     PageConnection(R.xml.preferences_connection, R.string.prefs_category_connection),
     PageAppearance(R.xml.preferences_appearance, R.string.prefs_category_appearance),

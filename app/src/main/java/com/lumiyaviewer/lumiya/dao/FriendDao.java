@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class FriendDao extends AbstractDao<Friend, UUID> {
     public static final String TABLENAME = "Friends";
 
@@ -35,8 +34,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'Friends'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, Friend friend) {
         sQLiteStatement.clearBindings();
         UUID uuid = friend.getUuid();
@@ -48,7 +46,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         sQLiteStatement.bindLong(4, friend.getIsOnline() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID getKey(Friend friend) {
         if (friend != null) {
             return friend.getUuid();
@@ -56,18 +54,18 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Friend readEntity(Cursor cursor, int i) {
         return new Friend(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)), cursor.getInt(i + 1), cursor.getInt(i + 2), cursor.getShort(i + 3) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, Friend friend, int i) {
         friend.setUuid(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)));
         friend.setRightsGiven(cursor.getInt(i + 1));
@@ -75,7 +73,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         friend.setIsOnline(cursor.getShort(i + 3) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -83,8 +81,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         return UUID.fromString(cursor.getString(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID updateKeyAfterInsert(Friend friend, long j) {
         return friend.getUuid();
     }

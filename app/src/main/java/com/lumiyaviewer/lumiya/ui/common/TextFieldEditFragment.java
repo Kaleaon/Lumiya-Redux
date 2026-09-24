@@ -20,7 +20,6 @@ import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class TextFieldEditFragment extends ChatterFragment implements BackButtonHandler {
     private MenuItem undoMenuItem;
     private String originalText = "";
@@ -57,7 +56,7 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
         closeFragment();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.BackButtonHandler
+    @Override
     public boolean onBackButtonPressed() {
         View view = getView();
         if (view == null) {
@@ -68,21 +67,21 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
             return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.2
+        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TextFieldEditFragment.this.m567x95fa4f00((String) charSequence, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.1
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TextFieldEditFragment.this.m568x95fab3c8(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -91,13 +90,13 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.user_notes_edit_menu, menu);
@@ -105,14 +104,14 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
         this.undoMenuItem.setVisible(this.hasChanged);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.user_text_field_edit, viewGroup, false);
         final TextView textView = (TextView) inflate.findViewById(R.id.field_edit_text);
         textView.setHint(getFieldHint(layoutInflater.getContext()));
-        textView.addTextChangedListener(new TextWatcher() { // from class: com.lumiyaviewer.lumiya.ui.common.TextFieldEditFragment.1
-            @Override // android.text.TextWatcher
+        textView.addTextChangedListener(new TextWatcher() {
+            @Override
             public void afterTextChanged(Editable editable) {
                 boolean z = !Objects.equal(textView.getText().toString(), TextFieldEditFragment.this.originalText);
                 if (z != TextFieldEditFragment.this.hasChanged) {
@@ -123,39 +122,39 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
                 }
             }
 
-            @Override // android.text.TextWatcher
+            @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            @Override // android.text.TextWatcher
+            @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
         });
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_undo /* 2131755778 */:
+            case R.id.item_undo:
                 final View view = getView();
                 if (view != null && !Objects.equal(((TextView) view.findViewById(R.id.field_edit_text)).getText().toString(), this.originalText)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage(getString(R.string.discard_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo.3
+                    builder.setMessage(getString(R.string.discard_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                             TextFieldEditFragment.this.m566x95f8ee07((View) view, dialogInterface, i);
                         }
 
-                        @Override // android.content.DialogInterface.OnClickListener
+                        @Override
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             $m$0(dialogInterface, i);
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$DtZUcoBgRyVu-s24uOe08hwsuHo
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
                         }
 
-                        @Override // android.content.DialogInterface.OnClickListener
+                        @Override
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             $m$0(dialogInterface, i);
                         }

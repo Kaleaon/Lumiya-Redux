@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class DrawableAvatarStub implements ChatterNameRetriever.OnChatterNameUpdated {
     final SLObjectAvatarInfo avatarObject;
     private final ChatterNameRetriever chatterNameRetriever;
@@ -61,7 +60,7 @@ public class DrawableAvatarStub implements ChatterNameRetriever.OnChatterNameUpd
         return fArr;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+    @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         setNameTag(chatterNameRetriever.getResolvedName());
     }

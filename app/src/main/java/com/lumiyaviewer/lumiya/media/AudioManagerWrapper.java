@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/* loaded from: classes.dex */
 public class AudioManagerWrapper implements InvocationHandler {
     public static final int AUDIOFOCUS_GAIN = 1;
     public static final int AUDIOFOCUS_GAIN_TRANSIENT = 2;
@@ -76,7 +75,7 @@ public class AudioManagerWrapper implements InvocationHandler {
         }
     }
 
-    @Override // java.lang.reflect.InvocationHandler
+    @Override
     public Object invoke(Object obj, Method method, Object[] objArr) throws Throwable {
         try {
             if (method.getName().equalsIgnoreCase("onAudioFocusChange") && objArr.length >= 1 && (objArr[0] instanceof Integer)) {

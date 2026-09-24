@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.modules.search;
 import com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 final class AutoValue_SearchGridQuery extends SearchGridQuery {
     private final String searchText;
     private final SearchGridQuery.SearchType searchType;
@@ -42,17 +41,17 @@ final class AutoValue_SearchGridQuery extends SearchGridQuery {
         return ((((this.searchUUID.hashCode() ^ 1000003) * 1000003) ^ this.searchText.hashCode()) * 1000003) ^ this.searchType.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public String searchText() {
         return this.searchText;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public SearchGridQuery.SearchType searchType() {
         return this.searchType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
+    @Override
     public UUID searchUUID() {
         return this.searchUUID;
     }

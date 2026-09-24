@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 
 import android.opengl.GLES20;
 
-/* loaded from: classes.dex */
 public class AvatarProgram extends BasicPrimProgram {
     public int uJointMap;
     public int uJointMapLength;
@@ -14,7 +13,7 @@ public class AvatarProgram extends BasicPrimProgram {
         super(Shader.AvatarVertexShader, Shader.PrimFragmentShader);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.BasicPrimProgram, com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         super.bindVariables();
         this.vWeight = GLES20.glGetAttribLocation(this.handle, "vWeight");

@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class ConfigUtils {
     public static final String CARDBOARD_CONFIG_FOLDER = "Cardboard";
     private static final String CARDBOARD_DEVICE_PARAMS_FILE = "current_device_params";

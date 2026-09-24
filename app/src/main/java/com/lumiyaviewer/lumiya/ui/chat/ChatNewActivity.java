@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.lumiyaviewer.lumiya.R;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -25,26 +24,25 @@ import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ChatNewActivity extends MasterDetailsActivity implements UnreadNotificationManager.NotifyCapture {
     private Subscription<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfoSubscription;
-    private final Subscription.OnData<CurrentLocationInfo> onCurrentLocation = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$NRCeOQv-yeRY8P8t9O3BV_sPyX4
+    private final Subscription.OnData<CurrentLocationInfo> onCurrentLocation = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             ChatNewActivity.this.m424lambda$com_lumiyaviewer_lumiya_ui_chat_ChatNewActivity_4384((CurrentLocationInfo) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     };
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected FragmentActivityFactory getDetailsFragmentFactory() {
         return ChatFragmentActivityFactory.getInstance();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Bundle getNewDetailsFragmentArguments(@Nullable Bundle bundle, @Nullable Bundle bundle2) {
         if (bundle2 != null) {
             return super.getNewDetailsFragmentArguments(bundle, bundle2);
@@ -63,26 +61,26 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
         setDefaultTitle(name, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setDefaultTitle(getString(R.string.app_name), null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle) {
         return ContactsFragment.newInstance(ActivityUtils.makeFragmentArguments(ActivityUtils.getActiveAgentID(intent), null));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationManager.NotifyCapture
+    @Override
     @javax.annotation.Nullable
     public Intent onGetNotifyCaptureIntent(@Nonnull UnreadNotificationInfo unreadNotificationInfo, Intent intent) {
-        intent.addFlags(536870912);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("fromSameActivity", true);
         return intent;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onPause() {
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
         if (userManager != null) {
@@ -91,7 +89,7 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
         super.onPause();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
@@ -100,7 +98,7 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getIntent());
@@ -117,7 +115,7 @@ public class ChatNewActivity extends MasterDetailsActivity implements UnreadNoti
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         if (this.currentLocationInfoSubscription != null) {
             this.currentLocationInfoSubscription.unsubscribe();

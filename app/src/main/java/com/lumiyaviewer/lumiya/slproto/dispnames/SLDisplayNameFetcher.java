@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLDisplayNameFetcher extends SLModule {
     private static final int MAX_BATCH_SIZE = 4;
     private final String capsURL;
@@ -43,8 +42,8 @@ public class SLDisplayNameFetcher extends SLModule {
     public SLDisplayNameFetcher(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
         super(sLAgentCircuit);
         this.threadMustExit = new AtomicBoolean(false);
-        this.requestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.dispnames.SLDisplayNameFetcher.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.requestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 UUIDNameRequest uUIDNameRequest = new UUIDNameRequest();
                 UUIDNameRequest.UUIDNameBlock uUIDNameBlock = new UUIDNameRequest.UUIDNameBlock();
@@ -59,8 +58,8 @@ public class SLDisplayNameFetcher extends SLModule {
                 SLDisplayNameFetcher.this.SendMessage(uUIDNameRequest);
             }
         }, false, 3, 15000L);
-        this.httpThreadRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.dispnames.SLDisplayNameFetcher.2
-            @Override // java.lang.Runnable
+        this.httpThreadRunnable = new Runnable() {
+            @Override
             public void run() {
                 UUID nextRequest;
                 RequestQueue<UUID, UserName> userNameRequestQueue = SLDisplayNameFetcher.this.userManager.getUserNameRequestQueue();
@@ -106,7 +105,6 @@ public class SLDisplayNameFetcher extends SLModule {
         this.workingThread.start();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void requestNamesHttp(Set<UUID> set, RequestQueue<UUID, UserName> requestQueue) {
         StringBuilder append = new StringBuilder(this.capsURL).append('/');
         boolean z = true;
@@ -152,7 +150,7 @@ public class SLDisplayNameFetcher extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         this.threadMustExit.set(true);
         if (this.xmlReq != null) {

@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDouble;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class LLVector3 {
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     public float x;

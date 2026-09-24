@@ -4,7 +4,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<K>, RequestSource<K, Tdown>, ResultHandler<K, Tdown>, Refreshable<K> {
 
     @Nullable
@@ -21,7 +20,6 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         this.resultHandler = requestSource.attachRequestHandler(this);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: processRequestInternal, reason: merged with bridge method [inline-methods] */
     public void m45lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_940(@Nonnull K k) {
         Tup processRequest = processRequest(k);
@@ -34,7 +32,6 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         this.requestHandler.onRequest(k);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: requestUpdateInternal, reason: merged with bridge method [inline-methods] */
     public void m43lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_1507(@Nonnull K k) {
         if (this.requestHandler != null) {
@@ -42,13 +39,13 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public ResultHandler<K, Tdown> attachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         this.requestHandler = requestHandler;
         return this;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestSource
+    @Override
     public void detachRequestHandler(@Nonnull RequestHandler<K> requestHandler) {
         if (this.requestHandler == requestHandler) {
             this.requestHandler = null;
@@ -65,15 +62,15 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         this.resultHandler.onResultData((K) obj, processResult((K) obj, (Tdown) obj2));
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final K k) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$s15PKVbd3BFZx563Ff4DOHT5V_w
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     RequestProcessor.this.m45lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_940(k);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -83,22 +80,22 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull K k) {
         if (this.requestHandler != null) {
             this.requestHandler.onRequestCancelled(k);
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultData(@Nonnull final K k, final Tdown tdown) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$s15PKVbd3BFZx563Ff4DOHT5V_w.2
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     RequestProcessor.this.m44lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_2159(k, tdown);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -108,7 +105,7 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultError(@Nonnull K k, Throwable th) {
         this.resultHandler.onResultError(k, th);
     }
@@ -118,15 +115,15 @@ public abstract class RequestProcessor<K, Tup, Tdown> implements RequestHandler<
 
     protected abstract Tup processResult(@Nonnull K k, Tdown tdown);
 
-    @Override // com.lumiyaviewer.lumiya.react.Refreshable
+    @Override
     public void requestUpdate(final K k) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$s15PKVbd3BFZx563Ff4DOHT5V_w.1
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     RequestProcessor.this.m43lambda$com_lumiyaviewer_lumiya_react_RequestProcessor_1507(k);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }

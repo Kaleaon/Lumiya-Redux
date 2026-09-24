@@ -5,19 +5,27 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectIncludeInSearch
+ * viewer -> simulator
+ *
+ * <p>Template: {@code ObjectIncludeInSearch Low 424 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectIncludeInSearch extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public boolean IncludeInSearch;
-        public int ObjectLocalID;
+        public boolean IncludeInSearch; // BOOL
+        public int ObjectLocalID; // U32
     }
 
     public ObjectIncludeInSearch() {
@@ -25,21 +33,22 @@ public class ObjectIncludeInSearch extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 5) + 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectIncludeInSearch(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -88);
+        // Message number: Low 424 (ObjectIncludeInSearch).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0xA8);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -49,7 +58,7 @@ public class ObjectIncludeInSearch extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -2,7 +2,6 @@ package com.google.vrtoolkit.cardboard;
 
 import java.lang.reflect.Array;
 
-/* loaded from: classes.dex */
 class SensorReadingStats {
     private static final String TAG = SensorReadingStats.class.getSimpleName();
     private int numAxes;

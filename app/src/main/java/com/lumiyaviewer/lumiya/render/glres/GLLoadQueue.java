@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.res.collections.WeakQueue;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class GLLoadQueue {
     final WeakQueue<GLLoadable> loadQueue = new WeakQueue<>();
 

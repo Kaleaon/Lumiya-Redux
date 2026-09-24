@@ -8,7 +8,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 import java.util.Arrays;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class PhoneParams {
     private static final boolean DEBUG = false;
     private static final String TAG = PhoneParams.class.getSimpleName();

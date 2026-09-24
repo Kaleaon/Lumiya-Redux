@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 
 import com.google.common.base.Strings;
 
-/* loaded from: classes.dex */
 public class SLPrimObjectDisplayInfo extends SLObjectDisplayInfo {
     public final int localID;
     public final boolean payable;

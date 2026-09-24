@@ -26,25 +26,24 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectsManager {
     private final MultipleChatterNameRetriever nameRetriever;
     private final UserManager userManager;
     private final AtomicReference<SLParcelInfo> parcelInfo = new AtomicReference<>(null);
     private final Object filterLock = new Object();
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create();
-    private final MultipleChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new MultipleChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4
+    private final MultipleChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new MultipleChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(MultipleChatterNameRetriever multipleChatterNameRetriever) {
             ObjectsManager.this.m357x8e849dac(multipleChatterNameRetriever);
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.MultipleChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public final void onChatterNameUpdated(MultipleChatterNameRetriever multipleChatterNameRetriever) {
             $m$0(multipleChatterNameRetriever);
         }
     };
-    private final SimpleRequestHandler<SubscriptionSingleKey> updateRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ObjectsManager.1
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    private final SimpleRequestHandler<SubscriptionSingleKey> updateRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+        @Override
         public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
             SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
@@ -54,15 +53,15 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.SimpleRequestHandler, com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequestCancelled(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
             ObjectsManager.this.nameRetriever.clearChatters();
         }
     };
     private final SimpleRequestHandler<Integer> objectProfileRequestHandler = new AnonymousClass2();
     private final SimpleRequestHandler<UUID> touchableObjectsRequestHandler = new AnonymousClass3();
-    private final Runnable updateObjectListRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ObjectsManager.4
-        @Override // java.lang.Runnable
+    private final Runnable updateObjectListRunnable = new Runnable() {
+        @Override
         public void run() {
             SLObjectFilterInfo sLObjectFilterInfo;
             synchronized (ObjectsManager.this.filterLock) {
@@ -99,16 +98,16 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequest(@Nonnull final Integer num) {
             final SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
-                activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.1
+                activeAgentCircuit.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass2.this.m358xd130cea5((SLAgentCircuit) activeAgentCircuit, (Integer) num);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -135,16 +134,16 @@ public class ObjectsManager {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequest(@Nonnull final UUID uuid) {
             final SLAgentCircuit activeAgentCircuit = ObjectsManager.this.userManager.getActiveAgentCircuit();
             if (activeAgentCircuit != null) {
-                activeAgentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$n3FxEEuksYOCADj00lseQFiZ3z4.2
+                activeAgentCircuit.execute(new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         AnonymousClass3.this.m359xd2e617a5((SLAgentCircuit) activeAgentCircuit, (UUID) uuid);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }

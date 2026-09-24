@@ -2,7 +2,6 @@ package com.google.vr.sdk.base;
 
 import android.opengl.Matrix;
 
-/* loaded from: classes.dex */
 public class FieldOfView {
     private static final float CARDBOARD_V1_MAX_FOV_BOTTOM = 40.0f;
     private static final float CARDBOARD_V1_MAX_FOV_LEFT_RIGHT = 40.0f;

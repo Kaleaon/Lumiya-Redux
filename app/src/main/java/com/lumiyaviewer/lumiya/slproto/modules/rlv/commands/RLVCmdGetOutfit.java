@@ -8,9 +8,8 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommands;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdGetOutfit implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         try {
             int parseInt = Integer.parseInt(str);

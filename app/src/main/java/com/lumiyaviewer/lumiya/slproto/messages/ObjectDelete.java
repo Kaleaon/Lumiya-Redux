@@ -6,19 +6,27 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectDelete
+ * viewer -> simulator
+ *
+ * <p>Template: {@code ObjectDelete Low 89 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectDelete extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public boolean Force;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public boolean Force; // BOOL - god trying to force delete
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ObjectLocalID;
+        public int ObjectLocalID; // U32
     }
 
     public ObjectDelete() {
@@ -26,21 +34,22 @@ public class ObjectDelete extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 4) + 38;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectDelete(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 89);
+        // Message number: Low 89 (ObjectDelete).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x59);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.AgentData_Field.Force);
@@ -51,7 +60,7 @@ public class ObjectDelete extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

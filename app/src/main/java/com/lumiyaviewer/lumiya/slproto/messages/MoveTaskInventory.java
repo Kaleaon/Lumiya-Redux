@@ -4,20 +4,27 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * MoveTaskInventory
+ *
+ * <p>Template: {@code MoveTaskInventory Low 288 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MoveTaskInventory extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryData InventoryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID FolderID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID FolderID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Single. */
     public static class InventoryData {
-        public UUID ItemID;
-        public int LocalID;
+        public UUID ItemID; // LLUUID
+        public int LocalID; // U32
     }
 
     public MoveTaskInventory() {
@@ -26,21 +33,22 @@ public class MoveTaskInventory extends SLMessage {
         this.InventoryData_Field = new InventoryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 72;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleMoveTaskInventory(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 32);
+        // Message number: Low 288 (MoveTaskInventory).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x20);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.FolderID);
@@ -48,7 +56,7 @@ public class MoveTaskInventory extends SLMessage {
         packUUID(byteBuffer, this.InventoryData_Field.ItemID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

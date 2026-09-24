@@ -10,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-/* loaded from: classes.dex */
 public class SLPolyMorphData {
     private DirectByteBuffer indexBuffer;
     private boolean isMasked;

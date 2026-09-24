@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import android.app.Activity;
 import com.google.vr.cardboard.AndroidNCompat;
 
-/* loaded from: classes.dex */
 public final class AndroidCompat {
     private AndroidCompat() {
     }

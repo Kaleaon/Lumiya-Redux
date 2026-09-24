@@ -3,13 +3,21 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * AbortXfer
+ *
+ * <p>Template: {@code AbortXfer Low 157 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_abort_xfer()} in indra/llmessage/llxfermanager.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AbortXfer extends SLMessage {
     public XferID XferID_Field;
 
+    /** Block XferID, Single. */
     public static class XferID {
-        public long ID;
-        public int Result;
+        public long ID; // U64
+        public int Result; // S32
     }
 
     public AbortXfer() {
@@ -17,26 +25,27 @@ public class AbortXfer extends SLMessage {
         this.XferID_Field = new XferID();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 16;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAbortXfer(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -99);
+        // Message number: Low 157 (AbortXfer).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x9D);
         packLong(byteBuffer, this.XferID_Field.ID);
         packInt(byteBuffer, this.XferID_Field.Result);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.XferID_Field.ID = unpackLong(byteBuffer);
         this.XferID_Field.Result = unpackInt(byteBuffer);

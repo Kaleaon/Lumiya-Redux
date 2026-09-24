@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public abstract class MasterDetailsActivity extends DetailsActivity {
     protected static final String FROM_SAME_ACTIVITY = "fromSameActivity";
     private static final String IMPLICIT_DETAILS_TAG = "MasterDetailsActivityIsImplicitDetails";
@@ -29,7 +28,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean isRootDetailsFragment(Class<? extends Fragment> cls) {
         return getDetailsFragmentFactory().getFragmentClass().isAssignableFrom(cls);
     }
@@ -49,7 +48,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
     /* JADX WARN: Removed duplicated region for block: B:87:0x01f2  */
     /* JADX WARN: Removed duplicated region for block: B:94:0x01e5  */
     /* JADX WARN: Removed duplicated region for block: B:98:0x01c0  */
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -166,7 +165,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
 
     protected abstract Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle);
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean onDetailsStackEmpty() {
         FragmentManager supportFragmentManager;
         Fragment findFragmentById;
@@ -198,7 +197,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Debug.Printf("MasterDetailsActivity: onNewIntent, intent = %s", intent);
@@ -223,12 +222,12 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity, com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected void replaceDetailsFragment(FragmentManager fragmentManager, Fragment fragment) {
         Fragment findFragmentById;
         FragmentTransaction beginTransaction = fragmentManager.beginTransaction();
@@ -241,7 +240,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         updateTitle();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     public Fragment showDetailsFragment(Class<? extends Fragment> cls, Intent intent, Bundle bundle) {
         Bundle arguments;
         Fragment showDetailsFragment = super.showDetailsFragment(cls, intent, bundle);
@@ -251,7 +250,7 @@ public abstract class MasterDetailsActivity extends DetailsActivity {
         return showDetailsFragment;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected void updateTitleNoDetails() {
         boolean handled = false;
         Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);

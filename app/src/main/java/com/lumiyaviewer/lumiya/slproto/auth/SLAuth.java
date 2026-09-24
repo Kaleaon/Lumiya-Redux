@@ -20,7 +20,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import com.lumiyaviewer.lumiya.utils.HashUtils;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public class SLAuth {
 
     private static class LoginRequestField {

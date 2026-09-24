@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDDouble extends LLSDNode {
     private double value;
 
@@ -17,18 +16,18 @@ public class LLSDDouble extends LLSDNode {
         this.value = Double.parseDouble(str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public double asDouble() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(114);
         dataOutputStream.writeDouble(this.value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "real");
         xmlSerializer.text(Double.toString(this.value));

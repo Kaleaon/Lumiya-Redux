@@ -1,13 +1,13 @@
 package com.lumiyaviewer.lumiya.slproto.terrain;
 
-import androidx.core.view.InputDeviceCompat;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.spatial.SpatialIndex;
 import com.lumiyaviewer.lumiya.slproto.messages.RegionHandshake;
 import com.lumiyaviewer.lumiya.utils.BitBuffer;
 
-/* loaded from: classes.dex */
 public class TerrainData {
+    /** Terrain vertices along one region edge: 256 one-metre cells + 1 (llsurface.cpp). */
+    private static final int REGION_VERTICES_PER_SIDE = 257;
     public static final int PatchesPerEdge = 16;
     public static final int PatchesSize = 16;
     public static final int TerrainPerEdge = 256;
@@ -80,14 +80,14 @@ public class TerrainData {
                     i6++;
                 }
                 if (i6 == 4) {
-                    this.vertexHeights[(i2 * InputDeviceCompat.SOURCE_KEYBOARD) + i5] = f / i6;
+                    this.vertexHeights[(i2 * REGION_VERTICES_PER_SIDE) + i5] = f / i6;
                     float f2 = this.heightMap[(min4 * 256) + min3] - this.heightMap[min + (min4 * 256)];
                     float f3 = this.heightMap[(min4 * 256) + min3] - this.heightMap[(min2 * 256) + min3];
-                    this.vertexNormals[((i2 * InputDeviceCompat.SOURCE_KEYBOARD) + i5) * 2] = f2;
-                    this.vertexNormals[(((i2 * InputDeviceCompat.SOURCE_KEYBOARD) + i5) * 2) + 1] = f3;
-                    this.vertexValids[(i2 * InputDeviceCompat.SOURCE_KEYBOARD) + i5] = true;
+                    this.vertexNormals[((i2 * REGION_VERTICES_PER_SIDE) + i5) * 2] = f2;
+                    this.vertexNormals[(((i2 * REGION_VERTICES_PER_SIDE) + i5) * 2) + 1] = f3;
+                    this.vertexValids[(i2 * REGION_VERTICES_PER_SIDE) + i5] = true;
                 } else {
-                    this.vertexValids[(i2 * InputDeviceCompat.SOURCE_KEYBOARD) + i5] = false;
+                    this.vertexValids[(i2 * REGION_VERTICES_PER_SIDE) + i5] = false;
                 }
             }
             i2++;
@@ -145,7 +145,7 @@ public class TerrainData {
         }
         boolean z = true;
         for (int i3 = 0; i3 < 17; i3++) {
-            int i4 = ((i2 * 16) + i3) * InputDeviceCompat.SOURCE_KEYBOARD;
+            int i4 = ((i2 * 16) + i3) * REGION_VERTICES_PER_SIDE;
             int i5 = 0;
             while (true) {
                 if (i5 >= 17) {
@@ -169,7 +169,7 @@ public class TerrainData {
             if (i7 >= 17) {
                 return new TerrainPatchInfo(new TerrainPatchHeightMap(this.waterHeight, fArr, fArr2, 17, 17), this.terrainTextures, i / 16.0f, i / 16.0f, 0.0625f, 0.0625f);
             }
-            int i8 = ((i2 * 16) + i7) * InputDeviceCompat.SOURCE_KEYBOARD;
+            int i8 = ((i2 * 16) + i7) * REGION_VERTICES_PER_SIDE;
             for (int i9 = 0; i9 < 17; i9++) {
                 float f = this.vertexHeights[i8 + i9 + (i * 16)];
                 float f2 = this.vertexNormals[(i8 + i9 + (i * 16)) * 2];

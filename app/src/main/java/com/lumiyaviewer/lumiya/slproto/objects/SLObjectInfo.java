@@ -1,9 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.objects;
 
 import android.opengl.Matrix;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
-import com.google.common.base.Ascii;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.render.DrawableObject;
@@ -41,7 +38,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLObjectInfo implements Identifiable<UUID> {
     private static final int AGENT_ATTACH_MASK = 240;
     private static final int AGENT_ATTACH_OFFSET = 4;
@@ -287,7 +283,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         }
         this.objectCoords.set(1, objectData.Scale);
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(objectData.Text);
-        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & 0xFF) | ((objectData.TextColor[1] << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | ((objectData.TextColor[2] << 16) & 16711680) | ((objectData.TextColor[3] << Ascii.CAN) & ViewCompat.MEASURED_STATE_MASK) : 0));
+        applyHoverText(Strings.isNullOrEmpty(stringFromVariableOEM) ? null : HoverText.create(stringFromVariableOEM, objectData.TextColor.length >= 4 ? (objectData.TextColor[0] & 0xFF) | ((objectData.TextColor[1] << 8) & 0xFF00) | ((objectData.TextColor[2] << 16) & 0xFF0000) | ((objectData.TextColor[3] << 24) & 0xFF000000) : 0));
         PrimVolumeParams createFromObjectUpdate = PrimVolumeParams.createFromObjectUpdate(objectData);
         if (createFromObjectUpdate != null && objectData.ExtraParams != null) {
             createFromObjectUpdate.unpackExtraParams(ByteBuffer.wrap(objectData.ExtraParams).order(ByteOrder.LITTLE_ENDIAN));
@@ -528,7 +524,7 @@ public abstract class SLObjectInfo implements Identifiable<UUID> {
         return this.hoverText;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.Identifiable
+    @Override
     public UUID getId() {
         return this.uuid;
     }

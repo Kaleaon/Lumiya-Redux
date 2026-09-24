@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.avatar;
 
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarParamAlpha {
     public final float domain;
     public final boolean multiplyBlend;

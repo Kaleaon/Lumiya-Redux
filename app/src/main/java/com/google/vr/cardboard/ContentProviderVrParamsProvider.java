@@ -17,7 +17,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 import com.google.vrtoolkit.cardboard.proto.nano.Preferences;
 
-/* loaded from: classes.dex */
 public class ContentProviderVrParamsProvider implements VrParamsProvider {
     private static final String TAG = ContentProviderVrParamsProvider.class.getSimpleName();
     private final ContentProviderClient client;
@@ -90,37 +89,37 @@ public class ContentProviderVrParamsProvider implements VrParamsProvider {
         }
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public void close() {
         this.client.release();
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public CardboardDevice.DeviceParams readDeviceParams() {
         return (CardboardDevice.DeviceParams) readParams(new CardboardDevice.DeviceParams(), this.deviceParamsSettingUri, null);
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public Phone.PhoneParams readPhoneParams() {
         return (Phone.PhoneParams) readParams(new Phone.PhoneParams(), this.phoneParamsSettingUri, null);
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public Vr.VREvent.SdkConfigurationParams readSdkConfigurationParams(SdkConfiguration.SdkConfigurationRequest sdkConfigurationRequest) {
         return (Vr.VREvent.SdkConfigurationParams) readParams(SdkConfigurationReader.DEFAULT_PARAMS, this.sdkConfigurationParamsSettingUri, Base64.encodeToString(MessageNano.toByteArray(sdkConfigurationRequest), 0));
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public Preferences.UserPrefs readUserPrefs() {
         return (Preferences.UserPrefs) readParams(new Preferences.UserPrefs(), this.userPrefsUri, null);
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public boolean updateUserPrefs(Preferences.UserPrefs userPrefs) {
         return writeParams(userPrefs, this.userPrefsUri);
     }
 
-    @Override // com.google.vr.cardboard.VrParamsProvider
+    @Override
     public boolean writeDeviceParams(CardboardDevice.DeviceParams deviceParams) {
         return writeParams(deviceParams, this.deviceParamsSettingUri);
     }

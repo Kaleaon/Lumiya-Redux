@@ -31,7 +31,6 @@ import com.lumiyaviewer.lumiya.ui.search.SearchGridAdapter;
 import de.greenrobot.dao.query.LazyList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SearchGridFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, SearchGridAdapter.OnSearchResultClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
@@ -80,13 +79,13 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
             return;
         }
         switch (this.radioGroupSearchType.getCheckedRadioButtonId()) {
-            case R.id.radio_people /* 2131755642 */:
+            case R.id.radio_people:
                 searchType = SearchGridQuery.SearchType.People;
                 break;
-            case R.id.radio_places /* 2131755643 */:
+            case R.id.radio_places:
                 searchType = SearchGridQuery.SearchType.Places;
                 break;
-            case R.id.radio_groups /* 2131755644 */:
+            case R.id.radio_groups:
                 searchType = SearchGridQuery.SearchType.Groups;
                 break;
             default:
@@ -104,7 +103,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         return searchGridFragment;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.search_fragment, viewGroup, false);
@@ -116,13 +115,13 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         this.unbinder.unbind();
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         if (this.adapter != null) {
             LazyList<SearchGridResult> data = this.searchResults.getData();
@@ -136,7 +135,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         beginSearch();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.search.SearchGridAdapter.OnSearchResultClickListener
+    @Override
     public void onSearchResultClicked(SearchGridResult searchGridResult) {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments());
         if (searchGridResult == null || activeAgentID == null) {

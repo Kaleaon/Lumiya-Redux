@@ -21,7 +21,6 @@ import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class DrawablePrim {
     public static final int RENDER_PASS_ALL = 3;
     public static final int RENDER_PASS_OPAQUE = 1;

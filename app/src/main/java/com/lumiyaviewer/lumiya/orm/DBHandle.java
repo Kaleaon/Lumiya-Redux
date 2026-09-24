@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQuery;
 
-/* loaded from: classes.dex */
 public final class DBHandle implements SQLiteDatabase.CursorFactory {
     private final SQLiteDatabase sqliteDB;
 
@@ -24,7 +23,7 @@ public final class DBHandle implements SQLiteDatabase.CursorFactory {
         return this.sqliteDB;
     }
 
-    @Override // android.database.sqlite.SQLiteDatabase.CursorFactory
+    @Override
     public Cursor newCursor(SQLiteDatabase sQLiteDatabase, SQLiteCursorDriver sQLiteCursorDriver, String str, SQLiteQuery sQLiteQuery) {
         return new DBHandleCursor(sQLiteDatabase, sQLiteCursorDriver, str, sQLiteQuery);
     }

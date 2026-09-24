@@ -1,9 +1,7 @@
 package com.lumiyaviewer.lumiya.base64;
 
-import com.google.common.base.Ascii;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class Base64 {
     private static final char[] CA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
     private static final int[] IA = new int[256];
@@ -417,7 +415,7 @@ public class Base64 {
             bArr2[i13] = (byte) CA[i10 & 63];
             if (z && (i4 = i4 + 1) == 19 && i5 < i3 - 2) {
                 int i14 = i5 + 1;
-                bArr2[i5] = Ascii.CR;
+                bArr2[i5] = (byte) '\r';
                 bArr2[i14] = 10;
                 i5 = i14 + 1;
                 i4 = 0;

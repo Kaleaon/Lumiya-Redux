@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ActivityUtils {
     public static final String EXTRA_ACTIVE_AGENT_UUID = "activeAgentUUID";
     public static final String FRAGMENT_SELECTION_KEY = "fragmentSelection";

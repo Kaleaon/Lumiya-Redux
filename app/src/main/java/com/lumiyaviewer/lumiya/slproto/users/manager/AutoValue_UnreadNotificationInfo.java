@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
     private final UUID agentUUID;
     private final int freshMessagesCount;
@@ -47,7 +46,7 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
         this.objectPopupInfo = objectPopupNotification;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     public UUID agentUUID() {
         return this.agentUUID;
     }
@@ -66,7 +65,7 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     public int freshMessagesCount() {
         return this.freshMessagesCount;
     }
@@ -75,25 +74,25 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
         return ((((((((((((((this.agentUUID.hashCode() ^ 1000003) * 1000003) ^ this.totalUnreadCount) * 1000003) ^ this.unreadSources.hashCode()) * 1000003) ^ this.mostImportantType.hashCode()) * 1000003) ^ this.freshMessagesCount) * 1000003) ^ this.mostImportantFreshType.hashCode()) * 1000003) ^ this.singleFreshSource.hashCode()) * 1000003) ^ this.objectPopupInfo.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     @Nonnull
     public Optional<NotificationType> mostImportantFreshType() {
         return this.mostImportantFreshType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     @Nonnull
     public Optional<NotificationType> mostImportantType() {
         return this.mostImportantType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     @Nonnull
     public UnreadNotificationInfo.ObjectPopupNotification objectPopupInfo() {
         return this.objectPopupInfo;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     @Nonnull
     public Optional<UnreadNotificationInfo.UnreadMessageSource> singleFreshSource() {
         return this.singleFreshSource;
@@ -103,12 +102,12 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
         return "UnreadNotificationInfo{agentUUID=" + this.agentUUID + ", totalUnreadCount=" + this.totalUnreadCount + ", unreadSources=" + this.unreadSources + ", mostImportantType=" + this.mostImportantType + ", freshMessagesCount=" + this.freshMessagesCount + ", mostImportantFreshType=" + this.mostImportantFreshType + ", singleFreshSource=" + this.singleFreshSource + ", objectPopupInfo=" + this.objectPopupInfo + "}";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     public int totalUnreadCount() {
         return this.totalUnreadCount;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
+    @Override
     @Nonnull
     public ImmutableList<UnreadNotificationInfo.UnreadMessageSource> unreadSources() {
         return this.unreadSources;

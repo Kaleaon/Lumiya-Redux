@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 
-/* loaded from: classes.dex */
 public enum NotificationSounds {
     LocalChat(R.raw.lumiya_local_chat_message),
     IM(R.raw.lumiya_private_message),

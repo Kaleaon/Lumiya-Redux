@@ -32,7 +32,6 @@ import com.lumiyaviewer.lumiya.ui.myava.TransactionLogAdapter;
 import de.greenrobot.dao.query.LazyList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class TransactionLogFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, TransactionLogAdapter.OnTransactionClickListener {
     private TransactionLogAdapter adapter;
 
@@ -46,8 +45,8 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.moneyTransactions).withDataChangedListener(this);
     private boolean scrollToBottomRunnablePosted = false;
     private final Handler mHandler = new Handler();
-    private final Runnable scrollToBottomRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.myava.TransactionLogFragment.1
-        @Override // java.lang.Runnable
+    private final Runnable scrollToBottomRunnable = new Runnable() {
+        @Override
         public void run() {
             int itemCount;
             TransactionLogFragment.this.scrollToBottomRunnablePosted = false;
@@ -68,21 +67,21 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
 
     private void clearTransactionLog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.clear_transaction_log_message).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$N_xrT8AwWQ2OjPw50fSCa4Lhb58.1
+        builder.setMessage(R.string.clear_transaction_log_message).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TransactionLogFragment.this.m675xf57d8a84(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$N_xrT8AwWQ2OjPw50fSCa4Lhb58
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -117,19 +116,19 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         performClearTransactionLog();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.transaction_log_menu, menu);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.transaction_log, viewGroup, false);
@@ -140,7 +139,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onDestroyView() {
         if (this.unbinder != null) {
             this.unbinder.unbind();
@@ -149,7 +148,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         super.onDestroyView();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         LazyList<MoneyTransaction> data = this.moneyTransactions.getData();
         if (data != null) {
@@ -161,10 +160,10 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_clear_transaction_log /* 2131755859 */:
+            case R.id.item_clear_transaction_log:
                 clearTransactionLog();
                 return true;
             default:
@@ -172,7 +171,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
@@ -181,13 +180,13 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         this.loadableMonitor.unsubscribeAll();
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.myava.TransactionLogAdapter.OnTransactionClickListener
+    @Override
     public void onTransactionClicked(MoneyTransaction moneyTransaction) {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments());
         if (activeAgentID != null) {

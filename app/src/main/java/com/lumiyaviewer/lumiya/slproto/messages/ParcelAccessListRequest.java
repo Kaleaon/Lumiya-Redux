@@ -4,20 +4,28 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * ParcelAccessListRequest
+ *
+ * <p>Template: {@code ParcelAccessListRequest Low 215 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelAccessListRequest extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int Flags;
-        public int LocalID;
-        public int SequenceID;
+        public int Flags; // U32
+        public int LocalID; // S32
+        public int SequenceID; // S32
     }
 
     public ParcelAccessListRequest() {
@@ -26,21 +34,22 @@ public class ParcelAccessListRequest extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 48;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelAccessListRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -41);
+        // Message number: Low 215 (ParcelAccessListRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xD7);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.Data_Field.SequenceID);
@@ -48,7 +57,7 @@ public class ParcelAccessListRequest extends SLMessage {
         packInt(byteBuffer, this.Data_Field.LocalID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

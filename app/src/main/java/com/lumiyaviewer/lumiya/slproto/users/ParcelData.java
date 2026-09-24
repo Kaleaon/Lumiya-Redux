@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.io.Serializable;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ParcelData implements Serializable {
     private final int area;
     private final String description;

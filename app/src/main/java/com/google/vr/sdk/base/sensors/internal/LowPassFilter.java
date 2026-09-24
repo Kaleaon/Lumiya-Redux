@@ -2,7 +2,6 @@ package com.google.vr.sdk.base.sensors.internal;
 
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class LowPassFilter {
     private static final double NANOS_TO_SECONDS = 1.0d / TimeUnit.NANOSECONDS.convert(1, TimeUnit.SECONDS);
     private long lastTimestampNs;

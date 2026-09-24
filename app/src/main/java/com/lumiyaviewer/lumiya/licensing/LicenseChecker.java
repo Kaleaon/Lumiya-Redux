@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class LicenseChecker {
     public static final String APP_STORE_NAME = "Google Play";
     public static final String APP_STORE_URL = "https://play.google.com/store/apps/details?id=com.lumiyaviewer.lumiya";

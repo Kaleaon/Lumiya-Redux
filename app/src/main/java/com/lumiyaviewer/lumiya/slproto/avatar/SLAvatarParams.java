@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarParams {
     public static final int NUM_PARAMS = 218;
 

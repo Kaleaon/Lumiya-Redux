@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.avatar;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLAvatarParamColor {
 
     @Nonnull

@@ -8,7 +8,6 @@ import android.view.Choreographer;
 import android.view.Display;
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class DisplaySynchronizer implements Choreographer.FrameCallback {
     private static final boolean DEBUG = false;
     public static final long DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(1);
@@ -44,7 +43,7 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
     
         if ((r8 - r7.lastDisplayRotationUpdateTimeNanos <= com.google.vr.cardboard.DisplaySynchronizer.DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS) == false) goto L4;
      */
-    @Override // android.view.Choreographer.FrameCallback
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument

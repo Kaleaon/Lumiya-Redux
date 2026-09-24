@@ -13,7 +13,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRefreshLayout.OnRefreshListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-common-loadmon-Loadable$StatusSwitchesValues, reason: not valid java name */
@@ -100,7 +99,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable.LoadableStatusListener
+    @Override
     public void onLoadableStatusChange(Loadable loadable, Loadable.Status status) {
         Iterator<Loadable> it = this.loadables.iterator();
         boolean z = false;
@@ -132,7 +131,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         this.onLoadableDataChangedListener.onLoadableDataChanged();
     }
 
-    @Override // androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+    @Override
     public void onRefresh() {
         for (Loadable loadable : this.loadables) {
             if (loadable instanceof RefreshableOne) {

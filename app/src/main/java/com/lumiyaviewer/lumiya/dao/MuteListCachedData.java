@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.dao;
 
-/* loaded from: classes.dex */
 public class MuteListCachedData {
     private int CRC;
     private byte[] data;

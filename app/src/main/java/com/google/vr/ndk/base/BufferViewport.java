@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.RectF;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferViewport {
     public static final int BUFFER_INDEX_EXTERNAL_SURFACE = -1;
     public static final int EXTERNAL_SURFACE_ID_NONE = -1;

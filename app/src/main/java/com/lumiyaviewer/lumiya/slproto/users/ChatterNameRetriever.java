@@ -12,11 +12,9 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.lang.ref.WeakReference;
-import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatterNameRetriever {
     public final ChatterID chatterID;
 
@@ -47,8 +45,6 @@ public class ChatterNameRetriever {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
     public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ParcelData parcelData = currentLocationInfo.parcelData();
         String name = parcelData != null ? parcelData.getName() : null;
@@ -62,8 +58,6 @@ public class ChatterNameRetriever {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onGroupProfile, reason: merged with bridge method [inline-methods] */
     public void onGroupProfile(GroupProfileReply groupProfileReply) {
         this.resolvedName = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
         this.resolvedSecondaryName = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
@@ -73,8 +67,6 @@ public class ChatterNameRetriever {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onUserName, reason: merged with bridge method [inline-methods] */
     public void onUserName(UserName userName) {
         Debug.Printf("Resolved name for %s", userName.getUuid());
         if (GlobalOptions.getInstance().isLegacyUserNames()) {

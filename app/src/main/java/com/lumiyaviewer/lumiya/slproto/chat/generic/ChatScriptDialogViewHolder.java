@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.chat.SLChatScriptDialog;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatScriptDialogViewHolder extends ChatEventViewHolder implements View.OnClickListener {
     private static final int[] dialogButtonIds = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12};
     public final CardView cardView;
@@ -46,10 +45,10 @@ public class ChatScriptDialogViewHolder extends ChatEventViewHolder implements V
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonDialogIgnore /* 2131755305 */:
+            case R.id.buttonDialogIgnore:
                 if (this.dialogEvent != null) {
                     this.dialogEvent.onDialogIgnored(UserManager.getUserManager(this.dialogEvent.getAgentUUID()));
                     requestAdapterUpdate();

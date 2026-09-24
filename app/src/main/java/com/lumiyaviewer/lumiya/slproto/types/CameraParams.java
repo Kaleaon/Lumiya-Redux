@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 public class CameraParams {
     private static final float FLING_DECEL_PITCH = 100.0f;
     private static final float FLING_DECEL_YAW = 50.0f;

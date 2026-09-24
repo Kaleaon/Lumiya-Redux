@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.prims;
 
 import com.lumiyaviewer.lumiya.utils.InternPool;
 
-/* loaded from: classes.dex */
 public class PrimParamsPool {
     public static InternPool<PrimPathParams> pathParamsPool = new InternPool<>();
     public static InternPool<PrimProfileParams> profileParamsPool = new InternPool<>();

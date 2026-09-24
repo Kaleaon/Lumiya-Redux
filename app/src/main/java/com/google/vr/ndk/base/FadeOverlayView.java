@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
-/* loaded from: classes.dex */
 class FadeOverlayView extends View {
     static final long AUTO_FADE_DURATION_MILLIS = 350;
     static final long AUTO_FADE_START_DELAY_MILLIS = 1000;
@@ -26,14 +25,14 @@ class FadeOverlayView extends View {
     public FadeOverlayView(Context context) {
         super(context);
         this.fadeType = 0;
-        this.fadeUpdateRunnable = new Runnable() { // from class: com.google.vr.ndk.base.FadeOverlayView.1
-            @Override // java.lang.Runnable
+        this.fadeUpdateRunnable = new Runnable() {
+            @Override
             public void run() {
                 FadeOverlayView.this.updateFade();
             }
         };
-        this.autoFadeHandler = new Handler(Looper.getMainLooper()) { // from class: com.google.vr.ndk.base.FadeOverlayView.2
-            @Override // android.os.Handler
+        this.autoFadeHandler = new Handler(Looper.getMainLooper()) {
+            @Override
             public void handleMessage(Message message) {
                 if (message.what != FadeOverlayView.MSG_AUTO_FADE) {
                     super.handleMessage(message);
@@ -47,7 +46,7 @@ class FadeOverlayView extends View {
 
     private void endFade() {
         if (this.fadeType != 0) {
-            setVisibility(this.fadeType != 2 ? 8 : 0);
+            setVisibility(this.fadeType != 2 ? View.GONE : View.VISIBLE);
             setAlpha(this.fadeType != 2 ? 0.0f : 1.0f);
             removeCallbacks(this.fadeUpdateRunnable);
             this.fadeType = 0;
@@ -60,7 +59,6 @@ class FadeOverlayView extends View {
         removeCallbacks(this.fadeUpdateRunnable);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateFade() {
         long currentAnimationTimeMillis = AnimationUtils.currentAnimationTimeMillis() - this.fadeStartTimeMillis;
         float f = currentAnimationTimeMillis / this.fadeDurationMillis;
@@ -69,7 +67,7 @@ class FadeOverlayView extends View {
         }
         setAlpha(Math.min(Math.max(f, 0.0f), 1.0f));
         if (!(currentAnimationTimeMillis >= this.fadeDurationMillis) && getVisibility() != 0) {
-            setVisibility(0);
+            setVisibility(View.VISIBLE);
         }
         if (currentAnimationTimeMillis >= this.fadeDurationMillis) {
             endFade();
@@ -116,7 +114,7 @@ class FadeOverlayView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     public void setEnabled(boolean z) {
         if (isEnabled() != z) {
             super.setEnabled(z);

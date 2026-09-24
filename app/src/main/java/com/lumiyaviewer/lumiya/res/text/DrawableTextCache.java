@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.res.ResourceMemoryCache;
 import com.lumiyaviewer.lumiya.res.ResourceRequest;
 import com.lumiyaviewer.lumiya.res.executors.PrimComputeExecutor;
 
-/* loaded from: classes.dex */
 public class DrawableTextCache extends ResourceMemoryCache<DrawableTextParams, DrawableTextBitmap> {
     private final int fontSize;
 
@@ -17,12 +16,12 @@ public class DrawableTextCache extends ResourceMemoryCache<DrawableTextParams, D
             this.fontSize = i;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             PrimComputeExecutor.getInstance().execute(this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             completeRequest(new DrawableTextBitmap(getParams(), this.fontSize));
         }

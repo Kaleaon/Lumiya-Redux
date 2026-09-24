@@ -8,7 +8,6 @@ import android.os.RemoteException;
 import com.google.vr.vrcore.library.api.IObjectWrapper;
 import com.google.vr.vrcore.library.api.IVrNativeLibraryLoader;
 
-/* loaded from: classes.dex */
 public interface IVrCreator extends IInterface {
 
     public static abstract class Stub extends Binder implements IVrCreator {
@@ -23,7 +22,7 @@ public interface IVrCreator extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrCreator
+            @Override
             public IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper iObjectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -39,7 +38,7 @@ public interface IVrCreator extends IInterface {
                 }
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -48,7 +47,7 @@ public interface IVrCreator extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.library.api.IVrCreator
+            @Override
             public IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -78,12 +77,12 @@ public interface IVrCreator extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IVrCreator)) ? (IVrCreator) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 3:

@@ -6,29 +6,41 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupRoleDataReply
+ * All role data for this group
+ * dataserver -> simulator -> agent
+ *
+ * <p>Template: {@code GroupRoleDataReply Low 372 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLGroupMgr::processGroupRoleDataReply()} in indra/newview/llgroupmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GroupRoleDataReply extends SLMessage {
     public AgentData AgentData_Field;
     public GroupData GroupData_Field;
     public ArrayList<RoleData> RoleData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block GroupData, Single. */
     public static class GroupData {
-        public UUID GroupID;
-        public UUID RequestID;
-        public int RoleCount;
+        public UUID GroupID; // LLUUID
+        public UUID RequestID; // LLUUID
+        public int RoleCount; // S32
     }
 
+    /** Block RoleData, Variable. */
     public static class RoleData {
-        public byte[] Description;
-        public int Members;
-        public byte[] Name;
-        public long Powers;
-        public UUID RoleID;
-        public byte[] Title;
+        public byte[] Description; // Variable 1
+        public int Members; // U32
+        public byte[] Name; // Variable 1
+        public long Powers; // U64
+        public UUID RoleID; // LLUUID
+        public byte[] Title; // Variable 1
     }
 
     public GroupRoleDataReply() {
@@ -37,7 +49,7 @@ public class GroupRoleDataReply extends SLMessage {
         this.GroupData_Field = new GroupData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 57;
         Iterator<?> it = this.RoleData_Fields.iterator();
@@ -51,16 +63,17 @@ public class GroupRoleDataReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupRoleDataReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 116);
+        // Message number: Low 372 (GroupRoleDataReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x74);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.GroupData_Field.GroupID);
         packUUID(byteBuffer, this.GroupData_Field.RequestID);
@@ -76,7 +89,7 @@ public class GroupRoleDataReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.GroupData_Field.GroupID = unpackUUID(byteBuffer);

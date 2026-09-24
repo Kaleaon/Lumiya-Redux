@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class So3Util {
     private static final double M_SQRT1_2 = 0.7071067811865476d;
     private static final double ONE_20TH = 0.1666666716337204d;

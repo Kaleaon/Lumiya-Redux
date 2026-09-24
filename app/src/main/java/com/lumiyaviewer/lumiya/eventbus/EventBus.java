@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class EventBus {
     private final List<HandlerInfo> handlers;
 
@@ -27,7 +26,7 @@ public class EventBus {
             this.handler = handler;
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 this.method.invoke(this.subscriber, this.event);

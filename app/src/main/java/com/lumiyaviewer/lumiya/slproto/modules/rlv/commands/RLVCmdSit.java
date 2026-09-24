@@ -5,13 +5,12 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdSit extends RLVCmdGenericRestriction {
     public RLVCmdSit() {
         super(RLVRestrictionType.sit, false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdGenericRestriction
+    @Override
     protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
         if (str != null) {
             try {

@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.picking;
 
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 
-/* loaded from: classes.dex */
 public class ObjectIntersectInfo {
     public final IntersectInfo intersectInfo;
     public final SLObjectInfo objInfo;

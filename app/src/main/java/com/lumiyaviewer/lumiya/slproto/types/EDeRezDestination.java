@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public enum EDeRezDestination {
     DRD_SAVE_INTO_AGENT_INVENTORY(0),
     DRD_ACQUIRE_TO_AGENT_INVENTORY(1),

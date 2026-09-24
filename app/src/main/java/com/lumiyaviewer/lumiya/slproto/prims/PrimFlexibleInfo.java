@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class PrimFlexibleInfo {
     private static final float FLEXIBLE_OBJECT_MAX_INTERNAL_TENSION_FORCE = 0.99f;
     private static final long MIN_UPDATE_INTERVAL = 200;

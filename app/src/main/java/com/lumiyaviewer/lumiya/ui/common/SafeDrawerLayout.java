@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import com.lumiyaviewer.lumiya.Debug;
 
-/* loaded from: classes.dex */
 public class SafeDrawerLayout extends DrawerLayout {
     public SafeDrawerLayout(Context context) {
         super(context);
@@ -20,7 +19,7 @@ public class SafeDrawerLayout extends DrawerLayout {
         super(context, attributeSet, i);
     }
 
-    @Override // androidx.drawerlayout.widget.DrawerLayout, android.view.ViewGroup
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         try {
             return super.onInterceptTouchEvent(motionEvent);

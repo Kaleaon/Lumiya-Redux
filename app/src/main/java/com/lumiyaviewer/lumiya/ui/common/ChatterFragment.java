@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class ChatterFragment extends FragmentWithTitle implements ChatterNameRetriever.OnChatterNameUpdated {
     public static final String CHATTER_ID_KEY = "chatterID";
 
@@ -75,13 +74,13 @@ public abstract class ChatterFragment extends FragmentWithTitle implements Chatt
 
     protected abstract void onShowUser(@Nullable ChatterID chatterID);
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         setNewUser((ChatterID) getArguments().getParcelable(CHATTER_ID_KEY));
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         setNewUser(null);
         super.onStop();

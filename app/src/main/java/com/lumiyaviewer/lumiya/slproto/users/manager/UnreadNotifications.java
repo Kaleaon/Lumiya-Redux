@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class UnreadNotifications {
     public static UnreadNotifications create(@Nonnull UUID uuid, @Nonnull ImmutableMap<NotificationType, UnreadNotificationInfo> immutableMap) {
         return new AutoValue_UnreadNotifications(uuid, immutableMap);

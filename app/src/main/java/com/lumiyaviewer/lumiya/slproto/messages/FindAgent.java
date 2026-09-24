@@ -6,20 +6,31 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * FindAgent - used to find an agent's global position. I used a
+ * variable sized LocationBlock so that the message can be recycled with
+ * minimum new messages and handlers.
+ *
+ * <p>Template: {@code FindAgent Low 256 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processAgentFound()} in indra/newview/llcallingcard.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class FindAgent extends SLMessage {
     public AgentBlock AgentBlock_Field;
     public ArrayList<LocationBlock> LocationBlock_Fields = new ArrayList<>();
 
+    /** Block AgentBlock, Single. */
     public static class AgentBlock {
-        public UUID Hunter;
-        public UUID Prey;
-        public Inet4Address SpaceIP;
+        public UUID Hunter; // LLUUID
+        public UUID Prey; // LLUUID
+        public Inet4Address SpaceIP; // IPADDR
     }
 
+    /** Block LocationBlock, Variable. */
     public static class LocationBlock {
-        public double GlobalX;
-        public double GlobalY;
+        public double GlobalX; // F64
+        public double GlobalY; // F64
     }
 
     public FindAgent() {
@@ -27,21 +38,22 @@ public class FindAgent extends SLMessage {
         this.AgentBlock_Field = new AgentBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.LocationBlock_Fields.size() * 16) + 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleFindAgent(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 0);
+        // Message number: Low 256 (FindAgent).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x00);
         packUUID(byteBuffer, this.AgentBlock_Field.Hunter);
         packUUID(byteBuffer, this.AgentBlock_Field.Prey);
         packIPAddress(byteBuffer, this.AgentBlock_Field.SpaceIP);
@@ -52,7 +64,7 @@ public class FindAgent extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentBlock_Field.Hunter = unpackUUID(byteBuffer);
         this.AgentBlock_Field.Prey = unpackUUID(byteBuffer);

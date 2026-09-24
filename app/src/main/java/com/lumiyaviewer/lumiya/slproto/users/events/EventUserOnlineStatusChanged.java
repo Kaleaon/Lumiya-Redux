@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.users.events;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class EventUserOnlineStatusChanged {
     public final UUID agentUUID;
     public final boolean isOnline;

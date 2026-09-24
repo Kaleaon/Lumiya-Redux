@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.eventbus;
 
-/* loaded from: classes.dex */
 public abstract class EventRateLimiter {
     private final EventBus bus;
     private final long minInterval;

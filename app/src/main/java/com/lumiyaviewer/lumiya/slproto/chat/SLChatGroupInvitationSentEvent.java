@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatGroupInvitationSentEvent extends SLChatEvent {
     public SLChatGroupInvitationSentEvent(ChatMessage chatMessage, @Nonnull UUID uuid) {
         super(chatMessage, uuid);
@@ -19,13 +18,13 @@ public final class SLChatGroupInvitationSentEvent extends SLChatEvent {
         super(chatMessageSource, uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.GroupInvitationSent;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected String getText(Context context, @Nonnull UserManager userManager) {
         String sourceName = this.source.getSourceName(userManager);
         Object[] objArr = new Object[1];
@@ -36,17 +35,17 @@ public final class SLChatGroupInvitationSentEvent extends SLChatEvent {
         return context.getString(R.string.invitation_sent_text, objArr);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_NORMAL;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
     }

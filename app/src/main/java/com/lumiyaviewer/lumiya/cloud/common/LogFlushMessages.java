@@ -5,7 +5,6 @@ import com.google.common.base.Strings;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LogFlushMessages implements Bundleable {
 
     @Nullable
@@ -27,7 +26,7 @@ public class LogFlushMessages implements Bundleable {
         this.chatterName = str2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("agentUUID", this.agentUUID.toString());

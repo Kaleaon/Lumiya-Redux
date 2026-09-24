@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.render.glres.textures.GLTextTextureCache;
 import com.lumiyaviewer.lumiya.res.ResourceConsumer;
 import com.lumiyaviewer.lumiya.res.text.DrawableTextParams;
 
-/* loaded from: classes.dex */
 public class DrawableHoverText implements ResourceConsumer, GLCleanable {
     private final int backgroundColor;
     private final String hoverText;
@@ -51,7 +50,7 @@ public class DrawableHoverText implements ResourceConsumer, GLCleanable {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLCleanable
+    @Override
     public void GLCleanup() {
         if (this.textTextureCache != null) {
             this.textTextureCache.CancelRequest(this);
@@ -97,7 +96,7 @@ public class DrawableHoverText implements ResourceConsumer, GLCleanable {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+    @Override
     public void OnResourceReady(Object obj, boolean z) {
         if (obj instanceof GLLoadedTextTexture) {
             this.hoverTextTexture = (GLLoadedTextTexture) obj;

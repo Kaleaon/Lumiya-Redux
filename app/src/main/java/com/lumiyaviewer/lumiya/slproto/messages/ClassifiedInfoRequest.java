@@ -4,18 +4,28 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ClassifiedInfoRequest
+ * viewer -> simulator
+ * simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code ClassifiedInfoRequest Low 43 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ClassifiedInfoRequest extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public UUID ClassifiedID;
+        public UUID ClassifiedID; // LLUUID
     }
 
     public ClassifiedInfoRequest() {
@@ -24,27 +34,28 @@ public class ClassifiedInfoRequest extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleClassifiedInfoRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 43);
+        // Message number: Low 43 (ClassifiedInfoRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x2B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.ClassifiedID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

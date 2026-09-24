@@ -25,7 +25,6 @@ import com.lumiyaviewer.lumiya.ui.grids.ManageGridsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class ManageAccountsActivity extends ThemedActivity implements AccountEditDialog.OnAccountEditResultListener, AdapterView.OnItemClickListener, View.OnClickListener {
     private AccountListAdapter adapter;
     private AccountList accountList = null;
@@ -39,7 +38,7 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
             this.gridList = new GridList(context);
         }
 
-        @Override // android.widget.ArrayAdapter, android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService("layout_inflater");
             if (view == null) {
@@ -75,21 +74,21 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
 
     private void showAccountDeleteDialog(final AccountList.AccountInfo accountInfo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.account_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.accounts.-$Lambda$c901yk_brt0jPczBoAMr-Jn1w74.1
+        builder.setMessage(getString(R.string.account_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 ManageAccountsActivity.this.m396xf58c202e((AccountList.AccountInfo) accountInfo, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.accounts.-$Lambda$c901yk_brt0jPczBoAMr-Jn1w74
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -103,11 +102,11 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         deleteAccount(accountInfo);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.accounts.AccountEditDialog.OnAccountEditResultListener
+    @Override
     public void onAccountEditCancelled() {
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.accounts.AccountEditDialog.OnAccountEditResultListener
+    @Override
     public void onAccountEdited(AccountList.AccountInfo accountInfo, boolean z) {
         if (z) {
             this.accountList.addNewAccount(accountInfo);
@@ -121,10 +120,10 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.add_new_account_button /* 2131755482 */:
+            case R.id.add_new_account_button:
                 AccountEditDialog accountEditDialog = new AccountEditDialog(this, null);
                 accountEditDialog.setOnAccountEditResultListener(this);
                 accountEditDialog.show();
@@ -132,18 +131,18 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
         AccountList.AccountInfo item = this.adapter.getItem(((AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo()).position);
         if (item != null) {
             AccountList.AccountInfo accountInfo = item;
             switch (menuItem.getItemId()) {
-                case R.id.item_account_edit /* 2131755767 */:
+                case R.id.item_account_edit:
                     AccountEditDialog accountEditDialog = new AccountEditDialog(this, accountInfo);
                     accountEditDialog.setOnAccountEditResultListener(this);
                     accountEditDialog.show();
                     return true;
-                case R.id.item_account_delete /* 2131755768 */:
+                case R.id.item_account_delete:
                     showAccountDeleteDialog(accountInfo);
                     return true;
             }
@@ -151,7 +150,7 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         return super.onContextItemSelected(menuItem);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.manage_accounts);
@@ -165,19 +164,19 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         registerForContextMenu(listView);
     }
 
-    @Override // android.app.Activity, android.view.View.OnCreateContextMenuListener
+    @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
         getMenuInflater().inflate(R.menu.account_list_context_menu, contextMenu);
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.manage_accounts_menu, menu);
         return true;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         Object itemAtPosition = adapterView.getItemAtPosition(i);
         if (itemAtPosition instanceof AccountList.AccountInfo) {
@@ -188,10 +187,10 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_manage_grids /* 2131755821 */:
+            case R.id.item_manage_grids:
                 startActivity(new Intent(this, (Class<?>) ManageGridsActivity.class));
                 return true;
             default:
@@ -199,7 +198,7 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     public void onResume() {
         super.onResume();
         this.adapter.updateGridList();

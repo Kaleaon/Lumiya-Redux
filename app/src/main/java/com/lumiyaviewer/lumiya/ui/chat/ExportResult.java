@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.chat;
 
 import java.io.File;
 
-/* loaded from: classes.dex */
 class ExportResult {
     final File outputFile;
     final String rawText;

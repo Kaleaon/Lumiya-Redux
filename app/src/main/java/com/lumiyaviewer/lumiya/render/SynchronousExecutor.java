@@ -6,11 +6,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SynchronousExecutor implements Executor {
     private final Queue<Runnable> queue = new ConcurrentLinkedQueue();
 
-    @Override // java.util.concurrent.Executor
+    @Override
     public void execute(@Nonnull Runnable runnable) {
         this.queue.add(runnable);
     }

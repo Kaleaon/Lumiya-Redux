@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import android.view.View;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class DashedSeparatorView extends View {
     private final Paint paint;
     private final Path path;
@@ -66,16 +65,16 @@ public class DashedSeparatorView extends View {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.paint.setColor(this.separatorColor);
         this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setStrokeWidth(TypedValue.applyDimension(1, 1.0f, getResources().getDisplayMetrics()));
+        this.paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.0f, getResources().getDisplayMetrics()));
         this.paint.setPathEffect(this.pathEffect);
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         this.path.reset();
         this.path.moveTo(0.0f, getHeight() / 2);

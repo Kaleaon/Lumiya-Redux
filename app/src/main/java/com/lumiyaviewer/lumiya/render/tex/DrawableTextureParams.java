@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class DrawableTextureParams {
     public static DrawableTextureParams create(UUID uuid, TextureClass textureClass) {
         return new AutoValue_DrawableTextureParams(uuid, textureClass, null, null);

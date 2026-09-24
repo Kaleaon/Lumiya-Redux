@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.events;
 
-/* loaded from: classes.dex */
 public class SLBalanceChangedEvent {
     public final int newBalance;
     public final int oldBalance;

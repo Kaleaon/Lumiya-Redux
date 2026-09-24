@@ -20,7 +20,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DetailsActivity extends ConnectedActivity {
     public static final String DEFAULT_DETAILS_FRAGMENT_TAG = "defaultDetails";
     private static final String DEFAULT_SUBTITLE_TAG = "DetailsActivity:defaultSubTitle";
@@ -35,15 +34,15 @@ public class DetailsActivity extends ConnectedActivity {
     private String defaultSubTitle = null;
 
     private static class DetailsStackEntry implements Parcelable {
-        public static final Parcelable.Creator<DetailsStackEntry> CREATOR = new Parcelable.Creator<DetailsStackEntry>() { // from class: com.lumiyaviewer.lumiya.ui.common.DetailsActivity.DetailsStackEntry.1
+        public static final Parcelable.Creator<DetailsStackEntry> CREATOR = new Parcelable.Creator<DetailsStackEntry>() {
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public DetailsStackEntry createFromParcel(Parcel parcel) {
                 return new DetailsStackEntry(parcel);
             }
 
             /* JADX WARN: Can't rename method to resolve collision */
-            @Override // android.os.Parcelable.Creator
+            @Override
             public DetailsStackEntry[] newArray(int i) {
                 return new DetailsStackEntry[i];
             }
@@ -84,7 +83,7 @@ public class DetailsActivity extends ConnectedActivity {
             this(fragment);
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public int describeContents() {
             return 0;
         }
@@ -100,7 +99,7 @@ public class DetailsActivity extends ConnectedActivity {
             return fragment;
         }
 
-        @Override // android.os.Parcelable
+        @Override
         public void writeToParcel(Parcel parcel, int i) {
             parcel.writeString(this.className);
             if (this.arguments != null) {
@@ -185,7 +184,7 @@ public class DetailsActivity extends ConnectedActivity {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity
+    @Override
     public boolean handleBackPressed() {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.details);
@@ -202,7 +201,7 @@ public class DetailsActivity extends ConnectedActivity {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (bundle != null) {
@@ -232,13 +231,13 @@ public class DetailsActivity extends ConnectedActivity {
         updateTitle();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, android.app.Activity
+    @Override
     protected void onPostCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onPostCreate(bundle);
         updateTitle();
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity, androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
+    @Override
     public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] iArr) {
         super.onRequestPermissionsResult(i, strArr, iArr);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -250,7 +249,7 @@ public class DetailsActivity extends ConnectedActivity {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ConnectedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putParcelableArrayList(DETAILS_STACK_TAG, this.detailsStack);
         bundle.putString(DEFAULT_TITLE_TAG, this.defaultTitle);

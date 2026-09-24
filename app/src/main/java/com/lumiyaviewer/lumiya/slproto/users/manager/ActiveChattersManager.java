@@ -43,7 +43,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ActiveChattersManager implements MessageSourceNameResolver.OnMessageSourcesResolvedListener {
     private static final int CHAT_LOG_CHUNK_SIZE = 100;
 
@@ -76,8 +75,8 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     private final Map<OnChatEventListener, Executor> objectMessageListeners = new WeakHashMap();
     private final EventBus chatEventBus = new EventBus();
     private final SubscriptionPool<ChatterID, UnreadMessageInfo> unreadCountsPool = new SubscriptionPool<>();
-    private final OnListUpdated onListUpdated = new OnListUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ActiveChattersManager.1
-        @Override // com.lumiyaviewer.lumiya.slproto.users.manager.OnListUpdated
+    private final OnListUpdated onListUpdated = new OnListUpdated() {
+        @Override
         public void onListUpdated() {
             ActiveChattersManager.this.chatterList.notifyListUpdated(ChatterListType.Active);
         }
@@ -106,9 +105,8 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         this.findChatterQueryNullUUID = this.chatterDao.queryBuilder().where(ChatterDao.Properties.Type.eq(null), ChatterDao.Properties.Uuid.isNull()).build();
         this.localChatterID = ChatterID.getLocalChatterID(userManager.getUserID());
         this.messageSourceNameResolver = new MessageSourceNameResolver(userManager, this);
-        new RequestFinalProcessor<ChatterID, UnreadMessageInfo>(this.unreadCountsPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ActiveChattersManager.2
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+        new RequestFinalProcessor<ChatterID, UnreadMessageInfo>(this.unreadCountsPool, userManager.getDatabaseExecutor()) {
+            @Override
             public UnreadMessageInfo processRequest(@Nonnull ChatterID chatterID) throws Throwable {
                 ChatMessage load;
                 Chatter chatter = ActiveChattersManager.this.getChatter(chatterID);
@@ -120,8 +118,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         };
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: clearChatHistoryInternal, reason: merged with bridge method [inline-methods] */
     public void clearChatHistoryInternal(@Nonnull ChatterID chatterID) {
         Chatter chatter;
         synchronized (this.chatEventLock) {
@@ -143,8 +139,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         this.userManager.getUnreadNotificationManager().updateUnreadNotifications();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: clearUnreadCount, reason: merged with bridge method [inline-methods] */
     public void clearUnreadCount(@Nonnull ChatterID chatterID) {
         Chatter chatter = null;
         boolean z = false;
@@ -186,7 +180,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         return linkedList;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Removed duplicated region for block: B:56:0x00d2 A[Catch: all -> 0x01da, TryCatch #1 {, blocks: (B:40:0x0089, B:42:0x0091, B:44:0x0095, B:46:0x00ab, B:48:0x00b5, B:49:0x00bc, B:51:0x00c2, B:52:0x00c9, B:56:0x00d2, B:57:0x00d7, B:59:0x00dd, B:61:0x00e5, B:63:0x00eb, B:66:0x00f3, B:67:0x00f6, B:69:0x00fe, B:71:0x0104, B:73:0x0115, B:75:0x0121, B:77:0x0127, B:78:0x0132, B:79:0x0135, B:81:0x014f, B:83:0x0157, B:86:0x0160, B:87:0x016a), top: B:39:0x0089 }] */
     /* renamed from: handleChatEventInternal, reason: merged with bridge method [inline-methods] */
     /*
@@ -215,12 +208,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
                         final OnChatEventListener onChatEventListener = (OnChatEventListener) entry.getKey();
                         Executor executor = (Executor) entry.getValue();
                         if (executor != null) {
-                            executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.2
+                            executor.execute(new Runnable() {
                                 private final /* synthetic */ void $m$0() {
                                     ((OnChatEventListener) onChatEventListener).onChatEvent((SLChatEvent) sLChatEvent);
                                 }
 
-                                @Override // java.lang.Runnable
+                                @Override
                                 public final void run() {
                                     $m$0();
                                 }
@@ -401,8 +394,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: markChatterInactiveInternal, reason: merged with bridge method [inline-methods] */
     public void markChatterInactiveInternal(ChatterID chatterID, boolean z) {
         boolean z2 = false;
         boolean z3 = true;
@@ -441,8 +432,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         this.userManager.getSyncManager().flushChatter(chatterID);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: notifyChatEventUpdatedInternal, reason: merged with bridge method [inline-methods] */
     public void notifyChatEventUpdatedInternal(SLChatEvent sLChatEvent) {
         ChatMessage databaseObject;
         synchronized (this.chatEventLock) {
@@ -453,8 +442,6 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
         this.userManager.getUnreadNotificationManager().updateUnreadNotifications();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: notifyTeleportCompleteInternal, reason: merged with bridge method [inline-methods] */
     public void notifyTeleportCompleteInternal(String str) {
         Chatter chatter = getChatter(this.localChatterID);
         if (chatter != null) {
@@ -493,12 +480,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void HandleChatEvent(final ChatterID chatterID, final SLChatEvent sLChatEvent, final boolean z) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.8
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.m283x2a96bcb8((ChatterID) chatterID, (SLChatEvent) sLChatEvent, z);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -507,12 +494,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
 
     public void addDisplayedChatter(@Nonnull final ChatterID chatterID) {
         if (this.displayedChatters.add(chatterID)) {
-            this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI
+            this.userManager.getDatabaseExecutor().execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     ActiveChattersManager.this.clearUnreadCount((ChatterID) chatterID);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -527,12 +514,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void clearChatHistory(@Nonnull final ChatterID chatterID) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.1
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.clearChatHistoryInternal((ChatterID) chatterID);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -595,12 +582,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
             }
         }
         if (z2) {
-            this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.6
+            this.userManager.getDatabaseExecutor().execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     ActiveChattersManager.this.m282x2a955819((ChatterID) chatterID, (Chatter) unique);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -669,12 +656,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void markChatterInactive(final ChatterID chatterID, final boolean z) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.7
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.markChatterInactiveInternal((ChatterID) chatterID, z);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -682,12 +669,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void notifyChatEventUpdated(final SLChatEvent sLChatEvent) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.3
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.notifyChatEventUpdatedInternal((SLChatEvent) sLChatEvent);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -695,19 +682,19 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void notifyTeleportComplete(final String str) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.4
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.notifyTeleportCompleteInternal((String) str);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
         });
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.MessageSourceNameResolver.OnMessageSourcesResolvedListener
+    @Override
     public void onMessageSourcesResolved(Set<Long> set, UserName userName) {
         ChatMessage load;
         for (Long l : set) {
@@ -746,12 +733,12 @@ public class ActiveChattersManager implements MessageSourceNameResolver.OnMessag
     }
 
     public void unmuteChatter(final ChatterID chatterID) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$bC26PUjVA14BMgZPIZxiNFWFltI.5
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 ActiveChattersManager.this.m286x2aa5b87a((ChatterID) chatterID);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

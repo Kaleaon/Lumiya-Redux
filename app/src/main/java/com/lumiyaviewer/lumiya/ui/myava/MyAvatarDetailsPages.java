@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.myava;
 
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 enum MyAvatarDetailsPages {
     pageProfile(R.string.my_profile_fragment_title),
     pageOutfits(R.string.my_outfits_fragment_title),

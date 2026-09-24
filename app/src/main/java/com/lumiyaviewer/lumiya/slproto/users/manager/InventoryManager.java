@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryManager {
     private final RequestProcessor<UUID, SLInventoryEntry, SLInventoryEntry> folderRequestProcessor;
 
@@ -46,10 +45,10 @@ public class InventoryManager {
     private final SubscriptionPool<SubscriptionSingleKey, Boolean> searchProcessPool = new SubscriptionPool<>();
     private final SubscriptionPool<SubscriptionSingleKey, Boolean> searchRunningPool = new SubscriptionPool<>();
     private final SubscriptionSingleDataPool<InventoryClipboardEntry> clipboardPool = new SubscriptionSingleDataPool<>();
-    private final RequestHandler<InventoryQuery> queryRequestHandler = new RequestHandler<InventoryQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.InventoryManager.1
+    private final RequestHandler<InventoryQuery> queryRequestHandler = new RequestHandler<InventoryQuery>() {
         private final Map<InventoryQuery, FolderSubscription> folderQueries = new ConcurrentHashMap();
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequest(@Nonnull InventoryQuery inventoryQuery) {
             FolderSubscription put;
             FolderSubscription folderSubscription = null;
@@ -68,7 +67,7 @@ public class InventoryManager {
             put.unsubscribe();
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        @Override
         public void onRequestCancelled(@Nonnull InventoryQuery inventoryQuery) {
             FolderSubscription folderSubscription = this.folderQueries.get(inventoryQuery);
             if (folderSubscription != null) {
@@ -91,7 +90,7 @@ public class InventoryManager {
             this(inventoryQuery, uuid);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public void onData(SLInventoryEntry sLInventoryEntry) {
             if (sLInventoryEntry != null) {
                 Debug.Printf("Inventory: folder subscription got name: %s with folderId = '%s'", sLInventoryEntry.name, sLInventoryEntry.uuid);
@@ -99,14 +98,14 @@ public class InventoryManager {
             InventoryManager.this.entryListPool.onResultData(this.query, this.query.query(sLInventoryEntry, InventoryManager.this.inventoryDB));
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+        @Override
         public void onError(Throwable th) {
             Debug.Printf("Inventory: subscription error: %s", th);
             Debug.Warning(th);
             InventoryManager.this.entryListPool.onResultError(this.query, th);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.UnsubscribableOne
+        @Override
         public void unsubscribe() {
             this.subscription.unsubscribe();
         }
@@ -130,22 +129,19 @@ public class InventoryManager {
             throw new IllegalArgumentException("Null inventory database");
         }
         this.inventoryDB = userInventoryDB;
-        this.folderRequestProcessor = new RequestProcessor<UUID, SLInventoryEntry, SLInventoryEntry>(this.folderEntryPool, this.inventoryDbExecutor) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.InventoryManager.2
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        this.folderRequestProcessor = new RequestProcessor<UUID, SLInventoryEntry, SLInventoryEntry>(this.folderEntryPool, this.inventoryDbExecutor) {
+            @Override
             public boolean isRequestComplete(@Nonnull UUID uuid2, SLInventoryEntry sLInventoryEntry) {
                 return sLInventoryEntry != null && Objects.equal(sLInventoryEntry.sessionID, InventoryManager.this.currentSessionID.get());
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             @Nullable
             public SLInventoryEntry processRequest(@Nonnull UUID uuid2) {
                 return userInventoryDB.findEntry(uuid2);
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             public SLInventoryEntry processResult(@Nonnull UUID uuid2, SLInventoryEntry sLInventoryEntry) {
                 if (sLInventoryEntry != null) {
                     Debug.Printf("Inventory: entry subscription got name: %s with folderId = '%s'", sLInventoryEntry.name, sLInventoryEntry.uuid);
@@ -154,23 +150,23 @@ public class InventoryManager {
                 return sLInventoryEntry;
             }
         };
-        this.folderEntryPool.setCacheInvalidateHandler(new Refreshable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$JIBenvPHaOomPgMJhTFPuiVXBzY.2
+        this.folderEntryPool.setCacheInvalidateHandler(new Refreshable() {
             private final /* synthetic */ void $m$0(Object obj) {
                 InventoryManager.m334xda6ba0b1((InventoryDB) userInventoryDB, (UUID) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Refreshable
+            @Override
             public final void requestUpdate(Object obj) {
                 $m$0(obj);
             }
         }, this.inventoryDbExecutor);
         this.entryListPool.attachRequestHandler(new AsyncRequestHandler(this.inventoryDbExecutor, this.queryRequestHandler));
-        this.entryListPool.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$JIBenvPHaOomPgMJhTFPuiVXBzY.1
+        this.entryListPool.setDisposeHandler(new DisposeHandler() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ((InventoryEntryList) obj).close();
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.DisposeHandler
+            @Override
             public final void onDispose(Object obj) {
                 $m$0(obj);
             }
@@ -198,14 +194,13 @@ public class InventoryManager {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateSearchResults() {
-        this.entryListPool.requestUpdateSome(new Predicate() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$JIBenvPHaOomPgMJhTFPuiVXBzY
+        this.entryListPool.requestUpdateSome(new Predicate() {
             private final /* synthetic */ boolean $m$0(Object obj) {
                 return InventoryManager.m335xda6d0c9c((InventoryQuery) obj);
             }
 
-            @Override // com.google.common.base.Predicate
+            @Override
             public final boolean apply(Object obj) {
                 return $m$0(obj);
             }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 public class Voice3DVector {
     public final float x;
     public final float y;

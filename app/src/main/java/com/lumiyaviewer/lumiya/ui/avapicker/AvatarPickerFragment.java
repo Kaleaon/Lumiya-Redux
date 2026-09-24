@@ -25,7 +25,6 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class AvatarPickerFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-avapicker-AvatarPickerFragment$ContactListTypeSwitchesValues, reason: not valid java name */
@@ -38,7 +37,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             this.context = context;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
             if (obj instanceof View) {
                 if (obj instanceof ListView) {
@@ -48,12 +47,12 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             }
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public int getCount() {
             return ContactListType.values().length;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public CharSequence getPageTitle(int i) {
             if (i < 0 || i >= ContactListType.values().length) {
                 return null;
@@ -61,7 +60,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             return ContactListType.values()[i].toString();
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public Object instantiateItem(ViewGroup viewGroup, int i) {
             if (i < 0 || i >= ContactListType.values().length) {
                 return null;
@@ -74,7 +73,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             return listView;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public boolean isViewFromObject(View view, Object obj) {
             return view == obj;
         }
@@ -105,7 +104,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
             this();
         }
 
-        @Override // com.google.common.base.Predicate
+        @Override
         public boolean apply(@Nullable ChatterDisplayData chatterDisplayData) {
             return chatterDisplayData != null && (chatterDisplayData.chatterID instanceof ChatterID.ChatterIDUser) && chatterDisplayData.chatterID.isValidUUID();
         }
@@ -133,7 +132,6 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         return iArr;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nonnull
     public ListAdapter createListAdapter(Context context, UserManager userManager, @Nonnull ContactListType contactListType) {
         switch (m398x55b16b4()[contactListType.ordinal()]) {
@@ -151,12 +149,12 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
     protected void createExtraView(LayoutInflater layoutInflater, FrameLayout frameLayout) {
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.FragmentHasTitle
+    @Override
     public abstract String getTitle();
 
     protected abstract void onAvatarSelected(ChatterID chatterID, @Nullable String str);
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.avatar_picker, viewGroup, false);
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.avatar_picker_pager);
@@ -166,7 +164,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         return inflate;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         ChatterID chatterID;
         Object itemAtPosition = adapterView.getItemAtPosition(i);

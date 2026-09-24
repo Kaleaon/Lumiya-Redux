@@ -6,33 +6,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UUID to name lookup
+ * UUIDNameRequest
+ * Translate a UUID into first and last names
+ *
+ * <p>Template: {@code UUIDNameRequest Low 235 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code handleUUIDNameRequest()} in indra/llmessage/llcachename.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class UUIDNameRequest extends SLMessage {
     public ArrayList<UUIDNameBlock> UUIDNameBlock_Fields = new ArrayList<>();
 
+    /** Block UUIDNameBlock, Variable. */
     public static class UUIDNameBlock {
-        public UUID ID;
+        public UUID ID; // LLUUID
     }
 
     public UUIDNameRequest() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.UUIDNameBlock_Fields.size() * 16) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleUUIDNameRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -21);
+        // Message number: Low 235 (UUIDNameRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xEB);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
         Iterator<?> it = this.UUIDNameBlock_Fields.iterator();
         while (it.hasNext()) {
@@ -40,7 +51,7 @@ public class UUIDNameRequest extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

@@ -3,7 +3,6 @@ package com.google.protobuf.nano;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public final class MapFactories {
     private static volatile MapFactory mapFactory = new DefaultMapFactory();
 
@@ -11,7 +10,7 @@ public final class MapFactories {
         private DefaultMapFactory() {
         }
 
-        @Override // com.google.protobuf.nano.MapFactories.MapFactory
+        @Override
         public <K, V> Map<K, V> forMap(Map<K, V> map) {
             return map != null ? map : new HashMap();
         }

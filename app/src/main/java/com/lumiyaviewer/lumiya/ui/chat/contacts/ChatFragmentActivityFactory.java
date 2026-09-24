@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.ui.common.ChatterFragment;
 import com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory;
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
 
-/* loaded from: classes.dex */
 public class ChatFragmentActivityFactory implements FragmentActivityFactory {
 
     private static class InstanceHolder {
@@ -26,7 +25,7 @@ public class ChatFragmentActivityFactory implements FragmentActivityFactory {
         return InstanceHolder.Instance;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+    @Override
     public Intent createIntent(Context context, Bundle bundle) {
         ChatterID chatterID;
         Intent intent = new Intent(context, (Class<?>) ChatNewActivity.class);
@@ -37,7 +36,7 @@ public class ChatFragmentActivityFactory implements FragmentActivityFactory {
         return intent;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
+    @Override
     public Class<? extends Fragment> getFragmentClass() {
         return ChatFragment.class;
     }

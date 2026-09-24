@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
-/* loaded from: classes.dex */
 public class RiggedMeshProgram30 extends PrimProgram {
     public int uAnimationDataBlockIndex;
     public int uAnimationDataBlockSize;
@@ -23,7 +22,7 @@ public class RiggedMeshProgram30 extends PrimProgram {
         super(Shader.RiggedMeshVertexShader30, z ? Shader.PrimOpaqueFragmentShader30 : Shader.PrimFragmentShader30);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.PrimProgram, com.lumiyaviewer.lumiya.render.shaders.BasicPrimProgram, com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     @TargetApi(18)
     protected void bindVariables() {
         super.bindVariables();

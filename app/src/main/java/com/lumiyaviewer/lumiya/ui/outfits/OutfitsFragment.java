@@ -47,90 +47,89 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class OutfitsFragment extends FragmentWithTitle implements ReloadableFragment, View.OnClickListener, InventoryFolderAdapter.OnItemCheckboxClickListener {
     private static final String FOLDER_ID_KEY = "folderID";
     private ViewGroup listHeader;
     private InventoryFolderAdapter adapter = null;
     private UUID myOutfitsFolderUUID = null;
-    private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.1
+    private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onInventoryEntryList((InventoryEntryList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.2
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.3
+    private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.4
+    private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onWornAttachmentsChanged((ImmutableMap) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.5
+    private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onWornWearablesChanged((Table) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<InventoryQuery, InventoryEntryList> rootFolderEntryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.6
+    private final SubscriptionData<InventoryQuery, InventoryEntryList> rootFolderEntryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onRootFolderEntryList((InventoryEntryList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, UUID> wornOutfitFolder = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.7
+    private final SubscriptionData<SubscriptionSingleKey, UUID> wornOutfitFolder = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             OutfitsFragment.this.onWornOutfitFolder((UUID) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.entryList);
     private final Object listHeaderData = new Object();
-    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs
+    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
             OutfitsFragment.this.m712lambda$com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragment_13544(adapterView, view, i, j);
         }
 
-        @Override // android.widget.AdapterView.OnItemClickListener
+        @Override
         public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
             $m$0(adapterView, view, i, j);
         }
@@ -180,16 +179,12 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         showInventoryList(uuid);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
     public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (this.adapter != null) {
             this.adapter.setAvatarAppearance(sLAgentCircuit != null ? sLAgentCircuit.getModules().avatarAppearance : null);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onInventoryEntryList, reason: merged with bridge method [inline-methods] */
     public void onInventoryEntryList(InventoryEntryList inventoryEntryList) {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()));
         setTitle(inventoryEntryList.getTitle(), null);
@@ -199,14 +194,10 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         updateLoadingStatus();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onLoadingStatusChanged, reason: merged with bridge method [inline-methods] */
     public void onLoadingStatusChanged(Boolean bool) {
         updateLoadingStatus();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onRootFolderEntryList, reason: merged with bridge method [inline-methods] */
     public void onRootFolderEntryList(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
             for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
@@ -223,24 +214,18 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onWornAttachmentsChanged, reason: merged with bridge method [inline-methods] */
     public void onWornAttachmentsChanged(ImmutableMap<UUID, String> immutableMap) {
         if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onWornOutfitFolder, reason: merged with bridge method [inline-methods] */
     public void onWornOutfitFolder(UUID uuid) {
         if (this.adapter != null) {
             this.adapter.setWornOutfitFolder(uuid);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onWornWearablesChanged, reason: merged with bridge method [inline-methods] */
     public void onWornWearablesChanged(Table<SLWearableType, UUID, SLWearable> table) {
         if (this.adapter != null) {
             this.adapter.setWornWearables(table);
@@ -283,22 +268,22 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
                     if (Objects.equal(uuid, this.myOutfitsFolderUUID)) {
                         ((TextView) this.listHeader.findViewById(R.id.itemNameTextView)).setText(R.string.current_outfit);
                         ((ImageView) this.listHeader.findViewById(R.id.itemTypeIconView)).setImageResource(R.drawable.inv_folder);
-                        view.findViewById(R.id.wear_buttons_layout).setVisibility(8);
+                        view.findViewById(R.id.wear_buttons_layout).setVisibility(View.GONE);
                     } else {
                         ((TextView) this.listHeader.findViewById(R.id.itemNameTextView)).setText(R.string.inventory_go_up);
                         ((ImageView) this.listHeader.findViewById(R.id.itemTypeIconView)).setImageResource(R.drawable.inv_up);
-                        view.findViewById(R.id.wear_buttons_layout).setVisibility(0);
+                        view.findViewById(R.id.wear_buttons_layout).setVisibility(View.VISIBLE);
                     }
-                    this.listHeader.findViewById(R.id.itemSubTypeIconView).setVisibility(8);
-                    this.listHeader.setVisibility(0);
+                    this.listHeader.findViewById(R.id.itemSubTypeIconView).setVisibility(View.GONE);
+                    this.listHeader.setVisibility(View.VISIBLE);
                 }
             } else {
                 this.rootFolderEntryList.subscribe(userManager.getInventoryManager().getInventoryEntries(), InventoryQuery.create((UUID) null, (String) null, true, false, false, (SLAssetType) null));
                 if (this.listHeader != null) {
-                    this.listHeader.setVisibility(8);
+                    this.listHeader.setVisibility(View.GONE);
                 }
                 if (view != null) {
-                    view.findViewById(R.id.wear_buttons_layout).setVisibility(8);
+                    view.findViewById(R.id.wear_buttons_layout).setVisibility(View.GONE);
                 }
             }
             if (this.adapter != null) {
@@ -367,19 +352,19 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.outfit_folder_wear_button /* 2131755591 */:
+            case R.id.outfit_folder_wear_button:
                 changeOutfit(true);
                 break;
-            case R.id.outfit_folder_add_button /* 2131755592 */:
+            case R.id.outfit_folder_add_button:
                 changeOutfit(false);
                 break;
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         Debug.Printf("InventoryFragment: onCreateView", new Object[0]);
@@ -403,7 +388,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.inventory.InventoryFolderAdapter.OnItemCheckboxClickListener
+    @Override
     public void onItemCheckboxClicked(SLInventoryEntry sLInventoryEntry) {
         SLInventoryEntry resolveLink;
         UserManager userManager = getUserManager();
@@ -432,21 +417,21 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         EventBus.getInstance().subscribe(this);
         showInventoryList(getFolderUUID());
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         showInventoryList(null);
         EventBus.getInstance().unsubscribe(this);
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         Debug.Printf("InventoryFragment: setFragmentArgs '%s'", bundle);
         if (bundle != null) {

@@ -7,9 +7,8 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import java.util.HashSet;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdClear implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         HashSet hashSet = new HashSet();
         for (RLVRestrictionType rLVRestrictionType : RLVRestrictionType.values()) {

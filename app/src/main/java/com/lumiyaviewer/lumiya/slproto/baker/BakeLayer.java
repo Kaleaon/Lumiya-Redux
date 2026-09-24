@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.baker;
 
-import androidx.core.view.ViewCompat;
 
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;
@@ -12,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.baker.BakeProcess;
 import java.io.InputStream;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class BakeLayer {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-avatar-SLAvatarParamColor$ColorOperationSwitchesValues, reason: not valid java name */
@@ -162,7 +160,7 @@ public class BakeLayer {
         boolean z6 = false;
         int netColor = getNetColor(bakeProcess);
         OpenJPEG openJPEG2 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, 0);
-        OpenJPEG openJPEG3 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, ViewCompat.MEASURED_STATE_MASK);
+        OpenJPEG openJPEG3 = new OpenJPEG(openJPEG.width, openJPEG.height, 4, 4, 0, 0xFF000000);
         Debug.Log(String.format("Baking: layer %s net_color 0x%08x.", this.layerName, Integer.valueOf(netColor)));
         boolean z7 = true;
         boolean z8 = false;

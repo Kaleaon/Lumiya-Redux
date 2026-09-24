@@ -27,7 +27,6 @@ import com.google.vr.vrcore.controller.api.IControllerListener;
 import com.google.vr.vrcore.controller.api.IControllerService;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class ServiceBridge implements ServiceConnection {
     private static final boolean DEBUG = false;
     public static final int FLAG_SUPPORTS_RECENTER = 1;
@@ -40,20 +39,20 @@ public class ServiceBridge implements ServiceConnection {
     private boolean isBound;
     private IControllerService service;
     private final ControllerListenerOptions options = new ControllerListenerOptions();
-    private final Runnable bindRunnable = new Runnable() { // from class: com.google.vr.internal.controller.ServiceBridge.1
-        @Override // java.lang.Runnable
+    private final Runnable bindRunnable = new Runnable() {
+        @Override
         public void run() {
             ServiceBridge.this.doBind();
         }
     };
-    private final Runnable unbindRunnable = new Runnable() { // from class: com.google.vr.internal.controller.ServiceBridge.2
-        @Override // java.lang.Runnable
+    private final Runnable unbindRunnable = new Runnable() {
+        @Override
         public void run() {
             ServiceBridge.this.doUnbind();
         }
     };
-    private final IControllerListener controllerListener = new IControllerListener.Stub() { // from class: com.google.vr.internal.controller.ServiceBridge.3
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+    private final IControllerListener controllerListener = new IControllerListener.Stub() {
+        @Override
         public void deprecatedOnControllerAccelEvent(ControllerAccelEvent controllerAccelEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             Parcel obtain2 = Parcel.obtain();
@@ -65,7 +64,7 @@ public class ServiceBridge implements ServiceConnection {
             obtain2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerButtonEvent(ControllerButtonEvent controllerButtonEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             Parcel obtain2 = Parcel.obtain();
@@ -77,12 +76,12 @@ public class ServiceBridge implements ServiceConnection {
             obtain2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public boolean deprecatedOnControllerButtonEventV1(ControllerButtonEvent controllerButtonEvent) {
             return true;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerGyroEvent(ControllerGyroEvent controllerGyroEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             Parcel obtain2 = Parcel.obtain();
@@ -94,7 +93,7 @@ public class ServiceBridge implements ServiceConnection {
             obtain2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerOrientationEvent(ControllerOrientationEvent controllerOrientationEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             Parcel obtain2 = Parcel.obtain();
@@ -106,7 +105,7 @@ public class ServiceBridge implements ServiceConnection {
             obtain2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void deprecatedOnControllerTouchEvent(ControllerTouchEvent controllerTouchEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             Parcel obtain2 = Parcel.obtain();
@@ -118,34 +117,34 @@ public class ServiceBridge implements ServiceConnection {
             obtain2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public int getApiVersion() throws RemoteException {
             return 10;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public ControllerListenerOptions getOptions() throws RemoteException {
             return ServiceBridge.this.options;
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket(ControllerEventPacket controllerEventPacket) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerEventPacket(controllerEventPacket);
             controllerEventPacket.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerEventPacket2(ControllerEventPacket2 controllerEventPacket2) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerEventPacket(controllerEventPacket2);
             controllerEventPacket2.recycle();
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) {
             ServiceBridge.this.callbacks.onControllerRecentered(controllerOrientationEvent);
         }
 
-        @Override // com.google.vr.vrcore.controller.api.IControllerListener
+        @Override
         public void onControllerStateChanged(int i, int i2) throws RemoteException {
             ServiceBridge.this.callbacks.onControllerStateChanged(i, i2);
         }
@@ -177,7 +176,6 @@ public class ServiceBridge implements ServiceConnection {
         this.callbacks = callbacks;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void doBind() {
         ensureOnMainThread();
         if (this.isBound) {
@@ -194,7 +192,6 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void doUnbind() {
         ensureOnMainThread();
         if (!this.isBound) {
@@ -232,7 +229,7 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         int i = 0;
         ensureOnMainThread();
@@ -281,7 +278,7 @@ public class ServiceBridge implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceDisconnected(ComponentName componentName) {
         ensureOnMainThread();
         this.service = null;

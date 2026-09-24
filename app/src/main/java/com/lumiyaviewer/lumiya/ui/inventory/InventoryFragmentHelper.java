@@ -31,7 +31,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryFragmentHelper {
     static final int SORT_ORDER_ALPHA = 1;
     private static final String SORT_ORDER_KEY = "inventorySortOrder";
@@ -125,21 +124,21 @@ public class InventoryFragmentHelper {
 
     private void showRezDialog(final SLInventoryEntry sLInventoryEntry) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getContext().getString(R.string.rez_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.6
+        builder.setMessage(getContext().getString(R.string.rez_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 InventoryFragmentHelper.this.m629x89731ef0((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.2
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -160,21 +159,21 @@ public class InventoryFragmentHelper {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(String.format(getContext().getString(R.string.share_inv_item_title), sLInventoryEntry.name, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.9
+        builder.setMessage(String.format(getContext().getString(R.string.share_inv_item_title), sLInventoryEntry.name, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 InventoryFragmentHelper.m627x8974ec91((Runnable) runnable, (SLAgentCircuit) activeAgentCircuit, (ChatterID) chatterID, (SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -187,22 +186,22 @@ public class InventoryFragmentHelper {
         dialog.setContentView(R.layout.inv_rename_dialog);
         dialog.setTitle(R.string.new_folder_dialog_title);
         ((Button) dialog.findViewById(R.id.okButton)).setText(R.string.create_folder_button);
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.7
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 InventoryFragmentHelper.this.m628x8972353e((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.3
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 ((Dialog) dialog).cancel();
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
@@ -238,22 +237,22 @@ public class InventoryFragmentHelper {
         dialog.setTitle(R.string.new_landmark_dialog_title);
         ((Button) dialog.findViewById(R.id.okButton)).setText(R.string.create_folder_button);
         ((EditText) dialog.findViewById(R.id.itemNameText)).setText(str);
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.10
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 InventoryFragmentHelper.m620xa4b588bd((Dialog) dialog, (SLInventory) inventory, (SLInventoryEntry) sLInventoryEntry, (String) format, view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.4
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 ((Dialog) dialog).cancel();
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
@@ -268,21 +267,21 @@ public class InventoryFragmentHelper {
         }
         final boolean isLink = inventory.canMoveToTrash(sLInventoryEntry) ? sLInventoryEntry.isLink() : true;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getContext().getString(isLink ? R.string.delete_inv_item_title : R.string.trash_inv_item_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.11
+        builder.setMessage(getContext().getString(isLink ? R.string.delete_inv_item_title : R.string.trash_inv_item_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 InventoryFragmentHelper.m625x89746493(isLink, (SLInventory) inventory, (SLInventoryEntry) sLInventoryEntry, (Runnable) runnable, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.1
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -293,20 +292,20 @@ public class InventoryFragmentHelper {
     void PerformInventoryAction(SLInventoryEntry sLInventoryEntry, int i) {
         Debug.Log("PerformInventoryAction: entry = " + sLInventoryEntry);
         switch (i) {
-            case R.string.asset_action_edit /* 2131296333 */:
+            case R.string.asset_action_edit:
                 UserManager userManager = getUserManager();
                 if (userManager != null) {
                     getContext().startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), sLInventoryEntry.parentUUID, sLInventoryEntry, sLInventoryEntry.invType == 10, null, 0));
                     break;
                 }
                 break;
-            case R.string.asset_action_rez /* 2131296334 */:
+            case R.string.asset_action_rez:
                 showRezDialog(sLInventoryEntry);
                 break;
-            case R.string.asset_action_teleport /* 2131296335 */:
+            case R.string.asset_action_teleport:
                 showTeleportDialog(sLInventoryEntry);
                 break;
-            case R.string.asset_action_view /* 2131296336 */:
+            case R.string.asset_action_view:
                 Debug.Log("Inventory: view action for asset type = " + sLInventoryEntry.assetType);
                 if (sLInventoryEntry.assetType == SLAssetType.AT_TEXTURE.getTypeCode()) {
                     ViewTexture(sLInventoryEntry.assetUUID);
@@ -321,22 +320,22 @@ public class InventoryFragmentHelper {
         dialog.setContentView(R.layout.inv_rename_dialog);
         dialog.setTitle(R.string.rename_inv_item_title);
         ((EditText) dialog.findViewById(R.id.itemNameText)).setText(sLInventoryEntry.name);
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.8
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 InventoryFragmentHelper.this.m630x8973e911((Dialog) dialog, (SLInventoryEntry) sLInventoryEntry, view);
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }
         });
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$6k4r7SqDbbDd94MFx7S4Wwav0Lg.5
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             private final /* synthetic */ void $m$0(View view) {
                 ((Dialog) dialog).cancel();
             }
 
-            @Override // android.view.View.OnClickListener
+            @Override
             public final void onClick(View view) {
                 $m$0(view);
             }

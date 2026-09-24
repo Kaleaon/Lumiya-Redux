@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class ChatterList {
 
     @Nonnull
@@ -34,12 +33,12 @@ public class ChatterList {
     private final Map<ChatterListType, ChatterDisplayDataList> chatterLists = Collections.synchronizedMap(new EnumMap(ChatterListType.class));
     private final SubscriptionPool<UUID, Float> nearbyDistancePool = new SubscriptionPool<>();
     private final SubscriptionPool<UUID, Boolean> typingUsersPool = new SubscriptionPool<>();
-    private final OnListUpdated onNearbyListUpdated = new OnListUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$vvo1Hidt87pwA0OrMywwrJjt1rU
+    private final OnListUpdated onNearbyListUpdated = new OnListUpdated() {
         private final /* synthetic */ void $m$0() {
             ChatterList.this.m305xfc0863d4();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.manager.OnListUpdated
+        @Override
         public final void onListUpdated() {
             $m$0();
         }
@@ -52,9 +51,8 @@ public class ChatterList {
         this.friendManager = new FriendManager(userManager, this.daoSession, this);
         this.groupManager = new GroupManager(userManager, this.daoSession, this);
         this.activeChattersManager = new ActiveChattersManager(userManager, this.daoSession, this);
-        new RequestFinalProcessor<UUID, Float>(this.nearbyDistancePool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ChatterList.1
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+        new RequestFinalProcessor<UUID, Float>(this.nearbyDistancePool, userManager.getDatabaseExecutor()) {
+            @Override
             public Float processRequest(@Nonnull UUID uuid) throws Throwable {
                 SLModules modules;
                 SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
@@ -64,9 +62,8 @@ public class ChatterList {
                 return modules.minimap.getDistanceToUser(uuid);
             }
         };
-        new RequestFinalProcessor<UUID, Boolean>(this.typingUsersPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ChatterList.2
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+        new RequestFinalProcessor<UUID, Boolean>(this.typingUsersPool, userManager.getDatabaseExecutor()) {
+            @Override
             public Boolean processRequest(@Nonnull UUID uuid) throws Throwable {
                 SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
                 if (activeAgentCircuit != null) {
@@ -75,7 +72,7 @@ public class ChatterList {
                 return false;
             }
         };
-        new RequestFinalProcessor<ChatterListType, ImmutableList<ChatterDisplayData>>(this.chatterListPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.ChatterList.3
+        new RequestFinalProcessor<ChatterListType, ImmutableList<ChatterDisplayData>>(this.chatterListPool, userManager.getDatabaseExecutor()) {
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-users-manager-ChatterListTypeSwitchesValues, reason: not valid java name */
             private /* synthetic */ int[] f225x521388d7 = null;
@@ -110,8 +107,7 @@ public class ChatterList {
                 return iArr;
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+            @Override
             /* renamed from: cancelRequest, reason: avoid collision after fix types in other method and merged with bridge method [inline-methods] */
             public void m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(@Nonnull ChatterListType chatterListType) {
                 ChatterDisplayDataList chatterDisplayDataList = (ChatterDisplayDataList) ChatterList.this.chatterLists.remove(chatterListType);
@@ -120,8 +116,7 @@ public class ChatterList {
                 }
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestFinalProcessor
+            @Override
             public ImmutableList<ChatterDisplayData> processRequest(@Nonnull ChatterListType chatterListType) {
                 ChatterDisplayDataList chatterDisplayDataList = (ChatterDisplayDataList) ChatterList.this.chatterLists.get(chatterListType);
                 if (chatterDisplayDataList == null) {

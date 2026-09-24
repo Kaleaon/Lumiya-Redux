@@ -12,7 +12,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class UnreadNotificationInfo {
 
     public static abstract class ObjectPopupMessage {

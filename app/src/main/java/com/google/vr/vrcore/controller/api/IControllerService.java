@@ -7,7 +7,6 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import com.google.vr.vrcore.controller.api.IControllerListener;
 
-/* loaded from: classes.dex */
 public interface IControllerService extends IInterface {
 
     public static abstract class Stub extends Binder implements IControllerService {
@@ -23,7 +22,7 @@ public interface IControllerService extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -32,7 +31,7 @@ public interface IControllerService extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
+            @Override
             public int initialize(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -48,7 +47,7 @@ public interface IControllerService extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
+            @Override
             public boolean registerListener(int i, String str, IControllerListener iControllerListener) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -66,7 +65,7 @@ public interface IControllerService extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerService
+            @Override
             public boolean unregisterListener(String str) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -95,12 +94,12 @@ public interface IControllerService extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IControllerService)) ? (IControllerService) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

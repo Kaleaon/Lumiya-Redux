@@ -20,10 +20,8 @@ import android.view.ViewGroup;
 import com.astuetz.PagerSlidingTabStrip;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.StreamingMediaService;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleDataPool;
-import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo;
@@ -37,7 +35,6 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 import com.lumiyaviewer.lumiya.ui.render.CardboardActivity;
 
-/* loaded from: classes.dex */
 public class ContactsFragment extends Fragment {
     private CurrentLocationInfo currentLocationInfo;
     private MenuItem itemLocationDetails = null;
@@ -91,12 +88,12 @@ public class ContactsFragment extends Fragment {
             super(fragmentManager);
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public int getCount() {
             return ContactListType.values().length;
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter
+        @Override
         public Fragment getItem(int i) {
             Fragment nearbyUsersFragment;
             switch (m430x7c67181e()[ContactListType.values()[i].ordinal()]) {
@@ -127,7 +124,7 @@ public class ContactsFragment extends Fragment {
             return nearbyUsersFragment;
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public CharSequence getPageTitle(int i) {
             int nearbyUsers;
             ContactListType contactListType = ContactListType.values()[i];
@@ -135,7 +132,7 @@ public class ContactsFragment extends Fragment {
             return (contactListType != ContactListType.Nearby || ContactsFragment.this.currentLocationInfo == null || (nearbyUsers = ContactsFragment.this.currentLocationInfo.nearbyUsers()) == 0) ? name : name + " (" + Integer.toString(nearbyUsers) + ")";
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
+        @Override
         public Parcelable saveState() {
             return null;
         }
@@ -147,8 +144,6 @@ public class ContactsFragment extends Fragment {
         return contactsFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
     public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ViewPager viewPager;
         PagerAdapter adapter;
@@ -196,13 +191,13 @@ public class ContactsFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.contact_fragment_menu, menu);
@@ -211,7 +206,7 @@ public class ContactsFragment extends Fragment {
         updateOptionsMenu();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.contacts, viewGroup, false);
@@ -221,18 +216,18 @@ public class ContactsFragment extends Fragment {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         CurrentLocationInfo currentLocationInfoSnapshot;
         ParcelData parcelData;
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         switch (menuItem.getItemId()) {
-            case R.id.item_contacts_location_details /* 2131755772 */:
+            case R.id.item_contacts_location_details:
                 if (userManager != null && (currentLocationInfoSnapshot = userManager.getCurrentLocationInfoSnapshot()) != null && (parcelData = currentLocationInfoSnapshot.parcelData()) != null) {
                     DetailsActivity.showEmbeddedDetails(getActivity(), ParcelPropertiesFragment.class, ParcelPropertiesFragment.makeSelection(userManager.getUserID(), parcelData));
                 }
                 return true;
-            case R.id.item_contacts_play_parcel_media /* 2131755773 */:
+            case R.id.item_contacts_play_parcel_media:
                 StreamingMediaService.startStreamingMediaService(getContext(), userManager);
                 return true;
             default:
@@ -240,23 +235,23 @@ public class ContactsFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         updateOptionsMenu();
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         if (userManager != null) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$zIl8cGSTO94X3h9h2afeKA4NC_s
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
                 private final /* synthetic */ void $m$0(Object obj) {
                     ContactsFragment.this.onCurrentLocation((CurrentLocationInfo) obj);
                 }
 
-                @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+                @Override
                 public final void onData(Object obj) {
                     $m$0(obj);
                 }
@@ -264,7 +259,7 @@ public class ContactsFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.subscription != null) {
             this.subscription.unsubscribe();

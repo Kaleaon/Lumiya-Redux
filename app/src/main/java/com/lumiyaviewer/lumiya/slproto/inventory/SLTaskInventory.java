@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.inventory;
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 
-/* loaded from: classes.dex */
 public class SLTaskInventory {
     public final ImmutableList<SLInventoryEntry> entries;
 

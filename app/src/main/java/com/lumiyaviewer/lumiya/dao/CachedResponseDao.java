@@ -7,7 +7,6 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 
-/* loaded from: classes.dex */
 public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
     public static final String TABLENAME = "CachedResponses";
 
@@ -33,8 +32,7 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedResponses'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, CachedResponse cachedResponse) {
         sQLiteStatement.clearBindings();
         String key = cachedResponse.getKey();
@@ -48,7 +46,7 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         sQLiteStatement.bindLong(3, cachedResponse.getMustRevalidate() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String getKey(CachedResponse cachedResponse) {
         if (cachedResponse != null) {
             return cachedResponse.getKey();
@@ -56,25 +54,25 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public CachedResponse readEntity(Cursor cursor, int i) {
         return new CachedResponse(cursor.isNull(i + 0) ? null : cursor.getString(i + 0), cursor.isNull(i + 1) ? null : cursor.getBlob(i + 1), cursor.getShort(i + 2) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, CachedResponse cachedResponse, int i) {
         cachedResponse.setKey(cursor.isNull(i + 0) ? null : cursor.getString(i + 0));
         cachedResponse.setData(cursor.isNull(i + 1) ? null : cursor.getBlob(i + 1));
         cachedResponse.setMustRevalidate(cursor.getShort(i + 2) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -82,8 +80,7 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         return cursor.getString(i + 0);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public String updateKeyAfterInsert(CachedResponse cachedResponse, long j) {
         return cachedResponse.getKey();
     }

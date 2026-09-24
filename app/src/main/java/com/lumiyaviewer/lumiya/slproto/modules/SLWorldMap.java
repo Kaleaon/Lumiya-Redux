@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules;
 
-import androidx.core.view.InputDeviceCompat;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
@@ -14,7 +13,6 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLWorldMap extends SLModule {
     private String teleportTargetName;
     private int teleportTargetX;
@@ -49,7 +47,7 @@ public class SLWorldMap extends SLModule {
                 int floor3 = (int) Math.floor(d2);
                 int i = floor & 255;
                 int floor2 = floor3 & 255;
-                long j = (((long) (floor & InputDeviceCompat.SOURCE_ANY)) << 32) | (((long) (floor3 & InputDeviceCompat.SOURCE_ANY)) & 4294967295L);
+                long j = (((long) (floor & 0xFFFFFF00)) << 32) | (((long) (floor3 & 0xFFFFFF00)) & 0xFFFFFFFFL);
                 Debug.Printf("Initiating teleport to regionHandle 0x%x x %d y %d", Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(floor2));
                 this.agentCircuit.TeleportToRegion(j, i, floor2, 0);
             }
@@ -70,7 +68,7 @@ public class SLWorldMap extends SLModule {
             }
             MapBlockReply.Data data = (MapBlockReply.Data) it.next();
             String stringFromVariableOEM = SLMessage.stringFromVariableOEM(data.Name);
-            long j = (((long) (data.X * 256)) << 32) | (((long) (data.Y * 256)) & 4294967295L);
+            long j = (((long) (data.X * 256)) << 32) | (((long) (data.Y * 256)) & 0xFFFFFFFFL);
             if (this.teleportTargetName == null || !this.teleportTargetName.equalsIgnoreCase(stringFromVariableOEM)) {
                 z3 = z;
             } else if (j != 0) {

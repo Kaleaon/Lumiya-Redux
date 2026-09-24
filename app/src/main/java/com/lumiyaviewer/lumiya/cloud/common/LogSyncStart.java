@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.cloud.common;
 import android.os.Bundle;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class LogSyncStart implements Bundleable {
     public final UUID agentUUID;
     public final int appVersionCode;
@@ -18,7 +17,7 @@ public class LogSyncStart implements Bundleable {
         this.agentUUID = UUID.fromString(bundle.getString("agentUUID"));
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("appVersionCode", this.appVersionCode);

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.users.manager;
 import com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 final class AutoValue_GroupManager_GroupMembersQuery extends GroupManager.GroupMembersQuery {
     private final UUID groupID;
     private final UUID requestID;
@@ -33,7 +32,7 @@ final class AutoValue_GroupManager_GroupMembersQuery extends GroupManager.GroupM
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.GroupMembersQuery
+    @Override
     public UUID groupID() {
         return this.groupID;
     }
@@ -42,7 +41,7 @@ final class AutoValue_GroupManager_GroupMembersQuery extends GroupManager.GroupM
         return ((this.groupID.hashCode() ^ 1000003) * 1000003) ^ this.requestID.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.GroupMembersQuery
+    @Override
     public UUID requestID() {
         return this.requestID;
     }

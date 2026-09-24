@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class PriorityExecutorService {
     private ThreadPoolExecutor exe;
     private PriorityBinQueue<Runnable> queue;
@@ -15,7 +14,7 @@ public class PriorityExecutorService {
         private ComparePriority() {
         }
 
-        @Override // java.util.Comparator
+        @Override
         public int compare(Runnable runnable, Runnable runnable2) {
             return (runnable instanceof HasPriority ? ((HasPriority) runnable).getPriority() : 0) - (runnable2 instanceof HasPriority ? ((HasPriority) runnable2).getPriority() : 0);
         }
@@ -25,8 +24,8 @@ public class PriorityExecutorService {
         private OnExecutionCompleteListener onExecutionCompleteListener;
 
         public ExecutorWithListener(final String str, int i, int i2, long j, TimeUnit timeUnit, BlockingQueue<Runnable> blockingQueue, OnExecutionCompleteListener onExecutionCompleteListener) {
-            super(i, i2, j, timeUnit, blockingQueue, new ThreadFactory() { // from class: com.lumiyaviewer.lumiya.utils.PriorityExecutorService.ExecutorWithListener.1
-                @Override // java.util.concurrent.ThreadFactory
+            super(i, i2, j, timeUnit, blockingQueue, new ThreadFactory() {
+                @Override
                 public Thread newThread(Runnable runnable) {
                     return new Thread(runnable, str);
                 }
@@ -35,7 +34,7 @@ public class PriorityExecutorService {
             this.onExecutionCompleteListener = onExecutionCompleteListener;
         }
 
-        @Override // java.util.concurrent.ThreadPoolExecutor
+        @Override
         protected void afterExecute(Runnable runnable, Throwable th) {
             if (this.onExecutionCompleteListener != null) {
                 this.onExecutionCompleteListener.onExecutionComplete(runnable, th);

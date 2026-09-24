@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 public class MuteListEntry {
     public static final int flagAll = 15;
     public static final int flagObjectSounds = 8;

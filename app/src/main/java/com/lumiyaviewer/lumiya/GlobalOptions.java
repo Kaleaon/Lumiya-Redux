@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChangeListener {
     private int themeResourceId = R.style.Theme_Lumiya_Light;
     private boolean legacyUserNames = false;
@@ -336,7 +335,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
         return this.legacyUserNames;
     }
 
-    @Override // android.content.SharedPreferences.OnSharedPreferenceChangeListener
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String str) {
         updateFromPreferences(LumiyaApp.getContext(), sharedPreferences);
         EventBus.getInstance().publish(new GlobalOptionsChangedEvent(sharedPreferences));

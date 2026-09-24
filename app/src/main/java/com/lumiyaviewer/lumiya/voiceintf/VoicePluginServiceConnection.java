@@ -72,7 +72,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoicePluginServiceConnection implements ServiceConnection {
     public static final String ACTION_VOICE_ACCEPT = "accept";
     public static final String ACTION_VOICE_REJECT = "reject";
@@ -95,7 +94,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
 
     @Nullable
     private ChatterNameRetriever ringingChatterNameRetriever = null;
-    private final Handler fromPluginHandler = new Handler() { // from class: com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection.1
+    private final Handler fromPluginHandler = new Handler() {
 
         /* renamed from: -com-lumiyaviewer-lumiya-voice-common-VoicePluginMessageTypeSwitchesValues, reason: not valid java name */
         private /* synthetic */ int[] f611x5636931c = null;
@@ -174,7 +173,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
             return iArr;
         }
 
-        @Override // android.os.Handler
+        @Override
         public void handleMessage(Message message) {
             if (message.what == 200 && (message.obj instanceof Bundle)) {
                 Bundle bundle = (Bundle) message.obj;
@@ -244,7 +243,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceAudioProperties(VoiceAudioProperties voiceAudioProperties) {
         Object[] objArr = new Object[1];
         objArr[0] = voiceAudioProperties != null ? voiceAudioProperties.bluetoothState : null;
@@ -255,7 +253,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceChannelStatus(VoiceChannelStatus voiceChannelStatus) {
         SLModules modules;
         if (voiceChannelStatus.chatInfo.state == VoiceChatInfo.VoiceChatState.None) {
@@ -281,7 +278,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceInitializeReply(VoiceInitializeReply voiceInitializeReply) {
         if (!voiceInitializeReply.appVersionOk) {
             UserManager userManager = this.userManager.get();
@@ -314,7 +310,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceLoginStatus(VoiceLoginStatus voiceLoginStatus) {
         SLModules modules;
         UserManager userManager = this.userManager.get();
@@ -327,7 +322,6 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void onVoiceRinging(final VoiceRinging voiceRinging) {
         UserManager userManager = this.userManager.get();
         if (userManager == null || voiceRinging == null || voiceRinging.agentUUID == null) {
@@ -335,12 +329,12 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
         ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(userManager.getUserID(), voiceRinging.agentUUID);
         this.voiceChannels.forcePut(userChatterID, voiceRinging.voiceChannelInfo);
-        this.ringingChatterNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA.1
+        this.ringingChatterNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
             private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
                 VoicePluginServiceConnection.this.m914x2afa1cbb((VoiceRinging) voiceRinging, chatterNameRetriever);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+            @Override
             public final void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
                 $m$0(chatterNameRetriever);
             }
@@ -371,7 +365,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         intent.setData(voiceRinging.toUri());
         intent.putExtra(INTENT_EXTRA_RINGING_MESSSAGE, voiceRinging.toBundle());
         Intent intentCreateIntent = ChatFragmentActivityFactory.getInstance().createIntent(this.context, ChatFragment.makeSelection(chatterID));
-        intentCreateIntent.addFlags(536870912);
+        intentCreateIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         ActivityUtils.setActiveAgentID(intentCreateIntent, chatterID.agentUUID);
         intentCaptureNotify = intentCreateIntent;
         UserManager userManager = this.userManager.get();
@@ -437,12 +431,12 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     }
 
     public void disconnect() {
-        this.mainThreadHandler.post(new Runnable() { // from class: com.lumiyaviewer.lumiya.voiceintf.-$Lambda$KEiwggiQxhrsJugAMeHgzXJrgrA
+        this.mainThreadHandler.post(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 VoicePluginServiceConnection.this.m915x2afbf316();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -475,7 +469,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         this.context.unbindService(this);
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Debug.Printf("LumiyaVoice: service connected", new Object[0]);
         this.toPluginMessenger = new Messenger(iBinder);
@@ -486,7 +480,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
         }
     }
 
-    @Override // android.content.ServiceConnection
+    @Override
     public void onServiceDisconnected(ComponentName componentName) {
         Debug.Printf("LumiyaCloud: service disconnected", new Object[0]);
         UserManager userManager = this.userManager.get();

@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.res.ResourceRequest;
 import com.lumiyaviewer.lumiya.res.executors.PrimComputeExecutor;
 import com.lumiyaviewer.lumiya.slproto.terrain.TerrainPatchHeightMap;
 
-/* loaded from: classes.dex */
 public class TerrainGeometryCache extends ResourceMemoryCache<TerrainPatchHeightMap, TerrainPatchGeometry> {
 
     private static class TerrainGeometryRequest extends ResourceRequest<TerrainPatchHeightMap, TerrainPatchGeometry> implements Runnable {
@@ -16,18 +15,18 @@ public class TerrainGeometryCache extends ResourceMemoryCache<TerrainPatchHeight
             super(terrainPatchHeightMap, resourceManager);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             PrimComputeExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             PrimComputeExecutor.getInstance().execute(this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new TerrainPatchGeometry(getParams()));

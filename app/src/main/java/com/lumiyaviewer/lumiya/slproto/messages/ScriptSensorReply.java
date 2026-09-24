@@ -8,25 +8,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptSensorReply - returns the request script search information back to the requester
+ *
+ * <p>Template: {@code ScriptSensorReply Low 248 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ScriptSensorReply extends SLMessage {
     public Requester Requester_Field;
     public ArrayList<SensedData> SensedData_Fields = new ArrayList<>();
 
+    /** Block Requester, Single. */
     public static class Requester {
-        public UUID SourceID;
+        public UUID SourceID; // LLUUID
     }
 
+    /** Block SensedData, Variable. */
     public static class SensedData {
-        public UUID GroupID;
-        public byte[] Name;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public LLVector3 Position;
-        public float Range;
-        public LLQuaternion Rotation;
-        public int Type;
-        public LLVector3 Velocity;
+        public UUID GroupID; // LLUUID
+        public byte[] Name; // Variable 1
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public LLVector3 Position; // LLVector3
+        public float Range; // F32
+        public LLQuaternion Rotation; // LLQuaternion
+        public int Type; // S32
+        public LLVector3 Velocity; // LLVector3
     }
 
     public ScriptSensorReply() {
@@ -34,7 +41,7 @@ public class ScriptSensorReply extends SLMessage {
         this.Requester_Field = new Requester();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 21;
         Iterator<?> it = this.SensedData_Fields.iterator();
@@ -47,16 +54,17 @@ public class ScriptSensorReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleScriptSensorReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -8);
+        // Message number: Low 248 (ScriptSensorReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xF8);
         packUUID(byteBuffer, this.Requester_Field.SourceID);
         byteBuffer.put((byte) this.SensedData_Fields.size());
         for (SensedData sensedData : this.SensedData_Fields) {
@@ -72,7 +80,7 @@ public class ScriptSensorReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Requester_Field.SourceID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;

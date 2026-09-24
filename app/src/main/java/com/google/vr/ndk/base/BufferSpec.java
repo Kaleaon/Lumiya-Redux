@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.Point;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferSpec {
     private static final String TAG = BufferSpec.class.getSimpleName();
     long nativeBufferSpec;

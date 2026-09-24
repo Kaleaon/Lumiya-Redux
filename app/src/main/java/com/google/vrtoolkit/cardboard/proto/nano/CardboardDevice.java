@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.protobuf.nano.WireFormatNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface CardboardDevice {
 
     public static final class CardboardInternalParams extends ExtendableMessageNano<CardboardInternalParams> implements Cloneable {
@@ -99,8 +98,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final CardboardInternalParams clone() {
             try {
                 CardboardInternalParams cardboardInternalParams = (CardboardInternalParams) super.clone();
@@ -113,7 +111,7 @@ public interface CardboardDevice {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeRawVarint32Size;
             int computeSerializedSize = super.computeSerializedSize();
@@ -181,7 +179,7 @@ public interface CardboardDevice {
             return (this.bitField0_ & 4) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final CardboardInternalParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -338,7 +336,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if (this.eyeOrientations != null && this.eyeOrientations.length > 0) {
                 int i = 0;
@@ -414,8 +412,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final DaydreamInternalParams clone() {
             try {
                 DaydreamInternalParams daydreamInternalParams = (DaydreamInternalParams) super.clone();
@@ -433,7 +430,7 @@ public interface CardboardDevice {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -460,7 +457,7 @@ public interface CardboardDevice {
             return (this.bitField0_ & 1) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final DaydreamInternalParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -503,7 +500,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeInt32(1, this.version_);
@@ -639,8 +636,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final DeviceParams clone() {
             try {
                 DeviceParams deviceParams = (DeviceParams) super.clone();
@@ -662,7 +658,7 @@ public interface CardboardDevice {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -767,7 +763,7 @@ public interface CardboardDevice {
             return (this.bitField0_ & 16) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final DeviceParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -956,7 +952,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeString(1, this.vendor_);
@@ -1058,8 +1054,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final ScreenAlignmentMarker clone() {
             try {
                 return (ScreenAlignmentMarker) super.clone();
@@ -1068,7 +1063,7 @@ public interface CardboardDevice {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -1093,7 +1088,7 @@ public interface CardboardDevice {
             return (this.bitField0_ & 2) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final ScreenAlignmentMarker mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -1129,7 +1124,7 @@ public interface CardboardDevice {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeFloat(1, this.horizontal_);

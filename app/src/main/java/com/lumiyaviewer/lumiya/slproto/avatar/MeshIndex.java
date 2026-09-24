@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum MeshIndex {
     MESH_ID_HAIR,
     MESH_ID_HEAD,

@@ -43,7 +43,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class DrawableAvatar extends DrawableAvatarStub implements IntersectPickable, DrawEntryList.EntryRemovalListener {
     private final Object animationLock;
     private final AnimationSkeletonData animationSkeletonData;
@@ -191,10 +190,8 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         return avatarAnimationList;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Type inference failed for: r0v27, types: [com.lumiyaviewer.lumiya.render.spatial.DrawListEntry[]] */
-    /* renamed from: processUpdateAttachments, reason: merged with bridge method [inline-methods] */
     public void processUpdateAttachments() {
         DrawListPrimEntry[] drawListPrimEntryArr;
         boolean z;
@@ -337,7 +334,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.avatar.DrawableAvatarStub
+    @Override
     public void DrawNameTag(RenderContext renderContext) {
         DrawableHoverText drawableHoverText = this.drawableNameTag;
         if (drawableHoverText != null) {
@@ -359,7 +356,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         return hasStopped;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.picking.IntersectPickable
+    @Override
     public ObjectIntersectInfo PickObject(RenderContext renderContext, float f, float f2, float f3) {
         ObjectIntersectInfo objectIntersectInfo;
         float[] worldMatrix = getWorldMatrix(renderContext);
@@ -472,7 +469,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.spatial.DrawEntryList.EntryRemovalListener
+    @Override
     public void onEntryRemovalRequested(DrawListEntry drawListEntry) {
         synchronized (this.deadAttachmentsLock) {
             this.deadAttachmentsList.add(drawListEntry);

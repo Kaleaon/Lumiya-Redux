@@ -7,15 +7,14 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-/* loaded from: classes.dex */
 public class ChatEventTimestampUpdater {
     private static final long TIMESTAMP_UPDATE_INTERVAL = 60000;
     private final Context context;
     private final Handler mHandler = new Handler();
     private boolean updateRunnablePosted = false;
     private final Set<ChatEventViewHolder> viewHolders = Collections.newSetFromMap(new WeakHashMap());
-    private final Runnable updateRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.chat.ChatEventTimestampUpdater.1
-        @Override // java.lang.Runnable
+    private final Runnable updateRunnable = new Runnable() {
+        @Override
         public void run() {
             ChatEventTimestampUpdater.this.updateRunnablePosted = false;
             for (ChatEventViewHolder chatEventViewHolder : ChatEventTimestampUpdater.this.viewHolders) {

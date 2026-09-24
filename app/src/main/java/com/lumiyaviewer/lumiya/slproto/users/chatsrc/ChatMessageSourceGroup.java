@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class ChatMessageSourceGroup extends ChatMessageSource {
 
     @Nonnull
@@ -22,31 +21,31 @@ class ChatMessageSourceGroup extends ChatMessageSource {
         this.name = chatMessage.getSenderName();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatterID getDefaultChatter(UUID uuid) {
         return ChatterID.getGroupChatterID(uuid, this.uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public String getSourceName(@Nonnull UserManager userManager) {
         return this.name;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatMessageSource.ChatMessageSourceType getSourceType() {
         return ChatMessageSource.ChatMessageSourceType.Group;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public UUID getSourceUUID() {
         return this.uuid;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     public void serializeTo(@Nonnull ChatMessage chatMessage) {
         super.serializeTo(chatMessage);
         chatMessage.setSenderUUID(this.uuid);

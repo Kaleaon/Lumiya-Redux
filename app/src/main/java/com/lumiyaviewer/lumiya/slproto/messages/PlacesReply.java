@@ -1,41 +1,54 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * PlacesReply
+ * dataserver -> simulator -> viewer
+ * If the user has specified a location, use that to compute
+ * global x,y,z.  Otherwise, use center of the AABB.
+ * reliable
+ *
+ * <p>Template: {@code PlacesReply Low 30 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_places_reply()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class PlacesReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<QueryData> QueryData_Fields = new ArrayList<>();
     public TransactionData TransactionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID QueryID;
+        public UUID AgentID; // LLUUID
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryData, Variable. */
     public static class QueryData {
-        public int ActualArea;
-        public int BillableArea;
-        public byte[] Desc;
-        public float Dwell;
-        public int Flags;
-        public float GlobalX;
-        public float GlobalY;
-        public float GlobalZ;
-        public byte[] Name;
-        public UUID OwnerID;
-        public int Price;
-        public byte[] SimName;
-        public UUID SnapshotID;
+        public int ActualArea; // S32
+        public int BillableArea; // S32
+        public byte[] Desc; // Variable 1
+        public float Dwell; // F32
+        public int Flags; // U8
+        public float GlobalX; // F32 - meters
+        public float GlobalY; // F32 - meters
+        public float GlobalZ; // F32 - meters
+        public byte[] Name; // Variable 1
+        public UUID OwnerID; // LLUUID
+        public int Price; // S32
+        public byte[] SimName; // Variable 1
+        public UUID SnapshotID; // LLUUID
     }
 
+    /** Block TransactionData, Single. */
     public static class TransactionData {
-        public UUID TransactionID;
+        public UUID TransactionID; // LLUUID
     }
 
     public PlacesReply() {
@@ -44,7 +57,7 @@ public class PlacesReply extends SLMessage {
         this.TransactionData_Field = new TransactionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 53;
         Iterator<?> it = this.QueryData_Fields.iterator();
@@ -58,16 +71,17 @@ public class PlacesReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandlePlacesReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.RS);
+        // Message number: Low 30 (PlacesReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x1E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.QueryID);
         packUUID(byteBuffer, this.TransactionData_Field.TransactionID);
@@ -89,7 +103,7 @@ public class PlacesReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.QueryID = unpackUUID(byteBuffer);

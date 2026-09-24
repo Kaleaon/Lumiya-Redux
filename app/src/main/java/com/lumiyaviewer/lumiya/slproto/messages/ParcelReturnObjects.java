@@ -6,29 +6,40 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelReturnObjects
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelReturnObjects Low 199 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelReturnObjects extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
     public ArrayList<TaskIDs> TaskIDs_Fields = new ArrayList<>();
     public ArrayList<OwnerIDs> OwnerIDs_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block OwnerIDs, Variable. */
     public static class OwnerIDs {
-        public UUID OwnerID;
+        public UUID OwnerID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public int LocalID;
-        public int ReturnType;
+        public int LocalID; // S32
+        public int ReturnType; // U32
     }
 
+    /** Block TaskIDs, Variable. */
     public static class TaskIDs {
-        public UUID TaskID;
+        public UUID TaskID; // LLUUID
     }
 
     public ParcelReturnObjects() {
@@ -37,21 +48,22 @@ public class ParcelReturnObjects extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.TaskIDs_Fields.size() * 16) + 45 + 1 + (this.OwnerIDs_Fields.size() * 16);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelReturnObjects(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -57);
+        // Message number: Low 199 (ParcelReturnObjects).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xC7);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
@@ -68,7 +80,7 @@ public class ParcelReturnObjects extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-/* loaded from: classes.dex */
 public class PackageUtils {
     private static final String GOOGLE_PACKAGE_PREFIX = "com.google.";
 

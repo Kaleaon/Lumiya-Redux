@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLGridConnection extends SLConnection {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-SLGridConnection$ConnectionStateSwitchesValues, reason: not valid java name */
@@ -89,7 +88,6 @@ public class SLGridConnection extends SLConnection {
         return iArr;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void DoConnect(SLAuthParams sLAuthParams, String str) {
         try {
             SLAuthReply Login = new SLAuth().Login(sLAuthParams.withLocation(str));
@@ -193,8 +191,8 @@ public class SLGridConnection extends SLConnection {
     }
 
     private void startConnecting(final boolean z, final String str) {
-        this.loginThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.SLGridConnection.1
-            @Override // java.lang.Runnable
+        this.loginThread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 if (z) {
                     try {

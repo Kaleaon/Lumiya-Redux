@@ -23,7 +23,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/* loaded from: classes.dex */
 public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, OpenJPEG> {
     private File baseDir;
     private File textureTempDir;
@@ -112,7 +111,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (!(obj instanceof File)) {
                 if (obj == null) {
@@ -128,7 +127,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             Debug.Printf("DecompressRequest: cancelled (%s)", getParams().uuid().toString());
             Future<?> future = this.decompressorFuture;
@@ -140,12 +139,12 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             TextureCache.this.textureCompressedCache.RequestResource(getParams(), (ResourceConsumer) this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.utils.HasPriority
+        @Override
         public int getPriority() {
             DrawableTextureParams params = getParams();
             if (TextureCache.this.canBeLowQuality(params) && this.lowQualityDone) {
@@ -161,7 +160,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             DrawableTextureParams params = getParams();
             if (params.textureClass() == TextureClass.Sculpt || params.textureClass() == TextureClass.Baked) {
@@ -183,7 +182,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             TextureCache.this.memoryAwareExecutor.completeRequest(this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.executors.Startable
+        @Override
         public void start() {
             this.decompressorFuture = TextureCache.this.decompressorExecutor.submit(this);
         }
@@ -197,14 +196,14 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             this.rawFile = file;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             TextureCache.this.memoryAwareExecutor.cancelRequest(this);
             LoaderExecutor.getInstance().remove(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             if (getParams().textureClass() == TextureClass.Prim) {
                 TextureCache.this.memoryAwareExecutor.queueRequest(this);
@@ -213,7 +212,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new OpenJPEG(this.rawFile.getAbsoluteFile(), getParams().textureClass(), OpenJPEG.ImageFormat.Raw, true));
@@ -224,13 +223,12 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             TextureCache.this.memoryAwareExecutor.completeRequest(this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.executors.Startable
+        @Override
         public void start() {
             LoaderExecutor.getInstance().execute(this);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean canBeLowQuality(DrawableTextureParams drawableTextureParams) {
         return drawableTextureParams.textureClass() == TextureClass.Prim;
     }

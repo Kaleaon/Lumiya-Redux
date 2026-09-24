@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SubscriptionList<K, T> {
     private final Set<Subscription.SubscriptionReference<K, T>> subscriptions = new HashSet();
     private T lastData = null;

@@ -5,9 +5,8 @@ import android.os.Bundle;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public abstract class ChatterReloadableFragment extends ChatterFragment implements ReloadableFragment {
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         UUID activeAgentID;
         ChatterID chatterID = bundle != null ? (ChatterID) bundle.getParcelable(ChatterFragment.CHATTER_ID_KEY) : null;

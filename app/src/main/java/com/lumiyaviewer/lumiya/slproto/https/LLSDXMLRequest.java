@@ -13,7 +13,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/* loaded from: classes.dex */
 public class LLSDXMLRequest {
     private static final MediaType MEDIA_TYPE_LLSD_XML = MediaType.parse("application/llsd+xml");
     private final AtomicReference<Call> callRef = new AtomicReference<>(null);

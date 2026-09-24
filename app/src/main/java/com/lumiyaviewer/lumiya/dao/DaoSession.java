@@ -7,7 +7,6 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class DaoSession extends AbstractDaoSession {
     private final CachedAssetDao cachedAssetDao;
     private final DaoConfig cachedAssetDaoConfig;

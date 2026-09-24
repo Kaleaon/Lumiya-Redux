@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-/* loaded from: classes.dex */
 public class SensorEventProviderFromRecordedData implements SensorEventProvider {
     private final List<SensorEventAndTime> events;
     private ListIterator<SensorEventAndTime> eventsIterator = null;
@@ -21,7 +20,7 @@ public class SensorEventProviderFromRecordedData implements SensorEventProvider 
         private EventClock() {
         }
 
-        @Override // com.google.vr.sdk.base.sensors.Clock
+        @Override
         public long nanoTime() {
             return this.currentTimeNs;
         }
@@ -58,7 +57,7 @@ public class SensorEventProviderFromRecordedData implements SensorEventProvider 
         return true;
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void registerListener(SensorEventListener sensorEventListener) {
         synchronized (this.registeredListeners) {
             this.registeredListeners.add(sensorEventListener);
@@ -69,17 +68,17 @@ public class SensorEventProviderFromRecordedData implements SensorEventProvider 
         this.eventsIterator = this.events.listIterator();
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void start() {
         reset();
         next();
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void stop() {
     }
 
-    @Override // com.google.vr.sdk.base.sensors.SensorEventProvider
+    @Override
     public void unregisterListener(SensorEventListener sensorEventListener) {
         synchronized (this.registeredListeners) {
             this.registeredListeners.remove(sensorEventListener);

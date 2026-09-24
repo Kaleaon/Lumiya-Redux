@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.terrain;
 import com.google.common.primitives.Floats;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class TerrainPatchHeightMap {
     private final int hashCode;
     private final float[] heightMap;

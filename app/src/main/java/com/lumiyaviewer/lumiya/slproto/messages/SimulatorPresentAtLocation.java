@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.net.Inet4Address;
@@ -8,37 +7,47 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SimulatorPresentAtLocation - indicates that the sim is present at a grid
+ * location and passes what it believes its neighbors are
+ *
+ * <p>Template: {@code SimulatorPresentAtLocation Low 11 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SimulatorPresentAtLocation extends SLMessage {
     public SimulatorBlock SimulatorBlock_Field;
     public SimulatorPublicHostBlock SimulatorPublicHostBlock_Field;
     public NeighborBlock[] NeighborBlock_Fields = new NeighborBlock[4];
     public ArrayList<TelehubBlock> TelehubBlock_Fields = new ArrayList<>();
 
+    /** Block NeighborBlock, Multiple 4. */
     public static class NeighborBlock {
-        public Inet4Address IP;
-        public int Port;
+        public Inet4Address IP; // IPADDR
+        public int Port; // IPPORT
     }
 
+    /** Block SimulatorBlock, Single. */
     public static class SimulatorBlock {
-        public int EstateID;
-        public int ParentEstateID;
-        public int RegionFlags;
-        public UUID RegionID;
-        public int SimAccess;
-        public byte[] SimName;
+        public int EstateID; // U32
+        public int ParentEstateID; // U32
+        public int RegionFlags; // U32
+        public UUID RegionID; // LLUUID
+        public int SimAccess; // U8
+        public byte[] SimName; // Variable 1
     }
 
+    /** Block SimulatorPublicHostBlock, Single. */
     public static class SimulatorPublicHostBlock {
-        public int GridX;
-        public int GridY;
-        public int Port;
-        public Inet4Address SimulatorIP;
+        public int GridX; // U32
+        public int GridY; // U32
+        public int Port; // IPPORT
+        public Inet4Address SimulatorIP; // IPADDR
     }
 
+    /** Block TelehubBlock, Variable. */
     public static class TelehubBlock {
-        public boolean HasTelehub;
-        public LLVector3 TelehubPos;
+        public boolean HasTelehub; // BOOL
+        public LLVector3 TelehubPos; // LLVector3
     }
 
     public SimulatorPresentAtLocation() {
@@ -50,21 +59,22 @@ public class SimulatorPresentAtLocation extends SLMessage {
         this.SimulatorBlock_Field = new SimulatorBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.SimulatorBlock_Field.SimName.length + 1 + 1 + 4 + 16 + 4 + 4 + 42 + 1 + (this.TelehubBlock_Fields.size() * 13);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSimulatorPresentAtLocation(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put(Ascii.VT);
+        // Message number: Low 11 (SimulatorPresentAtLocation).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x0B);
         packShort(byteBuffer, (short) this.SimulatorPublicHostBlock_Field.Port);
         packIPAddress(byteBuffer, this.SimulatorPublicHostBlock_Field.SimulatorIP);
         packInt(byteBuffer, this.SimulatorPublicHostBlock_Field.GridX);
@@ -86,7 +96,7 @@ public class SimulatorPresentAtLocation extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.SimulatorPublicHostBlock_Field.Port = unpackShort(byteBuffer) & 65535;
         this.SimulatorPublicHostBlock_Field.SimulatorIP = unpackIPAddress(byteBuffer);

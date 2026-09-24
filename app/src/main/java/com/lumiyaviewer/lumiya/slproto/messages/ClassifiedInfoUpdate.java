@@ -5,27 +5,38 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ClassifiedInfoUpdate
+ * Update a classified.  ParcelID and EstateID are set
+ * on the simulator as the message passes through.
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code ClassifiedInfoUpdate Low 45 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ClassifiedInfoUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int Category;
-        public int ClassifiedFlags;
-        public UUID ClassifiedID;
-        public byte[] Desc;
-        public byte[] Name;
-        public UUID ParcelID;
-        public int ParentEstate;
-        public LLVector3d PosGlobal;
-        public int PriceForListing;
-        public UUID SnapshotID;
+        public int Category; // U32
+        public int ClassifiedFlags; // U8
+        public UUID ClassifiedID; // LLUUID
+        public byte[] Desc; // Variable 2
+        public byte[] Name; // Variable 1
+        public UUID ParcelID; // LLUUID
+        public int ParentEstate; // U32
+        public LLVector3d PosGlobal; // LLVector3d
+        public int PriceForListing; // S32
+        public UUID SnapshotID; // LLUUID
     }
 
     public ClassifiedInfoUpdate() {
@@ -34,21 +45,22 @@ public class ClassifiedInfoUpdate extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.Name.length + 21 + 2 + this.Data_Field.Desc.length + 16 + 4 + 16 + 24 + 1 + 4 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleClassifiedInfoUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 45);
+        // Message number: Low 45 (ClassifiedInfoUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x2D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.ClassifiedID);
@@ -63,7 +75,7 @@ public class ClassifiedInfoUpdate extends SLMessage {
         packInt(byteBuffer, this.Data_Field.PriceForListing);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

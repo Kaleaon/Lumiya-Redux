@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.os.Build;
 import android.os.Trace;
 
-/* loaded from: classes.dex */
 class TraceCompat {
     TraceCompat() {
     }

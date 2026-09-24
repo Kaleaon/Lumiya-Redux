@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.dao.ChatMessageDao;
 import com.lumiyaviewer.lumiya.dao.DaoMaster;
 
-/* loaded from: classes.dex */
 public class DBOpenHelper extends DaoMaster.DevOpenHelper {
     public DBOpenHelper(Context context, String str, SQLiteDatabase.CursorFactory cursorFactory) {
         super(context, str, cursorFactory);
@@ -28,12 +27,12 @@ public class DBOpenHelper extends DaoMaster.DevOpenHelper {
         }
     }
 
-    @Override // android.database.sqlite.SQLiteOpenHelper
+    @Override
     public void onDowngrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
         super.onUpgrade(sQLiteDatabase, i, i2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.dao.DaoMaster.DevOpenHelper, android.database.sqlite.SQLiteOpenHelper
+    @Override
     public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
         if (i2 == 71 ? tryUpgradeTo71(sQLiteDatabase, i) : false) {
             Debug.Printf("Database upgrade success.", new Object[0]);

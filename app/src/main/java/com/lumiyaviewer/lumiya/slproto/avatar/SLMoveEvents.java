@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public class SLMoveEvents {
     public static final int AGENT_CONTROL_AT = 1572867;
     public static final int AGENT_CONTROL_AT_NEG = 2;

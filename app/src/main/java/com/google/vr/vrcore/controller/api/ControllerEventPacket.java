@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import java.util.ArrayDeque;
 
 @Deprecated
-/* loaded from: classes.dex */
 public class ControllerEventPacket implements Parcelable {
     protected static final int MAX_EVENTS = 16;
     private static final int SERIALIZED_FORMAT_VERSION = 1;
@@ -21,9 +20,9 @@ public class ControllerEventPacket implements Parcelable {
     private ControllerTouchEvent[] touchEvents;
     private static ArrayDeque<ControllerEventPacket> pool = new ArrayDeque<>();
     private static Object poolLock = new Object();
-    public static final Parcelable.Creator<ControllerEventPacket> CREATOR = new Parcelable.Creator<ControllerEventPacket>() { // from class: com.google.vr.vrcore.controller.api.ControllerEventPacket.1
+    public static final Parcelable.Creator<ControllerEventPacket> CREATOR = new Parcelable.Creator<ControllerEventPacket>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerEventPacket createFromParcel(Parcel parcel) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
             obtain.readFromParcel(parcel);
@@ -31,7 +30,7 @@ public class ControllerEventPacket implements Parcelable {
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerEventPacket[] newArray(int i) {
             return new ControllerEventPacket[i];
         }
@@ -165,7 +164,7 @@ public class ControllerEventPacket implements Parcelable {
         }
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -263,7 +262,7 @@ public class ControllerEventPacket implements Parcelable {
         }
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(1);
         parcel.writeInt(this.accelEventCount);

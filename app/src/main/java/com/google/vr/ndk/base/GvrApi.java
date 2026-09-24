@@ -16,7 +16,6 @@ import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class GvrApi {
     private static final String TAG = GvrApi.class.getSimpleName();
     private static PoseTracker sPoseTrackerForTesting;

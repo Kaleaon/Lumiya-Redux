@@ -4,7 +4,6 @@ import android.opengl.GLES20;
 import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.slproto.windlight.WindlightPreset;
 
-/* loaded from: classes.dex */
 public class BasicPrimProgram extends ShaderProgram {
     public int LightAmbientColor;
     public int LightDiffuseColor;
@@ -23,7 +22,7 @@ public class BasicPrimProgram extends ShaderProgram {
         super(shader, shader2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
         return super.Compile(shaderPreprocessor);
     }
@@ -44,7 +43,7 @@ public class BasicPrimProgram extends ShaderProgram {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     protected void bindVariables() {
         this.vPosition = GLES20.glGetAttribLocation(this.handle, "vPosition");
         this.vTexCoord = GLES20.glGetAttribLocation(this.handle, "vTexCoord");
@@ -60,7 +59,7 @@ public class BasicPrimProgram extends ShaderProgram {
         this.LightAmbientColor = GLES20.glGetUniformLocation(this.handle, "LightAmbientColor");
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.shaders.ShaderProgram
+    @Override
     public /* bridge */ /* synthetic */ int getHandle() {
         return super.getHandle();
     }

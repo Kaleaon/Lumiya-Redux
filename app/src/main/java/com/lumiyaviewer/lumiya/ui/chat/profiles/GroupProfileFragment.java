@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupProfileFragment extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
     @Nullable
@@ -56,7 +55,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             super(fragmentManager);
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
+        @Override
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
             ProfileTab profileTab;
             if (this.tabs != null && (profileTab = this.tabs.get(i)) != null) {
@@ -65,7 +64,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             super.destroyItem(viewGroup, i, obj);
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public int getCount() {
             if (this.tabs != null) {
                 return this.tabs.size();
@@ -73,7 +72,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             return 0;
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter
+        @Override
         public Fragment getItem(int i) {
             if (this.tabs == null) {
                 return null;
@@ -89,7 +88,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             }
         }
 
-        @Override // androidx.viewpager.widget.PagerAdapter
+        @Override
         public CharSequence getPageTitle(int i) {
             if (this.tabs == null) {
                 return null;
@@ -102,7 +101,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
             return this.tabs;
         }
 
-        @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
+        @Override
         public Parcelable saveState() {
             return null;
         }
@@ -134,12 +133,12 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         if (bundle != null) {
@@ -154,16 +153,16 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.user_profile_pager);
         this.adapter = new ProfilePagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(this.adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.GroupProfileFragment.1
-            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
             public void onPageScrollStateChanged(int i) {
             }
 
-            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+            @Override
             public void onPageScrolled(int i, float f, int i2) {
             }
 
-            @Override // androidx.viewpager.widget.ViewPager.OnPageChangeListener
+            @Override
             public void onPageSelected(int i) {
                 ImmutableList<ProfileTab> tabs;
                 if (GroupProfileFragment.this.adapter == null || (tabs = GroupProfileFragment.this.adapter.getTabs()) == null || i < 0 || i >= tabs.size()) {
@@ -178,7 +177,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor.OnLoadableDataChangedListener
+    @Override
     public void onLoadableDataChanged() {
         int i = 0;
         try {
@@ -209,7 +208,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         Debug.Printf("GroupProfile tabs: saving lastSelectedTab %s, lastSelectedChatterID %s", this.lastSelectedTab, this.lastSelectedChatterID);
@@ -221,7 +220,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
+    @Override
     protected void onShowUser(@Nullable ChatterID chatterID) {
         this.myGroupList.unsubscribe();
         if (this.userManager != null && (chatterID instanceof ChatterID.ChatterIDGroup)) {

@@ -10,19 +10,18 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory;
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity;
 
-/* loaded from: classes.dex */
 public class SearchGridActivity extends MasterDetailsActivity {
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected FragmentActivityFactory getDetailsFragmentFactory() {
         return null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity, com.lumiyaviewer.lumiya.ui.common.DetailsActivity
+    @Override
     protected boolean isRootDetailsFragment(Class<? extends Fragment> cls) {
         return cls == UserProfileFragment.class || cls == GroupProfileFragment.class || cls == ParcelInfoFragment.class;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
+    @Override
     protected Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle) {
         return SearchGridFragment.newInstance(ActivityUtils.getActiveAgentID(intent));
     }

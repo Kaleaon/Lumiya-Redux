@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.modules.SLModule;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/* loaded from: classes.dex */
 public class SLTextureUploader extends SLModule {
     private String capURL;
     private ExecutorService executor;
@@ -27,7 +26,7 @@ public class SLTextureUploader extends SLModule {
         this.executor.execute(sLTextureUploadRequest);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.executor != null) {
             this.executor.shutdownNow();

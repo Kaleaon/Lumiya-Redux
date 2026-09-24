@@ -4,7 +4,6 @@ import android.opengl.GLES20;
 import com.google.vr.cardboard.UsedByNative;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class Viewport {
     public int height;
     public int width;

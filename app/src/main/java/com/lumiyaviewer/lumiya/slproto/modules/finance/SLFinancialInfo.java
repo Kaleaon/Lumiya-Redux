@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/* loaded from: classes.dex */
 public class SLFinancialInfo extends SLModule {
     private static final int DEFAULT_UPLOAD_COST = 10;
     private int balance;
@@ -102,14 +101,14 @@ public class SLFinancialInfo extends SLModule {
         SendMessage(moneyTransferRequest);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCircuitReady() {
         super.HandleCircuitReady();
         AskForMoneyBalance();
         RequestEconomyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getBalanceManager().clearFinancialInfo(this);

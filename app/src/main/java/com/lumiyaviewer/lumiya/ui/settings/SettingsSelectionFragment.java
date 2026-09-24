@@ -15,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 
-/* loaded from: classes.dex */
 public class SettingsSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private class SettingPagesAdapter extends ArrayAdapter<SettingsPage> {
@@ -23,7 +22,7 @@ public class SettingsSelectionFragment extends Fragment implements AdapterView.O
             super(context, R.layout.simple_list_item_1, SettingsPage.values());
         }
 
-        @Override // android.widget.ArrayAdapter, android.widget.Adapter
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View view2 = super.getView(i, view, viewGroup);
             SettingsPage item = getItem(i);
@@ -34,7 +33,7 @@ public class SettingsSelectionFragment extends Fragment implements AdapterView.O
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.settings_page_selector, viewGroup, false);
@@ -44,7 +43,7 @@ public class SettingsSelectionFragment extends Fragment implements AdapterView.O
         return inflate;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         SettingsPage[] valuesCustom = SettingsPage.values();
         if (i < 0 || i >= valuesCustom.length) {

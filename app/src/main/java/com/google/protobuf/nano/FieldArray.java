@@ -1,6 +1,5 @@
 package com.google.protobuf.nano;
 
-/* loaded from: classes.dex */
 public final class FieldArray implements Cloneable {
     private static final FieldData DELETED = new FieldData();
     private FieldData[] mData;
@@ -89,7 +88,6 @@ public final class FieldArray implements Cloneable {
         return idealByteArraySize(i * 4) / 4;
     }
 
-    /* renamed from: clone, reason: merged with bridge method [inline-methods] */
     public final FieldArray clone() {
         int size = size();
         FieldArray fieldArray = new FieldArray(size);

@@ -14,16 +14,15 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectPopupsFragment extends Fragment {
     private static final String AGENT_UUID_KEY = "agentUUID";
-    private final ItemTouchHelper.Callback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, 12) { // from class: com.lumiyaviewer.lumiya.ui.objpopup.ObjectPopupsFragment.1
-        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
+    private final ItemTouchHelper.Callback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, 12) {
+        @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
             return false;
         }
 
-        @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
+        @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
             RecyclerView recyclerView;
             RecyclerView.Adapter adapter;
@@ -47,7 +46,6 @@ public class ObjectPopupsFragment extends Fragment {
         return objectPopupsFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nullable
     public UserManager getUserManager() {
         Bundle arguments = getArguments();
@@ -57,7 +55,7 @@ public class ObjectPopupsFragment extends Fragment {
         return UserManager.getUserManager(UUID.fromString(arguments.getString(AGENT_UUID_KEY)));
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.object_popups_fragment_layout, viewGroup, false);
@@ -68,7 +66,7 @@ public class ObjectPopupsFragment extends Fragment {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         RecyclerView recyclerView;
         super.onStart();
@@ -80,7 +78,7 @@ public class ObjectPopupsFragment extends Fragment {
         recyclerView.setAdapter(new ObjectPopupsAdapter(getContext(), userManager.getObjectPopupsManager().getObjectPopups(), userManager));
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         RecyclerView recyclerView;
         View view = getView();

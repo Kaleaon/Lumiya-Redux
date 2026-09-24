@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-/* loaded from: classes.dex */
 public class CardboardControlsPlaceholder extends ViewGroup {
     private int fixedHeight;
     private int fixedWidth;
@@ -47,7 +46,7 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         this.onViewInvalidateListener = null;
     }
 
-    @Override // android.view.ViewGroup, android.view.ViewParent
+    @Override
     public ViewParent invalidateChildInParent(int[] iArr, Rect rect) {
         ViewParent invalidateChildInParent = super.invalidateChildInParent(iArr, rect);
         if (this.onViewInvalidateListener != null) {
@@ -56,7 +55,7 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         return invalidateChildInParent;
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int childCount = getChildCount();
         for (int i5 = 0; i5 < childCount; i5++) {
@@ -64,7 +63,7 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         }
     }
 
-    @Override // android.view.View
+    @Override
     protected void onMeasure(int i, int i2) {
         int childCount = getChildCount();
         for (int i3 = 0; i3 < childCount; i3++) {

@@ -30,7 +30,6 @@ import com.lumiyaviewer.lumiya.utils.HasPriority;
 import java.io.File;
 import java.util.concurrent.Future;
 
-/* loaded from: classes.dex */
 public class TextureCompressedCache extends ResourceManager<DrawableTextureParams, File> {
     private final StartingExecutor downloadExecutor = new StartingExecutor(GlobalOptions.getInstance().getMaxTextureDownloads());
     private final Object lock = new Object();
@@ -82,12 +81,12 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             this.fetcher = sLTextureFetcher;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.modules.texfetcher.SLTextureFetchRequest.TextureFetchCompleteListener
+        @Override
         public void OnTextureFetchComplete(SLTextureFetchRequest sLTextureFetchRequest) {
             completeRequest(sLTextureFetchRequest.outputFile);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             SLTextureFetchRequest sLTextureFetchRequest;
             SLTextureFetcher sLTextureFetcher;
@@ -108,18 +107,18 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void completeRequest(File file) {
             TextureCompressedCache.this.downloadExecutor.completeRequest(this);
             super.completeRequest(file);
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             this.fetchTask = HTTPFetchExecutor.getInstance().submit(this);
         }
 
-        @Override // com.lumiyaviewer.lumiya.utils.HasPriority
+        @Override
         public int getPriority() {
             switch (m129x8a7b09f7()[getParams().textureClass().ordinal()]) {
                 case 1:
@@ -133,7 +132,7 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
 
         /* JADX WARN: Removed duplicated region for block: B:38:0x01d2 A[LOOP:0: B:17:0x00bc->B:38:0x01d2, LOOP_END] */
         /* JADX WARN: Removed duplicated region for block: B:39:0x00fc A[SYNTHETIC] */
-        @Override // java.lang.Runnable
+        @Override
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
@@ -195,7 +194,7 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.executors.Startable
+        @Override
         public void start() {
             SLTextureFetchRequest sLTextureFetchRequest;
             SLTextureFetcher sLTextureFetcher = this.fetcher;
@@ -213,13 +212,12 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     public ResourceRequest<DrawableTextureParams, File> CreateNewRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, File> resourceManager) {
         return new TextureFetchRequest(drawableTextureParams, resourceManager, TextureCache.getInstance().getTextureCompressedFile(drawableTextureParams), this.fetcher);
     }
 
-    @Override // com.lumiyaviewer.lumiya.res.ResourceManager
+    @Override
     public void RequestResource(DrawableTextureParams drawableTextureParams, ResourceConsumer resourceConsumer) {
         File textureCompressedFileOld = TextureCache.getInstance().getTextureCompressedFileOld(drawableTextureParams);
         File textureCompressedFile = TextureCache.getInstance().getTextureCompressedFile(drawableTextureParams);

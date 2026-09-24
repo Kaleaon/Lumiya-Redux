@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.terrain.TerrainData;
 import java.lang.ref.WeakReference;
 
-/* loaded from: classes.dex */
 public class SpatialIndex {
     private volatile WeakReference<Object> indexHolder;
     private volatile SpatialObjectIndex objectIndex;

@@ -19,7 +19,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoader.EventListener, HasUserPicClickHandler {
 
     @Nonnull
@@ -34,12 +33,12 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
     private ChatMessageLoader chatMessageLoader = null;
     private WeakReference<OnAdapterDataChanged> onAdapterDataChangedListener = new WeakReference<>(null);
     private WeakReference<OnUserPicClickedListener> onUserPicClickedListener = new WeakReference<>(null);
-    private final View.OnClickListener userPicClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$aLaDwVKcksSTh8O8aNFE_CFHRQc
+    private final View.OnClickListener userPicClickListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             ChatRecyclerAdapter.this.m425lambda$com_lumiyaviewer_lumiya_ui_chat_ChatRecyclerAdapter_7040(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
@@ -65,7 +64,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         setHasStableIds(true);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemCount() {
         if (this.chatMessageLoader != null) {
             return this.chatMessageLoader.size();
@@ -73,7 +72,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         return 0;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public long getItemId(int i) {
         if (this.chatMessageLoader != null) {
             return this.chatMessageLoader.get(i).getId().longValue();
@@ -81,7 +80,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         return -1L;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemViewType(int i) {
         if (this.chatMessageLoader != null) {
             return this.chatMessageLoader.get(i).getViewType();
@@ -89,13 +88,13 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         return 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     @Nonnull
     public Executor getListEventsExecutor() {
         return UIThreadExecutor.getSerialInstance();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.chat.HasUserPicClickHandler
+    @Override
     public View.OnClickListener getUserPicClickListener() {
         return this.userPicClickListener;
     }
@@ -117,7 +116,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         onUserPicClickedListener.onUserPicClicked(attachedMessageSource);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         SLChatEvent loadFromDatabaseObject;
         if (this.chatMessageLoader == null || (loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(this.chatMessageLoader.get(i), this.userManager.getUserID())) == null || !(viewHolder instanceof ChatEventViewHolder)) {
@@ -126,12 +125,12 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         loadFromDatabaseObject.bindViewHolder((ChatEventViewHolder) viewHolder, this.userManager, this.timestampUpdater);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return SLChatEvent.createViewHolder(this.inflater, i, viewGroup, this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     public void onListItemAddedAtEnd() {
         OnAdapterDataChanged onAdapterDataChanged;
         if (this.chatMessageLoader == null || (onAdapterDataChanged = this.onAdapterDataChangedListener.get()) == null) {
@@ -140,7 +139,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         onAdapterDataChanged.onAdapterDataAddedAtEnd();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     public void onListItemChanged(int i) {
         if (this.chatMessageLoader != null) {
             Debug.Printf("ChatView: item changed: position %d", Integer.valueOf(i));
@@ -152,7 +151,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     public void onListItemsAdded(int i, int i2) {
         if (this.chatMessageLoader != null) {
             Debug.Printf("ChatView: items added: new size %d, position %d, count %d", Integer.valueOf(this.chatMessageLoader.size()), Integer.valueOf(i), Integer.valueOf(i2));
@@ -164,7 +163,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     public void onListItemsRemoved(int i, int i2) {
         if (this.chatMessageLoader != null) {
             Debug.Printf("ChatView: items removed: new size %d, position %d, count %d", Integer.valueOf(this.chatMessageLoader.size()), Integer.valueOf(i), Integer.valueOf(i2));
@@ -176,7 +175,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.wlist.ChunkedListLoader.EventListener
+    @Override
     public void onListReloaded() {
         if (this.chatMessageLoader != null) {
             Debug.Printf("ChatView: list cleared", new Object[0]);
@@ -188,7 +187,7 @@ class ChatRecyclerAdapter extends RecyclerView.Adapter implements ChunkedListLoa
         }
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {
         if (viewHolder instanceof ChatEventViewHolder) {
             this.timestampUpdater.removeViewHolder((ChatEventViewHolder) viewHolder);

@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.utils.HasPriority;
 import java.io.File;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLTextureFetchRequest implements HasPriority {
 
     /* renamed from: -com-lumiyaviewer-lumiya-render-tex-TextureClassSwitchesValues, reason: not valid java name */
@@ -91,7 +90,7 @@ public class SLTextureFetchRequest implements HasPriority {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.HasPriority
+    @Override
     public int getPriority() {
         return getPriorityForClass(this.textureClass, this.visibleRangeCategory);
     }

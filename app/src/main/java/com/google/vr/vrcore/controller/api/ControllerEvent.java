@@ -3,7 +3,6 @@ package com.google.vr.vrcore.controller.api;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/* loaded from: classes.dex */
 public abstract class ControllerEvent implements Parcelable {
     public static final int CONTROLLER_ID_DEFAULT = 0;
     public int controllerId = 0;
@@ -23,7 +22,7 @@ public abstract class ControllerEvent implements Parcelable {
         this.controllerId = parcel.readInt();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(this.timestampNanos);
         parcel.writeInt(this.controllerId);

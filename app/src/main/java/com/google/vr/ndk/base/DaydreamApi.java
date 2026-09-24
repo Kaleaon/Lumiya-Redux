@@ -34,7 +34,6 @@ import java.util.List;
 
 @UsedByReflection("IAP")
 @TargetApi(24)
-/* loaded from: classes.dex */
 public class DaydreamApi implements AutoCloseable {
     private static final String DAYDREAM_CATEGORY = "com.google.intent.category.DAYDREAM";
     private static final int MIN_API_FOR_HEADSET_INSERTION = 11;
@@ -46,8 +45,8 @@ public class DaydreamApi implements AutoCloseable {
     private int vrCoreApiVersion;
     private IVrCoreSdkService vrCoreSdkService;
     private ArrayList<Runnable> queuedRunnables = new ArrayList<>();
-    private final ServiceConnection connection = new ServiceConnection() { // from class: com.google.vr.ndk.base.DaydreamApi.1
-        @Override // android.content.ServiceConnection
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             DaydreamApi.this.vrCoreSdkService = IVrCoreSdkService.Stub.asInterface(iBinder);
             try {
@@ -69,7 +68,7 @@ public class DaydreamApi implements AutoCloseable {
             DaydreamApi.this.queuedRunnables.clear();
         }
 
-        @Override // android.content.ServiceConnection
+        @Override
         public void onServiceDisconnected(ComponentName componentName) {
             DaydreamApi.this.vrCoreSdkService = null;
         }
@@ -175,8 +174,8 @@ public class DaydreamApi implements AutoCloseable {
     }
 
     private void launchInVr(final PendingIntent pendingIntent, final ComponentName componentName) {
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.3
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.daydreamManager != null) {
                     try {
@@ -198,8 +197,8 @@ public class DaydreamApi implements AutoCloseable {
     }
 
     private void launchTransitionCallbackInVr(final ITransitionCallbacks iTransitionCallbacks) {
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.4
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 boolean z;
                 if (DaydreamApi.this.daydreamManager == null) {
@@ -259,15 +258,15 @@ public class DaydreamApi implements AutoCloseable {
         return intent;
     }
 
-    @Override // java.lang.AutoCloseable
+    @Override
     @UsedByReflection("IAP")
     public void close() {
         if (this.closed) {
             return;
         }
         this.closed = true;
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.12
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 DaydreamApi.this.context.unbindService(DaydreamApi.this.connection);
                 DaydreamApi.this.vrCoreSdkService = null;
@@ -282,8 +281,8 @@ public class DaydreamApi implements AutoCloseable {
             intent = new Intent();
         }
         final PendingIntent createPendingResult = activity.createPendingResult(i, intent, 1073741824);
-        final Runnable runnable = new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.7
-            @Override // java.lang.Runnable
+        final Runnable runnable = new Runnable() {
+            @Override
             public void run() {
                 try {
                     createPendingResult.send(0);
@@ -294,8 +293,8 @@ public class DaydreamApi implements AutoCloseable {
                 }
             }
         };
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.8
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.daydreamManager == null) {
                     Log.w(DaydreamApi.TAG, "Failed to exit VR: Daydream service unavailable.");
@@ -340,8 +339,8 @@ public class DaydreamApi implements AutoCloseable {
     }
 
     public void handleInsertionIntoHeadset(final byte[] bArr) {
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.10
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.vrCoreApiVersion < 11) {
                     String str = DaydreamApi.TAG;
@@ -365,8 +364,8 @@ public class DaydreamApi implements AutoCloseable {
     }
 
     public void handleRemovalFromHeadset() {
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.11
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.vrCoreApiVersion < 11) {
                     String str = DaydreamApi.TAG;
@@ -403,7 +402,7 @@ public class DaydreamApi implements AutoCloseable {
         }
         Intent createVrIntent = createVrIntent(componentName);
         checkIntent(createVrIntent);
-        launchInVr(PendingIntent.getActivity(this.context, 0, createVrIntent, 1073741824), createVrIntent.getComponent());
+        launchInVr(PendingIntent.getActivity(this.context, 0, createVrIntent, PendingIntent.FLAG_ONE_SHOT), createVrIntent.getComponent());
     }
 
     @UsedByReflection("IAP")
@@ -419,11 +418,11 @@ public class DaydreamApi implements AutoCloseable {
     @UsedByReflection("IAP")
     public void launchInVrForResult(final Activity activity, final PendingIntent pendingIntent, final int i) {
         checkNotClosed();
-        launchTransitionCallbackInVr(new ITransitionCallbacks.Stub() { // from class: com.google.vr.ndk.base.DaydreamApi.6
-            @Override // com.google.vr.vrcore.common.api.ITransitionCallbacks
+        launchTransitionCallbackInVr(new ITransitionCallbacks.Stub() {
+            @Override
             public void onTransitionComplete() {
-                activity.runOnUiThread(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.6.1
-                    @Override // java.lang.Runnable
+                activity.runOnUiThread(new Runnable() {
+                    @Override
                     public void run() {
                         try {
                             activity.startIntentSenderForResult(pendingIntent.getIntentSender(), i, null, 0, 0, 0);
@@ -441,8 +440,8 @@ public class DaydreamApi implements AutoCloseable {
     @UsedByReflection("IAP")
     public void launchVrHomescreen() {
         checkNotClosed();
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.5
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.daydreamManager == null) {
                     Log.e(DaydreamApi.TAG, "Can't launch VR homescreen via DaydreamManager. Giving up trying to leave current VR activity...");
@@ -464,8 +463,8 @@ public class DaydreamApi implements AutoCloseable {
 
     public void registerDaydreamIntent(final PendingIntent pendingIntent) {
         checkNotClosed();
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.2
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 if (DaydreamApi.this.daydreamManager == null) {
                     Log.w(DaydreamApi.TAG, "Can't register/unregister daydream intent: no DaydreamManager.");
@@ -486,8 +485,8 @@ public class DaydreamApi implements AutoCloseable {
 
     public void setInhibitSystemButtons(final ComponentName componentName, final boolean z) {
         checkNotClosed();
-        runWhenServiceConnected(new Runnable() { // from class: com.google.vr.ndk.base.DaydreamApi.9
-            @Override // java.lang.Runnable
+        runWhenServiceConnected(new Runnable() {
+            @Override
             public void run() {
                 try {
                     Bundle bundle = new Bundle();

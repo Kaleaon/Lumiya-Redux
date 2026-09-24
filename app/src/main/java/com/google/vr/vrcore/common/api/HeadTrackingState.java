@@ -4,17 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class HeadTrackingState implements Parcelable {
-    public static final Parcelable.Creator<HeadTrackingState> CREATOR = new Parcelable.Creator<HeadTrackingState>() { // from class: com.google.vr.vrcore.common.api.HeadTrackingState.1
+    public static final Parcelable.Creator<HeadTrackingState> CREATOR = new Parcelable.Creator<HeadTrackingState>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final HeadTrackingState createFromParcel(Parcel parcel) {
             return new HeadTrackingState(parcel);
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final HeadTrackingState[] newArray(int i) {
             return new HeadTrackingState[i];
         }
@@ -47,7 +46,7 @@ public class HeadTrackingState implements Parcelable {
         obtain.recycle();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -87,7 +86,7 @@ public class HeadTrackingState implements Parcelable {
         return new StringBuilder(36).append("HeadTrackingState[").append(this.data.length).append(" bytes]").toString();
     }
 
-    @Override // android.os.Parcelable
+    @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(this.data.length);
         parcel.writeByteArray(this.data);

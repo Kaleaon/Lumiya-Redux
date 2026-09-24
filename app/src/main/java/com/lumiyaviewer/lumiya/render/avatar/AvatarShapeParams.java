@@ -6,7 +6,6 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AvatarShapeParams {
 
     @Nonnull

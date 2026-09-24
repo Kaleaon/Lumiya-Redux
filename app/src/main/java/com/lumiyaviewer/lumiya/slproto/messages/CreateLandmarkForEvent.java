@@ -4,24 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * give agent a landmark for an event.
+ *
+ * <p>Template: {@code CreateLandmarkForEvent Low 306 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class CreateLandmarkForEvent extends SLMessage {
     public AgentData AgentData_Field;
     public EventData EventData_Field;
     public InventoryBlock InventoryBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block EventData, Single. */
     public static class EventData {
-        public int EventID;
+        public int EventID; // U32
     }
 
+    /** Block InventoryBlock, Single. */
     public static class InventoryBlock {
-        public UUID FolderID;
-        public byte[] Name;
+        public UUID FolderID; // LLUUID
+        public byte[] Name; // Variable 1
     }
 
     public CreateLandmarkForEvent() {
@@ -31,21 +39,22 @@ public class CreateLandmarkForEvent extends SLMessage {
         this.InventoryBlock_Field = new InventoryBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.InventoryBlock_Field.Name.length + 17 + 40;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleCreateLandmarkForEvent(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 50);
+        // Message number: Low 306 (CreateLandmarkForEvent).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x32);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.EventData_Field.EventID);
@@ -53,7 +62,7 @@ public class CreateLandmarkForEvent extends SLMessage {
         packVariable(byteBuffer, this.InventoryBlock_Field.Name, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

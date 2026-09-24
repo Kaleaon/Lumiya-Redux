@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SearchGridResult {
     private Long id;
     private String itemName;

@@ -3,7 +3,6 @@ package com.google.vr.vrcore.base.api;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-/* loaded from: classes.dex */
 public class BuildUtils {
     private static volatile Boolean isDebug;
 

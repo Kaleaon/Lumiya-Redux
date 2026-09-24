@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 import uk.co.senab.photoview.Compat;
 
 @TargetApi(5)
-/* loaded from: classes.dex */
 public class EclairGestureDetector extends CupcakeGestureDetector {
     private static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId;
@@ -18,7 +17,7 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
         this.mActivePointerIndex = 0;
     }
 
-    @Override // uk.co.senab.photoview.gestures.CupcakeGestureDetector
+    @Override
     float getActiveX(MotionEvent motionEvent) {
         try {
             return motionEvent.getX(this.mActivePointerIndex);
@@ -27,7 +26,7 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
         }
     }
 
-    @Override // uk.co.senab.photoview.gestures.CupcakeGestureDetector
+    @Override
     float getActiveY(MotionEvent motionEvent) {
         try {
             return motionEvent.getY(this.mActivePointerIndex);
@@ -36,7 +35,7 @@ public class EclairGestureDetector extends CupcakeGestureDetector {
         }
     }
 
-    @Override // uk.co.senab.photoview.gestures.CupcakeGestureDetector, uk.co.senab.photoview.gestures.GestureDetector
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         switch (motionEvent.getAction() & 255) {
             case 0:

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.res.executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 
-/* loaded from: classes.dex */
 public class ResourceCleanupExecutor extends ScheduledThreadPoolExecutor {
 
     private static class InstanceHolder {
@@ -14,8 +13,8 @@ public class ResourceCleanupExecutor extends ScheduledThreadPoolExecutor {
     }
 
     public ResourceCleanupExecutor() {
-        super(1, new ThreadFactory() { // from class: com.lumiyaviewer.lumiya.res.executors.ResourceCleanupExecutor.1
-            @Override // java.util.concurrent.ThreadFactory
+        super(1, new ThreadFactory() {
+            @Override
             public Thread newThread(Runnable runnable) {
                 return new Thread(runnable, "ResourceCleanup");
             }

@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-/* loaded from: classes.dex */
 public class SLThreadingCircuit extends SLCircuit implements Executor {
     private static final int DEFAULT_IDLE_INTERVAL = 1000;
     private final BlockingQueue<Runnable> queue;
@@ -18,8 +17,8 @@ public class SLThreadingCircuit extends SLCircuit implements Executor {
 
     public SLThreadingCircuit(SLGridConnection sLGridConnection, SLCircuitInfo sLCircuitInfo, SLAuthReply sLAuthReply, SLCircuit sLCircuit) throws IOException {
         super(sLGridConnection, sLCircuitInfo, sLAuthReply, sLCircuit);
-        this.workingRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.SLThreadingCircuit.1
-            @Override // java.lang.Runnable
+        this.workingRunnable = new Runnable() {
+            @Override
             public void run() {
                 Debug.Printf("SLThreadingCircuit: working thread started.", new Object[0]);
                 while (SLThreadingCircuit.this.workEnabled) {
@@ -47,36 +46,36 @@ public class SLThreadingCircuit extends SLCircuit implements Executor {
         this.workingThread.interrupt();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void HandleMessage(final SLMessage sLMessage) {
-        this.queue.offer(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.-$Lambda$YxYPv04qlnFzJCNumOXxffqwZwU
+        this.queue.offer(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 SLThreadingCircuit.this.m146lambda$com_lumiyaviewer_lumiya_slproto_SLThreadingCircuit_1833((SLMessage) sLMessage);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
         });
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessCloseCircuit() {
         stopThread();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessNetworkError() {
         stopThread();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessTimeout() {
         stopThread();
     }
 
-    @Override // java.util.concurrent.Executor
+    @Override
     public void execute(Runnable runnable) {
         this.queue.offer(runnable);
     }

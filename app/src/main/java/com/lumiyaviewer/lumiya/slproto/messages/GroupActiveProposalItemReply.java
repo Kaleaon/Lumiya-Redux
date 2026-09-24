@@ -6,33 +6,43 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupActiveProposalItemReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code GroupActiveProposalItemReply Low 360 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupActiveProposalItemReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ProposalData> ProposalData_Fields = new ArrayList<>();
     public TransactionData TransactionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block ProposalData, Variable. */
     public static class ProposalData {
-        public boolean AlreadyVoted;
-        public byte[] EndDateTime;
-        public float Majority;
-        public byte[] ProposalText;
-        public int Quorum;
-        public byte[] StartDateTime;
-        public byte[] TerseDateID;
-        public byte[] VoteCast;
-        public UUID VoteID;
-        public UUID VoteInitiator;
+        public boolean AlreadyVoted; // BOOL
+        public byte[] EndDateTime; // Variable 1 - string
+        public float Majority; // F32
+        public byte[] ProposalText; // Variable 1 - string
+        public int Quorum; // S32
+        public byte[] StartDateTime; // Variable 1 - string
+        public byte[] TerseDateID; // Variable 1 - string
+        public byte[] VoteCast; // Variable 1 - string
+        public UUID VoteID; // LLUUID
+        public UUID VoteInitiator; // LLUUID
     }
 
+    /** Block TransactionData, Single. */
     public static class TransactionData {
-        public int TotalNumItems;
-        public UUID TransactionID;
+        public int TotalNumItems; // U32
+        public UUID TransactionID; // LLUUID
     }
 
     public GroupActiveProposalItemReply() {
@@ -41,7 +51,7 @@ public class GroupActiveProposalItemReply extends SLMessage {
         this.TransactionData_Field = new TransactionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 57;
         Iterator<?> it = this.ProposalData_Fields.iterator();
@@ -55,16 +65,17 @@ public class GroupActiveProposalItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupActiveProposalItemReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 104);
+        // Message number: Low 360 (GroupActiveProposalItemReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x68);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
         packUUID(byteBuffer, this.TransactionData_Field.TransactionID);
@@ -84,7 +95,7 @@ public class GroupActiveProposalItemReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);

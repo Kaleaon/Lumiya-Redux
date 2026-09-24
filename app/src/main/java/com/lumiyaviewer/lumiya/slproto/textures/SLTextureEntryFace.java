@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLTextureEntryFace {
     public static final int AttributeAll = -1;
     static final int AttributeGlow = 512;

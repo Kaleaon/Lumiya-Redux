@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictions;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdGenericRestriction implements RLVCommand {
     private boolean canHaveExceptions;
     private RLVRestrictionType restrictionType;
@@ -18,7 +17,7 @@ public class RLVCmdGenericRestriction implements RLVCommand {
         this.canHaveExceptions = z;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         String str3;
         String str4;

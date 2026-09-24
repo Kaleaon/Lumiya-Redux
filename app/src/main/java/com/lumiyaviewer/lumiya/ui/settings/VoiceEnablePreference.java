@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.licensing.LicenseChecker;
 import com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection;
 
-/* loaded from: classes.dex */
 public class VoiceEnablePreference extends CheckBoxPreference {
     public VoiceEnablePreference(Context context) {
         super(context);
@@ -51,28 +50,28 @@ public class VoiceEnablePreference extends CheckBoxPreference {
         getContext().startActivity(intent);
     }
 
-    @Override // androidx.preference.TwoStatePreference, androidx.preference.Preference
+    @Override
     protected void onClick() {
         VoicePluginServiceConnection.setInstallOfferDisplayed(true);
         super.onClick();
         if (!isChecked() || VoicePluginServiceConnection.checkPluginInstalled(getContext())) {
             return;
         }
-        new AlertDialog.Builder(getContext()).setTitle(R.string.enable_voice).setMessage(getContext().getString(R.string.enable_voice_plugin_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$0TY5QW0tBCNc4BcO-pElkyve9kc.1
+        new AlertDialog.Builder(getContext()).setTitle(R.string.enable_voice).setMessage(getContext().getString(R.string.enable_voice_plugin_message, LicenseChecker.APP_STORE_NAME)).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 VoiceEnablePreference.this.m872xef85dc(dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.settings.-$Lambda$0TY5QW0tBCNc4BcO-pElkyve9kc
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }

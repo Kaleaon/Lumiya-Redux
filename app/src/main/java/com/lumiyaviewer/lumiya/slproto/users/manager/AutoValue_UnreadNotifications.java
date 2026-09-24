@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotifications extends UnreadNotifications {
     private final UUID agentUUID;
     private final ImmutableMap<NotificationType, UnreadNotificationInfo> notificationGroups;
@@ -21,7 +20,7 @@ final class AutoValue_UnreadNotifications extends UnreadNotifications {
         this.notificationGroups = immutableMap;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotifications
+    @Override
     @Nonnull
     public UUID agentUUID() {
         return this.agentUUID;
@@ -45,7 +44,7 @@ final class AutoValue_UnreadNotifications extends UnreadNotifications {
         return ((this.agentUUID.hashCode() ^ 1000003) * 1000003) ^ this.notificationGroups.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotifications
+    @Override
     @Nonnull
     public ImmutableMap<NotificationType, UnreadNotificationInfo> notificationGroups() {
         return this.notificationGroups;

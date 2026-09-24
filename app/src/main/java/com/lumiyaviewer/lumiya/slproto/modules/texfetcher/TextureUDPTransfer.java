@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class TextureUDPTransfer {
     private static final int MAX_RETRIES = 2;
     private static final long PACKET_TIMEOUT = 15000;

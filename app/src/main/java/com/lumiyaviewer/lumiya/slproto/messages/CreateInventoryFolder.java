@@ -4,21 +4,28 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * CreateInventoryFolder
+ *
+ * <p>Template: {@code CreateInventoryFolder Low 273 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class CreateInventoryFolder extends SLMessage {
     public AgentData AgentData_Field;
     public FolderData FolderData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block FolderData, Single. */
     public static class FolderData {
-        public UUID FolderID;
-        public byte[] Name;
-        public UUID ParentID;
-        public int Type;
+        public UUID FolderID; // LLUUID
+        public byte[] Name; // Variable 1
+        public UUID ParentID; // LLUUID
+        public int Type; // S8
     }
 
     public CreateInventoryFolder() {
@@ -27,21 +34,22 @@ public class CreateInventoryFolder extends SLMessage {
         this.FolderData_Field = new FolderData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.FolderData_Field.Name.length + 34 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleCreateInventoryFolder(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 17);
+        // Message number: Low 273 (CreateInventoryFolder).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x11);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.FolderData_Field.FolderID);
@@ -50,7 +58,7 @@ public class CreateInventoryFolder extends SLMessage {
         packVariable(byteBuffer, this.FolderData_Field.Name, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

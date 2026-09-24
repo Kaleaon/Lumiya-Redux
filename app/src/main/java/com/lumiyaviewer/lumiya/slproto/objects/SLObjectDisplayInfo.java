@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.objects;
 import com.google.common.collect.ImmutableList;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLObjectDisplayInfo {
     public final float distance;
     public final int hierarchyLevel;

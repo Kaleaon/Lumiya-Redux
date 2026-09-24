@@ -1,6 +1,5 @@
 package com.google.vr.vrcore.controller.api;
 
-/* loaded from: classes.dex */
 public class ControllerInitResults {
     public static final int FAILED_CLIENT_OBSOLETE = 3;
     public static final int FAILED_NOT_AUTHORIZED = 2;

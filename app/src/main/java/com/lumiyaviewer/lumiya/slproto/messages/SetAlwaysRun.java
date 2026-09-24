@@ -4,14 +4,21 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetAlwaysRun
+ * Lets the viewer choose between running and walking
+ *
+ * <p>Template: {@code SetAlwaysRun Low 88 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetAlwaysRun extends SLMessage {
     public AgentData AgentData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public boolean AlwaysRun;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public boolean AlwaysRun; // BOOL
+        public UUID SessionID; // LLUUID
     }
 
     public SetAlwaysRun() {
@@ -19,27 +26,28 @@ public class SetAlwaysRun extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetAlwaysRun(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 88);
+        // Message number: Low 88 (SetAlwaysRun).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x58);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.AgentData_Field.AlwaysRun);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

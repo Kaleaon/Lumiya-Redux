@@ -1,53 +1,64 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Can only fit around 7 items per packet - that's the way it goes. At
+ * least many bulk updates can be packed.
+ * Only from dataserver->sim->viewer
+ *
+ * <p>Template: {@code BulkUpdateInventory Low 281 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processBulkUpdateInventory()} in indra/newview/llinventorymodel.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class BulkUpdateInventory extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
     public ArrayList<ItemData> ItemData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID TransactionID;
+        public UUID AgentID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
-        public byte[] Name;
-        public UUID ParentID;
-        public int Type;
+        public UUID FolderID; // LLUUID
+        public byte[] Name; // Variable 1
+        public UUID ParentID; // LLUUID
+        public int Type; // S8
     }
 
+    /** Block ItemData, Variable. */
     public static class ItemData {
-        public UUID AssetID;
-        public int BaseMask;
-        public int CRC;
-        public int CallbackID;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public int Type;
+        public UUID AssetID; // LLUUID
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CallbackID; // U32 - Async Response
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID - permissions
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - permissions
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public int Type; // S8
     }
 
     public BulkUpdateInventory() {
@@ -55,7 +66,7 @@ public class BulkUpdateInventory extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i;
         int i2 = 37;
@@ -79,16 +90,17 @@ public class BulkUpdateInventory extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleBulkUpdateInventory(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.EM);
+        // Message number: Low 281 (BulkUpdateInventory).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x19);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.TransactionID);
         byteBuffer.put((byte) this.FolderData_Fields.size());
@@ -125,7 +137,7 @@ public class BulkUpdateInventory extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.TransactionID = unpackUUID(byteBuffer);

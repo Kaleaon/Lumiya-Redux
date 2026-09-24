@@ -6,47 +6,61 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * RegionInfo
+ * Used to populate UI for both region/estate floater
+ * and god tools floater
+ * sim -> viewer
+ * reliable
+ *
+ * <p>Template: {@code RegionInfo Low 142 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLViewerRegion::processRegionInfo()} in indra/newview/llviewerregion.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class RegionInfo extends SLMessage {
     public AgentData AgentData_Field;
     public RegionInfo2 RegionInfo2_Field;
     public ArrayList<RegionInfo3> RegionInfo3_Fields = new ArrayList<>();
     public RegionInfoData RegionInfoData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block RegionInfo2, Single. */
     public static class RegionInfo2 {
-        public int HardMaxAgents;
-        public int HardMaxObjects;
-        public int MaxAgents32;
-        public byte[] ProductName;
-        public byte[] ProductSKU;
+        public int HardMaxAgents; // U32
+        public int HardMaxObjects; // U32
+        public int MaxAgents32; // U32 - Identical to RegionInfo.MaxAgents but allows greater range
+        public byte[] ProductName; // Variable 1 - string
+        public byte[] ProductSKU; // Variable 1 - string
     }
 
+    /** Block RegionInfo3, Variable. */
     public static class RegionInfo3 {
-        public long RegionFlagsExtended;
+        public long RegionFlagsExtended; // U64
     }
 
     public static class RegionInfoData {
-        public float BillableFactor;
-        public int EstateID;
-        public int MaxAgents;
-        public float ObjectBonusFactor;
-        public int ParentEstateID;
-        public int PricePerMeter;
-        public int RedirectGridX;
-        public int RedirectGridY;
-        public int RegionFlags;
-        public int SimAccess;
-        public byte[] SimName;
-        public float SunHour;
-        public float TerrainLowerLimit;
-        public float TerrainRaiseLimit;
-        public boolean UseEstateSun;
-        public float WaterHeight;
+        public float BillableFactor; // F32
+        public int EstateID; // U32
+        public int MaxAgents; // U8
+        public float ObjectBonusFactor; // F32
+        public int ParentEstateID; // U32
+        public int PricePerMeter; // S32
+        public int RedirectGridX; // S32
+        public int RedirectGridY; // S32
+        public int RegionFlags; // U32
+        public int SimAccess; // U8
+        public byte[] SimName; // Variable 1 - string
+        public float SunHour; // F32 - last value set by estate or region controls JC
+        public float TerrainLowerLimit; // F32
+        public float TerrainRaiseLimit; // F32
+        public boolean UseEstateSun; // BOOL
+        public float WaterHeight; // F32
     }
 
     public RegionInfo() {
@@ -56,21 +70,22 @@ public class RegionInfo extends SLMessage {
         this.RegionInfo2_Field = new RegionInfo2();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.RegionInfoData_Field.SimName.length + 1 + 4 + 4 + 4 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + 36 + this.RegionInfo2_Field.ProductSKU.length + 1 + 1 + this.RegionInfo2_Field.ProductName.length + 4 + 4 + 4 + 1 + (this.RegionInfo3_Fields.size() * 8);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRegionInfo(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -114);
+        // Message number: Low 142 (RegionInfo).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x8E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packVariable(byteBuffer, this.RegionInfoData_Field.SimName, 1);
@@ -101,7 +116,7 @@ public class RegionInfo extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

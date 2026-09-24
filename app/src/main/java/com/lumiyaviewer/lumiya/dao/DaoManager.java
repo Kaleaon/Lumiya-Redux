@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DaoManager {
     private static final Object lock = new Object();
     private static final Map<UUID, DaoSession> userDaoSessions = new HashMap();

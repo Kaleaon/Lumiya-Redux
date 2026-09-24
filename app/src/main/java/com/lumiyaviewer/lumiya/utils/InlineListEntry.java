@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.utils;
 
 import com.lumiyaviewer.lumiya.utils.InlineListEntry;
 
-/* loaded from: classes.dex */
 public interface InlineListEntry<T extends InlineListEntry<T>> {
     InlineList<T> getList();
 

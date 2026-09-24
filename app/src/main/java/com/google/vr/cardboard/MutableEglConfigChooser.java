@@ -5,7 +5,6 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-/* loaded from: classes.dex */
 public class MutableEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
     private static final int EGL_MUTABLE_RENDER_BUFFER_BIT = 4096;
     private static final int EGL_OPENGL_ES3_BIT_KHR = 64;
@@ -40,7 +39,7 @@ public class MutableEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
         return !egl10.eglGetConfigAttrib(eGLDisplay, eGLConfig, i, iArr) ? i2 : iArr[0];
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLConfigChooser
+    @Override
     public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay) {
         int[] iArr = {12324, 8, 12323, 8, 12322, 8, 12321, 0, 12325, 0, 12326, 0, 12352, 64, 12339, 4100, 12344};
         int[] iArr2 = new int[1];

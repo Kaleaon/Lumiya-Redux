@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_CurrentLocationInfo extends CurrentLocationInfo {
     private final int inChatRangeUsers;
     private final int nearbyUsers;
@@ -38,23 +37,23 @@ final class AutoValue_CurrentLocationInfo extends CurrentLocationInfo {
         return (((((((this.parcelData == null ? 0 : this.parcelData.hashCode()) ^ 1000003) * 1000003) ^ this.nearbyUsers) * 1000003) ^ this.inChatRangeUsers) * 1000003) ^ (this.parcelVoiceChannel != null ? this.parcelVoiceChannel.hashCode() : 0);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo
+    @Override
     public int inChatRangeUsers() {
         return this.inChatRangeUsers;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo
+    @Override
     public int nearbyUsers() {
         return this.nearbyUsers;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo
+    @Override
     @Nullable
     public ParcelData parcelData() {
         return this.parcelData;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo
+    @Override
     @Nullable
     public VoiceChannelInfo parcelVoiceChannel() {
         return this.parcelVoiceChannel;

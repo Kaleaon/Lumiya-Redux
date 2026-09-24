@@ -1,20 +1,27 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AttachedSound - Sent by simulator to viewer to play sound attached with an object
+ *
+ * <p>Template: {@code AttachedSound Medium 13 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code null_message_callback()} in indra/llmessage/message.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AttachedSound extends SLMessage {
     public DataBlock DataBlock_Field;
 
+    /** Block DataBlock, Single. */
     public static class DataBlock {
-        public int Flags;
-        public float Gain;
-        public UUID ObjectID;
-        public UUID OwnerID;
-        public UUID SoundID;
+        public int Flags; // U8
+        public float Gain; // F32
+        public UUID ObjectID; // LLUUID
+        public UUID OwnerID; // LLUUID
+        public UUID SoundID; // LLUUID
     }
 
     public AttachedSound() {
@@ -22,20 +29,21 @@ public class AttachedSound extends SLMessage {
         this.DataBlock_Field = new DataBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 55;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAttachedSound(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put(Ascii.CR);
+        // Message number: Medium 13 (AttachedSound).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x0D);
         packUUID(byteBuffer, this.DataBlock_Field.SoundID);
         packUUID(byteBuffer, this.DataBlock_Field.ObjectID);
         packUUID(byteBuffer, this.DataBlock_Field.OwnerID);
@@ -43,7 +51,7 @@ public class AttachedSound extends SLMessage {
         packByte(byteBuffer, (byte) this.DataBlock_Field.Flags);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.DataBlock_Field.SoundID = unpackUUID(byteBuffer);
         this.DataBlock_Field.ObjectID = unpackUUID(byteBuffer);

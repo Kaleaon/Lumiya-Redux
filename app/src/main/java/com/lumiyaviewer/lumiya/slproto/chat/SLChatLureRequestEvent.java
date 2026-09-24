@@ -13,7 +13,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatLureRequestEvent extends SLChatYesNoEvent {
     public SLChatLureRequestEvent(ChatMessage chatMessage, @Nonnull UUID uuid) {
         super(chatMessage, uuid);
@@ -23,49 +22,49 @@ public final class SLChatLureRequestEvent extends SLChatYesNoEvent {
         super(chatMessageSource, uuid, improvedInstantMessage, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.LureRequest;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.teleport_lure_request_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.teleport_lure_request_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return context.getString(R.string.teleport_lure_request_question);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         String string = context.getString(R.string.teleport_lure_request_message);
         return !Strings.isNullOrEmpty(this.text) ? string + ": " + this.text : string + ".";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.teleport_lure_request_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.teleport_lure_request_accepted);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     protected boolean isActionMessage(@Nonnull UserManager userManager) {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         super.onYesAction(context, userManager);
         UUID sourceUUID = this.source.getSourceUUID();
@@ -80,7 +79,7 @@ public final class SLChatLureRequestEvent extends SLChatYesNoEvent {
         activeAgentCircuit.OfferTeleport(sourceUUID, context.getString(R.string.join_me_in_region, regionName));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
     }

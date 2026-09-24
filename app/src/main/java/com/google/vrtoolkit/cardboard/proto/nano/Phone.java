@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.protobuf.nano.WireFormatNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Phone {
 
     public static final class PhoneParams extends ExtendableMessageNano<PhoneParams> implements Cloneable {
@@ -72,8 +71,7 @@ public interface Phone {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final PhoneParams clone() {
             try {
                 PhoneParams phoneParams = (PhoneParams) super.clone();
@@ -86,7 +84,7 @@ public interface Phone {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if ((this.bitField0_ & 1) != 0) {
@@ -129,7 +127,7 @@ public interface Phone {
             return (this.bitField0_ & 2) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final PhoneParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -206,7 +204,7 @@ public interface Phone {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if ((this.bitField0_ & 1) != 0) {
                 codedOutputByteBufferNano.writeFloat(1, this.xPpi_);

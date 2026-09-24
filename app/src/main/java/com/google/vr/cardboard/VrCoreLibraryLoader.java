@@ -11,7 +11,6 @@ import com.google.vr.vrcore.library.api.ObjectWrapper;
 import com.google.vr.vrcore.library.api.VrCoreLoader;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class VrCoreLibraryLoader {
     private static final String TAG = VrCoreLibraryLoader.class.getSimpleName();
 

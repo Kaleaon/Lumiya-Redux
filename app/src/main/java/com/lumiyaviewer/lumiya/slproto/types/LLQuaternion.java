@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.types;
 
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class LLQuaternion {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-types-LLQuaternion$OrderSwitchesValues, reason: not valid java name */

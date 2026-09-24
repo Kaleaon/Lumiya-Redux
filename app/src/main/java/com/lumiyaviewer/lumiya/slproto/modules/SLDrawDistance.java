@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.modules;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 
-/* loaded from: classes.dex */
 public class SLDrawDistance extends SLModule {
     public static final float CHAT_RANGE = 20.0f;
     private static final long DRAW_RANGE_TIMEOUT = 10000;

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-/* loaded from: classes.dex */
 public class SLXferManager extends SLModule {
     private Map<String, Long> activeTransferIDs;
     private Map<Long, SLXfer> activeTransfers;

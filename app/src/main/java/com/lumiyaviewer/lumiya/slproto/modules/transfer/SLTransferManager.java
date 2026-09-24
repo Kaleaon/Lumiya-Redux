@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLTransferManager extends SLModule {
     private static final float DEFAULT_PRIORITY = 10000.0f;
     private final BiMap<AssetKey, UUID> activeTransferIds;
@@ -36,8 +35,8 @@ public class SLTransferManager extends SLModule {
         super(sLAgentCircuit);
         this.activeTransfers = Collections.synchronizedMap(new HashMap());
         this.activeTransferIds = Maps.synchronizedBiMap(HashBiMap.create());
-        this.assetRequestHandler = new AsyncRequestHandler(this.agentCircuit, new RequestHandler<AssetKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.transfer.SLTransferManager.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.assetRequestHandler = new AsyncRequestHandler(this.agentCircuit, new RequestHandler<AssetKey>() {
+            @Override
             public void onRequest(@Nonnull AssetKey assetKey) {
                 Debug.Printf("Transfer: Requested asset download for %s", assetKey);
                 SLTransfer sLTransfer = new SLTransfer(SLTransferManager.this.circuitInfo.agentID, SLTransferManager.this.circuitInfo.sessionID, assetKey, SLTransferManager.DEFAULT_PRIORITY);
@@ -46,7 +45,7 @@ public class SLTransferManager extends SLModule {
             }
 
             /* JADX WARN: Multi-variable type inference failed */
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+            @Override
             public void onRequestCancelled(@Nonnull AssetKey assetKey) {
                 SLTransfer sLTransfer;
                 UUID uuid = (UUID) SLTransferManager.this.activeTransferIds.remove(assetKey);
@@ -63,14 +62,12 @@ public class SLTransferManager extends SLModule {
         this.assetResultHandler = this.userManager != null ? this.userManager.getAssetResponseCacher().getRequestSource().attachRequestHandler(this.assetRequestHandler) : null;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void BeginTransfer(SLTransfer sLTransfer) {
         Debug.Printf("Transfer: Starting transfer: assetUUID %s, assetType %d", sLTransfer.getAssetUUID().toString(), Integer.valueOf(sLTransfer.getAssetType()));
         this.activeTransfers.put(sLTransfer.getTransferUUID(), sLTransfer);
         this.agentCircuit.SendMessage(sLTransfer.makeTransferRequest());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void CancelTransfer(SLTransfer sLTransfer) {
         this.activeTransfers.remove(sLTransfer.getTransferUUID());
         TransferAbort transferAbort = new TransferAbort();
@@ -90,7 +87,7 @@ public class SLTransferManager extends SLModule {
         this.assetResultHandler.onResultData(remove, new AssetData(status, sLTransfer.getData()));
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         AnimationCache.getInstance().setAssetResponseCacher(null);
         if (this.userManager != null) {

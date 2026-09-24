@@ -3,7 +3,6 @@ package com.google.vr.ndk.base;
 import android.graphics.Point;
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class SwapChain {
     private static final String TAG = SwapChain.class.getSimpleName();
     private int currentFrame;

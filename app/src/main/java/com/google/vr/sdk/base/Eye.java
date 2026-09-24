@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import com.google.vr.cardboard.UsedByNative;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class Eye {
     private float lastZFar;
     private float lastZNear;

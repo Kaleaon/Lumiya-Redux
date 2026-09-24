@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class AvatarRunningAnimation implements Comparable<AvatarRunningAnimation> {
 
     @Nonnull
@@ -23,7 +22,7 @@ class AvatarRunningAnimation implements Comparable<AvatarRunningAnimation> {
         this.jointSet.animate(avatarSkeleton, this.sequence, fArr, fArr2, lLQuaternionArr, lLVector3Arr);
     }
 
-    @Override // java.lang.Comparable
+    @Override
     public int compareTo(@Nonnull AvatarRunningAnimation avatarRunningAnimation) {
         int priority = avatarRunningAnimation.jointSet.getPriority() - this.jointSet.getPriority();
         if (priority != 0) {

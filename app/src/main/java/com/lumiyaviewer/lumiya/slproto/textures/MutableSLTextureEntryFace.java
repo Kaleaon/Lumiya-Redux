@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.textures;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MutableSLTextureEntryFace {
     public static final byte BUMP_MASK = 31;
     public static final byte FULLBRIGHT_MASK = 32;

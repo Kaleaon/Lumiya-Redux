@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 
-/* loaded from: classes.dex */
 public class SLMessageFactory {
     public static SLMessage CreateByID(int i) {
         switch (i) {

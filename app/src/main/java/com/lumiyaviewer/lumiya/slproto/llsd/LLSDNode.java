@@ -34,7 +34,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public abstract class LLSDNode {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-https-LLSDContentTypeDetector$LLSDContentTypeSwitchesValues, reason: not valid java name */

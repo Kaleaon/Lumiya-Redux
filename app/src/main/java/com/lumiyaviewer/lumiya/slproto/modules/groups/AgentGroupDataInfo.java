@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDSerialized;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AgentGroupDataInfo {
 
     @LLSDSerialized

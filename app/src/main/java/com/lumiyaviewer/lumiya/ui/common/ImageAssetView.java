@@ -21,7 +21,6 @@ import com.lumiyaviewer.lumiya.res.textures.TextureCache;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ImageAssetView extends View {
     private boolean alignTop;
     private UUID assetID;
@@ -45,7 +44,7 @@ public class ImageAssetView extends View {
             this();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
                 this.texture = (OpenJPEG) obj;
@@ -55,8 +54,7 @@ public class ImageAssetView extends View {
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Bitmap doInBackground(UUID... uuidArr) {
             Debug.Printf("loading asset ID %s", uuidArr[0].toString());
             TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuidArr[0], TextureClass.Asset), this);
@@ -80,8 +78,7 @@ public class ImageAssetView extends View {
             return null;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Bitmap bitmap) {
             ImageAssetView.this.imageBitmap = bitmap;
             if (ImageAssetView.this.verticalFit) {
@@ -122,7 +119,7 @@ public class ImageAssetView extends View {
         this.verticalFit = false;
     }
 
-    @Override // android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -133,10 +130,10 @@ public class ImageAssetView extends View {
         this.textPaint.setColor(i);
         this.textPaint.setTextAlign(Paint.Align.CENTER);
         this.textPaint.setAntiAlias(true);
-        this.textPaint.setTextSize(TypedValue.applyDimension(2, 14.0f, displayMetrics));
+        this.textPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14.0f, displayMetrics));
     }
 
-    @Override // android.view.View
+    @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
@@ -185,7 +182,7 @@ public class ImageAssetView extends View {
         canvas.drawRect(this.bitmapDestRect, this.bitmapPaint);
     }
 
-    @Override // android.view.View
+    @Override
     protected void onMeasure(int i, int i2) {
         if (View.MeasureSpec.getMode(i) == 0 && View.MeasureSpec.getMode(i2) == 0) {
             super.onMeasure(i, i2);

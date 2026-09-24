@@ -6,22 +6,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GroupDataUpdate
+ * This is a bunch of group data that needs to be appropriatly routed based on presence info.
+ * dataserver -> simulator
+ *
+ * <p>Template: {@code GroupDataUpdate Low 388 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupDataUpdate extends SLMessage {
     public ArrayList<AgentGroupData> AgentGroupData_Fields = new ArrayList<>();
 
+    /** Block AgentGroupData, Variable. */
     public static class AgentGroupData {
-        public UUID AgentID;
-        public long AgentPowers;
-        public UUID GroupID;
-        public byte[] GroupTitle;
+        public UUID AgentID; // LLUUID
+        public long AgentPowers; // U64
+        public UUID GroupID; // LLUUID
+        public byte[] GroupTitle; // Variable 1
     }
 
     public GroupDataUpdate() {
         this.zeroCoded = true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.AgentGroupData_Fields.iterator();
@@ -34,16 +42,17 @@ public class GroupDataUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupDataUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -124);
+        // Message number: Low 388 (GroupDataUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x84);
         byteBuffer.put((byte) this.AgentGroupData_Fields.size());
         for (AgentGroupData agentGroupData : this.AgentGroupData_Fields) {
             packUUID(byteBuffer, agentGroupData.AgentID);
@@ -53,7 +62,7 @@ public class GroupDataUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

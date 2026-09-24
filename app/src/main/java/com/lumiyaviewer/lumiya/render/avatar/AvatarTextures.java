@@ -9,7 +9,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AvatarTextures {
     public static final UUID DEFAULT_AVATAR_TEXTURE = UUID.fromString("c228d1cf-4b5d-4ba8-84f4-899a0796aa97");
     private final Map<AvatarTextureFaceIndex, UUID> avatarTextures = new EnumMap(AvatarTextureFaceIndex.class);

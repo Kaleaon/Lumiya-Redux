@@ -7,7 +7,6 @@ import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLSkeleton {
     public SLSkeletonBone rootBone;
     public final Map<SLSkeletonBoneID, SLSkeletonBone> bones = new EnumMap(SLSkeletonBoneID.class);

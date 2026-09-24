@@ -6,7 +6,6 @@ import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GridConnectionManager {
     private static final Object lock = new Object();
     private static final Map<UUID, SLGridConnection> connections = new WeakHashMap();

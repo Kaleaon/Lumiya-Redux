@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.types;
 import android.annotation.SuppressLint;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ImmutableVector {
     public final float x;
     public final float y;

@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.voice.common.model.Voice3DPosition;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceSet3DPosition implements VoicePluginMessage {
 
     @Nonnull
@@ -30,7 +29,7 @@ public class VoiceSet3DPosition implements VoicePluginMessage {
         this.listenerPosition = voice3DPosition2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle("voiceChannelInfo", this.voiceChannelInfo.toBundle());

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.spatial;
 import android.opengl.Matrix;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class FrustrumInfo {
     public final float[] mvpMatrix;
     public final float viewDistance;

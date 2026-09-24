@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Ints;
 import java.util.Collection;
 
-/* loaded from: classes.dex */
 public abstract class PayInfo {
     public static final int MAX_PAY_PRICES = 4;
 

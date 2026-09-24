@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/* loaded from: classes.dex */
 public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
     private static final float DEFAULT_ALPHA_END_DISTANCE = 1.0f;
     private static final float DEFAULT_ALPHA_START_DISTANCE = 0.0f;
@@ -36,7 +35,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
     private float mDragDismissThreshold = 1.0f;
     private float mAlphaStartSwipeDistance = 0.0f;
     private float mAlphaEndSwipeDistance = 1.0f;
-    private final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissAdvancedBehavior.1
+    private final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() {
         private int mOriginalCapturedViewLeft;
         private int mOriginalCapturedViewTop;
 
@@ -70,7 +69,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             return true;
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public int clampViewPositionHorizontal(View view, int i, int i2) {
             if (view.getTop() != this.mOriginalCapturedViewTop) {
                 return this.mOriginalCapturedViewLeft;
@@ -78,7 +77,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             return SwipeDismissAdvancedBehavior.clamp(this.mOriginalCapturedViewLeft - ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 1) != 0 ? view.getWidth() : 0), i, ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 2) != 0 ? view.getWidth() : 0) + this.mOriginalCapturedViewLeft);
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public int clampViewPositionVertical(View view, int i, int i2) {
             if (view.getLeft() != this.mOriginalCapturedViewLeft) {
                 return this.mOriginalCapturedViewTop;
@@ -86,7 +85,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             return SwipeDismissAdvancedBehavior.clamp(this.mOriginalCapturedViewTop - ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 4) != 0 ? view.getHeight() : 0), i, ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 8) != 0 ? view.getHeight() : 0) + this.mOriginalCapturedViewTop);
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public int getViewHorizontalDragRange(View view) {
             if ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 3) != 0) {
                 return view.getWidth();
@@ -94,7 +93,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             return 0;
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public int getViewVerticalDragRange(View view) {
             if ((SwipeDismissAdvancedBehavior.this.mSwipeDirection & 12) != 0) {
                 return view.getWidth();
@@ -102,20 +101,20 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             return 0;
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public void onViewCaptured(View view, int i) {
             this.mOriginalCapturedViewLeft = view.getLeft();
             this.mOriginalCapturedViewTop = view.getTop();
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public void onViewDragStateChanged(int i) {
             if (SwipeDismissAdvancedBehavior.this.mListener != null) {
                 SwipeDismissAdvancedBehavior.this.mListener.onDragStateChanged(i);
             }
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public void onViewPositionChanged(View view, int i, int i2, int i3, int i4) {
             int abs = (SwipeDismissAdvancedBehavior.this.mSwipeDirection & 3) != 0 ? Math.abs(i - this.mOriginalCapturedViewLeft) : 0;
             int abs2 = (SwipeDismissAdvancedBehavior.this.mSwipeDirection & 12) != 0 ? Math.abs(i2 - this.mOriginalCapturedViewTop) : 0;
@@ -126,7 +125,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             }
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public void onViewReleased(View view, float f, float f2) {
             int i;
             int i2;
@@ -164,7 +163,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             }
         }
 
-        @Override // androidx.customview.widget.ViewDragHelper.Callback
+        @Override
         public boolean tryCaptureView(View view, int i) {
             return SwipeDismissAdvancedBehavior.this.canSwipeDismissView(view);
         }
@@ -185,7 +184,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
             this.mDismiss = z;
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             if (SwipeDismissAdvancedBehavior.this.mViewDragHelper != null && SwipeDismissAdvancedBehavior.this.mViewDragHelper.continueSettling(true)) {
                 ViewCompat.postOnAnimation(this.mView, this);
@@ -202,12 +201,10 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
     private @interface SwipeDirection {
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public static float clamp(float f, float f2, float f3) {
         return Math.min(Math.max(f, f2), f3);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public static int clamp(int i, int i2, int i3) {
         return Math.min(Math.max(i, i2), i3);
     }
@@ -233,7 +230,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
         return 0;
     }
 
-    @Override // androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior
+    @Override
     public boolean onInterceptTouchEvent(CoordinatorLayout coordinatorLayout, V v, MotionEvent motionEvent) {
         switch (MotionEventCompat.getActionMasked(motionEvent)) {
             case 1:
@@ -255,7 +252,7 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
         return this.mViewDragHelper.shouldInterceptTouchEvent(motionEvent);
     }
 
-    @Override // androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior
+    @Override
     public boolean onTouchEvent(CoordinatorLayout coordinatorLayout, V v, MotionEvent motionEvent) {
         if (this.mViewDragHelper == null) {
             return false;

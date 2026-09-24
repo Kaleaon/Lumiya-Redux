@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class AvatarSkeleton extends SLDefaultSkeleton {
     private final float bodySize;
     private final boolean hasExtendedBones;
@@ -179,7 +178,7 @@ public class AvatarSkeleton extends SLDefaultSkeleton {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.avatar.SLSkeleton
+    @Override
     public void UpdateGlobalPositions(AnimationSkeletonData animationSkeletonData) {
         super.UpdateGlobalPositions(animationSkeletonData);
         updateAttachmentMatrix();
@@ -197,7 +196,7 @@ public class AvatarSkeleton extends SLDefaultSkeleton {
         return attachmentPoint.matrix;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.avatar.SLSkeleton
+    @Override
     public final float getBodySize() {
         return this.bodySize;
     }
@@ -210,7 +209,7 @@ public class AvatarSkeleton extends SLDefaultSkeleton {
         return this.pelvisOffset;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.avatar.SLSkeleton
+    @Override
     public final float getPelvisToFoot() {
         return this.pelvisToFoot;
     }

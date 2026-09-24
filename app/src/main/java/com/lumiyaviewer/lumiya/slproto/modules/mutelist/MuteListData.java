@@ -16,10 +16,9 @@ import java.util.UUID;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 public class MuteListData {
-    private static final Ordering<MuteListEntry> ordering = new Ordering<MuteListEntry>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.MuteListData.1
-        @Override // com.google.common.collect.Ordering, java.util.Comparator
+    private static final Ordering<MuteListEntry> ordering = new Ordering<MuteListEntry>() {
+        @Override
         public int compare(MuteListEntry muteListEntry, MuteListEntry muteListEntry2) {
             int viewOrder = muteListEntry.type.getViewOrder() - muteListEntry2.type.getViewOrder();
             return viewOrder != 0 ? viewOrder : muteListEntry.name.compareToIgnoreCase(muteListEntry2.name);
@@ -120,12 +119,12 @@ public class MuteListData {
         final MuteListKey muteListKey = new MuteListKey(muteListEntry);
         if (muteListKey.muteType == MuteType.BY_NAME) {
             ImmutableMap.Builder builder = ImmutableMap.builder();
-            builder.putAll(FluentIterable.from(this.muteListNames.entrySet()).filter(new Predicate() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.-$Lambda$pgqqKd1WN3Cb6t0a10SOVDLtoOA
+            builder.putAll(FluentIterable.from(this.muteListNames.entrySet()).filter(new Predicate() {
                 private final /* synthetic */ boolean $m$0(Object obj) {
                     return MuteListData.m238x1ef106fd((MuteListEntry) muteListEntry, (Map.Entry) obj);
                 }
 
-                @Override // com.google.common.base.Predicate
+                @Override
                 public final boolean apply(Object obj) {
                     return $m$0(obj);
                 }
@@ -134,12 +133,12 @@ public class MuteListData {
             return new MuteListData(this.muteList, builder.build());
         }
         ImmutableMap.Builder builder2 = ImmutableMap.builder();
-        builder2.putAll(FluentIterable.from(this.muteList.entrySet()).filter(new Predicate() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.-$Lambda$pgqqKd1WN3Cb6t0a10SOVDLtoOA.1
+        builder2.putAll(FluentIterable.from(this.muteList.entrySet()).filter(new Predicate() {
             private final /* synthetic */ boolean $m$0(Object obj) {
                 return MuteListData.m239x1ef16857((MuteListKey) muteListKey, (Map.Entry) obj);
             }
 
-            @Override // com.google.common.base.Predicate
+            @Override
             public final boolean apply(Object obj) {
                 return $m$0(obj);
             }
@@ -152,12 +151,12 @@ public class MuteListData {
         final MuteListKey muteListKey = new MuteListKey(muteListEntry);
         if (muteListKey.muteType == MuteType.BY_NAME) {
             ImmutableMap.Builder builder = ImmutableMap.builder();
-            builder.putAll(FluentIterable.from(this.muteListNames.entrySet()).filter(new Predicate() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.-$Lambda$pgqqKd1WN3Cb6t0a10SOVDLtoOA.2
+            builder.putAll(FluentIterable.from(this.muteListNames.entrySet()).filter(new Predicate() {
                 private final /* synthetic */ boolean $m$0(Object obj) {
                     return MuteListData.m236x1ef0929e((MuteListEntry) muteListEntry, (Map.Entry) obj);
                 }
 
-                @Override // com.google.common.base.Predicate
+                @Override
                 public final boolean apply(Object obj) {
                     return $m$0(obj);
                 }
@@ -165,12 +164,12 @@ public class MuteListData {
             return new MuteListData(this.muteList, builder.build());
         }
         ImmutableMap.Builder builder2 = ImmutableMap.builder();
-        builder2.putAll(FluentIterable.from(this.muteList.entrySet()).filter(new Predicate() { // from class: com.lumiyaviewer.lumiya.slproto.modules.mutelist.-$Lambda$pgqqKd1WN3Cb6t0a10SOVDLtoOA.3
+        builder2.putAll(FluentIterable.from(this.muteList.entrySet()).filter(new Predicate() {
             private final /* synthetic */ boolean $m$0(Object obj) {
                 return MuteListData.m237x1ef0f342((MuteListKey) muteListKey, (Map.Entry) obj);
             }
 
-            @Override // com.google.common.base.Predicate
+            @Override
             public final boolean apply(Object obj) {
                 return $m$0(obj);
             }

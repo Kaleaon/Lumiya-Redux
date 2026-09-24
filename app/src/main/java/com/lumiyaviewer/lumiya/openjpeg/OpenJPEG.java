@@ -7,8 +7,6 @@ import android.opengl.GLES10;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.os.Build;
-import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ViewCompat;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.GLTexture;
 import com.lumiyaviewer.lumiya.render.TextureMemoryTracker;
@@ -19,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class OpenJPEG implements GLTexture {
 
     /* renamed from: -com-lumiyaviewer-lumiya-openjpeg-OpenJPEG$ImageFormatSwitchesValues, reason: not valid java name */
@@ -283,7 +280,7 @@ public class OpenJPEG implements GLTexture {
         return getLoadedSize();
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public int SetAsTexture() {
         int i;
         if (this.rawBuffer != null) {
@@ -378,7 +375,7 @@ public class OpenJPEG implements GLTexture {
         super.finalize();
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public Bitmap getAsBitmap() {
         int i;
         Bitmap createBitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
@@ -389,7 +386,7 @@ public class OpenJPEG implements GLTexture {
             for (int i3 = 0; i3 < this.width; i3++) {
                 if (this.num_components == 1) {
                     int i4 = getByte(((this.width * i2) + i3) * this.num_components) & 0xFF;
-                    i = i4 | (i4 << 16) | ViewCompat.MEASURED_STATE_MASK | (i4 << 8);
+                    i = i4 | (i4 << 16) | 0xFF000000 | (i4 << 8);
                 } else {
                     i = ((this.num_components >= 4 ? getByte((((this.width * i2) + i3) * this.num_components) + 3) & 0xFF : 255) << 24) | ((getByte((((this.width * i2) + i3) * this.num_components) + 0) & 0xFF) << 16) | ((getByte((((this.width * i2) + i3) * this.num_components) + 1) & 0xFF) << 8) | (getByte((((this.width * i2) + i3) * this.num_components) + 2) & 0xFF);
                 }
@@ -399,7 +396,7 @@ public class OpenJPEG implements GLTexture {
         return createBitmap;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public byte getByte(int i) {
         if (this.rawBuffer != null) {
             return this.rawBuffer.get(i);
@@ -414,7 +411,7 @@ public class OpenJPEG implements GLTexture {
             for (int i3 = 0; i3 < this.width; i3++) {
                 if (this.num_extra_components == 1) {
                     int i4 = getByte((this.width * this.height * this.num_components) + (this.width * i2) + i3) & 0xFF;
-                    i = i4 | (i4 << 16) | ViewCompat.MEASURED_STATE_MASK | (i4 << 8);
+                    i = i4 | (i4 << 16) | 0xFF000000 | (i4 << 8);
                 } else {
                     i = 0;
                 }
@@ -424,7 +421,7 @@ public class OpenJPEG implements GLTexture {
         return createBitmap;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public ByteBuffer getExtraComponentsBuffer() {
         if (this.num_extra_components != 0 && this.rawBuffer != null) {
             ByteBuffer asReadOnlyBuffer = this.rawBuffer.asReadOnlyBuffer();
@@ -437,7 +434,7 @@ public class OpenJPEG implements GLTexture {
         return null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public int getHeight() {
         return this.height;
     }
@@ -449,20 +446,20 @@ public class OpenJPEG implements GLTexture {
         return 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public int getNumComponents() {
         return this.num_components;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public int getRGB(int i) {
         if (this.rawBuffer != null) {
-            return ((this.rawBuffer.get(i) << 16) & 16711680) | ((this.rawBuffer.get(i + 1) << 8) & MotionEventCompat.ACTION_POINTER_INDEX_MASK) | (this.rawBuffer.get(i + 2) & 0xFF);
+            return ((this.rawBuffer.get(i) << 16) & 0xFF0000) | ((this.rawBuffer.get(i + 1) << 8) & 0xFF00) | (this.rawBuffer.get(i + 2) & 0xFF);
         }
         return 0;
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.GLTexture
+    @Override
     public int getWidth() {
         return this.width;
     }

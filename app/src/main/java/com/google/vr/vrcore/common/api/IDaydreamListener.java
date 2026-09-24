@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IDaydreamListener extends IInterface {
 
     public static abstract class Stub extends Binder implements IDaydreamListener {
@@ -25,7 +24,7 @@ public interface IDaydreamListener extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void applyFade(int i, long j) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -38,12 +37,12 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void dumpDebugData() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -58,7 +57,7 @@ public interface IDaydreamListener extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public int getTargetApiVersion() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -73,7 +72,7 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void recenterHeadTracking() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -84,7 +83,7 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public HeadTrackingState requestStopTracking() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -99,7 +98,7 @@ public interface IDaydreamListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+            @Override
             public void resumeHeadTracking(HeadTrackingState headTrackingState) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -129,12 +128,12 @@ public interface IDaydreamListener extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IDaydreamListener)) ? (IDaydreamListener) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

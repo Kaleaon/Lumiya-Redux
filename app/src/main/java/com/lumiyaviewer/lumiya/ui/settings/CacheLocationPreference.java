@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class CacheLocationPreference extends Preference {
     public CacheLocationPreference(Context context) {
         super(context);
@@ -33,7 +32,7 @@ public class CacheLocationPreference extends Preference {
         return indexOf2 >= 0 ? str.substring(0, indexOf2) : str;
     }
 
-    @Override // androidx.preference.Preference
+    @Override
     public CharSequence getSummary() {
         String persistedString = getPersistedString(null);
         return Strings.isNullOrEmpty(persistedString) ? getContext().getString(R.string.default_cache_location) : makeDisplayableCacheLocation(persistedString);

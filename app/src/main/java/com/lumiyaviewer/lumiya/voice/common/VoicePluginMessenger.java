@@ -5,7 +5,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public class VoicePluginMessenger {
     public static boolean sendMessage(Messenger messenger, VoicePluginMessageType voicePluginMessageType, VoicePluginMessage voicePluginMessage, Messenger messenger2) {
         if (messenger == null) {

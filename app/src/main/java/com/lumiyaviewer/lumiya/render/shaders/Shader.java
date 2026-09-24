@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/* loaded from: classes.dex */
 public enum Shader {
     PrimFragmentShader(35632, "prim.fsh"),
     PrimFragmentShader30(35632, "prim_30.fsh"),

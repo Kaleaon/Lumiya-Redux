@@ -45,7 +45,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLAvatarControl extends SLModule {
     private static final int IDLE_AGENT_UPDATE_INTERVAL = 2000;
     public static final float MANUAL_FLY_SPEED = 1.0f;
@@ -103,7 +102,7 @@ public class SLAvatarControl extends SLModule {
             return this.scheduledInterval;
         }
 
-        @Override // java.util.TimerTask, java.lang.Runnable
+        @Override
         public void run() {
             if (SLAvatarControl.this.enableAgentUpdates) {
                 SLAvatarControl.this.SendAgentUpdate(SLAvatarControl.this.agentCircuit.getModules().drawDistance);
@@ -133,8 +132,8 @@ public class SLAvatarControl extends SLModule {
         this.lastTurnedAngle = 0.0f;
         this.isFlying = false;
         this.agentUpdateScheduleLock = new Object();
-        this.avatarStateRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLAvatarControl.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.avatarStateRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 if (SLAvatarControl.this.myAvatarStateResultHandler != null) {
                     SLAvatarControl.this.myAvatarStateResultHandler.onResultData(subscriptionSingleKey, SLAvatarControl.this.getMyAvatarState());
@@ -172,7 +171,6 @@ public class SLAvatarControl extends SLModule {
         SendMessage(agentAnimation2);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SendAgentUpdate(SLDrawDistance sLDrawDistance) {
         if (this.agentPosition.getPosition(this.agentUpdateCameraCenter)) {
             this.ActiveMotionMask = this.AgentMotionMask;
@@ -252,7 +250,6 @@ public class SLAvatarControl extends SLModule {
         return this.isFlying;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @Nonnull
     public MyAvatarState getMyAvatarState() {
         int i;
@@ -451,7 +448,7 @@ public class SLAvatarControl extends SLModule {
         SendMessage(agentSit);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getObjectsManager().myAvatarState().detachRequestHandler(this.avatarStateRequestHandler);

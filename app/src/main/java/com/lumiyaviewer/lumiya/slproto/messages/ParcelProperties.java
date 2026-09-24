@@ -1,70 +1,86 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelProperties
+ * sequence id = -1 for parcels that you explicitly selected
+ * For agents, sequence id increments every time the agent transits into
+ * a new parcel.  It is used to detect out-of-order agent parcel info updates.
+ * Bitmap = packed bit field, one bit per parcel grid, on if that grid is
+ * part of the selected parcel.
+ * sim -> viewer
+ * WARNING: This packet is potentially large.  With max length name,
+ * description, music URL and media URL, it is 1526 + sizeof ( LLUUID ) bytes.
+ *
+ * <p>Template: {@code ParcelProperties High 23 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLViewerParcelMgr::processParcelProperties()} in indra/newview/llviewerparcelmgr.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ParcelProperties extends SLMessage {
     public AgeVerificationBlock AgeVerificationBlock_Field;
     public ParcelData ParcelData_Field;
 
+    /** Block AgeVerificationBlock, Single. */
     public static class AgeVerificationBlock {
-        public boolean RegionDenyAgeUnverified;
+        public boolean RegionDenyAgeUnverified; // BOOL
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public LLVector3 AABBMax;
-        public LLVector3 AABBMin;
-        public int Area;
-        public int AuctionID;
-        public UUID AuthBuyerID;
-        public byte[] Bitmap;
-        public int Category;
-        public int ClaimDate;
-        public int ClaimPrice;
-        public byte[] Desc;
-        public UUID GroupID;
-        public int GroupPrims;
-        public boolean IsGroupOwned;
-        public int LandingType;
-        public int LocalID;
-        public int MaxPrims;
-        public int MediaAutoScale;
-        public UUID MediaID;
-        public byte[] MediaURL;
-        public byte[] MusicURL;
-        public byte[] Name;
-        public int OtherCleanTime;
-        public int OtherCount;
-        public int OtherPrims;
-        public UUID OwnerID;
-        public int OwnerPrims;
-        public int ParcelFlags;
-        public float ParcelPrimBonus;
-        public float PassHours;
-        public int PassPrice;
-        public int PublicCount;
-        public boolean RegionDenyAnonymous;
-        public boolean RegionDenyIdentified;
-        public boolean RegionDenyTransacted;
-        public boolean RegionPushOverride;
-        public int RentPrice;
-        public int RequestResult;
-        public int SalePrice;
-        public int SelectedPrims;
-        public int SelfCount;
-        public int SequenceID;
-        public int SimWideMaxPrims;
-        public int SimWideTotalPrims;
-        public boolean SnapSelection;
-        public UUID SnapshotID;
-        public int Status;
-        public int TotalPrims;
-        public LLVector3 UserLocation;
-        public LLVector3 UserLookAt;
+        public LLVector3 AABBMax; // LLVector3
+        public LLVector3 AABBMin; // LLVector3
+        public int Area; // S32
+        public int AuctionID; // U32
+        public UUID AuthBuyerID; // LLUUID
+        public byte[] Bitmap; // Variable 2 - packed bit-field
+        public int Category; // U8
+        public int ClaimDate; // S32 - time_t
+        public int ClaimPrice; // S32
+        public byte[] Desc; // Variable 1 - string
+        public UUID GroupID; // LLUUID
+        public int GroupPrims; // S32
+        public boolean IsGroupOwned; // BOOL
+        public int LandingType; // U8
+        public int LocalID; // S32
+        public int MaxPrims; // S32
+        public int MediaAutoScale; // U8
+        public UUID MediaID; // LLUUID
+        public byte[] MediaURL; // Variable 1 - string
+        public byte[] MusicURL; // Variable 1 - string
+        public byte[] Name; // Variable 1 - string
+        public int OtherCleanTime; // S32
+        public int OtherCount; // S32
+        public int OtherPrims; // S32
+        public UUID OwnerID; // LLUUID
+        public int OwnerPrims; // S32
+        public int ParcelFlags; // U32
+        public float ParcelPrimBonus; // F32
+        public float PassHours; // F32
+        public int PassPrice; // S32
+        public int PublicCount; // S32
+        public boolean RegionDenyAnonymous; // BOOL
+        public boolean RegionDenyIdentified; // BOOL
+        public boolean RegionDenyTransacted; // BOOL
+        public boolean RegionPushOverride; // BOOL
+        public int RentPrice; // S32
+        public int RequestResult; // S32
+        public int SalePrice; // S32
+        public int SelectedPrims; // S32
+        public int SelfCount; // S32
+        public int SequenceID; // S32
+        public int SimWideMaxPrims; // S32
+        public int SimWideTotalPrims; // S32
+        public boolean SnapSelection; // BOOL
+        public UUID SnapshotID; // LLUUID
+        public int Status; // U8 - owned vs. pending
+        public int TotalPrims; // S32
+        public LLVector3 UserLocation; // LLVector3
+        public LLVector3 UserLookAt; // LLVector3
     }
 
     public ParcelProperties() {
@@ -73,19 +89,20 @@ public class ParcelProperties extends SLMessage {
         this.AgeVerificationBlock_Field = new AgeVerificationBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.ParcelData_Field.Bitmap.length + 84 + 4 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + this.ParcelData_Field.Name.length + 1 + this.ParcelData_Field.Desc.length + 1 + this.ParcelData_Field.MusicURL.length + 1 + this.ParcelData_Field.MediaURL.length + 16 + 1 + 16 + 4 + 4 + 1 + 16 + 16 + 12 + 12 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelProperties(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.ETB);
+        // Message number: High 23 (ParcelProperties).
+        byteBuffer.put((byte) 0x17);
         packInt(byteBuffer, this.ParcelData_Field.RequestResult);
         packInt(byteBuffer, this.ParcelData_Field.SequenceID);
         packBoolean(byteBuffer, this.ParcelData_Field.SnapSelection);
@@ -138,7 +155,7 @@ public class ParcelProperties extends SLMessage {
         packBoolean(byteBuffer, this.AgeVerificationBlock_Field.RegionDenyAgeUnverified);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ParcelData_Field.RequestResult = unpackInt(byteBuffer);
         this.ParcelData_Field.SequenceID = unpackInt(byteBuffer);

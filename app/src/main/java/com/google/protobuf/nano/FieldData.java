@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: classes.dex */
 class FieldData implements Cloneable {
     private Extension<?, ?> cachedExtension;
     private List<UnknownFieldData> unknownFieldData;
@@ -32,7 +31,6 @@ class FieldData implements Cloneable {
         this.unknownFieldData.add(unknownFieldData);
     }
 
-    /* renamed from: clone, reason: merged with bridge method [inline-methods] */
     public final FieldData clone() {
         FieldData fieldData = new FieldData();
         try {

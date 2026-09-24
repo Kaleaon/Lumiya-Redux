@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class Vector3d {
     public double x;
     public double y;

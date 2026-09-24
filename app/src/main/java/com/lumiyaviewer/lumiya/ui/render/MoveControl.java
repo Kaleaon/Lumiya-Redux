@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
-/* loaded from: classes.dex */
 public enum MoveControl {
     Forward,
     Backward,

@@ -5,22 +5,28 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Request Image - Sent by the viewer to request a specified image at a specified resolution
+ *
+ * <p>Template: {@code RequestImage High 8 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RequestImage extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<RequestImageData> RequestImageData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
     public static class RequestImageData {
-        public int DiscardLevel;
-        public float DownloadPriority;
-        public UUID Image;
-        public int Packet;
-        public int Type;
+        public int DiscardLevel; // S8
+        public float DownloadPriority; // F32
+        public UUID Image; // LLUUID
+        public int Packet; // U32
+        public int Type; // U8
     }
 
     public RequestImage() {
@@ -28,19 +34,20 @@ public class RequestImage extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.RequestImageData_Fields.size() * 26) + 34;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRequestImage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) 8);
+        // Message number: High 8 (RequestImage).
+        byteBuffer.put((byte) 0x08);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.RequestImageData_Fields.size());
@@ -53,7 +60,7 @@ public class RequestImage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

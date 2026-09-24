@@ -15,7 +15,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.chat.ChatNewActivity;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class TeleportProgressDialog extends ProgressDialog implements DialogInterface.OnCancelListener {
     private final Handler mHandler;
     private final UserManager userManager;
@@ -35,12 +34,12 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
         if (userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || !activeAgentCircuit.getModules().rlvController.canTeleportToLandmark()) {
             return;
         }
-        final Runnable runnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$8gWLFwrhoxKapEC8iWggaUhFR1c.2
+        final Runnable runnable = new Runnable() {
             private final /* synthetic */ void $m$0() {
                 TeleportProgressDialog.m556x70f40358((SLAgentCircuit) activeAgentCircuit, (UUID) uuid, (Context) context, (UserManager) userManager);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -50,21 +49,21 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(context.getString(R.string.teleport_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$8gWLFwrhoxKapEC8iWggaUhFR1c.1
+        builder.setMessage(context.getString(R.string.teleport_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TeleportProgressDialog.m557x70f46c95((Runnable) runnable, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$8gWLFwrhoxKapEC8iWggaUhFR1c
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -113,7 +112,7 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
         }
     }
 
-    @Override // android.content.DialogInterface.OnCancelListener
+    @Override
     public void onCancel(DialogInterface dialogInterface) {
         if (this.userManager != null) {
             try {
@@ -127,7 +126,7 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
         }
     }
 
-    @Override // android.app.ProgressDialog, android.app.Dialog
+    @Override
     public void onStart() {
         super.onStart();
         if (this.userManager != null) {
@@ -135,7 +134,7 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
         }
     }
 
-    @Override // android.app.ProgressDialog, android.app.Dialog
+    @Override
     public void onStop() {
         if (this.userManager != null) {
             this.userManager.getEventBus().unsubscribe(this);

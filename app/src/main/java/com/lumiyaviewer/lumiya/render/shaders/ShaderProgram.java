@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.shaders;
 import android.opengl.GLES20;
 import com.lumiyaviewer.lumiya.Debug;
 
-/* loaded from: classes.dex */
 abstract class ShaderProgram {
     private final Shader fragmentShader;
     protected int handle;

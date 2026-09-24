@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLTersePacking;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class PrimPathParams {
     public static final float CUT_QUANTA = 2.0E-5f;
     public static final byte LL_PCODE_PATH_CIRCLE = 32;

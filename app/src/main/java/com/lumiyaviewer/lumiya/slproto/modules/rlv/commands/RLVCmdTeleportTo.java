@@ -7,9 +7,8 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdTeleportTo implements RLVCommand {
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         if (!str.equals("force") || str2 == null) {
             return;

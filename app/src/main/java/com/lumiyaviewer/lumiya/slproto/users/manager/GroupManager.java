@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class GroupManager {
 
     @Nonnull
@@ -49,8 +48,8 @@ public class GroupManager {
     private final SubscriptionPool<GroupMembersQuery, LazyList<GroupMember>> groupMembersSubscriptionPool = new SubscriptionPool<>();
     private final SubscriptionPool<GroupRoleMembersQuery, LazyList<GroupRoleMember>> groupRoleMemberSubscriptionPool = new SubscriptionPool<>();
     private final SubscriptionPool<GroupMemberRolesQuery, Set<UUID>> groupMemberRolesSubscriptionPool = new SubscriptionPool<>();
-    private final OnListUpdated onGroupListUpdated = new OnListUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.1
-        @Override // com.lumiyaviewer.lumiya.slproto.users.manager.OnListUpdated
+    private final OnListUpdated onGroupListUpdated = new OnListUpdated() {
+        @Override
         public void onListUpdated() {
             GroupManager.this.chatterList.notifyListUpdated(ChatterListType.Groups);
         }
@@ -97,19 +96,18 @@ public class GroupManager {
         this.groupMemberListDao = daoSession.getGroupMemberListDao();
         this.groupRoleMemberDao = daoSession.getGroupRoleMemberDao();
         this.groupRoleMemberListDao = daoSession.getGroupRoleMemberListDao();
-        this.subscription = userManager.getAvatarGroupLists().getPool().subscribe(userManager.getUserID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$u_XXTkSOKCgaVXhhU-plrxzPP28.2
+        this.subscription = userManager.getAvatarGroupLists().getPool().subscribe(userManager.getUserID(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
                 GroupManager.this.onAvatarGroupListsReply((AvatarGroupList) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+            @Override
             public final void onData(Object obj) {
                 $m$0(obj);
             }
         });
-        this.groupMemberDataSetHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UUID, UUID>(this.groupMemberDataSetPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.2
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        this.groupMemberDataSetHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UUID, UUID>(this.groupMemberDataSetPool, userManager.getDatabaseExecutor()) {
+            @Override
             @Nullable
             public UUID processRequest(@Nonnull UUID uuid) {
                 GroupMemberList load = GroupManager.this.groupMemberListDao.load(uuid);
@@ -119,16 +117,14 @@ public class GroupManager {
                 return null;
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             public UUID processResult(@Nonnull UUID uuid, UUID uuid2) {
                 GroupManager.this.groupMemberListDao.insertOrReplace(new GroupMemberList(uuid, uuid2));
                 return uuid2;
             }
         });
-        this.groupRoleMemberDataSetHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UUID, UUID>(this.groupRoleMemberDataSetPool, userManager.getDatabaseExecutor()) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.3
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        this.groupRoleMemberDataSetHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UUID, UUID>(this.groupRoleMemberDataSetPool, userManager.getDatabaseExecutor()) {
+            @Override
             public boolean isRequestComplete(@Nonnull UUID uuid, UUID uuid2) {
                 if (GroupManager.this.groupRoleMemberListDao.load(uuid) != null) {
                     return !GroupManager.this.groupRoleMemberListDao.load(uuid).getMustRevalidate();
@@ -136,8 +132,7 @@ public class GroupManager {
                 return false;
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             @Nullable
             public UUID processRequest(@Nonnull UUID uuid) {
                 GroupRoleMemberList load = GroupManager.this.groupRoleMemberListDao.load(uuid);
@@ -147,47 +142,46 @@ public class GroupManager {
                 return null;
             }
 
-            /* JADX INFO: Access modifiers changed from: protected */
-            @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+            @Override
             public UUID processResult(@Nonnull UUID uuid, UUID uuid2) {
                 GroupManager.this.groupRoleMemberListDao.insertOrReplace(new GroupRoleMemberList(uuid, uuid2, false));
                 return uuid2;
             }
         });
-        this.groupRoleMemberSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupRoleMembersQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.4
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupRoleMemberSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupRoleMembersQuery>() {
+            @Override
             public void onRequest(@Nonnull GroupRoleMembersQuery groupRoleMembersQuery) {
                 GroupManager.this.groupRoleMemberSubscriptionPool.onResultData(groupRoleMembersQuery, GroupManager.this.groupRoleMemberDao.queryBuilder().where(GroupRoleMemberDao.Properties.GroupID.eq(groupRoleMembersQuery.groupID()), GroupRoleMemberDao.Properties.RoleID.eq(groupRoleMembersQuery.roleID()), GroupRoleMemberDao.Properties.RequestID.eq(groupRoleMembersQuery.requestID())).listLazyUncached());
             }
         }));
-        this.groupRoleMemberSubscriptionPool.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$u_XXTkSOKCgaVXhhU-plrxzPP28
+        this.groupRoleMemberSubscriptionPool.setDisposeHandler(new DisposeHandler() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ((LazyList) obj).close();
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.DisposeHandler
+            @Override
             public final void onDispose(Object obj) {
                 $m$0(obj);
             }
         }, userManager.getDatabaseExecutor());
-        this.groupMembersSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupMembersQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.5
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupMembersSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupMembersQuery>() {
+            @Override
             public void onRequest(@Nonnull GroupMembersQuery groupMembersQuery) {
                 GroupManager.this.groupMembersSubscriptionPool.onResultData(groupMembersQuery, GroupManager.this.groupMemberDao.queryBuilder().where(GroupMemberDao.Properties.GroupID.eq(groupMembersQuery.groupID()), GroupMemberDao.Properties.RequestID.eq(groupMembersQuery.requestID())).listLazyUncached());
             }
         }));
-        this.groupMembersSubscriptionPool.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$u_XXTkSOKCgaVXhhU-plrxzPP28.1
+        this.groupMembersSubscriptionPool.setDisposeHandler(new DisposeHandler() {
             private final /* synthetic */ void $m$0(Object obj) {
                 ((LazyList) obj).close();
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.DisposeHandler
+            @Override
             public final void onDispose(Object obj) {
                 $m$0(obj);
             }
         }, userManager.getDatabaseExecutor());
-        this.groupMemberRolesSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupMemberRolesQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager.6
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.groupMemberRolesSubscriptionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<GroupMemberRolesQuery>() {
+            @Override
             public void onRequest(@Nonnull GroupMemberRolesQuery groupMemberRolesQuery) {
                 LazyList<GroupRoleMember> listLazyUncached = GroupManager.this.groupRoleMemberDao.queryBuilder().where(GroupRoleMemberDao.Properties.GroupID.eq(groupMemberRolesQuery.groupID()), GroupRoleMemberDao.Properties.UserID.eq(groupMemberRolesQuery.memberID()), GroupRoleMemberDao.Properties.RequestID.eq(groupMemberRolesQuery.requestID())).listLazyUncached();
                 ImmutableSet.Builder builder = ImmutableSet.builder();
@@ -201,8 +195,6 @@ public class GroupManager {
         }));
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAvatarGroupListsReply, reason: merged with bridge method [inline-methods] */
     public void onAvatarGroupListsReply(AvatarGroupList avatarGroupList) {
         this.avatarGroupListRef.set(avatarGroupList);
         this.chatterList.notifyListUpdated(ChatterListType.Groups);
@@ -256,12 +248,12 @@ public class GroupManager {
     }
 
     public void requestGroupRoleMembersRefresh(final UUID uuid) {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$u_XXTkSOKCgaVXhhU-plrxzPP28.3
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 GroupManager.this.m325xee8105e0((UUID) uuid);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

@@ -1,6 +1,5 @@
 package com.google.vr.sdk.base.sensors.internal;
 
-/* loaded from: classes.dex */
 public class Matrix3x3d {
     public double[] m;
 

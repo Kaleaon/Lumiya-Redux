@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.utils;
 import com.google.common.logging.nano.Vr;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 
-/* loaded from: classes.dex */
 public class SimpleStringParser {
     private int curPos = 0;
     private String spaceChars;

@@ -4,22 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarInterestsReply
+ *
+ * <p>Template: {@code AvatarInterestsReply Low 172 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processAvatarInterestsReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarInterestsReply extends SLMessage {
     public AgentData AgentData_Field;
     public PropertiesData PropertiesData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID AvatarID;
+        public UUID AgentID; // LLUUID - your id
+        public UUID AvatarID; // LLUUID - avatar you're asking about
     }
 
+    /** Block PropertiesData, Single. */
     public static class PropertiesData {
-        public byte[] LanguagesText;
-        public int SkillsMask;
-        public byte[] SkillsText;
-        public int WantToMask;
-        public byte[] WantToText;
+        public byte[] LanguagesText; // Variable 1 - string
+        public int SkillsMask; // U32
+        public byte[] SkillsText; // Variable 1 - string
+        public int WantToMask; // U32
+        public byte[] WantToText; // Variable 1 - string
     }
 
     public AvatarInterestsReply() {
@@ -28,21 +37,22 @@ public class AvatarInterestsReply extends SLMessage {
         this.PropertiesData_Field = new PropertiesData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.PropertiesData_Field.WantToText.length + 5 + 4 + 1 + this.PropertiesData_Field.SkillsText.length + 1 + this.PropertiesData_Field.LanguagesText.length + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAvatarInterestsReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -84);
+        // Message number: Low 172 (AvatarInterestsReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xAC);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.AvatarID);
         packInt(byteBuffer, this.PropertiesData_Field.WantToMask);
@@ -52,7 +62,7 @@ public class AvatarInterestsReply extends SLMessage {
         packVariable(byteBuffer, this.PropertiesData_Field.LanguagesText, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.AvatarID = unpackUUID(byteBuffer);

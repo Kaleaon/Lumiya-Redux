@@ -32,7 +32,6 @@ import com.lumiyaviewer.lumiya.eventbus.EventHandler;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
 import com.lumiyaviewer.lumiya.slproto.SLURL;
 import com.lumiyaviewer.lumiya.slproto.auth.SLAuth;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.events.SLLoginResultEvent;
 import com.lumiyaviewer.lumiya.slproto.events.SLReconnectingEvent;
 import com.lumiyaviewer.lumiya.ui.accounts.AccountList;
@@ -48,7 +47,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class LoginActivity extends ThemedActivity implements View.OnClickListener, TextWatcher, GridEditDialog.OnGridEditResultListener {
     private static final String KEY_CLIENT_ID = "client_id";
     private static final String KEY_LOGIN = "login";
@@ -233,15 +231,15 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         View findViewById = findViewById(R.id.login_progress_layout);
         View findViewById2 = findViewById(R.id.login_root_view);
         if (findViewById != null && findViewById2 != null) {
-            findViewById(R.id.login_progress_layout).setVisibility(z ? 0 : 8);
-            findViewById(R.id.login_root_view).setVisibility(z ? 8 : 0);
+            findViewById(R.id.login_progress_layout).setVisibility(z ? View.VISIBLE : View.GONE);
+            findViewById(R.id.login_root_view).setVisibility(z ? View.GONE : View.VISIBLE);
         }
         updateMenuItems();
     }
 
     private void startChatActivity(UUID uuid) {
         Intent intent = new Intent(this, (Class<?>) ChatNewActivity.class);
-        intent.addFlags(SLMoveEvents.AGENT_CONTROL_TURN_RIGHT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("activeAgentUUID", uuid.toString());
         startActivity(intent);
     }
@@ -273,11 +271,11 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void afterTextChanged(Editable editable) {
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         if (this.enableAutoClear) {
             EditText editText = (EditText) findViewById(R.id.editPassword);
@@ -290,7 +288,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public SharedPreferences getPreferences(int i) {
         return getSharedPreferences("LoginActivity", i);
     }
@@ -325,10 +323,10 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         if (findViewById(R.id.login_spacer).getHeight() >= 2 || findViewById(R.id.whatsnewText).getVisibility() == 8) {
             return;
         }
-        findViewById(R.id.whatsnewText).setVisibility(8);
+        findViewById(R.id.whatsnewText).setVisibility(View.GONE);
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onActivityResult(int i, int i2, Intent intent) {
         AccountList.AccountInfo accountInfo;
         Debug.Log("LoginActivity: onActivityResult: requestCode = " + i + ", resultCode = " + i2);
@@ -384,16 +382,16 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.whatsnewText /* 2131755463 */:
+            case R.id.whatsnewText:
                 startActivity(new Intent(this, (Class<?>) WhatsNewActivity.class));
                 break;
-            case R.id.buttonLogin /* 2131755469 */:
+            case R.id.buttonLogin:
                 CheckTOSAndLogin();
                 break;
-            case R.id.loginCancelButton /* 2131755474 */:
+            case R.id.loginCancelButton:
                 this.loggingIn = false;
                 SLGridConnection gridConnection = GridConnectionService.getGridConnection();
                 if (gridConnection != null) {
@@ -404,7 +402,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         SLGridConnection gridConnection = GridConnectionService.getGridConnection();
@@ -436,9 +434,9 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         this.gridDisplayAdapter = new GridList.GridArrayAdapter(this, this.gridDisplayList);
         ((Spinner) findViewById(R.id.spinnerGrid)).setAdapter((SpinnerAdapter) this.gridDisplayAdapter);
         setSelectedGrid();
-        ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { // from class: com.lumiyaviewer.lumiya.ui.login.LoginActivity.1
+        ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             /* JADX WARN: Type inference failed for: r0v2, types: [android.widget.Adapter] */
-            @Override // android.widget.AdapterView.OnItemSelectedListener
+            @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
                 if (i != LoginActivity.this.lastSelectedGrid) {
                     Object item = adapterView.getAdapter().getItem(i);
@@ -456,16 +454,16 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
                 }
             }
 
-            @Override // android.widget.AdapterView.OnItemSelectedListener
+            @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        findViewById(R.id.whatsnewText).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() { // from class: com.lumiyaviewer.lumiya.ui.login.-$Lambda$U_ZFuxgsYW8weMauiDTqAtaKePI
+        findViewById(R.id.whatsnewText).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             private final /* synthetic */ void $m$0() {
                 LoginActivity.this.m646lambda$com_lumiyaviewer_lumiya_ui_login_LoginActivity_5985();
             }
 
-            @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
+            @Override
             public final void onGlobalLayout() {
                 $m$0();
             }
@@ -474,7 +472,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         findViewById(R.id.loginCancelButton).setOnClickListener(this);
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.login_menu, menu);
         ImmutableList.Builder builder = ImmutableList.builder();
@@ -486,7 +484,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridAdded(GridList.GridInfo gridInfo, boolean z) {
         if (z) {
             this.gridList.addNewGrid(gridInfo);
@@ -504,28 +502,28 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridDeleted(GridList.GridInfo gridInfo) {
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.grids.GridEditDialog.OnGridEditResultListener
+    @Override
     public void onGridEditCancelled() {
         ((Spinner) findViewById(R.id.spinnerGrid)).setSelection(this.lastSelectedGrid);
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_settings /* 2131755787 */:
+            case R.id.item_settings:
                 startActivity(new Intent(this, (Class<?>) SettingsActivity.class));
                 return true;
-            case R.id.item_manage_accounts /* 2131755820 */:
+            case R.id.item_manage_accounts:
                 startActivityForResult(new Intent(this, (Class<?>) ManageAccountsActivity.class), 3);
                 return true;
-            case R.id.item_manage_grids /* 2131755821 */:
+            case R.id.item_manage_grids:
                 startActivity(new Intent(this, (Class<?>) ManageGridsActivity.class));
                 return true;
-            case R.id.item_show_password /* 2131755822 */:
+            case R.id.item_show_password:
                 EditText editText = (EditText) findViewById(R.id.editPassword);
                 editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
                 editText.setInputType(145);
@@ -535,7 +533,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         Debug.Printf("LoginActivity: Resumed.", new Object[0]);
@@ -558,18 +556,18 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         ((CheckBox) findViewById(R.id.savePassword)).setChecked(false);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         checkIfGridAvailable();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         super.onStop();
     }
 
-    @Override // android.text.TextWatcher
+    @Override
     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
     }
 }

@@ -2,7 +2,6 @@ package com.google.vr.sdk.controller;
 
 import java.util.Locale;
 
-/* loaded from: classes.dex */
 public class Orientation {
     public float w;
     public float x;

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.dao;
 import java.util.Date;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class MoneyTransaction {
     private UUID agentUUID;
     private Long id;

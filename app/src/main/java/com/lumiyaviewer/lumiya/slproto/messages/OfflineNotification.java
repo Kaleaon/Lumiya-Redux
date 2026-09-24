@@ -6,33 +6,42 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * OfflineNotification
+ *
+ * <p>Template: {@code OfflineNotification Low 323 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code processOfflineNotification()} in indra/newview/llcallingcard.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class OfflineNotification extends SLMessage {
     public ArrayList<AgentBlock> AgentBlock_Fields = new ArrayList<>();
 
+    /** Block AgentBlock, Variable. */
     public static class AgentBlock {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
     public OfflineNotification() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.AgentBlock_Fields.size() * 16) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleOfflineNotification(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 67);
+        // Message number: Low 323 (OfflineNotification).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x43);
         byteBuffer.put((byte) this.AgentBlock_Fields.size());
         Iterator<?> it = this.AgentBlock_Fields.iterator();
         while (it.hasNext()) {
@@ -40,7 +49,7 @@ public class OfflineNotification extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

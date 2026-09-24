@@ -2,13 +2,11 @@ package com.lumiyaviewer.lumiya.render;
 
 import android.opengl.GLES20;
 import android.opengl.GLES30;
-import androidx.core.view.InputDeviceCompat;
 import com.lumiyaviewer.lumiya.render.glres.GLQuery;
 import com.lumiyaviewer.lumiya.render.glres.buffers.GLLoadableBuffer;
 import com.lumiyaviewer.lumiya.render.glres.buffers.GLVertexArrayObject;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class BoundingBox {
     private static final float cubeSize = 0.5f;
     private static float[] cubeVertices = {-0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f};
@@ -33,7 +31,7 @@ public class BoundingBox {
         renderContext.curPrimProgram = null;
         GLES30.glColorMask(true, true, true, true);
         GLES30.glDepthMask(true);
-        GLES30.glDepthFunc(InputDeviceCompat.SOURCE_DPAD);
+        GLES30.glDepthFunc(GLES30.GL_LESS);
         GLES30.glEnable(2884);
     }
 

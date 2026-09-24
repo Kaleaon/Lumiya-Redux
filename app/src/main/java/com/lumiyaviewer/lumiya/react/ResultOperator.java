@@ -4,7 +4,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, Tin> {
 
     @Nullable
@@ -36,7 +35,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
 
     protected abstract Tout onData(Tin tin);
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultData(@Nonnull final K k, final Tin tin) {
         if (this.executor != null) {
             this.executor.execute(() -> m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(k, tin));
@@ -45,7 +44,7 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.ResultHandler
+    @Override
     public void onResultError(@Nonnull final K k, final Throwable th) {
         if (this.executor != null) {
             this.executor.execute(() -> m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(k, th));

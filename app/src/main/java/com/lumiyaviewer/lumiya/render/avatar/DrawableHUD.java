@@ -21,7 +21,6 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-/* loaded from: classes.dex */
 public class DrawableHUD {
     private final DrawableAvatar attachedTo;
     private final SLAttachmentPoint attachmentPoint;

@@ -6,32 +6,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirClassifiedReply dataserver->sim->viewer
+ * reliable
+ *
+ * <p>Template: {@code DirClassifiedReply Low 41 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelDirBrowser::processDirClassifiedReply()} in indra/newview/llpaneldirbrowser.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class DirClassifiedReply extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
     public ArrayList<StatusData> StatusData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public int ClassifiedFlags;
-        public UUID ClassifiedID;
-        public int CreationDate;
-        public int ExpirationDate;
-        public byte[] Name;
-        public int PriceForListing;
+        public int ClassifiedFlags; // U8
+        public UUID ClassifiedID; // LLUUID
+        public int CreationDate; // U32
+        public int ExpirationDate; // U32
+        public byte[] Name; // Variable 1
+        public int PriceForListing; // S32
     }
 
+    /** Block StatusData, Variable. */
     public static class StatusData {
-        public int Status;
+        public int Status; // U32
     }
 
     public DirClassifiedReply() {
@@ -40,7 +52,7 @@ public class DirClassifiedReply extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
@@ -53,16 +65,17 @@ public class DirClassifiedReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirClassifiedReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 41);
+        // Message number: Low 41 (DirClassifiedReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x29);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         byteBuffer.put((byte) this.QueryReplies_Fields.size());
@@ -81,7 +94,7 @@ public class DirClassifiedReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

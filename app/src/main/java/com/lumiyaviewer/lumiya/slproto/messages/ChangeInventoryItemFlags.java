@@ -5,19 +5,26 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ChangeInventoryItemFlags
+ *
+ * <p>Template: {@code ChangeInventoryItemFlags Low 271 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ChangeInventoryItemFlags extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<InventoryData> InventoryData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Variable. */
     public static class InventoryData {
-        public int Flags;
-        public UUID ItemID;
+        public int Flags; // U32
+        public UUID ItemID; // LLUUID
     }
 
     public ChangeInventoryItemFlags() {
@@ -25,21 +32,22 @@ public class ChangeInventoryItemFlags extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.InventoryData_Fields.size() * 20) + 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleChangeInventoryItemFlags(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 15);
+        // Message number: Low 271 (ChangeInventoryItemFlags).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x0F);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.InventoryData_Fields.size());
@@ -49,7 +57,7 @@ public class ChangeInventoryItemFlags extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

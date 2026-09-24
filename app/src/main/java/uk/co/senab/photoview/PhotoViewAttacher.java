@@ -25,7 +25,6 @@ import uk.co.senab.photoview.gestures.VersionedGestureDetector;
 import uk.co.senab.photoview.log.LogManager;
 import uk.co.senab.photoview.scrollerproxy.ScrollerProxy;
 
-/* loaded from: classes.dex */
 public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGestureListener, ViewTreeObserver.OnGlobalLayoutListener {
     static final int EDGE_BOTH = 2;
     static final int EDGE_LEFT = 0;
@@ -111,7 +110,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
             return PhotoViewAttacher.this.mInterpolator.getInterpolation(Math.min(1.0f, ((System.currentTimeMillis() - this.mStartTime) * 1.0f) / PhotoViewAttacher.this.ZOOM_DURATION));
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             ImageView imageView = PhotoViewAttacher.this.getImageView();
             if (imageView != null) {
@@ -175,7 +174,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
             }
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             ImageView imageView;
             if (this.mScroller.isFinished() || (imageView = PhotoViewAttacher.this.getImageView()) == null || !this.mScroller.computeScrollOffset()) {
@@ -247,8 +246,8 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
             return;
         }
         this.mScaleDragDetector = VersionedGestureDetector.newInstance(imageView.getContext(), this);
-        this.mGestureDetector = new GestureDetector(imageView.getContext(), new GestureDetector.SimpleOnGestureListener() { // from class: uk.co.senab.photoview.PhotoViewAttacher.1
-            @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+        this.mGestureDetector = new GestureDetector(imageView.getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
             public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
                 if (PhotoViewAttacher.this.mSingleFlingListener != null && PhotoViewAttacher.this.getScale() <= 1.0f && MotionEventCompat.getPointerCount(motionEvent) <= PhotoViewAttacher.SINGLE_TOUCH && MotionEventCompat.getPointerCount(motionEvent2) <= PhotoViewAttacher.SINGLE_TOUCH) {
                     return PhotoViewAttacher.this.mSingleFlingListener.onFling(motionEvent, motionEvent2, f, f2);
@@ -256,7 +255,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
                 return false;
             }
 
-            @Override // android.view.GestureDetector.SimpleOnGestureListener, android.view.GestureDetector.OnGestureListener
+            @Override
             public void onLongPress(MotionEvent motionEvent) {
                 if (PhotoViewAttacher.this.mLongClickListener == null) {
                     return;
@@ -363,7 +362,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         return this.mDisplayRect;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public Matrix getDrawMatrix() {
         this.mDrawMatrix.set(this.mBaseMatrix);
         this.mDrawMatrix.postConcat(this.mSuppMatrix);
@@ -412,7 +410,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         checkMatrixBounds();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void setImageViewMatrix(Matrix matrix) {
         RectF displayRect;
         ImageView imageView = getImageView();
@@ -480,7 +477,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         resetMatrix();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public boolean canZoom() {
         return this.mZoomEnabled;
     }
@@ -506,18 +503,18 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         }
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void getDisplayMatrix(Matrix matrix) {
         matrix.set(getDrawMatrix());
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public RectF getDisplayRect() {
         checkMatrixBounds();
         return getDisplayRect(getDrawMatrix());
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public IPhotoView getIPhotoViewImplementation() {
         return this;
     }
@@ -535,17 +532,17 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         return imageView;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMaximumScale() {
         return this.mMaxScale;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMediumScale() {
         return this.mMidScale;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getMinimumScale() {
         return this.mMinScale;
     }
@@ -560,12 +557,12 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         return this.mViewTapListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public float getScale() {
         return (float) Math.sqrt(((float) Math.pow(getValue(this.mSuppMatrix, 0), 2.0d)) + ((float) Math.pow(getValue(this.mSuppMatrix, 3), 2.0d)));
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public ImageView.ScaleType getScaleType() {
         return this.mScaleType;
     }
@@ -574,7 +571,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         matrix.set(this.mSuppMatrix);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public Bitmap getVisibleRectangleBitmap() {
         ImageView imageView = getImageView();
         if (imageView != null) {
@@ -587,7 +584,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     
         if ((r9 >= 1.0f) == false) goto L22;
      */
-    @Override // uk.co.senab.photoview.gestures.OnGestureListener
+    @Override
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
@@ -624,7 +621,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         }
     }
 
-    @Override // uk.co.senab.photoview.gestures.OnGestureListener
+    @Override
     public void onFling(float f, float f2, float f3, float f4) {
         if (DEBUG) {
             LogManager.getLogger().d(LOG_TAG, "onFling. sX: " + f + " sY: " + f2 + " Vx: " + f3 + " Vy: " + f4);
@@ -635,7 +632,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         imageView.post(this.mCurrentFlingRunnable);
     }
 
-    @Override // android.view.ViewTreeObserver.OnGlobalLayoutListener
+    @Override
     public void onGlobalLayout() {
         ImageView imageView = getImageView();
         if (imageView == null) {
@@ -659,7 +656,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         this.mIvLeft = left;
     }
 
-    @Override // uk.co.senab.photoview.gestures.OnGestureListener
+    @Override
     public void onScale(float f, float f2, float f3) {
         if (DEBUG) {
             LogManager.getLogger().d(LOG_TAG, String.format("onScale: scale: %.2f. fX: %.2f. fY: %.2f", Float.valueOf(f), Float.valueOf(f2), Float.valueOf(f3)));
@@ -675,7 +672,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         }
     }
 
-    @Override // android.view.View.OnTouchListener
+    @Override
     @SuppressLint({"ClickableViewAccessibility"})
     public boolean onTouch(View view, MotionEvent motionEvent) {
         boolean z;
@@ -733,7 +730,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         return z;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setAllowParentInterceptOnEdge(boolean z) {
         this.mAllowParentInterceptOnEdge = z;
     }
@@ -745,7 +742,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         checkAndDisplayMatrix();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public boolean setDisplayMatrix(Matrix matrix) {
         if (matrix == null) {
             throw new IllegalArgumentException("Matrix cannot be null");
@@ -760,25 +757,25 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         return true;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setMaximumScale(float f) {
         checkZoomLevels(this.mMinScale, this.mMidScale, f);
         this.mMaxScale = f;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setMediumScale(float f) {
         checkZoomLevels(this.mMinScale, f, this.mMaxScale);
         this.mMidScale = f;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setMinimumScale(float f) {
         checkZoomLevels(f, this.mMidScale, this.mMaxScale);
         this.mMinScale = f;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener onDoubleTapListener) {
         if (onDoubleTapListener == null) {
             this.mGestureDetector.setOnDoubleTapListener(new DefaultOnDoubleTapListener(this));
@@ -787,54 +784,54 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         }
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
         this.mLongClickListener = onLongClickListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnMatrixChangeListener(OnMatrixChangedListener onMatrixChangedListener) {
         this.mMatrixChangeListener = onMatrixChangedListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnPhotoTapListener(OnPhotoTapListener onPhotoTapListener) {
         this.mPhotoTapListener = onPhotoTapListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnScaleChangeListener(OnScaleChangeListener onScaleChangeListener) {
         this.mScaleChangeListener = onScaleChangeListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnSingleFlingListener(OnSingleFlingListener onSingleFlingListener) {
         this.mSingleFlingListener = onSingleFlingListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setOnViewTapListener(OnViewTapListener onViewTapListener) {
         this.mViewTapListener = onViewTapListener;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setRotationBy(float f) {
         this.mSuppMatrix.postRotate(f % 360.0f);
         checkAndDisplayMatrix();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setRotationTo(float f) {
         this.mSuppMatrix.setRotate(f % 360.0f);
         checkAndDisplayMatrix();
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScale(float f) {
         setScale(f, false);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScale(float f, float f2, float f3, boolean z) {
         ImageView imageView = getImageView();
         if (imageView == null) {
@@ -850,16 +847,17 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         }
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScale(float f, boolean z) {
         ImageView imageView = getImageView();
         if (imageView == null) {
             return;
         }
+        // Integer halving, as in 3.4.2: zoom focus snaps to a whole pixel.
         setScale(f, (float) (imageView.getRight() / 2), (float) (imageView.getBottom() / 2), z);
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScaleLevels(float f, float f2, float f3) {
         checkZoomLevels(f, f2, f3);
         this.mMinScale = f;
@@ -867,7 +865,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         this.mMaxScale = f3;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setScaleType(ImageView.ScaleType scaleType) {
         if (isSupportedScaleType(scaleType) && scaleType != this.mScaleType) {
             this.mScaleType = scaleType;
@@ -879,7 +877,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         this.mInterpolator = interpolator;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setZoomTransitionDuration(int i) {
         if (i < 0) {
             i = 200;
@@ -887,7 +885,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         this.ZOOM_DURATION = i;
     }
 
-    @Override // uk.co.senab.photoview.IPhotoView
+    @Override
     public void setZoomable(boolean z) {
         this.mZoomEnabled = z;
         update();

@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.res.ResourceRequest;
 import com.lumiyaviewer.lumiya.res.executors.PrimComputeExecutor;
 import com.lumiyaviewer.lumiya.slproto.prims.PrimDrawParams;
 
-/* loaded from: classes.dex */
 public class PrimCache extends ResourceMemoryCache<PrimDrawParams, DrawablePrim> {
     private final GeometryCache geometryCache;
     private final GLTextureCache textureCache;
@@ -26,7 +25,7 @@ public class PrimCache extends ResourceMemoryCache<PrimDrawParams, DrawablePrim>
             this.geometryCache = geometryCache;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (!(obj instanceof DrawableGeometry)) {
                 completeRequest(null);
@@ -36,19 +35,19 @@ public class PrimCache extends ResourceMemoryCache<PrimDrawParams, DrawablePrim>
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void cancelRequest() {
             PrimComputeExecutor.getInstance().remove(this);
             this.geometryCache.CancelRequest(this);
             super.cancelRequest();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceRequest
+        @Override
         public void execute() {
             this.geometryCache.RequestResource(getParams().getVolumeParams(), this);
         }
 
-        @Override // java.lang.Runnable
+        @Override
         public void run() {
             try {
                 completeRequest(new DrawablePrim(getParams(), this.geometry));

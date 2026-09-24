@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.UUID;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDUUID extends LLSDNode {
     private UUID value;
 
@@ -49,24 +48,24 @@ public class LLSDUUID extends LLSDNode {
         this.value = uuid;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public String asString() {
         return this.value.toString();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public UUID asUUID() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(117);
         dataOutputStream.writeLong(this.value.getMostSignificantBits());
         dataOutputStream.writeLong(this.value.getLeastSignificantBits());
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "uuid");
         if (this.value != null) {

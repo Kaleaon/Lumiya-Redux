@@ -31,7 +31,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLSearch extends SLModule {
     private static final int DFQ_ADULT_SIMS_ONLY = 134217728;
     private static final int DFQ_AGENT_OWNED = 64;
@@ -72,7 +71,7 @@ public class SLSearch extends SLModule {
     public SLSearch(SLAgentCircuit sLAgentCircuit) {
         super(sLAgentCircuit);
         this.currentSearchQuery = new AtomicReference<>(null);
-        this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.search.SLSearch.1
+        this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() {
 
             /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-search-SearchGridQuery$SearchTypeSwitchesValues, reason: not valid java name */
             private /* synthetic */ int[] f129xca68d786 = null;
@@ -99,7 +98,7 @@ public class SLSearch extends SLModule {
                 return iArr;
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+            @Override
             public void onRequest(@Nonnull SearchGridQuery searchGridQuery) {
                 SLSearch.this.currentSearchQuery.set(searchGridQuery);
                 switch (m248x591f1c2a()[searchGridQuery.searchType().ordinal()]) {
@@ -115,8 +114,8 @@ public class SLSearch extends SLModule {
                 }
             }
         });
-        this.parcelInfoRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.search.SLSearch.2
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.parcelInfoRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
+            @Override
             public void onRequest(@Nonnull UUID uuid) {
                 Debug.Printf("ParcelInfo: Requesting for %s", uuid);
                 ParcelInfoRequest parcelInfoRequest = new ParcelInfoRequest();
@@ -137,7 +136,6 @@ public class SLSearch extends SLModule {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchGroups(String str, UUID uuid) {
         DirFindQuery dirFindQuery = new DirFindQuery();
         dirFindQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -150,7 +148,6 @@ public class SLSearch extends SLModule {
         SendMessage(dirFindQuery);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchPeople(String str, UUID uuid) {
         DirFindQuery dirFindQuery = new DirFindQuery();
         dirFindQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -163,7 +160,6 @@ public class SLSearch extends SLModule {
         SendMessage(dirFindQuery);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void SearchPlaces(String str, UUID uuid) {
         DirPlacesQuery dirPlacesQuery = new DirPlacesQuery();
         dirPlacesQuery.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -238,7 +234,7 @@ public class SLSearch extends SLModule {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getSearchManager().searchResults().detachRequestHandler(this.searchRequestHandler);

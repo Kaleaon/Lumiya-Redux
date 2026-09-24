@@ -1,27 +1,37 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelPropertiesRequest
+ * SequenceID should be -1 or -2, and is echoed back in the
+ * parcel properties message.
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelPropertiesRequest Medium 11 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelPropertiesRequest extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public float East;
-        public float North;
-        public int SequenceID;
-        public boolean SnapSelection;
-        public float South;
-        public float West;
+        public float East; // F32
+        public float North; // F32
+        public int SequenceID; // S32
+        public boolean SnapSelection; // BOOL
+        public float South; // F32
+        public float West; // F32
     }
 
     public ParcelPropertiesRequest() {
@@ -30,20 +40,21 @@ public class ParcelPropertiesRequest extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 55;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelPropertiesRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put(Ascii.VT);
+        // Message number: Medium 11 (ParcelPropertiesRequest).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x0B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ParcelData_Field.SequenceID);
@@ -54,7 +65,7 @@ public class ParcelPropertiesRequest extends SLMessage {
         packBoolean(byteBuffer, this.ParcelData_Field.SnapSelection);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

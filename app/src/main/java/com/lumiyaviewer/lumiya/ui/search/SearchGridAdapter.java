@@ -23,7 +23,6 @@ import de.greenrobot.dao.query.LazyList;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
     private final UUID agentUUID;
     private final Context context;
@@ -63,10 +62,10 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
             this.resultItemName.setText(searchGridResult.getItemName());
             if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
                 Integer memberCount = searchGridResult.getMemberCount();
-                this.resultMemberCount.setVisibility(0);
+                this.resultMemberCount.setVisibility(View.VISIBLE);
                 this.resultMemberCount.setText(Integer.toString(memberCount != null ? memberCount.intValue() : 0));
             } else {
-                this.resultMemberCount.setVisibility(8);
+                this.resultMemberCount.setVisibility(View.GONE);
             }
             if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose();
@@ -74,21 +73,21 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
             }
             if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
                 this.userPicView.setChatterID(ChatterID.getGroupChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID()), searchGridResult.getItemName());
-                this.userPicView.setVisibility(0);
+                this.userPicView.setVisibility(View.VISIBLE);
             } else {
                 if (searchGridResult.getItemType() != SearchGridQuery.SearchType.People.ordinal()) {
-                    this.userPicView.setVisibility(8);
+                    this.userPicView.setVisibility(View.GONE);
                     return;
                 }
                 ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID());
                 this.userPicView.setChatterID(userChatterID, searchGridResult.getItemName());
-                this.userPicView.setVisibility(0);
+                this.userPicView.setVisibility(View.VISIBLE);
                 this.chatterNameRetriever = new ChatterNameRetriever(userChatterID, this, UIThreadExecutor.getInstance(), false);
                 this.chatterNameRetriever.subscribe();
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
+        @Override
         public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
             String resolvedName;
             if (chatterNameRetriever != this.chatterNameRetriever || (resolvedName = chatterNameRetriever.getResolvedName()) == null) {
@@ -97,7 +96,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
             this.resultItemName.setText(resolvedName);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public void onClick(View view) {
             if (SearchGridAdapter.this.onSearchResultClickListener == null || this.searchGridResult == null) {
                 return;
@@ -126,7 +125,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
             searchViewHolder.resultMemberCount = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.result_member_count, "field 'resultMemberCount'", TextView.class);
         }
 
-        @Override // butterknife.Unbinder
+        @Override
         @CallSuper
         public void unbind() {
             SearchViewHolder searchViewHolder = this.target;
@@ -148,7 +147,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         setHasStableIds(true);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemCount() {
         if (this.data != null) {
             return this.data.size();
@@ -156,7 +155,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         return 0;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public long getItemId(int i) {
         if (this.data == null || i < 0 || i >= this.data.size()) {
             return -1L;
@@ -164,7 +163,7 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         return this.data.get(i).getId().longValue();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onBindViewHolder(SearchViewHolder searchViewHolder, int i) {
         if (this.data == null || i < 0 || i >= this.data.size()) {
             return;
@@ -172,12 +171,12 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         searchViewHolder.bindToData(this.data.get(i));
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new SearchViewHolder(this.inflater.inflate(com.lumiyaviewer.lumiya.R.layout.search_result_item, viewGroup, false));
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onViewRecycled(SearchViewHolder searchViewHolder) {
         searchViewHolder.onRecycled();
     }

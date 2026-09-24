@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class AvatarRunningSequence extends AnimationTiming {
 
     @Nonnull

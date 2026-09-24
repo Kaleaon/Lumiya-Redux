@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.terrain;
 
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class TerrainPatchInfo {
     private final int hashCode = getHashCode();
     private final TerrainPatchHeightMap heightMap;

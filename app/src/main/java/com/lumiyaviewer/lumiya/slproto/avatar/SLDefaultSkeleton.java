@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.avatar;
 
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 
-/* loaded from: classes.dex */
 public class SLDefaultSkeleton extends SLSkeleton {
     protected SLDefaultSkeleton() {
         SLSkeletonBone sLSkeletonBone = new SLSkeletonBone(SLSkeletonBoneID.mSkull, new LLVector3(0.0f, 0.0f, 0.079f), new LLVector3(0.0f, 0.0f, 0.079f), null, null);

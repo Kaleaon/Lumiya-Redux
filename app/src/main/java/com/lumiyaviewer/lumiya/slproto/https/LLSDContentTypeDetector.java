@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.Debug;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public class LLSDContentTypeDetector {
 
     private static final byte[] UTF8_BOM = { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };

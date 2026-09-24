@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class Friend {
     public static final int GRANT_MAP_LOCATION = 2;
     public static final int GRANT_MODIFY_OBJECTS = 4;

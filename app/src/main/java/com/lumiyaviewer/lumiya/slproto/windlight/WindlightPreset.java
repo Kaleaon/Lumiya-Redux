@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import java.io.IOException;
 import java.io.InputStream;
 
-/* loaded from: classes.dex */
 public class WindlightPreset {
     private static final float WINDLIGHT_GAMMA = 2.2f;
     public float[] ambient;

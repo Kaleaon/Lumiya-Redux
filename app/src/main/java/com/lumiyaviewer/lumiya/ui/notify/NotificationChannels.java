@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class NotificationChannels {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-settings-NotificationTypeSwitchesValues, reason: not valid java name */

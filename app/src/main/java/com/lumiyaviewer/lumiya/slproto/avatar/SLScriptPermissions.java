@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.avatar;
 
-/* loaded from: classes.dex */
 public enum SLScriptPermissions {
     SCRIPT_PERMISSION_DEBIT(2, "take Linden dollars (L$) from you"),
     SCRIPT_PERMISSION_TAKE_CONTROLS(4, "act on your control inputs"),

@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
 
     @Nullable
@@ -28,8 +27,8 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
 
     public InventoryEntryList() {
         this.lock = new Object();
-        this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryEntryList.1
-            @Override // com.google.common.cache.CacheLoader
+        this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() {
+            @Override
             public SLInventoryEntry load(@Nonnull Integer num) {
                 SLInventoryEntry sLInventoryEntry;
                 if (InventoryEntryList.this.cursor == null) {
@@ -58,8 +57,8 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
 
     InventoryEntryList(@Nullable String str, @Nullable SLInventoryEntry sLInventoryEntry, @Nullable Cursor cursor) {
         this.lock = new Object();
-        this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() { // from class: com.lumiyaviewer.lumiya.orm.InventoryEntryList.1
-            @Override // com.google.common.cache.CacheLoader
+        this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() {
+            @Override
             public SLInventoryEntry load(@Nonnull Integer num) {
                 SLInventoryEntry sLInventoryEntry2;
                 if (InventoryEntryList.this.cursor == null) {
@@ -94,7 +93,7 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
         }
     }
 
-    @Override // java.util.AbstractList, java.util.List
+    @Override
     public SLInventoryEntry get(int i) {
         if (this.cursor != null && (!this.cursor.isClosed())) {
             try {
@@ -121,7 +120,7 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
         return this.title;
     }
 
-    @Override // java.util.AbstractCollection, java.util.Collection, java.util.List
+    @Override
     public int size() {
         return this.size;
     }

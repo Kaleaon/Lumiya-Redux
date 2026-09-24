@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/* loaded from: classes.dex */
 public class AvatarVisualState {
     private final UUID agentUUID;
     private final SLObjectAvatarInfo avatarObject;

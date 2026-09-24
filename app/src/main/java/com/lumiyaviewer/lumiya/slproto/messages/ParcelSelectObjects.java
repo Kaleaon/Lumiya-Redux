@@ -6,24 +6,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ParcelSelectObjects
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ParcelSelectObjects Low 202 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ParcelSelectObjects extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
     public ArrayList<ReturnIDs> ReturnIDs_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public int LocalID;
-        public int ReturnType;
+        public int LocalID; // S32
+        public int ReturnType; // U32
     }
 
+    /** Block ReturnIDs, Variable. */
     public static class ReturnIDs {
-        public UUID ReturnID;
+        public UUID ReturnID; // LLUUID
     }
 
     public ParcelSelectObjects() {
@@ -32,21 +42,22 @@ public class ParcelSelectObjects extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ReturnIDs_Fields.size() * 16) + 45;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleParcelSelectObjects(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -54);
+        // Message number: Low 202 (ParcelSelectObjects).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xCA);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
@@ -58,7 +69,7 @@ public class ParcelSelectObjects extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

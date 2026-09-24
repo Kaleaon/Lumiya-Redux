@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class RecyclerSubscribableListAdapter<T> extends RecyclerView.Adapter {
     private final RecyclerSubscribableListAdapter<T>.LocalItemList<T> localItemList;
 
@@ -22,38 +21,38 @@ public abstract class RecyclerSubscribableListAdapter<T> extends RecyclerView.Ad
             this.backingList.addAll(subscribableList.addSubscription(this, optional));
         }
 
-        @Override // java.util.AbstractList, java.util.List
+        @Override
         public void add(int i, T t) {
             this.backingList.add(i, t);
             RecyclerSubscribableListAdapter.this.notifyItemInserted(i);
         }
 
-        @Override // java.util.AbstractList, java.util.AbstractCollection, java.util.Collection, java.util.List
+        @Override
         public void clear() {
             this.backingList.clear();
             RecyclerSubscribableListAdapter.this.notifyDataSetChanged();
         }
 
-        @Override // java.util.AbstractList, java.util.List
+        @Override
         public T get(int i) {
             return this.backingList.get(i);
         }
 
-        @Override // java.util.AbstractList, java.util.List
+        @Override
         public T remove(int i) {
             T remove = this.backingList.remove(i);
             RecyclerSubscribableListAdapter.this.notifyItemRemoved(i);
             return remove;
         }
 
-        @Override // java.util.AbstractList, java.util.List
+        @Override
         public T set(int i, T t) {
             T t2 = this.backingList.set(i, t);
             RecyclerSubscribableListAdapter.this.notifyItemChanged(i);
             return t2;
         }
 
-        @Override // java.util.AbstractCollection, java.util.Collection, java.util.List
+        @Override
         public int size() {
             return this.backingList.size();
         }
@@ -67,12 +66,12 @@ public abstract class RecyclerSubscribableListAdapter<T> extends RecyclerView.Ad
 
     protected abstract RecyclerView.ViewHolder createObjectViewHolder(ViewGroup viewGroup, int i);
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemCount() {
         return this.localItemList.size();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemViewType(int i) {
         return getObjectViewType(this.localItemList.get(i));
     }
@@ -87,12 +86,12 @@ public abstract class RecyclerSubscribableListAdapter<T> extends RecyclerView.Ad
 
     protected abstract int getObjectViewType(T t);
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         bindObjectViewHolder(viewHolder, this.localItemList.get(i));
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return createObjectViewHolder(viewGroup, i);
     }

@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Timer;
 
-/* loaded from: classes.dex */
 public class SLConnection implements Runnable {
     private static final int DEFAULT_IDLE_INTERVAL = 1000;
     private Selector selector;
@@ -54,7 +53,7 @@ public class SLConnection implements Runnable {
         return timer;
     }
 
-    @Override // java.lang.Runnable
+    @Override
     public void run() {
         int i;
         Debug.Log("working thread started");

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public class VertexArray {
     private Vector3Array normals;
     private Vector2Array texCoords;

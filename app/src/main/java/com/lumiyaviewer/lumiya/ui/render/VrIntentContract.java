@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.ui.render;
 
 import androidx.annotation.NonNull;
 
-/* loaded from: classes.dex */
 public final class VrIntentContract {
     public static final String ALIAS_VR_ACTIVITY_CLASS = "com.lumiyaviewer.lumiya.ui.render.VrActivity";
     public static final String ACTION_LEGACY_CARDBOARD_ENTRY = "com.lumiyaviewer.lumiya.ui.render.CardboardActivity";

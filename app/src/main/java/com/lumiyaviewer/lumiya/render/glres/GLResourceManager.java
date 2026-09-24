@@ -9,7 +9,6 @@ import java.util.IdentityHashMap;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-/* loaded from: classes.dex */
 public class GLResourceManager {
     private final ReferenceQueue<GLGenericResource> refQueue = new ReferenceQueue<>();
     private final Set<GLGenericResourceReference> refSet = Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap()));

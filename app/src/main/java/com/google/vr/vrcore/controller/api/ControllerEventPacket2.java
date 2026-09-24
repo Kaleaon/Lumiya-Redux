@@ -4,15 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayDeque;
 
-/* loaded from: classes.dex */
 public final class ControllerEventPacket2 extends ControllerEventPacket {
     private int positionEventCount;
     private ControllerPositionEvent[] positionEvents = new ControllerPositionEvent[16];
     private static ArrayDeque<ControllerEventPacket2> pool = new ArrayDeque<>();
     private static Object poolLock = new Object();
-    public static final Parcelable.Creator<ControllerEventPacket2> CREATOR = new Parcelable.Creator<ControllerEventPacket2>() { // from class: com.google.vr.vrcore.controller.api.ControllerEventPacket2.1
+    public static final Parcelable.Creator<ControllerEventPacket2> CREATOR = new Parcelable.Creator<ControllerEventPacket2>() {
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerEventPacket2 createFromParcel(Parcel parcel) {
             ControllerEventPacket2 obtain = ControllerEventPacket2.obtain();
             obtain.readFromParcel(parcel);
@@ -20,7 +19,7 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         }
 
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // android.os.Parcelable.Creator
+        @Override
         public final ControllerEventPacket2[] newArray(int i) {
             return new ControllerEventPacket2[i];
         }
@@ -51,7 +50,7 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         return controllerPositionEventArr[i];
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket
+    @Override
     protected final int calculateParcelByteLength() {
         int calculateParcelByteLength = super.calculateParcelByteLength() + 4 + 4;
         for (int i = 0; i < this.positionEventCount; i++) {
@@ -60,13 +59,13 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         return calculateParcelByteLength;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket
+    @Override
     public final void clear() {
         super.clear();
         this.positionEventCount = 0;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket, android.os.Parcelable
+    @Override
     public final int describeContents() {
         return 0;
     }
@@ -82,7 +81,7 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         return this.positionEventCount;
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket
+    @Override
     public final void readFromParcel(Parcel parcel) {
         int dataPosition = parcel.dataPosition();
         int readInt = parcel.readInt();
@@ -95,7 +94,7 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         parcel.setDataPosition(dataPosition + readInt);
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket
+    @Override
     public final void recycle() {
         clear();
         synchronized (poolLock) {
@@ -105,7 +104,7 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         }
     }
 
-    @Override // com.google.vr.vrcore.controller.api.ControllerEventPacket, android.os.Parcelable
+    @Override
     public final void writeToParcel(Parcel parcel, int i) {
         int dataPosition = parcel.dataPosition();
         int calculateParcelByteLength = calculateParcelByteLength();

@@ -4,7 +4,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class AnimationSequenceInfo {
     protected static final int INVALID_SEQUENCE_ID = 0;
     protected static final long INVALID_TIMESTAMP = -1;

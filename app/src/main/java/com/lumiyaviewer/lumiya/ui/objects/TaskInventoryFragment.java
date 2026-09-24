@@ -16,10 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
@@ -41,7 +39,6 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TaskInventoryFragment extends FragmentWithTitle {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-inventory-SLAssetTypeSwitchesValues, reason: not valid java name */
@@ -56,8 +53,8 @@ public class TaskInventoryFragment extends FragmentWithTitle {
 
     @Nullable
     private SLObjectProfileData objectProfileData = null;
-    private final Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() { // from class: com.lumiyaviewer.lumiya.ui.objects.TaskInventoryFragment.1
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    private final Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() {
+        @Override
         public void onData(SLTaskInventory sLTaskInventory) {
             TaskInventoryFragment.this.taskInventory = sLTaskInventory;
             View view = TaskInventoryFragment.this.getView();
@@ -67,16 +64,16 @@ public class TaskInventoryFragment extends FragmentWithTitle {
                     ((TaskInventoryListAdapter) adapter).setData(sLTaskInventory);
                 }
                 ((TextView) view.findViewById(R.id.taskInventoryEmptyText)).setText(R.string.object_contents_empty);
-                view.findViewById(R.id.taskInventoryLoading).setVisibility(8);
+                view.findViewById(R.id.taskInventoryLoading).setVisibility(View.GONE);
             }
         }
     };
-    private final Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.3
+    private final Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             TaskInventoryFragment.this.m699x1db91107((SLObjectProfileData) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -94,19 +91,19 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             this.val$progressDialog = progressDialog;
         }
 
-        @Override // com.google.common.base.Function
+        @Override
         @Nullable
         public Void apply(@Nullable final UUID uuid) {
             Executor uIThreadExecutor = UIThreadExecutor.getInstance();
             final int i = this.val$taskID;
             final UserManager userManager = this.val$userManager;
             final ProgressDialog progressDialog = this.val$progressDialog;
-            uIThreadExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.4
+            uIThreadExecutor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     AnonymousClass2.this.m700x9b244ddf((UserManager) userManager, i, (ProgressDialog) progressDialog, (UUID) uuid);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -264,7 +261,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             return;
         }
         if (!userManager.getUserID().equals(this.objectProfileData.ownerUUID())) {
-            Toast.makeText(getActivity(), R.string.object_contents_not_owned, 1).show();
+            Toast.makeText(getActivity(), R.string.object_contents_not_owned, Toast.LENGTH_LONG).show();
             return;
         }
         if (!z) {
@@ -279,21 +276,21 @@ public class TaskInventoryFragment extends FragmentWithTitle {
             }
             if (z2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.1
+                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         TaskInventoryFragment.this.m697x992e5209(dialogInterface, i);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i) {
                         $m$0(dialogInterface, i);
                     }
@@ -378,30 +375,30 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.task_inventory_menu, menu);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.task_inventory, viewGroup, false);
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setAdapter((ListAdapter) new TaskInventoryListAdapter(layoutInflater.getContext()));
         ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setEmptyView(inflate.findViewById(android.R.id.empty));
-        ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$2R1p9WuPUwPagPVBm9YiYK9KyJ0.2
+        ((ListView) inflate.findViewById(R.id.taskInventoryListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
                 TaskInventoryFragment.this.m698x1db827b5(adapterView, view, i, j);
             }
 
-            @Override // android.widget.AdapterView.OnItemClickListener
+            @Override
             public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
                 $m$0(adapterView, view, i, j);
             }
@@ -409,10 +406,10 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         return inflate;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_copy_all /* 2131755858 */:
+            case R.id.item_copy_all:
                 copyAllToInventory(false);
                 return true;
             default:
@@ -420,7 +417,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         setTitle(getString(R.string.object_contents_title), null);
@@ -432,7 +429,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.taskInventorySubscription != null) {
             this.taskInventorySubscription.unsubscribe();

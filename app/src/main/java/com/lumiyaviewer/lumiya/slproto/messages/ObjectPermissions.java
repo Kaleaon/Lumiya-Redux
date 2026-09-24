@@ -5,26 +5,38 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectPermissions
+ * Field - see llpermissionsflags.h
+ * If Set is true, tries to turn on bits in mask.
+ * If set is false, tries to turn off bits in mask.
+ * BUG: This just forces the permissions field.
+ *
+ * <p>Template: {@code ObjectPermissions Low 105 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectPermissions extends SLMessage {
     public AgentData AgentData_Field;
     public HeaderData HeaderData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block HeaderData, Single. */
     public static class HeaderData {
-        public boolean Override;
+        public boolean Override; // BOOL - God-bit.
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int Field;
-        public int Mask;
-        public int ObjectLocalID;
-        public int Set;
+        public int Field; // U8
+        public int Mask; // U32
+        public int ObjectLocalID; // U32
+        public int Set; // U8
     }
 
     public ObjectPermissions() {
@@ -33,21 +45,22 @@ public class ObjectPermissions extends SLMessage {
         this.HeaderData_Field = new HeaderData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 10) + 38;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectPermissions(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 105);
+        // Message number: Low 105 (ObjectPermissions).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x69);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packBoolean(byteBuffer, this.HeaderData_Field.Override);
@@ -60,7 +73,7 @@ public class ObjectPermissions extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

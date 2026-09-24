@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.llsd;
 
-/* loaded from: classes.dex */
 public class LLSDValueTypeException extends LLSDException {
     private static final long serialVersionUID = -1831477542961670453L;
 

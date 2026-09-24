@@ -7,7 +7,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SubscriptionGenericDataPool<K, T> implements Subscribable<K, T>, Unsubscribable<K, T> {
     private final Object lock = new Object();
     private boolean canContainNulls = false;
@@ -58,22 +57,22 @@ public abstract class SubscriptionGenericDataPool<K, T> implements Subscribable<
         setData(k, null, th);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nonnull Subscription.OnData<T> onData) {
         return subscribe(k, null, onData, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nonnull Subscription.OnData<T> onData, @Nullable Subscription.OnError onError) {
         return subscribe(k, null, onData, onError);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nullable Executor executor, @Nonnull Subscription.OnData<T> onData) {
         return subscribe(k, executor, onData, null);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscribable
+    @Override
     public Subscription<K, T> subscribe(@Nonnull K k, @Nullable Executor executor, @Nonnull Subscription.OnData<T> onData, @Nullable Subscription.OnError onError) {
         Throwable error;
         T data;
@@ -88,7 +87,7 @@ public abstract class SubscriptionGenericDataPool<K, T> implements Subscribable<
         return subscription;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Unsubscribable
+    @Override
     public void unsubscribe(Subscription<K, T> subscription) {
         K key = subscription.getKey();
         synchronized (this.lock) {

@@ -12,7 +12,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatFriendshipOfferedEvent extends SLChatYesNoEvent {
     public final UUID sessionID;
 
@@ -26,38 +25,38 @@ public final class SLChatFriendshipOfferedEvent extends SLChatYesNoEvent {
         this.sessionID = improvedInstantMessage.MessageBlock_Field.ID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.FriendshipOffered;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.friendship_request_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.friendship_request_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return context.getString(R.string.friendship_request_question);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.friendship_request_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.friendship_request_accepted);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         super.onYesAction(context, userManager);
         UUID sourceUUID = this.source.getSourceUUID();
@@ -68,7 +67,7 @@ public final class SLChatFriendshipOfferedEvent extends SLChatYesNoEvent {
         activeAgentCircuit.AcceptFriendship(sourceUUID, this.sessionID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setSessionID(this.sessionID);

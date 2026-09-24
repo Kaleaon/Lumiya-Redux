@@ -2,7 +2,6 @@ package com.google.vr.sdk.controller;
 
 import android.graphics.PointF;
 
-/* loaded from: classes.dex */
 public class Controller {
     private static final int DURATION_REQUIRED_TO_RECENTER_NS = 600000000;
     static final int MIN_VRCORE_API_WITH_RECENTERING = 8;

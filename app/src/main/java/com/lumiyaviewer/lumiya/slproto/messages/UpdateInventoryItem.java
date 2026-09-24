@@ -6,40 +6,48 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * This is used bi-directionally between sim, dataserver, and viewer.
+ * THIS MESSAGE CAN NOT CREATE NEW INVENTORY ITEMS.
+ *
+ * <p>Template: {@code UpdateInventoryItem Low 266 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class UpdateInventoryItem extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<InventoryData> InventoryData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
-        public UUID TransactionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block InventoryData, Variable. */
     public static class InventoryData {
-        public int BaseMask;
-        public int CRC;
-        public int CallbackID;
-        public int CreationDate;
-        public UUID CreatorID;
-        public byte[] Description;
-        public int EveryoneMask;
-        public int Flags;
-        public UUID FolderID;
-        public UUID GroupID;
-        public int GroupMask;
-        public boolean GroupOwned;
-        public int InvType;
-        public UUID ItemID;
-        public byte[] Name;
-        public int NextOwnerMask;
-        public UUID OwnerID;
-        public int OwnerMask;
-        public int SalePrice;
-        public int SaleType;
-        public UUID TransactionID;
-        public int Type;
+        public int BaseMask; // U32 - permissions
+        public int CRC; // U32
+        public int CallbackID; // U32 - Async Response
+        public int CreationDate; // S32
+        public UUID CreatorID; // LLUUID - permissions
+        public byte[] Description; // Variable 1
+        public int EveryoneMask; // U32 - permissions
+        public int Flags; // U32
+        public UUID FolderID; // LLUUID
+        public UUID GroupID; // LLUUID - permissions
+        public int GroupMask; // U32 - permissions
+        public boolean GroupOwned; // BOOL - permissions
+        public int InvType; // S8
+        public UUID ItemID; // LLUUID
+        public byte[] Name; // Variable 1
+        public int NextOwnerMask; // U32 - permissions
+        public UUID OwnerID; // LLUUID - permissions
+        public int OwnerMask; // U32 - permissions
+        public int SalePrice; // S32
+        public int SaleType; // U8
+        public UUID TransactionID; // LLUUID
+        public int Type; // S8
     }
 
     public UpdateInventoryItem() {
@@ -47,7 +55,7 @@ public class UpdateInventoryItem extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 53;
         Iterator<?> it = this.InventoryData_Fields.iterator();
@@ -61,16 +69,17 @@ public class UpdateInventoryItem extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleUpdateInventoryItem(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 10);
+        // Message number: Low 266 (UpdateInventoryItem).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x0A);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.TransactionID);
@@ -101,7 +110,7 @@ public class UpdateInventoryItem extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

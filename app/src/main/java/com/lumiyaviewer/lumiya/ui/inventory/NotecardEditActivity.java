@@ -43,7 +43,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class NotecardEditActivity extends ThemedActivity implements SLNotecard.OnAttachmentClickListener, View.OnClickListener {
     private static final String INVENTORY_ENTRY_KEY = "inventoryEntry";
     private static final String IS_SCRIPT_KEY = "isScript";
@@ -60,22 +59,22 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     private boolean isEditingScript = false;
     private UUID taskUUID = null;
     private int taskLocalID = 0;
-    private final SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk
+    private final SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             NotecardEditActivity.this.onNotecardLoaded((AssetData) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.1
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             NotecardEditActivity.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -133,8 +132,6 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         ((EditText) findViewById(R.id.notecardEditDescription)).setText(this.notecardDescription);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
     public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (sLAgentCircuit != null && !sLAgentCircuit.getModules().rlvController.canViewNotecard()) {
             finish();
@@ -142,8 +139,6 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         updateButtonsForMode();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onNotecardLoaded, reason: merged with bridge method [inline-methods] */
     public void onNotecardLoaded(AssetData assetData) {
         if (assetData.getStatus() == 1) {
             try {
@@ -181,12 +176,12 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
                 SLInventory sLInventory = this.agentCircuit.get().getModules().inventory;
                 this.isSaving = true;
                 updateButtonsForMode();
-                sLInventory.UpdateNotecard(this.noteEntry, this.parentFolderUUID, this.isEditingScript, editable, editable2, bArr, this.taskUUID, this.taskLocalID, new SLInventory.OnNotecardUpdatedListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.2
+                sLInventory.UpdateNotecard(this.noteEntry, this.parentFolderUUID, this.isEditingScript, editable, editable2, bArr, this.taskUUID, this.taskLocalID, new SLInventory.OnNotecardUpdatedListener() {
                     private final /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry, String str) {
                         NotecardEditActivity.this.m635xf7aea699(sLInventoryEntry, str);
                     }
 
-                    @Override // com.lumiyaviewer.lumiya.slproto.inventory.SLInventory.OnNotecardUpdatedListener
+                    @Override
                     public final void onNotecardUpdated(SLInventoryEntry sLInventoryEntry, String str) {
                         $m$0(sLInventoryEntry, str);
                     }
@@ -226,14 +221,14 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
             this.menuItemNewAttachment.setVisible(this.editMode);
         }
         if (z && (!z2) && (!this.isSaving)) {
-            findViewById(R.id.notecardSaveButton).setVisibility(this.editMode ? 0 : 8);
-            findViewById(R.id.notecardDiscardButton).setVisibility(this.editMode ? 0 : 8);
-            findViewById(R.id.notecardEditButton).setVisibility(!this.editMode ? 0 : 8);
+            findViewById(R.id.notecardSaveButton).setVisibility(this.editMode ? View.VISIBLE : View.GONE);
+            findViewById(R.id.notecardDiscardButton).setVisibility(this.editMode ? View.VISIBLE : View.GONE);
+            findViewById(R.id.notecardEditButton).setVisibility(!this.editMode ? View.VISIBLE : View.GONE);
             i = -1;
         } else {
-            findViewById(R.id.notecardSaveButton).setVisibility(8);
-            findViewById(R.id.notecardDiscardButton).setVisibility(8);
-            findViewById(R.id.notecardEditButton).setVisibility(4);
+            findViewById(R.id.notecardSaveButton).setVisibility(View.GONE);
+            findViewById(R.id.notecardDiscardButton).setVisibility(View.GONE);
+            findViewById(R.id.notecardEditButton).setVisibility(View.INVISIBLE);
             i = z2 ? R.string.notecard_loading_contents : this.isSaving ? R.string.notecard_saving_contents : this.noteEntry != null ? R.string.notecard_read_only : -1;
         }
         if (i != -1) {
@@ -242,12 +237,12 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
             ((TextView) findViewById(R.id.notecardProgressText)).setText((CharSequence) null);
         }
         if (this.lastErrorMessage != null) {
-            findViewById(R.id.notecard_error_layout).setVisibility(0);
+            findViewById(R.id.notecard_error_layout).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.notecardErrorMessage)).setText(this.lastErrorMessage);
         } else {
-            findViewById(R.id.notecard_error_layout).setVisibility(8);
+            findViewById(R.id.notecard_error_layout).setVisibility(View.GONE);
         }
-        findViewById(R.id.notecardProgressIndicator).setVisibility((z2 || this.isSaving) ? 0 : 8);
+        findViewById(R.id.notecardProgressIndicator).setVisibility((z2 || this.isSaving) ? View.VISIBLE : View.GONE);
         ((EditText) findViewById(R.id.notecardEditContents)).setKeyListener(this.editMode ? TextKeyListener.getInstance() : null);
         ((EditText) findViewById(R.id.notecardEditTitle)).setKeyListener(this.editMode ? TextKeyListener.getInstance() : null);
         ((EditText) findViewById(R.id.notecardEditDescription)).setKeyListener(this.editMode ? TextKeyListener.getInstance() : null);
@@ -280,12 +275,12 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_inventory_NotecardEditActivity_19315, reason: not valid java name */
     /* synthetic */ void m635xf7aea699(final SLInventoryEntry sLInventoryEntry, final String str) {
-        UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.5
+        UIThreadExecutor.getInstance().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 NotecardEditActivity.this.m636xf7aea771((SLInventoryEntry) sLInventoryEntry, (String) str);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -300,7 +295,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         updateButtonsForMode();
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onActivityResult(int i, int i2, Intent intent) {
         SLInventoryEntry sLInventoryEntry;
         switch (i) {
@@ -317,18 +312,18 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.assets.SLNotecard.OnAttachmentClickListener
+    @Override
     public void onAttachmentClick(final SLInventoryEntry sLInventoryEntry) {
         if (sLInventoryEntry.invType == SLInventoryType.IT_LANDMARK.getTypeCode()) {
             CharSequence[] charSequenceArr = {getString(R.string.attachment_action_teleport), getString(R.string.attachment_action_copy)};
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.attachment_action_title));
-            builder.setItems(charSequenceArr, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.3
+            builder.setItems(charSequenceArr, new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     NotecardEditActivity.this.m633xf7ac5d94((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -339,12 +334,12 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         CharSequence[] charSequenceArr2 = {getString(R.string.attachment_action_copy)};
         AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
         builder2.setTitle(getString(R.string.attachment_action_title));
-        builder2.setItems(charSequenceArr2, new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.4
+        builder2.setItems(charSequenceArr2, new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 NotecardEditActivity.this.m634xf7acca34((SLInventoryEntry) sLInventoryEntry, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -352,26 +347,26 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         builder2.create().show();
     }
 
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.notecardErrorDiscard /* 2131755507 */:
+            case R.id.notecardErrorDiscard:
                 this.lastErrorMessage = null;
                 updateButtonsForMode();
                 break;
-            case R.id.notecardSaveButton /* 2131755510 */:
+            case R.id.notecardSaveButton:
                 saveChanges();
                 break;
-            case R.id.notecardDiscardButton /* 2131755511 */:
+            case R.id.notecardDiscardButton:
                 discardChanges();
                 break;
-            case R.id.notecardEditButton /* 2131755512 */:
+            case R.id.notecardEditButton:
                 startEditing();
                 break;
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ThemedActivity, androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Intent intent = getIntent();
@@ -409,7 +404,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         }
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.notecard_menu, menu);
         this.menuItemNewAttachment = menu.findItem(R.id.item_new_attachment);
@@ -420,10 +415,10 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
         return true;
     }
 
-    @Override // android.app.Activity
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_new_attachment /* 2131755826 */:
+            case R.id.item_new_attachment:
                 createNewAttachment();
                 return true;
             default:

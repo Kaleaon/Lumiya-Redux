@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.types.Vector3Array;
 import com.lumiyaviewer.lumiya.slproto.types.VertexArray;
 import java.util.ArrayList;
 
-/* loaded from: classes.dex */
 public class PrimVolumeFace {
     public static final int BOTTOM_MASK = 1024;
     public static final int CAP_MASK = 2;

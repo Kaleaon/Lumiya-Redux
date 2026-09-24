@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.avatar.BakedTextureIndex;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class BakeLayers {
     public static Map<BakedTextureIndex, BakeLayerSet> layerSets = new EnumMap(BakedTextureIndex.class);
 

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.picking;
 import android.opengl.Matrix;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector4;
 
-/* loaded from: classes.dex */
 public class IntersectInfo {
     public final int faceID;
     public final boolean faceKnown;

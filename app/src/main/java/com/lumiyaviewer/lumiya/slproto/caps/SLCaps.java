@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLCaps {
     private final Map<SLCapability, String> caps = new EnumMap(SLCapability.class);
 

@@ -3,12 +3,22 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
+/**
+ * NearestLandingPointUpdated
+ * sim->dataserver
+ * Sent from a region to the data server
+ * to have the dataserver note/clear in the db
+ * that the region has updated it's nearest landing point
+ *
+ * <p>Template: {@code NearestLandingRegionUpdated Low 146 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class NearestLandingRegionUpdated extends SLMessage {
     public RegionData RegionData_Field;
 
+    /** Block RegionData, Single. */
     public static class RegionData {
-        public long RegionHandle;
+        public long RegionHandle; // U64
     }
 
     public NearestLandingRegionUpdated() {
@@ -16,25 +26,26 @@ public class NearestLandingRegionUpdated extends SLMessage {
         this.RegionData_Field = new RegionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 12;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleNearestLandingRegionUpdated(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -110);
+        // Message number: Low 146 (NearestLandingRegionUpdated).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x92);
         packLong(byteBuffer, this.RegionData_Field.RegionHandle);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);
     }

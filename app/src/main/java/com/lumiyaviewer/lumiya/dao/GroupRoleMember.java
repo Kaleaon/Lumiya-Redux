@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.dao;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GroupRoleMember {
     private UUID groupID;
     private UUID requestID;

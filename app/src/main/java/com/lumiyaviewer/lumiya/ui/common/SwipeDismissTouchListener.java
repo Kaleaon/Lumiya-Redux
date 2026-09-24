@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.lumiyaviewer.lumiya.Debug;
 
 @TargetApi(12)
-/* loaded from: classes.dex */
 public class SwipeDismissTouchListener implements OnInterceptTouchEventListener {
     private final boolean canSwipeDown;
     private final boolean canSwipeLeft;
@@ -64,13 +63,12 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
         this.mCallbacks = dismissCallbacks;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void performDismiss() {
         final ViewGroup.LayoutParams layoutParams = this.mView.getLayoutParams();
         final int height = this.mView.getHeight();
         ValueAnimator duration = ValueAnimator.ofInt(height, 1).setDuration(this.mAnimationTime);
-        duration.addListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissTouchListener.2
-            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+        duration.addListener(new AnimatorListenerAdapter() {
+            @Override
             public void onAnimationEnd(Animator animator) {
                 SwipeDismissTouchListener.this.mCallbacks.onDismiss(SwipeDismissTouchListener.this.mView, SwipeDismissTouchListener.this.mToken);
                 SwipeDismissTouchListener.this.mView.setAlpha(1.0f);
@@ -80,8 +78,8 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
                 SwipeDismissTouchListener.this.mView.setLayoutParams(layoutParams);
             }
         });
-        duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissTouchListener.3
-            @Override // android.animation.ValueAnimator.AnimatorUpdateListener
+        duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 layoutParams.height = ((Integer) valueAnimator.getAnimatedValue()).intValue();
                 SwipeDismissTouchListener.this.mView.setLayoutParams(layoutParams);
@@ -90,13 +88,13 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
         duration.start();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.OnInterceptTouchEventListener
+    @Override
     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
         return false;
     }
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
-    @Override // com.lumiyaviewer.lumiya.ui.common.OnInterceptTouchEventListener
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         boolean z;
         boolean z2;
@@ -164,8 +162,8 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
                         dismiss = false;
                     }
                     if (dismiss) {
-                        this.mView.animate().translationX(f2).translationY(f).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() { // from class: com.lumiyaviewer.lumiya.ui.common.SwipeDismissTouchListener.1
-                            @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
+                        this.mView.animate().translationX(f2).translationY(f).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() {
+                            @Override
                             public void onAnimationEnd(Animator animator) {
                                 SwipeDismissTouchListener.this.performDismiss();
                             }
@@ -260,7 +258,7 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.OnInterceptTouchEventListener
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         return false;
     }

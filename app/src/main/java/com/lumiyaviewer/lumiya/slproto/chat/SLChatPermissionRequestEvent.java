@@ -14,7 +14,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
     private final UUID ItemID;
     private final String ObjectOwner;
@@ -41,23 +40,23 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         this.Questions = i;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.PermissionRequest;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoButton(Context context) {
         return context.getString(R.string.permission_request_no);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getNoMessage(Context context) {
         return context.getString(R.string.permission_request_declined);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getQuestion(Context context) {
         return context.getString(R.string.permission_request_question);
     }
@@ -66,7 +65,7 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         return this.Questions;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         String str = "";
         for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.values()) {
@@ -80,28 +79,28 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         return context.getString(R.string.permission_request_format, this.ObjectOwner, str);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesButton(Context context) {
         return context.getString(R.string.permission_request_yes);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public String getYesMessage(Context context) {
         return context.getString(R.string.permission_request_accepted);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public boolean isObjectPopup() {
         return true;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     protected void onNoAction(Context context, UserManager userManager) {
         super.onNoAction(context, userManager);
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
+    @Override
     public void onYesAction(Context context, UserManager userManager) {
         super.onYesAction(context, userManager);
         SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
@@ -111,7 +110,7 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         chatMessage.setItemID(this.ItemID);

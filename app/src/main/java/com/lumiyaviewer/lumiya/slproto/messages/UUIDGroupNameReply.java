@@ -6,20 +6,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * UUIDGroupNameReply
+ * Translate a UUID into a group name
+ *
+ * <p>Template: {@code UUIDGroupNameReply Low 238 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code handleUUIDGroupNameReply()} in indra/llmessage/llcachename.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class UUIDGroupNameReply extends SLMessage {
     public ArrayList<UUIDNameBlock> UUIDNameBlock_Fields = new ArrayList<>();
 
+    /** Block UUIDNameBlock, Variable. */
     public static class UUIDNameBlock {
-        public byte[] GroupName;
-        public UUID ID;
+        public byte[] GroupName; // Variable 1
+        public UUID ID; // LLUUID
     }
 
     public UUIDGroupNameReply() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 5;
         Iterator<?> it = this.UUIDNameBlock_Fields.iterator();
@@ -32,16 +41,17 @@ public class UUIDGroupNameReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleUUIDGroupNameReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -18);
+        // Message number: Low 238 (UUIDGroupNameReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xEE);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
         for (UUIDNameBlock uUIDNameBlock : this.UUIDNameBlock_Fields) {
             packUUID(byteBuffer, uUIDNameBlock.ID);
@@ -49,7 +59,7 @@ public class UUIDGroupNameReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

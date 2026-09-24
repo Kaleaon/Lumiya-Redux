@@ -21,7 +21,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-/* loaded from: classes.dex */
 public class TextureViewFragment extends StateAwareFragment {
     private static final String ASSET_UUID_KEY = "assetUUID";
 
@@ -43,7 +42,7 @@ public class TextureViewFragment extends StateAwareFragment {
             this();
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
                 this.texture = (OpenJPEG) obj;
@@ -53,8 +52,7 @@ public class TextureViewFragment extends StateAwareFragment {
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public Bitmap doInBackground(UUID... uuidArr) {
             Debug.Printf("loading asset ID %s", uuidArr[0].toString());
             TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuidArr[0], TextureClass.Asset), this);
@@ -78,8 +76,7 @@ public class TextureViewFragment extends StateAwareFragment {
             return null;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Bitmap bitmap) {
             if (TextureViewFragment.this.isFragmentStarted() && TextureViewFragment.this.textureImageView != null && TextureViewFragment.this.loadingLayout != null) {
                 if (bitmap != null) {
@@ -95,7 +92,7 @@ public class TextureViewFragment extends StateAwareFragment {
             TextureViewFragment.this.loadAssetImageTask = null;
         }
 
-        @Override // android.os.AsyncTask
+        @Override
         protected void onPreExecute() {
             if (!TextureViewFragment.this.isFragmentStarted() || TextureViewFragment.this.loadingLayout == null) {
                 return;
@@ -111,7 +108,7 @@ public class TextureViewFragment extends StateAwareFragment {
         return bundle;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.texture_view_fragment, viewGroup, false);
@@ -121,7 +118,7 @@ public class TextureViewFragment extends StateAwareFragment {
         return inflate;
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         LoadAssetImageTask loadAssetImageTask = null;
         super.onStart();
@@ -136,7 +133,7 @@ public class TextureViewFragment extends StateAwareFragment {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         if (this.loadAssetImageTask != null) {
             this.loadAssetImageTask.cancel(true);

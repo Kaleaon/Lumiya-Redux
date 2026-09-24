@@ -9,7 +9,6 @@ import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntry;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLObjectAvatarInfo extends SLObjectInfo {
 
     @Nonnull
@@ -37,7 +36,7 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         this.avatarVisualState.ApplyVisualParams(iArr);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     @Nonnull
     protected DrawListObjectEntry createDrawListEntry() {
         return new DrawListAvatarEntry(this);
@@ -48,12 +47,12 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         return this.avatarVisualState;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     public String getName() {
         return this.isMyAvatar ? "(my avatar)" : "(avatar)";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     public boolean isAvatar() {
         return true;
     }
@@ -62,7 +61,7 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         return this.isMyAvatar;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo
+    @Override
     public void onTexturesUpdate(SLTextureEntry sLTextureEntry) {
         this.avatarVisualState.ApplyTextures(sLTextureEntry, false);
     }

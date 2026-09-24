@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
 import com.lumiyaviewer.lumiya.ui.chat.HasUserPicClickHandler;
 import java.lang.ref.WeakReference;
 
-/* loaded from: classes.dex */
 public class ChatEventViewHolder extends RecyclerView.ViewHolder {
     protected final WeakReference<RecyclerView.Adapter> adapter;
     final View bubbleView;
@@ -62,12 +61,12 @@ public class ChatEventViewHolder extends RecyclerView.ViewHolder {
     public void updateTimestamp(Context context) {
         if (this.timestampView != null) {
             if (this.updateTimestamp == 0) {
-                this.timestampView.setVisibility(8);
+                this.timestampView.setVisibility(View.GONE);
                 return;
             }
             long currentTimeMillis = System.currentTimeMillis();
             this.timestampView.setText(currentTimeMillis < this.updateTimestamp + AnimationSequenceInfo.MAX_ANIMATION_LENGTH ? context.getString(R.string.now) : DateUtils.getRelativeTimeSpanString(this.updateTimestamp, currentTimeMillis, AnimationSequenceInfo.MAX_ANIMATION_LENGTH, 262144));
-            this.timestampView.setVisibility(0);
+            this.timestampView.setVisibility(View.VISIBLE);
         }
     }
 }

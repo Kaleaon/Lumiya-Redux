@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
     public static final String TABLENAME = "SearchGridResults";
 
@@ -40,8 +39,7 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'SearchGridResults'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, SearchGridResult searchGridResult) {
         sQLiteStatement.clearBindings();
         Long id = searchGridResult.getId();
@@ -59,7 +57,7 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         }
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long getKey(SearchGridResult searchGridResult) {
         if (searchGridResult != null) {
             return searchGridResult.getId();
@@ -67,18 +65,18 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public SearchGridResult readEntity(Cursor cursor, int i) {
         return new SearchGridResult(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)), UUID.fromString(cursor.getString(i + 1)), cursor.getInt(i + 2), UUID.fromString(cursor.getString(i + 3)), cursor.getString(i + 4), cursor.getInt(i + 5), cursor.isNull(i + 6) ? null : Integer.valueOf(cursor.getInt(i + 6)));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, SearchGridResult searchGridResult, int i) {
         searchGridResult.setId(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)));
         searchGridResult.setSearchUUID(UUID.fromString(cursor.getString(i + 1)));
@@ -90,7 +88,7 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -98,8 +96,7 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         return Long.valueOf(cursor.getLong(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long updateKeyAfterInsert(SearchGridResult searchGridResult, long j) {
         searchGridResult.setId(Long.valueOf(j));
         return Long.valueOf(j);

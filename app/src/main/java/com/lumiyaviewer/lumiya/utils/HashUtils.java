@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class HashUtils {
     private static MessageDigest MD5 = null;
 

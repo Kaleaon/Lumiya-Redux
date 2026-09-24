@@ -4,21 +4,31 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * CurrentInterval = 0  =>  this period (week, day, etc.)
+ * CurrentInterval = 1  =>  last period
+ * viewer -> simulator -> dataserver
+ * reliable
+ *
+ * <p>Template: {@code GroupAccountSummaryRequest Low 353 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class GroupAccountSummaryRequest extends SLMessage {
     public AgentData AgentData_Field;
     public MoneyData MoneyData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID GroupID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID GroupID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block MoneyData, Single. */
     public static class MoneyData {
-        public int CurrentInterval;
-        public int IntervalDays;
-        public UUID RequestID;
+        public int CurrentInterval; // S32
+        public int IntervalDays; // S32
+        public UUID RequestID; // LLUUID
     }
 
     public GroupAccountSummaryRequest() {
@@ -27,21 +37,22 @@ public class GroupAccountSummaryRequest extends SLMessage {
         this.MoneyData_Field = new MoneyData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 76;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGroupAccountSummaryRequest(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 97);
+        // Message number: Low 353 (GroupAccountSummaryRequest).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x61);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -50,7 +61,7 @@ public class GroupAccountSummaryRequest extends SLMessage {
         packInt(byteBuffer, this.MoneyData_Field.CurrentInterval);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -5,18 +5,27 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * SetFollowCamProperties
+ *
+ * <p>Template: {@code SetFollowCamProperties Low 159 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_set_follow_cam_properties()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class SetFollowCamProperties extends SLMessage {
     public ArrayList<CameraProperty> CameraProperty_Fields = new ArrayList<>();
     public ObjectData ObjectData_Field;
 
+    /** Block CameraProperty, Variable. */
     public static class CameraProperty {
-        public int Type;
-        public float Value;
+        public int Type; // S32
+        public float Value; // F32
     }
 
+    /** Block ObjectData, Single. */
     public static class ObjectData {
-        public UUID ObjectID;
+        public UUID ObjectID; // LLUUID
     }
 
     public SetFollowCamProperties() {
@@ -24,21 +33,22 @@ public class SetFollowCamProperties extends SLMessage {
         this.ObjectData_Field = new ObjectData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.CameraProperty_Fields.size() * 8) + 21;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetFollowCamProperties(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -97);
+        // Message number: Low 159 (SetFollowCamProperties).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x9F);
         packUUID(byteBuffer, this.ObjectData_Field.ObjectID);
         byteBuffer.put((byte) this.CameraProperty_Fields.size());
         for (CameraProperty cameraProperty : this.CameraProperty_Fields) {
@@ -47,7 +57,7 @@ public class SetFollowCamProperties extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ObjectData_Field.ObjectID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;

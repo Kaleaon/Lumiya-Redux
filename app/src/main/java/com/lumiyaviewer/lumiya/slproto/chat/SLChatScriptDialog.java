@@ -27,7 +27,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public final class SLChatScriptDialog extends SLChatDialogEvent {
     private static final int[] dialogButtonIds = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12};
     private final String[] buttons;
@@ -47,21 +46,21 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
                 if (i < SLChatScriptDialog.this.buttons.length) {
                     ((Button) findViewById(SLChatScriptDialog.dialogButtonIds[i])).setText(SLChatScriptDialog.this.buttons[i]);
                     findViewById(SLChatScriptDialog.dialogButtonIds[i]).setOnClickListener(this);
-                    findViewById(SLChatScriptDialog.dialogButtonIds[i]).setVisibility(0);
+                    findViewById(SLChatScriptDialog.dialogButtonIds[i]).setVisibility(View.VISIBLE);
                 } else {
-                    findViewById(SLChatScriptDialog.dialogButtonIds[i]).setVisibility(8);
+                    findViewById(SLChatScriptDialog.dialogButtonIds[i]).setVisibility(View.GONE);
                 }
             }
             setOnCancelListener(this);
         }
 
-        @Override // android.content.DialogInterface.OnCancelListener
+        @Override
         public void onCancel(DialogInterface dialogInterface) {
             SLChatScriptDialog.this.onDialogIgnored(this.userManager);
             dismiss();
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public void onClick(View view) {
             int i = 0;
             while (true) {
@@ -98,7 +97,7 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
         this.buttons = strArr;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void bindViewHolder(ChatEventViewHolder chatEventViewHolder, UserManager userManager, @Nullable ChatEventTimestampUpdater chatEventTimestampUpdater) {
         super.bindViewHolder(chatEventViewHolder, userManager, chatEventTimestampUpdater);
         if (chatEventViewHolder instanceof ChatScriptDialogViewHolder) {
@@ -110,22 +109,22 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
                 } else {
                     chatScriptDialogViewHolder.dialogResultTextView.setText(chatScriptDialogViewHolder.dialogResultTextView.getContext().getString(R.string.dialog_selected_format, this.selectedOption));
                 }
-                chatScriptDialogViewHolder.dialogResultTextView.findViewById(R.id.dialogResultTextView).setVisibility(0);
-                chatScriptDialogViewHolder.dialogButtonsLayout.findViewById(R.id.dialogButtonsLayout).setVisibility(8);
+                chatScriptDialogViewHolder.dialogResultTextView.findViewById(R.id.dialogResultTextView).setVisibility(View.VISIBLE);
+                chatScriptDialogViewHolder.dialogButtonsLayout.findViewById(R.id.dialogButtonsLayout).setVisibility(View.GONE);
                 chatScriptDialogViewHolder.cardView.setCardElevation(0.0f);
                 return;
             }
-            chatScriptDialogViewHolder.dialogResultTextView.findViewById(R.id.dialogResultTextView).setVisibility(8);
+            chatScriptDialogViewHolder.dialogResultTextView.findViewById(R.id.dialogResultTextView).setVisibility(View.GONE);
             for (int i = 0; i < chatScriptDialogViewHolder.dialogButtons.length; i++) {
                 if (i < this.buttons.length) {
                     chatScriptDialogViewHolder.dialogButtons[i].setText(this.buttons[i]);
-                    chatScriptDialogViewHolder.dialogButtons[i].setVisibility(0);
+                    chatScriptDialogViewHolder.dialogButtons[i].setVisibility(View.VISIBLE);
                 } else {
-                    chatScriptDialogViewHolder.dialogButtons[i].setVisibility(8);
+                    chatScriptDialogViewHolder.dialogButtons[i].setVisibility(View.GONE);
                 }
             }
-            chatScriptDialogViewHolder.dialogButtonsLayout.setVisibility(0);
-            chatScriptDialogViewHolder.cardView.setCardElevation(TypedValue.applyDimension(1, 4.0f, chatScriptDialogViewHolder.cardView.getResources().getDisplayMetrics()));
+            chatScriptDialogViewHolder.dialogButtonsLayout.setVisibility(View.VISIBLE);
+            chatScriptDialogViewHolder.cardView.setCardElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, chatScriptDialogViewHolder.cardView.getResources().getDisplayMetrics()));
         }
     }
 
@@ -133,18 +132,18 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
         return this.buttons;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     @Nonnull
     protected SLChatEvent.ChatMessageType getMessageType() {
         return SLChatEvent.ChatMessageType.ScriptDialog;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public SLChatEvent.ChatMessageViewType getViewType() {
         return SLChatEvent.ChatMessageViewType.VIEW_TYPE_DIALOG;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public boolean isObjectPopup() {
         return true;
     }
@@ -162,14 +161,13 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatDialogEvent
-    /* renamed from: onDialogIgnored */
+    @Override
     public void onDialogIgnored(UserManager userManager) {
         super.onDialogIgnored(userManager);
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatDialogEvent, com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
+    @Override
     public void serializeToDatabaseObject(@Nonnull ChatMessage chatMessage) {
         super.serializeToDatabaseObject(chatMessage);
         try {
@@ -182,7 +180,7 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
         chatMessage.setDialogSelectedOption(this.selectedOption);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatDialogEvent
+    @Override
     public void showDialog(Context context, UserManager userManager) {
         new ScriptDialogDialog(context, userManager, this.source.getSourceName(userManager), this.text).show();
     }

@@ -1,8 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.users;
 
 import com.lumiyaviewer.lumiya.dao.DaoSession;
-import com.lumiyaviewer.lumiya.react.RequestSource;
-import com.lumiyaviewer.lumiya.react.Subscribable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,14 +10,12 @@ import java.io.Serializable;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SerializableResponseCacher<Key, MessageType extends Serializable> extends ResponseCacher<Key, MessageType> {
     public SerializableResponseCacher(DaoSession daoSession, Executor executor, String str) {
         super(daoSession, executor, str);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
+    @Override
     public MessageType loadCached(byte[] bArr) {
         try {
             return (MessageType) new ObjectInputStream(new ByteArrayInputStream(bArr)).readObject();
@@ -32,8 +28,7 @@ public class SerializableResponseCacher<Key, MessageType extends Serializable> e
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // com.lumiyaviewer.lumiya.slproto.users.ResponseCacher
+    @Override
     public byte[] storeCached(@Nonnull MessageType messagetype) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

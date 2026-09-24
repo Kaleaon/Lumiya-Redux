@@ -18,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class SLNotecard {
     private static final String DELIM_ANY = " \t\n";
     private static final String DELIM_EOL = "\n";
@@ -35,12 +34,12 @@ public class SLNotecard {
             this.clickListener = onAttachmentClickListener;
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.assets.SLNotecard.InventoryEntrySpan
+        @Override
         public SLInventoryEntry getEntry() {
             return this.entry;
         }
 
-        @Override // android.text.style.ClickableSpan
+        @Override
         public void onClick(View view) {
             if (this.clickListener != null) {
                 this.clickListener.onAttachmentClick(this.entry);
@@ -57,7 +56,7 @@ public class SLNotecard {
             this.linkText = sLInventoryEntry.getReadableTextForLink();
         }
 
-        @Override // android.text.style.ReplacementSpan
+        @Override
         public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             if (i != i2) {
                 Paint paint2 = new Paint(paint);
@@ -67,12 +66,12 @@ public class SLNotecard {
             }
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.assets.SLNotecard.InventoryEntrySpan
+        @Override
         public SLInventoryEntry getEntry() {
             return this.entry;
         }
 
-        @Override // android.text.style.ReplacementSpan
+        @Override
         public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
             if (fontMetricsInt != null) {
                 Paint.FontMetricsInt fontMetricsInt2 = paint.getFontMetricsInt();

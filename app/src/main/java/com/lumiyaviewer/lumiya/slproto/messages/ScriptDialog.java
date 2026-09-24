@@ -6,28 +6,40 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptDialog
+ * sim -> viewer
+ * reliable
+ *
+ * <p>Template: {@code ScriptDialog Low 190 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_script_dialog()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class ScriptDialog extends SLMessage {
     public Data Data_Field;
     public ArrayList<Buttons> Buttons_Fields = new ArrayList<>();
     public ArrayList<OwnerData> OwnerData_Fields = new ArrayList<>();
 
+    /** Block Buttons, Variable. */
     public static class Buttons {
-        public byte[] ButtonLabel;
+        public byte[] ButtonLabel; // Variable 1
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int ChatChannel;
-        public byte[] FirstName;
-        public UUID ImageID;
-        public byte[] LastName;
-        public byte[] Message;
-        public UUID ObjectID;
-        public byte[] ObjectName;
+        public int ChatChannel; // S32
+        public byte[] FirstName; // Variable 1
+        public UUID ImageID; // LLUUID
+        public byte[] LastName; // Variable 1
+        public byte[] Message; // Variable 2
+        public UUID ObjectID; // LLUUID
+        public byte[] ObjectName; // Variable 1
     }
 
+    /** Block OwnerData, Variable. */
     public static class OwnerData {
-        public UUID OwnerID;
+        public UUID OwnerID; // LLUUID
     }
 
     public ScriptDialog() {
@@ -35,7 +47,7 @@ public class ScriptDialog extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.Data_Field.FirstName.length + 17 + 1 + this.Data_Field.LastName.length + 1 + this.Data_Field.ObjectName.length + 2 + this.Data_Field.Message.length + 4 + 16 + 4 + 1;
         Iterator<?> it = this.Buttons_Fields.iterator();
@@ -48,16 +60,17 @@ public class ScriptDialog extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleScriptDialog(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -66);
+        // Message number: Low 190 (ScriptDialog).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xBE);
         packUUID(byteBuffer, this.Data_Field.ObjectID);
         packVariable(byteBuffer, this.Data_Field.FirstName, 1);
         packVariable(byteBuffer, this.Data_Field.LastName, 1);
@@ -77,7 +90,7 @@ public class ScriptDialog extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Data_Field.ObjectID = unpackUUID(byteBuffer);
         this.Data_Field.FirstName = unpackVariable(byteBuffer, 1);

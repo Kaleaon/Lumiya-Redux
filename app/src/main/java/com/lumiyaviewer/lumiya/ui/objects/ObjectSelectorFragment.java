@@ -48,29 +48,28 @@ import java.util.Iterator;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
     private static final int MAX_FILTER_DISTANCE = 256;
     private static final int PROGRESS_BAR_SIZE_DIP = 4;
     private SearchView searchView;
     private Subscription<SubscriptionSingleKey, ObjectsManager.ObjectDisplayList> subscription;
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create();
-    private final Subscription.OnError onObjectListError = new Subscription.OnError() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$rXtKRyOts6GGB3GxWNYA5oEvU2Y.1
+    private final Subscription.OnError onObjectListError = new Subscription.OnError() {
         private final /* synthetic */ void $m$0(Throwable th) {
             ObjectSelectorFragment.this.m692x47832f4(th);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+        @Override
         public final void onError(Throwable th) {
             $m$0(th);
         }
     };
-    private final Subscription.OnData<ObjectsManager.ObjectDisplayList> onObjectListData = new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.objects.-$Lambda$rXtKRyOts6GGB3GxWNYA5oEvU2Y
+    private final Subscription.OnData<ObjectsManager.ObjectDisplayList> onObjectListData = new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             ObjectSelectorFragment.this.m693x4785519((ObjectsManager.ObjectDisplayList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
@@ -107,7 +106,6 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void updateFilter() {
         SLAgentCircuit activeAgentCircuit;
         SLModules modules;
@@ -134,12 +132,12 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         }
         View findViewById = view.findViewById(R.id.object_progress_bar);
         if (findViewById != null) {
-            findViewById.setVisibility(8);
+            findViewById.setVisibility(View.GONE);
         }
-        view.findViewById(R.id.empty_object_list_progress).setVisibility(8);
+        view.findViewById(R.id.empty_object_list_progress).setVisibility(View.GONE);
         ((TextView) view.findViewById(R.id.empty_object_list_message)).setText(R.string.object_list_not_connected);
-        view.findViewById(R.id.empty_object_list).setVisibility(0);
-        view.findViewById(R.id.objectListView).setVisibility(8);
+        view.findViewById(R.id.empty_object_list).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.objectListView).setVisibility(View.GONE);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_objects_ObjectSelectorFragment_10971, reason: not valid java name */
@@ -149,12 +147,12 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         if (view != null) {
             View findViewById = view.findViewById(R.id.object_progress_bar);
             if (findViewById != null) {
-                findViewById.setVisibility(objectDisplayList.isLoading ? 0 : 8);
+                findViewById.setVisibility(objectDisplayList.isLoading ? View.VISIBLE : View.GONE);
             }
-            view.findViewById(R.id.empty_object_list_progress).setVisibility(objectDisplayList.isLoading ? 0 : 8);
+            view.findViewById(R.id.empty_object_list_progress).setVisibility(objectDisplayList.isLoading ? View.VISIBLE : View.GONE);
             ((TextView) view.findViewById(R.id.empty_object_list_message)).setText(objectDisplayList.isLoading ? R.string.object_list_loading : R.string.object_list_result_empty);
-            view.findViewById(R.id.empty_object_list).setVisibility(immutableList.isEmpty() ? 0 : 8);
-            view.findViewById(R.id.objectListView).setVisibility(immutableList.isEmpty() ? 8 : 0);
+            view.findViewById(R.id.empty_object_list).setVisibility(immutableList.isEmpty() ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.objectListView).setVisibility(immutableList.isEmpty() ? View.GONE : View.VISIBLE);
             ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.objectListView);
             ExpandableListAdapter expandableListAdapter = expandableListView.getExpandableListAdapter();
             if (expandableListAdapter instanceof ObjectListAdapter) {
@@ -180,12 +178,12 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         }
     }
 
-    @Override // android.widget.CompoundButton.OnCheckedChangeListener
+    @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
         updateFilter();
     }
 
-    @Override // android.widget.ExpandableListView.OnChildClickListener
+    @Override
     public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i2, long j) {
         SLObjectDisplayInfo child;
         ExpandableListAdapter expandableListAdapter = expandableListView.getExpandableListAdapter();
@@ -196,36 +194,36 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         return true;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@androidx.annotation.Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.menu_object_selector, menu);
         this.searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.ObjectSelectorFragment.1
-            @Override // androidx.appcompat.widget.SearchView.OnQueryTextListener
+        this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
             public boolean onQueryTextChange(String str) {
                 Debug.Printf("searchview: textchange", new Object[0]);
                 ObjectSelectorFragment.this.updateFilter();
                 return true;
             }
 
-            @Override // androidx.appcompat.widget.SearchView.OnQueryTextListener
+            @Override
             public boolean onQueryTextSubmit(String str) {
                 return true;
             }
         });
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() { // from class: com.lumiyaviewer.lumiya.ui.objects.ObjectSelectorFragment.2
-            @Override // androidx.core.view.MenuItemCompat.OnActionExpandListener
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+            @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 View view = ObjectSelectorFragment.this.getView();
                 if (view != null) {
-                    view.findViewById(R.id.filterPanel).setVisibility(8);
+                    view.findViewById(R.id.filterPanel).setVisibility(View.GONE);
                     Animation animation = view.findViewById(R.id.filterPanel).getAnimation();
                     if (animation != null) {
                         animation.cancel();
@@ -235,11 +233,11 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
                 return true;
             }
 
-            @Override // androidx.core.view.MenuItemCompat.OnActionExpandListener
+            @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
                 View view = ObjectSelectorFragment.this.getView();
                 if (view != null) {
-                    view.findViewById(R.id.filterPanel).setVisibility(0);
+                    view.findViewById(R.id.filterPanel).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.filterPanel).startAnimation(AnimationUtils.loadAnimation(ObjectSelectorFragment.this.getContext(), R.anim.slide_from_above));
                 }
                 ObjectSelectorFragment.this.updateFilter();
@@ -248,7 +246,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         });
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
         View inflate = layoutInflater.inflate(R.layout.object_list, viewGroup, false);
@@ -263,12 +261,12 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         if (Build.VERSION.SDK_INT >= 14) {
             ButteryProgressBar butteryProgressBar = new ButteryProgressBar(layoutInflater.getContext());
             butteryProgressBar.setId(R.id.object_progress_bar);
-            ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, new FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(1, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())));
+            ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, new FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())));
         }
         return inflate;
     }
 
-    @Override // android.widget.ExpandableListView.OnGroupClickListener
+    @Override
     public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long j) {
         SLObjectDisplayInfo group;
         Debug.Printf("displayObjects: onGroupClick: view %s id %d", view, Integer.valueOf(view.getId()));
@@ -279,7 +277,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         return true;
     }
 
-    @Override // android.widget.SeekBar.OnSeekBarChangeListener
+    @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
         View view = getView();
         if (view != null) {
@@ -290,7 +288,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         SLModules modules;
         int i = 256;
@@ -317,11 +315,11 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         }
     }
 
-    @Override // android.widget.SeekBar.OnSeekBarChangeListener
+    @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         SLAgentCircuit activeAgentCircuit;
         SLModules modules;
@@ -336,7 +334,7 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         super.onStop();
     }
 
-    @Override // android.widget.SeekBar.OnSeekBarChangeListener
+    @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 }

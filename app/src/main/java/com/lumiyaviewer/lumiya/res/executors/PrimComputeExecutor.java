@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.res.executors;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-/* loaded from: classes.dex */
 public class PrimComputeExecutor extends WeakExecutor {
     private boolean isPaused;
     private ReentrantLock pauseLock;
@@ -30,7 +29,7 @@ public class PrimComputeExecutor extends WeakExecutor {
         return InstanceHolder.Instance;
     }
 
-    @Override // java.util.concurrent.ThreadPoolExecutor
+    @Override
     protected void beforeExecute(Thread thread, Runnable runnable) {
         super.beforeExecute(thread, runnable);
         this.pauseLock.lock();

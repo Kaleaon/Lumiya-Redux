@@ -6,26 +6,36 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * LandStatReply
+ * Sent by the simulator in response to LandStatRequest
+ *
+ * <p>Template: {@code LandStatReply Low 422 Trusted Unencoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLFloaterTopObjects::handle_land_reply()} in indra/newview/llfloatertopobjects.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class LandStatReply extends SLMessage {
     public ArrayList<ReportData> ReportData_Fields = new ArrayList<>();
     public RequestData RequestData_Field;
 
+    /** Block ReportData, Variable. */
     public static class ReportData {
-        public float LocationX;
-        public float LocationY;
-        public float LocationZ;
-        public byte[] OwnerName;
-        public float Score;
-        public UUID TaskID;
-        public int TaskLocalID;
-        public byte[] TaskName;
+        public float LocationX; // F32
+        public float LocationY; // F32
+        public float LocationZ; // F32
+        public byte[] OwnerName; // Variable 1
+        public float Score; // F32
+        public UUID TaskID; // LLUUID
+        public int TaskLocalID; // U32
+        public byte[] TaskName; // Variable 1
     }
 
+    /** Block RequestData, Single. */
     public static class RequestData {
-        public int ReportType;
-        public int RequestFlags;
-        public int TotalObjectCount;
+        public int ReportType; // U32
+        public int RequestFlags; // U32
+        public int TotalObjectCount; // U32
     }
 
     public LandStatReply() {
@@ -33,7 +43,7 @@ public class LandStatReply extends SLMessage {
         this.RequestData_Field = new RequestData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 17;
         Iterator<?> it = this.ReportData_Fields.iterator();
@@ -47,16 +57,17 @@ public class LandStatReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleLandStatReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) -90);
+        // Message number: Low 422 (LandStatReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0xA6);
         packInt(byteBuffer, this.RequestData_Field.ReportType);
         packInt(byteBuffer, this.RequestData_Field.RequestFlags);
         packInt(byteBuffer, this.RequestData_Field.TotalObjectCount);
@@ -73,7 +84,7 @@ public class LandStatReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.RequestData_Field.ReportType = unpackInt(byteBuffer);
         this.RequestData_Field.RequestFlags = unpackInt(byteBuffer);

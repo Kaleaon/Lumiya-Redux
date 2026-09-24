@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.inventory.SLInventory;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class SLInventoryFetchRequest {
     protected final InventoryDB db;
 

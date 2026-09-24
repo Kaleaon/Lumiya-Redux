@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IObjectWrapper extends IInterface {
 
     public static abstract class Stub extends Binder implements IObjectWrapper {
@@ -19,7 +18,7 @@ public interface IObjectWrapper extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -41,12 +40,12 @@ public interface IObjectWrapper extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IObjectWrapper)) ? (IObjectWrapper) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1598968902:

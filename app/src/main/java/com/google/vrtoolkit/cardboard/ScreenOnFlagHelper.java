@@ -6,7 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-/* loaded from: classes.dex */
 public class ScreenOnFlagHelper implements SensorEventListener {
     private static final boolean DEBUG = false;
     private static final long IDLE_TIMEOUT_MS = 30000;
@@ -45,11 +44,11 @@ public class ScreenOnFlagHelper implements SensorEventListener {
         }
     }
 
-    @Override // android.hardware.SensorEventListener
+    @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
     }
 
-    @Override // android.hardware.SensorEventListener
+    @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if ((sensorEvent.timestamp - this.lastSampleTimestamp) / 1000000 >= SAMPLE_INTERVAL_MS) {
             this.sensorStats.addSample(sensorEvent.values);

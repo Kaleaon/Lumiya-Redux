@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.users.manager;
 
 import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotificationInfo_ObjectPopupMessage extends UnreadNotificationInfo.ObjectPopupMessage {
     private final String message;
     private final String objectName;
@@ -36,12 +35,12 @@ final class AutoValue_UnreadNotificationInfo_ObjectPopupMessage extends UnreadNo
         return ((this.objectName.hashCode() ^ 1000003) * 1000003) ^ this.message.hashCode();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupMessage
+    @Override
     public String message() {
         return this.message;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.ObjectPopupMessage
+    @Override
     public String objectName() {
         return this.objectName;
     }

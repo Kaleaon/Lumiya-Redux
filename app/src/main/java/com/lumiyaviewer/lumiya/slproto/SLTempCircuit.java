@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public class SLTempCircuit extends SLCircuit {
     private List<SLMessage> pendingMessages;
 
@@ -15,17 +14,17 @@ public class SLTempCircuit extends SLCircuit {
         this.pendingMessages = new LinkedList();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit, com.lumiyaviewer.lumiya.slproto.messages.SLMessageHandler
+    @Override
     public void DefaultMessageHandler(SLMessage sLMessage) {
         this.pendingMessages.add(sLMessage);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessNetworkError() {
         this.gridConn.removeTempCircuit(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLCircuit
+    @Override
     public void ProcessTimeout() {
         this.gridConn.removeTempCircuit(this);
     }

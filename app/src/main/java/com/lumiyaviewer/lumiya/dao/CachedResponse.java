@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.dao;
 
-/* loaded from: classes.dex */
 public class CachedResponse {
     private byte[] data;
     private String key;

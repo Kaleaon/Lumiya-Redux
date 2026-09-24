@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class BakeProcess implements SLTextureUploadRequest.TextureUploadCompleteListener {
     private final SLAvatarAppearance avatarAppearance;
     private final Thread bakingThread;
@@ -73,7 +72,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
             this.texture = wearableTexture;
         }
 
-        @Override // com.lumiyaviewer.lumiya.res.ResourceConsumer
+        @Override
         public void OnResourceReady(Object obj, boolean z) {
             if (obj instanceof OpenJPEG) {
                 this.textureData = (OpenJPEG) obj;
@@ -116,12 +115,12 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
                 this.wearables.put(sLWearable, arrayList);
             }
         }
-        this.bakingThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.baker.-$Lambda$qb61PwDoxRPFEOdyYwns3UfUTbM
+        this.bakingThread = new Thread(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 BakeProcess.this.bakeAppearance();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -145,8 +144,6 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         return SLTextureEntry.create(create, sLTextureEntryFaceArr);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: bakeAppearance, reason: merged with bridge method [inline-methods] */
     public void bakeAppearance() {
         Debug.Printf("Baking: Requesting texture data.", new Object[0]);
         Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
@@ -260,14 +257,13 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         return !this.wornWearables.row(SLWearableType.WT_SKIRT).isEmpty();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void notifyTextureReady() {
         synchronized (this.textureReadyLock) {
             this.textureReadyLock.notifyAll();
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.texuploader.SLTextureUploadRequest.TextureUploadCompleteListener
+    @Override
     public void OnTextureUploadComplete(SLTextureUploadRequest sLTextureUploadRequest) {
         boolean z;
         int i;

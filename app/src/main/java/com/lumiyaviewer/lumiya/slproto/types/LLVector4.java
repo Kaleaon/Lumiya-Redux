@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public class LLVector4 {
     public static final float FP_MAG_THRESHOLD = 1.0E-7f;
     public float w;

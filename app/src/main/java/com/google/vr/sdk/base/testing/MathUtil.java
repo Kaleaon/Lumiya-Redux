@@ -3,7 +3,6 @@ package com.google.vr.sdk.base.testing;
 import com.google.vr.sdk.base.sensors.internal.Matrix3x3d;
 import com.google.vr.sdk.base.sensors.internal.Vector3d;
 
-/* loaded from: classes.dex */
 public final class MathUtil {
     private MathUtil() {
     }

@@ -5,33 +5,40 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> dataserver
+ *
+ * <p>Template: {@code RegionPresenceRequestByHandle Low 15 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class RegionPresenceRequestByHandle extends SLMessage {
     public ArrayList<RegionData> RegionData_Fields = new ArrayList<>();
 
+    /** Block RegionData, Variable. */
     public static class RegionData {
-        public long RegionHandle;
+        public long RegionHandle; // U64
     }
 
     public RegionPresenceRequestByHandle() {
         this.zeroCoded = false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.RegionData_Fields.size() * 8) + 5;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleRegionPresenceRequestByHandle(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 15);
+        // Message number: Low 15 (RegionPresenceRequestByHandle).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x0F);
         byteBuffer.put((byte) this.RegionData_Fields.size());
         Iterator<?> it = this.RegionData_Fields.iterator();
         while (it.hasNext()) {
@@ -39,7 +46,7 @@ public class RegionPresenceRequestByHandle extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
         for (int i2 = 0; i2 < i; i2++) {

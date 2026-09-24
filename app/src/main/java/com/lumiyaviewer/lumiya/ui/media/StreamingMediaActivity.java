@@ -8,9 +8,8 @@ import android.widget.TextView;
 import com.lumiyaviewer.lumiya.StreamingMediaService;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 
-/* loaded from: classes.dex */
 public class StreamingMediaActivity extends AppCompatActivity implements View.OnClickListener {
-    @Override // android.view.View.OnClickListener
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case com.lumiyaviewer.lumiya.R.id.parcel_media_stop_button:
@@ -23,7 +22,7 @@ public class StreamingMediaActivity extends AppCompatActivity implements View.On
         }
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     public void onCreate(Bundle bundle) {
         ParcelData parcelData;
         super.onCreate(bundle);

@@ -4,7 +4,6 @@ import androidx.core.os.EnvironmentCompat;
 import java.util.HashMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public enum SLInventoryType {
     IT_TEXTURE(0, "texture", "Texture"),
     IT_SOUND(1, "sound", "Sound"),

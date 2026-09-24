@@ -17,7 +17,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class MuteListAdapter extends BaseAdapter {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-mutelist-MuteTypeSwitchesValues, reason: not valid java name */
@@ -61,12 +60,12 @@ class MuteListAdapter extends BaseAdapter {
         this.layoutInflater = LayoutInflater.from(context);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         return this.muteList.size();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public MuteListEntry getItem(int i) {
         if (i < 0 || i >= this.muteList.size()) {
             return null;
@@ -74,12 +73,12 @@ class MuteListAdapter extends BaseAdapter {
         return this.muteList.get(i);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         return 0L;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         int i2;
         MuteListEntry item = getItem(i);
@@ -111,7 +110,7 @@ class MuteListAdapter extends BaseAdapter {
         return null;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return false;
     }

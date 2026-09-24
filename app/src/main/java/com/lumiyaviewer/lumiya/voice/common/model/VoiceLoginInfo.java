@@ -4,7 +4,6 @@ import android.os.Bundle;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceLoginInfo {
 
     @Nonnull

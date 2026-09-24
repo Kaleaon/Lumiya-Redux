@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.render.glres.GLCleanable;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class GLLoadableBuffer implements GLCleanable {
     private GLBuffer glBuffer = null;
 
@@ -160,7 +159,7 @@ public class GLLoadableBuffer implements GLCleanable {
         GLES20.glDrawElements(i, i2, i3, i4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLCleanable
+    @Override
     public void GLCleanup() {
         this.glBuffer = null;
     }

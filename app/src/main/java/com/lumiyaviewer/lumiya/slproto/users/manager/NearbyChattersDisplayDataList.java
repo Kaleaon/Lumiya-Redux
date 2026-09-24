@@ -8,15 +8,14 @@ import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 class NearbyChattersDisplayDataList extends ChatterDisplayDataList {
     public NearbyChattersDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated) {
-        super(userManager, onListUpdated, new Comparator() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$D8uG4BZ932XmwoX97ZE2tEBU1gE
+        super(userManager, onListUpdated, new Comparator() {
             private final /* synthetic */ int $m$0(Object obj, Object obj2) {
                 return NearbyChattersDisplayDataList.m342x73a7db48((ChatterDisplayData) obj, (ChatterDisplayData) obj2);
             }
 
-            @Override // java.util.Comparator
+            @Override
             public final int compare(Object obj, Object obj2) {
                 return $m$0(obj, obj2);
             }
@@ -29,7 +28,7 @@ class NearbyChattersDisplayDataList extends ChatterDisplayDataList {
         return compare != 0 ? compare : chatterDisplayData.compareTo(chatterDisplayData2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.ChatterDisplayDataList
+    @Override
     protected List<ChatterID> getChatters() {
         SLModules modules;
         List<ChatterID> list = null;

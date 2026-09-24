@@ -21,7 +21,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.utils.CreateFailureException;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public final class DrawableGeometry implements GLCleanable {
     private final int FaceCount;
     private final int[] FaceIndexStartsCounts;
@@ -287,7 +286,7 @@ public final class DrawableGeometry implements GLCleanable {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.render.glres.GLCleanable
+    @Override
     public void GLCleanup() {
         this.vertexArrayObject = null;
     }

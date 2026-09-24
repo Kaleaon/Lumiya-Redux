@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.objects;
 
-/* loaded from: classes.dex */
 final class AutoValue_SLObjectFilterInfo extends SLObjectFilterInfo {
     private final String filterText;
     private final float range;
@@ -33,7 +32,7 @@ final class AutoValue_SLObjectFilterInfo extends SLObjectFilterInfo {
         return false;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectFilterInfo
+    @Override
     public String filterText() {
         return this.filterText;
     }
@@ -42,22 +41,22 @@ final class AutoValue_SLObjectFilterInfo extends SLObjectFilterInfo {
         return (((((this.showNonDescriptive ? 1231 : 1237) ^ (((this.showAttachments ? 1231 : 1237) ^ ((this.filterText.hashCode() ^ 1000003) * 1000003)) * 1000003)) * 1000003) ^ (this.showNonTouchable ? 1231 : 1237)) * 1000003) ^ Float.floatToIntBits(this.range);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectFilterInfo
+    @Override
     public float range() {
         return this.range;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectFilterInfo
+    @Override
     public boolean showAttachments() {
         return this.showAttachments;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectFilterInfo
+    @Override
     public boolean showNonDescriptive() {
         return this.showNonDescriptive;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.objects.SLObjectFilterInfo
+    @Override
     public boolean showNonTouchable() {
         return this.showNonTouchable;
     }

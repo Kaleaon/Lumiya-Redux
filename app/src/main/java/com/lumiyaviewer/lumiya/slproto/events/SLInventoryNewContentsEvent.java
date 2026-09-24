@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.events;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLInventoryNewContentsEvent {
     public int newFolderCount = 0;
     public int newItemCount = 0;

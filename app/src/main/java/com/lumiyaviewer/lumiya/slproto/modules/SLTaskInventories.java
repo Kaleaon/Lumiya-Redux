@@ -20,7 +20,6 @@ import com.lumiyaviewer.lumiya.utils.SimpleStringParser;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompletionListener {
     private static final String DELIM_ANY = " \t\n";
     private static final String DELIM_EOL = "\n";
@@ -30,8 +29,8 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
 
     public SLTaskInventories(SLAgentCircuit sLAgentCircuit) {
         super(sLAgentCircuit);
-        this.requestHandler = new AsyncRequestHandler(sLAgentCircuit, new SimpleRequestHandler<Integer>() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLTaskInventories.1
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.requestHandler = new AsyncRequestHandler(sLAgentCircuit, new SimpleRequestHandler<Integer>() {
+            @Override
             public void onRequest(@Nonnull Integer num) {
                 SLTaskInventories.this.RequestTaskInventory(num.intValue());
             }
@@ -44,7 +43,6 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void RequestTaskInventory(int i) {
         Debug.Printf("taskID = %d", Integer.valueOf(i));
         RequestTaskInventory requestTaskInventory = new RequestTaskInventory();
@@ -82,7 +80,7 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         if (this.userManager != null) {
             this.userManager.getObjectsManager().getTaskInventoryRequestSource().detachRequestHandler(this.requestHandler);
@@ -101,7 +99,7 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.xfer.SLXfer.SLXferCompletionListener
+    @Override
     public void onXferComplete(Object obj, String str, byte[] bArr) {
         if (obj instanceof UUID) {
             UUID uuid = (UUID) obj;

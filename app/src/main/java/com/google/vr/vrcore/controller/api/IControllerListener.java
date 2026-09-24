@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IControllerListener extends IInterface {
 
     public static abstract class Stub extends Binder implements IControllerListener {
@@ -31,12 +30,12 @@ public interface IControllerListener extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void deprecatedOnControllerAccelEvent(ControllerAccelEvent controllerAccelEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -53,7 +52,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void deprecatedOnControllerButtonEvent(ControllerButtonEvent controllerButtonEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -70,7 +69,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public boolean deprecatedOnControllerButtonEventV1(ControllerButtonEvent controllerButtonEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -91,7 +90,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void deprecatedOnControllerGyroEvent(ControllerGyroEvent controllerGyroEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -108,7 +107,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void deprecatedOnControllerOrientationEvent(ControllerOrientationEvent controllerOrientationEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -125,7 +124,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void deprecatedOnControllerTouchEvent(ControllerTouchEvent controllerTouchEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -142,7 +141,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public int getApiVersion() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -161,7 +160,7 @@ public interface IControllerListener extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public ControllerListenerOptions getOptions() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -176,7 +175,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void onControllerEventPacket(ControllerEventPacket controllerEventPacket) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -193,7 +192,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void onControllerEventPacket2(ControllerEventPacket2 controllerEventPacket2) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -210,7 +209,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -227,7 +226,7 @@ public interface IControllerListener extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.controller.api.IControllerListener
+            @Override
             public void onControllerStateChanged(int i, int i2) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -253,12 +252,12 @@ public interface IControllerListener extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IControllerListener)) ? (IControllerListener) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 1:

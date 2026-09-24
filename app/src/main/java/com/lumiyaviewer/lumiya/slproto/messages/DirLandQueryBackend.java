@@ -4,24 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirLandQueryBackend sim->dataserver
+ * Special query for the land for sale/auction panel.
+ *
+ * <p>Template: {@code DirLandQueryBackend Low 49 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class DirLandQueryBackend extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public int Area;
-        public int EstateID;
-        public boolean Godlike;
-        public int Price;
-        public int QueryFlags;
-        public UUID QueryID;
-        public int QueryStart;
-        public int SearchType;
+        public int Area; // S32
+        public int EstateID; // U32
+        public boolean Godlike; // BOOL
+        public int Price; // S32
+        public int QueryFlags; // U32
+        public UUID QueryID; // LLUUID
+        public int QueryStart; // S32
+        public int SearchType; // U32
     }
 
     public DirLandQueryBackend() {
@@ -30,21 +38,22 @@ public class DirLandQueryBackend extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 61;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirLandQueryBackend(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 49);
+        // Message number: Low 49 (DirLandQueryBackend).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x31);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         packInt(byteBuffer, this.QueryData_Field.QueryFlags);
@@ -56,7 +65,7 @@ public class DirLandQueryBackend extends SLMessage {
         packBoolean(byteBuffer, this.QueryData_Field.Godlike);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

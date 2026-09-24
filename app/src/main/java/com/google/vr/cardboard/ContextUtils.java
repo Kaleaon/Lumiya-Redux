@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 
-/* loaded from: classes.dex */
 public class ContextUtils {
     public static boolean canGetActivity(Context context) {
         return getActivity(context) != null;

@@ -15,14 +15,13 @@ import de.greenrobot.dao.query.LazyList;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class BalanceManager {
     private final MoneyTransactionDao moneyTransactionDao;
     private final UserManager userManager;
     private final AtomicReference<SLFinancialInfo> financialInfo = new AtomicReference<>(null);
     private final SubscriptionPool<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactionPool = new SubscriptionPool<>();
-    private final SimpleRequestHandler<SubscriptionSingleKey> balanceRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.BalanceManager.1
-        @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    private final SimpleRequestHandler<SubscriptionSingleKey> balanceRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
+        @Override
         public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
             SLFinancialInfo sLFinancialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
             if (sLFinancialInfo == null) {
@@ -41,8 +40,8 @@ public class BalanceManager {
             }
         }
     };
-    private final Runnable requestBalanceRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.BalanceManager.2
-        @Override // java.lang.Runnable
+    private final Runnable requestBalanceRunnable = new Runnable() {
+        @Override
         public void run() {
             SLFinancialInfo sLFinancialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
             if (sLFinancialInfo != null) {
@@ -58,18 +57,18 @@ public class BalanceManager {
         this.userManager = userManager;
         this.moneyTransactionDao = userManager.getDaoSession().getMoneyTransactionDao();
         this.balancePool.attachRequestHandler(this.balanceRequestHandler);
-        this.moneyTransactionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<SubscriptionSingleKey>() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.BalanceManager.3
-            @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+        this.moneyTransactionPool.attachRequestHandler(new AsyncRequestHandler(userManager.getDatabaseExecutor(), new SimpleRequestHandler<SubscriptionSingleKey>() {
+            @Override
             public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
                 BalanceManager.this.moneyTransactionPool.onResultData(subscriptionSingleKey, BalanceManager.this.moneyTransactionDao.queryBuilder().orderAsc(MoneyTransactionDao.Properties.Timestamp).listLazy());
             }
         }));
-        this.moneyTransactionPool.setDisposeHandler(new DisposeHandler() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$xo_DO1h0hLJizWUYkWN5MuOY-xk
+        this.moneyTransactionPool.setDisposeHandler(new DisposeHandler() {
             private final /* synthetic */ void $m$0(Object obj) {
                 BalanceManager.m296x44e075e0((LazyList) obj);
             }
 
-            @Override // com.lumiyaviewer.lumiya.react.DisposeHandler
+            @Override
             public final void onDispose(Object obj) {
                 $m$0(obj);
             }
@@ -89,12 +88,12 @@ public class BalanceManager {
     }
 
     public void clearMoneyTransactions() {
-        this.userManager.getDatabaseExecutor().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$xo_DO1h0hLJizWUYkWN5MuOY-xk.1
+        this.userManager.getDatabaseExecutor().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 BalanceManager.this.m297x44e1c14d();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }

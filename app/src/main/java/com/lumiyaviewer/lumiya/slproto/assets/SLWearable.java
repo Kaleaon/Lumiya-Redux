@@ -11,7 +11,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SLWearable implements Subscription.OnData<AssetData>, Subscription.OnError {
 
     @Nonnull
@@ -67,7 +66,7 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         return this.wearableData;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+    @Override
     public void onData(AssetData assetData) {
         if (assetData != null) {
             if (assetData.getStatus() != 1 || assetData.getData() == null) {
@@ -89,7 +88,7 @@ public class SLWearable implements Subscription.OnData<AssetData>, Subscription.
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
+    @Override
     public void onError(Throwable th) {
         Debug.Printf("Wearable: got error for asset %s", this.assetID);
         this.isFailed = true;

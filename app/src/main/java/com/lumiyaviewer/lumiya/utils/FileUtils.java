@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.utils;
 import com.lumiyaviewer.lumiya.Debug;
 import java.io.File;
 
-/* loaded from: classes.dex */
 public class FileUtils {
     public static void clearFolder(File file) {
         File[] listFiles;

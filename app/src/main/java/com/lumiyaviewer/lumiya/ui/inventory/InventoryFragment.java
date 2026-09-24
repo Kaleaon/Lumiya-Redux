@@ -67,7 +67,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryFragment extends FragmentWithTitle implements ReloadableFragment {
 
     /* renamed from: -com-lumiyaviewer-lumiya-ui-inventory-InventoryActivity$SelectActionSwitchesValues, reason: not valid java name */
@@ -84,93 +83,93 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
 
     @Nonnull
     private ImmutableMap<Integer, MenuItem> folderActionMenuItems = ImmutableMap.of();
-    private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.6
+    private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onInventoryEntryList((InventoryEntryList) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, InventoryManager.InventoryClipboardEntry> clipboardEntry = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.7
+    private final SubscriptionData<SubscriptionSingleKey, InventoryManager.InventoryClipboardEntry> clipboardEntry = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onClipboardEntry((InventoryManager.InventoryClipboardEntry) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.8
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.9
+    private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, Boolean> searchRunning = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.10
+    private final SubscriptionData<SubscriptionSingleKey, Boolean> searchRunning = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.11
+    private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onWornAttachmentsChanged((ImmutableMap) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
-    private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.12
+    private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             InventoryFragment.this.onWornWearablesChanged((Table) obj);
         }
 
-        @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
+        @Override
         public final void onData(Object obj) {
             $m$0(obj);
         }
     });
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.entryList);
-    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.5
+    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         private final /* synthetic */ void $m$0(AdapterView adapterView, View view, int i, long j) {
             InventoryFragment.this.m614x3694a933(adapterView, view, i, j);
         }
 
-        @Override // android.widget.AdapterView.OnItemClickListener
+        @Override
         public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
             $m$0(adapterView, view, i, j);
         }
     };
-    private final View.OnClickListener saveAsClickListener = new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.4
+    private final View.OnClickListener saveAsClickListener = new View.OnClickListener() {
         private final /* synthetic */ void $m$0(View view) {
             InventoryFragment.this.m616x36a1db7a(view);
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public final void onClick(View view) {
             $m$0(view);
         }
@@ -357,20 +356,14 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         return inventoryFragment;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
     public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         updateFolderActionItems();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onClipboardEntry, reason: merged with bridge method [inline-methods] */
     public void onClipboardEntry(InventoryManager.InventoryClipboardEntry inventoryClipboardEntry) {
         updateFolderActionItems();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onInventoryEntryList, reason: merged with bridge method [inline-methods] */
     public void onInventoryEntryList(InventoryEntryList inventoryEntryList) {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()));
         if (isForSelectItem()) {
@@ -390,22 +383,16 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         updateFolderActionItems();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onLoadingStatusChanged, reason: merged with bridge method [inline-methods] and merged with bridge method [inline-methods] */
     public void onLoadingStatusChanged(Boolean bool) {
         updateLoadingStatus();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onWornAttachmentsChanged, reason: merged with bridge method [inline-methods] */
     public void onWornAttachmentsChanged(ImmutableMap<UUID, String> immutableMap) {
         if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onWornWearablesChanged, reason: merged with bridge method [inline-methods] */
     public void onWornWearablesChanged(Table<SLWearableType, UUID, SLWearable> table) {
         if (this.adapter != null) {
             this.adapter.setWornWearables(table);
@@ -445,12 +432,12 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         Intent intent;
         String str = null;
         if ((sLInventoryEntry.baseMask & sLInventoryEntry.ownerMask & 8192) == 0) {
-            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.item_is_no_transfer)).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.2
+            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.item_is_no_transfer)).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     $m$0(dialogInterface, i);
                 }
@@ -472,21 +459,21 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
             string = string + "\n" + getString(R.string.no_copy_item_transfer_confirm);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(string).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.16
+        builder.setMessage(string).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 InventoryFragment.this.m615x3697e76c((UUID) uuid, (SLInventoryEntry) sLInventoryEntry, (FragmentActivity) activity, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.3
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
@@ -551,28 +538,28 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         boolean z2 = data2 != null;
         for (Map.Entry<Integer, MenuItem> entry : this.folderActionMenuItems.entrySet()) {
             switch (entry.getKey().intValue()) {
-                case R.id.inventory_go_up_item /* 2131755800 */:
+                case R.id.inventory_go_up_item:
                     entry.getValue().setVisible(!equal);
                     break;
-                case R.id.inventory_create_item /* 2131755801 */:
-                case R.id.inventory_folder_create_item /* 2131755802 */:
-                case R.id.inventory_folder_create_landmark /* 2131755803 */:
-                case R.id.inventory_folder_create_notecard /* 2131755804 */:
-                case R.id.inventory_folder_upload_picture /* 2131755805 */:
+                case R.id.inventory_create_item:
+                case R.id.inventory_folder_create_item:
+                case R.id.inventory_folder_create_landmark:
+                case R.id.inventory_folder_create_notecard:
+                case R.id.inventory_folder_upload_picture:
                     entry.getValue().setVisible(hasData);
                     break;
-                case R.id.inventory_folder_delete_item /* 2131755806 */:
-                case R.id.inventory_folder_rename_item /* 2131755807 */:
-                case R.id.inventory_folder_share_item /* 2131755808 */:
-                case R.id.inventory_folder_cut_item /* 2131755809 */:
-                case R.id.inventory_folder_copy_item /* 2131755810 */:
+                case R.id.inventory_folder_delete_item:
+                case R.id.inventory_folder_rename_item:
+                case R.id.inventory_folder_share_item:
+                case R.id.inventory_folder_cut_item:
+                case R.id.inventory_folder_copy_item:
                 default:
                     entry.getValue().setVisible((equal || !(z ^ true)) ? false : hasData);
                     break;
-                case R.id.inventory_folder_paste_item /* 2131755811 */:
+                case R.id.inventory_folder_paste_item:
                     entry.getValue().setVisible(isCopyable ? hasData : false);
                     break;
-                case R.id.inventory_folder_paste_as_link_item /* 2131755812 */:
+                case R.id.inventory_folder_paste_as_link_item:
                     entry.getValue().setVisible(z2 ? hasData : false);
                     break;
             }
@@ -720,12 +707,12 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                     return;
                 }
                 final ProgressDialog show = ProgressDialog.show(getContext(), null, getString(R.string.notecard_saving_contents), true, true);
-                data.getModules().inventory.CopyInventoryFromNotecard(this.saveInfo.notecardUUID, this.saveInfo.saveItemUUID, uuid, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.13
+                data.getModules().inventory.CopyInventoryFromNotecard(this.saveInfo.notecardUUID, this.saveInfo.saveItemUUID, uuid, new Runnable() {
                     private final /* synthetic */ void $m$0() {
                         InventoryFragment.this.m617x36a1f2bc((ProgressDialog) show);
                     }
 
-                    @Override // java.lang.Runnable
+                    @Override
                     public final void run() {
                         $m$0();
                     }
@@ -756,12 +743,12 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_inventory_InventoryFragment_40889, reason: not valid java name */
     /* synthetic */ void m617x36a1f2bc(final ProgressDialog progressDialog) {
-        UIThreadExecutor.getInstance().execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.14
+        UIThreadExecutor.getInstance().execute(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 InventoryFragment.this.m618x36a1f5df((ProgressDialog) progressDialog);
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -779,7 +766,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onActivityCreated(@Nullable Bundle bundle) {
         Intent intent;
         super.onActivityCreated(bundle);
@@ -790,15 +777,15 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         View view = getView();
         if (view != null) {
             if (this.saveInfo == null || !folderActionsVisible()) {
-                view.findViewById(R.id.save_as_layout).setVisibility(8);
+                view.findViewById(R.id.save_as_layout).setVisibility(View.GONE);
             } else {
-                view.findViewById(R.id.save_as_layout).setVisibility(0);
+                view.findViewById(R.id.save_as_layout).setVisibility(View.VISIBLE);
                 ((TextView) view.findViewById(R.id.save_as_message)).setText(getString(R.string.inventory_save_format, this.saveInfo.saveItemName));
             }
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onActivityResult(int i, int i2, Intent intent) {
         Uri data;
         super.onActivityResult(i, i2, intent);
@@ -818,21 +805,21 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(getString(R.string.upload_confirm_question, Integer.valueOf(uploadCost))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.17
+                builder.setMessage(getString(R.string.upload_confirm_question, Integer.valueOf(uploadCost))).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i3) {
                         InventoryFragment.this.m613x3689c76d((String) lastPathSegment, (Bitmap) bitmap, (UserManager) userManager, (UUID) uuid, dialogInterface, i3);
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i3) {
                         $m$0(dialogInterface, i3);
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i3) {
                         dialogInterface.cancel();
                     }
 
-                    @Override // android.content.DialogInterface.OnClickListener
+                    @Override
                     public final void onClick(DialogInterface dialogInterface, int i3) {
                         $m$0(dialogInterface, i3);
                     }
@@ -841,12 +828,12 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
             }
         } catch (IOException e) {
             Debug.Warning(e);
-            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.failed_to_open_picture)).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.1
+            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.failed_to_open_picture)).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
                 private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i3) {
                     dialogInterface.cancel();
                 }
 
-                @Override // android.content.DialogInterface.OnClickListener
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i3) {
                     $m$0(dialogInterface, i3);
                 }
@@ -854,13 +841,13 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, androidx.fragment.app.Fragment
+    @Override
     public void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         if (folderActionsVisible()) {
@@ -874,7 +861,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         Debug.Printf("InventoryFragment: onCreateView", new Object[0]);
@@ -894,7 +881,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         final SLInventoryEntry folder;
         UserManager userManager = getUserManager();
@@ -902,51 +889,51 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         if (data != null && userManager != null && (folder = data.getFolder()) != null) {
             SLAgentCircuit data2 = this.agentCircuit.getData();
             switch (menuItem.getItemId()) {
-                case R.id.inventory_go_up_item /* 2131755800 */:
+                case R.id.inventory_go_up_item:
                     if (folder.parentUUID != null && (!Objects.equal(folder.parentUUID, UUIDPool.ZeroUUID))) {
                         Debug.Printf("InventoryFragment: navigate up to %s (current is %s)", folder.parentUUID, folder.uuid);
                         navigateToFolder(folder.parentUUID);
                     }
                     return true;
-                case R.id.inventory_folder_create_item /* 2131755802 */:
+                case R.id.inventory_folder_create_item:
                     this.inventoryFragmentHelper.CreateNewFolder(folder);
                     return true;
-                case R.id.inventory_folder_create_landmark /* 2131755803 */:
+                case R.id.inventory_folder_create_landmark:
                     this.inventoryFragmentHelper.CreateNewLandmark(folder);
                     return true;
-                case R.id.inventory_folder_create_notecard /* 2131755804 */:
+                case R.id.inventory_folder_create_notecard:
                     getActivity().startActivity(NotecardEditActivity.createIntent(getContext(), userManager.getUserID(), folder.uuid, null, false, null, 0));
                     return true;
-                case R.id.inventory_folder_upload_picture /* 2131755805 */:
+                case R.id.inventory_folder_upload_picture:
                     selectPictureForUpload();
                     return true;
-                case R.id.inventory_folder_delete_item /* 2131755806 */:
-                    this.inventoryFragmentHelper.DeleteInventoryEntry(folder, new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.15
+                case R.id.inventory_folder_delete_item:
+                    this.inventoryFragmentHelper.DeleteInventoryEntry(folder, new Runnable() {
                         private final /* synthetic */ void $m$0() {
                             InventoryFragment.this.m612x3687192d((SLInventoryEntry) folder);
                         }
 
-                        @Override // java.lang.Runnable
+                        @Override
                         public final void run() {
                             $m$0();
                         }
                     });
                     return true;
-                case R.id.inventory_folder_rename_item /* 2131755807 */:
+                case R.id.inventory_folder_rename_item:
                     this.inventoryFragmentHelper.RenameInventoryEntry(folder);
                     return true;
-                case R.id.inventory_folder_share_item /* 2131755808 */:
+                case R.id.inventory_folder_share_item:
                     this.inventoryFragmentHelper.ShareInventoryEntry(folder);
                     return true;
-                case R.id.inventory_folder_cut_item /* 2131755809 */:
+                case R.id.inventory_folder_cut_item:
                     userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(true, folder));
-                    Toast.makeText(getContext(), R.string.copied_to_clipboard, 1).show();
+                    Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                     return true;
-                case R.id.inventory_folder_copy_item /* 2131755810 */:
+                case R.id.inventory_folder_copy_item:
                     userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(false, folder));
-                    Toast.makeText(getContext(), R.string.copied_to_clipboard, 1).show();
+                    Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                     return true;
-                case R.id.inventory_folder_paste_item /* 2131755811 */:
+                case R.id.inventory_folder_paste_item:
                     InventoryManager.InventoryClipboardEntry data3 = this.clipboardEntry.getData();
                     if (data3 != null && data2 != null) {
                         if (data3.isCut) {
@@ -957,7 +944,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
                         }
                     }
                     return true;
-                case R.id.inventory_folder_paste_as_link_item /* 2131755812 */:
+                case R.id.inventory_folder_paste_as_link_item:
                     InventoryManager.InventoryClipboardEntry data4 = this.clipboardEntry.getData();
                     if (data4 != null && data2 != null) {
                         data2.getModules().inventory.LinkInventoryItem(folder, data4.inventoryEntry.uuid, data4.inventoryEntry.isFolder ? SLInventoryType.IT_CATEGORY.getTypeCode() : data4.inventoryEntry.invType, data4.inventoryEntry.isFolder ? SLAssetType.AT_LINK_FOLDER.getTypeCode() : SLAssetType.AT_LINK.getTypeCode(), data4.inventoryEntry.name, data4.inventoryEntry.description);
@@ -968,27 +955,27 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         return false;
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         updateFolderActionItems();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle, com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         super.onStart();
         EventBus.getInstance().subscribe(this);
         showInventoryList(getInventoryQuery());
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.StateAwareFragment, androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         showInventoryList(null);
         EventBus.getInstance().unsubscribe(this);
         super.onStop();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
+    @Override
     public void setFragmentArgs(Intent intent, Bundle bundle) {
         Debug.Printf("InventoryFragment: setFragmentArgs '%s'", bundle);
         if (bundle != null) {

@@ -6,7 +6,6 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 class GLStateBackup {
     private boolean cullFaceEnabled;
     private boolean depthTestEnabled;

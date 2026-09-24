@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.prims;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector2;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector4;
 
-/* loaded from: classes.dex */
 public class VertexData {
     public LLVector4 Normal;
     public LLVector4 Position;

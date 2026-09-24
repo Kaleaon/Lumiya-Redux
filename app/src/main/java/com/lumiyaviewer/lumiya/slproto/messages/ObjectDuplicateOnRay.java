@@ -7,27 +7,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ObjectDuplicateOnRay
+ * viewer -> simulator
+ * Makes a copy of an object, using the add object raycast
+ * code to abut it to other objects.
+ *
+ * <p>Template: {@code ObjectDuplicateOnRay Low 91 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectDuplicateOnRay extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public boolean BypassRaycast;
-        public boolean CopyCenters;
-        public boolean CopyRotates;
-        public int DuplicateFlags;
-        public UUID GroupID;
-        public LLVector3 RayEnd;
-        public boolean RayEndIsIntersection;
-        public LLVector3 RayStart;
-        public UUID RayTargetID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public boolean BypassRaycast; // BOOL
+        public boolean CopyCenters; // BOOL
+        public boolean CopyRotates; // BOOL
+        public int DuplicateFlags; // U32 - see object_flags.h
+        public UUID GroupID; // LLUUID
+        public LLVector3 RayEnd; // LLVector3 - region local
+        public boolean RayEndIsIntersection; // BOOL
+        public LLVector3 RayStart; // LLVector3 - region local
+        public UUID RayTargetID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ObjectLocalID;
+        public int ObjectLocalID; // U32
     }
 
     public ObjectDuplicateOnRay() {
@@ -35,21 +45,22 @@ public class ObjectDuplicateOnRay extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 4) + 101;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectDuplicateOnRay(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 91);
+        // Message number: Low 91 (ObjectDuplicateOnRay).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x5B);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.GroupID);
@@ -68,7 +79,7 @@ public class ObjectDuplicateOnRay extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

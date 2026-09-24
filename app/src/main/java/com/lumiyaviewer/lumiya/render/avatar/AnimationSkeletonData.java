@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class AnimationSkeletonData {
     private static final int numAnimatedBones = 133;
     private final float[] animPriorityRotArray = new float[133];

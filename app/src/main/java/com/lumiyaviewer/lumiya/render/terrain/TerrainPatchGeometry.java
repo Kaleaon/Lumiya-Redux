@@ -11,7 +11,6 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.utils.IdentityMatrix;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 
-/* loaded from: classes.dex */
 public class TerrainPatchGeometry {
     public static final int DrawPatchSize = 16;
     private static final int index_size_bytes = 3072;

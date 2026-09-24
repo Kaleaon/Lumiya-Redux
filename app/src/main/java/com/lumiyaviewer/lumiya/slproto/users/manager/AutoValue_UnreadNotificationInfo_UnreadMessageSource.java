@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 final class AutoValue_UnreadNotificationInfo_UnreadMessageSource extends UnreadNotificationInfo.UnreadMessageSource {
     private final ChatterID chatterID;
     private final Optional<String> chatterName;
@@ -30,13 +29,13 @@ final class AutoValue_UnreadNotificationInfo_UnreadMessageSource extends UnreadN
         this.unreadMessagesCount = i;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.UnreadMessageSource
+    @Override
     @Nonnull
     public ChatterID chatterID() {
         return this.chatterID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.UnreadMessageSource
+    @Override
     public Optional<String> chatterName() {
         return this.chatterName;
     }
@@ -63,13 +62,13 @@ final class AutoValue_UnreadNotificationInfo_UnreadMessageSource extends UnreadN
         return "UnreadMessageSource{chatterID=" + this.chatterID + ", chatterName=" + this.chatterName + ", unreadMessages=" + this.unreadMessages + ", unreadMessagesCount=" + this.unreadMessagesCount + "}";
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.UnreadMessageSource
+    @Override
     @Nonnull
     public ImmutableList<SLChatEvent> unreadMessages() {
         return this.unreadMessages;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo.UnreadMessageSource
+    @Override
     public int unreadMessagesCount() {
         return this.unreadMessagesCount;
     }

@@ -13,7 +13,6 @@ import com.lumiyaviewer.lumiya.eventbus.EventHandler;
 import com.lumiyaviewer.lumiya.ui.ThemeMapper;
 import com.lumiyaviewer.lumiya.ui.settings.ThemeChangedEvent;
 
-/* loaded from: classes.dex */
 public class ThemedActivity extends AppCompatActivity {
     private int selectedThemeId = -1;
 
@@ -22,7 +21,7 @@ public class ThemedActivity extends AppCompatActivity {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         this.selectedThemeId = GlobalOptions.getInstance().getThemeResourceId();
         Debug.Printf("Theme: activity theme 0x%x", Integer.valueOf(this.selectedThemeId));
@@ -31,7 +30,7 @@ public class ThemedActivity extends AppCompatActivity {
         super.onCreate(bundle);
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         int themeResourceId = GlobalOptions.getInstance().getThemeResourceId();
@@ -42,13 +41,13 @@ public class ThemedActivity extends AppCompatActivity {
         onThemeChangedEvent(new ThemeChangedEvent(themeResourceId));
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStart() {
         super.onStart();
         EventBus.getInstance().subscribe((Activity) this);
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onStop() {
         EventBus.getInstance().unsubscribeActivity(this);
         super.onStop();

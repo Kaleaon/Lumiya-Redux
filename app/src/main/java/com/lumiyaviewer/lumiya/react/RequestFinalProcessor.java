@@ -4,7 +4,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
 
     @Nullable
@@ -18,7 +17,6 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         this.resultHandler = requestSource.attachRequestHandler(this);
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
     /* renamed from: cancelRequest, reason: merged with bridge method [inline-methods] */
     public void m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(@Nonnull K k) {
     }
@@ -33,15 +31,15 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final K k) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$psFcS6-5kKyuCZBH4SbOZwtpXG8
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     RequestFinalProcessor.this.m34lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_673(k);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -55,15 +53,15 @@ public abstract class RequestFinalProcessor<K, T> implements RequestHandler<K> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull final K k) {
         if (this.executor != null) {
-            this.executor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.react.-$Lambda$psFcS6-5kKyuCZBH4SbOZwtpXG8.1
+            this.executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     RequestFinalProcessor.this.m33lambda$com_lumiyaviewer_lumiya_react_RequestFinalProcessor_1437(k);
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }

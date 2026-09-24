@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.res.executors;
 
-/* loaded from: classes.dex */
 public class LoaderExecutor extends WeakExecutor {
 
     private static class InstanceHolder {

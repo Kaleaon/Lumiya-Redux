@@ -2,7 +2,6 @@ package com.google.vr.ndk.base;
 
 import android.util.Log;
 
-/* loaded from: classes.dex */
 public class BufferViewportList {
     private static final String TAG = BufferViewportList.class.getSimpleName();
     long nativeBufferViewportList;

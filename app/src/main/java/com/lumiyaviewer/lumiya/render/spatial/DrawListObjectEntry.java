@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
 import com.lumiyaviewer.lumiya.slproto.types.Vector3Array;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public abstract class DrawListObjectEntry extends DrawListEntry {
 
     @Nonnull

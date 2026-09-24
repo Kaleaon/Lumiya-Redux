@@ -13,7 +13,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.lumiyaviewer.lumiya.R;
 
-/* loaded from: classes.dex */
 public class NavDrawerActivityHelper implements AdapterView.OnItemClickListener {
     private final NavDrawerAdapter drawerAdapter;
     private final DrawerLayout drawerLayout;
@@ -64,7 +63,7 @@ public class NavDrawerActivityHelper implements AdapterView.OnItemClickListener 
         }
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         if (this.drawerLayout != null) {
             this.drawerLayout.closeDrawers();

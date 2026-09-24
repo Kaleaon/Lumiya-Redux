@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.events;
 
 import java.util.Set;
 
-/* loaded from: classes.dex */
 public class SLInventoryUpdatedEvent {
     private boolean needsReload;
     private Set<Long> updatedFolders;

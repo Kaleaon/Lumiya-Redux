@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class AssetKey {
     private static final Joiner toStringJoiner = Joiner.on(':').useForNull("null");
 

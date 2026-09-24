@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.glres;
 
-/* loaded from: classes.dex */
 public abstract class GLSizedResource extends GLResource {
     private final int loadedSize;
 

@@ -10,7 +10,6 @@ import com.lumiyaviewer.lumiya.slproto.types.Vector3Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 public class PrimVolume {
     private static final int FLEXI_PATH_REZ = 16;
     private static final int SCULPT_REZ_1 = 6;

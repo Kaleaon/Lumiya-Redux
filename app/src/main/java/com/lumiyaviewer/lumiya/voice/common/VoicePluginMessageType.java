@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.voice.common;
 
-/* loaded from: classes.dex */
 public enum VoicePluginMessageType {
     VoiceInitialize,
     VoiceInitializeReply,

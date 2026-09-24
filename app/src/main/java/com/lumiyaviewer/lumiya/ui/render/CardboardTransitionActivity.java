@@ -1,5 +1,7 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
+import android.view.WindowManager;
+import android.view.Window;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,23 +14,20 @@ import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.render.vr.VrRuntimeSelector;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class CardboardTransitionActivity extends AppCompatActivity {
     private static final int MAX_WAIT_ATTEMPTS = 15;
     private static final long WAIT_INTERVAL = 250;
     private Handler handler = new Handler();
     private int waitAttempts = 0;
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: tryToStartCardboard, reason: merged with bridge method [inline-methods] */
     public void tryToStartCardboard() {
         if (this.waitAttempts >= 15 || (!TextureMemoryTracker.hasActiveRenderer())) {
-            this.handler.postDelayed(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$4MERJxt3ZMMK7daj1OhYLtxY69Y
+            this.handler.postDelayed(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     CardboardTransitionActivity.this.m796x33a6fc46();
                 }
 
-                @Override // java.lang.Runnable
+                @Override
                 public final void run() {
                     $m$0();
                 }
@@ -37,12 +36,12 @@ public class CardboardTransitionActivity extends AppCompatActivity {
         }
         Debug.Printf("Cardboard: EGL renderer still active.", new Object[0]);
         this.waitAttempts++;
-        this.handler.postDelayed(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$4MERJxt3ZMMK7daj1OhYLtxY69Y.1
+        this.handler.postDelayed(new Runnable() {
             private final /* synthetic */ void $m$0() {
                 CardboardTransitionActivity.this.tryToStartCardboard();
             }
 
-            @Override // java.lang.Runnable
+            @Override
             public final void run() {
                 $m$0();
             }
@@ -65,15 +64,15 @@ public class CardboardTransitionActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, androidx.core.app.SupportActivity, android.app.Activity
+    @Override
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
-        requestWindowFeature(1);
-        getWindow().setFlags(1024, 1024);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.cardboard_transition_layout);
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
+    @Override
     protected void onResume() {
         super.onResume();
         tryToStartCardboard();

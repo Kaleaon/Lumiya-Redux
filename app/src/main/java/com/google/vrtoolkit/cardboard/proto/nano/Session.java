@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.protobuf.nano.WireFormatNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Session {
 
     public static final class TrackerState extends ExtendableMessageNano<TrackerState> implements Cloneable {
@@ -70,8 +69,7 @@ public interface Session {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final TrackerState clone() {
             try {
                 TrackerState trackerState = (TrackerState) super.clone();
@@ -93,7 +91,7 @@ public interface Session {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if (this.q != null && this.q.length > 0) {
@@ -134,7 +132,7 @@ public interface Session {
             return (this.bitField0_ & 1) != 0;
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final TrackerState mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -294,7 +292,7 @@ public interface Session {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if (this.q != null && this.q.length > 0) {
                 int length = this.q.length * 8;

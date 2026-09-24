@@ -58,7 +58,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLChatEvent implements View.OnLongClickListener {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-chat-generic-SLChatEvent$ChatMessageTypeSwitchesValues, reason: not valid java name */
@@ -168,62 +167,62 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
     }
 
     public enum ChatMessageViewType implements ChatEventViewHolder.Factory {
-        VIEW_TYPE_NORMAL(R.layout.chat_message, false, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls
+        VIEW_TYPE_NORMAL(R.layout.chat_message, false, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m161x24dc691(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
         }),
-        VIEW_TYPE_YESNO(R.layout.chat_message_yesno, false, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.1
+        VIEW_TYPE_YESNO(R.layout.chat_message_yesno, false, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m162x24dc692(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
         }),
-        VIEW_TYPE_DIALOG(R.layout.chat_message_dialog, false, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.2
+        VIEW_TYPE_DIALOG(R.layout.chat_message_dialog, false, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m163x24dc693(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
         }),
-        VIEW_TYPE_TEXTBOX(R.layout.chat_message_textbox, true, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.3
+        VIEW_TYPE_TEXTBOX(R.layout.chat_message_textbox, true, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m164x24dc694(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
         }),
-        VIEW_TYPE_SESSION_MARK(R.layout.chat_message_session_mark, false, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.4
+        VIEW_TYPE_SESSION_MARK(R.layout.chat_message_session_mark, false, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m165x24dc695(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
         }),
-        VIEW_TYPE_PLAIN(R.layout.chat_message_plain, false, new ChatEventViewHolder.Factory() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.5
+        VIEW_TYPE_PLAIN(R.layout.chat_message_plain, false, new ChatEventViewHolder.Factory() {
             private final /* synthetic */ ChatEventViewHolder $m$0(View view, RecyclerView.Adapter adapter) {
                 return SLChatEvent.ChatMessageViewType.m166x24dc696(view, adapter);
             }
 
-            @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+            @Override
             public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
                 return $m$0(view, adapter);
             }
@@ -275,7 +274,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
             return values();
         }
 
-        @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder.Factory
+        @Override
         public final ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter) {
             return this.viewHolderFactory.createViewHolder(view, adapter);
         }
@@ -522,14 +521,14 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
             chatEventViewHolder.chatSourceIcon.setChatterID(null, null);
             chatEventViewHolder.chatSourceIcon.setDefaultIcon(-1, false);
             chatEventViewHolder.chatSourceIcon.setForceIcon(-1);
-            chatEventViewHolder.chatSourceIcon.setVisibility(8);
+            chatEventViewHolder.chatSourceIcon.setVisibility(View.GONE);
             chatEventViewHolder.chatSourceIcon.setAttachedMessageSource(null);
         }
         if (chatEventViewHolder.chatSourceIconRight != null && chatEventViewHolder.chatSourceIconRight != chatterPicView) {
             chatEventViewHolder.chatSourceIconRight.setChatterID(null, null);
             chatEventViewHolder.chatSourceIconRight.setDefaultIcon(-1, false);
             chatEventViewHolder.chatSourceIconRight.setForceIcon(-1);
-            chatEventViewHolder.chatSourceIconRight.setVisibility(8);
+            chatEventViewHolder.chatSourceIconRight.setVisibility(View.GONE);
             chatEventViewHolder.chatSourceIconRight.setAttachedMessageSource(null);
         }
         if (chatEventViewHolder.bubbleView != null) {
@@ -551,7 +550,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                 case 1:
                     chatterPicView.setChatterID(null, null);
                     chatterPicView.setForceIcon(R.drawable.inv_object);
-                    chatterPicView.setVisibility(0);
+                    chatterPicView.setVisibility(View.VISIBLE);
                     chatterPicView.setAttachedMessageSource(this.source);
                     break;
                 case 2:
@@ -560,12 +559,12 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                         chatterPicView.setChatterID(null, null);
                         chatterPicView.setDefaultIcon(-1, false);
                         chatterPicView.setForceIcon(-1);
-                        chatterPicView.setVisibility(8);
+                        chatterPicView.setVisibility(View.GONE);
                         break;
                     } else {
                         Debug.Printf("chatterBindPic: name %s, sourceUUID %s", this.source.getSourceName(userManager), sourceUUID.toString());
                         chatterPicView.setChatterID(ChatterID.getUserChatterID(userManager.getUserID(), sourceUUID), this.source.getSourceName(userManager));
-                        chatterPicView.setVisibility(0);
+                        chatterPicView.setVisibility(View.VISIBLE);
                         chatterPicView.setAttachedMessageSource(this.source);
                         break;
                     }
@@ -573,7 +572,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                     chatterPicView.setChatterID(null, null);
                     chatterPicView.setDefaultIcon(-1, false);
                     chatterPicView.setForceIcon(-1);
-                    chatterPicView.setVisibility(8);
+                    chatterPicView.setVisibility(View.GONE);
                     chatterPicView.setAttachedMessageSource(null);
                     break;
             }
@@ -586,7 +585,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                     chatEventTimestampUpdater.addViewHolder(chatEventViewHolder);
                 }
             } else {
-                textView.setVisibility(8);
+                textView.setVisibility(View.GONE);
             }
         }
         TextView textView2 = chatEventViewHolder.textView;
@@ -685,7 +684,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_chat_generic_SLChatEvent_21084, reason: not valid java name */
     /* synthetic */ boolean m160xda67b1b8(Context context, MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.item_copy_message_text /* 2131755771 */:
+            case R.id.item_copy_message_text:
                 UserManager userManager = UserManager.getUserManager(this.agentUUID);
                 if (userManager != null) {
                     CharSequence plainTextMessage = getPlainTextMessage(context, userManager, true);
@@ -694,7 +693,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                     } else {
                         ((android.content.ClipboardManager) context.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Message", plainTextMessage));
                     }
-                    Toast.makeText(context, "Message copied to clipboard", 0).show();
+                    Toast.makeText(context, "Message copied to clipboard", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
@@ -708,7 +707,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         }
     }
 
-    @Override // android.view.View.OnLongClickListener
+    @Override
     public final boolean onLongClick(View view) {
         final Context context = view.getContext();
         if (context == null) {
@@ -716,12 +715,12 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         }
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.inflate(R.menu.chat_messages_context_menu);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() { // from class: com.lumiyaviewer.lumiya.slproto.chat.generic.-$Lambda$2ey8fl8aDXV9bCTwS1nc4b06kls.6
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             private final /* synthetic */ boolean $m$0(MenuItem menuItem) {
                 return SLChatEvent.this.m160xda67b1b8((Context) context, menuItem);
             }
 
-            @Override // androidx.appcompat.widget.PopupMenu.OnMenuItemClickListener
+            @Override
             public final boolean onMenuItemClick(MenuItem menuItem) {
                 return $m$0(menuItem);
             }

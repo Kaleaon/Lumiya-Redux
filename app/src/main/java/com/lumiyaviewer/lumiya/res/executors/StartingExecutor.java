@@ -6,7 +6,6 @@ import java.util.IdentityHashMap;
 import java.util.Queue;
 import java.util.Set;
 
-/* loaded from: classes.dex */
 public class StartingExecutor {
     private int maxConcurrentRequests;
     private final Queue<Startable> waitingRequests = new WeakQueue();

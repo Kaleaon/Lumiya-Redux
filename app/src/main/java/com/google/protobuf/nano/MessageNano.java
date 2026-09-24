@@ -3,7 +3,6 @@ package com.google.protobuf.nano;
 import java.io.IOException;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public abstract class MessageNano {
     protected volatile int cachedSize = -1;
 
@@ -55,7 +54,6 @@ public abstract class MessageNano {
         return bArr;
     }
 
-    /* renamed from: clone, reason: merged with bridge method [inline-methods] */
     public MessageNano clone() throws CloneNotSupportedException {
         return (MessageNano) super.clone();
     }

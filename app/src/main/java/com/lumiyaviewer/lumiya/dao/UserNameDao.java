@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class UserNameDao extends AbstractDao<UserName, UUID> {
     public static final String TABLENAME = "UserNames";
 
@@ -35,8 +34,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'UserNames'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, UserName userName) {
         sQLiteStatement.clearBindings();
         UUID uuid = userName.getUuid();
@@ -54,7 +52,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         sQLiteStatement.bindLong(4, userName.getIsBadUUID() ? 1L : 0L);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID getKey(UserName userName) {
         if (userName != null) {
             return userName.getUuid();
@@ -62,18 +60,18 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UserName readEntity(Cursor cursor, int i) {
         return new UserName(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)), cursor.isNull(i + 1) ? null : cursor.getString(i + 1), cursor.isNull(i + 2) ? null : cursor.getString(i + 2), cursor.getShort(i + 3) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, UserName userName, int i) {
         userName.setUuid(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)));
         userName.setUserName(cursor.isNull(i + 1) ? null : cursor.getString(i + 1));
@@ -81,7 +79,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         userName.setIsBadUUID(cursor.getShort(i + 3) != 0);
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -89,8 +87,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         return UUID.fromString(cursor.getString(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public UUID updateKeyAfterInsert(UserName userName, long j) {
         return userName.getUuid();
     }

@@ -68,7 +68,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UserManager {
 
     @Nonnull
@@ -166,9 +165,8 @@ public class UserManager {
     private final SubscriptionSingleDataPool<ChatterID> voiceActiveChatterPool = new SubscriptionSingleDataPool<>();
     private final SubscriptionSingleDataPool<VoiceAudioProperties> voiceAudioPropertiesPool = new SubscriptionSingleDataPool<>();
     private final SubscriptionPool<UUID, UserName> userNamesPool = new SubscriptionPool<>();
-    private final RateLimitRequestHandler<UUID, UserName> userNamesHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UserName, UserName>(this.userNamesPool, this.dbExecutor) { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.UserManager.1
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+    private final RateLimitRequestHandler<UUID, UserName> userNamesHandler = new RateLimitRequestHandler<>(new RequestProcessor<UUID, UserName, UserName>(this.userNamesPool, this.dbExecutor) {
+        @Override
         public boolean isRequestComplete(@Nonnull UUID uuid, UserName userName) {
             if (userName != null) {
                 if (userName.getIsBadUUID()) {
@@ -181,15 +179,13 @@ public class UserManager {
             return false;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        @Override
         @Nullable
         public UserName processRequest(@Nonnull UUID uuid) {
             return UserManager.this.daoSession.getUserNameDao().load(uuid);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
-        @Override // com.lumiyaviewer.lumiya.react.RequestProcessor
+        @Override
         public UserName processResult(@Nonnull UUID uuid, UserName userName) {
             UserName load = UserManager.this.daoSession.getUserNameDao().load(uuid);
             if (load == null) {

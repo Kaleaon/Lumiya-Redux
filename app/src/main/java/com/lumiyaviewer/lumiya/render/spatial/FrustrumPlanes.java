@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.spatial;
 
-/* loaded from: classes.dex */
 public class FrustrumPlanes {
     public static final int INSIDE = 1;
     public static final int INTERSECT = 0;

@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommands;
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVCmdVersion implements RLVCommand {
 
     /* renamed from: -com-lumiyaviewer-lumiya-slproto-modules-rlv-RLVCommandsSwitchesValues, reason: not valid java name */
@@ -145,7 +144,7 @@ public class RLVCmdVersion implements RLVCommand {
         return String.format("RestrainedLove viewer v%d.%d.%d", 1, 10, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
+    @Override
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         try {
             int parseInt = Integer.parseInt(str);

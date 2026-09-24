@@ -6,7 +6,6 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-/* loaded from: classes.dex */
 public interface IVrCoreLoggingService extends IInterface {
 
     public static abstract class Stub extends Binder implements IVrCoreLoggingService {
@@ -21,7 +20,7 @@ public interface IVrCoreLoggingService extends IInterface {
                 this.mRemote = iBinder;
             }
 
-            @Override // android.os.IInterface
+            @Override
             public IBinder asBinder() {
                 return this.mRemote;
             }
@@ -30,7 +29,7 @@ public interface IVrCoreLoggingService extends IInterface {
                 return Stub.DESCRIPTOR;
             }
 
-            @Override // com.google.vr.vrcore.logging.api.IVrCoreLoggingService
+            @Override
             public void log(VREventParcelable vREventParcelable) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -47,7 +46,7 @@ public interface IVrCoreLoggingService extends IInterface {
                 }
             }
 
-            @Override // com.google.vr.vrcore.logging.api.IVrCoreLoggingService
+            @Override
             public void logBatched(VREventParcelable[] vREventParcelableArr) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
@@ -72,12 +71,12 @@ public interface IVrCoreLoggingService extends IInterface {
             return (queryLocalInterface != null && (queryLocalInterface instanceof IVrCoreLoggingService)) ? (IVrCoreLoggingService) queryLocalInterface : new Proxy(iBinder);
         }
 
-        @Override // android.os.IInterface
+        @Override
         public IBinder asBinder() {
             return this;
         }
 
-        @Override // android.os.Binder
+        @Override
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             switch (i) {
                 case 2:

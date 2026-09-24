@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: classes.dex */
 public final class VrParamsProviderFactory {
     private static final boolean DEBUG = false;
     private static final String TAG = VrParamsProviderFactory.class.getSimpleName();

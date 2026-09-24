@@ -15,7 +15,6 @@ import com.lumiyaviewer.lumiya.slproto.modules.SLAvatarAppearance;
 import com.lumiyaviewer.lumiya.ui.common.DismissableAdapter;
 import com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener;
 
-/* loaded from: classes.dex */
 class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
 
     @Nullable
@@ -29,7 +28,7 @@ class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
         this.inflater = LayoutInflater.from(context);
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DismissableAdapter
+    @Override
     public boolean canDismiss(int i) {
         SLAvatarAppearance.WornItem item = getItem(i);
         if (item == null || this.avatarAppearance == null) {
@@ -44,12 +43,12 @@ class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
         return this.avatarAppearance.canTakeItemOff(item.getWornOn());
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public int getCount() {
         return this.wornItems.size();
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public SLAvatarAppearance.WornItem getItem(int i) {
         if (i < 0 || i >= this.wornItems.size()) {
             return null;
@@ -57,17 +56,17 @@ class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
         return this.wornItems.get(i);
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public long getItemId(int i) {
         return i;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public int getItemViewType(int i) {
         return 0;
     }
 
-    @Override // android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View view2 = (view == null || view.getId() == R.id.outfitItemLayout) ? view : null;
         View inflate = view2 == null ? this.inflater.inflate(R.layout.outfit_item, viewGroup, false) : view2;
@@ -75,26 +74,26 @@ class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
         ((TextView) inflate.findViewById(R.id.itemNameTextView)).setText(wornItem.getName());
         if (wornItem.getWornOn() != null) {
             ((ImageView) inflate.findViewById(R.id.itemTypeIconView)).setImageResource(R.drawable.inv_clothes);
-            inflate.findViewById(R.id.itemTouchableIcon).setVisibility(8);
+            inflate.findViewById(R.id.itemTouchableIcon).setVisibility(View.GONE);
         } else {
             ((ImageView) inflate.findViewById(R.id.itemTypeIconView)).setImageResource(R.drawable.inv_object);
-            inflate.findViewById(R.id.itemTouchableIcon).setVisibility(wornItem.getIsTouchable() ? 0 : 8);
+            inflate.findViewById(R.id.itemTouchableIcon).setVisibility(wornItem.getIsTouchable() ? View.VISIBLE : View.GONE);
         }
         SwipeDismissListViewTouchListener.restoreViewState(inflate);
         return inflate;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean hasStableIds() {
         return false;
     }
 
-    @Override // android.widget.BaseAdapter, android.widget.Adapter
+    @Override
     public boolean isEmpty() {
         return this.wornItems.isEmpty();
     }
 
-    @Override // com.lumiyaviewer.lumiya.ui.common.DismissableAdapter
+    @Override
     public void onDismiss(int i) {
         SLAvatarAppearance.WornItem item = getItem(i);
         if (item == null || this.avatarAppearance == null) {

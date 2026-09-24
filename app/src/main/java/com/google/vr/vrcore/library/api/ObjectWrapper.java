@@ -6,7 +6,6 @@ import com.google.vr.vrcore.library.api.IObjectWrapper;
 import java.lang.reflect.Field;
 
 @UsedByReflection("ObjectWrapper.java")
-/* loaded from: classes.dex */
 public final class ObjectWrapper<T> extends IObjectWrapper.Stub {
 
     @UsedByReflection("ObjectWrapper.java")

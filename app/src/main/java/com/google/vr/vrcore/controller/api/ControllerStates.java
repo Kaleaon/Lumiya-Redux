@@ -1,6 +1,5 @@
 package com.google.vr.vrcore.controller.api;
 
-/* loaded from: classes.dex */
 public class ControllerStates {
     public static final int CONNECTED = 3;
     public static final int CONNECTING = 2;

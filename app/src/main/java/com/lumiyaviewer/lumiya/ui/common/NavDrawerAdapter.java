@@ -22,17 +22,16 @@ import com.lumiyaviewer.lumiya.ui.search.SearchGridActivity;
 import com.lumiyaviewer.lumiya.ui.settings.SettingsActivity;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterView.OnItemClickListener {
-    private static NavDrawerItem[] items = {new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_chat, com.lumiyaviewer.lumiya.R.attr.MenuIconLocalChatThemed, com.lumiyaviewer.lumiya.R.string.nav_chat, ChatNewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_3d_view, com.lumiyaviewer.lumiya.R.attr.MenuIconWorldViewThemed, com.lumiyaviewer.lumiya.R.string.nav_3d_view, WorldViewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_objects, com.lumiyaviewer.lumiya.R.attr.MenuIconObjectsThemed, com.lumiyaviewer.lumiya.R.string.nav_objects, ObjectListNewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_inventory, com.lumiyaviewer.lumiya.R.attr.MenuIconInventoryThemed, com.lumiyaviewer.lumiya.R.string.nav_inventory, InventoryActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_minimap, com.lumiyaviewer.lumiya.R.attr.MenuIconMinimapThemed, com.lumiyaviewer.lumiya.R.string.nav_minimap, MinimapActivity.class), new NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_teleport_home, com.lumiyaviewer.lumiya.R.attr.MenuIconHomeThemed, com.lumiyaviewer.lumiya.R.string.nav_teleport_home) { // from class: com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.1
-        @Override // com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.NavDrawerItem
+    private static NavDrawerItem[] items = {new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_chat, com.lumiyaviewer.lumiya.R.attr.MenuIconLocalChatThemed, com.lumiyaviewer.lumiya.R.string.nav_chat, ChatNewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_3d_view, com.lumiyaviewer.lumiya.R.attr.MenuIconWorldViewThemed, com.lumiyaviewer.lumiya.R.string.nav_3d_view, WorldViewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_objects, com.lumiyaviewer.lumiya.R.attr.MenuIconObjectsThemed, com.lumiyaviewer.lumiya.R.string.nav_objects, ObjectListNewActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_inventory, com.lumiyaviewer.lumiya.R.attr.MenuIconInventoryThemed, com.lumiyaviewer.lumiya.R.string.nav_inventory, InventoryActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_minimap, com.lumiyaviewer.lumiya.R.attr.MenuIconMinimapThemed, com.lumiyaviewer.lumiya.R.string.nav_minimap, MinimapActivity.class), new NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_teleport_home, com.lumiyaviewer.lumiya.R.attr.MenuIconHomeThemed, com.lumiyaviewer.lumiya.R.string.nav_teleport_home) {
+        @Override
         public void onClick(Context context) {
             if (context instanceof Activity) {
                 TeleportHomeDialog.show((Activity) context);
             }
         }
-    }, new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_my_avatar, com.lumiyaviewer.lumiya.R.attr.MenuIconCardThemed, com.lumiyaviewer.lumiya.R.string.nav_my_avatar, MyAvatarActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_people_search, com.lumiyaviewer.lumiya.R.attr.MenuIconSearchThemed, com.lumiyaviewer.lumiya.R.string.nav_search, SearchGridActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_settings, com.lumiyaviewer.lumiya.R.attr.MenuIconSettingsThemed, com.lumiyaviewer.lumiya.R.string.nav_settings, SettingsActivity.class), new NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_signout, com.lumiyaviewer.lumiya.R.attr.MenuIconSignOffThemed, com.lumiyaviewer.lumiya.R.string.nav_signout) { // from class: com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.2
-        @Override // com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.NavDrawerItem
+    }, new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_my_avatar, com.lumiyaviewer.lumiya.R.attr.MenuIconCardThemed, com.lumiyaviewer.lumiya.R.string.nav_my_avatar, MyAvatarActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_people_search, com.lumiyaviewer.lumiya.R.attr.MenuIconSearchThemed, com.lumiyaviewer.lumiya.R.string.nav_search, SearchGridActivity.class), new NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_settings, com.lumiyaviewer.lumiya.R.attr.MenuIconSettingsThemed, com.lumiyaviewer.lumiya.R.string.nav_settings, SettingsActivity.class), new NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_signout, com.lumiyaviewer.lumiya.R.attr.MenuIconSignOffThemed, com.lumiyaviewer.lumiya.R.string.nav_signout) {
+        @Override
         public void onClick(Context context) {
             if (context instanceof Activity) {
                 LogoutDialog.show((Activity) context);
@@ -48,11 +47,11 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterVie
             this.activityClass = cls;
         }
 
-        @Override // com.lumiyaviewer.lumiya.ui.common.NavDrawerAdapter.NavDrawerItem
+        @Override
         public void onClick(Context context) {
             UUID activeAgentID;
             Intent intent = new Intent(context, this.activityClass);
-            intent.addFlags(131072);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             if ((context instanceof Activity) && (activeAgentID = ActivityUtils.getActiveAgentID(((Activity) context).getIntent())) != null) {
                 intent.putExtra("activeAgentUUID", activeAgentID.toString());
             }
@@ -79,7 +78,7 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterVie
         super(context, com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, items);
     }
 
-    @Override // android.widget.ArrayAdapter, android.widget.Adapter
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         NavDrawerItem item = getItem(i);
         if (item == null) {
@@ -95,7 +94,7 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> implements AdapterVie
         return view;
     }
 
-    @Override // android.widget.AdapterView.OnItemClickListener
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
         NavDrawerItem item = getItem(i);
         if (item != null) {

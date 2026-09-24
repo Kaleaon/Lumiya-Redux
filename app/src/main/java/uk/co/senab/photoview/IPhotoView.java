@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-/* loaded from: classes.dex */
 public interface IPhotoView {
     public static final float DEFAULT_MAX_SCALE = 3.0f;
     public static final float DEFAULT_MID_SCALE = 1.75f;

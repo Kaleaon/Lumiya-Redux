@@ -5,19 +5,26 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * EventLocationReply
+ *
+ * <p>Template: {@code EventLocationReply Low 308 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class EventLocationReply extends SLMessage {
     public EventData EventData_Field;
     public QueryData QueryData_Field;
 
+    /** Block EventData, Single. */
     public static class EventData {
-        public UUID RegionID;
-        public LLVector3 RegionPos;
-        public boolean Success;
+        public UUID RegionID; // LLUUID
+        public LLVector3 RegionPos; // LLVector3
+        public boolean Success; // BOOL
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
     public EventLocationReply() {
@@ -26,28 +33,29 @@ public class EventLocationReply extends SLMessage {
         this.EventData_Field = new EventData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 49;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleEventLocationReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 52);
+        // Message number: Low 308 (EventLocationReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x34);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         packBoolean(byteBuffer, this.EventData_Field.Success);
         packUUID(byteBuffer, this.EventData_Field.RegionID);
         packLLVector3(byteBuffer, this.EventData_Field.RegionPos);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);
         this.EventData_Field.Success = unpackBoolean(byteBuffer);

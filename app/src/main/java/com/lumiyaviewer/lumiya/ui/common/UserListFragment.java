@@ -25,7 +25,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class UserListFragment extends Fragment {
 
     @Nullable
@@ -67,26 +66,26 @@ public abstract class UserListFragment extends Fragment {
         handleUserDefaultAction(chatterID);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         View view = getView();
         if (view != null) {
             ListView listView = (ListView) view.findViewById(R.id.contactList);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$1wR8wJi1e-GgAIYEhals_u5j3nM
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 private final /* synthetic */ void $m$0(AdapterView adapterView, View view2, int i, long j) {
                     UserListFragment.this.m588lambda$com_lumiyaviewer_lumiya_ui_common_UserListFragment_1689(adapterView, view2, i, j);
                 }
 
-                @Override // android.widget.AdapterView.OnItemClickListener
+                @Override
                 public final void onItemClick(AdapterView adapterView, View view2, int i, long j) {
                     $m$0(adapterView, view2, i, j);
                 }
             });
             registerForContextMenu(listView);
             if (itemsMayBeDismissed()) {
-                SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() { // from class: com.lumiyaviewer.lumiya.ui.common.UserListFragment.1
-                    @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.DismissCallbacks
+                SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = new SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                    @Override
                     public boolean canDismiss(ListView listView2, int i) {
                         ListAdapter adapter = listView2.getAdapter();
                         if (adapter instanceof DismissableAdapter) {
@@ -95,7 +94,7 @@ public abstract class UserListFragment extends Fragment {
                         return false;
                     }
 
-                    @Override // com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener.DismissCallbacks
+                    @Override
                     public void onDismiss(ListView listView2, int i) {
                         ListAdapter adapter = listView2.getAdapter();
                         if (adapter instanceof DismissableAdapter) {
@@ -109,18 +108,18 @@ public abstract class UserListFragment extends Fragment {
         }
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         this.userManager = ActivityUtils.getUserManager(getArguments());
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         return layoutInflater.inflate(R.layout.contacts_group, viewGroup, false);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStart() {
         ListView listView;
         super.onStart();
@@ -133,7 +132,7 @@ public abstract class UserListFragment extends Fragment {
         listView.setAdapter(userManager != null ? createListAdapter(getActivity(), getLoaderManager(), userManager) : null);
     }
 
-    @Override // androidx.fragment.app.Fragment
+    @Override
     public void onStop() {
         ListView listView;
         View view = getView();

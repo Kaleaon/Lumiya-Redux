@@ -5,20 +5,34 @@ import java.net.Inet4Address;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * KickUser
+ * *FIXME*
+ * Kick off a logged-in user, such as when two people log in with the
+ * same account name.
+ * ROUTED dataserver -> userserver -> spaceserver -> simulator -> viewer
+ * reliable, but that may not matter if a system component is quitting
+ *
+ * <p>Template: {@code KickUser Low 163 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_kick_user()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class KickUser extends SLMessage {
     public TargetBlock TargetBlock_Field;
     public UserInfo UserInfo_Field;
 
+    /** Block TargetBlock, Single. */
     public static class TargetBlock {
-        public Inet4Address TargetIP;
-        public int TargetPort;
+        public Inet4Address TargetIP; // IPADDR - U32 encoded IP
+        public int TargetPort; // IPPORT
     }
 
+    /** Block UserInfo, Single. */
     public static class UserInfo {
-        public UUID AgentID;
-        public byte[] Reason;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public byte[] Reason; // Variable 2 - string
+        public UUID SessionID; // LLUUID
     }
 
     public KickUser() {
@@ -27,21 +41,22 @@ public class KickUser extends SLMessage {
         this.UserInfo_Field = new UserInfo();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.UserInfo_Field.Reason.length + 34 + 10;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleKickUser(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -93);
+        // Message number: Low 163 (KickUser).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xA3);
         packIPAddress(byteBuffer, this.TargetBlock_Field.TargetIP);
         packShort(byteBuffer, (short) this.TargetBlock_Field.TargetPort);
         packUUID(byteBuffer, this.UserInfo_Field.AgentID);
@@ -49,7 +64,7 @@ public class KickUser extends SLMessage {
         packVariable(byteBuffer, this.UserInfo_Field.Reason, 2);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TargetBlock_Field.TargetIP = unpackIPAddress(byteBuffer);
         this.TargetBlock_Field.TargetPort = unpackShort(byteBuffer) & 65535;

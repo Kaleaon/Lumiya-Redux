@@ -6,19 +6,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AvatarPicksReply
+ * dataserver -> simulator -> viewer
+ * Send the header information for this avatar's picks
+ * This fills in the tabs of the Picks panel.
+ * reliable
+ *
+ * <p>Template: {@code AvatarPicksReply Low 178 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLAvatarPropertiesProcessor::processAvatarPicksReply()} in indra/newview/llavatarpropertiesprocessor.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AvatarPicksReply extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<Data> Data_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID TargetID;
+        public UUID AgentID; // LLUUID
+        public UUID TargetID; // LLUUID
     }
 
+    /** Block Data, Variable. */
     public static class Data {
-        public UUID PickID;
-        public byte[] PickName;
+        public UUID PickID; // LLUUID
+        public byte[] PickName; // Variable 1 - string
     }
 
     public AvatarPicksReply() {
@@ -26,7 +39,7 @@ public class AvatarPicksReply extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.Data_Fields.iterator();
@@ -39,16 +52,17 @@ public class AvatarPicksReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAvatarPicksReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -78);
+        // Message number: Low 178 (AvatarPicksReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xB2);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.TargetID);
         byteBuffer.put((byte) this.Data_Fields.size());
@@ -58,7 +72,7 @@ public class AvatarPicksReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.TargetID = unpackUUID(byteBuffer);

@@ -3,7 +3,6 @@ package com.google.vr.sdk.base;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-/* loaded from: classes.dex */
 public class Distortion {
     private float[] coefficients;
     private static final float[] CARDBOARD_V2_2_COEFFICIENTS = {0.34f, 0.55f};

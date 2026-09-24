@@ -2,7 +2,6 @@ package com.google.vr.cardboard;
 
 import android.net.Uri;
 
-/* loaded from: classes.dex */
 public class VrSettingsProviderContract {
     public static final String DAYDREAM_SETUP_COMPLETED = "daydream_setup";
     public static final String DEVICE_PARAMS_SETTING = "device_params";

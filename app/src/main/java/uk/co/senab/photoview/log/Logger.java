@@ -1,6 +1,5 @@
 package uk.co.senab.photoview.log;
 
-/* loaded from: classes.dex */
 public interface Logger {
     int d(String str, String str2);
 

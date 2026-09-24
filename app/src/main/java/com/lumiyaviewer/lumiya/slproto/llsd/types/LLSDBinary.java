@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDBinary extends LLSDNode {
     private byte[] value;
 
@@ -18,12 +17,12 @@ public class LLSDBinary extends LLSDNode {
         this.value = bArr;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public byte[] asBinary() {
         return this.value;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public int asInt() {
         int i = 0;
         for (int i2 = 0; i2 < 4 && i2 < this.value.length; i2++) {
@@ -32,7 +31,7 @@ public class LLSDBinary extends LLSDNode {
         return i;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public long asLong() {
         long j = 0;
         for (int i = 0; i < 8 && i < this.value.length; i++) {
@@ -41,14 +40,14 @@ public class LLSDBinary extends LLSDNode {
         return j;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(98);
         dataOutputStream.writeInt(this.value.length);
         dataOutputStream.write(this.value);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "binary");
         xmlSerializer.text(Base64.encodeToString(this.value, false));

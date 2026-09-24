@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class SLObjectProfileData {
     public static SLObjectProfileData create(@Nonnull SLObjectInfo sLObjectInfo) {
         HoverText hoverText = sLObjectInfo.getHoverText();

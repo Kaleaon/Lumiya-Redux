@@ -6,19 +6,34 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DEPRECATED: ObjectScale
+ * == Old Behavior ==
+ * Set the scale on objects
+ * == Reason for deprecation ==
+ * Unused code path was removed in the move to Havok4
+ * Object position, scale and rotation messages were already unified
+ * to MultipleObjectUpdate and this message was unused cruft.
+ * == New Location ==
+ * MultipleObjectUpdate can be used instead.
+ *
+ * <p>Template: {@code ObjectScale Low 92 NotTrusted Zerocoded Deprecated}
+ * (recovered/reference/message_template.msg).
+ */
 public class ObjectScale extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public int ObjectLocalID;
-        public LLVector3 Scale;
+        public int ObjectLocalID; // U32
+        public LLVector3 Scale; // LLVector3
     }
 
     public ObjectScale() {
@@ -26,21 +41,22 @@ public class ObjectScale extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ObjectData_Fields.size() * 16) + 37;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleObjectScale(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 92);
+        // Message number: Low 92 (ObjectScale).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x5C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -50,7 +66,7 @@ public class ObjectScale extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -19,7 +19,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 
-/* loaded from: classes.dex */
 public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
     public static final int DEBUG_CHECK_GL_ERROR = 1;
     public static final int DEBUG_LOG_GL_CALLS = 2;
@@ -72,7 +71,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             return iArr2;
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLConfigChooser
+        @Override
         public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay) {
             int[] iArr = new int[1];
             if (!egl10.eglChooseConfig(eGLDisplay, this.mConfigSpec, null, 0, iArr)) {
@@ -120,7 +119,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             return !egl10.eglGetConfigAttrib(eGLDisplay, eGLConfig, i, this.mValue) ? i2 : this.mValue[0];
         }
 
-        @Override // com.google.vr.ndk.base.GvrSurfaceView.BaseConfigChooser
+        @Override
         public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr) {
             for (EGLConfig eGLConfig : eGLConfigArr) {
                 int findConfigAttrib = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12325, 0);
@@ -145,7 +144,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         private DefaultContextFactory() {
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLContextFactory
+        @Override
         public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
             int[] iArr = {EGL_CONTEXT_CLIENT_VERSION, GvrSurfaceView.this.mEGLContextClientVersion, 12344};
             EGLContext eGLContext = EGL10.EGL_NO_CONTEXT;
@@ -155,7 +154,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             return egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLContextFactory
+        @Override
         public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
             if (egl10.eglDestroyContext(eGLDisplay, eGLContext)) {
                 return;
@@ -171,7 +170,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         private DefaultWindowSurfaceFactory() {
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
+        @Override
         public EGLSurface createWindowSurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, Object obj) {
             try {
                 return egl10.eglCreateWindowSurface(eGLDisplay, eGLConfig, obj, null);
@@ -181,7 +180,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        @Override // android.opengl.GLSurfaceView.EGLWindowSurfaceFactory
+        @Override
         public void destroySurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLSurface eGLSurface) {
             egl10.eglDestroySurface(eGLDisplay, eGLSurface);
         }
@@ -579,7 +578,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        @Override // java.lang.Thread, java.lang.Runnable
+        @Override
         public void run() {
             setName(new StringBuilder(29).append("GLThread ").append(getId()).toString());
             try {
@@ -658,17 +657,17 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             this.mBuilder.delete(0, this.mBuilder.length());
         }
 
-        @Override // java.io.Writer, java.io.Closeable, java.lang.AutoCloseable
+        @Override
         public void close() {
             flushBuilder();
         }
 
-        @Override // java.io.Writer, java.io.Flushable
+        @Override
         public void flush() {
             flushBuilder();
         }
 
-        @Override // java.io.Writer
+        @Override
         public void write(char[] cArr, int i, int i2) {
             for (int i3 = 0; i3 < i2; i3++) {
                 char c = cArr[i + i3];
@@ -731,7 +730,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         return this.mGLThread.getRenderMode();
     }
 
-    @Override // android.view.SurfaceView, android.view.View
+    @Override
     protected void onAttachedToWindow() {
         int renderMode;
         int swapMode;
@@ -756,7 +755,7 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mDetached = false;
     }
 
-    @Override // android.view.SurfaceView, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         if (this.mGLThread != null) {
             this.mGLThread.requestExitAndWait();
@@ -849,22 +848,22 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
         this.mGLThread.onWindowResize(i2, i3);
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.mGLThread.surfaceCreated();
     }
 
-    @Override // android.view.SurfaceHolder.Callback
+    @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         this.mGLThread.surfaceDestroyed();
     }
 
-    @Override // android.view.SurfaceHolder.Callback2
+    @Override
     public void surfaceRedrawNeeded(SurfaceHolder surfaceHolder) {
         this.mGLThread.requestRenderAndWait();
     }

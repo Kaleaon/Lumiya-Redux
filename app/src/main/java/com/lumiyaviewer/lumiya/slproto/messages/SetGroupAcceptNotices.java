@@ -4,24 +4,32 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> simulator -> dataserver
+ *
+ * <p>Template: {@code SetGroupAcceptNotices Low 370 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class SetGroupAcceptNotices extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
     public NewData NewData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public boolean AcceptNotices;
-        public UUID GroupID;
+        public boolean AcceptNotices; // BOOL
+        public UUID GroupID; // LLUUID
     }
 
+    /** Block NewData, Single. */
     public static class NewData {
-        public boolean ListInProfile;
+        public boolean ListInProfile; // BOOL
     }
 
     public SetGroupAcceptNotices() {
@@ -31,21 +39,22 @@ public class SetGroupAcceptNotices extends SLMessage {
         this.NewData_Field = new NewData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 54;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleSetGroupAcceptNotices(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 114);
+        // Message number: Low 370 (SetGroupAcceptNotices).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x72);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.GroupID);
@@ -53,7 +62,7 @@ public class SetGroupAcceptNotices extends SLMessage {
         packBoolean(byteBuffer, this.NewData_Field.ListInProfile);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

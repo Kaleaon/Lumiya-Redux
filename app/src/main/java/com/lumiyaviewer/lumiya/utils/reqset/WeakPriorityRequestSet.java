@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-/* loaded from: classes.dex */
 public class WeakPriorityRequestSet<T> {
     private final Map<Integer, WeakRequestSet<T>> priorityBins = new TreeMap();
     private final Lock lock = new ReentrantLock();

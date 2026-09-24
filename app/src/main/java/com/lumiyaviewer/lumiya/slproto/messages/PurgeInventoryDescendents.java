@@ -1,22 +1,29 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * This is how you remove inventory when you're not even sure what it
+ * is - only it's parenting.
+ *
+ * <p>Template: {@code PurgeInventoryDescendents Low 285 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class PurgeInventoryDescendents extends SLMessage {
     public AgentData AgentData_Field;
     public InventoryData InventoryData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block InventoryData, Single. */
     public static class InventoryData {
-        public UUID FolderID;
+        public UUID FolderID; // LLUUID
     }
 
     public PurgeInventoryDescendents() {
@@ -25,27 +32,28 @@ public class PurgeInventoryDescendents extends SLMessage {
         this.InventoryData_Field = new InventoryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 52;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandlePurgeInventoryDescendents(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put(Ascii.GS);
+        // Message number: Low 285 (PurgeInventoryDescendents).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x1D);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.InventoryData_Field.FolderID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -8,14 +8,12 @@ import androidx.core.app.NotificationCompat;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
-import com.lumiyaviewer.lumiya.slproto.avatar.SLMoveEvents;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo;
 import com.lumiyaviewer.lumiya.ui.login.LoginActivity;
 import com.lumiyaviewer.lumiya.ui.notify.NotificationChannels;
 
-/* loaded from: classes.dex */
 public class OnlineNotificationInfo {
 
     private final String contentText;
@@ -100,7 +98,7 @@ public class OnlineNotificationInfo {
             return null;
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationChannels.getInstance().getChannelName(NotificationChannels.Channel.OnlineStatus));
-        builder.setSmallIcon(R.drawable.ic_online_notify).setContentTitle(this.titleText).setContentText(this.contentText).setDefaults(0).setOngoing(true).setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, (Class<?>) LoginActivity.class), SLMoveEvents.AGENT_CONTROL_AWAY)).setOnlyAlertOnce(true);
+        builder.setSmallIcon(R.drawable.ic_online_notify).setContentTitle(this.titleText).setContentText(this.contentText).setDefaults(0).setOngoing(true).setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, (Class<?>) LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT)).setOnlyAlertOnce(true);
         if (this.hasProgress) {
             builder.setProgress(0, 0, true);
         }

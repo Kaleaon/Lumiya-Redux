@@ -12,7 +12,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-/* loaded from: classes.dex */
 public class LLSDArray extends LLSDNode {
     private ArrayList<LLSDNode> items = new ArrayList<>();
 
@@ -35,7 +34,7 @@ public class LLSDArray extends LLSDNode {
         this.items.add(lLSDNode);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public LLSDNode byIndex(int i) throws LLSDInvalidKeyException {
         if (i < 0 || i >= this.items.size()) {
             throw new LLSDInvalidKeyException(String.format("Array index out of range: req %d, size %d", Integer.valueOf(i), Integer.valueOf(this.items.size())));
@@ -43,12 +42,12 @@ public class LLSDArray extends LLSDNode {
         return this.items.get(i);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public int getCount() {
         return this.items.size();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toBinary(DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(91);
         dataOutputStream.writeInt(this.items.size());
@@ -59,7 +58,7 @@ public class LLSDArray extends LLSDNode {
         dataOutputStream.writeByte(93);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
+    @Override
     public void toXML(XmlSerializer xmlSerializer) throws IOException {
         xmlSerializer.startTag("", "array");
         Iterator<LLSDNode> it = this.items.iterator();

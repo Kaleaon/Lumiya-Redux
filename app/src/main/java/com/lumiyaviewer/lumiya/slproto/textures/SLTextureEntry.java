@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.textures;
 
 import androidx.core.internal.view.SupportMenu;
-import com.google.common.base.Ascii;
 import com.google.common.logging.nano.Vr;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.utils.InternPool;
@@ -10,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLTextureEntry {
     public static final int MAX_FACES = 32;
     private static final SLTextureEntryFace[] emptyFaces = new SLTextureEntryFace[0];
@@ -263,7 +261,7 @@ public class SLTextureEntry {
         int i = 0;
         do {
             b = byteBuffer.get();
-            i = (i << 7) | (b & Ascii.DEL);
+            i = (i << 7) | (b & 0x7F);
             iArr[0] = iArr[0] + 7;
         } while ((b & 128) != 0);
         return i;

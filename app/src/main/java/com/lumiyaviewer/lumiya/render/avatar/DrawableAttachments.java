@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-/* loaded from: classes.dex */
 class DrawableAttachments {
     private GLLoadableBuffer glAnimationDataBuffer;
 

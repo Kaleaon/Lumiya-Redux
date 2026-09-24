@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewHolder> {
     private final UUID agentUUID;
     private final Context context;
@@ -76,7 +75,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
             this.timestampTextView.setText(DateUtils.getRelativeTimeSpanString(TransactionLogAdapter.this.context, this.calendar.getTimeInMillis(), false));
         }
 
-        @Override // android.view.View.OnClickListener
+        @Override
         public void onClick(View view) {
             if (TransactionLogAdapter.this.onTransactionClickListener == null || this.moneyTransaction == null) {
                 return;
@@ -103,7 +102,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
             transactionViewHolder.finalBalanceTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.finalBalanceTextView, "field 'finalBalanceTextView'", TextView.class);
         }
 
-        @Override // butterknife.Unbinder
+        @Override
         @CallSuper
         public void unbind() {
             TransactionViewHolder transactionViewHolder = this.target;
@@ -127,7 +126,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         setHasStableIds(true);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemCount() {
         if (this.data != null) {
             return this.data.size();
@@ -135,7 +134,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         return 0;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public long getItemId(int i) {
         if (this.data == null || i < 0 || i >= this.data.size()) {
             return -1L;
@@ -143,7 +142,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         return this.data.get(i).getId().longValue();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onBindViewHolder(TransactionViewHolder transactionViewHolder, int i) {
         if (this.data == null || i < 0 || i >= this.data.size()) {
             return;
@@ -151,12 +150,12 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         transactionViewHolder.bindToData(this.data.get(i));
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public TransactionViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new TransactionViewHolder(this.inflater.inflate(com.lumiyaviewer.lumiya.R.layout.transaction_log_item, viewGroup, false));
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onViewRecycled(TransactionViewHolder transactionViewHolder) {
         transactionViewHolder.onRecycled();
     }

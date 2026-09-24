@@ -9,7 +9,6 @@ import com.google.protobuf.nano.MessageNano;
 import com.google.protobuf.nano.WireFormatNano;
 import java.io.IOException;
 
-/* loaded from: classes.dex */
 public interface Vr {
 
     public static final class VREvent extends ExtendableMessageNano<VREvent> implements Cloneable {
@@ -75,8 +74,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Application clone() {
                 try {
                     return (Application) super.clone();
@@ -85,7 +83,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.packageName != null) {
@@ -97,7 +95,7 @@ public interface Vr {
                 return this.version == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(3, this.version);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Application mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -122,7 +120,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.packageName != null) {
                     codedOutputByteBufferNano.writeString(1, this.packageName);
@@ -189,8 +187,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final AudioStats clone() {
                 try {
                     AudioStats audioStats = (AudioStats) super.clone();
@@ -232,7 +229,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.renderingMode != null) {
@@ -285,7 +282,7 @@ public interface Vr {
                 return computeSerializedSize;
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final AudioStats mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -385,7 +382,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.renderingMode != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.renderingMode.intValue());
@@ -504,8 +501,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Capture clone() {
                     try {
                         return (Capture) super.clone();
@@ -514,7 +510,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.outcome != null) {
@@ -538,7 +534,7 @@ public interface Vr {
                     return this.processingTimeMs == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(7, this.processingTimeMs.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Capture mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -583,7 +579,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.outcome != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.outcome.intValue());
@@ -658,8 +654,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Share clone() {
                     try {
                         return (Share) super.clone();
@@ -668,7 +663,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.type != null) {
@@ -680,7 +675,7 @@ public interface Vr {
                     return this.numPhotos == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(3, this.numPhotos.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Share mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -716,7 +711,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.type != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.type.intValue());
@@ -772,8 +767,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final ShareStart clone() {
                     try {
                         return (ShareStart) super.clone();
@@ -782,7 +776,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.originScreen != null) {
@@ -791,7 +785,7 @@ public interface Vr {
                     return this.numPhotos == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(2, this.numPhotos.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final ShareStart mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -819,7 +813,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.originScreen != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.originScreen.intValue());
@@ -876,8 +870,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final View clone() {
                     try {
                         return (View) super.clone();
@@ -886,7 +879,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.orientation != null) {
@@ -901,7 +894,7 @@ public interface Vr {
                     return this.numPanos == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(4, this.numPanos.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final View mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -935,7 +928,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.orientation != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.orientation.intValue());
@@ -986,8 +979,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Cyclops clone() {
                 try {
                     Cyclops cyclops = (Cyclops) super.clone();
@@ -1009,7 +1001,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.capture != null) {
@@ -1024,7 +1016,7 @@ public interface Vr {
                 return this.shareStart == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(4, this.shareStart);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Cyclops mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -1064,7 +1056,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.capture != null) {
                     codedOutputByteBufferNano.writeMessage(1, this.capture);
@@ -1128,8 +1120,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final DoublePrecisionTransform clone() {
                 try {
                     return (DoublePrecisionTransform) super.clone();
@@ -1138,7 +1129,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.translationX != null) {
@@ -1162,7 +1153,7 @@ public interface Vr {
                 return this.scale == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeDoubleSize(7, this.scale.doubleValue());
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final DoublePrecisionTransform mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -1199,7 +1190,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.translationX != null) {
                     codedOutputByteBufferNano.writeDouble(1, this.translationX.doubleValue());
@@ -1287,8 +1278,7 @@ public interface Vr {
                         return this;
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                    /* renamed from: clone */
+                    @Override
                     public final ControllerState clone() {
                         try {
                             ControllerState controllerState = (ControllerState) super.clone();
@@ -1301,7 +1291,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     protected final int computeSerializedSize() {
                         int computeSerializedSize = super.computeSerializedSize();
                         if (this.role != null) {
@@ -1310,7 +1300,7 @@ public interface Vr {
                         return this.startFromControllerTransform == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(2, this.startFromControllerTransform);
                     }
 
-                    @Override // com.google.protobuf.nano.MessageNano
+                    @Override
                     public final ControllerState mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                         while (true) {
                             int readTag = codedInputByteBufferNano.readTag();
@@ -1341,7 +1331,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                         if (this.role != null) {
                             codedOutputByteBufferNano.writeInt32(1, this.role.intValue());
@@ -1384,8 +1374,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Actor clone() {
                     try {
                         Actor actor = (Actor) super.clone();
@@ -1406,7 +1395,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.startFromHeadTransform != null) {
@@ -1425,7 +1414,7 @@ public interface Vr {
                     return i;
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Actor mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -1464,7 +1453,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.startFromHeadTransform != null) {
                         codedOutputByteBufferNano.writeMessage(2, this.startFromHeadTransform);
@@ -1515,8 +1504,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final AppState clone() {
                     try {
                         return (AppState) super.clone();
@@ -1525,13 +1513,13 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     return this.appModeId == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(1, this.appModeId.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final AppState mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -1550,7 +1538,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.appModeId != null) {
                         codedOutputByteBufferNano.writeInt64(1, this.appModeId.longValue());
@@ -1600,8 +1588,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final ControllerState clone() {
                     try {
                         ControllerState controllerState = (ControllerState) super.clone();
@@ -1614,7 +1601,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.role != null) {
@@ -1623,7 +1610,7 @@ public interface Vr {
                     return this.startFromControllerTransform == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(2, this.startFromControllerTransform);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final ControllerState mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -1654,7 +1641,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.role != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.role.intValue());
@@ -1700,8 +1687,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Environment clone() {
                     try {
                         Environment environment = (Environment) super.clone();
@@ -1714,13 +1700,13 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     return this.startFromEnvironmentTransform == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(1, this.startFromEnvironmentTransform);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Environment mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -1742,7 +1728,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.startFromEnvironmentTransform != null) {
                         codedOutputByteBufferNano.writeMessage(1, this.startFromEnvironmentTransform);
@@ -1789,8 +1775,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Menu clone() {
                     try {
                         return (Menu) super.clone();
@@ -1799,7 +1784,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.categoryName != null) {
@@ -1811,7 +1796,7 @@ public interface Vr {
                     return this.contentKey == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(3, this.contentKey);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Menu mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -1836,7 +1821,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.categoryName != null) {
                         codedOutputByteBufferNano.writeString(1, this.categoryName);
@@ -1924,8 +1909,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Preferences clone() {
                     try {
                         return (Preferences) super.clone();
@@ -1934,7 +1918,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.labelsState != null) {
@@ -1952,7 +1936,7 @@ public interface Vr {
                     return this.humanScaleMode == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(5, this.humanScaleMode.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Preferences mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2013,7 +1997,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.labelsState != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.labelsState.intValue());
@@ -2078,8 +2062,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final SplashScreen clone() {
                     try {
                         return (SplashScreen) super.clone();
@@ -2088,7 +2071,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.exitType != null) {
@@ -2103,7 +2086,7 @@ public interface Vr {
                     return this.viewPreloadDurationMs == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(4, this.viewPreloadDurationMs.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final SplashScreen mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2136,7 +2119,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.exitType != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.exitType.intValue());
@@ -2190,8 +2173,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Tour clone() {
                     try {
                         return (Tour) super.clone();
@@ -2200,7 +2182,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.name != null) {
@@ -2209,7 +2191,7 @@ public interface Vr {
                     return this.playbackMs == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(2, this.playbackMs.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Tour mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2231,7 +2213,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.name != null) {
                         codedOutputByteBufferNano.writeString(1, this.name);
@@ -2279,8 +2261,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Tutorial clone() {
                     try {
                         return (Tutorial) super.clone();
@@ -2289,7 +2270,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.stage != null) {
@@ -2298,7 +2279,7 @@ public interface Vr {
                     return this.stageName == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(2, this.stageName);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Tutorial mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2320,7 +2301,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.stage != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.stage.intValue());
@@ -2376,8 +2357,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final View clone() {
                     try {
                         View view = (View) super.clone();
@@ -2390,7 +2370,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.mode != null) {
@@ -2402,7 +2382,7 @@ public interface Vr {
                     return this.simulationSecondsSinceEpoch == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(3, this.simulationSecondsSinceEpoch.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final View mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2437,7 +2417,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.mode != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.mode.intValue());
@@ -2493,8 +2473,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final EarthVr clone() {
                 try {
                     EarthVr earthVr = (EarthVr) super.clone();
@@ -2550,7 +2529,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.startFromKeyholeTransform != null) {
@@ -2601,7 +2580,7 @@ public interface Vr {
                 return this.splashScreen == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(12, this.splashScreen);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final EarthVr mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -2711,7 +2690,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.startFromKeyholeTransform != null) {
                     codedOutputByteBufferNano.writeMessage(1, this.startFromKeyholeTransform);
@@ -2807,8 +2786,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Pano clone() {
                     try {
                         return (Pano) super.clone();
@@ -2817,7 +2795,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.widthPixels != null) {
@@ -2829,7 +2807,7 @@ public interface Vr {
                     return this.stereoFormat == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(3, this.stereoFormat.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Pano mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2860,7 +2838,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.widthPixels != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.widthPixels.intValue());
@@ -2920,8 +2898,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Video clone() {
                     try {
                         return (Video) super.clone();
@@ -2930,7 +2907,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.widthPixels != null) {
@@ -2945,7 +2922,7 @@ public interface Vr {
                     return this.videoDurationMs == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(4, this.videoDurationMs.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Video mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -2979,7 +2956,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.widthPixels != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.widthPixels.intValue());
@@ -3036,8 +3013,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final EmbedVrWidget clone() {
                 try {
                     EmbedVrWidget embedVrWidget = (EmbedVrWidget) super.clone();
@@ -3053,7 +3029,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.viewMode != null) {
@@ -3068,7 +3044,7 @@ public interface Vr {
                 return this.errorMsg == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(4, this.errorMsg);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final EmbedVrWidget mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -3109,7 +3085,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.viewMode != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.viewMode.intValue());
@@ -3360,8 +3336,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final HeadMount clone() {
                 try {
                     return (HeadMount) super.clone();
@@ -3370,7 +3345,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.vendor != null) {
@@ -3379,7 +3354,7 @@ public interface Vr {
                 return this.model == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(2, this.model);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final HeadMount mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -3401,7 +3376,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.vendor != null) {
                     codedOutputByteBufferNano.writeString(1, this.vendor);
@@ -3449,8 +3424,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final HistogramBucket clone() {
                 try {
                     return (HistogramBucket) super.clone();
@@ -3459,7 +3433,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.minimumValue != null) {
@@ -3468,7 +3442,7 @@ public interface Vr {
                 return this.count == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(2, this.count.intValue());
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final HistogramBucket mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -3490,7 +3464,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.minimumValue != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.minimumValue.intValue());
@@ -3554,8 +3528,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final KeyboardEvent clone() {
                     try {
                         KeyboardEvent keyboardEvent = (KeyboardEvent) super.clone();
@@ -3577,7 +3550,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.clientTimestamp != null) {
@@ -3625,7 +3598,7 @@ public interface Vr {
                     return this.layout == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(9, this.layout);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final KeyboardEvent mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -3718,7 +3691,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.clientTimestamp != null) {
                         codedOutputByteBufferNano.writeInt64(1, this.clientTimestamp.longValue());
@@ -3820,8 +3793,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final KeyboardTextEntry clone() {
                     try {
                         return (KeyboardTextEntry) super.clone();
@@ -3830,7 +3802,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.type != null) {
@@ -3845,7 +3817,7 @@ public interface Vr {
                     return this.language == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(4, this.language);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final KeyboardTextEntry mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -3879,7 +3851,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.type != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.type.intValue());
@@ -3933,8 +3905,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Keyboard clone() {
                 try {
                     Keyboard keyboard = (Keyboard) super.clone();
@@ -3952,7 +3923,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.keyboardEvents != null && this.keyboardEvents.length > 0) {
@@ -3966,7 +3937,7 @@ public interface Vr {
                 return computeSerializedSize;
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Keyboard mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -3999,7 +3970,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.keyboardEvents != null && this.keyboardEvents.length > 0) {
                     for (int i = 0; i < this.keyboardEvents.length; i++) {
@@ -4056,8 +4027,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Launcher clone() {
                 try {
                     return (Launcher) super.clone();
@@ -4066,13 +4036,13 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 return this.navItem == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(1, this.navItem.intValue());
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Launcher mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -4101,7 +4071,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.navItem != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.navItem.intValue());
@@ -4166,8 +4136,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final LoadTime clone() {
                     try {
                         return (LoadTime) super.clone();
@@ -4176,7 +4145,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.assetType != null) {
@@ -4185,7 +4154,7 @@ public interface Vr {
                     return this.loadTimeMs == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(2, this.loadTimeMs.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final LoadTime mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -4221,7 +4190,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.assetType != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.assetType.intValue());
@@ -4300,8 +4269,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Lullaby clone() {
                 try {
                     Lullaby lullaby = (Lullaby) super.clone();
@@ -4314,7 +4282,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.uiElement != null) {
@@ -4329,7 +4297,7 @@ public interface Vr {
                 return this.loadTime == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(4, this.loadTime);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Lullaby mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -4395,7 +4363,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.uiElement != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.uiElement.intValue());
@@ -4485,8 +4453,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final PerformanceStats clone() {
                 try {
                     PerformanceStats performanceStats = (PerformanceStats) super.clone();
@@ -4573,7 +4540,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.averageFps != null) {
@@ -4683,7 +4650,7 @@ public interface Vr {
                 return (this.batteryShutdownTemperature != null && this.batteryShutdownTemperature.length > 0) ? computeSerializedSize + (this.batteryShutdownTemperature.length * 4) + (this.batteryShutdownTemperature.length * 2) : computeSerializedSize;
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final PerformanceStats mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -5028,7 +4995,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.averageFps != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.averageFps.intValue());
@@ -5198,8 +5165,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final OpenMedia clone() {
                     try {
                         return (OpenMedia) super.clone();
@@ -5208,7 +5174,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.type != null) {
@@ -5220,7 +5186,7 @@ public interface Vr {
                     return this.isSample == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeBoolSize(3, this.isSample.booleanValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final OpenMedia mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -5260,7 +5226,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.type != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.type.intValue());
@@ -5309,8 +5275,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final WarmWelcome clone() {
                     try {
                         return (WarmWelcome) super.clone();
@@ -5319,13 +5284,13 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     return this.exitProgress == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeFloatSize(1, this.exitProgress.floatValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final WarmWelcome mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -5344,7 +5309,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.exitProgress != null) {
                         codedOutputByteBufferNano.writeFloat(1, this.exitProgress.floatValue());
@@ -5385,8 +5350,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Photos clone() {
                 try {
                     Photos photos = (Photos) super.clone();
@@ -5402,7 +5366,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.numPhotos != null) {
@@ -5414,7 +5378,7 @@ public interface Vr {
                 return this.warmWelcome == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(3, this.warmWelcome);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Photos mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -5445,7 +5409,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.numPhotos != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.numPhotos.intValue());
@@ -5502,8 +5466,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final QrCodeScan clone() {
                 try {
                     return (QrCodeScan) super.clone();
@@ -5512,7 +5475,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.status != null) {
@@ -5521,7 +5484,7 @@ public interface Vr {
                 return this.headMountConfigUrl == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(2, this.headMountConfigUrl);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final QrCodeScan mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -5550,7 +5513,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.status != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.status.intValue());
@@ -5600,8 +5563,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Renderer clone() {
                 try {
                     return (Renderer) super.clone();
@@ -5610,7 +5572,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.glVendor != null) {
@@ -5622,7 +5584,7 @@ public interface Vr {
                 return this.glVersion == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeStringSize(3, this.glVersion);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Renderer mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -5647,7 +5609,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.glVendor != null) {
                     codedOutputByteBufferNano.writeString(1, this.glVendor);
@@ -5717,8 +5679,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final AsyncReprojectionConfig clone() {
                     try {
                         return (AsyncReprojectionConfig) super.clone();
@@ -5727,7 +5688,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.flags != null) {
@@ -5736,7 +5697,7 @@ public interface Vr {
                     return this.displayLatencyMicros == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt64Size(2, this.displayLatencyMicros.longValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final AsyncReprojectionConfig mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -5758,7 +5719,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.flags != null) {
                         codedOutputByteBufferNano.writeInt64(1, this.flags.longValue());
@@ -5813,8 +5774,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final SdkConfigurationParams clone() {
                 try {
                     SdkConfigurationParams sdkConfigurationParams = (SdkConfigurationParams) super.clone();
@@ -5827,7 +5787,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.daydreamImageAlignmentEnabled != null) {
@@ -5854,7 +5814,7 @@ public interface Vr {
                 return this.useOnlineMagnetometerCalibration == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeBoolSize(8, this.useOnlineMagnetometerCalibration.booleanValue());
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final SdkConfigurationParams mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -5904,7 +5864,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.daydreamImageAlignmentEnabled != null) {
                     codedOutputByteBufferNano.writeBool(1, this.daydreamImageAlignmentEnabled.booleanValue());
@@ -5978,8 +5938,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final GyroscopeStats clone() {
                     try {
                         GyroscopeStats gyroscopeStats = (GyroscopeStats) super.clone();
@@ -6001,7 +5960,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.bias != null) {
@@ -6016,7 +5975,7 @@ public interface Vr {
                     return this.standardDeviation == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(4, this.standardDeviation);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final GyroscopeStats mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -6056,7 +6015,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.bias != null) {
                         codedOutputByteBufferNano.writeMessage(1, this.bias);
@@ -6112,8 +6071,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Vector3 clone() {
                     try {
                         return (Vector3) super.clone();
@@ -6122,7 +6080,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.x != null) {
@@ -6134,7 +6092,7 @@ public interface Vr {
                     return this.z == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeFloatSize(3, this.z.floatValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Vector3 mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -6159,7 +6117,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.x != null) {
                         codedOutputByteBufferNano.writeFloat(1, this.x.floatValue());
@@ -6204,8 +6162,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final SensorStats clone() {
                 try {
                     SensorStats sensorStats = (SensorStats) super.clone();
@@ -6218,13 +6175,13 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 return this.gyroscopeStats == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(1, this.gyroscopeStats);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final SensorStats mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -6246,7 +6203,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.gyroscopeStats != null) {
                     codedOutputByteBufferNano.writeMessage(1, this.gyroscopeStats);
@@ -6314,8 +6271,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final PanoSession clone() {
                     try {
                         return (PanoSession) super.clone();
@@ -6324,7 +6280,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.source != null) {
@@ -6351,7 +6307,7 @@ public interface Vr {
                     return this.infoClicks == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(8, this.infoClicks.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final PanoSession mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -6399,7 +6355,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.source != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.source.intValue());
@@ -6459,8 +6415,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final StreetView clone() {
                 try {
                     StreetView streetView = (StreetView) super.clone();
@@ -6473,13 +6428,13 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 return this.panoSession == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(1, this.panoSession);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final StreetView mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -6501,7 +6456,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.panoSession != null) {
                     codedOutputByteBufferNano.writeMessage(1, this.panoSession);
@@ -6565,8 +6520,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final TimeIntervalData clone() {
                     try {
                         TimeIntervalData timeIntervalData = (TimeIntervalData) super.clone();
@@ -6585,7 +6539,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.intervalStartTimeSeconds != null) {
@@ -6615,7 +6569,7 @@ public interface Vr {
                     return (this.batteryTemperature != null && this.batteryTemperature.length > 0) ? computeSerializedSize + (this.batteryTemperature.length * 4) + (this.batteryTemperature.length * 1) : computeSerializedSize;
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final TimeIntervalData mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -6742,7 +6696,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.intervalStartTimeSeconds != null) {
                         codedOutputByteBufferNano.writeInt32(1, this.intervalStartTimeSeconds.intValue());
@@ -6812,8 +6766,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final TimeSeriesData clone() {
                 try {
                     TimeSeriesData timeSeriesData = (TimeSeriesData) super.clone();
@@ -6831,7 +6784,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.timeIntervalSeconds != null) {
@@ -6850,7 +6803,7 @@ public interface Vr {
                 return i;
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final TimeSeriesData mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -6886,7 +6839,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.timeIntervalSeconds != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.timeIntervalSeconds.intValue());
@@ -6949,8 +6902,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final Transform clone() {
                 try {
                     return (Transform) super.clone();
@@ -6959,7 +6911,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.translationX != null) {
@@ -6983,7 +6935,7 @@ public interface Vr {
                 return this.scale == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeFloatSize(7, this.scale.floatValue());
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final Transform mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -7020,7 +6972,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.translationX != null) {
                     codedOutputByteBufferNano.writeFloat(1, this.translationX.floatValue());
@@ -7125,8 +7077,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Controller clone() {
                     try {
                         return (Controller) super.clone();
@@ -7135,7 +7086,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.manufacturer != null) {
@@ -7177,7 +7128,7 @@ public interface Vr {
                     return this.axis == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(13, this.axis.intValue());
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Controller mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -7245,7 +7196,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.manufacturer != null) {
                         codedOutputByteBufferNano.writeString(1, this.manufacturer);
@@ -7392,8 +7343,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final VrCore clone() {
                 try {
                     VrCore vrCore = (VrCore) super.clone();
@@ -7412,7 +7362,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 if (this.errorCode != null) {
@@ -7433,7 +7383,7 @@ public interface Vr {
                 return this.controller == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(6, this.controller);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final VrCore mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -7545,7 +7495,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.errorCode != null) {
                     codedOutputByteBufferNano.writeInt32(1, this.errorCode.intValue());
@@ -7633,8 +7583,7 @@ public interface Vr {
                         return this;
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                    /* renamed from: clone */
+                    @Override
                     public final StepStateChange clone() {
                         try {
                             return (StepStateChange) super.clone();
@@ -7643,7 +7592,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     protected final int computeSerializedSize() {
                         int computeSerializedSize = super.computeSerializedSize();
                         if (this.step != null) {
@@ -7655,7 +7604,7 @@ public interface Vr {
                         return this.newStepState == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(3, this.newStepState.intValue());
                     }
 
-                    @Override // com.google.protobuf.nano.MessageNano
+                    @Override
                     public final StepStateChange mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                         while (true) {
                             int readTag = codedInputByteBufferNano.readTag();
@@ -7708,7 +7657,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                         if (this.step != null) {
                             codedOutputByteBufferNano.writeInt32(1, this.step.intValue());
@@ -7758,8 +7707,7 @@ public interface Vr {
                         return this;
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                    /* renamed from: clone */
+                    @Override
                     public final View clone() {
                         try {
                             return (View) super.clone();
@@ -7768,7 +7716,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     protected final int computeSerializedSize() {
                         int computeSerializedSize = super.computeSerializedSize();
                         if (this.step != null) {
@@ -7777,7 +7725,7 @@ public interface Vr {
                         return this.page == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeInt32Size(2, this.page.intValue());
                     }
 
-                    @Override // com.google.protobuf.nano.MessageNano
+                    @Override
                     public final View mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                         while (true) {
                             int readTag = codedInputByteBufferNano.readTag();
@@ -7811,7 +7759,7 @@ public interface Vr {
                         }
                     }
 
-                    @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                    @Override
                     public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                         if (this.step != null) {
                             codedOutputByteBufferNano.writeInt32(1, this.step.intValue());
@@ -7854,8 +7802,7 @@ public interface Vr {
                     return this;
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-                /* renamed from: clone */
+                @Override
                 public final Setup clone() {
                     try {
                         Setup setup = (Setup) super.clone();
@@ -7871,7 +7818,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 protected final int computeSerializedSize() {
                     int computeSerializedSize = super.computeSerializedSize();
                     if (this.view != null) {
@@ -7880,7 +7827,7 @@ public interface Vr {
                     return this.stepStateChange == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(2, this.stepStateChange);
                 }
 
-                @Override // com.google.protobuf.nano.MessageNano
+                @Override
                 public final Setup mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                     while (true) {
                         int readTag = codedInputByteBufferNano.readTag();
@@ -7908,7 +7855,7 @@ public interface Vr {
                     }
                 }
 
-                @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+                @Override
                 public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                     if (this.view != null) {
                         codedOutputByteBufferNano.writeMessage(1, this.view);
@@ -7950,8 +7897,7 @@ public interface Vr {
                 return this;
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-            /* renamed from: clone */
+            @Override
             public final VrHome clone() {
                 try {
                     VrHome vrHome = (VrHome) super.clone();
@@ -7964,13 +7910,13 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             protected final int computeSerializedSize() {
                 int computeSerializedSize = super.computeSerializedSize();
                 return this.setup == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(1, this.setup);
             }
 
-            @Override // com.google.protobuf.nano.MessageNano
+            @Override
             public final VrHome mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
                 while (true) {
                     int readTag = codedInputByteBufferNano.readTag();
@@ -7992,7 +7938,7 @@ public interface Vr {
                 }
             }
 
-            @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+            @Override
             public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
                 if (this.setup != null) {
                     codedOutputByteBufferNano.writeMessage(1, this.setup);
@@ -8051,8 +7997,7 @@ public interface Vr {
             return this;
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
-        /* renamed from: clone */
+        @Override
         public final VREvent clone() {
             try {
                 VREvent vREvent = (VREvent) super.clone();
@@ -8124,7 +8069,7 @@ public interface Vr {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         protected final int computeSerializedSize() {
             int computeSerializedSize = super.computeSerializedSize();
             if (this.headMount != null) {
@@ -8200,7 +8145,7 @@ public interface Vr {
             return this.sdkConfiguration == null ? computeSerializedSize : computeSerializedSize + CodedOutputByteBufferNano.computeMessageSize(22, this.sdkConfiguration);
         }
 
-        @Override // com.google.protobuf.nano.MessageNano
+        @Override
         public final VREvent mergeFrom(CodedInputByteBufferNano codedInputByteBufferNano) throws IOException {
             while (true) {
                 int readTag = codedInputByteBufferNano.readTag();
@@ -8362,7 +8307,7 @@ public interface Vr {
             }
         }
 
-        @Override // com.google.protobuf.nano.ExtendableMessageNano, com.google.protobuf.nano.MessageNano
+        @Override
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if (this.headMount != null) {
                 codedOutputByteBufferNano.writeMessage(1, this.headMount);

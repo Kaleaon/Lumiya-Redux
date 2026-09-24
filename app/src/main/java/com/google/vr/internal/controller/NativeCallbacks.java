@@ -10,7 +10,6 @@ import com.google.vr.vrcore.controller.api.ControllerOrientationEvent;
 import com.google.vr.vrcore.controller.api.ControllerTouchEvent;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public final class NativeCallbacks implements ServiceBridge.Callbacks {
     private boolean closed;
     private final long userData;
@@ -49,7 +48,7 @@ public final class NativeCallbacks implements ServiceBridge.Callbacks {
         this.closed = true;
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onControllerEventPacket(ControllerEventPacket controllerEventPacket) {
         synchronized (this) {
             if (this.closed) {
@@ -78,49 +77,49 @@ public final class NativeCallbacks implements ServiceBridge.Callbacks {
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onControllerRecentered(ControllerOrientationEvent controllerOrientationEvent) {
         if (!this.closed) {
             handleControllerRecentered(this.userData, controllerOrientationEvent.timestampNanos, controllerOrientationEvent.qx, controllerOrientationEvent.qy, controllerOrientationEvent.qz, controllerOrientationEvent.qw);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onControllerStateChanged(int i, int i2) {
         if (!this.closed) {
             handleStateChanged(this.userData, i, i2);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onServiceConnected(int i) {
         if (!this.closed) {
             handleServiceConnected(this.userData, i);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onServiceDisconnected() {
         if (!this.closed) {
             handleServiceDisconnected(this.userData);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onServiceFailed() {
         if (!this.closed) {
             handleServiceFailed(this.userData);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onServiceInitFailed(int i) {
         if (!this.closed) {
             handleServiceInitFailed(this.userData, i);
         }
     }
 
-    @Override // com.google.vr.internal.controller.ServiceBridge.Callbacks
+    @Override
     public final synchronized void onServiceUnavailable() {
         if (!this.closed) {
             handleServiceUnavailable(this.userData);

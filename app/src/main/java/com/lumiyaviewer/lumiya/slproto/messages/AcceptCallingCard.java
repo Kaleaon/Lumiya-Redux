@@ -6,23 +6,33 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AcceptCallingCard
+ *
+ * <p>Template: {@code AcceptCallingCard Low 302 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_accept_callingcard()} in indra/newview/llviewermessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class AcceptCallingCard extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<FolderData> FolderData_Fields = new ArrayList<>();
     public TransactionBlock TransactionBlock_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block FolderData, Variable. */
     public static class FolderData {
-        public UUID FolderID;
+        public UUID FolderID; // LLUUID - place to put calling card.
     }
 
+    /** Block TransactionBlock, Single. */
     public static class TransactionBlock {
-        public UUID TransactionID;
+        public UUID TransactionID; // LLUUID
     }
 
     public AcceptCallingCard() {
@@ -31,21 +41,22 @@ public class AcceptCallingCard extends SLMessage {
         this.TransactionBlock_Field = new TransactionBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.FolderData_Fields.size() * 16) + 53;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAcceptCallingCard(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 46);
+        // Message number: Low 302 (AcceptCallingCard).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x2E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.TransactionBlock_Field.TransactionID);
@@ -56,7 +67,7 @@ public class AcceptCallingCard extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

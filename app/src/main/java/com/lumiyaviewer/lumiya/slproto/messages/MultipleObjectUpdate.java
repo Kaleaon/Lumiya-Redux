@@ -6,20 +6,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * MultipleObjectUpdate
+ * viewer -> simulator
+ * updates position, rotation and scale in one message
+ * positions sent as region-local floats
+ *
+ * <p>Template: {@code MultipleObjectUpdate Medium 2 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class MultipleObjectUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ObjectData> ObjectData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ObjectData, Variable. */
     public static class ObjectData {
-        public byte[] Data;
-        public int ObjectLocalID;
-        public int Type;
+        public byte[] Data; // Variable 1 - custom type
+        public int ObjectLocalID; // U32
+        public int Type; // U8
     }
 
     public MultipleObjectUpdate() {
@@ -27,7 +37,7 @@ public class MultipleObjectUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 35;
         Iterator<?> it = this.ObjectData_Fields.iterator();
@@ -40,15 +50,16 @@ public class MultipleObjectUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleMultipleObjectUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put((byte) -1);
-        byteBuffer.put((byte) 2);
+        // Message number: Medium 2 (MultipleObjectUpdate).
+        byteBuffer.put((byte) 0xFF);
+        byteBuffer.put((byte) 0x02);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         byteBuffer.put((byte) this.ObjectData_Fields.size());
@@ -59,7 +70,7 @@ public class MultipleObjectUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

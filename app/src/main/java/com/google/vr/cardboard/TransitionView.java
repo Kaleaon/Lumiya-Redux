@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-/* loaded from: classes.dex */
 public class TransitionView extends FrameLayout implements View.OnTouchListener {
     public static final int ALREADY_LANDSCAPE_LEFT_TRANSITION_DELAY_MS = 2000;
     private static final int LANDSCAPE_TOLERANCE_DEGREES = 5;
@@ -49,10 +48,9 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         setOnTouchListener(this);
         setBackground(new ColorDrawable(TRANSITION_BACKGROUND_COLOR));
         inflateContentView(R.layout.transition_view);
-        super.setVisibility(8);
+        super.setVisibility(View.GONE);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void fadeOutAndRemove(boolean z) {
         stopOrientationMonitor();
         Animation animation = getAnimation();
@@ -70,10 +68,10 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         if (z) {
             alphaAnimation.setStartOffset(2000L);
         }
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() { // from class: com.google.vr.cardboard.TransitionView.4
-            @Override // android.view.animation.Animation.AnimationListener
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
             public void onAnimationEnd(Animation animation2) {
-                TransitionView.this.setVisibility(8);
+                TransitionView.this.setVisibility(View.GONE);
                 ((ViewGroup) TransitionView.this.getParent()).removeView(TransitionView.this);
                 if (TransitionView.this.animationDrawable != null) {
                     TransitionView.this.animationDrawable.stop();
@@ -85,11 +83,11 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
                 TransitionView.this.transitionListener.onTransitionDone();
             }
 
-            @Override // android.view.animation.Animation.AnimationListener
+            @Override
             public void onAnimationRepeat(Animation animation2) {
             }
 
-            @Override // android.view.animation.Animation.AnimationListener
+            @Override
             public void onAnimationStart(Animation animation2) {
             }
         });
@@ -99,8 +97,8 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
     private void inflateContentView(int i) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(i, (ViewGroup) this, true);
-        findViewById(R.id.transition_switch_action).setOnClickListener(new View.OnClickListener() { // from class: com.google.vr.cardboard.TransitionView.1
-            @Override // android.view.View.OnClickListener
+        findViewById(R.id.transition_switch_action).setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 UiUtils.launchOrInstallCardboard(TransitionView.this.getContext());
                 if (TransitionView.this.transitionListener == null) {
@@ -109,24 +107,22 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
                 TransitionView.this.transitionListener.onSwitchViewer();
             }
         });
-        ((ImageView) findViewById(R.id.transition_icon)).setOnClickListener(new View.OnClickListener() { // from class: com.google.vr.cardboard.TransitionView.2
-            @Override // android.view.View.OnClickListener
+        ((ImageView) findViewById(R.id.transition_icon)).setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 TransitionView.this.fadeOutAndRemove(false);
             }
         });
         updateBackButtonVisibility();
         if (!this.useCustomTransitionLayout && getResources().getConfiguration().orientation == 2) {
-            findViewById(R.id.transition_bottom_frame).setVisibility(8);
+            findViewById(R.id.transition_bottom_frame).setVisibility(View.GONE);
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public static boolean isLandscapeLeft(int i) {
         return Math.abs(i + (-270)) < 5;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public static boolean isLandscapeRight(int i) {
         return Math.abs(i + (-90)) < 5;
     }
@@ -135,7 +131,6 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         return Math.abs(i + (-180)) > 135;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void rotateViewIfNeeded() {
         if (getWidth() <= 0 || getHeight() <= 0 || this.orientation == -1 || this.orientationEventListener == null || this.rotationChecked) {
             return;
@@ -163,9 +158,9 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
             findViewById.requestLayout();
         }
         if (isPortrait) {
-            findViewById(R.id.transition_bottom_frame).setVisibility(0);
+            findViewById(R.id.transition_bottom_frame).setVisibility(View.VISIBLE);
         } else {
-            findViewById(R.id.transition_bottom_frame).setVisibility(8);
+            findViewById(R.id.transition_bottom_frame).setVisibility(View.GONE);
             if (this.useCustomTransitionLayout) {
                 TextView textView = (TextView) findViewById(R.id.transition_text);
                 if (textView != null) {
@@ -187,8 +182,8 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
 
     private void startOrientationMonitor() {
         if (this.orientationEventListener == null) {
-            this.orientationEventListener = new OrientationEventListener(getContext()) { // from class: com.google.vr.cardboard.TransitionView.3
-                @Override // android.view.OrientationEventListener
+            this.orientationEventListener = new OrientationEventListener(getContext()) {
+                @Override
                 public void onOrientationChanged(int i) {
                     TransitionView.this.orientation = i;
                     if (!TransitionView.this.rotationChecked) {
@@ -216,21 +211,21 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         this.backButton = (ImageButton) ((ViewGroup) findViewById(R.id.transition_frame)).findViewById(R.id.back_button);
         if (this.backButtonRunnable != null) {
             this.backButton.setTag(this.backButtonRunnable);
-            this.backButton.setVisibility(0);
-            this.backButton.setOnClickListener(new View.OnClickListener() { // from class: com.google.vr.cardboard.TransitionView.5
-                @Override // android.view.View.OnClickListener
+            this.backButton.setVisibility(View.VISIBLE);
+            this.backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View view) {
                     TransitionView.this.backButtonRunnable.run();
                 }
             });
         } else {
-            this.backButton.setVisibility(8);
+            this.backButton.setVisibility(View.GONE);
             this.backButton.setTag(null);
             this.backButton.setOnClickListener(null);
         }
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.orientationEventListener != null) {
@@ -239,7 +234,7 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         rotateViewIfNeeded();
     }
 
-    @Override // android.view.ViewGroup, android.view.View
+    @Override
     protected void onDetachedFromWindow() {
         if (this.orientationEventListener != null) {
             this.orientation = -1;
@@ -248,7 +243,7 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         super.onDetachedFromWindow();
     }
 
-    @Override // android.view.View.OnTouchListener
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return true;
     }
@@ -284,7 +279,7 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         }
     }
 
-    @Override // android.view.View
+    @Override
     public void setVisibility(int i) {
         int visibility = getVisibility();
         super.setVisibility(i);

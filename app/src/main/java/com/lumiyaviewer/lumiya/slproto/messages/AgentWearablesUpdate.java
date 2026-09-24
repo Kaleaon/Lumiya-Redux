@@ -5,21 +5,32 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * AgentWearablesUpdate
+ * (a.k.a. "Here's what your avatar should be wearing now.")
+ * dataserver -> userserver -> viewer
+ * reliable
+ * NEVER from viewer to sim
+ *
+ * <p>Template: {@code AgentWearablesUpdate Low 382 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class AgentWearablesUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<WearableData> WearableData_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public int SerialNum;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public int SerialNum; // U32 - Increases every time the wearables change for a given agent.  Used to avoid processing out of order packets.
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block WearableData, Variable. */
     public static class WearableData {
-        public UUID AssetID;
-        public UUID ItemID;
-        public int WearableType;
+        public UUID AssetID; // LLUUID
+        public UUID ItemID; // LLUUID
+        public int WearableType; // U8 - LLWearable::EWearType
     }
 
     public AgentWearablesUpdate() {
@@ -27,21 +38,22 @@ public class AgentWearablesUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.WearableData_Fields.size() * 33) + 41;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleAgentWearablesUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 126);
+        // Message number: Low 382 (AgentWearablesUpdate).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x7E);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.AgentData_Field.SerialNum);
@@ -53,7 +65,7 @@ public class AgentWearablesUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

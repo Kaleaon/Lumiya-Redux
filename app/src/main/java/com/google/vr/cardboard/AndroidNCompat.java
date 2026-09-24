@@ -19,7 +19,6 @@ import android.view.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
-/* loaded from: classes.dex */
 public class AndroidNCompat {
     private static final String ACTION_VR_LISTENER_SETTINGS = "android.settings.VR_LISTENER_SETTINGS";
     private static final boolean DEBUG = false;
@@ -60,8 +59,8 @@ public class AndroidNCompat {
 
     private static boolean handleVrCoreAbsence(final Context context, int i) {
         if (i == -1) {
-            showWarningDialog(context, R.string.dialog_vr_core_not_installed, R.string.go_to_playstore_button, new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.AndroidNCompat.1
-                @Override // android.content.DialogInterface.OnClickListener
+            showWarningDialog(context, R.string.dialog_vr_core_not_installed, R.string.go_to_playstore_button, new DialogInterface.OnClickListener() {
+                @Override
                 public final void onClick(DialogInterface dialogInterface, int i2) {
                     Intent intent = new Intent("android.intent.action.VIEW");
                     intent.setData(Uri.parse("market://details?id=com.google.vr.vrcore"));
@@ -78,8 +77,8 @@ public class AndroidNCompat {
         if (i != -2) {
             return true;
         }
-        showWarningDialog(context, R.string.dialog_vr_core_not_enabled, R.string.go_to_vr_listeners_settings_button, new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.AndroidNCompat.2
-            @Override // android.content.DialogInterface.OnClickListener
+        showWarningDialog(context, R.string.dialog_vr_core_not_enabled, R.string.go_to_vr_listeners_settings_button, new DialogInterface.OnClickListener() {
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i2) {
                 context.startActivity(new Intent(AndroidNCompat.ACTION_VR_LISTENER_SETTINGS));
             }
@@ -176,8 +175,8 @@ public class AndroidNCompat {
 
     private static void showWarningDialog(Context context, int i, int i2, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.GvrDialogTheme);
-        builder.setMessage(i).setTitle(R.string.dialog_title_warning).setPositiveButton(i2, onClickListener).setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() { // from class: com.google.vr.cardboard.AndroidNCompat.3
-            @Override // android.content.DialogInterface.OnClickListener
+        builder.setMessage(i).setTitle(R.string.dialog_title_warning).setPositiveButton(i2, onClickListener).setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i3) {
             }
         });

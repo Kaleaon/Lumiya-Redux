@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.slproto.events;
 
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLLoginResultEvent {
     public final UUID activeAgentUUID;
     public final String message;

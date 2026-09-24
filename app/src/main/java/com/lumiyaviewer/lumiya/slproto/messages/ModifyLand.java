@@ -6,35 +6,45 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ModifyLand - sent to modify a piece of land on a simulator.
+ * viewer -> sim
+ *
+ * <p>Template: {@code ModifyLand Low 124 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ModifyLand extends SLMessage {
     public AgentData AgentData_Field;
     public ModifyBlock ModifyBlock_Field;
     public ArrayList<ParcelData> ParcelData_Fields = new ArrayList<>();
     public ArrayList<ModifyBlockExtended> ModifyBlockExtended_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ModifyBlock, Single. */
     public static class ModifyBlock {
-        public int Action;
-        public int BrushSize;
-        public float Height;
-        public float Seconds;
+        public int Action; // U8
+        public int BrushSize; // U8
+        public float Height; // F32
+        public float Seconds; // F32
     }
 
+    /** Block ModifyBlockExtended, Variable. */
     public static class ModifyBlockExtended {
-        public float BrushSize;
+        public float BrushSize; // U8
     }
 
+    /** Block ParcelData, Variable. */
     public static class ParcelData {
-        public float East;
-        public int LocalID;
-        public float North;
-        public float South;
-        public float West;
+        public float East; // F32
+        public int LocalID; // S32
+        public float North; // F32
+        public float South; // F32
+        public float West; // F32
     }
 
     public ModifyLand() {
@@ -43,21 +53,22 @@ public class ModifyLand extends SLMessage {
         this.ModifyBlock_Field = new ModifyBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ParcelData_Fields.size() * 20) + 47 + 1 + (this.ModifyBlockExtended_Fields.size() * 4);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleModifyLand(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 124);
+        // Message number: Low 124 (ModifyLand).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x7C);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packByte(byteBuffer, (byte) this.ModifyBlock_Field.Action);
@@ -79,7 +90,7 @@ public class ModifyLand extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

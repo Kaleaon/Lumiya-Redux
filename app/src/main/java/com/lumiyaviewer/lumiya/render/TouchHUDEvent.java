@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render;
 
-/* loaded from: classes.dex */
 public class TouchHUDEvent {
     public float x;
     public float y;

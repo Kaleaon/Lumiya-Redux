@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class BakedImage {
     private BakeLayerSet layerSet;
     private OpenJPEG resultImage;

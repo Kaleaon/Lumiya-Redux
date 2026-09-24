@@ -4,7 +4,6 @@ import android.opengl.Matrix;
 import com.lumiyaviewer.lumiya.render.avatar.AnimationSkeletonData;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 
-/* loaded from: classes.dex */
 public class SLSkeletonBone {
     private final LLVector3 basePosition;
     public final SLSkeletonBoneID boneID;

@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.spatial;
 
-/* loaded from: classes.dex */
 public class SpatialListEntry<T> {
     public final T data;
     SpatialTreeNode node = null;

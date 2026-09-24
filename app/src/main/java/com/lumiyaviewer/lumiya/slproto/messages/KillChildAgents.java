@@ -4,12 +4,18 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * KillChildAgents - A new agent has connected to the simulator . . . make sure that any old child cameras are blitzed
+ *
+ * <p>Template: {@code KillChildAgents Low 242 Trusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class KillChildAgents extends SLMessage {
     public IDBlock IDBlock_Field;
 
+    /** Block IDBlock, Single. */
     public static class IDBlock {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
     public KillChildAgents() {
@@ -17,25 +23,26 @@ public class KillChildAgents extends SLMessage {
         this.IDBlock_Field = new IDBlock();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 20;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleKillChildAgents(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -14);
+        // Message number: Low 242 (KillChildAgents).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xF2);
         packUUID(byteBuffer, this.IDBlock_Field.AgentID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.IDBlock_Field.AgentID = unpackUUID(byteBuffer);
     }

@@ -4,21 +4,30 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * ScriptDialogReply
+ * viewer -> sim
+ * reliable
+ *
+ * <p>Template: {@code ScriptDialogReply Low 191 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ScriptDialogReply extends SLMessage {
     public AgentData AgentData_Field;
     public Data Data_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block Data, Single. */
     public static class Data {
-        public int ButtonIndex;
-        public byte[] ButtonLabel;
-        public int ChatChannel;
-        public UUID ObjectID;
+        public int ButtonIndex; // S32
+        public byte[] ButtonLabel; // Variable 1
+        public int ChatChannel; // S32
+        public UUID ObjectID; // LLUUID
     }
 
     public ScriptDialogReply() {
@@ -27,21 +36,22 @@ public class ScriptDialogReply extends SLMessage {
         this.Data_Field = new Data();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return this.Data_Field.ButtonLabel.length + 25 + 36;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleScriptDialogReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -65);
+        // Message number: Low 191 (ScriptDialogReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xBF);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.Data_Field.ObjectID);
@@ -50,7 +60,7 @@ public class ScriptDialogReply extends SLMessage {
         packVariable(byteBuffer, this.Data_Field.ButtonLabel, 1);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

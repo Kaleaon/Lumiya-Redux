@@ -5,27 +5,35 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * sim -> dataserver
+ *
+ * <p>Template: {@code LogParcelChanges Low 224 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class LogParcelChanges extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<ParcelData> ParcelData_Fields = new ArrayList<>();
     public RegionData RegionData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block ParcelData, Variable. */
     public static class ParcelData {
-        public int Action;
-        public int ActualArea;
-        public boolean IsOwnerGroup;
-        public UUID OwnerID;
-        public UUID ParcelID;
-        public UUID TransactionID;
+        public int Action; // S8
+        public int ActualArea; // S32
+        public boolean IsOwnerGroup; // BOOL
+        public UUID OwnerID; // LLUUID
+        public UUID ParcelID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block RegionData, Single. */
     public static class RegionData {
-        public long RegionHandle;
+        public long RegionHandle; // U64
     }
 
     public LogParcelChanges() {
@@ -34,21 +42,22 @@ public class LogParcelChanges extends SLMessage {
         this.RegionData_Field = new RegionData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return (this.ParcelData_Fields.size() * 54) + 29;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleLogParcelChanges(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -32);
+        // Message number: Low 224 (LogParcelChanges).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xE0);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packLong(byteBuffer, this.RegionData_Field.RegionHandle);
         byteBuffer.put((byte) this.ParcelData_Fields.size());
@@ -62,7 +71,7 @@ public class LogParcelChanges extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.RegionData_Field.RegionHandle = unpackLong(byteBuffer);

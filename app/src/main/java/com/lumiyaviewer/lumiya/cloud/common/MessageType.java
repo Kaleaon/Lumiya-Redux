@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.cloud.common;
 
-/* loaded from: classes.dex */
 public enum MessageType {
     LogSyncStart,
     LogSyncStatus,

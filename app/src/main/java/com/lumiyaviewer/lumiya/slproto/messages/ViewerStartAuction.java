@@ -4,19 +4,29 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * viewer -> sim
+ * start an auction. viewer fills in the appropriate date, simulator
+ * validates and fills in the rest of the information to start an auction
+ * on a parcel. Processing currently requires that AgentID is a god.
+ *
+ * <p>Template: {@code ViewerStartAuction Low 228 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ViewerStartAuction extends SLMessage {
     public AgentData AgentData_Field;
     public ParcelData ParcelData_Field;
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
     }
 
+    /** Block ParcelData, Single. */
     public static class ParcelData {
-        public int LocalID;
-        public UUID SnapshotID;
+        public int LocalID; // S32
+        public UUID SnapshotID; // LLUUID
     }
 
     public ViewerStartAuction() {
@@ -25,28 +35,29 @@ public class ViewerStartAuction extends SLMessage {
         this.ParcelData_Field = new ParcelData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         return 56;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleViewerStartAuction(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) -28);
+        // Message number: Low 228 (ViewerStartAuction).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0xE4);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packInt(byteBuffer, this.ParcelData_Field.LocalID);
         packUUID(byteBuffer, this.ParcelData_Field.SnapshotID);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

@@ -22,7 +22,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/* loaded from: classes.dex */
 public class SLUserNameFetcher extends SLModule implements RequestListener {
     private static final int MAX_BATCH_SIZE = 4;
     private static final long REPLY_TIMEOUT = 10000;
@@ -45,8 +44,8 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
         this.hasNamesToFetch = this.lock.newCondition();
         this.udpLock = new Object();
         this.waitingReplySince = 0L;
-        this.threadRunnable = new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.SLUserNameFetcher.1
-            @Override // java.lang.Runnable
+        this.threadRunnable = new Runnable() {
+            @Override
             public void run() {
                 while (!SLUserNameFetcher.this.threadMustExit) {
                     while (SLUserNameFetcher.this.FetchSomeNamesOverHTTP()) {
@@ -83,7 +82,6 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public boolean FetchSomeNamesOverHTTP() {
         String str;
         LLSDNode lLSDNode;
@@ -170,7 +168,7 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
         return arrayList;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleCloseCircuit() {
         this.threadMustExit = true;
         if (this.xmlReq != null) {
@@ -200,7 +198,7 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.reqset.RequestListener
+    @Override
     public void onNewRequest() {
         if (this.workingThread != null) {
             this.lock.lock();

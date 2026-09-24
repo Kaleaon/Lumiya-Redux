@@ -9,7 +9,6 @@ import com.google.vr.cardboard.VrParamsProviderFactory;
 import com.google.vrtoolkit.cardboard.proto.nano.CardboardDevice;
 import com.google.vrtoolkit.cardboard.proto.nano.Phone;
 
-/* loaded from: classes.dex */
 public class HeadMountedDisplayManager {
     private static final String TAG = "HeadMountedDisplayManager";
     private final Context context;

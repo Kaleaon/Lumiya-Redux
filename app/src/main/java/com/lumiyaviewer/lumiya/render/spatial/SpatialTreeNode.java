@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.render.spatial;
 
 import com.lumiyaviewer.lumiya.utils.InlineList;
 
-/* loaded from: classes.dex */
 public class SpatialTreeNode extends InlineList<DrawListEntry> {
     private static final float MIN_SIZE = 2.0f;
     private SpatialTreeNode[] children;
@@ -202,7 +201,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void addEntry(DrawListEntry drawListEntry) {
         boolean z = getFirst() == null && this.children == null;
         boolean z2 = this.singleChild != null;
@@ -269,7 +268,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         return this.children[i3].findNode(fArr);
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void removeEntry(DrawListEntry drawListEntry) {
         super.removeEntry(drawListEntry);
         if (this.depthBin != -1) {
@@ -285,7 +284,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         shrinkBoundingBox();
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void requestEntryRemoval(DrawListEntry drawListEntry) {
         this.spatialTree.spatialObjectIndex.requestEntryRemoval(drawListEntry);
     }

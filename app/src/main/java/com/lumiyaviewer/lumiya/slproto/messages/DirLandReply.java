@@ -6,27 +6,39 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * DirLandReply
+ * dataserver -> simulator -> viewer
+ * reliable
+ *
+ * <p>Template: {@code DirLandReply Low 50 Trusted Zerocoded UDPDeprecated}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code LLPanelDirBrowser::processDirLandReply()} in indra/newview/llpaneldirbrowser.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class DirLandReply extends SLMessage {
     public AgentData AgentData_Field;
     public QueryData QueryData_Field;
     public ArrayList<QueryReplies> QueryReplies_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
+        public UUID AgentID; // LLUUID
     }
 
+    /** Block QueryData, Single. */
     public static class QueryData {
-        public UUID QueryID;
+        public UUID QueryID; // LLUUID
     }
 
+    /** Block QueryReplies, Variable. */
     public static class QueryReplies {
-        public int ActualArea;
-        public boolean Auction;
-        public boolean ForSale;
-        public byte[] Name;
-        public UUID ParcelID;
-        public int SalePrice;
+        public int ActualArea; // S32
+        public boolean Auction; // BOOL
+        public boolean ForSale; // BOOL
+        public byte[] Name; // Variable 1
+        public UUID ParcelID; // LLUUID
+        public int SalePrice; // S32
     }
 
     public DirLandReply() {
@@ -35,7 +47,7 @@ public class DirLandReply extends SLMessage {
         this.QueryData_Field = new QueryData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int i = 37;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
@@ -48,16 +60,17 @@ public class DirLandReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleDirLandReply(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 0);
-        byteBuffer.put((byte) 50);
+        // Message number: Low 50 (DirLandReply).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x00);
+        byteBuffer.put((byte) 0x32);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.QueryData_Field.QueryID);
         byteBuffer.put((byte) this.QueryReplies_Fields.size());
@@ -71,7 +84,7 @@ public class DirLandReply extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);

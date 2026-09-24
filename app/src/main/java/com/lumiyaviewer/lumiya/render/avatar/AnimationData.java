@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class AnimationData {
     private static final float LL_MAX_PELVIS_OFFSET = 5.0f;
     private final float animLength;
@@ -200,19 +199,18 @@ public class AnimationData {
             this.position = lLVector3;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public LLVector3 getTransform() {
             return this.position;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public void setInterpolated(LLVector3 lLVector3, float f, AnimationKeyframe<LLVector3> animationKeyframe, float f2) {
             lLVector3.setLerp(this.position, f, animationKeyframe.getTransform(), f2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public void setTransform(LLVector3 lLVector3) {
             lLVector3.set(this.position);
         }
@@ -230,19 +228,18 @@ public class AnimationData {
             this.quaternion = lLQuaternion;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         /* JADX WARN: Can't rename method to resolve collision */
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public LLQuaternion getTransform() {
             return this.quaternion;
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public void setInterpolated(LLQuaternion lLQuaternion, float f, AnimationKeyframe<LLQuaternion> animationKeyframe, float f2) {
             lLQuaternion.setLerp(this.quaternion, f, animationKeyframe.getTransform(), f2);
         }
 
-        @Override // com.lumiyaviewer.lumiya.render.avatar.AnimationData.AnimationKeyframe
+        @Override
         public void setTransform(LLQuaternion lLQuaternion) {
             lLQuaternion.set(this.quaternion);
         }

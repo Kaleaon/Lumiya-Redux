@@ -4,7 +4,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public abstract class RequestOperator<K, T> implements RequestHandler<K> {
 
     @Nullable
@@ -44,7 +43,7 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequest(@Nonnull final K k) {
         if (this.executor != null) {
             this.executor.execute(() -> m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(k));
@@ -58,7 +57,7 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandler
+    @Override
     public void onRequestCancelled(@Nonnull final K k) {
         if (this.executor != null) {
             this.executor.execute(() -> m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(k));

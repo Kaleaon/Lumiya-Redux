@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class GroupRoleMemberDao extends AbstractDao<GroupRoleMember, Void> {
     public static final String TABLENAME = "GroupRoleMembers";
 
@@ -37,8 +36,7 @@ public class GroupRoleMemberDao extends AbstractDao<GroupRoleMember, Void> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupRoleMembers'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, GroupRoleMember groupRoleMember) {
         sQLiteStatement.clearBindings();
         sQLiteStatement.bindString(1, groupRoleMember.getGroupID().toString());
@@ -47,23 +45,23 @@ public class GroupRoleMemberDao extends AbstractDao<GroupRoleMember, Void> {
         sQLiteStatement.bindString(4, groupRoleMember.getUserID().toString());
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void getKey(GroupRoleMember groupRoleMember) {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public GroupRoleMember readEntity(Cursor cursor, int i) {
         return new GroupRoleMember(UUID.fromString(cursor.getString(i + 0)), UUID.fromString(cursor.getString(i + 1)), UUID.fromString(cursor.getString(i + 2)), UUID.fromString(cursor.getString(i + 3)));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, GroupRoleMember groupRoleMember, int i) {
         groupRoleMember.setGroupID(UUID.fromString(cursor.getString(i + 0)));
         groupRoleMember.setRequestID(UUID.fromString(cursor.getString(i + 1)));
@@ -71,13 +69,12 @@ public class GroupRoleMemberDao extends AbstractDao<GroupRoleMember, Void> {
         groupRoleMember.setUserID(UUID.fromString(cursor.getString(i + 3)));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void readKey(Cursor cursor, int i) {
         return null;
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Void updateKeyAfterInsert(GroupRoleMember groupRoleMember, long j) {
         return null;
     }

@@ -11,7 +11,6 @@ import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class MeshRiggingData {
     private static final InternPool<MeshRiggingData> riggingDataPool = new InternPool<>();
     private final boolean hasExtendedBones;

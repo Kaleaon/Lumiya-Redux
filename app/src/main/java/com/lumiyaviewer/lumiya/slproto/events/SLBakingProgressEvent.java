@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.events;
 
-/* loaded from: classes.dex */
 public class SLBakingProgressEvent {
     public boolean done;
     public boolean first;

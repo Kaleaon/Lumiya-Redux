@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class RLVController extends SLModule {
     private boolean RLVEnabled;
     private String RLVEnablingCommand;
@@ -73,7 +72,7 @@ public class RLVController extends SLModule {
         this.agentCircuit.HandleChatEvent(this.agentCircuit.getLocalChatterID(), new SLEnableRLVOfferEvent(chatFromSimulator, this.agentCircuit.getAgentUUID()), true);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.modules.SLModule
+    @Override
     public void HandleGlobalOptionsChange() {
         boolean rLVEnabled = GlobalOptions.getInstance().getRLVEnabled();
         if (rLVEnabled && (!this.RLVEnabled) && this.RLVEnablingOffered && this.RLVEnablingCommand != null) {

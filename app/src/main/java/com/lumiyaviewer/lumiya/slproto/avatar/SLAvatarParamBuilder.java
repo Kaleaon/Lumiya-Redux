@@ -17,7 +17,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 class SLAvatarParamBuilder {
     SLAvatarParamBuilder() {
     }

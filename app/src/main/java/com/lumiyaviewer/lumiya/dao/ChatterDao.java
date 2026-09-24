@@ -8,7 +8,6 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class ChatterDao extends AbstractDao<Chatter, Long> {
     public static final String TABLENAME = "CHATTER";
 
@@ -41,8 +40,7 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
         sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHATTER'");
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void bindValues(SQLiteStatement sQLiteStatement, Chatter chatter) {
         sQLiteStatement.clearBindings();
         Long id = chatter.getId();
@@ -67,7 +65,7 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
         }
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long getKey(Chatter chatter) {
         if (chatter != null) {
             return chatter.getId();
@@ -75,18 +73,18 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
         return null;
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     protected boolean isEntityUpdateable() {
         return true;
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Chatter readEntity(Cursor cursor, int i) {
         return new Chatter(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)), cursor.getInt(i + 1), cursor.isNull(i + 2) ? null : UUID.fromString(cursor.getString(i + 2)), cursor.getShort(i + 3) != 0, cursor.getShort(i + 4) != 0, cursor.getInt(i + 5), cursor.isNull(i + 6) ? null : Long.valueOf(cursor.getLong(i + 6)), cursor.isNull(i + 7) ? null : UUID.fromString(cursor.getString(i + 7)));
     }
 
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public void readEntity(Cursor cursor, Chatter chatter, int i) {
         chatter.setId(cursor.isNull(i + 0) ? null : Long.valueOf(cursor.getLong(i + 0)));
         chatter.setType(cursor.getInt(i + 1));
@@ -99,7 +97,7 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
     }
 
     /* JADX WARN: Can't rename method to resolve collision */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long readKey(Cursor cursor, int i) {
         if (cursor.isNull(i + 0)) {
             return null;
@@ -107,8 +105,7 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
         return Long.valueOf(cursor.getLong(i + 0));
     }
 
-    /* JADX INFO: Access modifiers changed from: protected */
-    @Override // de.greenrobot.dao.AbstractDao
+    @Override
     public Long updateKeyAfterInsert(Chatter chatter, long j) {
         chatter.setId(Long.valueOf(j));
         return Long.valueOf(j);

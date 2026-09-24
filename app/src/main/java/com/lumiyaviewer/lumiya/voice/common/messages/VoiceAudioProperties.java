@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceBluetoothState;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class VoiceAudioProperties implements VoicePluginMessage {
 
     @Nonnull
@@ -31,7 +30,7 @@ public class VoiceAudioProperties implements VoicePluginMessage {
         this.bluetoothState = voiceBluetoothState;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putFloat("speakerVolume", this.speakerVolume);

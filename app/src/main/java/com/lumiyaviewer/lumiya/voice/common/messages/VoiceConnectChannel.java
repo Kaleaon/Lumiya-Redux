@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class VoiceConnectChannel implements VoicePluginMessage {
 
     @Nullable
@@ -25,7 +24,7 @@ public class VoiceConnectChannel implements VoicePluginMessage {
         this.channelCredentials = str;
     }
 
-    @Override // com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle("voiceChannelInfo", this.voiceChannelInfo.toBundle());

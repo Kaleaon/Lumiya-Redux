@@ -2,7 +2,6 @@ package com.lumiyaviewer.lumiya.utils;
 
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public final class StringUtils {
     public static int countOccurrences(String str, char c) {
         int i = 0;

@@ -6,25 +6,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * GenericMessage
+ * format must be identical to above
+ * As above, but don't have to be god or estate owner to send.
+ *
+ * <p>Template: {@code GenericMessage Low 261 NotTrusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ * <p>Viewer reference: {@code process_generic_message()} in indra/newview/llviewergenericmessage.cpp
+ * (secondlife/viewer @ c179f76c01).
+ */
 public class GenericMessage extends SLMessage {
     public AgentData AgentData_Field;
     public MethodData MethodData_Field;
     public ArrayList<ParamList> ParamList_Fields = new ArrayList<>();
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID AgentID;
-        public UUID SessionID;
-        public UUID TransactionID;
+        public UUID AgentID; // LLUUID
+        public UUID SessionID; // LLUUID
+        public UUID TransactionID; // LLUUID
     }
 
+    /** Block MethodData, Single. */
     public static class MethodData {
-        public UUID Invoice;
-        public byte[] Method;
+        public UUID Invoice; // LLUUID
+        public byte[] Method; // Variable 1
     }
 
+    /** Block ParamList, Variable. */
     public static class ParamList {
-        public byte[] Parameter;
+        public byte[] Parameter; // Variable 1
     }
 
     public GenericMessage() {
@@ -33,7 +45,7 @@ public class GenericMessage extends SLMessage {
         this.MethodData_Field = new MethodData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 52 + 1;
         Iterator<?> it = this.ParamList_Fields.iterator();
@@ -46,16 +58,17 @@ public class GenericMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleGenericMessage(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.putShort((short) -1);
-        byteBuffer.put((byte) 1);
-        byteBuffer.put((byte) 5);
+        // Message number: Low 261 (GenericMessage).
+        byteBuffer.putShort((short) 0xFFFF);
+        byteBuffer.put((byte) 0x01);
+        byteBuffer.put((byte) 0x05);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
         packUUID(byteBuffer, this.AgentData_Field.SessionID);
         packUUID(byteBuffer, this.AgentData_Field.TransactionID);
@@ -68,7 +81,7 @@ public class GenericMessage extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);

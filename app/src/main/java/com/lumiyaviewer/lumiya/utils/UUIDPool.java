@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class UUIDPool extends InternPool<UUID> {
     private static final UUIDPool instance = new UUIDPool();
     public static final UUID ZeroUUID = new UUID(0, 0);

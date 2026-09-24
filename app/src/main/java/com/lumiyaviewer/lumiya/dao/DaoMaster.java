@@ -7,7 +7,6 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
-/* loaded from: classes.dex */
 public class DaoMaster extends AbstractDaoMaster {
     public static final int SCHEMA_VERSION = 71;
 
@@ -16,7 +15,7 @@ public class DaoMaster extends AbstractDaoMaster {
             super(context, str, cursorFactory);
         }
 
-        @Override // android.database.sqlite.SQLiteOpenHelper
+        @Override
         public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
             Log.i("greenDAO", "Upgrading schema from version " + i + " to " + i2 + " by dropping all tables");
             DaoMaster.dropAllTables(sQLiteDatabase, true);
@@ -29,7 +28,7 @@ public class DaoMaster extends AbstractDaoMaster {
             super(context, str, cursorFactory, 71);
         }
 
-        @Override // android.database.sqlite.SQLiteOpenHelper
+        @Override
         public void onCreate(SQLiteDatabase sQLiteDatabase) {
             Log.i("greenDAO", "Creating tables for schema version 71");
             DaoMaster.createAllTables(sQLiteDatabase, false);
@@ -91,12 +90,12 @@ public class DaoMaster extends AbstractDaoMaster {
         ChatterDao.dropTable(sQLiteDatabase, z);
     }
 
-    @Override // de.greenrobot.dao.AbstractDaoMaster
+    @Override
     public DaoSession newSession() {
         return new DaoSession(this.db, IdentityScopeType.Session, this.daoConfigMap);
     }
 
-    @Override // de.greenrobot.dao.AbstractDaoMaster
+    @Override
     public DaoSession newSession(IdentityScopeType identityScopeType) {
         return new DaoSession(this.db, identityScopeType, this.daoConfigMap);
     }

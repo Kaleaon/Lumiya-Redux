@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/* loaded from: classes.dex */
 public final class Version {
     public final int majorVersion;
     public final int minorVersion;

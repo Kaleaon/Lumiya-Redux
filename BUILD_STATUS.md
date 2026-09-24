@@ -1,5 +1,17 @@
 # Build status
 
+**Current (2026-09-24):** `./gradlew :app:assembleDebug` builds, and
+`tools/verify/verify_against_apk.sh` reports **0 damaged classes** and **0
+unresolved references** against the original 3.4.2 bytecode. 226 classes ship
+as original bytecode (`tools/recover/bytecode_classes.txt`), and 25 reviewed
+differences are listed with reasons in `tools/verify/accepted.txt`. Unit tests
+and protocol conformance pass. Method and tools:
+[docs/recovery/verified_recovery.md](docs/recovery/verified_recovery.md).
+
+The sections below are the historical log from before verification existed.
+Several fixes they describe were later found by the verifier to have changed
+behaviour; see `docs/recovery/superseded_hand_edits.txt`.
+
 Snapshot taken against `./gradlew :app:assembleDebug`, AGP 8.7.3, Gradle
 8.10.2, JDK 21, Android SDK 34, on the `claude/reverse-engineer-apk-zBeon`
 branch at the commit that introduces this file.

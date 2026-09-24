@@ -27,7 +27,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL10;
 
 @UsedByNative
-/* loaded from: classes.dex */
 public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachListener, CardboardViewApi {
     private static final String TAG = CardboardViewNativeImpl.class.getSimpleName();
     private volatile Runnable cardboardBackListener;
@@ -52,14 +51,14 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         private PresentationListener() {
         }
 
-        @Override // com.google.vr.ndk.base.GvrLayout.PresentationListener
+        @Override
         public void onPresentationStarted(Display display) {
             this.originalParams = CardboardViewNativeImpl.this.getScreenParams();
             CardboardViewNativeImpl.this.updateScreenParams(new ScreenParams(display));
             CardboardViewNativeImpl.this.reconnectSensors();
         }
 
-        @Override // com.google.vr.ndk.base.GvrLayout.PresentationListener
+        @Override
         public void onPresentationStopped() {
             if (this.originalParams == null) {
                 return;
@@ -82,7 +81,6 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
             this.stereoMode = CardboardViewNativeImpl.this.stereoMode;
         }
 
-        /* JADX INFO: Access modifiers changed from: private */
         public void callOnRendererShutdown() {
             if (this.renderer != null) {
                 this.renderer.onRendererShutdown();
@@ -124,8 +122,8 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         public void getCurrentEyeParams(final HeadTransform headTransform, final Eye eye, final Eye eye2, final Eye eye3, final Eye eye4, final Eye eye5) {
             CardboardViewNativeImpl.this.checkNativeCardboardView();
             final CountDownLatch countDownLatch = new CountDownLatch(1);
-            CardboardViewNativeImpl.this.queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.RendererHelper.3
-                @Override // java.lang.Runnable
+            CardboardViewNativeImpl.this.queueEvent(new Runnable() {
+                @Override
                 public void run() {
                     CardboardViewNativeImpl.this.nativeGetCurrentEyeParams(CardboardViewNativeImpl.this.nativeCardboardView, headTransform, eye, eye2, eye3, eye4, eye5);
                     countDownLatch.countDown();
@@ -140,7 +138,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
             }
         }
 
-        @Override // android.opengl.GLSurfaceView.Renderer
+        @Override
         public void onDrawFrame(GL10 gl10) {
             if ((this.renderer == null && this.stereoRenderer == null) || !this.surfaceCreated) {
                 return;
@@ -151,7 +149,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
             EGL14.eglSwapInterval(this.eglDisplay, 1);
         }
 
-        @Override // android.opengl.GLSurfaceView.Renderer
+        @Override
         public void onSurfaceChanged(GL10 gl10, int i, int i2) {
             if ((this.renderer == null && this.stereoRenderer == null) || !this.surfaceCreated) {
                 return;
@@ -170,7 +168,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
             callOnSurfaceChanged(i, i2);
         }
 
-        @Override // android.opengl.GLSurfaceView.Renderer
+        @Override
         public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
             if (this.renderer == null && this.stereoRenderer == null) {
                 return;
@@ -197,8 +195,8 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         public void setStereoModeEnabled(final boolean z) {
             CardboardViewNativeImpl.this.checkNativeCardboardView();
             CardboardViewNativeImpl.this.gvrLayout.setStereoModeEnabled(z);
-            CardboardViewNativeImpl.this.queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.RendererHelper.2
-                @Override // java.lang.Runnable
+            CardboardViewNativeImpl.this.queueEvent(new Runnable() {
+                @Override
                 public void run() {
                     if (RendererHelper.this.stereoMode != z) {
                         RendererHelper.this.stereoMode = z;
@@ -213,8 +211,8 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
 
         public void shutdown() {
-            CardboardViewNativeImpl.this.queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.RendererHelper.1
-                @Override // java.lang.Runnable
+            CardboardViewNativeImpl.this.queueEvent(new Runnable() {
+                @Override
                 public void run() {
                     if ((RendererHelper.this.renderer != null || RendererHelper.this.stereoRenderer != null) && RendererHelper.this.surfaceCreated) {
                         RendererHelper.this.surfaceCreated = false;
@@ -252,7 +250,6 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         this.nativeCardboardView = nativeInit(this.gvrApi.getNativeGvrContext());
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void checkNativeCardboardView() {
         if (this.nativeCardboardView == 0) {
             throw new IllegalStateException("GvrView has already been shut down.");
@@ -265,59 +262,44 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
 
     private native void nativeDestroy(long j);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeGetCurrentEyeParams(long j, HeadTransform headTransform, Eye eye, Eye eye2, Eye eye3, Eye eye4, Eye eye5);
 
     private native float nativeGetNeckModelFactor(long j);
 
     private native long nativeInit(long j);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeLogEvent(long j, int i);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeOnDrawFrame(long j);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeOnSurfaceChanged(long j, int i, int i2);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeOnSurfaceCreated(long j);
 
     private static native long nativeSetApplicationState(ClassLoader classLoader, Context context);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetDepthStencilFormat(long j, int i);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetDistortionCorrectionEnabled(long j, boolean z);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetDistortionCorrectionScale(long j, float f);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetGvrViewerParams(long j, byte[] bArr);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetMultisampling(long j, int i);
 
     private native void nativeSetNeckModelEnabled(long j, boolean z);
 
     private native void nativeSetNeckModelFactor(long j, float f);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetRenderer(long j, GvrView.Renderer renderer);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetScreenParams(long j, int i, int i2, float f, float f2, float f3);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetStereoModeEnabled(long j, boolean z);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeSetStereoRenderer(long j, GvrView.StereoRenderer stereoRenderer);
 
-    /* JADX INFO: Access modifiers changed from: private */
     public native void nativeUndistortTexture(long j, int i);
 
     @UsedByNative
@@ -325,7 +307,6 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         runOnCardboardBackListener();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     @UsedByNative
     public void onCardboardTrigger() {
         Runnable runnable = this.cardboardTriggerListener;
@@ -335,15 +316,13 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         ThreadUtils.runOnUiThread(runnable);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void queueEvent(Runnable runnable) {
         this.glSurfaceView.queueEvent(runnable);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void reconnectSensors() {
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.10
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.gvrApi.reconnectSensors();
             }
@@ -360,8 +339,8 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
 
     private void setGvrViewerParams(final GvrViewerParams gvrViewerParams) {
         this.uiLayout.setViewerName(new GvrViewerParams(gvrViewerParams).getModel());
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.8
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeSetGvrViewerParams(CardboardViewNativeImpl.this.nativeCardboardView, gvrViewerParams.toByteArray());
             }
@@ -370,8 +349,8 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
 
     private void setScreenParams(ScreenParams screenParams) {
         final ScreenParams screenParams2 = new ScreenParams(screenParams);
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.9
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.rendererHelper.setScreenParams(screenParams2);
                 CardboardViewNativeImpl.this.nativeSetScreenParams(CardboardViewNativeImpl.this.nativeCardboardView, screenParams2.getWidth(), screenParams2.getHeight(), screenParams2.getWidthMeters() / screenParams2.getWidth(), screenParams2.getHeightMeters() / screenParams2.getHeight(), screenParams2.getBorderSizeMeters());
@@ -381,15 +360,15 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
 
     private void updateTransitionListener() {
         if (this.uiLayout.getUiLayer().getTransitionViewEnabled()) {
-            this.uiLayout.getUiLayer().setTransitionViewListener(new TransitionView.TransitionListener() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.1
-                @Override // com.google.vr.cardboard.TransitionView.TransitionListener
+            this.uiLayout.getUiLayer().setTransitionViewListener(new TransitionView.TransitionListener() {
+                @Override
                 public void onSwitchViewer() {
                     if (CardboardViewNativeImpl.this.nativeCardboardView != 0) {
                         CardboardViewNativeImpl.this.nativeLogEvent(CardboardViewNativeImpl.this.nativeCardboardView, 2003);
                     }
                 }
 
-                @Override // com.google.vr.cardboard.TransitionView.TransitionListener
+                @Override
                 public void onTransitionDone() {
                     if (CardboardViewNativeImpl.this.nativeCardboardView != 0) {
                         CardboardViewNativeImpl.this.nativeLogEvent(CardboardViewNativeImpl.this.nativeCardboardView, 2002);
@@ -405,10 +384,10 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void enableCardboardTriggerEmulation() {
-        this.gvrLayout.enableCardboardTriggerEmulation(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.7
-            @Override // java.lang.Runnable
+        this.gvrLayout.enableCardboardTriggerEmulation(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.onCardboardTrigger();
             }
@@ -426,62 +405,62 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public boolean getAsyncReprojectionEnabled() {
         return this.gvrLayout.getGvrApi().getAsyncReprojectionEnabled();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void getCurrentEyeParams(HeadTransform headTransform, Eye eye, Eye eye2, Eye eye3, Eye eye4, Eye eye5) {
         this.rendererHelper.getCurrentEyeParams(headTransform, eye, eye2, eye3, eye4, eye5);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public boolean getDistortionCorrectionEnabled() {
         return this.distortionCorrectionEnabled;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public GvrSurfaceView getGvrSurfaceView() {
         return this.glSurfaceView;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public GvrViewerParams getGvrViewerParams() {
         return this.hmdManager.getHeadMountedDisplay().getGvrViewerParams();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public HeadMountedDisplay getHeadMountedDisplay() {
         return this.hmdManager.getHeadMountedDisplay();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public float getInterpupillaryDistance() {
         return getGvrViewerParams().getInterLensDistance();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public float getNeckModelFactor() {
         return nativeGetNeckModelFactor(this.nativeCardboardView);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public View getRootView() {
         return this.gvrLayout;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public ScreenParams getScreenParams() {
         return this.hmdManager.getHeadMountedDisplay().getScreenParams();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public boolean getStereoModeEnabled() {
         return this.stereoMode;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void onPause() {
         checkNativeCardboardView();
         this.gvrApi.pauseTracking();
@@ -490,7 +469,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         this.gvrLayout.onPause();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void onResume() {
         checkNativeCardboardView();
         this.gvrLayout.onResume();
@@ -501,7 +480,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         this.gvrApi.resumeTracking();
     }
 
-    @Override // com.google.vr.cardboard.CardboardGLSurfaceView.DetachListener
+    @Override
     public void onSurfaceViewDetachedFromWindow() {
         if (this.shutdownLatch != null) {
             return;
@@ -518,7 +497,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         this.shutdownLatch = null;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if (motionEvent.getActionMasked() != 0 || this.cardboardTriggerListener == null) {
             return false;
@@ -527,125 +506,125 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         return true;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void recenterHeadTracker() {
         this.gvrApi.recenterTracking();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void resetHeadTracker() {
         this.gvrApi.resetTracking();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public boolean setAsyncReprojectionEnabled(boolean z) {
         return this.gvrLayout.setAsyncReprojectionEnabled(z);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setDepthStencilFormat(final int i) {
         checkNativeCardboardView();
         if (!BufferSpec.isValidDepthStencilFormat(i)) {
             throw new IllegalArgumentException("Invalid depth-stencil format.");
         }
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.6
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeSetDepthStencilFormat(CardboardViewNativeImpl.this.nativeCardboardView, i);
             }
         });
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setDistortionCorrectionEnabled(final boolean z) {
         checkNativeCardboardView();
         this.distortionCorrectionEnabled = z;
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.2
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeSetDistortionCorrectionEnabled(CardboardViewNativeImpl.this.nativeCardboardView, z);
             }
         });
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setDistortionCorrectionScale(final float f) {
         checkNativeCardboardView();
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.4
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeSetDistortionCorrectionScale(CardboardViewNativeImpl.this.nativeCardboardView, f);
             }
         });
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setMultisampling(final int i) {
         checkNativeCardboardView();
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.5
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeSetMultisampling(CardboardViewNativeImpl.this.nativeCardboardView, i);
             }
         });
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setNeckModelEnabled(boolean z) {
         nativeSetNeckModelEnabled(this.nativeCardboardView, z);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setNeckModelFactor(float f) {
         nativeSetNeckModelFactor(this.nativeCardboardView, f);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setOnCardboardBackListener(Runnable runnable) {
         this.cardboardBackListener = runnable;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setOnCardboardTriggerListener(Runnable runnable) {
         this.cardboardTriggerListener = runnable;
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setOnCloseButtonListener(Runnable runnable) {
         this.uiLayout.setCloseButtonListener(runnable);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setOnTransitionViewDoneListener(Runnable runnable) {
         this.transitionDoneListener = runnable;
         updateTransitionListener();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setRenderer(GvrView.Renderer renderer) {
         this.rendererHelper.setRenderer(renderer);
         this.glSurfaceView.setRenderer(this.rendererHelper);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setRenderer(GvrView.StereoRenderer stereoRenderer) {
         this.rendererHelper.setRenderer(stereoRenderer);
         this.glSurfaceView.setRenderer(this.rendererHelper);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setStereoModeEnabled(boolean z) {
         this.stereoMode = z;
         this.rendererHelper.setStereoModeEnabled(z);
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void setTransitionViewEnabled(boolean z) {
         this.uiLayout.setTransitionViewEnabled(z);
         updateTransitionListener();
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void shutdown() {
         if (this.nativeCardboardView != 0) {
             this.gvrLayout.shutdown();
@@ -654,25 +633,25 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void undistortTexture(final int i) {
         checkNativeCardboardView();
-        queueEvent(new Runnable() { // from class: com.google.vr.sdk.base.CardboardViewNativeImpl.3
-            @Override // java.lang.Runnable
+        queueEvent(new Runnable() {
+            @Override
             public void run() {
                 CardboardViewNativeImpl.this.nativeUndistortTexture(CardboardViewNativeImpl.this.nativeCardboardView, i);
             }
         });
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void updateGvrViewerParams(GvrViewerParams gvrViewerParams) {
         if (this.hmdManager.updateGvrViewerParams(gvrViewerParams)) {
             setGvrViewerParams(getGvrViewerParams());
         }
     }
 
-    @Override // com.google.vr.sdk.base.CardboardViewApi
+    @Override
     public void updateScreenParams(ScreenParams screenParams) {
         if (this.hmdManager.updateScreenParams(screenParams)) {
             setScreenParams(getScreenParams());

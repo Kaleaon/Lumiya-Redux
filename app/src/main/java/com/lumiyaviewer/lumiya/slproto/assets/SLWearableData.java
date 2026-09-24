@@ -1,11 +1,9 @@
 package com.lumiyaviewer.lumiya.slproto.assets;
 
 import com.google.common.collect.ImmutableList;
-import com.lumiyaviewer.lumiya.Debug;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLWearableData {
     public final String name;
     public final ImmutableList<WearableParam> params;

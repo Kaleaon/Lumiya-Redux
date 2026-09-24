@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.users.manager.assets;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 final class AutoValue_AssetKey extends AssetKey {
     private final int assetType;
     private final UUID assetUUID;
@@ -23,18 +22,18 @@ final class AutoValue_AssetKey extends AssetKey {
         this.taskUUID = uuid4;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int assetType() {
         return this.assetType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID assetUUID() {
         return this.assetUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int channelType() {
         return this.channelType;
     }
@@ -57,24 +56,24 @@ final class AutoValue_AssetKey extends AssetKey {
         return (((this.itemUUID == null ? 0 : this.itemUUID.hashCode()) ^ (((this.ownerUUID == null ? 0 : this.ownerUUID.hashCode()) ^ (((((this.assetUUID == null ? 0 : this.assetUUID.hashCode()) ^ ((((this.channelType ^ 1000003) * 1000003) ^ this.sourceType) * 1000003)) * 1000003) ^ this.assetType) * 1000003)) * 1000003)) * 1000003) ^ (this.taskUUID != null ? this.taskUUID.hashCode() : 0);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID itemUUID() {
         return this.itemUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID ownerUUID() {
         return this.ownerUUID;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     public int sourceType() {
         return this.sourceType;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.manager.assets.AssetKey
+    @Override
     @Nullable
     public UUID taskUUID() {
         return this.taskUUID;

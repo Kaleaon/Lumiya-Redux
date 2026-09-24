@@ -12,7 +12,6 @@ import android.os.Handler;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
-import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatar;
 import com.lumiyaviewer.lumiya.render.avatar.DrawableAvatarStub;
@@ -55,7 +54,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 @SuppressLint({"InlinedApi"})
-/* loaded from: classes.dex */
 public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.EGLContextFactory {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
     private static final int EMPTY_FRAMES_COUNT = 1;
@@ -160,8 +158,6 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
-    /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
     public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (sLAgentCircuit == null) {
             this.avatarControl = null;
@@ -287,7 +283,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         }
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLContextFactory
+    @Override
     public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
         Debug.Printf("EGL: createContext called.", new Object[0]);
         if (GpuCapabilities.shouldAttemptEs3Context(this.requestGL20)) {
@@ -310,7 +306,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         return egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
     }
 
-    @Override // android.opengl.GLSurfaceView.EGLContextFactory
+    @Override
     @SuppressLint({"DefaultLocale"})
     public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
         Debug.Printf("EGL: destroyContext called.", new Object[0]);
@@ -399,7 +395,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.initialUpdateDone = true;
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
+    @Override
     public void onDrawFrame(GL10 gl10) {
         onPrepareFrame(null);
         onDrawFrame(gl10, null, null, null, null, null, 0);
@@ -754,7 +750,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         TextureMemoryTracker.clearActiveRenderer(this);
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
+    @Override
     public void onSurfaceChanged(GL10 gl10, int i, int i2) {
         RenderContext renderContext = this.renderContext.get();
         if (renderContext == null) {
@@ -845,7 +841,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.firstFrameTime = System.currentTimeMillis();
     }
 
-    @Override // android.opengl.GLSurfaceView.Renderer
+    @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
         onSurfaceCreated(gl10, eGLConfig, false);
     }

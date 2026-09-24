@@ -8,7 +8,6 @@ import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 
-/* loaded from: classes.dex */
 public class TeleportHomeDialog {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956, reason: not valid java name */
     static /* synthetic */ void m555lambda$com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956(Activity activity, UserManager userManager, SLAgentCircuit sLAgentCircuit, DialogInterface dialogInterface, int i) {
@@ -23,21 +22,21 @@ public class TeleportHomeDialog {
         if (userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || !activeAgentCircuit.getModules().rlvController.canTeleportToLocation()) {
             return;
         }
-        new AlertDialog.Builder(activity).setMessage(R.string.teleport_home_confirm_title).setPositiveButton("Yes", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$sKhJxooMqZpn4u0mFmtSpF7hGx8.1
+        new AlertDialog.Builder(activity).setMessage(R.string.teleport_home_confirm_title).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 TeleportHomeDialog.m555lambda$com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956((Activity) activity, (UserManager) userManager, (SLAgentCircuit) activeAgentCircuit, dialogInterface, i);
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$sKhJxooMqZpn4u0mFmtSpF7hGx8
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             private final /* synthetic */ void $m$0(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
             }
 
-            @Override // android.content.DialogInterface.OnClickListener
+            @Override
             public final void onClick(DialogInterface dialogInterface, int i) {
                 $m$0(dialogInterface, i);
             }

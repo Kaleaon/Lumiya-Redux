@@ -6,7 +6,6 @@ import com.lumiyaviewer.lumiya.slproto.SLCircuitInfo;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 
-/* loaded from: classes.dex */
 public class SLModule {
     protected SLAgentCircuit agentCircuit;
     protected SLCircuitInfo circuitInfo;

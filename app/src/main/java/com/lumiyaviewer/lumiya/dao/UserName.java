@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class UserName {
     private String displayName;
     private boolean isBadUUID;

@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya;
 import android.util.Log;
 import java.nio.ByteBuffer;
 
-/* loaded from: classes.dex */
 public class Debug {
     private static final String LOG_TAG = "Lumiya";
 

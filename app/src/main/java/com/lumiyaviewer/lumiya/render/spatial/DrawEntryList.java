@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.render.spatial;
 import com.lumiyaviewer.lumiya.utils.InlineList;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class DrawEntryList extends InlineList<DrawListEntry> {
 
     @Nullable
@@ -17,7 +16,7 @@ public class DrawEntryList extends InlineList<DrawListEntry> {
         this.listener = entryRemovalListener;
     }
 
-    @Override // com.lumiyaviewer.lumiya.utils.InlineList
+    @Override
     public void requestEntryRemoval(DrawListEntry drawListEntry) {
         if (this.listener != null) {
             this.listener.onEntryRemovalRequested(drawListEntry);

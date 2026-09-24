@@ -7,7 +7,6 @@ import com.google.vr.vrcore.base.api.VrCoreNotAvailableException;
 import com.google.vr.vrcore.base.api.VrCoreUtils;
 import com.google.vr.vrcore.library.api.IVrCreator;
 
-/* loaded from: classes.dex */
 public class VrCoreLoader {
     private static final String CREATOR_NAME = "com.google.vr.vrcore.library.VrCreator";
     private static final boolean DEBUG = false;

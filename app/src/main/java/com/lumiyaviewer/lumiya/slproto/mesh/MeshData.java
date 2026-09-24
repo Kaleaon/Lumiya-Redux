@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.zip.InflaterInputStream;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class MeshData {
     public static final int MAX_RIGGED_MESH_JOINTS = 163;
 

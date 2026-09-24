@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.types;
 
-/* loaded from: classes.dex */
 public class Vector2Array extends VectorArray {
     public Vector2Array(int i) {
         super(2, i);

@@ -9,7 +9,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-/* loaded from: classes.dex */
 public class DirectByteBuffer {
     private ByteBuffer buf;
 

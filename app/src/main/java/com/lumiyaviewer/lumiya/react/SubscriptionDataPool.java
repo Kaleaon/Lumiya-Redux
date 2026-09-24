@@ -5,17 +5,16 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class SubscriptionDataPool<K, T> extends SubscriptionGenericDataPool<K, T> {
     private final Map<K, SubscriptionList<K, T>> entries = new HashMap();
 
-    @Override // com.lumiyaviewer.lumiya.react.SubscriptionGenericDataPool
+    @Override
     @Nullable
     protected SubscriptionList<K, T> getExistingSubscriptions(@Nonnull K k) {
         return this.entries.get(k);
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.SubscriptionGenericDataPool
+    @Override
     @Nonnull
     protected SubscriptionList<K, T> getSubscriptions(@Nonnull K k) {
         SubscriptionList<K, T> subscriptionList = this.entries.get(k);
@@ -27,7 +26,7 @@ public class SubscriptionDataPool<K, T> extends SubscriptionGenericDataPool<K, T
         return subscriptionList2;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.SubscriptionGenericDataPool
+    @Override
     public SubscriptionDataPool<K, T> setCanContainNulls(boolean z) {
         super.setCanContainNulls(z);
         return this;

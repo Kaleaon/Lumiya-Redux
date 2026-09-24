@@ -13,7 +13,6 @@ import java.nio.FloatBuffer;
 import java.util.EnumMap;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public class SLPolyMesh extends SLMeshData {
     protected boolean hasWeights;
     public int[] jointMap;

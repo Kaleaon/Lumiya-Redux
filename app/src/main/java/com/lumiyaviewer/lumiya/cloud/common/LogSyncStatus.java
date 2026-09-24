@@ -5,7 +5,6 @@ import androidx.core.app.NotificationCompat;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class LogSyncStatus implements Bundleable {
 
     @Nullable
@@ -33,7 +32,7 @@ public class LogSyncStatus implements Bundleable {
         this.errorMessage = bundle.getString("errorMessage");
     }
 
-    @Override // com.lumiyaviewer.lumiya.cloud.common.Bundleable
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putInt("pluginVersionCode", this.pluginVersionCode);

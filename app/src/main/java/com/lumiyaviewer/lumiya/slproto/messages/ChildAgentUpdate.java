@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.messages;
 
-import com.google.common.base.Ascii;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
@@ -9,7 +8,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
+/**
+ * Child Agent Update - agents send child agents to neighboring simulators.
+ * This will create a child camera if there isn't one at the target already
+ * Can't send viewer IP and port between simulators -- the port may get remapped
+ * if the viewer is behind a Network Address Translation (NAT) box.
+ * Note: some of the fields of this message really only need to be sent when an
+ * agent crosses a region boundary and changes from a child to a main agent
+ * (such as Head/BodyRotation, ControlFlags, Animations etc)
+ * simulator -> simulator
+ * reliable
+ *
+ * <p>Template: {@code ChildAgentUpdate High 25 Trusted Zerocoded}
+ * (recovered/reference/message_template.msg).
+ */
 public class ChildAgentUpdate extends SLMessage {
     public AgentData AgentData_Field;
     public ArrayList<GroupData> GroupData_Fields = new ArrayList<>();
@@ -20,65 +32,73 @@ public class ChildAgentUpdate extends SLMessage {
     public ArrayList<AgentAccess> AgentAccess_Fields = new ArrayList<>();
     public ArrayList<AgentInfo> AgentInfo_Fields = new ArrayList<>();
 
+    /** Block AgentAccess, Variable. */
     public static class AgentAccess {
-        public int AgentLegacyAccess;
-        public int AgentMaxAccess;
+        public int AgentLegacyAccess; // U8
+        public int AgentMaxAccess; // U8
     }
 
+    /** Block AgentData, Single. */
     public static class AgentData {
-        public UUID ActiveGroupID;
-        public int AgentAccess;
-        public UUID AgentID;
-        public LLVector3 AgentPos;
-        public byte[] AgentTextures;
-        public LLVector3 AgentVel;
-        public boolean AlwaysRun;
-        public float Aspect;
-        public LLVector3 AtAxis;
-        public LLQuaternion BodyRotation;
-        public LLVector3 Center;
-        public boolean ChangedGrid;
-        public int ControlFlags;
-        public float EnergyLevel;
-        public float Far;
-        public int GodLevel;
-        public LLQuaternion HeadRotation;
-        public LLVector3 LeftAxis;
-        public int LocomotionState;
-        public UUID PreyAgent;
-        public long RegionHandle;
-        public UUID SessionID;
-        public LLVector3 Size;
-        public byte[] Throttles;
-        public LLVector3 UpAxis;
-        public int ViewerCircuitCode;
+        public UUID ActiveGroupID; // LLUUID
+        public int AgentAccess; // U8
+        public UUID AgentID; // LLUUID
+        public LLVector3 AgentPos; // LLVector3
+        public byte[] AgentTextures; // Variable 2
+        public LLVector3 AgentVel; // LLVector3
+        public boolean AlwaysRun; // BOOL
+        public float Aspect; // F32
+        public LLVector3 AtAxis; // LLVector3
+        public LLQuaternion BodyRotation; // LLQuaternion
+        public LLVector3 Center; // LLVector3
+        public boolean ChangedGrid; // BOOL
+        public int ControlFlags; // U32
+        public float EnergyLevel; // F32
+        public float Far; // F32
+        public int GodLevel; // U8 - Changed from BOOL to U8, and renamed GodLevel (from Godlike)
+        public LLQuaternion HeadRotation; // LLQuaternion
+        public LLVector3 LeftAxis; // LLVector3
+        public int LocomotionState; // U32
+        public UUID PreyAgent; // LLUUID
+        public long RegionHandle; // U64
+        public UUID SessionID; // LLUUID
+        public LLVector3 Size; // LLVector3
+        public byte[] Throttles; // Variable 1
+        public LLVector3 UpAxis; // LLVector3
+        public int ViewerCircuitCode; // U32
     }
 
+    /** Block AgentInfo, Variable. */
     public static class AgentInfo {
-        public int Flags;
+        public int Flags; // U32
     }
 
+    /** Block AnimationData, Variable. */
     public static class AnimationData {
-        public UUID Animation;
-        public UUID ObjectID;
+        public UUID Animation; // LLUUID
+        public UUID ObjectID; // LLUUID
     }
 
+    /** Block GranterBlock, Variable. */
     public static class GranterBlock {
-        public UUID GranterID;
+        public UUID GranterID; // LLUUID
     }
 
+    /** Block GroupData, Variable. */
     public static class GroupData {
-        public boolean AcceptNotices;
-        public UUID GroupID;
-        public long GroupPowers;
+        public boolean AcceptNotices; // BOOL
+        public UUID GroupID; // LLUUID
+        public long GroupPowers; // U64
     }
 
+    /** Block NVPairData, Variable. */
     public static class NVPairData {
-        public byte[] NVPairs;
+        public byte[] NVPairs; // Variable 2
     }
 
+    /** Block VisualParam, Variable. */
     public static class VisualParam {
-        public int ParamValue;
+        public int ParamValue; // U8
     }
 
     public ChildAgentUpdate() {
@@ -86,7 +106,7 @@ public class ChildAgentUpdate extends SLMessage {
         this.AgentData_Field = new AgentData();
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public int CalcPayloadSize() {
         int length = this.AgentData_Field.Throttles.length + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.length + 16 + 1 + 1 + (this.GroupData_Fields.size() * 25) + 1 + (this.AnimationData_Fields.size() * 32) + 1 + (this.GranterBlock_Fields.size() * 16) + 1;
         Iterator<?> it = this.NVPairData_Fields.iterator();
@@ -99,14 +119,15 @@ public class ChildAgentUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void Handle(SLMessageHandler sLMessageHandler) {
         sLMessageHandler.HandleChildAgentUpdate(this);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void PackPayload(ByteBuffer byteBuffer) {
-        byteBuffer.put(Ascii.EM);
+        // Message number: High 25 (ChildAgentUpdate).
+        byteBuffer.put((byte) 0x19);
         packLong(byteBuffer, this.AgentData_Field.RegionHandle);
         packInt(byteBuffer, this.AgentData_Field.ViewerCircuitCode);
         packUUID(byteBuffer, this.AgentData_Field.AgentID);
@@ -171,7 +192,7 @@ public class ChildAgentUpdate extends SLMessage {
         }
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.SLMessage
+    @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.RegionHandle = unpackLong(byteBuffer);
         this.AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer);

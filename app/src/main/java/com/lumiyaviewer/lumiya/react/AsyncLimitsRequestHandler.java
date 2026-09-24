@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.react;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 
-/* loaded from: classes.dex */
 public class AsyncLimitsRequestHandler<K> extends AsyncRequestHandler<K> implements RequestHandlerLimits {
     private final boolean isCancellable;
     private final int maxRequests;
@@ -16,17 +15,17 @@ public class AsyncLimitsRequestHandler<K> extends AsyncRequestHandler<K> impleme
         this.requestTimeout = j;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandlerLimits
+    @Override
     public int getMaxRequestsInFlight() {
         return this.maxRequests;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandlerLimits
+    @Override
     public long getRequestTimeout() {
         return this.requestTimeout;
     }
 
-    @Override // com.lumiyaviewer.lumiya.react.RequestHandlerLimits
+    @Override
     public boolean isRequestCancellable() {
         return this.isCancellable;
     }

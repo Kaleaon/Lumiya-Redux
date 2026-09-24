@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
-/* loaded from: classes.dex */
 public final class InternalNano {
     public static final int TYPE_BOOL = 8;
     public static final int TYPE_BYTES = 12;

@@ -24,7 +24,6 @@ import com.google.vr.vrcore.common.api.IVrCoreSdkService;
 import com.google.vr.vrcore.common.api.SdkServiceConsts;
 import java.lang.ref.WeakReference;
 
-/* loaded from: classes.dex */
 class VrCoreSdkClient {
     private static final boolean DEBUG = false;
     private static final int FADE_FLUSH_DELAY_FOR_TRACKING_STABILIZATION_MILLIS = 200;
@@ -45,8 +44,8 @@ class VrCoreSdkClient {
     private final boolean shouldBind;
     private IVrCoreSdkService vrCoreSdkService;
     private boolean isEnabled = true;
-    private final ServiceConnection serviceConnection = new ServiceConnection() { // from class: com.google.vr.ndk.base.VrCoreSdkClient.1
-        @Override // android.content.ServiceConnection
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             IVrCoreSdkService asInterface = IVrCoreSdkService.Stub.asInterface(iBinder);
             try {
@@ -92,7 +91,7 @@ class VrCoreSdkClient {
             }
         }
 
-        @Override // android.content.ServiceConnection
+        @Override
         public void onServiceDisconnected(ComponentName componentName) {
             VrCoreSdkClient.this.vrCoreSdkService = null;
             VrCoreSdkClient.this.daydreamManager = null;
@@ -106,8 +105,8 @@ class VrCoreSdkClient {
         private static final long TRACKING_SAFEGUARD_DELAY_MILLIS = 3000;
         private final WeakReference<FadeOverlayView> fadeOverlayViewWeak;
         private final WeakReference<GvrApi> gvrApiWeak;
-        private final Handler safeguardHandler = new Handler() { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.1
-            @Override // android.os.Handler
+        private final Handler safeguardHandler = new Handler() {
+            @Override
             public void handleMessage(Message message) {
                 switch (message.what) {
                     case 1:
@@ -130,13 +129,12 @@ class VrCoreSdkClient {
             this.fadeOverlayViewWeak = new WeakReference<>(fadeOverlayView);
         }
 
-        /* JADX INFO: Access modifiers changed from: private */
         public final void applyFadeImpl(final int i, final long j) {
             final FadeOverlayView fadeOverlayView = this.fadeOverlayViewWeak.get();
             if (fadeOverlayView != null) {
                 cancelSafeguard(2);
-                fadeOverlayView.post(new Runnable() { // from class: com.google.vr.ndk.base.VrCoreSdkClient.DaydreamListenerImpl.2
-                    @Override // java.lang.Runnable
+                fadeOverlayView.post(new Runnable() {
+                    @Override
                     public void run() {
                         fadeOverlayView.startFade(i, j);
                     }
@@ -157,7 +155,6 @@ class VrCoreSdkClient {
             this.safeguardHandler.sendEmptyMessageDelayed(i, j);
         }
 
-        /* JADX INFO: Access modifiers changed from: private */
         public final void resumeHeadTrackingImpl(HeadTrackingState headTrackingState) {
             GvrApi gvrApi = this.gvrApiWeak.get();
             if (gvrApi == null) {
@@ -168,12 +165,12 @@ class VrCoreSdkClient {
             }
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final void applyFade(int i, long j) {
             applyFadeImpl(i, j);
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final void dumpDebugData() throws RemoteException {
             GvrApi gvrApi = this.gvrApiWeak.get();
             if (gvrApi != null) {
@@ -183,12 +180,12 @@ class VrCoreSdkClient {
             }
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final int getTargetApiVersion() throws RemoteException {
             return 10;
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final void recenterHeadTracking() throws RemoteException {
             GvrApi gvrApi = this.gvrApiWeak.get();
             if (gvrApi != null) {
@@ -198,7 +195,7 @@ class VrCoreSdkClient {
             }
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final HeadTrackingState requestStopTracking() throws RemoteException {
             GvrApi gvrApi = this.gvrApiWeak.get();
             if (gvrApi == null) {
@@ -217,7 +214,7 @@ class VrCoreSdkClient {
             this.safeguardHandler.removeCallbacksAndMessages(null);
         }
 
-        @Override // com.google.vr.vrcore.common.api.IDaydreamListener
+        @Override
         public final void resumeHeadTracking(HeadTrackingState headTrackingState) {
             resumeHeadTrackingImpl(headTrackingState);
         }
@@ -272,19 +269,16 @@ class VrCoreSdkClient {
         }
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handleBindFailed() {
         doUnbind();
         warnIfIncompatibleClient();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handleNoDaydreamManager() {
         doUnbind();
         warnIfIncompatibleClient();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void handlePrepareVrFailed() {
         doUnbind();
         this.closeVrRunnable.run();
@@ -304,7 +298,6 @@ class VrCoreSdkClient {
         return false;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public static void resumeTracking(GvrApi gvrApi, HeadTrackingState headTrackingState) {
         byte[] bArr = null;
         if (headTrackingState != null && !headTrackingState.isEmpty()) {
@@ -313,7 +306,6 @@ class VrCoreSdkClient {
         gvrApi.resumeTrackingSetState(bArr);
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void resumeTracking(HeadTrackingState headTrackingState) {
         resumeTracking(this.gvrApi, headTrackingState);
         if (this.fadeOverlayView == null) {

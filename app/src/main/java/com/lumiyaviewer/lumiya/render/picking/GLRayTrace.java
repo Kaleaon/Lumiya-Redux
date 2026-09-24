@@ -5,7 +5,6 @@ import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector4;
 
-/* loaded from: classes.dex */
 public class GLRayTrace {
 
     public static class RayIntersectInfo {

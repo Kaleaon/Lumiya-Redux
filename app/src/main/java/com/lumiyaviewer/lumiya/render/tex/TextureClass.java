@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.tex;
 
-/* loaded from: classes.dex */
 public enum TextureClass {
     Prim("textures"),
     Sculpt("sculpt"),

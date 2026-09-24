@@ -5,7 +5,6 @@ import android.opengl.Matrix;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-/* loaded from: classes.dex */
 public class MatrixStack {
     private static final int DEFAULT_MAX_DEPTH = 32;
     private static final int MATRIX_SIZE = 16;

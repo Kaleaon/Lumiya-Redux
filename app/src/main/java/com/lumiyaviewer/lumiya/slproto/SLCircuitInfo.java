@@ -5,7 +5,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.UUID;
 
-/* loaded from: classes.dex */
 public class SLCircuitInfo {
     public final UUID agentID;
     final int circuitCode;

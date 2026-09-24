@@ -7,7 +7,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class ChatMessageSourceUnknown extends ChatMessageSource {
     private static final ChatMessageSourceUnknown Instance = new ChatMessageSourceUnknown();
 
@@ -18,25 +17,25 @@ public class ChatMessageSourceUnknown extends ChatMessageSource {
         return Instance;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatterID getDefaultChatter(UUID uuid) {
         return ChatterID.getLocalChatterID(uuid);
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public String getSourceName(@Nonnull UserManager userManager) {
         return null;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nonnull
     public ChatMessageSource.ChatMessageSourceType getSourceType() {
         return ChatMessageSource.ChatMessageSourceType.Unknown;
     }
 
-    @Override // com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
+    @Override
     @Nullable
     public UUID getSourceUUID() {
         return null;

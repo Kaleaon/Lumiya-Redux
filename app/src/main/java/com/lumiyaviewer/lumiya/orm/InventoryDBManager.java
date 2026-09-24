@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-/* loaded from: classes.dex */
 public class InventoryDBManager {
     private static final Object lock = new Object();
     private static final Map<UUID, InventoryDB> userDBs = new HashMap();

@@ -1,6 +1,5 @@
 package com.google.vr.ndk.base;
 
-/* loaded from: classes.dex */
 public class UserPrefs {
     private static final String TAG = UserPrefs.class.getSimpleName();
     private final long nativeUserPrefs;
