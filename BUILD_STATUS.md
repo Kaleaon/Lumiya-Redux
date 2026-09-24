@@ -6,7 +6,11 @@ unresolved references** against the original 3.4.2 bytecode. Every class is
 compiled from source (`tools/recover/bytecode_classes.txt` is empty and no
 original-bytecode jar is linked), and 25 reviewed differences are listed with
 reasons in `tools/verify/accepted.txt`. Unit tests (PriorityBinQueueTest) and
-`tools/protocol/run_conformance.sh` pass. Method and tools:
+`tools/protocol/run_conformance.sh` pass. Unit tests now also cover TLS
+verification, MFA login, Bakes on Mesh and the Filament scene layer (32
+tests, `./gradlew :app:check`); see
+[the gap analysis §7](docs/modernization/viewer_gap_analysis_and_filament_plan.md).
+Method and tools:
 [docs/recovery/verified_recovery.md](docs/recovery/verified_recovery.md).
 
 The sections below are the historical log from before verification existed.

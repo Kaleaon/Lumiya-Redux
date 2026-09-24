@@ -74,9 +74,10 @@ android {
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
-        // AGP 8.7's UnsafeIntentLaunch detector crashes while analyzing the
-        // recovered NfcSensor receiver; keep the rest of lint enabled.
-        disable 'UnsafeIntentLaunch', 'UnspecifiedRegisterReceiverFlag'
+        // AGP 8.7's UnsafeIntentLaunch and UnsafeImplicitIntentLaunch
+        // detectors crash while analyzing the recovered NfcSensor receiver;
+        // keep the rest of lint enabled.
+        disable 'UnsafeIntentLaunch', 'UnsafeImplicitIntentLaunch', 'UnspecifiedRegisterReceiverFlag'
     }
     packagingOptions {
         resources.excludes += [

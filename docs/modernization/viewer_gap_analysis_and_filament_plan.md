@@ -11,7 +11,7 @@ This document answers three questions:
    without throwing away the verified recovery?
 3. Which upgrades are concrete enough to do now?
 
-Section 6 lists what this branch already changed. Everything else is a plan.
+Sections 6 and 7 list what has been changed so far. Everything else is a plan.
 The phase documents in this directory (`06_phase_4_rendering.md`,
 `08_phase_6_voice.md`, `10_phase_8_security.md`) were written against the
 Linkpoint code base. This document grounds the same goals in the recovered
@@ -66,8 +66,8 @@ current grid. **Looks wrong** means content shows but renders incorrectly.
 | Feature (year in SL) | Lumiya 3.4.2 | Impact | Where to implement |
 | --- | --- | --- | --- |
 | `ViewerAsset` capability for textures, meshes, animations, sounds and settings (~2020–21) | Knew only `GetTexture` / `GetMesh` | **Breaks.** Current SL viewers fetch everything through `ViewerAsset`, and the per-asset caps are believed retired on Agni. Meshes could not load, and textures fell back to slow UDP. | **Done on this branch** (§6). |
-| Multi-factor authentication at login (2022) | Not supported | **Breaks** for accounts with MFA enabled. Login returns `reason = "mfa_challenge"`, and the viewer must re-send with `token` (and later `mfa_hash`). | `slproto/auth/SLAuth.SendLoginRequest`, `SLAuthReply`. Add a token prompt in `ui/login/LoginActivity`. Reference: `indra/newview/lllogininstance.cpp`. |
-| Bakes on Mesh, BOM (2019) | Not supported. Only the 6 legacy bake slots (`BakedTextureIndex`). | **Looks wrong.** Most mesh bodies and heads show the placeholder "use baked texture" UUIDs instead of the skin. This is the most visible avatar gap. | Map the `IMG_USE_BAKED_*` UUIDs (`indra/llprimitive/llprimitive.h` / `lltextureentry`) to the wearer's bakes when building `DrawablePrim` faces for attachments. Add the 5 newer bake slots (`BAKED_LEFT_ARM`, `BAKED_LEFT_LEG`, `BAKED_AUX1..3`, texture entries 40–44). See §5.2. |
+| Multi-factor authentication at login (2022) | Not supported | **Breaks** for accounts with MFA enabled. Login returns `reason = "mfa_challenge"`, and the viewer must re-send with `token` (and later `mfa_hash`). | **Done** (§7). |
+| Bakes on Mesh, BOM (2019) | Not supported. Only the 6 legacy bake slots (`BakedTextureIndex`). | **Looks wrong.** Most mesh bodies and heads show the placeholder "use baked texture" UUIDs instead of the skin. This is the most visible avatar gap. | **Done** for the legacy renderer (§7). |
 | Animesh (2018) | Parsing only. Extra-param `0x70` (extended mesh) is ignored. | **Looks wrong.** Animated mesh objects stand frozen in bind pose. | `PrimVolumeParams.unpackExtraParams`, `ObjectAnimation` message, drive an `AvatarSkeleton` per object. |
 | Environment Enhancement Project, EEP (2019) | Built-in Windlight day cycle from `assets/windlight`, sun hour from the sim | **Looks wrong.** Region and parcel skies and water settings are ignored. | `ExtEnvironment` cap (region/parcel LLSD) plus settings assets through `ViewerAsset?settings_id=`. |
 | PBR / glTF materials (2023) | None. Extra-param `0x80` (render material) is ignored. | **Looks wrong.** New content made for PBR shows its fallback or a blank texture. | `RenderMaterials`-era material assets, GLTF material overrides (`GenericStreamingMessage`). Needs a PBR-capable renderer, so it is the main driver for Filament (§4). |
@@ -83,7 +83,7 @@ current grid. **Looks wrong** means content shows but renders incorrectly.
 
 | Item | Finding | Severity |
 | --- | --- | --- |
-| TLS | `SLHTTPSConnection` installs a trust-everything `X509TrustManager` **and** a hostname verifier that returns `true`, for every HTTPS call including login (password hash) and caps. Modern viewers verify certificates: the SL viewer ships a CA bundle (`indra/newview/app_settings/ca-bundle.crt`). | **P0 security.** Any on-path attacker can capture the login hash and session. See §5.1 for a rollout that won't strand OpenSimulator users. |
+| TLS | `SLHTTPSConnection` installed a trust-everything `X509TrustManager` **and** a hostname verifier that returned `true`, for every HTTPS call including login (password hash) and caps. | **Fixed** (§7). Was P0: any on-path attacker could capture the login hash and session. |
 | 16 KB page size | `jniLibs/arm64-v8a/libgvr.so` and both `x86_64` libraries have 4 KB `LOAD` alignment (`readelf -lW`). Android 15+ devices with 16 KB pages cannot load them, and Google Play requires 16 KB compatibility for apps targeting API 35+. | **P1.** Rebuilding `libopenjpeg`/`librawbuf` from source and removing GVR fixes it. |
 | OpenJPEG 1.5.0 | 2012 release. Many CVEs were fixed in 2.x. It decodes untrusted J2C data from the grid. | P1 |
 | OkHttp 3.14.9 | No longer maintained | Done on this branch: OkHttp 4.12 (§6). |
@@ -145,7 +145,9 @@ source matched the original bytecode.
 ## 4. Bringing in Google Filament
 
 Filament (`com.google.android.filament`, **1.77.0** on Maven Central as of
-2026-09-21) fits this project:
+2026-09-21) fits this project. 1.76.0 and later declare `minCompileSdk 37`,
+so this project uses **1.75.1** until it moves to a newer Android Gradle
+plugin and compileSdk (§7):
 
 * It is a physically based renderer built for Android: GLES 3.0+ and Vulkan
   backends, plus a feature level 0 path for GLES 2.0 devices.
@@ -255,7 +257,7 @@ library and its 4 KB-aligned `libgvr.so`.
 
 | Stage | Output | Exit check |
 | --- | --- | --- |
-| F0 | Add `filament-android` and a `matc` Gradle task. Add a developer-only `FilamentWorldActivity` that renders terrain and sky from `SceneDelta`s. | Opens and closes 100 times with no native memory drift (P4-ENGINE-01). |
+| F0 | Add `filament-android` and a `matc` Gradle task. Add a developer-only `FilamentWorldActivity` that renders terrain and sky from `SceneDelta`s. | Opens and closes 100 times with no native memory drift (P4-ENGINE-01). **Built (§7); the exit check is written as an instrumentation test but has not been run on a device.** |
 | F1 | Terrain, water, sky, sun | Terrain matches the legacy renderer's golden images. |
 | F2 | Prims, sculpts, meshes with `sl_legacy`, point lights | Golden-image parity with the legacy renderer on the milestone-1 corpus. |
 | F3 | Avatars: skinning, animation, attachments, **BOM**, animesh | Avatars and attachments match the legacy renderer. BOM bodies show skin. |
@@ -272,6 +274,14 @@ on TIER_A/B, legacy on TIER_C) with a user override in settings.
 
 ### 5.1 TLS verification (P0)
 
+**Done differently (§7).** Two assumptions below did not hold: the Linden
+Lab CA the desktop viewer shipped (`app_settings/lindenlab.pem`) expired in
+April 2025 and is a 1024-bit MD5 certificate, so there is nothing current
+to bundle, and the desktop viewer verifies Agni against a public CA bundle
+(libcurl `CURLOPT_SSL_VERIFYPEER`, `indra/llcorehttp/httpcommon.cpp`). The
+report-only release was skipped: certificates are enforced now. The
+original plan, for reference:
+
 1. Build a `TrustManager` from the system trust store **plus** the CA
    certificates the Linden Lab viewer ships
    (`indra/newview/app_settings/ca-bundle.crt`, filtered to the Linden Lab
@@ -285,6 +295,10 @@ on TIER_A/B, legacy on TIER_C) with a user override in settings.
    self-signed certificates.
 
 ### 5.2 Bakes on Mesh (high user value, no new renderer needed)
+
+**Done (§7).** The 5 new slots went into `AvatarTextureFaceIndex` only:
+`BakedTextureIndex` drives the legacy local baker (`BakeProcess`), which
+has no layer sets for them. `SLTextureEntry` also had to learn faces 32–44.
 
 * Add the 5 bake slots to `BakedTextureIndex`/`AvatarTextureFaceIndex` and
   their appearance-service names.
@@ -309,6 +323,8 @@ on TIER_A/B, legacy on TIER_C) with a user override in settings.
 * Rebuild `librawbuf` from `recovered/native/librawbuf.so.decompiled.c`.
 
 ### 5.4 Login: MFA
+
+**Done (§7).**
 
 When the reply has `reason == "mfa_challenge"`, prompt for the code and
 re-send with `token`. Store the `mfa_hash` returned on success, per account,
@@ -411,3 +427,84 @@ be:
    picker) show and switch tabs.
 4. The screens that used ButterKnife still respond to buttons: world view,
    minimap, pay, profiles, search, parcel info.
+
+---
+
+## 7. Second pass: TLS, MFA, Bakes on Mesh, Filament F0
+
+### TLS certificate verification
+
+| Change | Files |
+| --- | --- |
+| Certificates are checked against the platform trust store, with OkHttp's hostname verifier. The trust-everything manager and always-true verifier are gone. | `slproto/https/TlsPolicy.java`, `SLHTTPSConnection.java` |
+| A grid the user added can be marked "Allow untrusted certificates" (off by default) for self-signed OpenSimulator servers. The switch never applies to `*.secondlife.com`, `*.secondlife.io` or `*.lindenlab.com`, and never when the host is unknown. Rejected and bypassed certificates are logged with host and subject. | `ui/grids/GridList.java`, `GridEditDialog.java`, `res/layout/grid_edit_dialog.xml`, `SLAuthParams`, `SLAuth.Login` |
+| A certificate failure at login shows its own message instead of "Failed to connect to login server." | `SLAuth.CertificateVerificationException`, `SLGridConnection.DoConnect` |
+
+`TlsPolicyTest` runs real TLS handshakes through the viewer's client
+against a local server with a self-signed certificate. It fails on the
+3.4.2 client (`untrusted certificate was accepted: 200`) and passes now.
+
+### Multi-factor login
+
+| Change | Files |
+| --- | --- |
+| Login sends `token` and `mfa_hash` (empty when unknown), as `LLLoginInstance::constructAuthParams` does. | `slproto/auth/SLAuth.java` |
+| `reason` and `mfa_hash` are parsed from the reply. `reason == "mfa_challenge"` stops auto-reconnect and is reported as `SLLoginResultEvent.mfaRequired`. | `SLAuthReply`, `SLGridConnection`, `SLLoginResultEvent` |
+| `LoginActivity` asks for the code (whitespace stripped, as SL-17034) and repeats the same login with it. The code is used once; reconnects send the saved hash. | `ui/login/LoginActivity.java`, `res/layout/mfa_token_dialog.xml` |
+| The `mfa_hash` from a successful login is stored per grid and account, AES-GCM encrypted with an Android Keystore key. No plaintext fallback; excluded from backup. | `slproto/auth/MfaHashStore.java`, `res/xml/backup_rules.xml` |
+| `LoginActivity` no longer passes the typed password or its hash to `Debug.Log`. | `LoginActivity.DoLogin` |
+
+`MfaLoginTest` drives challenge, code and saved-hash logins against a local
+XML-RPC server. `MfaHashStore`'s Keystore encryption is not covered by a
+JVM test (Robolectric has no AndroidKeyStore provider).
+
+### Bakes on Mesh
+
+| Change | Files |
+| --- | --- |
+| Texture entries hold up to 45 faces (`MAX_TES`) with 64-bit face bitfields. 3.4.2 stopped at 32, so the new bake slots were dropped while parsing. | `slproto/textures/SLTextureEntry.java` |
+| `AvatarTextureFaceIndex` gains faces 29–44 (universal tattoos and the `LEFT_ARM`, `LEFT_LEG`, `AUX1`–`AUX3` bakes), ordinals equal to `ETextureIndex`. | `slproto/avatar/AvatarTextureFaceIndex.java` |
+| The 11 `IMG_USE_BAKED_*` UUIDs map to bake slots. | `slproto/avatar/BakesOnMesh.java` |
+| An attachment prim that uses one carries its wearer's bakes in `PrimDrawParams` (so the prim cache keys on them). `DrawablePrim` then fetches the bake from the appearance service, like the system body. Other prims are untouched and still share cache entries. | `slproto/prims/AvatarBakes.java`, `PrimDrawParams`, `render/drawable/DrawablePrim`, `render/DrawableObject` |
+| Attachments are rebuilt when the wearer's bakes change. | `render/avatar/DrawableAvatar`, `DrawableAttachments`, `AvatarTextures` |
+
+`BakesOnMeshTest` parses a 45-face appearance texture entry built from the
+wire format and checks the placeholder resolution. Not done: hiding the
+system body under a BOM body is left to the alpha layers in the server
+bake, as before; HUD attachments are not refreshed on appearance change.
+
+### Filament stage F0
+
+| Change | Files |
+| --- | --- |
+| `filament-android` **1.75.1**, debug builds only. Its native libraries are 16 KB page-aligned. | `app/build.gradle` |
+| `compileFilamentMaterials` resolves `matc` of the same release from Maven for the host OS (`linux-x86_64`, `osx-aarch_64`, `windows-x86_64`; there is no Intel macOS build) and compiles `src/debug/materials/*.mat` into the debug assets. | `app/build.gradle`, `sl_sky.mat`, `sl_terrain.mat` |
+| Renderer-independent scene layer: `SceneDelta` (`TerrainPatch`, `Environment`), a coalescing `SceneDeltaQueue`, `RegionSceneSource` (region terrain, Windlight at the sim sun hour with the legacy light mapping, demo terrain when no region is loaded) and `SceneGeometry`. | `render/scene/*.kt` |
+| `FilamentWorldActivity`: every Filament call on one engine thread driven by `Choreographer`; the swap chain follows the surface; everything is destroyed with the activity. A "Filament F0 (dev)" launcher entry in debug builds. | `src/debug/.../ui/render/filament/*`, `src/debug/AndroidManifest.xml` |
+
+`SceneGeometryTest` and `RegionEnvironmentTest` cover the scene layer on the
+JVM. `FilamentWorldLifecycleTest` (`./gradlew :app:connectedDebugAndroidTest`)
+is the F0 exit check; it compiles, but **has not been run**: this
+environment has no emulator acceleration. Release builds contain no Filament
+code, libraries or materials.
+
+### Verification
+
+* `./gradlew :app:check :app:assembleRelease`: pass (32 unit tests, lint).
+  Lint needed `UnsafeImplicitIntentLaunch` disabled: that detector crashes on
+  `NfcSensor.java`, also on the previous `main`.
+* `tools/protocol/run_conformance.sh`: pass.
+* `tools/verify/verify_against_apk.sh` against `Lumiya_3.4.2.apk`: **0 damaged
+  classes, 0 unresolved references**, with the intended differences listed
+  in `tools/verify/accepted.txt`.
+
+**Not verified:** nothing ran on a device or against a live grid. First
+checks:
+
+1. Log in to Second Life: login succeeds with verification on, and caps,
+   textures and meshes load (no `TLS: rejected certificate` lines).
+2. An account with MFA on: the code prompt appears, login completes, and a
+   second login does not ask again.
+3. An avatar wearing a BOM mesh body shows skin.
+4. The "Filament F0 (dev)" entry shows terrain and sky, logged out and in a
+   region; then run `FilamentWorldLifecycleTest`.

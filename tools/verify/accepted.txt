@@ -32,7 +32,7 @@ Lcom/lumiyaviewer/lumiya/StreamingMediaService;->startStreamingMediaService(Land
 Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;->onParcelMediaPlay()V  startService -> StreamingMediaService.startServiceCompat
 Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;->onParcelMediaStop()V  startService -> StreamingMediaService.startServiceCompat
 Lcom/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment;-><lambdas/anonymous/moved>  AsyncTask constructor signature (captured outer instance) differs; same task started
-Lcom/lumiyaviewer/lumiya/ui/login/LoginActivity;->DoLogin()V  startService -> GridConnectionService.startServiceCompat
+Lcom/lumiyaviewer/lumiya/ui/login/LoginActivity;->DoLogin()V  startService -> GridConnectionService.startServiceCompat; service start, progress view and loggingIn moved into startLogin (reused for the MFA retry); password and hash no longer passed to Debug.Log
 Lcom/lumiyaviewer/lumiya/GridConnectionService;->showUnreadNotification(Lcom/lumiyaviewer/lumiya/slproto/users/manager/UnreadNotifications;)V  non-grouped branch removed: on API 26+ OreoNotificationChannelManager.useNotificationGroups() is always true
 Lcom/lumiyaviewer/lumiya/slproto/SLAgentCircuit;->getAgentSLURL()Ljava/lang/String;  map link upgraded from http:// to https://
 
@@ -125,3 +125,28 @@ Lcom/lumiyaviewer/lumiya/ui/search/ParcelInfoFragment;->onCreateView(Landroid/vi
 Lcom/lumiyaviewer/lumiya/ui/search/SearchGridAdapter$SearchViewHolder;-><init>(Lcom/lumiyaviewer/lumiya/ui/search/SearchGridAdapter;Landroid/view/View;)V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
 Lcom/lumiyaviewer/lumiya/ui/search/SearchGridFragment;->onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
 Lcom/lumiyaviewer/lumiya/ui/voice/VoiceStatusView;->initializeControls()V  ButterKnife.bind(...) -> new *_ViewBinding(...) (the generated binding, now in-tree source)
+
+# --- TLS certificate verification (slproto/https/TlsPolicy)
+Lcom/lumiyaviewer/lumiya/slproto/https/SLHTTPSConnection;-><clinit>()V  trust-everything X509TrustManager and always-true HostnameVerifier replaced by TlsPolicy (platform trust store, per-grid opt-out never applied to Linden hosts)
+Lcom/lumiyaviewer/lumiya/slproto/https/SLHTTPSConnection;->getSocketFactory()Ljavax/net/ssl/SSLSocketFactory;  SSLContext initialised with the verifying TlsPolicy trust manager; throws instead of returning null
+Lcom/lumiyaviewer/lumiya/slproto/https/SLHTTPSConnection;-><lambdas/anonymous/moved>  anonymous trust-everything X509TrustManager removed
+
+# --- multi-factor login (token / mfa_hash, lllogininstance.cpp)
+Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuth;-><init>()V  delegates to SLAuth(MfaHashStore) to load the saved mfa_hash
+Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V  delegates to the constructor that also takes allowUntrustedCertificates and mfaToken; same fields written
+Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;->withLocation(Ljava/lang/String;)Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;  copies allowUntrustedCertificates and mfaToken too
+Lcom/lumiyaviewer/lumiya/slproto/events/SLLoginResultEvent;-><init>(ZLjava/lang/String;Ljava/util/UUID;)V  delegates to the private constructor that also sets mfaRequired=false; same fields written
+
+# --- Bakes on Mesh (45-face texture entries, slproto/avatar/BakesOnMesh)
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->getFaceMask()I  now getFaceMask()J: face bitfields are 64-bit so faces 32-44 (Bakes on Mesh slots) are kept
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;-><init>(Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntryFace;[Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntryFace;)V  face mask built as a long, capped at MAX_FACES (45)
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;-><init>(Ljava/nio/ByteBuffer;I)V  same wire parsing with 64-bit face bitfields and up to 45 faces (llprimitive.h MAX_TES); 3.4.2 dropped faces >= 32
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->getHashValue()I  long face mask folded into the int hash
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->GetFace(I)Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntryFace;  face limit 32 -> MAX_FACES (45)
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->equals(Ljava/lang/Object;)Z  compares the long face mask
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->isSingleFace()Z  tests the long face mask
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;->packByteArray()[B  WriteFaceBitfield takes a long mask; same byte encoding for faces below 32
+Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;-><lambdas/anonymous/moved>  WriteFaceBitfield rewritten for 64-bit masks (same encoding); its no-op Debug.Log calls dropped
+Lcom/lumiyaviewer/lumiya/render/avatar/AvatarTextures;->ApplyTextures(Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;Z)Z  calls getFaceMask()J (was I); same zero test
+Lcom/lumiyaviewer/lumiya/render/drawable/DrawablePrim;-><init>(Lcom/lumiyaviewer/lumiya/slproto/prims/PrimDrawParams;Lcom/lumiyaviewer/lumiya/render/drawable/DrawableGeometry;)V  face textures created through faceTextureParams, which resolves Bakes on Mesh placeholders on attachments and otherwise returns create(uuid, TextureClass.Prim) as before
+Lcom/lumiyaviewer/lumiya/slproto/prims/PrimDrawParams;-><init>(Lcom/lumiyaviewer/lumiya/slproto/prims/PrimVolumeParams;Lcom/lumiyaviewer/lumiya/slproto/textures/SLTextureEntry;)V  delegates to the private constructor that also sets bakes=null; same fields written
