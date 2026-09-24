@@ -150,7 +150,11 @@ public class SLCaps {
         ViewerMetrics,
         ViewerStartAuction,
         ViewerStats,
-        VoiceSignalingRequest;
+        VoiceSignalingRequest,
+
+        // Legacy mesh fetch cap still offered by OpenSimulator grids that
+        // predate ViewerAsset. See getMeshFetchURL().
+        GetMesh2;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         public static SLCapability[] valuesCustom() {
@@ -224,6 +228,36 @@ public class SLCaps {
 
     public String getCapability(SLCapability capability) {
         return this.caps.get(capability);
+    }
+
+    /**
+     * Base URL for HTTP texture fetches (<code>?texture_id=</code>).
+     *
+     * <p>Beyond 3.4.2, which only knew GetTexture: current Second Life
+     * viewers fetch every asset through the ViewerAsset capability (the
+     * viewer's LLViewerRegion::getViewerAssetUrl(), used by lltexturefetch.cpp)
+     * and the grid has retired the per-asset GetTexture/GetMesh caps, which
+     * left 3.4.2 on the slow UDP ImageData path. ViewerAsset takes the same
+     * query parameter. GetTexture is kept for OpenSimulator grids that
+     * predate ViewerAsset.</p>
+     */
+    public String getTextureFetchURL() {
+        String url = this.caps.get(SLCapability.ViewerAsset);
+        return url != null ? url : this.caps.get(SLCapability.GetTexture);
+    }
+
+    /**
+     * Base URL for HTTP mesh fetches (<code>?mesh_id=</code>): ViewerAsset,
+     * as in the viewer's LLMeshRepository, then the legacy GetMesh2 and
+     * GetMesh caps. Beyond 3.4.2, which only knew GetMesh and so could not
+     * load mesh on current Second Life regions.
+     */
+    public String getMeshFetchURL() {
+        String url = this.caps.get(SLCapability.ViewerAsset);
+        if (url == null) {
+            url = this.caps.get(SLCapability.GetMesh2);
+        }
+        return url != null ? url : this.caps.get(SLCapability.GetMesh);
     }
 
     public String getCapabilityOrThrow(SLCapability capability) throws NoSuchCapabilityException {

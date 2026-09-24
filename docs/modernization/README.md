@@ -38,6 +38,7 @@ self-contained; read them in order the first time, then use this index.
 | 09 | [`09_phase_7_architecture.md`](09_phase_7_architecture.md) | Decompose god-class, DI, thread-safety, lifecycle scopes, error plumbing. |
 | 10 | [`10_phase_8_security.md`](10_phase_8_security.md) | LLSD fuzzing, MFA, TLS, scoped storage, permissions, TPV policy compliance. |
 | 11 | [`11_phase_9_release.md`](11_phase_9_release.md) | CI, signing, reproducible builds, Play Store / sideload update channel. |
+| — | [`viewer_gap_analysis_and_filament_plan.md`](viewer_gap_analysis_and_filament_plan.md) | Lumiya-specific gap analysis against current SL viewers, how Filament fits the recovered renderer (scene-delta seam, materials, staging), prioritised upgrades, and the asset-fetch fixes already made. |
 | 12 | [`12_risks.md`](12_risks.md) | Risk register with likelihood, impact, mitigation, owners. |
 | 13 | [`13_acceptance.md`](13_acceptance.md) | Per-phase acceptance checklists. The done-or-not-done test. |
 
