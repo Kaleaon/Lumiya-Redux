@@ -42,6 +42,20 @@ tools/verify/verify_against_apk.sh      /path/to/Lumiya_3.4.2.apk
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) to navigate the code and
 [`BUILD_STATUS.md`](BUILD_STATUS.md) for the last-mile cleanup list.
 
+## Pull-request verification
+
+Every pull request runs the Android CI workflow. It installs the pinned API 34
+SDK, validates the Gradle wrapper, builds a debug APK, and runs the complete
+Gradle `check` lifecycle (including JVM tests, Android lint, and the repository's
+source-policy checks). Successful runs retain the installable debug APK for 14
+days; lint and unit-test reports are uploaded even when verification fails.
+
+Run the same verification locally with:
+
+```bash
+./gradlew --no-daemon :app:assembleDebug :app:check
+```
+
 ## Protocol conformance checks
 
 ```bash
