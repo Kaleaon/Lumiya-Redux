@@ -7,18 +7,23 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.render.avatar.AvatarSkeleton;
+import com.lumiyaviewer.lumiya.render.avatar.AvatarTextures;
 import com.lumiyaviewer.lumiya.render.glres.buffers.GLLoadableBuffer;
 import com.lumiyaviewer.lumiya.render.picking.IntersectInfo;
 import com.lumiyaviewer.lumiya.render.shaders.FlexiPrimProgram;
 import com.lumiyaviewer.lumiya.render.shaders.PrimProgram;
 import com.lumiyaviewer.lumiya.render.tex.DrawableTextureParams;
 import com.lumiyaviewer.lumiya.render.tex.TextureClass;
+import com.lumiyaviewer.lumiya.slproto.avatar.AvatarTextureFaceIndex;
+import com.lumiyaviewer.lumiya.slproto.avatar.BakesOnMesh;
 import com.lumiyaviewer.lumiya.slproto.mesh.MeshJointTranslations;
+import com.lumiyaviewer.lumiya.slproto.prims.AvatarBakes;
 import com.lumiyaviewer.lumiya.slproto.prims.PrimDrawParams;
 import com.lumiyaviewer.lumiya.slproto.prims.PrimFlexibleInfo;
 import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntry;
 import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
+import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
 public class DrawablePrim {
@@ -65,7 +70,7 @@ public class DrawablePrim {
                 this.singleFaceColor = textureEntryFace2.getRGBA(textureEntryFace);
                 UUID textureID = textureEntryFace2.getTextureID(textureEntryFace);
                 if (textureID != null) {
-                    this.singleFaceTexture = new DrawableFaceTexture(DrawableTextureParams.create(textureID, TextureClass.Prim));
+                    this.singleFaceTexture = new DrawableFaceTexture(faceTextureParams(textureID, primDrawParams.getBakes()));
                 } else {
                     this.singleFaceTexture = null;
                 }
@@ -94,12 +99,31 @@ public class DrawablePrim {
                 this.FaceColorsIDs[i + 1] = 0;
                 UUID textureID2 = textureEntryFace3.getTextureID(textureEntryFace);
                 if (textureID2 != null) {
-                    this.FaceTextures[j] = new DrawableFaceTexture(DrawableTextureParams.create(textureID2, TextureClass.Prim));
+                    this.FaceTextures[j] = new DrawableFaceTexture(faceTextureParams(textureID2, primDrawParams.getBakes()));
                 }
                 initFaceUVMatrix(textureEntryFace, textureEntryFace3, this.FaceUVMatrices, j * 16);
             }
             i += 2;
         }
+    }
+
+    /**
+     * A face's texture. On an attachment, a Bakes on Mesh placeholder is
+     * replaced by the wearer's bake for that region, fetched the same way as
+     * the system body's (DrawableAvatarPart.setTexture). Without a known bake
+     * the placeholder texture shows, as before.
+     */
+    static DrawableTextureParams faceTextureParams(UUID textureID, AvatarBakes bakes) {
+        if (bakes != null) {
+            AvatarTextureFaceIndex bakedFace = BakesOnMesh.getBakedFace(textureID);
+            if (bakedFace != null) {
+                UUID bake = bakes.getBake(bakedFace);
+                if (bake != null && !bake.equals(UUIDPool.ZeroUUID) && !bake.equals(AvatarTextures.DEFAULT_AVATAR_TEXTURE)) {
+                    return DrawableTextureParams.create(bake, bakedFace, bakes.getAvatarUUID());
+                }
+            }
+        }
+        return DrawableTextureParams.create(textureID, TextureClass.Prim);
     }
 
     private int DrawFace(RenderContext renderContext, DrawableGeometry drawableGeometry, GLLoadableBuffer glLoadableBuffer, boolean z, int i, int i2, DrawableFaceTexture drawableFaceTexture, float[] floats, int i3, int i4) {

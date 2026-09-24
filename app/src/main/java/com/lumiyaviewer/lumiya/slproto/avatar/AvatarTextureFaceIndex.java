@@ -29,7 +29,27 @@ public enum AvatarTextureFaceIndex {
     TEX_HAIR_ALPHA("hair"),
     TEX_HEAD_TATTOO("head"),
     TEX_UPPER_TATTOO("upper"),
-    TEX_LOWER_TATTOO("lower");
+    TEX_LOWER_TATTOO("lower"),
+    // Universal wearable and Bakes on Mesh slots (2019). The ordinal is the
+    // texture entry face, so these follow ETextureIndex in
+    // indra/llappearance/llavatarappearancedefines.h exactly. The name is the
+    // bake region, used in appearance-service texture URLs.
+    TEX_HEAD_UNIVERSAL_TATTOO("head"),
+    TEX_UPPER_UNIVERSAL_TATTOO("upper"),
+    TEX_LOWER_UNIVERSAL_TATTOO("lower"),
+    TEX_SKIRT_TATTOO("skirt"),
+    TEX_HAIR_TATTOO("hair"),
+    TEX_EYES_TATTOO("eyes"),
+    TEX_LEFT_ARM_TATTOO("leftarm"),
+    TEX_LEFT_LEG_TATTOO("leftleg"),
+    TEX_AUX1_TATTOO("aux1"),
+    TEX_AUX2_TATTOO("aux2"),
+    TEX_AUX3_TATTOO("aux3"),
+    TEX_LEFT_ARM_BAKED("leftarm"),
+    TEX_LEFT_LEG_BAKED("leftleg"),
+    TEX_AUX1_BAKED("aux1"),
+    TEX_AUX2_BAKED("aux2"),
+    TEX_AUX3_BAKED("aux3");
 
     private String bakedTextureName;
 

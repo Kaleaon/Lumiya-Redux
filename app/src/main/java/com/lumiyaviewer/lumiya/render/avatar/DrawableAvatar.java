@@ -27,6 +27,7 @@ import com.lumiyaviewer.lumiya.slproto.avatar.SLSkeletonBoneID;
 import com.lumiyaviewer.lumiya.slproto.mesh.MeshJointTranslations;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectAvatarInfo;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
+import com.lumiyaviewer.lumiya.slproto.prims.AvatarBakes;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.utils.IdentityMatrix;
 import com.lumiyaviewer.lumiya.utils.LinkedTreeNode;
@@ -45,6 +46,9 @@ import javax.annotation.Nonnull;
 
 public class DrawableAvatar extends DrawableAvatarStub implements IntersectPickable, DrawEntryList.EntryRemovalListener {
     private final Object animationLock;
+    /** The wearer's bakes, for Bakes on Mesh faces on attachments. Null until appearance arrives. */
+    private volatile AvatarBakes avatarBakes;
+    private final UUID avatarUUID;
     private final AnimationSkeletonData animationSkeletonData;
     private final Map<UUID, AvatarAnimationState> animations;
     private volatile boolean animationsInitialized;
@@ -74,6 +78,8 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public DrawableAvatar(DrawableStore drawableStore, UUID uuid, SLObjectAvatarInfo objectAvatarInfo, UUID uuid2, Map<UUID, AnimationSequenceInfo> map) {
         super(drawableStore, uuid, objectAvatarInfo);
+        this.avatarUUID = uuid2;
+        this.avatarBakes = null;
         this.updatedSkeleton = new AtomicReference<>(null);
         this.parts = new EnumMap(MeshIndex.class);
         this.animationLock = new Object();
@@ -424,6 +430,19 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
             Map.Entry entry = (Map.Entry) it.next();
             ((DrawableAvatarPart) entry.getValue()).setTexture(this.drawableStore.glTextureCache, avatarTextures.getTexture(((DrawableAvatarPart) entry.getValue()).getFaceIndex()));
         }
+        if (this.avatarUUID != null) {
+            AvatarBakes bakes = avatarTextures.getBakes(this.avatarUUID);
+            if (!bakes.equals(this.avatarBakes)) {
+                this.avatarBakes = bakes;
+                // Outfit changed: Bakes on Mesh attachments pick up the new bakes.
+                this.drawableAttachmentList.forEachObject(DrawableObject::refreshBakesOnMesh);
+            }
+        }
+    }
+
+    /** The wearer's bakes, or null before the avatar's appearance is known. */
+    public AvatarBakes getAvatarBakes() {
+        return this.avatarBakes;
     }
 
     public DrawableHUD getDrawableHUD() {

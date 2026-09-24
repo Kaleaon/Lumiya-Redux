@@ -51,6 +51,14 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
         setHoverText(objectInfo.getHoverText());
     }
 
+    /** Rebuild faces that show the wearer's bakes (Bakes on Mesh) after an appearance change. */
+    public void refreshBakesOnMesh() {
+        PrimDrawParams primDrawParams = this.objInfo.getPrimDrawParams();
+        if (this.attachedTo != null && primDrawParams != null && primDrawParams.usesBakesOnMesh()) {
+            setPrimDrawParams(primDrawParams);
+        }
+    }
+
     public final void ApplyJointTranslations(MeshJointTranslations meshJointTranslations) {
         DrawablePrim drawablePrim = this.drawablePrim;
         if (drawablePrim != null) {
@@ -297,6 +305,9 @@ public class DrawableObject implements IntersectPickable, ResourceConsumer {
     }
 
     public void setPrimDrawParams(PrimDrawParams primDrawParams) {
+        if (this.attachedTo != null && primDrawParams != null) {
+            primDrawParams = primDrawParams.withBakes(this.attachedTo.getAvatarBakes());
+        }
         this.drawableStore.primCache.RequestResource(primDrawParams, this);
         if (primDrawParams.getVolumeParams().isFlexible()) {
             this.flexibleInfo = new PrimFlexibleInfo();
