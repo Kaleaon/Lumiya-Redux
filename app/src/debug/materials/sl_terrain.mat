@@ -1,0 +1,44 @@
+// Region terrain for the Filament world view (stage F0).
+//
+// Colour bands by height, standing in for the four terrain detail textures:
+// low, mid-low, mid-high and high, blended over the region's start height
+// and height range as llvlcomposition.cpp does. F1 samples the real detail
+// textures with the same blend and noise.
+material {
+    name : sl_terrain,
+    shadingModel : lit,
+    culling : back,
+    parameters : [
+        { type : float3, name : color0 },
+        { type : float3, name : color1 },
+        { type : float3, name : color2 },
+        { type : float3, name : color3 },
+        { type : float, name : startHeight },
+        { type : float, name : heightRange }
+    ],
+    variables : [
+        terrainHeight
+    ],
+    requires : [
+        position
+    ]
+}
+
+vertex {
+    void materialVertex(inout MaterialVertexInputs material) {
+        material.terrainHeight.x = getPosition().z;
+    }
+}
+
+fragment {
+    void material(inout MaterialInputs material) {
+        prepareMaterial(material);
+        float t = clamp((variable_terrainHeight.x - materialParams.startHeight) / max(materialParams.heightRange, 0.01), 0.0, 1.0) * 3.0;
+        vec3 c = mix(materialParams.color0, materialParams.color1, clamp(t, 0.0, 1.0));
+        c = mix(c, materialParams.color2, clamp(t - 1.0, 0.0, 1.0));
+        c = mix(c, materialParams.color3, clamp(t - 2.0, 0.0, 1.0));
+        material.baseColor = vec4(c, 1.0);
+        material.roughness = 0.9;
+        material.metallic = 0.0;
+    }
+}

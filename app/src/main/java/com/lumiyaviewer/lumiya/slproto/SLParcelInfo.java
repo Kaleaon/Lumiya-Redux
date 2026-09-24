@@ -260,6 +260,13 @@ public class SLParcelInfo {
         return uuid;
     }
 
+    /** The simulator's sun hour (0..1), without consuming the legacy renderer's change flag. */
+    public float peekSunHour() {
+        synchronized (this.simSunHourLock) {
+            return this.simSunHour;
+        }
+    }
+
     public boolean getSunHour(float[] floats, boolean z) {
         synchronized (this.simSunHourLock) {
             if (!this.simSunHourDirty && !z) {
