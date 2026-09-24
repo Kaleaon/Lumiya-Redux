@@ -34,7 +34,14 @@ if [[ ! -f "$WORK/orig.jar" ]]; then
 fi
 javac -nowarn -d "$WORK/classes" -cp "$CP" "$ROOT/tools/recover/legacy/RemapLegacy.java"
 
-grep -v '^#' "$LIST" | sed '/^\s*$/d' > "$WORK/tops.txt"
+grep -v '^#' "$LIST" | sed '/^\s*$/d' > "$WORK/tops.txt" || true
+if [[ ! -s "$WORK/tops.txt" ]]; then
+  # Nothing ships as original bytecode any more; app/build.gradle links the
+  # jar only while the list is non-empty.
+  rm -f "$OUT"
+  echo "bytecode_classes.txt is empty; removed $OUT"
+  exit 0
+fi
 # ButterKnife only generates Foo_ViewBinding for sources it compiles; bring
 # the original generated binding along with each bytecode class.
 unzip -Z1 "$WORK/orig.jar" | sed -n 's/_ViewBinding\.class$//p' > "$WORK/bound.txt"
