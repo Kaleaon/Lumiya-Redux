@@ -278,4 +278,7 @@ dependencies {
     // app theme) on the JVM; see LayoutInflationTest.
     testImplementation 'org.robolectric:robolectric:4.14.1'
     testImplementation 'androidx.test:core:1.6.1'
+    // Local HTTPS/login servers for the TLS and MFA login tests.
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'com.squareup.okhttp3:okhttp-tls:4.12.0'
 }

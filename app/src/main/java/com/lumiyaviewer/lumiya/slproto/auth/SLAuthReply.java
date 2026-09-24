@@ -25,6 +25,8 @@ public final class SLAuthReply {
     public final boolean isTemporary;
     public final String loginURL;
     public final String message;
+    /** Multi-factor hash to save and send on later logins; null if the grid sent none. */
+    public final String mfaHash;
     public final String nextMethod;
     public final String nextURL;
     public final UUID secureSessionID;
@@ -33,6 +35,11 @@ public final class SLAuthReply {
     public final String simAddress;
     public final int simPort;
     public final boolean success;
+    /** Failure reason code, e.g. "key", "presence", "mfa_challenge"; null on success. */
+    public final String reason;
+
+    /** Login reason code asking for a multi-factor code (lllogininstance.cpp). */
+    public static final String REASON_MFA_CHALLENGE = "mfa_challenge";
 
     public static class Friend {
         public final int rightsGiven;
@@ -68,6 +75,8 @@ public final class SLAuthReply {
         this.nextURL = authReply.nextURL;
         this.fromTeleport = fromTeleport;
         this.isTemporary = isTemporary;
+        this.reason = authReply.reason;
+        this.mfaHash = authReply.mfaHash;
     }
 
     public SLAuthReply(String gridName, String loginURL, @Nonnull XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
@@ -87,6 +96,8 @@ public final class SLAuthReply {
         String str7 = "";
         String str8 = null;
         UUID uuid4 = null;
+        String reason = null;
+        String mfaHash = null;
         List<Friend> of = ImmutableList.of();
         xmlPullParser.nextTag();
         xmlPullParser.require(2, null, "methodResponse");
@@ -124,6 +135,10 @@ public final class SLAuthReply {
                                     str3 = getSimpleValue(xmlPullParser);
                                 } else if (innerText.equalsIgnoreCase("next_method")) {
                                     str4 = getSimpleValue(xmlPullParser);
+                                } else if (innerText.equalsIgnoreCase("reason")) {
+                                    reason = getSimpleValue(xmlPullParser);
+                                } else if (innerText.equalsIgnoreCase("mfa_hash")) {
+                                    mfaHash = getSimpleValue(xmlPullParser);
                                 } else if (innerText.equalsIgnoreCase("message")) {
                                     str7 = getSimpleValue(xmlPullParser);
                                 } else if (innerText.equalsIgnoreCase("agent_appearance_service")) {
@@ -162,6 +177,12 @@ public final class SLAuthReply {
         this.isIndeterminate = z;
         this.nextURL = str3;
         this.nextMethod = str4;
+        this.reason = reason;
+        this.mfaHash = mfaHash;
+    }
+
+    public boolean isMfaChallenge() {
+        return !this.success && REASON_MFA_CHALLENGE.equals(this.reason);
     }
 
     private void finishTag(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {

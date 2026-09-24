@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.lumiyaviewer.lumiya.R;
@@ -37,12 +38,14 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
         if (this.editGrid != null) {
             ((TextView) findViewById(R.id.gridNameText)).setText(this.editGrid.getGridName());
             ((TextView) findViewById(R.id.gridLoginURIText)).setText(this.editGrid.getLoginURL());
+            ((CheckBox) findViewById(R.id.gridAllowUntrustedCerts)).setChecked(this.editGrid.getAllowUntrustedCertificates());
             ((Button) findViewById(R.id.okButton)).setText(R.string.save_changes);
             findViewById(R.id.deleteButton).setVisibility(View.VISIBLE);
             setTitle(R.string.edit_grid_dialog_title);
         } else {
             ((TextView) findViewById(R.id.gridNameText)).setText("");
             ((TextView) findViewById(R.id.gridLoginURIText)).setText("");
+            ((CheckBox) findViewById(R.id.gridAllowUntrustedCerts)).setChecked(false);
             ((Button) findViewById(R.id.okButton)).setText(R.string.add_new_grid);
             findViewById(R.id.deleteButton).setVisibility(View.GONE);
             setTitle(R.string.new_grid_dialog_title);
@@ -57,6 +60,7 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
             case R.id.okButton:
                 String charSequence = ((TextView) findViewById(R.id.gridNameText)).getText().toString();
                 String text = ((TextView) findViewById(R.id.gridLoginURIText)).getText().toString();
+                boolean allowUntrustedCerts = ((CheckBox) findViewById(R.id.gridAllowUntrustedCerts)).isChecked();
                 if (!charSequence.equals("")) {
                     if (!text.equals("")) {
                         GridList.GridInfo gridByName = this.gridList.getGridByName(charSequence);
@@ -74,6 +78,7 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
                                     gridInfo.setGridName(charSequence);
                                     gridInfo.setLoginURL(text);
                                 }
+                                gridInfo.setAllowUntrustedCertificates(allowUntrustedCerts);
                                 this.onGridEditResultListener.onGridAdded(gridInfo, z);
                                 break;
                             }

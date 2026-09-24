@@ -317,6 +317,13 @@ Second Life® is a registered trademark or Linden Research, Inc."</string>
     <string name="grid_status_connecting">Connecting to %s...</string>
     <string name="grid_status_reconnecting">Reconnecting to %s...</string>
     <string name="grid_uri_empty_error">Login URI should not be empty</string>
+    <string name="grid_allow_untrusted_certs">Allow untrusted certificates</string>
+    <string name="grid_allow_untrusted_certs_hint">Only for grids with self-signed certificates. Anyone on the network path could then read your password hash. Never applies to Second Life hosts.</string>
+    <string name="mfa_prompt_title">Authentication code</string>
+    <string name="mfa_prompt_default_message">Enter the code from your authenticator app.</string>
+    <string name="mfa_prompt_hint">Authentication code</string>
+    <string name="mfa_prompt_continue">Continue</string>
+    <string name="mfa_prompt_empty">Enter a code</string>
     <string name="group_charter">Charter</string>
     <string name="group_closed_enrollment">Closed group</string>
     <string name="group_free_to_join">Free to join</string>

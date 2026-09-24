@@ -18,9 +18,21 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.lumiyaviewer.lumiya.utils.HashUtils;
+import com.lumiyaviewer.lumiya.slproto.https.TlsPolicy;
 import java.io.IOException;
+import java.security.cert.CertificateException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 public class SLAuth {
+    private final MfaHashStore mfaHashStore;
+
+    public SLAuth() {
+        this(LumiyaApp.getContext() != null ? new MfaHashStore(LumiyaApp.getContext()) : null);
+    }
+
+    SLAuth(MfaHashStore mfaHashStore) {
+        this.mfaHashStore = mfaHashStore;
+    }
 
     private static class LoginRequestField {
         public final String name;
@@ -108,6 +120,13 @@ public class SLAuth {
         fields.add(new LoginRequestField("id0", authParams.clientID.toString(), null));
         fields.add(new LoginRequestField("agree_to_tos", "true", null));
         fields.add(new LoginRequestField("viewer_digest", "f50cfcc3-d6ce-4f16-a822-b91271de4c48", null));
+        // Multi-factor authentication (lllogininstance.cpp constructAuthParams):
+        // "token" carries the code the user typed after an mfa_challenge
+        // reply, "mfa_hash" the hash a previous MFA login returned. Both are
+        // sent, empty when unknown.
+        String mfaHash = this.mfaHashStore != null ? this.mfaHashStore.get(authParams.gridName, authParams.loginName) : "";
+        fields.add(new LoginRequestField("token", normalizeMfaToken(authParams.mfaToken), null));
+        fields.add(new LoginRequestField("mfa_hash", mfaHash, null));
         String loginURL = authParams.loginURL;
         String methodName = "login_to_simulator";
         SLAuthReply reply = null;
@@ -172,6 +191,9 @@ public class SLAuth {
                     parser.setInput(new BufferedInputStream(response.body().byteStream(), 65536), null);
                     reply = new SLAuthReply(authParams.gridName, authParams.loginURL, parser);
                     if (!reply.isIndeterminate || reply.nextMethod == null || reply.nextURL == null) {
+                        if (reply.success && reply.mfaHash != null && this.mfaHashStore != null) {
+                            this.mfaHashStore.put(authParams.gridName, authParams.loginName, reply.mfaHash);
+                        }
                         return reply;
                     }
                     methodName = reply.nextMethod;
@@ -200,12 +222,49 @@ public class SLAuth {
         return "$1$" + HashUtils.MD5_Hash(trimmed);
     }
 
+    /**
+     * The viewer strips all whitespace from the code before sending it
+     * (SL-17034): codes are often pasted as "123 456".
+     */
+    static String normalizeMfaToken(String token) {
+        return token == null ? "" : token.replaceAll("\\s", "");
+    }
+
     public SLAuthReply Login(SLAuthParams authParams) throws IOException {
+        // The selected grid decides whether certificates that fail
+        // verification are accepted for the whole session (never for
+        // Linden Lab hosts).
+        TlsPolicy.setAllowUntrustedCertificates(authParams.allowUntrustedCertificates);
         try {
             return SendLoginRequest(authParams);
         } catch (Exception e) {
             e.printStackTrace();
+            if (isCertificateFailure(e)) {
+                throw new CertificateVerificationException(e);
+            }
             throw new IOException("Failed to login to simulator");
+        }
+    }
+
+    private static boolean isCertificateFailure(Throwable e) {
+        for (Throwable t = e; t != null; t = t.getCause()) {
+            if (t instanceof SSLPeerUnverifiedException || t instanceof CertificateException) {
+                return true;
+            }
+            if (t.getCause() == t) {
+                break;
+            }
+        }
+        return false;
+    }
+
+    /** The login server's certificate did not verify (TlsPolicy). */
+    public static class CertificateVerificationException extends IOException {
+        private static final long serialVersionUID = 1L;
+
+        CertificateVerificationException(Throwable cause) {
+            super("The login server's security certificate could not be verified. The connection may be intercepted. "
+                    + "For a grid with a self-signed certificate, allow untrusted certificates in Manage Grids.", cause);
         }
     }
 }

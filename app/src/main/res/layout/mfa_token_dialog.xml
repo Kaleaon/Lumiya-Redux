@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Multi-factor code prompt shown after an "mfa_challenge" login reply. -->
+<LinearLayout android:orientation="vertical" android:paddingLeft="24.0dip" android:paddingTop="12.0dip" android:paddingRight="24.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@+id/mfaTokenMessage" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <EditText android:id="@+id/mfaTokenText" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:inputType="number" android:autofillHints="smsOTPCode" android:importantForAutofill="yes" android:hint="@string/mfa_prompt_hint" />
+</LinearLayout>

@@ -32,6 +32,7 @@ import com.lumiyaviewer.lumiya.eventbus.EventHandler;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
 import com.lumiyaviewer.lumiya.slproto.SLURL;
 import com.lumiyaviewer.lumiya.slproto.auth.SLAuth;
+import com.lumiyaviewer.lumiya.slproto.auth.SLAuthParams;
 import com.lumiyaviewer.lumiya.slproto.events.SLLoginResultEvent;
 import com.lumiyaviewer.lumiya.slproto.events.SLReconnectingEvent;
 import com.lumiyaviewer.lumiya.ui.accounts.AccountList;
@@ -55,6 +56,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
     private static final String KEY_SELECTED_GRID = "selected_grid";
     private static final String KEY_TOS_ACCEPTED = "tos_accepted";
     private UUID lastSelectedGridUUID;
+    private Intent lastLoginIntent;
     private boolean loggingIn = false;
     private boolean enableAutoClear = false;
     private int lastSelectedGrid = 0;
@@ -100,11 +102,11 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
             if (findAccount != null && !findAccount.getPasswordHash().equals("")) {
                 str3 = findAccount.getPasswordHash();
             }
-            Debug.Log("Login: using saved hash, hash = " + str3);
+            Debug.Log("Login: using saved hash");
             str = str3;
         } else {
             String passwordHash = SLAuth.getPasswordHash(text2);
-            Debug.Log("Login: not using saved hash, password = " + text2 + ", new hash: " + passwordHash);
+            Debug.Log("Login: not using saved hash");
             str = passwordHash;
         }
         this.enableAutoClear = false;
@@ -144,7 +146,6 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         }
         String loginStartLocation = slurl != null ? slurl.getLoginStartLocation() : string2;
         Debug.Log("Start location (LoginActivity): " + loginStartLocation);
-        this.loggingIn = true;
         Intent intent = new Intent(this, (Class<?>) GridConnectionService.class);
         intent.setAction(GridConnectionService.LOGIN_ACTION);
         intent.putExtra(KEY_LOGIN, editable);
@@ -153,9 +154,54 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         intent.putExtra("start_location", loginStartLocation);
         intent.putExtra("login_url", selectedGrid.getLoginURL());
         intent.putExtra("grid_name", selectedGrid.getGridName());
+        intent.putExtra(SLAuthParams.EXTRA_ALLOW_UNTRUSTED_CERTIFICATES, selectedGrid.getAllowUntrustedCertificates());
+        startLogin(intent);
+    }
+
+    private void startLogin(Intent intent) {
+        // Kept so an MFA challenge can resend the same login with a code:
+        // the password field has already been cleared or masked by then.
+        this.lastLoginIntent = intent;
+        this.loggingIn = true;
         GridConnectionService.startServiceCompat(this, intent);
         showProgressView(true);
         ((TextView) findViewById(R.id.connect_status_text)).setText(R.string.status_logging_in);
+    }
+
+    /**
+     * The grid wants a multi-factor code (reason "mfa_challenge"). Same flow
+     * as the viewer's PromptMFAToken notification: ask for the code, then
+     * repeat the login with it in the "token" field.
+     */
+    private void showMfaPrompt(String message) {
+        final Intent loginIntent = this.lastLoginIntent;
+        if (loginIntent == null) {
+            return;
+        }
+        View view = getLayoutInflater().inflate(R.layout.mfa_token_dialog, null);
+        final EditText tokenText = (EditText) view.findViewById(R.id.mfaTokenText);
+        ((TextView) view.findViewById(R.id.mfaTokenMessage)).setText(Strings.isNullOrEmpty(message) ? getString(R.string.mfa_prompt_default_message) : message);
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.mfa_prompt_title)
+                .setView(view)
+                .setPositiveButton(R.string.mfa_prompt_continue, null)
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+        dialog.setOnShowListener(d -> {
+            tokenText.requestFocus();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                String token = tokenText.getText().toString().replaceAll("\\s", "");
+                if (token.isEmpty()) {
+                    tokenText.setError(getString(R.string.mfa_prompt_empty));
+                    return;
+                }
+                dialog.dismiss();
+                Intent retry = new Intent(loginIntent);
+                retry.putExtra(SLAuthParams.EXTRA_MFA_TOKEN, token);
+                startLogin(retry);
+            });
+        });
+        dialog.show();
     }
 
     private void checkIfGridAvailable() {
@@ -300,6 +346,11 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         if (loginResultEvent.success) {
             startChatActivity(loginResultEvent.activeAgentUUID);
             finish();
+            return;
+        }
+        if (loginResultEvent.mfaRequired && !isFinishing()) {
+            showProgressView(false);
+            showMfaPrompt(loginResultEvent.message);
             return;
         }
         if (!isFinishing() && progressViewVisible()) {
