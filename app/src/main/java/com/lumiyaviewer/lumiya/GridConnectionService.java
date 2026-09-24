@@ -90,6 +90,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private final Handler mHandler = new Handler();
     private SharedPreferences prefs = null;
     private boolean cloudSyncEnabled = false;
+    private boolean startingNotificationVisible = false;
 
     @Nullable
     private UserManager cloudSyncUserManager = null;
@@ -683,9 +684,10 @@ public class GridConnectionService extends Service implements SharedPreferences.
             Debug.Printf("WiFi lock released", new Object[0]);
         }
         OnlineNotificationInfo onlineNotificationInfo = new OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, this.connectedAgentNameRetriever, this.currentLocationInfo.getData());
-        if (onlineNotificationInfo.equals(this.onlineNotificationInfo)) {
+        if (!this.startingNotificationVisible && onlineNotificationInfo.equals(this.onlineNotificationInfo)) {
             return;
         }
+        this.startingNotificationVisible = false;
         this.onlineNotificationInfo = onlineNotificationInfo;
         Notification notification = onlineNotificationInfo.getNotification(this);
         if (notification != null) {
@@ -810,6 +812,13 @@ public class GridConnectionService extends Service implements SharedPreferences.
 
     @Override
     public int onStartCommand(Intent intent, int i, int i2) {
+        // startServiceCompat() uses startForegroundService() on Android O and newer.
+        // Fulfil that contract before login/licensing can do any asynchronous work.
+        // updateOnlineNotification() will replace this placeholder (or remove it when
+        // the user has disabled online-status notifications) once state is available.
+        startForeground(R.id.online_notify_id,
+                OnlineNotificationInfo.getStartingNotification(this, gridName));
+        this.startingNotificationVisible = true;
         Object[] objArr = new Object[2];
         objArr[0] = intent != null ? "not null" : "null";
         objArr[1] = Integer.valueOf(i);

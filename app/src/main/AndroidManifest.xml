@@ -3,6 +3,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- GridConnectionService is promoted while login/connection work is running. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.NFC" />
     <!-- Required on Android 13+ (API 33) to display IM / friend / teleport-offer notifications. -->
@@ -67,7 +70,7 @@
                 <data android:scheme="secondlife" />
             </intent-filter>
         </activity>
-        <service android:name="com.lumiyaviewer.lumiya.GridConnectionService" android:exported="false" />
+        <service android:name="com.lumiyaviewer.lumiya.GridConnectionService" android:exported="false" android:foregroundServiceType="remoteMessaging" />
         <service android:name="com.lumiyaviewer.lumiya.StreamingMediaService" android:exported="false" />
         <provider android:authorities="com.lumiyaviewer.files" android:exported="false" android:grantUriPermissions="true" android:name="androidx.core.content.FileProvider">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
