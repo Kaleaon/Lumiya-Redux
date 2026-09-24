@@ -856,7 +856,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         if (imageView == null) {
             return;
         }
-        setScale(f, imageView.getRight() / 2.0f, imageView.getBottom() / 2.0f, z);
+        setScale(f, (float) (imageView.getRight() / 2), (float) (imageView.getBottom() / 2), z);
     }
 
     @Override // uk.co.senab.photoview.IPhotoView

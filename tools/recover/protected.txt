@@ -46,11 +46,8 @@ com/lumiyaviewer/lumiya/slproto/users/manager/SearchManager.java
 com/lumiyaviewer/lumiya/slproto/users/manager/UserManager.java
 com/lumiyaviewer/lumiya/ui/chat/profiles/ParcelPropertiesFragment.java
 com/lumiyaviewer/lumiya/ui/common/NavDrawerActivityItem.java
-com/lumiyaviewer/lumiya/ui/common/NavDrawerAdapter.java
 com/lumiyaviewer/lumiya/ui/common/NavDrawerItem.java
-com/lumiyaviewer/lumiya/ui/inventory/UploadImageAsyncTask.java
 com/lumiyaviewer/lumiya/ui/inventory/UploadImageResult.java
-com/lumiyaviewer/lumiya/ui/myava/TransactionLogAdapter.java
 com/lumiyaviewer/lumiya/ui/myava/TransactionViewHolder.java
 com/lumiyaviewer/lumiya/ui/render/CardboardActivity.java
 com/lumiyaviewer/lumiya/ui/render/CardboardTransitionActivity.java
@@ -67,10 +64,10 @@ com/lumiyaviewer/lumiya/ui/render/vr/VrPose.java
 com/lumiyaviewer/lumiya/ui/render/vr/VrRuntime.java
 com/lumiyaviewer/lumiya/ui/render/vr/VrRuntimeSelector.java
 com/lumiyaviewer/lumiya/ui/render/vr/VrSession.java
-com/lumiyaviewer/lumiya/ui/search/SearchGridAdapter.java
 com/lumiyaviewer/lumiya/ui/search/SearchViewHolder.java
 com/lumiyaviewer/lumiya/utils/SimpleStringParser.java
 uk/co/senab/photoview/PhotoViewAttacher.java
 com/lumiyaviewer/lumiya/GridConnectionService.java
 com/lumiyaviewer/lumiya/StreamingMediaService.java
 com/lumiyaviewer/lumiya/ui/login/LoginActivity.java
+com/lumiyaviewer/lumiya/utils/PriorityBinQueue.java

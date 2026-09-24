@@ -2,6 +2,8 @@ package com.lumiyaviewer.lumiya.ui.myava;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import androidx.annotation.CallSuper;
+import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -10,7 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.lumiyaviewer.lumiya.R;
+import butterknife.Unbinder;
+import butterknife.internal.Utils;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
@@ -34,16 +37,86 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
         void onTransactionClicked(MoneyTransaction moneyTransaction);
     }
 
-    UUID getAgentUUID() {
-        return this.agentUUID;
+    class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(com.lumiyaviewer.lumiya.R.id.amountTextView)
+        TextView amountTextView;
+        private Calendar calendar;
+        private final ChatterNameDisplayer chatterNameDisplayer;
+
+        @BindView(com.lumiyaviewer.lumiya.R.id.finalBalanceTextView)
+        TextView finalBalanceTextView;
+        private MoneyTransaction moneyTransaction;
+
+        @BindView(com.lumiyaviewer.lumiya.R.id.timeStampTextView)
+        TextView timestampTextView;
+
+        @BindView(com.lumiyaviewer.lumiya.R.id.user_name)
+        TextView userName;
+
+        @BindView(com.lumiyaviewer.lumiya.R.id.userPicView)
+        ChatterPicView userPicView;
+
+        TransactionViewHolder(View view) {
+            super(view);
+            this.chatterNameDisplayer = new ChatterNameDisplayer();
+            ButterKnife.bind(this, view);
+            this.chatterNameDisplayer.bindViews(this.userName, this.userPicView);
+            view.setOnClickListener(this);
+            this.calendar = Calendar.getInstance();
+        }
+
+        @SuppressLint({"DefaultLocale", "SetTextI18n"})
+        void bindToData(MoneyTransaction moneyTransaction) {
+            this.moneyTransaction = moneyTransaction;
+            this.chatterNameDisplayer.setChatterID(ChatterID.getUserChatterID(TransactionLogAdapter.this.agentUUID, moneyTransaction.getAgentUUID()));
+            this.amountTextView.setText(TransactionLogAdapter.this.context.getString(com.lumiyaviewer.lumiya.R.string.transaction_amount_format, Integer.valueOf(moneyTransaction.getTransactionAmount())));
+            this.finalBalanceTextView.setText(TransactionLogAdapter.this.context.getString(com.lumiyaviewer.lumiya.R.string.transaction_balance_amount, Integer.valueOf(moneyTransaction.getNewBalance())));
+            this.calendar.setTime(moneyTransaction.getTimestamp());
+            this.timestampTextView.setText(DateUtils.getRelativeTimeSpanString(TransactionLogAdapter.this.context, this.calendar.getTimeInMillis(), false));
+        }
+
+        @Override // android.view.View.OnClickListener
+        public void onClick(View view) {
+            if (TransactionLogAdapter.this.onTransactionClickListener == null || this.moneyTransaction == null) {
+                return;
+            }
+            TransactionLogAdapter.this.onTransactionClickListener.onTransactionClicked(this.moneyTransaction);
+        }
+
+        void onRecycled() {
+            this.chatterNameDisplayer.setChatterID(null);
+            this.moneyTransaction = null;
+        }
     }
 
-    Context getContext() {
-        return this.context;
-    }
+    public class TransactionViewHolder_ViewBinding implements Unbinder {
+        private TransactionViewHolder target;
 
-    OnTransactionClickListener getOnTransactionClickListener() {
-        return this.onTransactionClickListener;
+        @UiThread
+        public TransactionViewHolder_ViewBinding(TransactionViewHolder transactionViewHolder, View view) {
+            this.target = transactionViewHolder;
+            transactionViewHolder.userName = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.user_name, "field 'userName'", TextView.class);
+            transactionViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
+            transactionViewHolder.timestampTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.timeStampTextView, "field 'timestampTextView'", TextView.class);
+            transactionViewHolder.amountTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.amountTextView, "field 'amountTextView'", TextView.class);
+            transactionViewHolder.finalBalanceTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.finalBalanceTextView, "field 'finalBalanceTextView'", TextView.class);
+        }
+
+        @Override // butterknife.Unbinder
+        @CallSuper
+        public void unbind() {
+            TransactionViewHolder transactionViewHolder = this.target;
+            if (transactionViewHolder == null) {
+                throw new IllegalStateException("Bindings already cleared.");
+            }
+            this.target = null;
+            transactionViewHolder.userName = null;
+            transactionViewHolder.userPicView = null;
+            transactionViewHolder.timestampTextView = null;
+            transactionViewHolder.amountTextView = null;
+            transactionViewHolder.finalBalanceTextView = null;
+        }
     }
 
     TransactionLogAdapter(Context context, UUID uuid, OnTransactionClickListener onTransactionClickListener) {
@@ -80,7 +153,7 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionViewH
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     public TransactionViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new TransactionViewHolder(this, this.inflater.inflate(R.layout.transaction_log_item, viewGroup, false));
+        return new TransactionViewHolder(this.inflater.inflate(com.lumiyaviewer.lumiya.R.layout.transaction_log_item, viewGroup, false));
     }
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter

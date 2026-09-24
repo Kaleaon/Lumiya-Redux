@@ -30,7 +30,7 @@ CP="$WORK/lib/*"
 
 if [[ ! -f "$WORK/orig.jar" ]]; then
   unzip -q -o "$APK" classes.dex -d "$WORK"
-  java -cp "$CP" com.googlecode.dex2jar.tools.Dex2jarCmd -f -o "$WORK/orig.jar" "$WORK/classes.dex"
+  java -cp "$CP" com.googlecode.dex2jar.tools.Dex2jarCmd -f -e "$WORK/dex2jar-errors.zip" -o "$WORK/orig.jar" "$WORK/classes.dex"
 fi
 javac -nowarn -d "$WORK/classes" -cp "$CP" "$ROOT/tools/recover/legacy/RemapLegacy.java"
 

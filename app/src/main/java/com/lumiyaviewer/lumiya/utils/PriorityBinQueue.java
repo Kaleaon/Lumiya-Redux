@@ -200,17 +200,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:12:0x002b, code lost:
-    
-        r2.remove();
-        r7.allItems.remove(r0);
-        com.lumiyaviewer.lumiya.Debug.Printf("Thread %s got item with priority %d", java.lang.Thread.currentThread().getName(), java.lang.Integer.valueOf(r1));
-     */
     @Override // java.util.concurrent.BlockingQueue
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
     public T poll(long j, TimeUnit timeUnit) throws InterruptedException {
         long remaining = timeUnit.toNanos(j);
         this.lock.lockInterruptibly();

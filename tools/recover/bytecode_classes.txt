@@ -183,6 +183,7 @@ com/lumiyaviewer/lumiya/ui/chat/profiles/UserProfileFragment
 com/lumiyaviewer/lumiya/ui/common/DetailsActivity
 com/lumiyaviewer/lumiya/ui/common/ImageAssetView
 com/lumiyaviewer/lumiya/ui/common/MasterDetailsActivity
+com/lumiyaviewer/lumiya/ui/common/NavDrawerAdapter
 com/lumiyaviewer/lumiya/ui/common/SwipeDismissListViewTouchListener
 com/lumiyaviewer/lumiya/ui/common/SwipeDismissTouchListener
 com/lumiyaviewer/lumiya/ui/common/ThemedActivity
@@ -192,6 +193,7 @@ com/lumiyaviewer/lumiya/ui/inventory/InventoryFragment
 com/lumiyaviewer/lumiya/ui/inventory/InventorySaveInfo
 com/lumiyaviewer/lumiya/ui/inventory/NotecardEditActivity
 com/lumiyaviewer/lumiya/ui/inventory/TextureViewFragment
+com/lumiyaviewer/lumiya/ui/inventory/UploadImageAsyncTask
 com/lumiyaviewer/lumiya/ui/minimap/MinimapActivity
 com/lumiyaviewer/lumiya/ui/minimap/MinimapFragment
 com/lumiyaviewer/lumiya/ui/minimap/MinimapView
@@ -199,6 +201,7 @@ com/lumiyaviewer/lumiya/ui/minimap/NearbyPeopleMinimapFragment
 com/lumiyaviewer/lumiya/ui/myava/MuteListAdapter
 com/lumiyaviewer/lumiya/ui/myava/MuteListFragment
 com/lumiyaviewer/lumiya/ui/myava/MyAvatarFragment
+com/lumiyaviewer/lumiya/ui/myava/TransactionLogAdapter
 com/lumiyaviewer/lumiya/ui/notify/NotificationChannels
 com/lumiyaviewer/lumiya/ui/notify/OnlineNotificationInfo
 com/lumiyaviewer/lumiya/ui/objects/ObjectListAdapter
@@ -207,6 +210,7 @@ com/lumiyaviewer/lumiya/ui/objects/TaskInventoryFragment
 com/lumiyaviewer/lumiya/ui/objects/TouchableObjectsFragment
 com/lumiyaviewer/lumiya/ui/outfits/OutfitsFragment
 com/lumiyaviewer/lumiya/ui/render/WorldSurfaceView
+com/lumiyaviewer/lumiya/ui/search/SearchGridAdapter
 com/lumiyaviewer/lumiya/ui/search/SearchGridFragment
 com/lumiyaviewer/lumiya/ui/settings/NotificationSettings
 com/lumiyaviewer/lumiya/ui/settings/NotificationType
@@ -216,7 +220,6 @@ com/lumiyaviewer/lumiya/ui/settings/SettingsSelectionFragment
 com/lumiyaviewer/lumiya/ui/voice/VoiceStatusView
 com/lumiyaviewer/lumiya/utils/LEDAction
 com/lumiyaviewer/lumiya/utils/LevensteinDistance
-com/lumiyaviewer/lumiya/utils/PriorityBinQueue
 com/lumiyaviewer/lumiya/utils/wlist/ChunkedList
 com/lumiyaviewer/lumiya/voice/common/VoicePluginMessageType
 com/lumiyaviewer/lumiya/voice/common/model/VoiceChannelInfo

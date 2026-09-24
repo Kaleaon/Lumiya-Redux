@@ -332,9 +332,15 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     private static NotificationSettings notifySettingsByType(NotificationType notificationType) {
-        switch (m13xc4a7bd01()[notificationType.ordinal()]) {
+        switch (notificationType) {
+            case Group:
+                return notifyGroup;
+            case Private:
+                return notifyPrivate;
+            case LocalChat:
+            default:
+                return notifyLocalChat;
         }
-        return notifyLocalChat;
     }
 
     /* JADX INFO: Access modifiers changed from: private */

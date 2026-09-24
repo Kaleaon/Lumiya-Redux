@@ -1,5 +1,8 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
+import com.google.vr.cardboard.FullscreenMode;
+import com.google.vr.sdk.base.AndroidCompat;
+import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -171,6 +174,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     @BindView(R.id.cardboard_ims)
     LinearLayout chatsOverlayLayout;
     private VrSession vrSession;
+    // Window behaviour 3.4.2 applied in VR mode regardless of runtime:
+    // keep the screen on, immersive fullscreen (restored after the VR
+    // runtime refactor dropped them).
+    private final ScreenOnFlagHelper screenOnFlagHelper = new ScreenOnFlagHelper(this);
+    private FullscreenMode fullscreenMode;
     private VrRuntime vrRuntime;
 
     @BindView(R.id.dialogQuestionText)
@@ -1754,12 +1762,15 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         super.onCreate(bundle);
         requestWindowFeature(1);
         getWindow().setFlags(1024, 1024);
+        this.fullscreenMode = new FullscreenMode(getWindow());
         setContentView(R.layout.cardboard_layout);
         this.userManager = ActivityUtils.getUserManager(getIntent());
         if (this.userManager == null) {
             finish();
             return;
         }
+        AndroidCompat.trySetVrModeEnabled(this, true);
+        AndroidCompat.setSustainedPerformanceMode(this, true);
         this.renderSettings = new RenderSettings(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
         this.stateHandler = new Handler();
         Debug.Printf("Cardboard: creating VR view", new Object[0]);
@@ -1989,6 +2000,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (this.vrSession != null) {
             this.vrSession.onPause();
         }
+        this.screenOnFlagHelper.stop();
         super.onPause();
     }
 
@@ -1998,6 +2010,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (this.vrSession != null) {
             this.vrSession.onResume();
         }
+        this.fullscreenMode.goFullscreen();
+        this.screenOnFlagHelper.start();
         if (this.speechRecognizer == null) {
             if (SpeechRecognizer.isRecognitionAvailable(this)) {
                 Debug.Printf("Cardboard: speech recognition is available", new Object[0]);
@@ -2115,6 +2129,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     @Override // android.app.Activity, android.view.Window.Callback
     public void onWindowFocusChanged(boolean z) {
         super.onWindowFocusChanged(z);
+        if (this.fullscreenMode != null) {
+            this.fullscreenMode.onWindowFocusChanged(z);
+        }
     }
 
     @OnClick({R.id.cardboard_yes_button})

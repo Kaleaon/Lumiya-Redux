@@ -60,10 +60,11 @@ set +e
 python3 "$ROOT/tools/verify/dexdiff.py" \
   "$WORK/orig-smali" "$ROOT/recovered/android/res/values/public.xml" \
   "$WORK/new-smali" "$R_TXT" \
+  --accept "$ROOT/tools/verify/accepted.txt" \
   --json "$WORK/report.json" --verbose > "$WORK/report.txt"
 rc=$?
 set -e
-grep -c '^DAMAGED' "$WORK/report.txt" | xargs echo "damaged classes:"
+echo "damaged classes: $(grep -c '^DAMAGED' "$WORK/report.txt" || true)"
 echo "report: $WORK/report.txt"
 # Original bytecode linked from app/libs is not checked by javac: make sure
 # every call/field access between app classes still resolves.

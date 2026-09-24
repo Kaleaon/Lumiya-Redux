@@ -75,6 +75,8 @@ def norm_types(s):
 
 
 def norm_mname(n):
+    if n in ('valuesCustom', '$values'):
+        return 'values'  # jadx's alias for the enum values() it could not name
     if LAMBDA_METHOD_RE.search(n) or re.match(r'^m\d+x[0-9a-f]+$', n):
         return 'LAMBDA'
     return ACCESS_RE.sub('access$', n)
@@ -222,6 +224,8 @@ def parse_smali(path, resmap):
                     continue  # anonymous-class ctor: captured-args signature varies
                 if line[m.start() - 1:m.start()] == '[':
                     owner = '*'  # array clone()
+                if m.group(2) in ('equals', 'hashCode', 'toString', 'getClass'):
+                    owner = '*'  # java.lang.Object methods: dispatch is virtual either way
                 desc = norm_types(m.group(3))
                 if owner == '*':
                     desc = desc[:desc.index(')') + 1]  # covariant library returns
@@ -233,7 +237,10 @@ def parse_smali(path, resmap):
                 if owner == 'LLAMBDA;' or 'SwitchesValues' in m.group(2) or m.group(2).startswith(('$SwitchMap$', 'this$', 'val$')):
                     cur.flags.add('lambda')
                     continue
-                ref = owner + '->' + m.group(2) + norm_types(m.group(3))
+                fname = m.group(2)
+                if owner.endswith('_ViewBinding;') and re.match(r'^view(\d+|[0-9a-f]{8})$', fname):
+                    fname = 'view<id>'  # ButterKnife 8 decimal vs 10 hex naming
+                ref = owner + '->' + fname + norm_types(m.group(3))
                 cur.fields[('W ' if 'put' in op else 'R ') + ref] += 1
         elif op in ('new-instance', 'instance-of', 'const-class', 'new-array', 'filled-new-array'):
             m = TYPE_RE.search(line)
@@ -289,6 +296,8 @@ def load_tree(root, resmap, prefixes):
             cls, methods = parse_smali(os.path.join(dp, fn), resmap)
             if cls is None or LAMBDA_CLASS_RE.search(cls):
                 continue
+            if re.search(r'/R(\$\w+)?;$', cls):
+                continue  # generated resource tables; ids are checked by name
             classes[cls] = methods
     return classes
 
@@ -307,6 +316,10 @@ def diff_method(o, n):
     for attr in ('invokes', 'fields', 'types', 'strings'):
         mo, mn = getattr(o, attr), getattr(n, attr)
         miss = [k for k in counter_missing(mo, mn) if not any(i in k for i in INTENTIONAL)]
+        if attr == 'strings':
+            # "a" + "b" literals may be folded or split differently.
+            joined = '\x00'.join(mn)
+            miss = [k for k in miss if k not in joined]
         add = counter_missing(mn, mo)
         if miss:
             missing[attr] = miss
@@ -376,7 +389,24 @@ def compare(orig, new):
                     n_bucket.merge(m)
                     if not (mk == 'LAMBDA' or anon):
                         entry['added_methods'].append(cname + '->' + mk)
+        # Accessor/lambda bodies moved into ordinary methods (javac inlines
+        # an access$ call as a direct call from the nested class) count as
+        # present when found anywhere in the rebuilt class.
+        n_all = Method()
+        for methods in n_classes.values():
+            for m in methods.values():
+                n_all.merge(m)
         miss, add = diff_method(o_bucket, n_bucket)
+        for kind in ('invokes', 'fields', 'types', 'strings'):
+            if kind in miss:
+                have = getattr(n_all, kind)
+                miss[kind] = [k for k in miss[kind] if k not in have]
+                if not miss[kind]:
+                    del miss[kind]
+        if 'numbers' in miss:
+            miss['numbers'] = [v for v in miss['numbers'] if not (v.lstrip('-').isdigit() and int(v) in n_all.numbers) and v not in n_all.numbers]
+            if not miss['numbers']:
+                del miss['numbers']
         if miss or add:
             entry['methods']['<lambdas/anonymous/moved>'] = {'missing': miss, 'added': add, 'orig_size': o_bucket.size, 'new_size': n_bucket.size}
         damaged = entry['missing_methods'] or any(v['missing'] for v in entry['methods'].values())
@@ -388,6 +418,31 @@ def compare(orig, new):
     return report
 
 
+def apply_accepted(report, path):
+    """Differences a human reviewed against the original bytecode and
+    judged intentional (modernisation) or codegen-only. Each needs a reason."""
+    accepted = {}
+    for line in open(path):
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        key, _, reason = line.partition(' ')
+        if not reason.strip():
+            raise SystemExit('accepted entry without a reason: ' + key)
+        accepted[key] = reason.strip()
+    for top, e in report.items():
+        if e['status'] != 'DAMAGED':
+            continue
+        for mk, v in e['methods'].items():
+            if v['missing'] and (mk in accepted or top + '->' + mk in accepted):
+                v['added']['accepted'] = accepted.get(mk) or accepted.get(top + '->' + mk)
+                v['added']['accepted_missing'] = v['missing']
+                v['missing'] = {}
+        e['missing_methods'] = [m for m in e['missing_methods'] if m not in accepted]
+        if not e['missing_methods'] and not any(v['missing'] for v in e['methods'].values()):
+            e['status'] = 'ACCEPTED'
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('orig_smali')
@@ -397,12 +452,15 @@ def main():
     ap.add_argument('--prefix', action='append', default=None)
     ap.add_argument('--json')
     ap.add_argument('--verbose', action='store_true')
+    ap.add_argument('--accept', help='reviewed differences: "Lclass;->method  reason" per line')
     a = ap.parse_args()
     prefixes = a.prefix or ['com/lumiyaviewer/', 'uk/co/senab/', 'com/google/vr/', 'com/google/vrtoolkit/']
     orig = load_tree(a.orig_smali, load_public_xml(a.orig_public_xml), prefixes)
     new_res = load_public_xml(a.new_r_txt) if a.new_r_txt.endswith('.xml') else load_r_txt(a.new_r_txt)
     new = load_tree(a.new_smali, new_res, prefixes)
     report = compare(orig, new)
+    if a.accept:
+        apply_accepted(report, a.accept)
     counts = collections.Counter(e['status'] for e in report.values())
     if a.json:
         with open(a.json, 'w') as f:
