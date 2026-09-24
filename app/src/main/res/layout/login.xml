@@ -16,7 +16,7 @@
                 <Button android:layout_gravity="center" android:id="@id/buttonLogin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_sign_in" />
             </LinearLayout>
         </LinearLayout>
-        <androidx.legacy.widget.Space android:id="@id/login_spacer" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="100.0" />
+        <Space android:id="@id/login_spacer" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="100.0" />
         <TextView android:textAppearance="?android:textAppearanceSmall" android:textSize="10.0sp" android:layout_gravity="center_horizontal" android:id="@id/textView3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="10.0sp" android:text="@string/disclaimer" android:layout_weight="0.0" />
     </LinearLayout>
     <include layout="@layout/login_progress_layout" />

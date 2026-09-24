@@ -216,23 +216,27 @@ dependencies {
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.9.25')
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
 
-    // ── AndroidX (replaces every `android.support.*` and `android.arch.*`
-    //    import in the decompilation; Jetifier rewrites the imports.)
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    // ── AndroidX. The decompiled `android.support.*` imports were rewritten
+    //    to these packages by tools/migrate_androidx.py. Versions are the
+    //    newest that still build against compileSdk 34. The legacy-support-v4
+    //    and -v13 umbrellas are replaced by the modules the code imports
+    //    (swiperefreshlayout, loader, drawerlayout, coordinatorlayout).
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.fragment:fragment:1.6.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.loader:loader:1.1.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.fragment:fragment:1.8.5'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.7'
-    implementation 'androidx.core:core:1.12.0'
-    implementation 'androidx.annotation:annotation:1.7.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.annotation:annotation:1.8.2'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.8.7'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
 
     // ── Room (parallel persistence migration) ──
     // Target end-state persistence runtime.
@@ -240,9 +244,10 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.6.1'
 
     // ── Square ──
-    // Last OkHttp 3.x release; API-compatible with the 3.5.0 the APK shipped.
-    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
-    implementation 'com.squareup.okio:okio:1.17.5'
+    // OkHttp 4 keeps the `okhttp3` package and the Java-facing API the
+    // recovered code uses (3.x has been unmaintained since 2021). It brings
+    // Okio 3 transitively; nothing imports okio directly.
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
     // ── greenDAO ──
     // Transitional dependency. Remove after Room migration reaches full
@@ -275,8 +280,8 @@ dependencies {
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     // ── Google libraries ──
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.guava:guava:32.1.3-android'   // Lumiya uses
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.google.guava:guava:33.3.1-android'   // Lumiya uses
                                                             // guava eventbus,
                                                             // cache, collect,
                                                             // io, net, util.
@@ -293,9 +298,5 @@ dependencies {
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
 
-    // ── Protobuf ──
-    // No direct Lumiya imports, but the GVR SDK pulls it in transitively;
-    // pinning a version avoids a resolution conflict. Remove with GVR stack.
-    implementation 'com.google.protobuf:protobuf-javalite:3.25.1'
     testImplementation 'junit:junit:4.13.2'
 }

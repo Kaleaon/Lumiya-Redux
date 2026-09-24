@@ -132,11 +132,11 @@ except for the few that are no longer distributed:
 | Package | Source |
 | --- | --- |
 | AndroidX / Material Components | Maven — latest stable (`androidx.*`, `com.google.android.material:*`). The decompiled `android.support.*` imports were rewritten to their AndroidX equivalents by `tools/migrate_androidx.py`. |
-| OkHttp 3.14.9 + Okio 1.17.5 | Maven Central. The APK shipped 3.5.0; 3.14.9 is the last API-compatible 3.x release. |
+| OkHttp 4.12.0 (Okio 3 transitively) | Maven Central. The APK shipped 3.5.0; 4.x keeps the `okhttp3` package and the Java-facing API the recovered code calls. |
 | greenDAO 2.1.0 | Maven Central. Transitional dependency while Room migration is in progress. Remove once Room is authoritative for all active entities/queries and migrations are validated end-to-end. |
 | ButterKnife 10.2.3 | Maven Central. Deprecated but final release. Transitional dependency: replace touched UI files with ViewBinding (preferred) or modern alternatives opportunistically; remove compiler/runtime after last consumer is migrated. |
-| Gson 2.10.1, Guava 32.1.3-android, JSR-305 3.0.2 | Maven Central. |
-| PagerSlidingTabStrip 1.0.1, nineoldandroids 2.4.0 | Maven Central. Kept at their last released versions. |
+| Gson 2.11.0, Guava 33.3.1-android, JSR-305 3.0.2 | Maven Central. |
+| PagerSlidingTabStrip 1.0.1 | Maven Central, last release. Built against the old support library, so it is the one dependency that still needs Jetifier. |
 | **PhotoView** | Shipped in-tree at `uk/co/senab/photoview/` because no reliable Maven drop-in preserves the legacy package. Migration target: `com.github.chrisbanes:PhotoView:2.3.0` + rewrite of the one consumer (`TextureViewFragment`). |
 | **Google VR SDK** | Shipped in-tree at `com/google/vr/` and `com/google/vrtoolkit/` plus `jniLibs/*/libgvr.so`. Google retired the SDK in 2019 and removed the Maven artefacts in 2021. Keep only until Cardboard/OpenXR replacement reaches parity and rollout confidence gates are met; then remove in-tree packages + `libgvr.so`. |
 | **protobuf-nano** | Shipped in-tree at `com/google/protobuf/nano/`. protobuf-javanano was discontinued. Only the GVR stack uses it, so remove with the GVR teardown after parity/rollout confidence is established. |
