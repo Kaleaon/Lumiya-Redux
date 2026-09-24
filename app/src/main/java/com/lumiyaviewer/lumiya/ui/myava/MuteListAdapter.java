@@ -32,7 +32,7 @@ class MuteListAdapter extends BaseAdapter {
         if (f461xafabc05e != null) {
             return f461xafabc05e;
         }
-        int[] iArr = new int[MuteType.valuesCustom().length];
+        int[] iArr = new int[MuteType.values().length];
         try {
             iArr[MuteType.AGENT.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

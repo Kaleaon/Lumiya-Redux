@@ -57,7 +57,7 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
 
         @Override // android.content.DialogInterface.OnCancelListener
         public void onCancel(DialogInterface dialogInterface) {
-            SLChatScriptDialog.this.m157xe7f9f9c3(this.userManager);
+            SLChatScriptDialog.this.onDialogIgnored(this.userManager);
             dismiss();
         }
 
@@ -164,8 +164,8 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
 
     @Override // com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatDialogEvent
     /* renamed from: onDialogIgnored */
-    public void m157xe7f9f9c3(UserManager userManager) {
-        super.m157xe7f9f9c3(userManager);
+    public void onDialogIgnored(UserManager userManager) {
+        super.onDialogIgnored(userManager);
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 

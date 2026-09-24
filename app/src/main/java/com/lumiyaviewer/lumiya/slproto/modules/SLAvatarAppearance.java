@@ -192,8 +192,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         this.inventory = sLInventory;
         this.parcelInfo = sLAgentCircuit.getGridConnection().parcelInfo;
         this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
-        this.currentOutfitFolder = new SubscriptionData<>(sLAgentCircuit, obj -> m210x65ecce27((InventoryEntryList) obj));
-        this.findCofFolder = new SubscriptionData<>(sLAgentCircuit, obj -> m211x65ecce28((InventoryEntryList) obj));
+        this.currentOutfitFolder = new SubscriptionData<>(sLAgentCircuit, obj -> onCurrentOutfitFolder((InventoryEntryList) obj));
+        this.findCofFolder = new SubscriptionData<>(sLAgentCircuit, obj -> onCofFolderEntry((InventoryEntryList) obj));
         if (this.userManager != null) {
             this.wornItemsResultHandler = this.userManager.wornItems().attachRequestHandler(this.wornItemsRequestHandler);
         } else {
@@ -290,7 +290,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         AgentIsNowWearing agentIsNowWearing = new AgentIsNowWearing();
         agentIsNowWearing.AgentData_Field.AgentID = this.circuitInfo.agentID;
         agentIsNowWearing.AgentData_Field.SessionID = this.circuitInfo.sessionID;
-        for (SLWearableType sLWearableType : SLWearableType.valuesCustom()) {
+        for (SLWearableType sLWearableType : SLWearableType.values()) {
             Map<UUID, SLWearable> row = this.wornWearables.row(sLWearableType);
             if (row != null) {
                 z = true;
@@ -636,7 +636,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z3;
         boolean z4;
         boolean z5;
-        SLWearableType[] valuesCustom = SLWearableType.valuesCustom();
+        SLWearableType[] valuesCustom = SLWearableType.values();
         int length = valuesCustom.length;
         int i = 0;
         boolean z6 = false;
@@ -808,7 +808,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCofFolderEntry, reason: merged with bridge method [inline-methods] */
-    public void m211x65ecce28(InventoryEntryList inventoryEntryList) {
+    public void onCofFolderEntry(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
             for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
                 if (sLInventoryEntry != null && sLInventoryEntry.isFolder && sLInventoryEntry.typeDefault == 46) {
@@ -823,7 +823,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentOutfitFolder, reason: merged with bridge method [inline-methods] */
-    public void m210x65ecce27(InventoryEntryList inventoryEntryList) {
+    public void onCurrentOutfitFolder(InventoryEntryList inventoryEntryList) {
         SLInventoryEntry folder;
         if (inventoryEntryList == null || (folder = inventoryEntryList.getFolder()) == null || !Objects.equal(folder.sessionID, this.agentCircuit.circuitInfo.sessionID)) {
             return;
@@ -1065,7 +1065,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
         if (z) {
             z6 = z5;
-            for (SLWearableType sLWearableType : SLWearableType.valuesCustom()) {
+            for (SLWearableType sLWearableType : SLWearableType.values()) {
                 if (!sLWearableType.isBodyPart() && rLVController.canTakeItemOff(sLWearableType)) {
                     Map<UUID, SLWearable> row = create.row(sLWearableType);
                     HashSet hashSet3 = new HashSet();
@@ -1305,7 +1305,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z;
         RLVController rLVController = this.agentCircuit.getModules().rlvController;
         HashBasedTable create = HashBasedTable.create(this.wornWearables);
-        SLWearableType[] valuesCustom = SLWearableType.valuesCustom();
+        SLWearableType[] valuesCustom = SLWearableType.values();
         int length = valuesCustom.length;
         int i = 0;
         boolean z2 = false;

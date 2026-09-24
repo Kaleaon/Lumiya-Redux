@@ -99,7 +99,7 @@ public class GroupManager {
         this.groupRoleMemberListDao = daoSession.getGroupRoleMemberListDao();
         this.subscription = userManager.getAvatarGroupLists().getPool().subscribe(userManager.getUserID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$u_XXTkSOKCgaVXhhU-plrxzPP28.2
             private final /* synthetic */ void $m$0(Object obj) {
-                GroupManager.this.m324x1ac41d9e((AvatarGroupList) obj);
+                GroupManager.this.onAvatarGroupListsReply((AvatarGroupList) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -203,7 +203,7 @@ public class GroupManager {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAvatarGroupListsReply, reason: merged with bridge method [inline-methods] */
-    public void m324x1ac41d9e(AvatarGroupList avatarGroupList) {
+    public void onAvatarGroupListsReply(AvatarGroupList avatarGroupList) {
         this.avatarGroupListRef.set(avatarGroupList);
         this.chatterList.notifyListUpdated(ChatterListType.Groups);
     }

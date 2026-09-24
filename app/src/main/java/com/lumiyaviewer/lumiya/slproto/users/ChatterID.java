@@ -387,7 +387,7 @@ public abstract class ChatterID implements Parcelable, Comparable<ChatterID> {
         if (f150xb1d54699 != null) {
             return f150xb1d54699;
         }
-        int[] iArr = new int[ChatterType.valuesCustom().length];
+        int[] iArr = new int[ChatterType.values().length];
         try {
             iArr[ChatterType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

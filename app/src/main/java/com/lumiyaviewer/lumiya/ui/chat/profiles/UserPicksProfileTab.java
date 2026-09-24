@@ -100,7 +100,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAddNewPick, reason: merged with bridge method [inline-methods] */
-    public void m530xb7c87a2b(View view) {
+    public void onAddNewPick(View view) {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDUser)) {
             return;
         }
@@ -158,7 +158,7 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
         this.picksAdapter = new PicksAdapter(layoutInflater.getContext(), null);
         inflate.findViewById(com.lumiyaviewer.lumiya.R.id.add_new_pick_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$0JruYUVxhc8cYQ6nJZD1LVnQE5A.1
             private final /* synthetic */ void $m$0(View view) {
-                UserPicksProfileTab.this.m530xb7c87a2b(view);
+                UserPicksProfileTab.this.onAddNewPick(view);
             }
 
             @Override // android.view.View.OnClickListener

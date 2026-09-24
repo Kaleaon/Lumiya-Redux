@@ -63,8 +63,8 @@ public class MuteListData {
                             i = 0;
                         }
                         Debug.Printf("MuteList: line '%s' type %d idstring '%s' name '%s' flags %d", readLine.trim(), Integer.valueOf(intToken), nextToken, nextToken2, Integer.valueOf(i));
-                        if (intToken >= 0 && intToken < MuteType.valuesCustom().length) {
-                            MuteType muteType = MuteType.valuesCustom()[intToken];
+                        if (intToken >= 0 && intToken < MuteType.values().length) {
+                            MuteType muteType = MuteType.values()[intToken];
                             MuteListEntry muteListEntry = new MuteListEntry(muteType, UUID.fromString(nextToken), nextToken2, i);
                             if (muteType == MuteType.BY_NAME) {
                                 builder2.put(nextToken2, muteListEntry);

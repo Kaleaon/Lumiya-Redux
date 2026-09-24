@@ -55,7 +55,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     private UUID myOutfitsFolderUUID = null;
     private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.1
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m705com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref0((InventoryEntryList) obj);
+            OutfitsFragment.this.onInventoryEntryList((InventoryEntryList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -65,7 +65,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.2
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m706com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref1((SLAgentCircuit) obj);
+            OutfitsFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -75,7 +75,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.3
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m707com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref2((Boolean) obj);
+            OutfitsFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -85,7 +85,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.4
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m708com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref3((ImmutableMap) obj);
+            OutfitsFragment.this.onWornAttachmentsChanged((ImmutableMap) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -95,7 +95,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.5
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m709com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref4((Table) obj);
+            OutfitsFragment.this.onWornWearablesChanged((Table) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -105,7 +105,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<InventoryQuery, InventoryEntryList> rootFolderEntryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.6
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m710com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref5((InventoryEntryList) obj);
+            OutfitsFragment.this.onRootFolderEntryList((InventoryEntryList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -115,7 +115,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     });
     private final SubscriptionData<SubscriptionSingleKey, UUID> wornOutfitFolder = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.outfits.-$Lambda$oBJjjSxYBPvwKW_FzKQvdarEfUs.7
         private final /* synthetic */ void $m$0(Object obj) {
-            OutfitsFragment.this.m711com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref6((UUID) obj);
+            OutfitsFragment.this.onWornOutfitFolder((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -182,7 +182,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m706com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref1(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (this.adapter != null) {
             this.adapter.setAvatarAppearance(sLAgentCircuit != null ? sLAgentCircuit.getModules().avatarAppearance : null);
         }
@@ -190,7 +190,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onInventoryEntryList, reason: merged with bridge method [inline-methods] */
-    public void m705com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref0(InventoryEntryList inventoryEntryList) {
+    public void onInventoryEntryList(InventoryEntryList inventoryEntryList) {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()));
         setTitle(inventoryEntryList.getTitle(), null);
         if (this.adapter != null) {
@@ -201,13 +201,13 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onLoadingStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m707com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref2(Boolean bool) {
+    public void onLoadingStatusChanged(Boolean bool) {
         updateLoadingStatus();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onRootFolderEntryList, reason: merged with bridge method [inline-methods] */
-    public void m710com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref5(InventoryEntryList inventoryEntryList) {
+    public void onRootFolderEntryList(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
             for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
                 if (sLInventoryEntry.isFolder && sLInventoryEntry.typeDefault == 48) {
@@ -225,7 +225,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onWornAttachmentsChanged, reason: merged with bridge method [inline-methods] */
-    public void m708com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref3(ImmutableMap<UUID, String> immutableMap) {
+    public void onWornAttachmentsChanged(ImmutableMap<UUID, String> immutableMap) {
         if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap);
         }
@@ -233,7 +233,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onWornOutfitFolder, reason: merged with bridge method [inline-methods] */
-    public void m711com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref6(UUID uuid) {
+    public void onWornOutfitFolder(UUID uuid) {
         if (this.adapter != null) {
             this.adapter.setWornOutfitFolder(uuid);
         }
@@ -241,7 +241,7 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onWornWearablesChanged, reason: merged with bridge method [inline-methods] */
-    public void m709com_lumiyaviewer_lumiya_ui_outfits_OutfitsFragmentmthref4(Table<SLWearableType, UUID, SLWearable> table) {
+    public void onWornWearablesChanged(Table<SLWearableType, UUID, SLWearable> table) {
         if (this.adapter != null) {
             this.adapter.setWornWearables(table);
         }

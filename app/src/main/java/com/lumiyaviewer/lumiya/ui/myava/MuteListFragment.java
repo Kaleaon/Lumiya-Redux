@@ -42,7 +42,7 @@ public class MuteListFragment extends FragmentWithTitle {
     private Unbinder unbinder;
     private final SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$dntbaqhB2OOLQW5t89NMwUjCLX4.2
         private final /* synthetic */ void $m$0(Object obj) {
-            MuteListFragment.this.m659com_lumiyaviewer_lumiya_ui_myava_MuteListFragmentmthref0((ImmutableList) obj);
+            MuteListFragment.this.onMuteList((ImmutableList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -93,7 +93,7 @@ public class MuteListFragment extends FragmentWithTitle {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMuteList, reason: merged with bridge method [inline-methods] */
-    public void m659com_lumiyaviewer_lumiya_ui_myava_MuteListFragmentmthref0(ImmutableList<MuteListEntry> immutableList) {
+    public void onMuteList(ImmutableList<MuteListEntry> immutableList) {
         if (this.adapter != null) {
             this.adapter.setData(immutableList);
         }

@@ -73,7 +73,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     private MenuItem clearChatHistoryMenuItem = null;
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.2
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0((SLAgentCircuit) obj);
+            ChatFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -83,7 +83,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     });
     private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1((ChatterID) obj);
+            ChatFragment.this.onVoiceActiveChatter((ChatterID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -93,7 +93,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     });
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$yqEv_Il5ub7IaZ99Gwjf4YWSeKg.4
         private final /* synthetic */ void $m$0(Object obj) {
-            ChatFragment.this.m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2((VoiceChatInfo) obj);
+            ChatFragment.this.onVoiceChatInfo((VoiceChatInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -229,7 +229,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m420com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref0(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         View view = getView();
         if (view != null) {
             Object[] objArr = new Object[1];
@@ -242,7 +242,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceActiveChatter, reason: merged with bridge method [inline-methods] */
-    public void m421com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref1(ChatterID chatterID) {
+    public void onVoiceActiveChatter(ChatterID chatterID) {
         if (chatterID == null || this.userManager == null || !this.vrMode) {
             this.voiceChatInfo.unsubscribe();
         } else {
@@ -253,7 +253,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m422com_lumiyaviewer_lumiya_ui_chat_ChatFragmentmthref2(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
         updateVrModeControls();
     }
 
@@ -510,8 +510,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment
     /* renamed from: onCurrentLocationChanged */
-    public void m584xeb75d0e9(CurrentLocationInfo currentLocationInfo) {
-        super.m584xeb75d0e9(currentLocationInfo);
+    public void onCurrentLocationChanged(CurrentLocationInfo currentLocationInfo) {
+        super.onCurrentLocationChanged(currentLocationInfo);
         updateVrModeControls();
     }
 
@@ -660,8 +660,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment
     /* renamed from: onVoiceLoginStatusChanged */
-    public void m583xeb75d0e8(Boolean bool) {
-        super.m583xeb75d0e8(bool);
+    public void onVoiceLoginStatusChanged(Boolean bool) {
+        super.onVoiceLoginStatusChanged(bool);
         updateVrModeControls();
     }
 }

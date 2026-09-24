@@ -52,7 +52,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
     private final SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.12
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMainProfileTab.this.m447xa875b11a((SLAgentCircuit) obj);
+            GroupMainProfileTab.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -75,7 +75,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onActiveGroupCheckboxClicked, reason: merged with bridge method [inline-methods] */
-    public void m450xa875b11d(View view) {
+    public void onActiveGroupCheckboxClicked(View view) {
         try {
             if (((CheckBox) view).isChecked()) {
                 this.agentCircuit.get().getModules().groupManager.ActivateGroup(this.groupProfile.get().GroupData_Field.GroupID);
@@ -89,7 +89,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m447xa875b11a(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         View view = getView();
         if (view != null) {
             for (int i : new int[]{R.id.show_in_profile_checkbox, R.id.active_group_checkbox, R.id.group_profile_contribution_button, R.id.group_join_button, R.id.group_leave_button, R.id.group_invite_button, R.id.group_change_role_button}) {
@@ -100,7 +100,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onChangeRoleClicked, reason: merged with bridge method [inline-methods] */
-    public void m452xa875b11f(View view) {
+    public void onChangeRoleClicked(View view) {
         int i = 0;
         try {
             this.agentCircuit.assertHasData();
@@ -142,7 +142,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onContributeLandClicked, reason: merged with bridge method [inline-methods] */
-    public void m453xa875b120(View view) {
+    public void onContributeLandClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             AvatarGroupList.AvatarGroupEntry avatarGroupEntry = this.myGroupList.get().Groups.get(this.groupProfile.get().GroupData_Field.GroupID);
@@ -171,7 +171,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCopyGroupKeyClicked, reason: merged with bridge method [inline-methods] */
-    public void m449xa875b11c(View view) {
+    public void onCopyGroupKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
             String uuid = ((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID().toString();
             if (Build.VERSION.SDK_INT < 11) {
@@ -185,7 +185,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onInviteClicked, reason: merged with bridge method [inline-methods] */
-    public void m456xa875b123(View view) {
+    public void onInviteClicked(View view) {
         UUID uuid;
         AvatarGroupList.AvatarGroupEntry avatarGroupEntry;
         try {
@@ -200,7 +200,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onJoinClicked, reason: merged with bridge method [inline-methods] */
-    public void m454xa875b121(View view) {
+    public void onJoinClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             final UUID uuid = this.groupProfile.get().GroupData_Field.GroupID;
@@ -241,7 +241,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onLeaveClicked, reason: merged with bridge method [inline-methods] */
-    public void m455xa875b122(View view) {
+    public void onLeaveClicked(View view) {
         try {
             this.agentCircuit.assertHasData();
             final UUID uuid = this.groupProfile.get().GroupData_Field.GroupID;
@@ -277,7 +277,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onShowInProfileCheckboxClicked, reason: merged with bridge method [inline-methods] */
-    public void m451xa875b11e(View view) {
+    public void onShowInProfileCheckboxClicked(View view) {
         try {
             AvatarGroupList.AvatarGroupEntry avatarGroupEntry = this.myGroupList.get().Groups.get(this.groupProfile.get().GroupData_Field.GroupID);
             if (avatarGroupEntry != null) {
@@ -290,7 +290,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onViewProfileClicked, reason: merged with bridge method [inline-methods] */
-    public void m448xa875b11b(View view) {
+    public void onViewProfileClicked(View view) {
         UUID uuid;
         GroupProfileReply data = this.groupProfile.getData();
         if (data == null || this.chatterID == null || (uuid = data.GroupData_Field.FounderID) == null || !(!uuid.equals(UUIDPool.ZeroUUID)) || this.chatterID == null) {
@@ -359,7 +359,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         ((ImageAssetView) inflate.findViewById(R.id.group_pic_view)).setVerticalFit(true);
         inflate.findViewById(R.id.group_profile_view_founder_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.3
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m448xa875b11b(view);
+                GroupMainProfileTab.this.onViewProfileClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -369,7 +369,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.button_copy_group_key).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.4
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m449xa875b11c(view);
+                GroupMainProfileTab.this.onCopyGroupKeyClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -379,7 +379,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.active_group_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.5
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m450xa875b11d(view);
+                GroupMainProfileTab.this.onActiveGroupCheckboxClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -389,7 +389,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.show_in_profile_checkbox).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.6
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m451xa875b11e(view);
+                GroupMainProfileTab.this.onShowInProfileCheckboxClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -399,7 +399,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_change_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.7
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m452xa875b11f(view);
+                GroupMainProfileTab.this.onChangeRoleClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -409,7 +409,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_profile_contribution_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.8
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m453xa875b120(view);
+                GroupMainProfileTab.this.onContributeLandClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -419,7 +419,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_join_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.9
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m454xa875b121(view);
+                GroupMainProfileTab.this.onJoinClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -429,7 +429,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_leave_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.10
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m455xa875b122(view);
+                GroupMainProfileTab.this.onLeaveClicked(view);
             }
 
             @Override // android.view.View.OnClickListener
@@ -439,7 +439,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         });
         inflate.findViewById(R.id.group_invite_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$qgA5NpRVpRFsQYZFFPT9VQYjWms.11
             private final /* synthetic */ void $m$0(View view) {
-                GroupMainProfileTab.this.m456xa875b123(view);
+                GroupMainProfileTab.this.onInviteClicked(view);
             }
 
             @Override // android.view.View.OnClickListener

@@ -65,4 +65,8 @@ rc=$?
 set -e
 grep -c '^DAMAGED' "$WORK/report.txt" | xargs echo "damaged classes:"
 echo "report: $WORK/report.txt"
+# Original bytecode linked from app/libs is not checked by javac: make sure
+# every call/field access between app classes still resolves.
+python3 "$ROOT/tools/verify/linkcheck.py" "$WORK/new-smali" > "$WORK/linkcheck.txt" || rc=1
+tail -n 20 "$WORK/linkcheck.txt"
 exit $rc

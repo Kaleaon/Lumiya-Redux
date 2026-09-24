@@ -42,7 +42,7 @@ public final class InternalNano {
         if (extendableMessageNano.unknownFieldData == null) {
             return;
         }
-        extendableMessageNano2.unknownFieldData = extendableMessageNano.unknownFieldData.m8clone();
+        extendableMessageNano2.unknownFieldData = extendableMessageNano.unknownFieldData.clone();
     }
 
     public static <K, V> int computeMapFieldSize(Map<K, V> map, int i, int i2, int i3) {

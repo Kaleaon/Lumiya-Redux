@@ -47,7 +47,7 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         switch (view.getId()) {
             case R.id.buttonDialogIgnore /* 2131755305 */:
                 if (this.textBoxEvent != null) {
-                    this.textBoxEvent.m157xe7f9f9c3(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()));
+                    this.textBoxEvent.onDialogIgnored(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()));
                     requestAdapterUpdate();
                     break;
                 }
@@ -59,7 +59,7 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
                     this.textBoxSend.setText(R.string.textbox_send_caption);
                     break;
                 } else if (this.textBoxEvent != null) {
-                    this.textBoxEvent.m156xe7f9f620(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
+                    this.textBoxEvent.onEnteredText(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
                     requestAdapterUpdate();
                     break;
                 }
@@ -84,7 +84,7 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         if (this.textBoxEvent == null) {
             return true;
         }
-        this.textBoxEvent.m156xe7f9f620(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
+        this.textBoxEvent.onEnteredText(UserManager.getUserManager(this.textBoxEvent.getAgentUUID()), this.textBox.getText().toString());
         requestAdapterUpdate();
         return true;
     }

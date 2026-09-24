@@ -63,7 +63,7 @@ public class MeshData {
                 if (fromBinary.keyExists(meshRendering.getLODName())) {
                     lLSDNode = fromBinary.byKey(meshRendering.getLODName());
                 } else {
-                    GlobalOptions.MeshRendering[] valuesCustom = GlobalOptions.MeshRendering.valuesCustom();
+                    GlobalOptions.MeshRendering[] valuesCustom = GlobalOptions.MeshRendering.values();
                     int ordinal = meshRendering.ordinal() + 1;
                     while (true) {
                         if (ordinal >= valuesCustom.length) {

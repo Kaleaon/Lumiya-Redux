@@ -66,7 +66,7 @@ public class ContactsFragment extends Fragment {
             if (f251x6907e542 != null) {
                 return f251x6907e542;
             }
-            int[] iArr = new int[ContactListType.valuesCustom().length];
+            int[] iArr = new int[ContactListType.values().length];
             try {
                 iArr[ContactListType.Active.ordinal()] = 1;
             } catch (NoSuchFieldError e) {
@@ -93,13 +93,13 @@ public class ContactsFragment extends Fragment {
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public int getCount() {
-            return ContactListType.valuesCustom().length;
+            return ContactListType.values().length;
         }
 
         @Override // androidx.fragment.app.FragmentStatePagerAdapter
         public Fragment getItem(int i) {
             Fragment nearbyUsersFragment;
-            switch (m430x7c67181e()[ContactListType.valuesCustom()[i].ordinal()]) {
+            switch (m430x7c67181e()[ContactListType.values()[i].ordinal()]) {
                 case 1:
                     nearbyUsersFragment = new ActiveChattersFragment();
                     break;
@@ -130,7 +130,7 @@ public class ContactsFragment extends Fragment {
         @Override // androidx.viewpager.widget.PagerAdapter
         public CharSequence getPageTitle(int i) {
             int nearbyUsers;
-            ContactListType contactListType = ContactListType.valuesCustom()[i];
+            ContactListType contactListType = ContactListType.values()[i];
             String name = contactListType.name();
             return (contactListType != ContactListType.Nearby || ContactsFragment.this.currentLocationInfo == null || (nearbyUsers = ContactsFragment.this.currentLocationInfo.nearbyUsers()) == 0) ? name : name + " (" + Integer.toString(nearbyUsers) + ")";
         }
@@ -149,7 +149,7 @@ public class ContactsFragment extends Fragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
-    public void m429com_lumiyaviewer_lumiya_ui_chat_ContactsFragmentmthref0(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ViewPager viewPager;
         PagerAdapter adapter;
         this.currentLocationInfo = currentLocationInfo;
@@ -253,7 +253,7 @@ public class ContactsFragment extends Fragment {
         if (userManager != null) {
             this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$zIl8cGSTO94X3h9h2afeKA4NC_s
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ContactsFragment.this.m429com_lumiyaviewer_lumiya_ui_chat_ContactsFragmentmthref0((CurrentLocationInfo) obj);
+                    ContactsFragment.this.onCurrentLocation((CurrentLocationInfo) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

@@ -40,7 +40,7 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
 
     @Override // com.lumiyaviewer.lumiya.ui.chat.profiles.ProfileTextFieldEditFragment
     /* renamed from: onAvatarProperties */
-    public void m517x7aa22308(AvatarPropertiesReply avatarPropertiesReply) {
+    public void onAvatarProperties(AvatarPropertiesReply avatarPropertiesReply) {
         this.avatarProperties = avatarPropertiesReply;
         setOriginalText(isFirstLife() ? SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.FLAboutText) : SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText));
     }

@@ -170,7 +170,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         if (f60x94bee140 != null) {
             return f60x94bee140;
         }
-        int[] iArr = new int[SLCapEventQueue.CapsEventType.valuesCustom().length];
+        int[] iArr = new int[SLCapEventQueue.CapsEventType.values().length];
         try {
             iArr[SLCapEventQueue.CapsEventType.AgentGroupDataUpdate.ordinal()] = 9;
         } catch (NoSuchFieldError e) {
@@ -220,7 +220,7 @@ public class SLAgentCircuit extends SLThreadingCircuit implements SLCapEventQueu
         if (f61xb1d54699 != null) {
             return f61xb1d54699;
         }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
+        int[] iArr = new int[ChatterID.ChatterType.values().length];
         try {
             iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

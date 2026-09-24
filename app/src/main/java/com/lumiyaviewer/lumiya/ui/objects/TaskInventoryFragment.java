@@ -132,7 +132,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         if (f501x3332d2fb != null) {
             return f501x3332d2fb;
         }
-        int[] iArr = new int[SLAssetType.valuesCustom().length];
+        int[] iArr = new int[SLAssetType.values().length];
         try {
             iArr[SLAssetType.AT_ANIMATION.ordinal()] = 3;
         } catch (NoSuchFieldError e) {

@@ -57,7 +57,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     private static /* synthetic */ int[] f378xb1d54699 = null;
     private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedIn = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.9
         private final /* synthetic */ void $m$0(Object obj) {
-            UserFunctionsFragment.this.m583xeb75d0e8((Boolean) obj);
+            UserFunctionsFragment.this.onVoiceLoginStatusChanged((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -67,7 +67,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     });
     protected final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.common.-$Lambda$EGu4GUNsisO_OSWWZeAugrk47Ks.10
         private final /* synthetic */ void $m$0(Object obj) {
-            UserFunctionsFragment.this.m584xeb75d0e9((CurrentLocationInfo) obj);
+            UserFunctionsFragment.this.onCurrentLocationChanged((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -81,7 +81,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
         if (f378xb1d54699 != null) {
             return f378xb1d54699;
         }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
+        int[] iArr = new int[ChatterID.ChatterType.values().length];
         try {
             iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -508,7 +508,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     /* JADX INFO: Access modifiers changed from: protected */
     @CallSuper
     /* renamed from: onCurrentLocationChanged, reason: merged with bridge method [inline-methods] */
-    public void m584xeb75d0e9(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationChanged(CurrentLocationInfo currentLocationInfo) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.supportInvalidateOptionsMenu();
@@ -788,7 +788,7 @@ public abstract class UserFunctionsFragment extends ChatterReloadableFragment im
     /* JADX INFO: Access modifiers changed from: protected */
     @CallSuper
     /* renamed from: onVoiceLoginStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m583xeb75d0e8(Boolean bool) {
+    public void onVoiceLoginStatusChanged(Boolean bool) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.supportInvalidateOptionsMenu();

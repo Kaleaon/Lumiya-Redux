@@ -144,7 +144,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         super.onCreateView(layoutInflater, viewGroup, bundle);
         if (bundle != null) {
             if (bundle.containsKey("lastSelectedTab")) {
-                this.lastSelectedTab = ProfileTab.valuesCustom()[bundle.getInt("lastSelectedTab")];
+                this.lastSelectedTab = ProfileTab.values()[bundle.getInt("lastSelectedTab")];
             }
             if (bundle.containsKey("lastSelectedChatterID")) {
                 this.lastSelectedChatterID = (ChatterID) bundle.getParcelable("lastSelectedChatterID");

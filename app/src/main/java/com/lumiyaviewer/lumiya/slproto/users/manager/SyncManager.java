@@ -76,7 +76,7 @@ public class SyncManager {
         if (f226xb1d54699 != null) {
             return f226xb1d54699;
         }
-        int[] iArr = new int[ChatterID.ChatterType.valuesCustom().length];
+        int[] iArr = new int[ChatterID.ChatterType.values().length];
         try {
             iArr[ChatterID.ChatterType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -108,7 +108,7 @@ public class SyncManager {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onChatterNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m371x9b8293ab(ChatterNameRetriever chatterNameRetriever) {
+    public void onChatterNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.3
             private final /* synthetic */ void $m$0() {
                 SyncManager.this.m370x9b8293aa();
@@ -123,7 +123,7 @@ public class SyncManager {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onFlushChatterNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m372x9b8293ac(ChatterNameRetriever chatterNameRetriever) {
+    public void onFlushChatterNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         this.flushChatters.remove(chatterNameRetriever.chatterID);
         chatterNameRetriever.dispose();
@@ -135,7 +135,7 @@ public class SyncManager {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMyNameRetrieved, reason: merged with bridge method [inline-methods] */
-    public void m367x9b8293a7(ChatterNameRetriever chatterNameRetriever) {
+    public void onMyNameRetrieved(ChatterNameRetriever chatterNameRetriever) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.4
             private final /* synthetic */ void $m$0() {
                 SyncManager.this.m370x9b8293aa();
@@ -150,7 +150,7 @@ public class SyncManager {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: processMessagesFlushed, reason: merged with bridge method [inline-methods] */
-    public void m376xcf5b7a09(ImmutableList<Long> immutableList) {
+    public void processMessagesFlushed(ImmutableList<Long> immutableList) {
         Iterator<Long> it = immutableList.iterator();
         while (it.hasNext()) {
             ChatMessage load = this.chatMessageDao.load(it.next());
@@ -173,7 +173,7 @@ public class SyncManager {
             }
             this.chatterNameRetriever = new ChatterNameRetriever(fromDatabaseObject, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.1
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    SyncManager.this.m371x9b8293ab(chatterNameRetriever);
+                    SyncManager.this.onChatterNameRetrieved(chatterNameRetriever);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -202,7 +202,7 @@ public class SyncManager {
             if (this.myNameRetriever == null) {
                 this.myNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.2
                     private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                        SyncManager.this.m367x9b8293a7(chatterNameRetriever);
+                        SyncManager.this.onMyNameRetrieved(chatterNameRetriever);
                     }
 
                     @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -303,7 +303,7 @@ public class SyncManager {
                 if (!this.flushChatters.containsKey(chatterID)) {
                     new ChatterNameRetriever(chatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            SyncManager.this.m372x9b8293ac(chatterNameRetriever);
+                            SyncManager.this.onFlushChatterNameRetrieved(chatterNameRetriever);
                         }
 
                         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated
@@ -333,7 +333,7 @@ public class SyncManager {
     public void onMessagesFlushed(final ImmutableList<Long> immutableList) {
         this.dbExecutor.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$AZwop9CtlZWAAgrWZJSwnA0FdZ8.9
             private final /* synthetic */ void $m$0() {
-                SyncManager.this.m376xcf5b7a09((ImmutableList) immutableList);
+                SyncManager.this.processMessagesFlushed((ImmutableList) immutableList);
             }
 
             @Override // java.lang.Runnable

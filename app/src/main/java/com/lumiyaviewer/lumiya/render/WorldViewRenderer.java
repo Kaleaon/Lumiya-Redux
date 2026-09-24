@@ -79,7 +79,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     private final boolean requestGL20;
     private final Handler stateHandler;
     private final SynchronousExecutor renderThreadExecutor = new SynchronousExecutor();
-    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(this.renderThreadExecutor, obj -> m59com_lumiyaviewer_lumiya_render_WorldViewRenderermthref0((SLAgentCircuit) obj));
+    private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(this.renderThreadExecutor, obj -> onAgentCircuit((SLAgentCircuit) obj));
     private final AtomicReference<RenderContext> renderContext = new AtomicReference<>();
 
     @Nullable
@@ -162,7 +162,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m59com_lumiyaviewer_lumiya_render_WorldViewRenderermthref0(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (sLAgentCircuit == null) {
             this.avatarControl = null;
             this.parcelInfo = null;

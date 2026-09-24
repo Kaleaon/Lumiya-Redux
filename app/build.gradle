@@ -10,6 +10,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def originalBytecodeList = rootProject.file('tools/recover/bytecode_classes.txt')
+def originalBytecodeClasses = originalBytecodeList.exists()
+    ? originalBytecodeList.readLines().collect { it.trim() }.findAll { it && !it.startsWith('#') }
+    : []
+
 android {
     namespace 'com.lumiyaviewer.lumiya'
     compileSdk 34
@@ -78,12 +83,27 @@ android {
         }
     }
 
+    // Pin every resource that existed in Lumiya 3.4.2 to its original id
+    // (generated from recovered/android/res/values/public.xml). Original
+    // bytecode linked from libs/lumiya-original-classes.jar and any id literal
+    // a decompiler left behind then point at the right resource.
+    androidResources {
+        additionalParameters += ['--stable-ids', file('stable-ids.txt').absolutePath]
+    }
+
     // Keep the shipped native libs (librawbuf.so, libopenjpeg.so, libgvr.so)
     // in src/main/jniLibs/<abi>/. Cleanup gate: remove libgvr.so only after
     // Cardboard/OpenXR parity lands and rollout confidence is confirmed.
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
+            // Classes whose recovered source does not yet reproduce the
+            // original bytecode ship as that original bytecode instead
+            // (tools/recover/legacy/build_legacy_jar.sh). Their .java files
+            // stay in the tree as the work-in-progress recovery but are not
+            // compiled. Remove a line from bytecode_classes.txt once
+            // tools/verify/dexdiff.py reports the source version as OK.
+            java.exclude originalBytecodeClasses.collect { "${it}.java" }
         }
     }
 }
@@ -190,6 +210,9 @@ tasks.withType(JavaCompile).configureEach {
 //  the remap (android.support → androidx).
 // -------------------------------------------------------------------------
 dependencies {
+    if (!originalBytecodeClasses.isEmpty()) {
+        implementation files('libs/lumiya-original-classes.jar')
+    }
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.9.25')
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
 

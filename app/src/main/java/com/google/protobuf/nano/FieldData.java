@@ -33,7 +33,7 @@ class FieldData implements Cloneable {
     }
 
     /* renamed from: clone, reason: merged with bridge method [inline-methods] */
-    public final FieldData m9clone() {
+    public final FieldData clone() {
         FieldData fieldData = new FieldData();
         try {
             fieldData.cachedExtension = this.cachedExtension;

@@ -20,7 +20,7 @@ public class UserNotesEditFragment extends TextFieldEditFragment implements Back
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAvatarNotes, reason: merged with bridge method [inline-methods] */
-    public void m520x6c22cc6e(AvatarNotesReply avatarNotesReply) {
+    public void onAvatarNotes(AvatarNotesReply avatarNotesReply) {
         setOriginalText(SLMessage.stringFromVariableUTF(avatarNotesReply.Data_Field.Notes).trim());
     }
 
@@ -45,7 +45,7 @@ public class UserNotesEditFragment extends TextFieldEditFragment implements Back
         }
         this.avatarNotesSubscription = this.userManager.getAvatarNotes().getPool().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$gtFtIPtqrsfNaJBMezEYcryNxGg
             private final /* synthetic */ void $m$0(Object obj) {
-                UserNotesEditFragment.this.m520x6c22cc6e((AvatarNotesReply) obj);
+                UserNotesEditFragment.this.onAvatarNotes((AvatarNotesReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

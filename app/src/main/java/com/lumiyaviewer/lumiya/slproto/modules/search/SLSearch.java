@@ -82,7 +82,7 @@ public class SLSearch extends SLModule {
                 if (f129xca68d786 != null) {
                     return f129xca68d786;
                 }
-                int[] iArr = new int[SearchGridQuery.SearchType.valuesCustom().length];
+                int[] iArr = new int[SearchGridQuery.SearchType.values().length];
                 try {
                     iArr[SearchGridQuery.SearchType.Groups.ordinal()] = 1;
                 } catch (NoSuchFieldError e) {

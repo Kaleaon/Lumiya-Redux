@@ -53,7 +53,7 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
             if (f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
                 return f52comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
             }
-            int[] iArr = new int[TextureClass.valuesCustom().length];
+            int[] iArr = new int[TextureClass.values().length];
             try {
                 iArr[TextureClass.Asset.ordinal()] = 3;
             } catch (NoSuchFieldError e) {

@@ -86,7 +86,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     private ImmutableMap<Integer, MenuItem> folderActionMenuItems = ImmutableMap.of();
     private final SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.6
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m605com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref0((InventoryEntryList) obj);
+            InventoryFragment.this.onInventoryEntryList((InventoryEntryList) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -96,7 +96,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, InventoryManager.InventoryClipboardEntry> clipboardEntry = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.7
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m606com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref1((InventoryManager.InventoryClipboardEntry) obj);
+            InventoryFragment.this.onClipboardEntry((InventoryManager.InventoryClipboardEntry) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -106,7 +106,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.8
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m607com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref2((SLAgentCircuit) obj);
+            InventoryFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -116,7 +116,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<UUID, Boolean> folderLoading = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.9
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m609com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref4((Boolean) obj);
+            InventoryFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -126,7 +126,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, Boolean> searchRunning = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.10
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m609com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref4((Boolean) obj);
+            InventoryFragment.this.onLoadingStatusChanged((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -136,7 +136,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.11
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m610com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref5((ImmutableMap) obj);
+            InventoryFragment.this.onWornAttachmentsChanged((ImmutableMap) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -146,7 +146,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
     });
     private final SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$MXulZZBv5zNDEqgJzTmU0EFG-10.12
         private final /* synthetic */ void $m$0(Object obj) {
-            InventoryFragment.this.m611com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref6((Table) obj);
+            InventoryFragment.this.onWornWearablesChanged((Table) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -181,7 +181,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
         if (f446x959df7ce != null) {
             return f446x959df7ce;
         }
-        int[] iArr = new int[InventoryActivity.SelectAction.valuesCustom().length];
+        int[] iArr = new int[InventoryActivity.SelectAction.values().length];
         try {
             iArr[InventoryActivity.SelectAction.applyFirstLife.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -359,19 +359,19 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m607com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref2(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         updateFolderActionItems();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onClipboardEntry, reason: merged with bridge method [inline-methods] */
-    public void m606com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref1(InventoryManager.InventoryClipboardEntry inventoryClipboardEntry) {
+    public void onClipboardEntry(InventoryManager.InventoryClipboardEntry inventoryClipboardEntry) {
         updateFolderActionItems();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onInventoryEntryList, reason: merged with bridge method [inline-methods] */
-    public void m605com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref0(InventoryEntryList inventoryEntryList) {
+    public void onInventoryEntryList(InventoryEntryList inventoryEntryList) {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()));
         if (isForSelectItem()) {
             InventoryActivity.SelectAction selectAction = getSelectAction();
@@ -392,13 +392,13 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onLoadingStatusChanged, reason: merged with bridge method [inline-methods] and merged with bridge method [inline-methods] */
-    public void m609com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref4(Boolean bool) {
+    public void onLoadingStatusChanged(Boolean bool) {
         updateLoadingStatus();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onWornAttachmentsChanged, reason: merged with bridge method [inline-methods] */
-    public void m610com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref5(ImmutableMap<UUID, String> immutableMap) {
+    public void onWornAttachmentsChanged(ImmutableMap<UUID, String> immutableMap) {
         if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap);
         }
@@ -406,7 +406,7 @@ public class InventoryFragment extends FragmentWithTitle implements ReloadableFr
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onWornWearablesChanged, reason: merged with bridge method [inline-methods] */
-    public void m611com_lumiyaviewer_lumiya_ui_inventory_InventoryFragmentmthref6(Table<SLWearableType, UUID, SLWearable> table) {
+    public void onWornWearablesChanged(Table<SLWearableType, UUID, SLWearable> table) {
         if (this.adapter != null) {
             this.adapter.setWornWearables(table);
         }

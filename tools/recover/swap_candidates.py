@@ -72,6 +72,53 @@ def compile_errors():
     return errs
 
 
+def _line_fix(path, line_no, fn):
+    lines = path.read_text(encoding='utf-8').split('\n')
+    old = lines[line_no - 1]
+    new = fn(old)
+    if new == old:
+        return False
+    lines[line_no - 1] = new
+    path.write_text('\n'.join(lines), encoding='utf-8')
+    return True
+
+
+def repair(path, errs):
+    """Apply the known rewrite for each javac error; True if anything changed.
+
+    Every rule maps a jadx artifact back to the Java the bytecode came from.
+    The verifier re-checks the result, so a wrong guess is rejected later."""
+    changed = False
+    for ctx in errs:
+        m = re.match(r'\S+:(\d+): error: (.*)', ctx)
+        if not m:
+            continue
+        ln, msg = int(m.group(1)), m.group(2)
+        a = re.search(r'<anonymous [\w.]+> cannot be converted to ([\w.]+)', msg)
+        if a:
+            # Inside an anonymous class jadx writes ((Outer) this) for the
+            # captured outer instance, i.e. Outer.this.
+            cls = re.escape(a.group(1).split('.')[-1])
+            changed |= _line_fix(path, ln, lambda t: re.sub(r'\(\((%s)\) this\)|\((%s)\) this' % (cls, cls),
+                                                         lambda mm: (mm.group(1) or mm.group(2)) + '.this', t))
+            continue
+        a = re.search(r'cannot assign a value to final variable (\w+)', msg)
+        if a:
+            # Synthetic enum switch-map arrays: jadx marks them final but
+            # keeps the lazy-init assignment.
+            text = path.read_text(encoding='utf-8')
+            new = re.sub(r'(\bstatic\s+)final\s+(int\[\]\s+%s\b)' % re.escape(a.group(1)), r'\1\2', text)
+            if new != text:
+                path.write_text(new, encoding='utf-8')
+                changed = True
+            continue
+        if 'anonymous class implements interface; cannot have arguments' in msg:
+            # jadx passes captured variables to the synthetic constructor.
+            changed |= _line_fix(path, ln, lambda t: re.sub(r'(new\s+[\w.<>, ?]+)\((?:[^()]|\([^()]*\))+\)(\s*\{)', r'\1()\2', t, count=1))
+            continue
+    return changed
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apk', required=True)
@@ -96,7 +143,7 @@ def main():
                 continue
             rel = rel_of(cls)
             cand = cdir / rel
-            if rel in protected or not cand.exists():
+            if rel in protected or not cand.exists() or rel.endswith(('_ViewBinding.java', '/R.java')):
                 continue
             targets[rel] = cls
         print('[%s] %d candidate files' % (name, len(targets)))
@@ -117,17 +164,21 @@ def main():
                 (SRC / rel).write_text(old, encoding='utf-8')
             log.write('%s REVERT %s (%s)\n' % (name, rel, why))
 
-        for it in range(12):
+        attempts = {}
+        for it in range(20):
             errs = compile_errors()
             if not errs:
                 break
             swapped_err = [r for r in errs if r in backups]
             for r in swapped_err:
-                revert(r, 'compile: ' + errs[r][0][:200])
+                attempts[r] = attempts.get(r, 0) + 1
+                if attempts[r] <= 4 and repair(SRC / r, errs[r]):
+                    continue
+                revert(r, 'compile: ' + errs[r][0][:400])
             if not swapped_err:
                 # A swapped class broke its users; blame the ones they mention.
                 blamed = set()
-                ctx = ' '.join(c for v in errs.values() for c in v)
+                ctx = ' '.join((SRC / f).read_text(encoding='utf-8') for f in errs if (SRC / f).exists())
                 for rel in list(backups):
                     simple = pathlib.Path(rel).stem
                     if re.search(r'\b%s\b' % re.escape(simple), ctx):

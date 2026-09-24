@@ -32,7 +32,7 @@ public class PayUserFragment extends ChatterFragment {
     private final ChatterNameDisplayer chatterNameDisplayer = new ChatterNameDisplayer();
     private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$4LKDzNIyR_gCoOmHf_6XBk4qMJA.1
         private final /* synthetic */ void $m$0(Object obj) {
-            PayUserFragment.this.m433com_lumiyaviewer_lumiya_ui_chat_PayUserFragmentmthref0((Integer) obj);
+            PayUserFragment.this.onMyBalance((Integer) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -59,7 +59,7 @@ public class PayUserFragment extends ChatterFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMyBalance, reason: merged with bridge method [inline-methods] */
-    public void m433com_lumiyaviewer_lumiya_ui_chat_PayUserFragmentmthref0(Integer num) {
+    public void onMyBalance(Integer num) {
         if (this.unbinder != null) {
             if (num == null) {
                 this.paymentDetailsBalance.setVisibility(8);

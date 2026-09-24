@@ -172,7 +172,7 @@ public class SLMinimap extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: updateAvatarParcelData, reason: merged with bridge method [inline-methods] */
-    public void m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0() {
+    public void updateAvatarParcelData() {
         ParcelData parcelData = this.myAvatarParcelDataIndex >= 0 ? this.parcels.get(Integer.valueOf(this.parcelIDs[this.myAvatarParcelDataIndex])) : null;
         if (parcelData != null && this.afterTeleport) {
             this.afterTeleport = false;
@@ -445,7 +445,7 @@ public class SLMinimap extends SLModule {
     public void requestUpdateAvatarParcelData() {
         this.agentCircuit.execute(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.modules.-$Lambda$eaDiotW55nmaHN5_b1ikeJpLLsk
             private final /* synthetic */ void $m$0() {
-                SLMinimap.this.m222com_lumiyaviewer_lumiya_slproto_modules_SLMinimapmthref0();
+                SLMinimap.this.updateAvatarParcelData();
             }
 
             @Override // java.lang.Runnable

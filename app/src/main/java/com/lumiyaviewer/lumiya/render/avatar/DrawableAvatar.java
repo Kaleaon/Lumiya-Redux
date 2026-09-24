@@ -93,7 +93,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         this.pelvisTranslateZ = 0.0f;
         this.localAviWorldMatrix = new float[16];
         this.jointMatrixUpdated = false;
-        this.updateAttachmentsRunnable = this::m62com_lumiyaviewer_lumiya_render_avatar_DrawableAvatarmthref0;
+        this.updateAttachmentsRunnable = this::processUpdateAttachments;
         this.shapeParamsUpdate = this::m63x3d2f5f87;
         SLBaseAvatar sLBaseAvatar = SLBaseAvatar.getInstance();
         for (MeshIndex meshIndex : MeshIndex.VALUES) {
@@ -195,7 +195,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
     /* JADX WARN: Multi-variable type inference failed */
     /* JADX WARN: Type inference failed for: r0v27, types: [com.lumiyaviewer.lumiya.render.spatial.DrawListEntry[]] */
     /* renamed from: processUpdateAttachments, reason: merged with bridge method [inline-methods] */
-    public void m62com_lumiyaviewer_lumiya_render_avatar_DrawableAvatarmthref0() {
+    public void processUpdateAttachments() {
         DrawListPrimEntry[] drawListPrimEntryArr;
         boolean z;
         DrawableObject drawableObject;

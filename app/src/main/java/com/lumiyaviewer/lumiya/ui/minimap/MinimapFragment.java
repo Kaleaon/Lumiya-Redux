@@ -21,7 +21,7 @@ import java.util.UUID;
 public class MinimapFragment extends Fragment implements MinimapView.OnUserClickListener {
     private final SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapFragment.this.m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0((SLMinimap.MinimapBitmap) obj);
+            MinimapFragment.this.onMinimapBitmap((SLMinimap.MinimapBitmap) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -31,7 +31,7 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
     });
     private final SubscriptionData<SubscriptionSingleKey, SLMinimap.UserLocations> userLocations = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$XqnH7RvGuiq1TzRqXD2eGyM2ulM.1
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapFragment.this.m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1((SLMinimap.UserLocations) obj);
+            MinimapFragment.this.onUserLocations((SLMinimap.UserLocations) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -48,7 +48,7 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMinimapBitmap, reason: merged with bridge method [inline-methods] */
-    public void m650com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref0(SLMinimap.MinimapBitmap minimapBitmap) {
+    public void onMinimapBitmap(SLMinimap.MinimapBitmap minimapBitmap) {
         View view = getView();
         if (view != null) {
             ((MinimapView) view.findViewById(R.id.minimapView)).setMinimapBitmap(minimapBitmap);
@@ -57,7 +57,7 @@ public class MinimapFragment extends Fragment implements MinimapView.OnUserClick
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onUserLocations, reason: merged with bridge method [inline-methods] */
-    public void m651com_lumiyaviewer_lumiya_ui_minimap_MinimapFragmentmthref1(SLMinimap.UserLocations userLocations) {
+    public void onUserLocations(SLMinimap.UserLocations userLocations) {
         View view = getView();
         if (view != null) {
             ((MinimapView) view.findViewById(R.id.minimapView)).setUserLocations(userLocations);

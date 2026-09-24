@@ -118,7 +118,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         }
         this.bakingThread = new Thread(new Runnable() { // from class: com.lumiyaviewer.lumiya.slproto.baker.-$Lambda$qb61PwDoxRPFEOdyYwns3UfUTbM
             private final /* synthetic */ void $m$0() {
-                BakeProcess.this.m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0();
+                BakeProcess.this.bakeAppearance();
             }
 
             @Override // java.lang.Runnable
@@ -133,7 +133,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         UUID uploadedID;
         SLTextureEntryFace create = SLTextureEntryFace.create(new MutableSLTextureEntryFace(-1));
         SLTextureEntryFace[] sLTextureEntryFaceArr = new SLTextureEntryFace[32];
-        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.valuesCustom()) {
+        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.values()) {
             int ordinal = bakedTextureIndex.getFaceIndex().ordinal();
             BakedImage bakedImage = this.bakedImages.get(bakedTextureIndex);
             if (bakedImage != null && (uploadedID = bakedImage.getUploadedID()) != null) {
@@ -147,7 +147,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: bakeAppearance, reason: merged with bridge method [inline-methods] */
-    public void m150com_lumiyaviewer_lumiya_slproto_baker_BakeProcessmthref0() {
+    public void bakeAppearance() {
         Debug.Printf("Baking: Requesting texture data.", new Object[0]);
         Iterator<List<WearableTextureData>> it = this.wearables.values().iterator();
         while (it.hasNext()) {
@@ -173,7 +173,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
         boolean isWearingSkirt = isWearingSkirt();
         File cacheDir = GlobalOptions.getInstance().getCacheDir("baker");
         cacheDir.mkdirs();
-        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.valuesCustom()) {
+        for (BakedTextureIndex bakedTextureIndex : BakedTextureIndex.values()) {
             if (Thread.interrupted()) {
                 Debug.Log("Baking: interrupted.");
                 this.eventBus.publish(new SLBakingProgressEvent(false, true, 0));
@@ -278,7 +278,7 @@ public class BakeProcess implements SLTextureUploadRequest.TextureUploadComplete
             bakedImageUploadRequest.bakedImage.setUploadedID(bakedImageUploadRequest.getTextureID());
             this.bakedImages.put(bakedImageUploadRequest.bakedIndex, bakedImageUploadRequest.bakedImage);
             boolean isWearingSkirt = isWearingSkirt();
-            BakedTextureIndex[] valuesCustom = BakedTextureIndex.valuesCustom();
+            BakedTextureIndex[] valuesCustom = BakedTextureIndex.values();
             int length = valuesCustom.length;
             int i3 = 0;
             boolean z2 = true;

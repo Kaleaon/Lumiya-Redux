@@ -73,7 +73,7 @@ public class LLSDStreamingParser {
         if (f115x653d09df != null) {
             return f115x653d09df;
         }
-        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.valuesCustom().length];
+        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.values().length];
         try {
             iArr[LLSDContentTypeDetector.LLSDContentType.llsdBinary.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -91,7 +91,7 @@ public class LLSDStreamingParser {
         if (f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues != null) {
             return f116comlumiyaviewerlumiyaslprotollsdLLSDNodeTypeSwitchesValues;
         }
-        int[] iArr = new int[LLSDNodeType.valuesCustom().length];
+        int[] iArr = new int[LLSDNodeType.values().length];
         try {
             iArr[LLSDNodeType.llsdArray.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

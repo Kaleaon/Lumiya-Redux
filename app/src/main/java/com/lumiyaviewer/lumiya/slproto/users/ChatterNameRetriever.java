@@ -49,7 +49,7 @@ public class ChatterNameRetriever {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
-    public void m272x6559d93c(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ParcelData parcelData = currentLocationInfo.parcelData();
         String name = parcelData != null ? parcelData.getName() : null;
         if (Objects.equal(this.resolvedName, name)) {
@@ -64,7 +64,7 @@ public class ChatterNameRetriever {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onGroupProfile, reason: merged with bridge method [inline-methods] */
-    public void m274x6559d93e(GroupProfileReply groupProfileReply) {
+    public void onGroupProfile(GroupProfileReply groupProfileReply) {
         this.resolvedName = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
         this.resolvedSecondaryName = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
         OnChatterNameUpdated onChatterNameUpdated = this.listener.get();
@@ -75,7 +75,7 @@ public class ChatterNameRetriever {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onUserName, reason: merged with bridge method [inline-methods] */
-    public void m273x6559d93d(UserName userName) {
+    public void onUserName(UserName userName) {
         Debug.Printf("Resolved name for %s", userName.getUuid());
         if (GlobalOptions.getInstance().isLegacyUserNames()) {
             this.resolvedName = userName.getUserName();
@@ -111,13 +111,13 @@ public class ChatterNameRetriever {
             return;
         }
         if (this.chatterID.getChatterType() == ChatterID.ChatterType.Local) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), this.executor, currentLocationInfo -> m272x6559d93c(currentLocationInfo));
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), this.executor, currentLocationInfo -> onCurrentLocation(currentLocationInfo));
             return;
         }
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
-            this.subscription = userManager.getUserNames().subscribe(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, userName -> m273x6559d93d(userName));
+            this.subscription = userManager.getUserNames().subscribe(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), this.executor, userName -> onUserName(userName));
         } else if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
-            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, groupProfileReply -> m274x6559d93e(groupProfileReply));
+            this.subscription = userManager.getCachedGroupProfiles().getPool().subscribe(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.executor, groupProfileReply -> onGroupProfile(groupProfileReply));
         } else {
             this.subscription = null;
         }

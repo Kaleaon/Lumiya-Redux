@@ -35,7 +35,7 @@ public class BakeLayer {
         if (f64x335e3db9 != null) {
             return f64x335e3db9;
         }
-        int[] iArr = new int[SLAvatarParamColor.ColorOperation.valuesCustom().length];
+        int[] iArr = new int[SLAvatarParamColor.ColorOperation.values().length];
         try {
             iArr[SLAvatarParamColor.ColorOperation.Blend.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

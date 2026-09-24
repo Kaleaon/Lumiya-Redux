@@ -145,7 +145,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAddNewRoleButton, reason: merged with bridge method [inline-methods] */
-    public void m507x6f5149fc(View view) {
+    public void onAddNewRoleButton(View view) {
         if ((getMyGroupPowers() & 16) != 0) {
             DetailsActivity.showEmbeddedDetails(getActivity(), GroupRoleDetailsFragment.class, GroupRoleDetailsFragment.makeSelection(this.chatterID, null));
         }
@@ -181,7 +181,7 @@ public class GroupRolesProfileTab extends ChatterReloadableFragment implements L
         });
         inflate.findViewById(R.id.add_new_role_button).setOnClickListener(new View.OnClickListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$zWKNEqUupU__bUM7E0seQ8xMgmU
             private final /* synthetic */ void $m$0(View view) {
-                GroupRolesProfileTab.this.m507x6f5149fc(view);
+                GroupRolesProfileTab.this.onAddNewRoleButton(view);
             }
 
             @Override // android.view.View.OnClickListener

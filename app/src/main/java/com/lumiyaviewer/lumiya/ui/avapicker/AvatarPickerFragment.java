@@ -50,23 +50,23 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public int getCount() {
-            return ContactListType.valuesCustom().length;
+            return ContactListType.values().length;
         }
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public CharSequence getPageTitle(int i) {
-            if (i < 0 || i >= ContactListType.valuesCustom().length) {
+            if (i < 0 || i >= ContactListType.values().length) {
                 return null;
             }
-            return ContactListType.valuesCustom()[i].toString();
+            return ContactListType.values()[i].toString();
         }
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public Object instantiateItem(ViewGroup viewGroup, int i) {
-            if (i < 0 || i >= ContactListType.valuesCustom().length) {
+            if (i < 0 || i >= ContactListType.values().length) {
                 return null;
             }
-            ContactListType contactListType = ContactListType.valuesCustom()[i];
+            ContactListType contactListType = ContactListType.values()[i];
             ListView listView = new ListView(this.context);
             listView.setOnItemClickListener(AvatarPickerFragment.this);
             listView.setAdapter(AvatarPickerFragment.this.createListAdapter(AvatarPickerFragment.this.getContext(), ActivityUtils.getUserManager(AvatarPickerFragment.this.getArguments()), contactListType));
@@ -116,7 +116,7 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
         if (f234x76a4d210 != null) {
             return f234x76a4d210;
         }
-        int[] iArr = new int[ContactListType.valuesCustom().length];
+        int[] iArr = new int[ContactListType.values().length];
         try {
             iArr[ContactListType.Friends.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

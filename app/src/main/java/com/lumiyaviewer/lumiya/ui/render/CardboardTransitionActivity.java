@@ -21,7 +21,7 @@ public class CardboardTransitionActivity extends AppCompatActivity {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: tryToStartCardboard, reason: merged with bridge method [inline-methods] */
-    public void m795xf8bcab63() {
+    public void tryToStartCardboard() {
         if (this.waitAttempts >= 15 || (!TextureMemoryTracker.hasActiveRenderer())) {
             this.handler.postDelayed(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$4MERJxt3ZMMK7daj1OhYLtxY69Y
                 private final /* synthetic */ void $m$0() {
@@ -39,7 +39,7 @@ public class CardboardTransitionActivity extends AppCompatActivity {
         this.waitAttempts++;
         this.handler.postDelayed(new Runnable() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$4MERJxt3ZMMK7daj1OhYLtxY69Y.1
             private final /* synthetic */ void $m$0() {
-                CardboardTransitionActivity.this.m795xf8bcab63();
+                CardboardTransitionActivity.this.tryToStartCardboard();
             }
 
             @Override // java.lang.Runnable
@@ -76,6 +76,6 @@ public class CardboardTransitionActivity extends AppCompatActivity {
     @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
     protected void onResume() {
         super.onResume();
-        m795xf8bcab63();
+        tryToStartCardboard();
     }
 }

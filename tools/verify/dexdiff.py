@@ -33,6 +33,7 @@ import collections
 import json
 import os
 import re
+import struct
 import sys
 
 SUPPORT_RE = re.compile(r'L(?:android/support|androidx|android/arch)/[\w/$]*?/?([\w$]+);')
@@ -62,6 +63,8 @@ def norm_owner(t):
     # Editable vs CharSequence) depends on a local's declared type, not on
     # behaviour; compare by method name + descriptor only.
     t = norm_type(t)
+    if t == 'Lcom/lumiyaviewer/lumiya/compat/PlatformCompat;':
+        return '*'  # redirected platform call (tools/recover/legacy)
     if t == 'LLAMBDA;' or t.startswith(APP_PREFIXES):
         return t
     return '*'
@@ -120,10 +123,23 @@ CONST_RE = re.compile(r'^const(?:/4|/16|/high16|-wide/16|-wide/32|-wide/high16|-
 STRING_RE = re.compile(r'^const-string(?:/jumbo)?\s+\w+,\s*"(.*)"$')
 
 
+def payload_value(tok):
+    tok = tok.strip()
+    try:
+        if tok.endswith('f') and not tok.startswith('0x'):
+            return struct.unpack('>i', struct.pack('>f', float(tok[:-1])))[0]
+        if tok.endswith('d') or ('.' in tok and not tok.startswith('0x')):
+            return struct.unpack('>q', struct.pack('>d', float(tok.rstrip('d'))))[0]
+        return int(tok.rstrip('tsL'), 16)
+    except (ValueError, struct.error):
+        return None
+
+
 def parse_smali(path, resmap):
     cls = None
     methods = {}
     cur = None
+    in_array = None
     for raw in open(path, encoding='utf-8', errors='replace'):
         line = raw.strip()
         if not line or line.startswith('#') or line.startswith('.line') or line.startswith('.local') \
@@ -137,7 +153,12 @@ def parse_smali(path, resmap):
             sig = line.split()[-1]
             name, desc = sig.split('(', 1)
             key = norm_mname(name) + '(' + norm_types(desc)
-            if name == '$values':
+            if name.startswith('access$'):
+                # Synthetic accessors exist only when the compiler needs them
+                # (private member touched from a nested class); their bodies
+                # are compared in the per-class bucket.
+                key = 'LAMBDA'
+            elif name == '$values':
                 # javac 15+ moves the enum $VALUES initialiser out of <clinit>.
                 key = '<clinit>()V'
             elif re.match(r'^-get.*SwitchesValues$', name) or name.startswith('$SWITCH_TABLE$'):
@@ -160,6 +181,21 @@ def parse_smali(path, resmap):
         if cur is None:
             continue
         op = line.split(None, 1)[0]
+        if op == '.array-data':
+            in_array = 0
+            continue
+        if op == '.end' and line.startswith('.end array-data'):
+            # dx fills small arrays with indexed aputs, d8 with a payload;
+            # record the indices either way.
+            cur.numbers.update(i for i in range(2, (in_array or 0) + 1))
+            in_array = None
+            continue
+        if in_array is not None:
+            in_array += 1
+            v = payload_value(line)
+            if v is not None and v not in (0, 1, -1):
+                cur.numbers.add(v)
+            continue
         if op.startswith('.') or op.startswith(':'):
             if op in ('.catch', '.catchall'):
                 cur.flags.add('try')
@@ -167,13 +203,25 @@ def parse_smali(path, resmap):
                 cur.flags.add('switch')
             continue
         cur.size += 1
+        op = op.replace('/range', '')
         if op.startswith('invoke-'):
             m = REF_RE.search(line)
+            if m and m.group(2) == 'desiredAssertionStatus':
+                continue  # d8 strips `assert` support
             if m:
                 owner = norm_owner(m.group(1))
                 if owner == 'LLAMBDA;':
                     cur.flags.add('lambda')
                     continue
+                if m.group(2).startswith('access$'):
+                    continue
+                mname = norm_mname(m.group(2))
+                if mname == 'LAMBDA' or re.search(r'SwitchesValues$', m.group(2)):
+                    continue  # synthetic accessor / lambda / switch-map helper
+                if m.group(2) == '<init>' and ANON_RE.search(m.group(1)):
+                    continue  # anonymous-class ctor: captured-args signature varies
+                if line[m.start() - 1:m.start()] == '[':
+                    owner = '*'  # array clone()
                 desc = norm_types(m.group(3))
                 if owner == '*':
                     desc = desc[:desc.index(')') + 1]  # covariant library returns
@@ -182,12 +230,12 @@ def parse_smali(path, resmap):
             m = REF_RE.search(line)
             if m:
                 owner = norm_type(m.group(1))
-                if owner == 'LLAMBDA;':
+                if owner == 'LLAMBDA;' or 'SwitchesValues' in m.group(2) or m.group(2).startswith(('$SwitchMap$', 'this$', 'val$')):
                     cur.flags.add('lambda')
                     continue
                 ref = owner + '->' + m.group(2) + norm_types(m.group(3))
                 cur.fields[('W ' if 'put' in op else 'R ') + ref] += 1
-        elif op in ('new-instance', 'check-cast', 'instance-of', 'const-class', 'new-array', 'filled-new-array'):
+        elif op in ('new-instance', 'instance-of', 'const-class', 'new-array', 'filled-new-array'):
             m = TYPE_RE.search(line)
             if m:
                 t = norm_type(m.group(0))
@@ -195,6 +243,8 @@ def parse_smali(path, resmap):
                     cur.flags.add('lambda')
                     continue
                 kind = 'array' if 'array' in op else op.split('-')[0]
+                if op == 'new-array':
+                    cur.flags.add('newarray')
                 if op == 'filled-new-array':
                     # d8 folds `new-array` + indexed `aput`s into one
                     # instruction; restore the size/index constants dx emits.
@@ -262,15 +312,27 @@ def diff_method(o, n):
             missing[attr] = miss
         if add:
             added[attr] = add
-    miss = sorted(map(str, o.numbers - n.numbers))
+    lost = o.numbers - n.numbers
+    if 'newarray' in o.flags or o.types.get('array') or any(k.startswith('array ') for k in o.types):
+        # dx initialises arrays with one aput per index, d8 with a payload or
+        # filled-new-array: the index constants are not behaviour.
+        lost = {v for v in lost if not (isinstance(v, int) and 2 <= v <= 64)}
+    miss = sorted(map(str, lost))
     add = sorted(map(str, n.numbers - o.numbers))
     if miss:
         missing['numbers'] = miss
     if add:
         added['numbers'] = add
-    fm = sorted(o.flags - n.flags - {'lambda'})
+    fm = sorted(o.flags - n.flags - {'lambda', 'newarray'})
     if fm:
         missing['flags'] = fm
+    sdk = 'R Landroid/os/Build$VERSION;->SDK_INT:I'
+    if missing and o.fields.get(sdk) and not n.fields.get(sdk):
+        # A version check against SDK_INT disappeared together with the
+        # code it guarded: minSdk 26 made that branch dead (d8 folds it for
+        # original bytecode; the source cleanup removed it on purpose).
+        added['sdk_folded'] = missing
+        missing = {}
     return missing, added
 
 
@@ -299,7 +361,8 @@ def compare(orig, new):
                     # Private methods can be renamed or inlined without
                     # changing behaviour; their bodies are checked in the
                     # bucket. A missing overridable method breaks dispatch.
-                    if not m.private:
+                    nested_ctor = mk.startswith('<init>(') and '$' in cname
+                    if not (m.private or nested_ctor):
                         entry['missing_methods'].append(cname + '->' + mk)
                     o_bucket.merge(m)
                     continue

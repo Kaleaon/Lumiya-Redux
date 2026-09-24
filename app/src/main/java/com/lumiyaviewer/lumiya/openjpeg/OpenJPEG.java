@@ -52,7 +52,7 @@ public class OpenJPEG implements GLTexture {
         if (f5x2156f8d4 != null) {
             return f5x2156f8d4;
         }
-        int[] iArr = new int[ImageFormat.valuesCustom().length];
+        int[] iArr = new int[ImageFormat.values().length];
         try {
             iArr[ImageFormat.JPEG2000.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

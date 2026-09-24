@@ -46,7 +46,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     private ChatterNameRetriever myAvatarNameRetriever = null;
     private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.myava.-$Lambda$E97LbIKTNF028fQGuPv0gXqIQrc
         private final /* synthetic */ void $m$0(Object obj) {
-            MyAvatarFragment.this.m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0((Integer) obj);
+            MyAvatarFragment.this.onMyBalance((Integer) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -65,7 +65,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
             if (f463x282be546 != null) {
                 return f463x282be546;
             }
-            int[] iArr = new int[MyAvatarDetailsPages.valuesCustom().length];
+            int[] iArr = new int[MyAvatarDetailsPages.values().length];
             try {
                 iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
             } catch (NoSuchFieldError e) {
@@ -87,7 +87,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         }
 
         public MyAvatarPagesAdapter(Context context) {
-            super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.valuesCustom());
+            super(context, android.R.layout.simple_list_item_1, MyAvatarDetailsPages.values());
         }
 
         @Override // android.widget.ArrayAdapter, android.widget.Adapter
@@ -114,7 +114,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
         if (f462x282be546 != null) {
             return f462x282be546;
         }
-        int[] iArr = new int[MyAvatarDetailsPages.valuesCustom().length];
+        int[] iArr = new int[MyAvatarDetailsPages.values().length];
         try {
             iArr[MyAvatarDetailsPages.pageBalance.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -153,7 +153,7 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMyBalance, reason: merged with bridge method [inline-methods] */
-    public void m664com_lumiyaviewer_lumiya_ui_myava_MyAvatarFragmentmthref0(Integer num) {
+    public void onMyBalance(Integer num) {
         if (this.unbinder != null) {
             ListAdapter adapter = this.myAvatarOptionsList.getAdapter();
             if (adapter instanceof MyAvatarPagesAdapter) {

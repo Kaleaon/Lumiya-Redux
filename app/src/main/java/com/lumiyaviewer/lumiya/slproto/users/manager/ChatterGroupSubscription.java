@@ -20,7 +20,7 @@ class ChatterGroupSubscription extends ChatterSubscription {
         super(sortedChatterList, chatterIDGroup, userManager);
         this.groupProfileSubscription = userManager.getCachedGroupProfiles().getPool().subscribe(chatterIDGroup.getChatterUUID(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.users.manager.-$Lambda$eTv5Cj2a9ssR4ZBNRV1Lgb181AY
             private final /* synthetic */ void $m$0(Object obj) {
-                ChatterGroupSubscription.this.m299xb0ce45f9((GroupProfileReply) obj);
+                ChatterGroupSubscription.this.onGroupProfile((GroupProfileReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -32,7 +32,7 @@ class ChatterGroupSubscription extends ChatterSubscription {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onGroupProfile, reason: merged with bridge method [inline-methods] */
-    public void m299xb0ce45f9(GroupProfileReply groupProfileReply) {
+    public void onGroupProfile(GroupProfileReply groupProfileReply) {
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(groupProfileReply.GroupData_Field.Name);
         if (Objects.equal(stringFromVariableOEM, this.displayData.displayName)) {
             return;

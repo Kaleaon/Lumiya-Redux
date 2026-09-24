@@ -72,7 +72,7 @@ public class SLGridConnection extends SLConnection {
         if (f62x8f75539 != null) {
             return f62x8f75539;
         }
-        int[] iArr = new int[ConnectionState.valuesCustom().length];
+        int[] iArr = new int[ConnectionState.values().length];
         try {
             iArr[ConnectionState.Connected.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

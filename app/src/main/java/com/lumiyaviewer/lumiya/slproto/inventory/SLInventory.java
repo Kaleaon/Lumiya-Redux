@@ -246,7 +246,7 @@ public class SLInventory extends SLModule {
         this.searchProcessResultHandler = this.userManager.getInventoryManager().getSearchProcessRequestSource().attachRequestHandler(new AsyncRequestHandler(this.dbExecutor, this.searchRequestHandler));
         this.nextFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs
             private final /* synthetic */ void $m$0(Object obj) {
-                SLInventory.this.m184com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref0((SLInventoryEntry) obj);
+                SLInventory.this.onNextFolderFetched((SLInventoryEntry) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -255,7 +255,7 @@ public class SLInventory extends SLModule {
             }
         }, new Subscription.OnError() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.2
             private final /* synthetic */ void $m$0(Throwable th) {
-                SLInventory.this.m185com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref1(th);
+                SLInventory.this.onNextFolderError(th);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnError
@@ -266,7 +266,7 @@ public class SLInventory extends SLModule {
         if (this.rootFolderFetchNeeded) {
             this.rootFolderSubscription = new SubscriptionData<>(this.dbExecutor, new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.inventory.-$Lambda$eCHTl-_kh2tUCaOJ-O9NRHJvhjs.1
                 private final /* synthetic */ void $m$0(Object obj) {
-                    SLInventory.this.m186com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref2((SLInventoryEntry) obj);
+                    SLInventory.this.onRootFolderFetched((SLInventoryEntry) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -520,13 +520,13 @@ public class SLInventory extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onNextFolderError, reason: merged with bridge method [inline-methods] */
-    public void m185com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref1(Throwable th) {
+    public void onNextFolderError(Throwable th) {
         fetchNextFolder();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onNextFolderFetched, reason: merged with bridge method [inline-methods] */
-    public void m184com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref0(SLInventoryEntry sLInventoryEntry) {
+    public void onNextFolderFetched(SLInventoryEntry sLInventoryEntry) {
         if (Objects.equal(sLInventoryEntry.sessionID, this.circuitInfo.sessionID)) {
             fetchNextFolder();
         }
@@ -534,7 +534,7 @@ public class SLInventory extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onRootFolderFetched, reason: merged with bridge method [inline-methods] */
-    public void m186com_lumiyaviewer_lumiya_slproto_inventory_SLInventorymthref2(SLInventoryEntry sLInventoryEntry) {
+    public void onRootFolderFetched(SLInventoryEntry sLInventoryEntry) {
         this.rootFolderFetchNeeded = false;
         if (this.rootFolderSubscription != null) {
             this.rootFolderSubscription.unsubscribe();

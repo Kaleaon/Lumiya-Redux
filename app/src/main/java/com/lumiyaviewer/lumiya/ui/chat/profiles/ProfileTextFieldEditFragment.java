@@ -15,7 +15,7 @@ public abstract class ProfileTextFieldEditFragment extends TextFieldEditFragment
 
     /* JADX INFO: Access modifiers changed from: protected */
     /* renamed from: onAvatarProperties, reason: merged with bridge method [inline-methods] */
-    public abstract void m517x7aa22308(AvatarPropertiesReply avatarPropertiesReply);
+    public abstract void onAvatarProperties(AvatarPropertiesReply avatarPropertiesReply);
 
     @Override // com.lumiyaviewer.lumiya.ui.common.ChatterFragment
     protected void onShowUser(@Nullable ChatterID chatterID) {
@@ -28,7 +28,7 @@ public abstract class ProfileTextFieldEditFragment extends TextFieldEditFragment
         }
         this.avatarProperties = this.userManager.getAvatarProperties().getPool().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$6hJe-KPqqQcY7xiCxogddm78oYc
             private final /* synthetic */ void $m$0(Object obj) {
-                ProfileTextFieldEditFragment.this.m517x7aa22308((AvatarPropertiesReply) obj);
+                ProfileTextFieldEditFragment.this.onAvatarProperties((AvatarPropertiesReply) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

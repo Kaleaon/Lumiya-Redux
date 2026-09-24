@@ -58,7 +58,7 @@ public class NotificationChannels {
         if (f464x3582025 != null) {
             return f464x3582025;
         }
-        int[] iArr = new int[NotificationType.valuesCustom().length];
+        int[] iArr = new int[NotificationType.values().length];
         try {
             iArr[NotificationType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

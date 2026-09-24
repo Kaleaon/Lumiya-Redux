@@ -50,7 +50,7 @@ public class InventorySaveInfo implements Parcelable {
     }
 
     protected InventorySaveInfo(Parcel parcel) {
-        this.saveType = InventorySaveType.valuesCustom()[parcel.readInt()];
+        this.saveType = InventorySaveType.values()[parcel.readInt()];
         if (parcel.readByte() != 0) {
             this.saveItemUUID = UUID.fromString(parcel.readString());
         } else {

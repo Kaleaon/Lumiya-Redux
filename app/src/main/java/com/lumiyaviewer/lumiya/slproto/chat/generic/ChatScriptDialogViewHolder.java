@@ -51,7 +51,7 @@ public class ChatScriptDialogViewHolder extends ChatEventViewHolder implements V
         switch (view.getId()) {
             case R.id.buttonDialogIgnore /* 2131755305 */:
                 if (this.dialogEvent != null) {
-                    this.dialogEvent.m157xe7f9f9c3(UserManager.getUserManager(this.dialogEvent.getAgentUUID()));
+                    this.dialogEvent.onDialogIgnored(UserManager.getUserManager(this.dialogEvent.getAgentUUID()));
                     requestAdapterUpdate();
                     break;
                 }

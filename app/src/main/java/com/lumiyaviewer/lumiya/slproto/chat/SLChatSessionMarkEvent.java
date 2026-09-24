@@ -32,7 +32,7 @@ public class SLChatSessionMarkEvent extends SLChatEvent {
 
     public SLChatSessionMarkEvent(ChatMessage chatMessage, @Nonnull UUID uuid) {
         super(chatMessage, uuid);
-        this.sessionMarkType = SessionMarkType.valuesCustom()[chatMessage.getChatChannel().intValue()];
+        this.sessionMarkType = SessionMarkType.values()[chatMessage.getChatChannel().intValue()];
         this.description = chatMessage.getMessageText();
     }
 

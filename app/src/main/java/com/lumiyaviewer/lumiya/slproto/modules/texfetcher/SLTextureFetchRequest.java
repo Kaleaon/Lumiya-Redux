@@ -31,7 +31,7 @@ public class SLTextureFetchRequest implements HasPriority {
         if (f130comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
             return f130comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
         }
-        int[] iArr = new int[TextureClass.valuesCustom().length];
+        int[] iArr = new int[TextureClass.values().length];
         try {
             iArr[TextureClass.Asset.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

@@ -294,7 +294,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         if (f72x73d6fc70 != null) {
             return f72x73d6fc70;
         }
-        int[] iArr = new int[ChatMessageType.valuesCustom().length];
+        int[] iArr = new int[ChatMessageType.values().length];
         try {
             iArr[ChatMessageType.BalanceChanged.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -392,7 +392,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
         if (f73xbd9aa5ff != null) {
             return f73xbd9aa5ff;
         }
-        int[] iArr = new int[ChatMessageSource.ChatMessageSourceType.valuesCustom().length];
+        int[] iArr = new int[ChatMessageSource.ChatMessageSourceType.values().length];
         try {
             iArr[ChatMessageSource.ChatMessageSourceType.Group.ordinal()] = 25;
         } catch (NoSuchFieldError e) {

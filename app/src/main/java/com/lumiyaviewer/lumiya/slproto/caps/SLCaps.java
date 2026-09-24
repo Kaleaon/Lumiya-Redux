@@ -170,11 +170,11 @@ public class SLCaps {
         String repairCapabilityURL = repairCapabilityURL(z, str2);
         LLSDXMLRequest lLSDXMLRequest = new LLSDXMLRequest();
         LLSDArray lLSDArray = new LLSDArray();
-        for (SLCapability sLCapability : SLCapability.valuesCustom()) {
+        for (SLCapability sLCapability : SLCapability.values()) {
             lLSDArray.add(new LLSDString(sLCapability.name()));
         }
         LLSDNode PerformRequest = lLSDXMLRequest.PerformRequest(repairCapabilityURL, lLSDArray);
-        for (SLCapability sLCapability2 : SLCapability.valuesCustom()) {
+        for (SLCapability sLCapability2 : SLCapability.values()) {
             if (PerformRequest.keyExists(sLCapability2.name())) {
                 String repairCapabilityURL2 = repairCapabilityURL(z, PerformRequest.byKey(sLCapability2.name()).asString());
                 this.caps.put(sLCapability2, repairCapabilityURL2);

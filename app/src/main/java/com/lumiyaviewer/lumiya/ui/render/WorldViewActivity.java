@@ -247,7 +247,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private boolean isDragging = false;
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.3
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0((SLAgentCircuit) obj);
+            WorldViewActivity.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -257,7 +257,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.4
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1((MyAvatarState) obj);
+            WorldViewActivity.this.onMyAvatarState((MyAvatarState) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -267,7 +267,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<Integer, SLObjectProfileData> selectedObjectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.5
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2((SLObjectProfileData) obj);
+            WorldViewActivity.this.onSelectedObjectProfile((SLObjectProfileData) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -277,7 +277,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.6
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3((CurrentLocationInfo) obj);
+            WorldViewActivity.this.onCurrentLocation((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -287,7 +287,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<SubscriptionSingleKey, ChatterID> voiceActiveChatter = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.7
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4((ChatterID) obj);
+            WorldViewActivity.this.onVoiceActiveChatter((ChatterID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -297,7 +297,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     });
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.8
         private final /* synthetic */ void $m$0(Object obj) {
-            WorldViewActivity.this.m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5((VoiceChatInfo) obj);
+            WorldViewActivity.this.onVoiceChatInfo((VoiceChatInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -662,7 +662,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m846com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref0(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (sLAgentCircuit != null) {
             this.avatarControl = sLAgentCircuit.getModules().avatarControl;
             this.drawDistance = sLAgentCircuit.getModules().drawDistance;
@@ -685,7 +685,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocation, reason: merged with bridge method [inline-methods] */
-    public void m849com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref3(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocation(CurrentLocationInfo currentLocationInfo) {
         ParcelData parcelData = currentLocationInfo != null ? currentLocationInfo.parcelData() : null;
         String name = parcelData != null ? parcelData.getName() : null;
         if (name == null) {
@@ -696,13 +696,13 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMyAvatarState, reason: merged with bridge method [inline-methods] */
-    public void m847com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref1(MyAvatarState myAvatarState) {
+    public void onMyAvatarState(MyAvatarState myAvatarState) {
         updateObjectPanel();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onPickedAvatarNameUpdated, reason: merged with bridge method [inline-methods] */
-    public void m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(ChatterNameRetriever chatterNameRetriever) {
+    public void onPickedAvatarNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         if (chatterNameRetriever == this.pickedAvatarNameRetriever) {
             updateObjectPanel();
         }
@@ -710,7 +710,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onSelectedObjectProfile, reason: merged with bridge method [inline-methods] */
-    public void m848com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref2(SLObjectProfileData sLObjectProfileData) {
+    public void onSelectedObjectProfile(SLObjectProfileData sLObjectProfileData) {
         Debug.Printf("got selected object profile: %s", sLObjectProfileData);
         updateObjectPanel();
         if (sLObjectProfileData != null) {
@@ -723,7 +723,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceActiveChatter, reason: merged with bridge method [inline-methods] */
-    public void m850com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref4(ChatterID chatterID) {
+    public void onVoiceActiveChatter(ChatterID chatterID) {
         if (this.voiceStatusView != null) {
             this.voiceStatusView.setChatterID(chatterID);
         }
@@ -736,7 +736,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m851com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref5(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -1097,7 +1097,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     }
                     this.pickedAvatarNameRetriever = new ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.render.-$Lambda$YnTWxJEMPymM_sHfAdAKQ7gcDf8.9
                         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                            WorldViewActivity.this.m852com_lumiyaviewer_lumiya_ui_render_WorldViewActivitymthref6(chatterNameRetriever);
+                            WorldViewActivity.this.onPickedAvatarNameUpdated(chatterNameRetriever);
                         }
 
                         @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated

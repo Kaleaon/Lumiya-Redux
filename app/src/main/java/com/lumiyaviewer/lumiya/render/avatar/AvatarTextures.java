@@ -25,7 +25,7 @@ public class AvatarTextures {
             return false;
         }
         SLTextureEntryFace GetDefaultTexture = sLTextureEntry.GetDefaultTexture();
-        AvatarTextureFaceIndex[] valuesCustom = AvatarTextureFaceIndex.valuesCustom();
+        AvatarTextureFaceIndex[] valuesCustom = AvatarTextureFaceIndex.values();
         int length = valuesCustom.length;
         int i = 0;
         boolean z3 = false;

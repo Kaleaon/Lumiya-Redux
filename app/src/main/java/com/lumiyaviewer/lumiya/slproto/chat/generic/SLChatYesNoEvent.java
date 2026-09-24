@@ -42,7 +42,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
         if (f74x99a8895a != null) {
             return f74x99a8895a;
         }
-        int[] iArr = new int[EventState.valuesCustom().length];
+        int[] iArr = new int[EventState.values().length];
         try {
             iArr[EventState.EventAccepted.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

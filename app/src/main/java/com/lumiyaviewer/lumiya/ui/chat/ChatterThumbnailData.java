@@ -41,7 +41,7 @@ public class ChatterThumbnailData implements ResourceConsumer {
         if (chatterID.getChatterType() == ChatterID.ChatterType.Local) {
             this.subscription = this.userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$4T-RyU3GIOc1CH0v3ewFouMG3lk
                 private final /* synthetic */ void $m$0(Object obj) {
-                    ChatterThumbnailData.this.m426com_lumiyaviewer_lumiya_ui_chat_ChatterThumbnailDatamthref0((CurrentLocationInfo) obj);
+                    ChatterThumbnailData.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -52,7 +52,7 @@ public class ChatterThumbnailData implements ResourceConsumer {
         } else if (chatterID.isValidUUID()) {
             this.subscription = chatterID.getPictureID(this.userManager, UIThreadExecutor.getInstance(), new ChatterID.OnChatterPictureIDListener() { // from class: com.lumiyaviewer.lumiya.ui.chat.-$Lambda$4T-RyU3GIOc1CH0v3ewFouMG3lk.1
                 private final /* synthetic */ void $m$0(UUID uuid) {
-                    ChatterThumbnailData.this.m427com_lumiyaviewer_lumiya_ui_chat_ChatterThumbnailDatamthref1(uuid);
+                    ChatterThumbnailData.this.requestBitmap(uuid);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterID.OnChatterPictureIDListener
@@ -67,7 +67,7 @@ public class ChatterThumbnailData implements ResourceConsumer {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocationInfo, reason: merged with bridge method [inline-methods] */
-    public void m426com_lumiyaviewer_lumiya_ui_chat_ChatterThumbnailDatamthref0(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         View view;
         ParcelData parcelData = currentLocationInfo.parcelData();
         UUID snapshotUUID = parcelData != null ? parcelData.getSnapshotUUID() : null;
@@ -84,7 +84,7 @@ public class ChatterThumbnailData implements ResourceConsumer {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: requestBitmap, reason: merged with bridge method [inline-methods] */
-    public void m427com_lumiyaviewer_lumiya_ui_chat_ChatterThumbnailDatamthref1(UUID uuid) {
+    public void requestBitmap(UUID uuid) {
         if (uuid == null || !(!Objects.equal(uuid, UUIDPool.ZeroUUID)) || this.userManager == null) {
             return;
         }

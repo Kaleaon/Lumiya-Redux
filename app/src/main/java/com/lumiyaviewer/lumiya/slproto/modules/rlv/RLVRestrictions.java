@@ -27,7 +27,7 @@ public class RLVRestrictions {
             if (f127x829a01e5 != null) {
                 return f127x829a01e5;
             }
-            int[] iArr = new int[RLVRestrictionType.RLVRuleMatchType.valuesCustom().length];
+            int[] iArr = new int[RLVRestrictionType.RLVRuleMatchType.values().length];
             try {
                 iArr[RLVRestrictionType.RLVRuleMatchType.TargetNoExceptions.ordinal()] = 1;
             } catch (NoSuchFieldError e) {

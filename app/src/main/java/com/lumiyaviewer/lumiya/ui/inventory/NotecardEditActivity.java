@@ -62,7 +62,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     private int taskLocalID = 0;
     private final SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk
         private final /* synthetic */ void $m$0(Object obj) {
-            NotecardEditActivity.this.m631x5527ee36((AssetData) obj);
+            NotecardEditActivity.this.onNotecardLoaded((AssetData) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -72,7 +72,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.inventory.-$Lambda$srzsajEQjSwYc3yok0XsNFeAjNk.1
         private final /* synthetic */ void $m$0(Object obj) {
-            NotecardEditActivity.this.m632x5527ee37((SLAgentCircuit) obj);
+            NotecardEditActivity.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -135,7 +135,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m632x5527ee37(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         if (sLAgentCircuit != null && !sLAgentCircuit.getModules().rlvController.canViewNotecard()) {
             finish();
         }
@@ -144,7 +144,7 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onNotecardLoaded, reason: merged with bridge method [inline-methods] */
-    public void m631x5527ee36(AssetData assetData) {
+    public void onNotecardLoaded(AssetData assetData) {
         if (assetData.getStatus() == 1) {
             try {
                 this.notecard = new SLNotecard(assetData.getData(), this.isEditingScript);

@@ -46,7 +46,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
     private static final String ROLE_TO_ADD_KEY = "roleToAdd";
     private final SubscriptionData<UUID, UUID> groupMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$MA84Fd9rUtD4VNMgzavMq_NILXY.2
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMembersProfileTab.this.m483xe6cc6560((UUID) obj);
+            GroupMembersProfileTab.this.onGroupMemberList((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -317,7 +317,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onGroupMemberList, reason: merged with bridge method [inline-methods] */
-    public void m483xe6cc6560(UUID uuid) {
+    public void onGroupMemberList(UUID uuid) {
         Debug.Printf("GroupMemberList: got dataset ID = %s", uuid);
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup)) {
             return;

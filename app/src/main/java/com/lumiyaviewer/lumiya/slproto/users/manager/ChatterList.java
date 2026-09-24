@@ -85,7 +85,7 @@ public class ChatterList {
                 if (f225x521388d7 != null) {
                     return f225x521388d7;
                 }
-                int[] iArr = new int[ChatterListType.valuesCustom().length];
+                int[] iArr = new int[ChatterListType.values().length];
                 try {
                     iArr[ChatterListType.Active.ordinal()] = 1;
                 } catch (NoSuchFieldError e) {

@@ -48,7 +48,7 @@ public class SLPolyMesh extends SLMeshData {
                 i2 = 0;
                 dataInputStream3 = dataInputStream2;
             }
-            SLVisualParamID sLVisualParamID = SLVisualParamID.valuesCustom()[dataInputStream3.readInt()];
+            SLVisualParamID sLVisualParamID = SLVisualParamID.values()[dataInputStream3.readInt()];
             this.morphs[i] = new SLPolyMorphData(sLVisualParamID, this, dataInputStream3);
             this.morphIndices.put(sLVisualParamID, Integer.valueOf(i));
             i++;

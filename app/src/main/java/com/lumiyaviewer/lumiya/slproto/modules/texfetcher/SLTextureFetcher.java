@@ -33,7 +33,7 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         this.capURL = null;
         this.agentAppearanceService = null;
         this.udpTransfers = new ConcurrentHashMap();
-        this.udpQueue = new PriorityBinQueue<>(TexturePriority.valuesCustom().length);
+        this.udpQueue = new PriorityBinQueue<>(TexturePriority.values().length);
         this.lastCheckForStalls = 0L;
         this.agentAppearanceService = str;
         this.capURL = sLCaps.getCapability(SLCaps.SLCapability.GetTexture);

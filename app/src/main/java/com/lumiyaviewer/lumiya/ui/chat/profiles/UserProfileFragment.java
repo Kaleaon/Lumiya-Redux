@@ -33,7 +33,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
 
         @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            ProfileTab profileTab = ProfileTab.valuesCustom()[i];
+            ProfileTab profileTab = ProfileTab.values()[i];
             if (profileTab != null) {
                 UserProfileFragment.this.activeFragments.remove(profileTab);
             }
@@ -42,12 +42,12 @@ public class UserProfileFragment extends UserFunctionsFragment {
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public int getCount() {
-            return ProfileTab.valuesCustom().length;
+            return ProfileTab.values().length;
         }
 
         @Override // androidx.fragment.app.FragmentStatePagerAdapter
         public Fragment getItem(int i) {
-            ProfileTab profileTab = ProfileTab.valuesCustom()[i];
+            ProfileTab profileTab = ProfileTab.values()[i];
             try {
                 Fragment fragment = (Fragment) profileTab.tabClass.getDeclaredConstructor().newInstance();
                 fragment.setArguments(UserProfileFragment.makeSelection(UserProfileFragment.this.chatterID));
@@ -60,7 +60,7 @@ public class UserProfileFragment extends UserFunctionsFragment {
 
         @Override // androidx.viewpager.widget.PagerAdapter
         public CharSequence getPageTitle(int i) {
-            return UserProfileFragment.this.getString(ProfileTab.valuesCustom()[i].tabCaption);
+            return UserProfileFragment.this.getString(ProfileTab.values()[i].tabCaption);
         }
 
         @Override // androidx.fragment.app.FragmentStatePagerAdapter, androidx.viewpager.widget.PagerAdapter

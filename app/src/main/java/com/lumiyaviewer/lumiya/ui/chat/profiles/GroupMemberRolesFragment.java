@@ -56,7 +56,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.3
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupMemberRolesFragment.this.m469xd12733d2((UUID) obj);
+            GroupMemberRolesFragment.this.onGroupRoleMemberList((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -247,7 +247,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onGroupRoleMemberList, reason: merged with bridge method [inline-methods] */
-    public void m469xd12733d2(UUID uuid) {
+    public void onGroupRoleMemberList(UUID uuid) {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup) || this.MemberID == null) {
             return;
         }
@@ -256,7 +256,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onMemberNameUpdated, reason: merged with bridge method [inline-methods] */
-    public void m470xd12733d3(ChatterNameRetriever chatterNameRetriever) {
+    public void onMemberNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
         if (Strings.isNullOrEmpty(resolvedName)) {
             setTitle(getString(R.string.name_loading_title), null);
@@ -436,7 +436,7 @@ public class GroupMemberRolesFragment extends ChatterReloadableFragment implemen
         if (this.MemberID != null) {
             this.memberNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$jWSiK5iq-zZfaogto6grdML6fzQ.4
                 private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
-                    GroupMemberRolesFragment.this.m470xd12733d3(chatterNameRetriever);
+                    GroupMemberRolesFragment.this.onMemberNameUpdated(chatterNameRetriever);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever.OnChatterNameUpdated

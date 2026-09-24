@@ -33,7 +33,7 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         int i = 0;
         this.ObjectOwner = SLMessage.stringFromVariableOEM(scriptQuestion.Data_Field.ObjectOwner);
         this.ItemID = scriptQuestion.Data_Field.ItemID;
-        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.valuesCustom()) {
+        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.values()) {
             if ((scriptQuestion.Data_Field.Questions & sLScriptPermissions.getPermMask()) != 0) {
                 i |= sLScriptPermissions.getPermMask();
             }
@@ -69,7 +69,7 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
     @Override // com.lumiyaviewer.lumiya.slproto.chat.SLChatTextEvent, com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
     public String getText(Context context, @Nonnull UserManager userManager) {
         String str = "";
-        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.valuesCustom()) {
+        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.values()) {
             if ((this.Questions & sLScriptPermissions.getPermMask()) != 0) {
                 if (!str.equals("")) {
                     str = str + ", ";

@@ -172,7 +172,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             if (f111xb781ade != null) {
                 return f111xb781ade;
             }
-            int[] iArr = new int[FolderValueKey.valuesCustom().length];
+            int[] iArr = new int[FolderValueKey.values().length];
             try {
                 iArr[FolderValueKey.agent_id.ordinal()] = 1;
             } catch (NoSuchFieldError e) {
@@ -333,7 +333,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 if (f113xc291c278 != null) {
                     return f113xc291c278;
                 }
-                int[] iArr = new int[PermissionsValueKey.valuesCustom().length];
+                int[] iArr = new int[PermissionsValueKey.values().length];
                 try {
                     iArr[PermissionsValueKey.base_mask.ordinal()] = 1;
                 } catch (NoSuchFieldError e) {
@@ -445,7 +445,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             if (f112xeca6ff43 != null) {
                 return f112xeca6ff43;
             }
-            int[] iArr = new int[ItemValueKey.valuesCustom().length];
+            int[] iArr = new int[ItemValueKey.values().length];
             try {
                 iArr[ItemValueKey.agent_id.ordinal()] = 1;
             } catch (NoSuchFieldError e) {

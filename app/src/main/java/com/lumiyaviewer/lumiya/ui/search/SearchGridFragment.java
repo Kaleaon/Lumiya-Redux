@@ -55,7 +55,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         if (f584xca68d786 != null) {
             return f584xca68d786;
         }
-        int[] iArr = new int[SearchGridQuery.SearchType.valuesCustom().length];
+        int[] iArr = new int[SearchGridQuery.SearchType.values().length];
         try {
             iArr[SearchGridQuery.SearchType.Groups.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -142,7 +142,7 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
         if (searchGridResult == null || activeAgentID == null) {
             return;
         }
-        switch (m861x591f1c2a()[SearchGridQuery.SearchType.valuesCustom()[searchGridResult.getItemType()].ordinal()]) {
+        switch (m861x591f1c2a()[SearchGridQuery.SearchType.values()[searchGridResult.getItemType()].ordinal()]) {
             case 1:
                 DetailsActivity.showEmbeddedDetails(getActivity(), GroupProfileFragment.class, GroupProfileFragment.makeSelection(ChatterID.getGroupChatterID(activeAgentID, searchGridResult.getItemUUID())));
                 break;

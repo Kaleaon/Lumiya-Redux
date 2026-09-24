@@ -79,7 +79,7 @@ public class SLVoice extends SLModule {
         this.requestedGroupChats = Collections.synchronizedSet(new HashSet());
         this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY
             private final /* synthetic */ void $m$0(Object obj) {
-                SLVoice.this.m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0((Boolean) obj);
+                SLVoice.this.onVoiceLoginStatusChanged((Boolean) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -117,7 +117,7 @@ public class SLVoice extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onParcelVoiceInfoResult, reason: merged with bridge method [inline-methods] */
-    public void m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(LLSDNode lLSDNode) {
+    public void onParcelVoiceInfoResult(LLSDNode lLSDNode) {
         if (lLSDNode != null) {
             try {
                 Debug.Printf("SLVoice: parcel voice info '%s'", lLSDNode.serializeToXML());
@@ -129,7 +129,7 @@ public class SLVoice extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onProvisionVoiceAccountResult, reason: merged with bridge method [inline-methods] and merged with bridge method [inline-methods] */
-    public void m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(LLSDNode lLSDNode) {
+    public void onProvisionVoiceAccountResult(LLSDNode lLSDNode) {
         if (lLSDNode != null) {
             try {
                 Debug.Printf("SLVoice: result '%s'", lLSDNode.serializeToXML());
@@ -154,7 +154,7 @@ public class SLVoice extends SLModule {
             }
             new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.2
                 private final /* synthetic */ void $m$0(LLSDNode lLSDNode2) {
-                    SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode2);
+                    SLVoice.this.onProvisionVoiceAccountResult(lLSDNode2);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -169,7 +169,7 @@ public class SLVoice extends SLModule {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceLoginStatusChanged, reason: merged with bridge method [inline-methods] */
-    public void m260com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref0(Boolean bool) {
+    public void onVoiceLoginStatusChanged(Boolean bool) {
         this.voiceLoggedIn = bool != null ? bool.booleanValue() : false;
     }
 
@@ -282,7 +282,7 @@ public class SLVoice extends SLModule {
             if (this.capURL != null) {
                 new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.1
                     private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                        SLVoice.this.m262com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref2(lLSDNode);
+                        SLVoice.this.onProvisionVoiceAccountResult(lLSDNode);
                     }
 
                     @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener
@@ -373,7 +373,7 @@ public class SLVoice extends SLModule {
         }
         new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() { // from class: com.lumiyaviewer.lumiya.slproto.modules.voice.-$Lambda$RETWaU3Ta92aG3GeBeXvI3Y9viY.3
             private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                SLVoice.this.m263com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoicemthref3(lLSDNode);
+                SLVoice.this.onParcelVoiceInfoResult(lLSDNode);
             }
 
             @Override // com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest.LLSDXMLResultListener

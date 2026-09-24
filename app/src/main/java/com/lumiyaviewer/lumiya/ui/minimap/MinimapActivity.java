@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 public class MinimapActivity extends ConnectedActivity {
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.minimap.-$Lambda$HQUtmVzLYkemE78mCklVmVxMXms
         private final /* synthetic */ void $m$0(Object obj) {
-            MinimapActivity.this.m649com_lumiyaviewer_lumiya_ui_minimap_MinimapActivitymthref0((CurrentLocationInfo) obj);
+            MinimapActivity.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -50,7 +50,7 @@ public class MinimapActivity extends ConnectedActivity {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocationInfo, reason: merged with bridge method [inline-methods] */
-    public void m649com_lumiyaviewer_lumiya_ui_minimap_MinimapActivitymthref0(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         if (currentLocationInfo != null) {
             ParcelData parcelData = currentLocationInfo.parcelData();
             String name = parcelData != null ? parcelData.getName() : null;

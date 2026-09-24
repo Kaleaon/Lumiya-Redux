@@ -174,7 +174,7 @@ public class VoiceStatusView extends FrameLayout {
         super(context);
         this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.1
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -184,7 +184,7 @@ public class VoiceStatusView extends FrameLayout {
         });
         this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.2
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -241,7 +241,7 @@ public class VoiceStatusView extends FrameLayout {
         super(context, attributeSet);
         this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.3
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -251,7 +251,7 @@ public class VoiceStatusView extends FrameLayout {
         });
         this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.4
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -308,7 +308,7 @@ public class VoiceStatusView extends FrameLayout {
         super(context, attributeSet, i);
         this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.5
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -318,7 +318,7 @@ public class VoiceStatusView extends FrameLayout {
         });
         this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.6
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -376,7 +376,7 @@ public class VoiceStatusView extends FrameLayout {
         super(context, attributeSet, i, i2);
         this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.7
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0((VoiceAudioProperties) obj);
+                VoiceStatusView.this.onVoiceAudioProperties((VoiceAudioProperties) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -386,7 +386,7 @@ public class VoiceStatusView extends FrameLayout {
         });
         this.voiceChatInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.voice.-$Lambda$LRu9qjGWbEJmZF4NfrRGigLGXl8.8
             private final /* synthetic */ void $m$0(Object obj) {
-                VoiceStatusView.this.m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1((VoiceChatInfo) obj);
+                VoiceStatusView.this.onVoiceChatInfo((VoiceChatInfo) obj);
             }
 
             @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -463,7 +463,7 @@ public class VoiceStatusView extends FrameLayout {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceAudioProperties, reason: merged with bridge method [inline-methods] */
-    public void m877com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref0(VoiceAudioProperties voiceAudioProperties) {
+    public void onVoiceAudioProperties(VoiceAudioProperties voiceAudioProperties) {
         Object[] objArr = new Object[1];
         objArr[0] = voiceAudioProperties != null ? voiceAudioProperties.bluetoothState : null;
         Debug.Printf("Voice: voice audio properties updated, bluetooth state %s", objArr);
@@ -472,7 +472,7 @@ public class VoiceStatusView extends FrameLayout {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onVoiceChatInfo, reason: merged with bridge method [inline-methods] */
-    public void m878com_lumiyaviewer_lumiya_ui_voice_VoiceStatusViewmthref1(VoiceChatInfo voiceChatInfo) {
+    public void onVoiceChatInfo(VoiceChatInfo voiceChatInfo) {
         updateVoiceState();
     }
 

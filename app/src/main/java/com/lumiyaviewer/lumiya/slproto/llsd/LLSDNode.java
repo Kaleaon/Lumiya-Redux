@@ -45,7 +45,7 @@ public abstract class LLSDNode {
         if (f114x653d09df != null) {
             return f114x653d09df;
         }
-        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.valuesCustom().length];
+        int[] iArr = new int[LLSDContentTypeDetector.LLSDContentType.values().length];
         try {
             iArr[LLSDContentTypeDetector.LLSDContentType.llsdBinary.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

@@ -20,7 +20,7 @@ public class SettingsSelectionFragment extends Fragment implements AdapterView.O
 
     private class SettingPagesAdapter extends ArrayAdapter<SettingsPage> {
         public SettingPagesAdapter(Context context) {
-            super(context, R.layout.simple_list_item_1, SettingsPage.valuesCustom());
+            super(context, R.layout.simple_list_item_1, SettingsPage.values());
         }
 
         @Override // android.widget.ArrayAdapter, android.widget.Adapter
@@ -46,7 +46,7 @@ public class SettingsSelectionFragment extends Fragment implements AdapterView.O
 
     @Override // android.widget.AdapterView.OnItemClickListener
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-        SettingsPage[] valuesCustom = SettingsPage.valuesCustom();
+        SettingsPage[] valuesCustom = SettingsPage.values();
         if (i < 0 || i >= valuesCustom.length) {
             return;
         }

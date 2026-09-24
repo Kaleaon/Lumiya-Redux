@@ -36,7 +36,7 @@ public abstract class SLChatDialogEvent extends SLChatTextEvent {
     }
 
     /* renamed from: onDialogIgnored */
-    protected void m157xe7f9f9c3(UserManager userManager) {
+    protected void onDialogIgnored(UserManager userManager) {
         this.ignored = true;
     }
 

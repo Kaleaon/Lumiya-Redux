@@ -34,7 +34,7 @@ public class LLQuaternion {
         if (f143xae1ac4c9 != null) {
             return f143xae1ac4c9;
         }
-        int[] iArr = new int[Order.valuesCustom().length];
+        int[] iArr = new int[Order.values().length];
         try {
             iArr[Order.XYZ.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

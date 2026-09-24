@@ -52,7 +52,7 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         if (f379xeb9cc37f != null) {
             return f379xeb9cc37f;
         }
-        int[] iArr = new int[Loadable.Status.valuesCustom().length];
+        int[] iArr = new int[Loadable.Status.values().length];
         try {
             iArr[Loadable.Status.Error.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

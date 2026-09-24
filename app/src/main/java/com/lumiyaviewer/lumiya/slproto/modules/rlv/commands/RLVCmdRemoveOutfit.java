@@ -15,7 +15,7 @@ public class RLVCmdRemoveOutfit extends RLVCmdGenericRestriction {
     @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdGenericRestriction
     protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
         SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
-        for (SLWearableType sLWearableType : SLWearableType.valuesCustom()) {
+        for (SLWearableType sLWearableType : SLWearableType.values()) {
             if (!sLWearableType.isBodyPart()) {
                 String name = sLWearableType.getName();
                 if (str.equals("") || name.equalsIgnoreCase(str)) {

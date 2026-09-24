@@ -49,7 +49,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
     private final SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$TbI0imFFmZKCR9nUgEGSvi-_8Q0.2
         private final /* synthetic */ void $m$0(Object obj) {
-            GroupRoleMembersFragment.this.m504x9104b852((UUID) obj);
+            GroupRoleMembersFragment.this.onGroupRoleMemberList((UUID) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -212,7 +212,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onGroupRoleMemberList, reason: merged with bridge method [inline-methods] */
-    public void m504x9104b852(UUID uuid) {
+    public void onGroupRoleMemberList(UUID uuid) {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup) || this.RoleID == null) {
             return;
         }

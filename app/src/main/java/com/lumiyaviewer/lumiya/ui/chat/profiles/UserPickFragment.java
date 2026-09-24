@@ -62,7 +62,7 @@ public class UserPickFragment extends FragmentWithTitle {
     ImageAssetView userPickImageView;
     private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$pe_zD6dKvPMIxwvN5gLJ2hSMvgo.3
         private final /* synthetic */ void $m$0(Object obj) {
-            UserPickFragment.this.m525x15b34e8a((PickInfoReply) obj);
+            UserPickFragment.this.onPickInfo((PickInfoReply) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -127,7 +127,7 @@ public class UserPickFragment extends FragmentWithTitle {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onPickInfo, reason: merged with bridge method [inline-methods] */
-    public void m525x15b34e8a(PickInfoReply pickInfoReply) {
+    public void onPickInfo(PickInfoReply pickInfoReply) {
         if (pickInfoReply != null) {
             LLVector3d lLVector3d = pickInfoReply.Data_Field.PosGlobal;
             Debug.Printf("GlobalPos: got pick global pos %f, %f, %f", Double.valueOf(lLVector3d.x), Double.valueOf(lLVector3d.y), Double.valueOf(lLVector3d.z));

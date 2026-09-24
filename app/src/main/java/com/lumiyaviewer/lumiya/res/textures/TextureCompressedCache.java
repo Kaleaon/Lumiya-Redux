@@ -51,7 +51,7 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
             if (f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues != null) {
                 return f53comlumiyaviewerlumiyarendertexTextureClassSwitchesValues;
             }
-            int[] iArr = new int[TextureClass.valuesCustom().length];
+            int[] iArr = new int[TextureClass.values().length];
             try {
                 iArr[TextureClass.Asset.ordinal()] = 3;
             } catch (NoSuchFieldError e) {

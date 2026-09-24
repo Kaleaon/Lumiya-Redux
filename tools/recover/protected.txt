@@ -71,3 +71,6 @@ com/lumiyaviewer/lumiya/ui/search/SearchGridAdapter.java
 com/lumiyaviewer/lumiya/ui/search/SearchViewHolder.java
 com/lumiyaviewer/lumiya/utils/SimpleStringParser.java
 uk/co/senab/photoview/PhotoViewAttacher.java
+com/lumiyaviewer/lumiya/GridConnectionService.java
+com/lumiyaviewer/lumiya/StreamingMediaService.java
+com/lumiyaviewer/lumiya/ui/login/LoginActivity.java

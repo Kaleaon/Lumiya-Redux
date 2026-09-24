@@ -33,7 +33,7 @@ public abstract class ChatMessageSource {
         if (f151xbd9aa5ff != null) {
             return f151xbd9aa5ff;
         }
-        int[] iArr = new int[ChatMessageSourceType.valuesCustom().length];
+        int[] iArr = new int[ChatMessageSourceType.values().length];
         try {
             iArr[ChatMessageSourceType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {

@@ -81,7 +81,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
     private final SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.3
         private final /* synthetic */ void $m$0(Object obj) {
-            ParcelPropertiesFragment.this.m512x3c670cfa((Boolean) obj);
+            ParcelPropertiesFragment.this.onIsPlayingMedia((Boolean) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -91,7 +91,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     });
     private final SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.ui.chat.profiles.-$Lambda$3KadVkUh82bQPaUr2S81wOMi_ug.4
         private final /* synthetic */ void $m$0(Object obj) {
-            ParcelPropertiesFragment.this.m513x3c670cfb((SLAgentCircuit) obj);
+            ParcelPropertiesFragment.this.onAgentCircuit((SLAgentCircuit) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -143,13 +143,13 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onAgentCircuit, reason: merged with bridge method [inline-methods] */
-    public void m513x3c670cfb(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
         updateSimOptions();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onIsPlayingMedia, reason: merged with bridge method [inline-methods] */
-    public void m512x3c670cfa(Boolean bool) {
+    public void onIsPlayingMedia(Boolean bool) {
         updatePlayingStatus();
     }
 

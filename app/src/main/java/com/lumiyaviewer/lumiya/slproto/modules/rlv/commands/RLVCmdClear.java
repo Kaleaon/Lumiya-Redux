@@ -12,7 +12,7 @@ public class RLVCmdClear implements RLVCommand {
     @Override // com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVCommand
     public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
         HashSet hashSet = new HashSet();
-        for (RLVRestrictionType rLVRestrictionType : RLVRestrictionType.valuesCustom()) {
+        for (RLVRestrictionType rLVRestrictionType : RLVRestrictionType.values()) {
             if (str == "") {
                 hashSet.add(rLVRestrictionType);
             } else if (rLVRestrictionType.toString().contains(str)) {

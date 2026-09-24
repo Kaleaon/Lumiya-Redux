@@ -105,7 +105,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private boolean voicePluginReceiverRegistered = false;
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0
         private final /* synthetic */ void $m$0(Object obj) {
-            GridConnectionService.this.m17com_lumiyaviewer_lumiya_GridConnectionServicemthref0((CurrentLocationInfo) obj);
+            GridConnectionService.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
         }
 
         @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData
@@ -200,7 +200,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         if (f3x3582025 != null) {
             return f3x3582025;
         }
-        int[] iArr = new int[NotificationType.valuesCustom().length];
+        int[] iArr = new int[NotificationType.values().length];
         try {
             iArr[NotificationType.Group.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -222,7 +222,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         if (f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues != null) {
             return f4comlumiyaviewerlumiyautilsLEDActionSwitchesValues;
         }
-        int[] iArr = new int[LEDAction.valuesCustom().length];
+        int[] iArr = new int[LEDAction.values().length];
         try {
             iArr[LEDAction.Always.ordinal()] = 1;
         } catch (NoSuchFieldError e) {
@@ -339,13 +339,13 @@ public class GridConnectionService extends Service implements SharedPreferences.
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onCurrentLocationInfo, reason: merged with bridge method [inline-methods] */
-    public void m17com_lumiyaviewer_lumiya_GridConnectionServicemthref0(CurrentLocationInfo currentLocationInfo) {
+    public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         updateOnlineNotification();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
     /* renamed from: onUnreadNotification, reason: merged with bridge method [inline-methods] */
-    public void m18com_lumiyaviewer_lumiya_GridConnectionServicemthref1(UnreadNotifications unreadNotifications) {
+    public void onUnreadNotification(UnreadNotifications unreadNotifications) {
         showUnreadNotification(unreadNotifications);
     }
 
@@ -774,7 +774,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         if (userManager != null) {
             this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe(UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() { // from class: com.lumiyaviewer.lumiya.-$Lambda$3DowF6pLKgVjVrTY9aZKQ2J3cf0.1
                 private final /* synthetic */ void $m$0(Object obj) {
-                    GridConnectionService.this.m18com_lumiyaviewer_lumiya_GridConnectionServicemthref1((UnreadNotifications) obj);
+                    GridConnectionService.this.onUnreadNotification((UnreadNotifications) obj);
                 }
 
                 @Override // com.lumiyaviewer.lumiya.react.Subscription.OnData

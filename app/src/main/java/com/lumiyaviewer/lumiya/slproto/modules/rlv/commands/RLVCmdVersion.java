@@ -24,7 +24,7 @@ public class RLVCmdVersion implements RLVCommand {
         if (f128x22b61868 != null) {
             return f128x22b61868;
         }
-        int[] iArr = new int[RLVCommands.valuesCustom().length];
+        int[] iArr = new int[RLVCommands.values().length];
         try {
             iArr[RLVCommands.accepttp.ordinal()] = 4;
         } catch (NoSuchFieldError e) {
