@@ -5,10 +5,18 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 
 public class SLAuthParams {
+    /** Intent extra: the grid accepts certificates that fail verification (TlsPolicy). */
+    public static final String EXTRA_ALLOW_UNTRUSTED_CERTIFICATES = "allow_untrusted_certificates";
+    /** Intent extra: one-time multi-factor code answering an "mfa_challenge" login reply. */
+    public static final String EXTRA_MFA_TOKEN = "mfa_token";
+
+    public final boolean allowUntrustedCertificates;
     public final UUID clientID;
     public final String gridName;
     public final String loginName;
     public final String loginURL;
+    /** One-time MFA code for this attempt only, or null. Never used for reconnects. */
+    public final String mfaToken;
     public final String passwordHash;
     public final String startLocation;
 
@@ -19,15 +27,23 @@ public class SLAuthParams {
         this.startLocation = intent.getStringExtra("start_location");
         this.loginURL = intent.getStringExtra("login_url");
         this.gridName = intent.getStringExtra("grid_name");
+        this.allowUntrustedCertificates = intent.getBooleanExtra(EXTRA_ALLOW_UNTRUSTED_CERTIFICATES, false);
+        this.mfaToken = intent.getStringExtra(EXTRA_MFA_TOKEN);
     }
 
     public SLAuthParams(String loginName, String passwordHash, UUID uuid, String startLocation, String loginURL, String gridName) {
+        this(loginName, passwordHash, uuid, startLocation, loginURL, gridName, false, null);
+    }
+
+    public SLAuthParams(String loginName, String passwordHash, UUID uuid, String startLocation, String loginURL, String gridName, boolean allowUntrustedCertificates, String mfaToken) {
         this.loginName = loginName;
         this.passwordHash = passwordHash;
         this.clientID = uuid;
         this.startLocation = startLocation;
         this.loginURL = loginURL;
         this.gridName = gridName;
+        this.allowUntrustedCertificates = allowUntrustedCertificates;
+        this.mfaToken = mfaToken;
     }
 
     public boolean equals(Object obj) {
@@ -61,6 +77,11 @@ public class SLAuthParams {
     }
 
     public SLAuthParams withLocation(String str) {
-        return new SLAuthParams(this.loginName, this.passwordHash, this.clientID, str, this.loginURL, this.gridName);
+        return new SLAuthParams(this.loginName, this.passwordHash, this.clientID, str, this.loginURL, this.gridName, this.allowUntrustedCertificates, this.mfaToken);
+    }
+
+    /** The same parameters after the MFA code has been used once. */
+    public SLAuthParams withoutMfaToken() {
+        return new SLAuthParams(this.loginName, this.passwordHash, this.clientID, this.startLocation, this.loginURL, this.gridName, this.allowUntrustedCertificates, null);
     }
 }

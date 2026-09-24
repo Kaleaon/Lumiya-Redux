@@ -9,18 +9,13 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.UnknownHostException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.X509ExtendedTrustManager;
 import okhttp3.ConnectionPool;
 import okhttp3.Dns;
 import okhttp3.HttpUrl;
@@ -32,27 +27,12 @@ import okhttp3.Response;
 public class SLHTTPSConnection {
     private static final long CONNECT_TIMEOUT = 60;
     private static final long READ_TIMEOUT = 60;
-    private static final X509TrustManager trustEverythingManager = new X509TrustManager() {
-        @Override
-        public void checkClientTrusted(X509Certificate[] x509CertificateArr, String str) throws CertificateException {
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] x509CertificateArr, String str) throws CertificateException {
-        }
-
-        @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
-        }
-    };
-    private static TrustManager[] trustAllCerts = {trustEverythingManager};
-    private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().proxy(Proxy.NO_PROXY).dns(new SLDNS()).connectionPool(new ConnectionPool(8, 5, TimeUnit.MINUTES)).connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).hostnameVerifier(new HostnameVerifier() {
-        @Override
-        public boolean verify(String str, SSLSession sslSession) {
-            return true;
-        }
-    }).addNetworkInterceptor(new CharsetStripInterceptor()).sslSocketFactory(getSocketFactory(), trustEverythingManager).build();
+    // 3.4.2 installed a trust-everything X509TrustManager and a hostname
+    // verifier that returned true, so any on-path attacker could read the
+    // login password hash and session. Certificates are verified now; see
+    // TlsPolicy for the per-grid exception for self-signed OpenSim grids.
+    private static final X509ExtendedTrustManager trustManager = TlsPolicy.createTrustManager();
+    private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().proxy(Proxy.NO_PROXY).dns(new SLDNS()).connectionPool(new ConnectionPool(8, 5, TimeUnit.MINUTES)).connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).hostnameVerifier(TlsPolicy.createHostnameVerifier()).addNetworkInterceptor(new CharsetStripInterceptor()).sslSocketFactory(getSocketFactory(), trustManager).build();
 
     static class CharsetStripInterceptor implements Interceptor {
         CharsetStripInterceptor() {
@@ -196,10 +176,11 @@ public class SLHTTPSConnection {
     private static SSLSocketFactory getSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustAllCerts, new SecureRandom());
+            sslContext.init(null, new TrustManager[]{trustManager}, null);
             return sslContext.getSocketFactory();
         } catch (Exception e) {
-            return null;
+            // No fallback to an unverified factory: fail loudly instead.
+            throw new IllegalStateException("Cannot initialise TLS", e);
         }
     }
 }

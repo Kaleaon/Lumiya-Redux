@@ -1,0 +1,46 @@
+// Sky dome for the Filament world view (stage F0).
+//
+// A gradient from the Windlight horizon colour to the zenith colour, with a
+// sun disc. The dome follows the camera and is drawn first, behind
+// everything. F1 replaces the gradient with a port of the legacy
+// sky.fsh / Windlight scattering, then EEP parameters.
+material {
+    name : sl_sky,
+    shadingModel : unlit,
+    culling : none,
+    depthWrite : false,
+    depthCulling : true,
+    parameters : [
+        { type : float3, name : zenithColor },
+        { type : float3, name : horizonColor },
+        { type : float3, name : sunColor },
+        // Unit vector towards the sun, SL region axes (Z up).
+        { type : float3, name : sunDirection }
+    ],
+    variables : [
+        skyDirection
+    ]
+}
+
+vertex {
+    void materialVertex(inout MaterialVertexInputs material) {
+        // Object-space position of a unit sphere is the view direction.
+        material.skyDirection.xyz = getPosition().xyz;
+    }
+}
+
+fragment {
+    void material(inout MaterialInputs material) {
+        prepareMaterial(material);
+        highp vec3 dir = normalize(variable_skyDirection.xyz);
+        float up = clamp(dir.z, 0.0, 1.0);
+        vec3 sky = mix(materialParams.horizonColor, materialParams.zenithColor, pow(up, 0.5));
+        // Below the horizon: fade to a darker horizon colour.
+        sky = mix(sky, materialParams.horizonColor * 0.5, clamp(-dir.z * 4.0, 0.0, 1.0));
+        float sunDot = dot(dir, normalize(materialParams.sunDirection));
+        float disc = smoothstep(0.9995, 0.9998, sunDot);
+        float glow = pow(max(sunDot, 0.0), 64.0) * 0.35;
+        sky += materialParams.sunColor * (disc + glow);
+        material.baseColor = vec4(sky, 1.0);
+    }
+}

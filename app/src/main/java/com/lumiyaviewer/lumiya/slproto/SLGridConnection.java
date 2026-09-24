@@ -67,6 +67,21 @@ public class SLGridConnection extends SLConnection {
     public void DoConnect(SLAuthParams authParams, String str) {
         try {
             SLAuthReply Login = new SLAuth().Login(authParams.withLocation(str));
+            if (authParams.mfaToken != null) {
+                // A multi-factor code is good for one attempt. Reconnects use
+                // the saved mfa_hash instead.
+                synchronized (this) {
+                    if (this.authParams == authParams) {
+                        this.authParams = authParams.withoutMfaToken();
+                    }
+                }
+            }
+            if (Login.isMfaChallenge()) {
+                // Needs the user to type a code: never retried automatically.
+                setConnectionState(ConnectionState.Idle);
+                dropForMfaChallenge(Login.message);
+                return;
+            }
             if (!Login.success) {
                 setConnectionState(ConnectionState.Idle);
                 reconnectOrDrop(true, false, Login.message);
@@ -85,10 +100,24 @@ public class SLGridConnection extends SLConnection {
                 this.parcelInfo.reset(this.userManager);
                 startCircuit(Login, null);
             }
+        } catch (SLAuth.CertificateVerificationException e) {
+            setConnectionState(ConnectionState.Idle);
+            reconnectOrDrop(true, false, e.getMessage());
         } catch (Exception e) {
             setConnectionState(ConnectionState.Idle);
             reconnectOrDrop(true, false, "Failed to connect to login server.");
         }
+    }
+
+    private void dropForMfaChallenge(String message) {
+        synchronized (this) {
+            this.userWantsConnected = false;
+            this.isReconnecting = false;
+        }
+        if (this.activeAgentUUID != null) {
+            GridConnectionManager.removeConnection(this.activeAgentUUID, this);
+        }
+        this.eventBus.publish(SLLoginResultEvent.mfaChallenge(message, this.activeAgentUUID));
     }
 
     private synchronized boolean Reconnect() {

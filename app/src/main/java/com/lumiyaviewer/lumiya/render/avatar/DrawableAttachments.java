@@ -11,6 +11,7 @@ import com.lumiyaviewer.lumiya.render.glres.buffers.GLLoadableBuffer;
 import com.lumiyaviewer.lumiya.slproto.avatar.SLSkeletonBoneID;
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer;
 import java.util.Iterator;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -69,6 +70,16 @@ class DrawableAttachments {
         this.rigged = builder2.build();
         this.glAnimationDataBuffer = drawableAttachments.glAnimationDataBuffer;
         Debug.Printf("Updated drawableAttachments: %d rigged, %d non-rigged", Integer.valueOf(this.rigged.size()), Integer.valueOf(this.nonRigged.size()));
+    }
+
+    /** Every attachment object, rigged or not. */
+    void forEachObject(Consumer<DrawableObject> action) {
+        for (DrawableObject drawableObject : this.rigged) {
+            action.accept(drawableObject);
+        }
+        for (DrawableObject drawableObject : this.nonRigged.values()) {
+            action.accept(drawableObject);
+        }
     }
 
     @SuppressLint({"NewApi"})

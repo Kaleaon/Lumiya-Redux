@@ -1,6 +1,8 @@
 package com.lumiyaviewer.lumiya.render.avatar;
 
 import com.lumiyaviewer.lumiya.slproto.avatar.AvatarTextureFaceIndex;
+import com.lumiyaviewer.lumiya.slproto.avatar.BakesOnMesh;
+import com.lumiyaviewer.lumiya.slproto.prims.AvatarBakes;
 import com.lumiyaviewer.lumiya.slproto.messages.AvatarAppearance;
 import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntry;
 import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace;
@@ -48,6 +50,18 @@ public class AvatarTextures {
             z3 = z2;
         }
         return z3;
+    }
+
+    /** The bake slots, for Bakes on Mesh attachments of this avatar. */
+    public synchronized AvatarBakes getBakes(UUID avatarUUID) {
+        Map<AvatarTextureFaceIndex, UUID> bakes = new EnumMap<>(AvatarTextureFaceIndex.class);
+        for (AvatarTextureFaceIndex faceIndex : BakesOnMesh.bakedFaces()) {
+            UUID bake = this.avatarTextures.get(faceIndex);
+            if (bake != null) {
+                bakes.put(faceIndex, bake);
+            }
+        }
+        return new AvatarBakes(avatarUUID, bakes);
     }
 
     public synchronized UUID getTexture(AvatarTextureFaceIndex avatarTextureFaceIndex) {

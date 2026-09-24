@@ -1,3 +1,6 @@
+import javax.inject.Inject
+import org.gradle.process.ExecOperations
+
 // App module for the recovered Lumiya viewer.
 //
 // The decompiled `android.support.*` imports were rewritten to AndroidX by
@@ -36,6 +39,8 @@ android {
         }
 
         vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -69,9 +74,10 @@ android {
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
-        // AGP 8.7's UnsafeIntentLaunch detector crashes while analyzing the
-        // recovered NfcSensor receiver; keep the rest of lint enabled.
-        disable 'UnsafeIntentLaunch', 'UnspecifiedRegisterReceiverFlag'
+        // AGP 8.7's UnsafeIntentLaunch and UnsafeImplicitIntentLaunch
+        // detectors crash while analyzing the recovered NfcSensor receiver;
+        // keep the rest of lint enabled.
+        disable 'UnsafeIntentLaunch', 'UnsafeImplicitIntentLaunch', 'UnspecifiedRegisterReceiverFlag'
     }
     packagingOptions {
         resources.excludes += [
@@ -108,6 +114,80 @@ android {
             // tools/verify/dexdiff.py reports the source version as OK.
             java.exclude originalBytecodeClasses.collect { "${it}.java" }
         }
+    }
+}
+
+// -------------------------------------------------------------------------
+//  Filament (stage F0, docs/modernization/viewer_gap_analysis_and_filament_plan.md §4.7)
+//
+//  Debug builds only for now: the developer FilamentWorldActivity in
+//  src/debug renders terrain and sky. Materials in src/debug/materials are
+//  compiled by matc, from the same Filament release as the runtime (a
+//  .filamat only loads in the engine version that built it), into the debug
+//  assets under materials/.
+//
+//  1.75.1 is the newest release that builds with compileSdk 34: 1.76.0 and
+//  later declare minCompileSdk 37, which needs a newer Android Gradle plugin.
+// -------------------------------------------------------------------------
+def filamentVersion = '1.75.1'
+
+// matc is published per host OS. There is no Intel macOS build on Maven.
+def hostOs = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+def matcClassifier = hostOs.contains('mac') ? 'osx-aarch_64'
+    : hostOs.contains('windows') ? 'windows-x86_64'
+    : 'linux-x86_64'
+
+configurations {
+    matc {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
+abstract class CompileFilamentMaterials extends DefaultTask {
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    abstract ConfigurableFileCollection getMaterialSources()
+
+    @InputFiles
+    @PathSensitive(PathSensitivity.NONE)
+    abstract ConfigurableFileCollection getMatc()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDir()
+
+    @Inject
+    abstract ExecOperations getExecOperations()
+
+    @TaskAction
+    void compile() {
+        File out = new File(outputDir.get().asFile, 'materials')
+        out.deleteDir()
+        out.mkdirs()
+        // Run a private copy: the file in the Gradle cache is not executable.
+        File exe = new File(temporaryDir, matc.singleFile.name)
+        exe.bytes = matc.singleFile.bytes
+        exe.setExecutable(true)
+        materialSources.files.sort().each { File mat ->
+            File filamat = new File(out, mat.name.replaceAll(/\.mat$/, '.filamat'))
+            execOperations.exec {
+                commandLine exe.absolutePath, '-p', 'mobile', '-a', 'opengl', '-a', 'vulkan',
+                    '-o', filamat.absolutePath, mat.absolutePath
+            }
+        }
+    }
+}
+
+def compileFilamentMaterials = tasks.register('compileFilamentMaterials', CompileFilamentMaterials) {
+    group = 'build'
+    description = 'Compiles the Filament .mat materials with matc into debug assets.'
+    materialSources.from(fileTree('src/debug/materials') { include '*.mat' })
+    matc.from(configurations.matc)
+}
+
+androidComponents {
+    onVariants(selector().withBuildType('debug')) { variant ->
+        variant.sources.assets.addGeneratedSourceDirectory(compileFilamentMaterials) { it.outputDir }
     }
 }
 
@@ -273,9 +353,21 @@ dependencies {
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
 
+    // ── Filament (stage F0: debug-only world view, see above) ──
+    debugImplementation "com.google.android.filament:filament-android:${filamentVersion}"
+    matc "com.google.android.filament:matc:${filamentVersion}:${matcClassifier}@exe"
+
     testImplementation 'junit:junit:4.13.2'
     // Robolectric runs resource-level checks (layout inflation under the
     // app theme) on the JVM; see LayoutInflationTest.
     testImplementation 'org.robolectric:robolectric:4.14.1'
     testImplementation 'androidx.test:core:1.6.1'
+    // Local HTTPS/login servers for the TLS and MFA login tests.
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'com.squareup.okhttp3:okhttp-tls:4.12.0'
+
+    // On-device checks (FilamentWorldLifecycleTest: P4-ENGINE-01).
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:core:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 }
