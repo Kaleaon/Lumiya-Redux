@@ -1,25 +1,41 @@
 package com.lumiyaviewer.lumiya.utils;
 
-import java.lang.reflect.Array;
-
 public class LevensteinDistance {
-    public static int computeLevensteinDistance(CharSequence charSequence, CharSequence charSequence2) {
-        int[][] iArr = (int[][]) Array.newInstance((Class<?>) Integer.TYPE, charSequence.length() + 1, charSequence2.length() + 1);
-        for (int i = 0; i <= charSequence.length(); i++) {
-            iArr[i][0] = i;
-        }
-        for (int i2 = 1; i2 <= charSequence2.length(); i2++) {
-            iArr[0][i2] = i2;
-        }
-        for (int i3 = 1; i3 <= charSequence.length(); i3++) {
-            for (int i4 = 1; i4 <= charSequence2.length(); i4++) {
-                iArr[i3][i4] = minimum(iArr[i3 - 1][i4] + 1, iArr[i3][i4 - 1] + 1, (charSequence.charAt(i3 + (-1)) == charSequence2.charAt(i4 + (-1)) ? 0 : 1) + iArr[i3 - 1][i4 - 1]);
-            }
-        }
-        return iArr[charSequence.length()][charSequence2.length()];
-    }
+   public static int computeLevensteinDistance(CharSequence var0, CharSequence var1) {
+      int[][] var8 = new int[var0.length() + 1][var1.length() + 1];
+      int var2 = 0;
 
-    private static int minimum(int i, int i2, int i3) {
-        return Math.min(Math.min(i, i2), i3);
-    }
+      while (var2 <= var0.length()) {
+         var8[var2][0] = var2++;
+      }
+
+      var2 = 1;
+
+      while (var2 <= var1.length()) {
+         var8[0][var2] = var2++;
+      }
+
+      for (int var11 = 1; var11 <= var0.length(); var11++) {
+         for (int var3 = 1; var3 <= var1.length(); var3++) {
+            int[] var9 = var8[var11];
+            int var7 = var8[var11 - 1][var3];
+            int var5 = var8[var11][var3 - 1];
+            int var6 = var8[var11 - 1][var3 - 1];
+            byte var4;
+            if (var0.charAt(var11 - 1) == var1.charAt(var3 - 1)) {
+               var4 = 0;
+            } else {
+               var4 = 1;
+            }
+
+            var9[var3] = minimum(var7 + 1, var5 + 1, var4 + var6);
+         }
+      }
+
+      return var8[var0.length()][var1.length()];
+   }
+
+   private static int minimum(int var0, int var1, int var2) {
+      return Math.min(Math.min(var0, var1), var2);
+   }
 }
