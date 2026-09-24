@@ -18,11 +18,11 @@ public class Friend {
         this.uuid = uuid;
     }
 
-    public Friend(UUID uuid, int i, int i2, boolean z) {
+    public Friend(UUID uuid, int rightsGiven, int rightsHas, boolean isOnline) {
         this.uuid = uuid;
-        this.rightsGiven = i;
-        this.rightsHas = i2;
-        this.isOnline = z;
+        this.rightsGiven = rightsGiven;
+        this.rightsHas = rightsHas;
+        this.isOnline = isOnline;
     }
 
     public boolean getIsOnline() {
@@ -41,16 +41,16 @@ public class Friend {
         return this.uuid;
     }
 
-    public void setIsOnline(boolean z) {
-        this.isOnline = z;
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 
-    public void setRightsGiven(int i) {
-        this.rightsGiven = i;
+    public void setRightsGiven(int rightsGiven) {
+        this.rightsGiven = rightsGiven;
     }
 
-    public void setRightsHas(int i) {
-        this.rightsHas = i;
+    public void setRightsHas(int rightsHas) {
+        this.rightsHas = rightsHas;
     }
 
     public void setUuid(UUID uuid) {

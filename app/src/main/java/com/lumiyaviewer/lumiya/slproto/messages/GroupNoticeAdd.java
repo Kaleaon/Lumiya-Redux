@@ -44,8 +44,8 @@ public class GroupNoticeAdd extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupNoticeAdd(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupNoticeAdd(this);
     }
 
     @Override

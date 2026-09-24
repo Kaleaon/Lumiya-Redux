@@ -41,8 +41,8 @@ public class BuyObjectInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleBuyObjectInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleBuyObjectInventory(this);
     }
 
     @Override

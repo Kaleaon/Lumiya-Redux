@@ -41,8 +41,8 @@ public class PayPriceReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePayPriceReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePayPriceReply(this);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class PayPriceReply extends SLMessage {
         this.ObjectData_Field.ObjectID = unpackUUID(byteBuffer);
         this.ObjectData_Field.DefaultPayPrice = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ButtonData buttonData = new ButtonData();
             buttonData.PayButton = unpackInt(byteBuffer);
             this.ButtonData_Fields.add(buttonData);

@@ -45,8 +45,8 @@ public class AcceptFriendship extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAcceptFriendship(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAcceptFriendship(this);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AcceptFriendship extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.TransactionBlock_Field.TransactionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             this.FolderData_Fields.add(folderData);

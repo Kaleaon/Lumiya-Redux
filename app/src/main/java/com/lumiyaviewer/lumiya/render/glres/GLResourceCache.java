@@ -25,12 +25,12 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
         @Override
         public void GLCompleteLoad() {
             ResourceType resourcetype;
-            boolean z;
+            boolean loadedFinal;
             synchronized (this) {
                 resourcetype = this.loadedResource;
-                z = this.loadedFinal;
+                loadedFinal = this.loadedFinal;
             }
-            if (z) {
+            if (loadedFinal) {
                 completeRequest(resourcetype);
             } else {
                 intermediateResult(resourcetype);
@@ -50,21 +50,21 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
         }
 
         @Override
-        public int GLLoad(RenderContext renderContext, GLLoadQueue.GLLoadHandler gLLoadHandler) {
+        public int GLLoad(RenderContext renderContext, GLLoadQueue.GLLoadHandler glLoadHandler) {
             Raw raw;
-            boolean z;
+            boolean finalResult;
             synchronized (this) {
                 raw = this.rawResource;
-                z = this.finalResult;
+                finalResult = this.finalResult;
             }
             ResourceType resourcetype = (ResourceType) GLResourceCache.this.LoadResource(getParams(), raw, renderContext);
             int loadedSize = resourcetype != null ? resourcetype.getLoadedSize() : 0;
             synchronized (this) {
                 this.loadedResource = resourcetype;
-                this.loadedFinal = z;
+                this.loadedFinal = finalResult;
             }
             if (resourcetype != null) {
-                gLLoadHandler.GLResourceLoaded(this);
+                glLoadHandler.GLResourceLoaded(this);
             }
             return loadedSize;
         }
@@ -102,8 +102,8 @@ public abstract class GLResourceCache<ResourceParams, RawType, ResourceType exte
         }
     }
 
-    protected GLResourceCache(GLLoadQueue gLLoadQueue) {
-        this.loadQueue = gLLoadQueue;
+    protected GLResourceCache(GLLoadQueue glLoadQueue) {
+        this.loadQueue = glLoadQueue;
     }
 
     protected abstract void CancelRawResource(ResourceConsumer resourceConsumer);

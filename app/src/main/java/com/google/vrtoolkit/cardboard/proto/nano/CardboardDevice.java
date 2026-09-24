@@ -51,8 +51,8 @@ public interface CardboardDevice {
             return new CardboardInternalParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static CardboardInternalParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (CardboardInternalParams) MessageNano.mergeFrom(new CardboardInternalParams(), bArr);
+        public static CardboardInternalParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (CardboardInternalParams) MessageNano.mergeFrom(new CardboardInternalParams(), bytes);
         }
 
         public final CardboardInternalParams clear() {
@@ -117,8 +117,8 @@ public interface CardboardDevice {
             int computeSerializedSize = super.computeSerializedSize();
             if (this.eyeOrientations != null && this.eyeOrientations.length > 0) {
                 int i = 0;
-                for (int i2 = 0; i2 < this.eyeOrientations.length; i2++) {
-                    i += CodedOutputByteBufferNano.computeInt32SizeNoTag(this.eyeOrientations[i2]);
+                for (int j = 0; j < this.eyeOrientations.length; j++) {
+                    i += CodedOutputByteBufferNano.computeInt32SizeNoTag(this.eyeOrientations[j]);
                 }
                 computeRawVarint32Size = computeSerializedSize + i + 1 + CodedOutputByteBufferNano.computeRawVarint32Size(i);
             } else {
@@ -188,14 +188,14 @@ public interface CardboardDevice {
                         return this;
                     case 8:
                         int repeatedFieldArrayLength = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 8);
-                        int[] iArr = new int[repeatedFieldArrayLength];
+                        int[] ints = new int[repeatedFieldArrayLength];
                         int i = 0;
-                        for (int i2 = 0; i2 < repeatedFieldArrayLength; i2++) {
-                            if (i2 != 0) {
+                        for (int j = 0; j < repeatedFieldArrayLength; j++) {
+                            if (j != 0) {
                                 codedInputByteBufferNano.readTag();
                             }
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
@@ -204,7 +204,7 @@ public interface CardboardDevice {
                                 case 5:
                                 case 6:
                                 case 7:
-                                    iArr[i] = readInt32;
+                                    ints[i] = int32;
                                     i++;
                                     break;
                             }
@@ -214,15 +214,15 @@ public interface CardboardDevice {
                         } else {
                             int length = this.eyeOrientations != null ? this.eyeOrientations.length : 0;
                             if (length != 0 || i != repeatedFieldArrayLength) {
-                                int[] iArr2 = new int[length + i];
+                                int[] ints2 = new int[length + i];
                                 if (length != 0) {
-                                    System.arraycopy(this.eyeOrientations, 0, iArr2, 0, length);
+                                    System.arraycopy(this.eyeOrientations, 0, ints2, 0, length);
                                 }
-                                System.arraycopy(iArr, 0, iArr2, length, i);
-                                this.eyeOrientations = iArr2;
+                                System.arraycopy(ints, 0, ints2, length, i);
+                                this.eyeOrientations = ints2;
                                 break;
                             } else {
-                                this.eyeOrientations = iArr;
+                                this.eyeOrientations = ints;
                                 break;
                             }
                         }
@@ -247,13 +247,13 @@ public interface CardboardDevice {
                         if (i3 != 0) {
                             codedInputByteBufferNano.rewindToPosition(position);
                             int length2 = this.eyeOrientations != null ? this.eyeOrientations.length : 0;
-                            int[] iArr3 = new int[i3 + length2];
+                            int[] ints3 = new int[i3 + length2];
                             if (length2 != 0) {
-                                System.arraycopy(this.eyeOrientations, 0, iArr3, 0, length2);
+                                System.arraycopy(this.eyeOrientations, 0, ints3, 0, length2);
                             }
                             while (codedInputByteBufferNano.getBytesUntilLimit() > 0) {
-                                int readInt322 = codedInputByteBufferNano.readInt32();
-                                switch (readInt322) {
+                                int int323 = codedInputByteBufferNano.readInt32();
+                                switch (int323) {
                                     case 0:
                                     case 1:
                                     case 2:
@@ -262,12 +262,12 @@ public interface CardboardDevice {
                                     case 5:
                                     case 6:
                                     case 7:
-                                        iArr3[length2] = readInt322;
+                                        ints3[length2] = int323;
                                         length2++;
                                         break;
                                 }
                             }
-                            this.eyeOrientations = iArr3;
+                            this.eyeOrientations = ints3;
                         }
                         codedInputByteBufferNano.popLimit(pushLimit);
                         break;
@@ -300,38 +300,38 @@ public interface CardboardDevice {
             }
         }
 
-        public final CardboardInternalParams setAccelerometer(String str) {
-            if (str == null) {
+        public final CardboardInternalParams setAccelerometer(String accelerometer) {
+            if (accelerometer == null) {
                 throw new NullPointerException();
             }
-            this.accelerometer_ = str;
+            this.accelerometer_ = accelerometer;
             this.bitField0_ |= 8;
             return this;
         }
 
-        public final CardboardInternalParams setGyroscope(String str) {
-            if (str == null) {
+        public final CardboardInternalParams setGyroscope(String gyroscope) {
+            if (gyroscope == null) {
                 throw new NullPointerException();
             }
-            this.gyroscope_ = str;
+            this.gyroscope_ = gyroscope;
             this.bitField0_ |= 16;
             return this;
         }
 
-        public final CardboardInternalParams setScreenCenterToLensDistance(float f) {
-            this.screenCenterToLensDistance_ = f;
+        public final CardboardInternalParams setScreenCenterToLensDistance(float screenCenterToLensDistance) {
+            this.screenCenterToLensDistance_ = screenCenterToLensDistance;
             this.bitField0_ |= 1;
             return this;
         }
 
-        public final CardboardInternalParams setXPpiOverride(float f) {
-            this.xPpiOverride_ = f;
+        public final CardboardInternalParams setXPpiOverride(float xPpiOverride) {
+            this.xPpiOverride_ = xPpiOverride;
             this.bitField0_ |= 2;
             return this;
         }
 
-        public final CardboardInternalParams setYPpiOverride(float f) {
-            this.yPpiOverride_ = f;
+        public final CardboardInternalParams setYPpiOverride(float yPpiOverride) {
+            this.yPpiOverride_ = yPpiOverride;
             this.bitField0_ |= 4;
             return this;
         }
@@ -340,13 +340,13 @@ public interface CardboardDevice {
         public final void writeTo(CodedOutputByteBufferNano codedOutputByteBufferNano) throws IOException {
             if (this.eyeOrientations != null && this.eyeOrientations.length > 0) {
                 int i = 0;
-                for (int i2 = 0; i2 < this.eyeOrientations.length; i2++) {
-                    i += CodedOutputByteBufferNano.computeInt32SizeNoTag(this.eyeOrientations[i2]);
+                for (int j = 0; j < this.eyeOrientations.length; j++) {
+                    i += CodedOutputByteBufferNano.computeInt32SizeNoTag(this.eyeOrientations[j]);
                 }
                 codedOutputByteBufferNano.writeRawVarint32(10);
                 codedOutputByteBufferNano.writeRawVarint32(i);
-                for (int i3 = 0; i3 < this.eyeOrientations.length; i3++) {
-                    codedOutputByteBufferNano.writeRawVarint32(this.eyeOrientations[i3]);
+                for (int k = 0; k < this.eyeOrientations.length; k++) {
+                    codedOutputByteBufferNano.writeRawVarint32(this.eyeOrientations[k]);
                 }
             }
             if ((this.bitField0_ & 1) != 0) {
@@ -393,8 +393,8 @@ public interface CardboardDevice {
             return new DaydreamInternalParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static DaydreamInternalParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (DaydreamInternalParams) MessageNano.mergeFrom(new DaydreamInternalParams(), bArr);
+        public static DaydreamInternalParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (DaydreamInternalParams) MessageNano.mergeFrom(new DaydreamInternalParams(), bytes);
         }
 
         public final DaydreamInternalParams clear() {
@@ -439,14 +439,14 @@ public interface CardboardDevice {
             if (this.alignmentMarkers == null || this.alignmentMarkers.length <= 0) {
                 return computeSerializedSize;
             }
-            int i = computeSerializedSize;
-            for (int i2 = 0; i2 < this.alignmentMarkers.length; i2++) {
-                ScreenAlignmentMarker screenAlignmentMarker = this.alignmentMarkers[i2];
+            int computeSerializedSize2 = computeSerializedSize;
+            for (int j = 0; j < this.alignmentMarkers.length; j++) {
+                ScreenAlignmentMarker screenAlignmentMarker = this.alignmentMarkers[j];
                 if (screenAlignmentMarker != null) {
-                    i += CodedOutputByteBufferNano.computeMessageSize(2, screenAlignmentMarker);
+                    computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(2, screenAlignmentMarker);
                 }
             }
-            return i;
+            return computeSerializedSize2;
         }
 
         public final int getVersion() {
@@ -494,8 +494,8 @@ public interface CardboardDevice {
             }
         }
 
-        public final DaydreamInternalParams setVersion(int i) {
-            this.version_ = i;
+        public final DaydreamInternalParams setVersion(int version) {
+            this.version_ = version;
             this.bitField0_ |= 1;
             return this;
         }
@@ -565,8 +565,8 @@ public interface CardboardDevice {
             return new DeviceParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static DeviceParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (DeviceParams) MessageNano.mergeFrom(new DeviceParams(), bArr);
+        public static DeviceParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (DeviceParams) MessageNano.mergeFrom(new DeviceParams(), bytes);
         }
 
         public final DeviceParams clear() {
@@ -787,93 +787,93 @@ public interface CardboardDevice {
                         this.bitField0_ |= 8;
                         break;
                     case 42:
-                        int readRawVarint32 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit = codedInputByteBufferNano.pushLimit(readRawVarint32);
-                        int i = readRawVarint32 / 4;
+                        int rawVarint32 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit = codedInputByteBufferNano.pushLimit(rawVarint32);
+                        int i = rawVarint32 / 4;
                         int length = this.leftEyeFieldOfViewAngles != null ? this.leftEyeFieldOfViewAngles.length : 0;
-                        float[] fArr = new float[i + length];
+                        float[] floats = new float[i + length];
                         if (length != 0) {
-                            System.arraycopy(this.leftEyeFieldOfViewAngles, 0, fArr, 0, length);
+                            System.arraycopy(this.leftEyeFieldOfViewAngles, 0, floats, 0, length);
                         }
-                        while (length < fArr.length) {
-                            fArr[length] = codedInputByteBufferNano.readFloat();
+                        while (length < floats.length) {
+                            floats[length] = codedInputByteBufferNano.readFloat();
                             length++;
                         }
-                        this.leftEyeFieldOfViewAngles = fArr;
+                        this.leftEyeFieldOfViewAngles = floats;
                         codedInputByteBufferNano.popLimit(pushLimit);
                         break;
                     case 45:
                         int repeatedFieldArrayLength = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 45);
                         int length2 = this.leftEyeFieldOfViewAngles != null ? this.leftEyeFieldOfViewAngles.length : 0;
-                        float[] fArr2 = new float[repeatedFieldArrayLength + length2];
+                        float[] floats2 = new float[repeatedFieldArrayLength + length2];
                         if (length2 != 0) {
-                            System.arraycopy(this.leftEyeFieldOfViewAngles, 0, fArr2, 0, length2);
+                            System.arraycopy(this.leftEyeFieldOfViewAngles, 0, floats2, 0, length2);
                         }
-                        while (length2 < fArr2.length - 1) {
-                            fArr2[length2] = codedInputByteBufferNano.readFloat();
+                        while (length2 < floats2.length - 1) {
+                            floats2[length2] = codedInputByteBufferNano.readFloat();
                             codedInputByteBufferNano.readTag();
                             length2++;
                         }
-                        fArr2[length2] = codedInputByteBufferNano.readFloat();
-                        this.leftEyeFieldOfViewAngles = fArr2;
+                        floats2[length2] = codedInputByteBufferNano.readFloat();
+                        this.leftEyeFieldOfViewAngles = floats2;
                         break;
                     case 53:
                         this.trayToLensDistance_ = codedInputByteBufferNano.readFloat();
                         this.bitField0_ |= 32;
                         break;
                     case 58:
-                        int readRawVarint322 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit2 = codedInputByteBufferNano.pushLimit(readRawVarint322);
-                        int i2 = readRawVarint322 / 4;
+                        int rawVarint323 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit2 = codedInputByteBufferNano.pushLimit(rawVarint323);
+                        int i2 = rawVarint323 / 4;
                         int length3 = this.distortionCoefficients != null ? this.distortionCoefficients.length : 0;
-                        float[] fArr3 = new float[i2 + length3];
+                        float[] floats3 = new float[i2 + length3];
                         if (length3 != 0) {
-                            System.arraycopy(this.distortionCoefficients, 0, fArr3, 0, length3);
+                            System.arraycopy(this.distortionCoefficients, 0, floats3, 0, length3);
                         }
-                        while (length3 < fArr3.length) {
-                            fArr3[length3] = codedInputByteBufferNano.readFloat();
+                        while (length3 < floats3.length) {
+                            floats3[length3] = codedInputByteBufferNano.readFloat();
                             length3++;
                         }
-                        this.distortionCoefficients = fArr3;
+                        this.distortionCoefficients = floats3;
                         codedInputByteBufferNano.popLimit(pushLimit2);
                         break;
                     case 61:
                         int repeatedFieldArrayLength2 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 61);
                         int length4 = this.distortionCoefficients != null ? this.distortionCoefficients.length : 0;
-                        float[] fArr4 = new float[repeatedFieldArrayLength2 + length4];
+                        float[] floats4 = new float[repeatedFieldArrayLength2 + length4];
                         if (length4 != 0) {
-                            System.arraycopy(this.distortionCoefficients, 0, fArr4, 0, length4);
+                            System.arraycopy(this.distortionCoefficients, 0, floats4, 0, length4);
                         }
-                        while (length4 < fArr4.length - 1) {
-                            fArr4[length4] = codedInputByteBufferNano.readFloat();
+                        while (length4 < floats4.length - 1) {
+                            floats4[length4] = codedInputByteBufferNano.readFloat();
                             codedInputByteBufferNano.readTag();
                             length4++;
                         }
-                        fArr4[length4] = codedInputByteBufferNano.readFloat();
-                        this.distortionCoefficients = fArr4;
+                        floats4[length4] = codedInputByteBufferNano.readFloat();
+                        this.distortionCoefficients = floats4;
                         break;
                     case 80:
                         this.hasMagnet_ = codedInputByteBufferNano.readBool();
                         this.bitField0_ |= 64;
                         break;
                     case 88:
-                        int readInt32 = codedInputByteBufferNano.readInt32();
-                        switch (readInt32) {
+                        int int32 = codedInputByteBufferNano.readInt32();
+                        switch (int32) {
                             case 0:
                             case 1:
                             case 2:
-                                this.verticalAlignment_ = readInt32;
+                                this.verticalAlignment_ = int32;
                                 this.bitField0_ |= 16;
                                 break;
                         }
                     case 96:
-                        int readInt322 = codedInputByteBufferNano.readInt32();
-                        switch (readInt322) {
+                        int int323 = codedInputByteBufferNano.readInt32();
+                        switch (int323) {
                             case 0:
                             case 1:
                             case 2:
                             case 3:
-                                this.primaryButton_ = readInt322;
+                                this.primaryButton_ = int323;
                                 this.bitField0_ |= 128;
                                 break;
                         }
@@ -898,56 +898,56 @@ public interface CardboardDevice {
             }
         }
 
-        public final DeviceParams setHasMagnet(boolean z) {
-            this.hasMagnet_ = z;
+        public final DeviceParams setHasMagnet(boolean hasMagnet) {
+            this.hasMagnet_ = hasMagnet;
             this.bitField0_ |= 64;
             return this;
         }
 
-        public final DeviceParams setInterLensDistance(float f) {
-            this.interLensDistance_ = f;
+        public final DeviceParams setInterLensDistance(float interLensDistance) {
+            this.interLensDistance_ = interLensDistance;
             this.bitField0_ |= 8;
             return this;
         }
 
-        public final DeviceParams setModel(String str) {
-            if (str == null) {
+        public final DeviceParams setModel(String model) {
+            if (model == null) {
                 throw new NullPointerException();
             }
-            this.model_ = str;
+            this.model_ = model;
             this.bitField0_ |= 2;
             return this;
         }
 
-        public final DeviceParams setPrimaryButton(int i) {
-            this.primaryButton_ = i;
+        public final DeviceParams setPrimaryButton(int primaryButton) {
+            this.primaryButton_ = primaryButton;
             this.bitField0_ |= 128;
             return this;
         }
 
-        public final DeviceParams setScreenToLensDistance(float f) {
-            this.screenToLensDistance_ = f;
+        public final DeviceParams setScreenToLensDistance(float screenToLensDistance) {
+            this.screenToLensDistance_ = screenToLensDistance;
             this.bitField0_ |= 4;
             return this;
         }
 
-        public final DeviceParams setTrayToLensDistance(float f) {
-            this.trayToLensDistance_ = f;
+        public final DeviceParams setTrayToLensDistance(float trayToLensDistance) {
+            this.trayToLensDistance_ = trayToLensDistance;
             this.bitField0_ |= 32;
             return this;
         }
 
-        public final DeviceParams setVendor(String str) {
-            if (str == null) {
+        public final DeviceParams setVendor(String vendor) {
+            if (vendor == null) {
                 throw new NullPointerException();
             }
-            this.vendor_ = str;
+            this.vendor_ = vendor;
             this.bitField0_ |= 1;
             return this;
         }
 
-        public final DeviceParams setVerticalAlignment(int i) {
-            this.verticalAlignment_ = i;
+        public final DeviceParams setVerticalAlignment(int verticalAlignment) {
+            this.verticalAlignment_ = verticalAlignment;
             this.bitField0_ |= 16;
             return this;
         }
@@ -981,8 +981,8 @@ public interface CardboardDevice {
                 int length2 = this.distortionCoefficients.length * 4;
                 codedOutputByteBufferNano.writeRawVarint32(58);
                 codedOutputByteBufferNano.writeRawVarint32(length2);
-                for (int i2 = 0; i2 < this.distortionCoefficients.length; i2++) {
-                    codedOutputByteBufferNano.writeFloatNoTag(this.distortionCoefficients[i2]);
+                for (int j = 0; j < this.distortionCoefficients.length; j++) {
+                    codedOutputByteBufferNano.writeFloatNoTag(this.distortionCoefficients[j]);
                 }
             }
             if ((this.bitField0_ & 64) != 0) {
@@ -1029,8 +1029,8 @@ public interface CardboardDevice {
             return new ScreenAlignmentMarker().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static ScreenAlignmentMarker parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (ScreenAlignmentMarker) MessageNano.mergeFrom(new ScreenAlignmentMarker(), bArr);
+        public static ScreenAlignmentMarker parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (ScreenAlignmentMarker) MessageNano.mergeFrom(new ScreenAlignmentMarker(), bytes);
         }
 
         public final ScreenAlignmentMarker clear() {
@@ -1112,14 +1112,14 @@ public interface CardboardDevice {
             }
         }
 
-        public final ScreenAlignmentMarker setHorizontal(float f) {
-            this.horizontal_ = f;
+        public final ScreenAlignmentMarker setHorizontal(float horizontal) {
+            this.horizontal_ = horizontal;
             this.bitField0_ |= 1;
             return this;
         }
 
-        public final ScreenAlignmentMarker setVertical(float f) {
-            this.vertical_ = f;
+        public final ScreenAlignmentMarker setVertical(float vertical) {
+            this.vertical_ = vertical;
             this.bitField0_ |= 2;
             return this;
         }

@@ -107,15 +107,15 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
             }
         }
 
-        private void callOnSurfaceCreated(EGLConfig eGLConfig) {
+        private void callOnSurfaceCreated(EGLConfig eglConfig) {
             CardboardViewNativeImpl.this.nativeOnSurfaceCreated(CardboardViewNativeImpl.this.nativeCardboardView);
             if (this.renderer != null) {
-                this.renderer.onSurfaceCreated(eGLConfig);
+                this.renderer.onSurfaceCreated(eglConfig);
             } else {
                 if (this.stereoRenderer == null) {
                     return;
                 }
-                this.stereoRenderer.onSurfaceCreated(eGLConfig);
+                this.stereoRenderer.onSurfaceCreated(eglConfig);
             }
         }
 
@@ -139,7 +139,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
 
         @Override
-        public void onDrawFrame(GL10 gl10) {
+        public void onDrawFrame(GL10 gL10) {
             if ((this.renderer == null && this.stereoRenderer == null) || !this.surfaceCreated) {
                 return;
             }
@@ -150,7 +150,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl10, int i, int i2) {
+        public void onSurfaceChanged(GL10 gL10, int i, int i2) {
             if ((this.renderer == null && this.stereoRenderer == null) || !this.surfaceCreated) {
                 return;
             }
@@ -169,13 +169,13 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
         }
 
         @Override
-        public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
+        public void onSurfaceCreated(GL10 gL10, EGLConfig eglConfig) {
             if (this.renderer == null && this.stereoRenderer == null) {
                 return;
             }
             this.surfaceCreated = true;
             this.eglDisplay = EGL14.eglGetCurrentDisplay();
-            callOnSurfaceCreated(eGLConfig);
+            callOnSurfaceCreated(eglConfig);
         }
 
         public void setRenderer(GvrView.Renderer renderer) {
@@ -284,7 +284,7 @@ public class CardboardViewNativeImpl implements CardboardGLSurfaceView.DetachLis
 
     public native void nativeSetDistortionCorrectionScale(long j, float f);
 
-    public native void nativeSetGvrViewerParams(long j, byte[] bArr);
+    public native void nativeSetGvrViewerParams(long j, byte[] bytes);
 
     public native void nativeSetMultisampling(long j, int i);
 

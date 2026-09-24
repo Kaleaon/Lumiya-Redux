@@ -33,56 +33,56 @@ public class DrawableAvatarPart implements ResourceConsumer {
         @Override
         public void run() {
             OpenJPEG openJPEG;
-            float[] fArr;
+            float[] partMorphParams;
             Debug.Printf("Avatar: meshUpdate entered for part %s", DrawableAvatarPart.this.faceIndex.toString());
             synchronized (DrawableAvatarPart.this.updateLock) {
                 openJPEG = DrawableAvatarPart.this.rawTexture;
-                fArr = DrawableAvatarPart.this.partMorphParams;
+                partMorphParams = DrawableAvatarPart.this.partMorphParams;
             }
-            if (fArr == null || openJPEG == null) {
+            if (partMorphParams == null || openJPEG == null) {
                 return;
             }
-            Debug.Printf("Avatar: meshUpdate: part %s params %s", DrawableAvatarPart.this.faceIndex.toString(), Arrays.toString(fArr));
-            SLAnimatedMeshData sLAnimatedMeshData = new SLAnimatedMeshData(DrawableAvatarPart.this.referenceMeshData, DrawableAvatarPart.this.hasGL20);
-            DrawableAvatarPart.this.referenceMeshData.applyMorphData(sLAnimatedMeshData, fArr, openJPEG);
+            Debug.Printf("Avatar: meshUpdate: part %s params %s", DrawableAvatarPart.this.faceIndex.toString(), Arrays.toString(partMorphParams));
+            SLAnimatedMeshData animatedMeshData = new SLAnimatedMeshData(DrawableAvatarPart.this.referenceMeshData, DrawableAvatarPart.this.hasGL20);
+            DrawableAvatarPart.this.referenceMeshData.applyMorphData(animatedMeshData, partMorphParams, openJPEG);
             synchronized (DrawableAvatarPart.this.updateLock) {
-                DrawableAvatarPart.this.meshData = sLAnimatedMeshData;
+                DrawableAvatarPart.this.meshData = animatedMeshData;
                 DrawableAvatarPart.this.meshDataUpdated = true;
             }
         }
     };
 
-    DrawableAvatarPart(UUID uuid, AvatarTextureFaceIndex avatarTextureFaceIndex, SLPolyMesh sLPolyMesh, boolean z) {
+    DrawableAvatarPart(UUID uuid, AvatarTextureFaceIndex avatarTextureFaceIndex, SLPolyMesh polyMesh, boolean hasGL20) {
         this.avatarUUID = uuid;
         this.faceIndex = avatarTextureFaceIndex;
-        this.referenceMeshData = sLPolyMesh;
-        this.hasGL20 = z;
+        this.referenceMeshData = polyMesh;
+        this.hasGL20 = hasGL20;
     }
 
     private void RequestMeshUpdate() {
         PrimComputeExecutor.getInstance().execute(this.meshUpdate);
     }
 
-    public final void GLDraw(RenderContext renderContext, float[] fArr, boolean z) {
-        SLAnimatedMeshData sLAnimatedMeshData;
+    public final void GLDraw(RenderContext renderContext, float[] floats, boolean z) {
+        SLAnimatedMeshData meshData;
         DrawableFaceTexture drawableFaceTexture;
         if (renderContext.hasGL20) {
             z = false;
         }
         synchronized (this.updateLock) {
-            sLAnimatedMeshData = this.meshData;
+            meshData = this.meshData;
             drawableFaceTexture = this.texture;
-            if (sLAnimatedMeshData != null && this.meshDataUpdated && fArr != null) {
+            if (meshData != null && this.meshDataUpdated && floats != null) {
                 this.meshDataUpdated = false;
                 z = true;
             }
         }
-        if (sLAnimatedMeshData != null) {
+        if (meshData != null) {
             if (z) {
-                this.referenceMeshData.applySkeleton(sLAnimatedMeshData, fArr);
-                sLAnimatedMeshData.setVerticesDirty();
+                this.referenceMeshData.applySkeleton(meshData, floats);
+                meshData.setVerticesDirty();
             }
-            sLAnimatedMeshData.GLDraw(renderContext, drawableFaceTexture);
+            meshData.GLDraw(renderContext, drawableFaceTexture);
         }
     }
 
@@ -104,12 +104,12 @@ public class DrawableAvatarPart implements ResourceConsumer {
         return this.faceIndex;
     }
 
-    void setPartMorphParams(float[] fArr) {
+    void setPartMorphParams(float[] floats) {
         boolean z;
         synchronized (this.updateLock) {
-            z = !Arrays.equals(this.partMorphParams, fArr);
+            z = !Arrays.equals(this.partMorphParams, floats);
             if (z) {
-                this.partMorphParams = fArr;
+                this.partMorphParams = floats;
             }
         }
         if (z) {
@@ -118,7 +118,7 @@ public class DrawableAvatarPart implements ResourceConsumer {
         }
     }
 
-    void setTexture(GLTextureCache gLTextureCache, UUID uuid) {
+    void setTexture(GLTextureCache glTextureCache, UUID uuid) {
         synchronized (this.updateLock) {
             Object[] objArr = new Object[2];
             objArr[0] = this.faceIndex.toString();
@@ -131,9 +131,9 @@ public class DrawableAvatarPart implements ResourceConsumer {
                     uuid = null;
                 }
             }
-            UUID uuid2 = this.textureUUID;
-            if (uuid2 != null) {
-                if (uuid != null && uuid2.equals(uuid)) {
+            UUID textureUUID = this.textureUUID;
+            if (textureUUID != null) {
+                if (uuid != null && textureUUID.equals(uuid)) {
                     return;
                 }
             } else if (uuid == null) {

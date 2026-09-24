@@ -33,8 +33,8 @@ public class GroupTitlesRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupTitlesRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupTitlesRequest(this);
     }
 
     @Override

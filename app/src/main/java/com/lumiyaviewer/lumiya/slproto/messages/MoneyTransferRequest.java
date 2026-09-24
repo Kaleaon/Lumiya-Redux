@@ -48,8 +48,8 @@ public class MoneyTransferRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMoneyTransferRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMoneyTransferRequest(this);
     }
 
     @Override

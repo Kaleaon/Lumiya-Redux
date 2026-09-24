@@ -112,16 +112,10 @@ public class RenameLocals {
     }
 
     static int renameFile(CompilationUnit cu) {
-        // Every identifier already used in the file is off limits for a new name.
-        // Names a new local could capture or clash with: every unqualified
-        // name used in the file (fields, inherited fields, statics, other
-        // locals) and every declared variable. Member names after a dot and
-        // method names cannot collide with a local.
-        Set<String> taken = new HashSet<>();
-        cu.findAll(NameExpr.class).forEach(n -> taken.add(n.getNameAsString()));
-        cu.findAll(VariableDeclarator.class).forEach(v -> taken.add(v.getNameAsString()));
-        cu.findAll(Parameter.class).forEach(v -> taken.add(v.getNameAsString()));
-        cu.findAll(com.github.javaparser.ast.body.TypeDeclaration.class).forEach(t -> taken.add(t.getNameAsString()));
+        // Type names declared in the file can be resolved as expressions
+        // (Outer.CONSTANT), so a local must never take one.
+        Set<String> typeNames = new HashSet<>();
+        cu.findAll(com.github.javaparser.ast.body.TypeDeclaration.class).forEach(t -> typeNames.add(t.getNameAsString()));
         Set<String> fields = new HashSet<>();
         cu.findAll(FieldDeclaration.class).forEach(f -> f.getVariables().forEach(v -> fields.add(v.getNameAsString())));
         int total = 0;
@@ -129,6 +123,15 @@ public class RenameLocals {
             if (callable.findAncestor(CallableDeclaration.class).isPresent()) {
                 continue; // handled as part of the outermost callable
             }
+            // Names a new local could capture or clash with, scoped to this
+            // method: every unqualified name it uses (fields, inherited
+            // fields, statics, outer locals) and every name it declares. A
+            // local may shadow a field the method only reaches as this.x;
+            // the byte-identity check (rename_locals.sh) proves each file.
+            Set<String> taken = new HashSet<>(typeNames);
+            callable.findAll(NameExpr.class).forEach(n -> taken.add(n.getNameAsString()));
+            callable.findAll(VariableDeclarator.class).forEach(v -> taken.add(v.getNameAsString()));
+            callable.findAll(Parameter.class).forEach(v -> taken.add(v.getNameAsString()));
             total += renameCallable(callable, taken, fields);
         }
         return total;
@@ -154,6 +157,8 @@ public class RenameLocals {
             if (decl instanceof Parameter && decl.getParentNode().orElse(null) instanceof LambdaExpr) continue;
             String base = suggest(decl, callable, old);
             if (base == null || base.equals(old)) continue;
+            // wearableData2 -> wearableData3 is churn, not a better name.
+            if (!base.equals("i") && base.equals(old.replaceAll("\\d+$", ""))) continue;
             String name = null;
             if (base.equals("i")) {
                 for (String c : COUNTERS) {
@@ -212,6 +217,28 @@ public class RenameLocals {
         }
         if (decl instanceof Parameter && parent instanceof CatchClause) {
             return old.matches("e\\d*") ? null : "e";
+        }
+        if (decl instanceof Parameter && parent instanceof CallableDeclaration) {
+            // A parameter stored straight into a field is named after it:
+            // this.wornOn = z  ->  wornOn.
+            String stored = null;
+            for (AssignExpr a : callable.findAll(AssignExpr.class)) {
+                if (a.getOperator() == AssignExpr.Operator.ASSIGN && a.getValue().isNameExpr()
+                        && a.getValue().asNameExpr().getNameAsString().equals(old)
+                        && a.getTarget().isFieldAccessExpr()
+                        && a.getTarget().asFieldAccessExpr().getScope().isThisExpr()) {
+                    String f = a.getTarget().asFieldAccessExpr().getNameAsString();
+                    if (stored != null && !stored.equals(f)) { stored = null; break; }
+                    stored = f;
+                }
+            }
+            if (stored != null && stored.matches("[a-z][A-Za-z0-9]*")) return stored;
+            // The single argument of setFoo(...) is the new foo.
+            CallableDeclaration<?> owner = (CallableDeclaration<?>) parent;
+            if (owner == callable && owner.getParameters().size() == 1
+                    && owner.getNameAsString().matches("set[A-Z]\\w*")) {
+                return decap(owner.getNameAsString().substring(3));
+            }
         }
         Expression init = null;
         if (decl instanceof VariableDeclarator) {

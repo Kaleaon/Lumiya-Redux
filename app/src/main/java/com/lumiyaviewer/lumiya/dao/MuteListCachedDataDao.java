@@ -24,23 +24,23 @@ public class MuteListCachedDataDao extends AbstractDao<MuteListCachedData, Long>
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MUTE_LIST_CACHED_DATA' ('_id' INTEGER PRIMARY KEY ,'CRC' INTEGER NOT NULL ,'DATA' BLOB NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MUTE_LIST_CACHED_DATA' ('_id' INTEGER PRIMARY KEY ,'CRC' INTEGER NOT NULL ,'DATA' BLOB NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MUTE_LIST_CACHED_DATA'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MUTE_LIST_CACHED_DATA'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, MuteListCachedData muteListCachedData) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, MuteListCachedData muteListCachedData) {
+        sqLiteStatement.clearBindings();
         Long id = muteListCachedData.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindLong(2, muteListCachedData.getCRC());
-        sQLiteStatement.bindBlob(3, muteListCachedData.getData());
+        sqLiteStatement.bindLong(2, muteListCachedData.getCRC());
+        sqLiteStatement.bindBlob(3, muteListCachedData.getData());
     }
 
     @Override

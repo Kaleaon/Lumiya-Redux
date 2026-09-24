@@ -39,8 +39,8 @@ public class ParcelDwellRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDwellRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDwellRequest(this);
     }
 
     @Override

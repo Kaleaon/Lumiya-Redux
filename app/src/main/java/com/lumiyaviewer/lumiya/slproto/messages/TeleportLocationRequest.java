@@ -41,8 +41,8 @@ public class TeleportLocationRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportLocationRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportLocationRequest(this);
     }
 
     @Override

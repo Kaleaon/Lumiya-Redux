@@ -29,8 +29,8 @@ public class SetCPURatio extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetCPURatio(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetCPURatio(this);
     }
 
     @Override

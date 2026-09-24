@@ -10,10 +10,10 @@ public class SLPrimObjectDisplayInfoWithChildren extends SLPrimObjectDisplayInfo
     public final ImmutableList<SLObjectDisplayInfo> children;
     private final boolean implicitlyAdded;
 
-    public SLPrimObjectDisplayInfoWithChildren(SLObjectInfo sLObjectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean z) {
-        super(sLObjectInfo, f);
+    public SLPrimObjectDisplayInfoWithChildren(SLObjectInfo objectInfo, float f, @Nonnull ImmutableList<SLObjectDisplayInfo> immutableList, boolean implicitlyAdded) {
+        super(objectInfo, f);
         this.children = immutableList;
-        this.implicitlyAdded = z;
+        this.implicitlyAdded = implicitlyAdded;
     }
 
     @Override

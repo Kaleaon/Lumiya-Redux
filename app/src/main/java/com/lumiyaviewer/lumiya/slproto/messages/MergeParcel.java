@@ -38,8 +38,8 @@ public class MergeParcel extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMergeParcel(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMergeParcel(this);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MergeParcel extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.MasterParcelData_Field.MasterID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             SlaveParcelData slaveParcelData = new SlaveParcelData();
             slaveParcelData.SlaveID = unpackUUID(byteBuffer);
             this.SlaveParcelData_Fields.add(slaveParcelData);

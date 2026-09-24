@@ -45,8 +45,8 @@ public class AvatarPropertiesUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesUpdate(this);
     }
 
     @Override

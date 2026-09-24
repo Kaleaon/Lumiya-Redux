@@ -7,8 +7,8 @@ public class SLTaskInventoryReceivedEvent {
     public final UUID taskID;
     public final SLTaskInventory taskInventory;
 
-    public SLTaskInventoryReceivedEvent(UUID uuid, SLTaskInventory sLTaskInventory) {
+    public SLTaskInventoryReceivedEvent(UUID uuid, SLTaskInventory taskInventory) {
         this.taskID = uuid;
-        this.taskInventory = sLTaskInventory;
+        this.taskInventory = taskInventory;
     }
 }

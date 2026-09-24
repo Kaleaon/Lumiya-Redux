@@ -22,10 +22,10 @@ public final class SLVoiceUpgradeEvent extends SLChatYesNoEvent {
         this.isInstall = chatMessage.getAssetType().intValue() != 0;
     }
 
-    public SLVoiceUpgradeEvent(@Nonnull UUID uuid, String str, boolean z, String str2) {
+    public SLVoiceUpgradeEvent(@Nonnull UUID uuid, String str, boolean isInstall, String upgradeURL) {
         super(ChatMessageSourceUnknown.getInstance(), uuid, str);
-        this.upgradeURL = str2;
-        this.isInstall = z;
+        this.upgradeURL = upgradeURL;
+        this.isInstall = isInstall;
     }
 
     @Override

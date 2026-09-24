@@ -129,8 +129,8 @@ public class ActiveChatsListAdapter extends BaseAdapter implements Closeable, Di
             return view2;
         }
 
-        public void setAnyoneOnline(boolean z) {
-            this.isAnyoneOnline = z;
+        public void setAnyoneOnline(boolean isAnyoneOnline) {
+            this.isAnyoneOnline = isAnyoneOnline;
         }
     }
 

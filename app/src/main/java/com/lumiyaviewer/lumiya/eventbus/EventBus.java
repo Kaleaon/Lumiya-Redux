@@ -18,10 +18,10 @@ public class EventBus {
         private final Method method;
         private final Object subscriber;
 
-        public EventInvocation(Object obj, Activity activity, Object obj2, Method method, Handler handler) {
-            this.event = obj;
+        public EventInvocation(Object event, Activity activity, Object subscriber, Method method, Handler handler) {
+            this.event = event;
             this.activity = activity;
-            this.subscriber = obj2;
+            this.subscriber = subscriber;
             this.method = method;
             this.handler = handler;
         }

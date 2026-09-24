@@ -31,9 +31,9 @@ public class AvatarPickKey implements Parcelable {
         this.pickID = UUID.fromString(parcel.readString());
     }
 
-    public AvatarPickKey(@Nonnull UUID uuid, @Nonnull UUID uuid2) {
+    public AvatarPickKey(@Nonnull UUID uuid, @Nonnull UUID pickID) {
         this.avatarID = uuid;
-        this.pickID = uuid2;
+        this.pickID = pickID;
     }
 
     @Override

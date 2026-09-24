@@ -70,8 +70,8 @@ public class UpdateInventoryItem extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateInventoryItem(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateInventoryItem(this);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class UpdateInventoryItem extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.TransactionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
             inventoryData.FolderID = unpackUUID(byteBuffer);

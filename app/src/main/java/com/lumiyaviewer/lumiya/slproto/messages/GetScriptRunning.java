@@ -31,8 +31,8 @@ public class GetScriptRunning extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGetScriptRunning(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGetScriptRunning(this);
     }
 
     @Override

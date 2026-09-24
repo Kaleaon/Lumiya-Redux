@@ -132,13 +132,13 @@ public class SLAttachmentPoint {
         pointsByName.put("Right Hind Foot", attachmentPoints[55]);
     }
 
-    private SLAttachmentPoint(int i, String str, int i2, boolean z, SLSkeletonBoneID sLSkeletonBoneID, LLVector3 lLVector3, LLQuaternion lLQuaternion) {
-        this.id = i;
-        this.name = str;
-        this.nonHUDindex = i2;
-        this.isHUD = z;
-        this.bone = sLSkeletonBoneID;
-        this.position = lLVector3;
-        this.rotation = lLQuaternion;
+    private SLAttachmentPoint(int id, String name, int nonHUDindex, boolean isHUD, SLSkeletonBoneID skeletonBoneID, LLVector3 position, LLQuaternion quaternion) {
+        this.id = id;
+        this.name = name;
+        this.nonHUDindex = nonHUDindex;
+        this.isHUD = isHUD;
+        this.bone = skeletonBoneID;
+        this.position = position;
+        this.rotation = quaternion;
     }
 }

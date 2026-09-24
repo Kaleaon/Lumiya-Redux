@@ -226,14 +226,14 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         return makeSelection;
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         View view = getView();
         if (view != null) {
             Object[] objArr = new Object[1];
-            objArr[0] = sLAgentCircuit != null ? "present" : "not present";
+            objArr[0] = agentCircuit != null ? "present" : "not present";
             Debug.Printf("agentCircuit is now %s", objArr);
-            view.findViewById(R.id.sendMessageButton).setVisibility((sLAgentCircuit == null || !(this.vrMode ^ true)) ? View.GONE : View.VISIBLE);
-            view.findViewById(R.id.chat_speak_button).setVisibility((sLAgentCircuit == null || !this.vrMode) ? View.GONE : View.VISIBLE);
+            view.findViewById(R.id.sendMessageButton).setVisibility((agentCircuit == null || !(this.vrMode ^ true)) ? View.GONE : View.VISIBLE);
+            view.findViewById(R.id.chat_speak_button).setVisibility((agentCircuit == null || !this.vrMode) ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -288,8 +288,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         return true;
     }
 
-    public void setTypingNotify(boolean z) {
-        if (!z) {
+    public void setTypingNotify(boolean typingNotify) {
+        if (!typingNotify) {
             if (this.typingNotifiedChatter != null) {
                 sendTypingNotify(this.typingNotifiedChatter, false);
                 this.typingNotifiedChatter = null;
@@ -553,8 +553,8 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
     }
 
     @Override
-    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] iArr) {
-        if (i == 500 && iArr.length > 0 && iArr[0] == 0) {
+    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] ints) {
+        if (i == 500 && ints.length > 0 && ints[0] == 0) {
             new ExportChatHistoryTask(getActivity()).execute(this.chatterID);
         }
     }

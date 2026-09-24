@@ -61,8 +61,8 @@ public class MapBlockReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapBlockReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapBlockReply(this);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MapBlockReply extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.Flags = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.X = unpackShort(byteBuffer) & 65535;
             data.Y = unpackShort(byteBuffer) & 65535;
@@ -109,7 +109,7 @@ public class MapBlockReply extends SLMessage {
             this.Data_Fields.add(data);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             Size size = new Size();
             size.SizeX = unpackShort(byteBuffer) & 65535;
             size.SizeY = unpackShort(byteBuffer) & 65535;

@@ -40,8 +40,8 @@ public class DeviceInfo {
         }
     }
 
-    private DeviceInfo(long j, Context context) {
-        this.nativeObject = j;
+    private DeviceInfo(long nativeObject, Context context) {
+        this.nativeObject = nativeObject;
         this.context = context;
     }
 

@@ -81,7 +81,7 @@ abstract class ResponseCacher<KeyType, MessageType> implements Refreshable<KeyTy
         }
     }
 
-    protected abstract MessageType loadCached(byte[] bArr);
+    protected abstract MessageType loadCached(byte[] bytes);
 
     @Override
     public void requestUpdate(KeyType keytype) {

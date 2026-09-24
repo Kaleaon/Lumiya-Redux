@@ -53,8 +53,8 @@ public class ChatEventViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    void setupTimestampUpdate(Context context, long j) {
-        this.updateTimestamp = j;
+    void setupTimestampUpdate(Context context, long updateTimestamp) {
+        this.updateTimestamp = updateTimestamp;
         updateTimestamp(context);
     }
 

@@ -60,12 +60,12 @@ public class FadingTextViewLog {
         }
     };
 
-    FadingTextViewLog(UserManager userManager, Context context, LinearLayout linearLayout, int i, int i2) {
+    FadingTextViewLog(UserManager userManager, Context context, LinearLayout linearLayout, int logTextColor, int logBackgroundColor) {
         this.userManager = userManager;
         this.context = context;
         this.chatsOverlayLayout = linearLayout;
-        this.logTextColor = i;
-        this.logBackgroundColor = i2;
+        this.logTextColor = logTextColor;
+        this.logBackgroundColor = logBackgroundColor;
     }
 
     void clearChatEvents() {

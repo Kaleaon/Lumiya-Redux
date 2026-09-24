@@ -26,30 +26,30 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'UserNames' ('UUID' TEXT PRIMARY KEY ,'USER_NAME' TEXT,'DISPLAY_NAME' TEXT,'IS_BAD_UUID' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'UserNames' ('UUID' TEXT PRIMARY KEY ,'USER_NAME' TEXT,'DISPLAY_NAME' TEXT,'IS_BAD_UUID' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'UserNames'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'UserNames'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, UserName userName) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, UserName userName) {
+        sqLiteStatement.clearBindings();
         UUID uuid = userName.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(1, uuid.toString());
+            sqLiteStatement.bindString(1, uuid.toString());
         }
         String userName2 = userName.getUserName();
         if (userName2 != null) {
-            sQLiteStatement.bindString(2, userName2);
+            sqLiteStatement.bindString(2, userName2);
         }
         String displayName = userName.getDisplayName();
         if (displayName != null) {
-            sQLiteStatement.bindString(3, displayName);
+            sqLiteStatement.bindString(3, displayName);
         }
-        sQLiteStatement.bindLong(4, userName.getIsBadUUID() ? 1L : 0L);
+        sqLiteStatement.bindLong(4, userName.getIsBadUUID() ? 1L : 0L);
     }
 
     @Override

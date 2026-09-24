@@ -39,14 +39,14 @@ public class SLAvatarParams {
         @Nullable
         public final ImmutableMap<SLSkeletonBoneID, SkeletonParamDefinition> skeletonParams;
 
-        AvatarParam(@Nullable MeshIndex meshIndex, float f, float f2, float f3, boolean z, @Nullable SLAvatarParamColor sLAvatarParamColor, @Nullable SLAvatarParamAlpha sLAvatarParamAlpha, @Nullable ImmutableList<DrivenParam> immutableList, @Nullable ImmutableMap<SLSkeletonBoneID, SkeletonParamDefinition> immutableMap) {
+        AvatarParam(@Nullable MeshIndex meshIndex, float minValue, float maxValue, float defValue, boolean morph, @Nullable SLAvatarParamColor avatarParamColor, @Nullable SLAvatarParamAlpha avatarParamAlpha, @Nullable ImmutableList<DrivenParam> immutableList, @Nullable ImmutableMap<SLSkeletonBoneID, SkeletonParamDefinition> immutableMap) {
             this.meshIndex = meshIndex;
-            this.minValue = f;
-            this.maxValue = f2;
-            this.defValue = f3;
-            this.morph = z;
-            this.paramColor = sLAvatarParamColor;
-            this.paramAlpha = sLAvatarParamAlpha;
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+            this.defValue = defValue;
+            this.morph = morph;
+            this.paramColor = avatarParamColor;
+            this.paramAlpha = avatarParamAlpha;
             this.drivenParams = immutableList;
             this.skeletonParams = immutableMap;
         }
@@ -59,12 +59,12 @@ public class SLAvatarParams {
         public final float min1;
         public final float min2;
 
-        DrivenParam(int i, float f, float f2, float f3, float f4) {
-            this.drivenID = i;
-            this.min1 = f;
-            this.max1 = f2;
-            this.min2 = f3;
-            this.max2 = f4;
+        DrivenParam(int drivenID, float min1, float max1, float min2, float max2) {
+            this.drivenID = drivenID;
+            this.min1 = min1;
+            this.max1 = max1;
+            this.min2 = min2;
+            this.max2 = max2;
         }
     }
 
@@ -78,10 +78,10 @@ public class SLAvatarParams {
         @Nonnull
         public final ImmutableList<AvatarParam> params;
 
-        ParamSet(int i, int i2, @Nonnull SLVisualParamID sLVisualParamID, @Nonnull ImmutableList<AvatarParam> immutableList) {
-            this.id = i;
-            this.appearanceIndex = i2;
-            this.name = sLVisualParamID;
+        ParamSet(int id, int appearanceIndex, @Nonnull SLVisualParamID visualParamID, @Nonnull ImmutableList<AvatarParam> immutableList) {
+            this.id = id;
+            this.appearanceIndex = appearanceIndex;
+            this.name = visualParamID;
             this.params = immutableList;
         }
     }
@@ -94,9 +94,9 @@ public class SLAvatarParams {
         @Nullable
         public final ImmutableVector scale;
 
-        SkeletonParamDefinition(@Nullable ImmutableVector immutableVector, @Nullable ImmutableVector immutableVector2) {
+        SkeletonParamDefinition(@Nullable ImmutableVector immutableVector, @Nullable ImmutableVector offset) {
             this.scale = immutableVector;
-            this.offset = immutableVector2;
+            this.offset = offset;
         }
     }
 
@@ -108,9 +108,9 @@ public class SLAvatarParams {
         @Nonnull
         public final LLVector3 scale;
 
-        public SkeletonParamValue(@Nonnull LLVector3 lLVector3, @Nonnull LLVector3 lLVector32) {
-            this.scale = lLVector3;
-            this.offset = lLVector32;
+        public SkeletonParamValue(@Nonnull LLVector3 scale, @Nonnull LLVector3 offset) {
+            this.scale = scale;
+            this.offset = offset;
         }
     }
 

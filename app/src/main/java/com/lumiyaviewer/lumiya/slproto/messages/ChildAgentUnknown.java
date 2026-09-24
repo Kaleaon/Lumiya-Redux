@@ -30,8 +30,8 @@ public class ChildAgentUnknown extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentUnknown(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentUnknown(this);
     }
 
     @Override

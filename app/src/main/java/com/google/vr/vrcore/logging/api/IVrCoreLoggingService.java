@@ -16,8 +16,8 @@ public interface IVrCoreLoggingService extends IInterface {
         private static class Proxy implements IVrCoreLoggingService {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -30,15 +30,15 @@ public interface IVrCoreLoggingService extends IInterface {
             }
 
             @Override
-            public void log(VREventParcelable vREventParcelable) throws RemoteException {
+            public void log(VREventParcelable vrEventParcelable) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    if (vREventParcelable == null) {
+                    if (vrEventParcelable == null) {
                         obtain.writeInt(0);
                     } else {
                         obtain.writeInt(1);
-                        vREventParcelable.writeToParcel(obtain, 0);
+                        vrEventParcelable.writeToParcel(obtain, 0);
                     }
                     this.mRemote.transact(2, obtain, null, 1);
                 } finally {
@@ -47,11 +47,11 @@ public interface IVrCoreLoggingService extends IInterface {
             }
 
             @Override
-            public void logBatched(VREventParcelable[] vREventParcelableArr) throws RemoteException {
+            public void logBatched(VREventParcelable[] vrEventParcelables) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeTypedArray(vREventParcelableArr, 0);
+                    obtain.writeTypedArray(vrEventParcelables, 0);
                     this.mRemote.transact(3, obtain, null, 1);
                 } finally {
                     obtain.recycle();
@@ -96,7 +96,7 @@ public interface IVrCoreLoggingService extends IInterface {
         }
     }
 
-    void log(VREventParcelable vREventParcelable) throws RemoteException;
+    void log(VREventParcelable vrEventParcelable) throws RemoteException;
 
-    void logBatched(VREventParcelable[] vREventParcelableArr) throws RemoteException;
+    void logBatched(VREventParcelable[] vrEventParcelables) throws RemoteException;
 }

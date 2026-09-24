@@ -77,10 +77,10 @@ public class GvrUiLayout extends FrameLayout {
         uiLayer.setBackButtonListener(runnable);
     }
 
-    void setDaydreamModeEnabled(boolean z) {
-        if (this.daydreamModeEnabled != z) {
-            this.daydreamModeEnabled = z;
-            if (!z) {
+    void setDaydreamModeEnabled(boolean daydreamModeEnabled) {
+        if (this.daydreamModeEnabled != daydreamModeEnabled) {
+            this.daydreamModeEnabled = daydreamModeEnabled;
+            if (!daydreamModeEnabled) {
                 this.uiLayer.setAlignmentMarkerScale(1.0f);
             } else {
                 this.uiLayer.setAlignmentMarkerScale(DAYDREAM_ALIGNMENT_MARKER_SCALE);
@@ -90,20 +90,20 @@ public class GvrUiLayout extends FrameLayout {
     }
 
     @Override
-    public void setEnabled(boolean z) {
-        this.uiLayer.setEnabled(z);
+    public void setEnabled(boolean enabled) {
+        this.uiLayer.setEnabled(enabled);
     }
 
-    public void setTransitionViewEnabled(boolean z) {
+    public void setTransitionViewEnabled(boolean transitionViewEnabled) {
         boolean z2 = false;
         UiLayer uiLayer = this.uiLayer;
-        if (z && !this.daydreamModeEnabled) {
+        if (transitionViewEnabled && !this.daydreamModeEnabled) {
             z2 = true;
         }
         uiLayer.setTransitionViewEnabled(z2);
     }
 
-    public void setViewerName(String str) {
-        this.uiLayer.setViewerName(str);
+    public void setViewerName(String viewerName) {
+        this.uiLayer.setViewerName(viewerName);
     }
 }

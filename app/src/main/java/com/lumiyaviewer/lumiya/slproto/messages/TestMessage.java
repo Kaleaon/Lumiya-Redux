@@ -48,8 +48,8 @@ public class TestMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTestMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTestMessage(this);
     }
 
     @Override

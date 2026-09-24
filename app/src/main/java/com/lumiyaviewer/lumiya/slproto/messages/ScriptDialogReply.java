@@ -42,8 +42,8 @@ public class ScriptDialogReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptDialogReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptDialogReply(this);
     }
 
     @Override

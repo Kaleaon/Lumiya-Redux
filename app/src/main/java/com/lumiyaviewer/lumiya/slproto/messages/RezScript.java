@@ -66,8 +66,8 @@ public class RezScript extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezScript(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezScript(this);
     }
 
     @Override

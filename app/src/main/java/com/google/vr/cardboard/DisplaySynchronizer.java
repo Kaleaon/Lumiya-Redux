@@ -48,10 +48,10 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-     public void doFrame(long j) {
+     public void doFrame(long lastDisplayRotationUpdateTimeNanos) {
         checkNativeDisplaySynchronizer();
         if (this.displayRotationDegrees != -1) {
-            if (!(j - this.lastDisplayRotationUpdateTimeNanos <= DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS)) {
+            if (!(lastDisplayRotationUpdateTimeNanos - this.lastDisplayRotationUpdateTimeNanos <= DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS)) {
                 switch (this.display.getRotation()) {
                     case 0:
                         this.displayRotationDegrees = 0;
@@ -70,10 +70,10 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
                         this.displayRotationDegrees = 0;
                         break;
                 }
-                this.lastDisplayRotationUpdateTimeNanos = j;
+                this.lastDisplayRotationUpdateTimeNanos = lastDisplayRotationUpdateTimeNanos;
             }
         }
-        nativeUpdate(this.nativeDisplaySynchronizer, j, this.displayRotationDegrees);
+        nativeUpdate(this.nativeDisplaySynchronizer, lastDisplayRotationUpdateTimeNanos, this.displayRotationDegrees);
     }
 
     protected void finalize() throws Throwable {

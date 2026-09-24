@@ -41,8 +41,8 @@ public class DirFindQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirFindQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirFindQuery(this);
     }
 
     @Override

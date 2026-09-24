@@ -17,11 +17,11 @@ public class UserName {
         this.uuid = uuid;
     }
 
-    public UserName(UUID uuid, String str, String str2, boolean z) {
+    public UserName(UUID uuid, String userName, String displayName, boolean isBadUUID) {
         this.uuid = uuid;
-        this.userName = str;
-        this.displayName = str2;
-        this.isBadUUID = z;
+        this.userName = userName;
+        this.displayName = displayName;
+        this.isBadUUID = isBadUUID;
     }
 
     public String getDisplayName() {
@@ -70,16 +70,16 @@ public class UserName {
         return true;
     }
 
-    public void setDisplayName(String str) {
-        this.displayName = str;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public void setIsBadUUID(boolean z) {
-        this.isBadUUID = z;
+    public void setIsBadUUID(boolean isBadUUID) {
+        this.isBadUUID = isBadUUID;
     }
 
-    public void setUserName(String str) {
-        this.userName = str;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setUuid(UUID uuid) {

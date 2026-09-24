@@ -16,8 +16,8 @@ public final class SLChatInventoryItemOfferedByGroupNoticeEvent extends SLChatIn
         super(chatMessage, uuid);
     }
 
-    public SLChatInventoryItemOfferedByGroupNoticeEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str, SLAssetType sLAssetType) {
-        super(chatMessageSource, uuid, improvedInstantMessage, str, extractItemID(improvedInstantMessage), sLAssetType);
+    public SLChatInventoryItemOfferedByGroupNoticeEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str, SLAssetType assetType) {
+        super(chatMessageSource, uuid, improvedInstantMessage, str, extractItemID(improvedInstantMessage), assetType);
     }
 
     @Override

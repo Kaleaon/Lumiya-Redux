@@ -33,30 +33,30 @@ class SLAvatarParamBuilder {
                     LLSDNode byKey = byIndex.byKey("params");
                     int count2 = byKey.getCount();
                     ImmutableList.Builder builder = ImmutableList.builder();
-                    for (int i2 = 0; i2 < count2; i2++) {
-                        LLSDNode byIndex2 = byKey.byIndex(i2);
-                        SLAvatarParamColor sLAvatarParamColor = null;
-                        SLAvatarParamAlpha sLAvatarParamAlpha = null;
+                    for (int j = 0; j < count2; j++) {
+                        LLSDNode byIndex2 = byKey.byIndex(j);
+                        SLAvatarParamColor avatarParamColor = null;
+                        SLAvatarParamAlpha avatarParamAlpha = null;
                         if (byIndex2.keyExists("paramColor")) {
                             LLSDNode byKey2 = byIndex2.byKey("paramColor");
                             LLSDNode byKey3 = byKey2.byKey("values");
-                            int[] iArr = new int[byKey3.getCount()];
-                            for (int i3 = 0; i3 < iArr.length; i3++) {
-                                iArr[i3] = byKey3.byIndex(i3).asInt();
+                            int[] ints = new int[byKey3.getCount()];
+                            for (int k = 0; k < ints.length; k++) {
+                                ints[k] = byKey3.byIndex(k).asInt();
                             }
-                            sLAvatarParamColor = new SLAvatarParamColor(SLAvatarParamColor.ColorOperation.valueOf(byKey2.byKey("opcode").asString()), iArr);
+                            avatarParamColor = new SLAvatarParamColor(SLAvatarParamColor.ColorOperation.valueOf(byKey2.byKey("opcode").asString()), ints);
                         }
                         if (byIndex2.keyExists("paramAlpha")) {
                             LLSDNode byKey4 = byIndex2.byKey("paramAlpha");
-                            sLAvatarParamAlpha = new SLAvatarParamAlpha((float) byKey4.byKey("domain").asDouble(), byKey4.keyExists("tgaFile") ? byKey4.byKey("tgaFile").asString() : null, byKey4.byKey("skipIfZero").asBoolean(), byKey4.byKey("multiplyBlend").asBoolean());
+                            avatarParamAlpha = new SLAvatarParamAlpha((float) byKey4.byKey("domain").asDouble(), byKey4.keyExists("tgaFile") ? byKey4.byKey("tgaFile").asString() : null, byKey4.byKey("skipIfZero").asBoolean(), byKey4.byKey("multiplyBlend").asBoolean());
                         }
                         MeshIndex valueOf = byIndex2.keyExists("meshIndex") ? MeshIndex.valueOf(byIndex2.byKey("meshIndex").asString()) : null;
                         ImmutableList immutableList = null;
                         if (byIndex2.keyExists("driven")) {
                             ImmutableList.Builder builder2 = ImmutableList.builder();
                             LLSDNode byKey5 = byIndex2.byKey("driven");
-                            for (int i4 = 0; i4 < byKey5.getCount(); i4++) {
-                                LLSDNode byIndex3 = byKey5.byIndex(i4);
+                            for (int m = 0; m < byKey5.getCount(); m++) {
+                                LLSDNode byIndex3 = byKey5.byIndex(m);
                                 builder2.add(new SLAvatarParams.DrivenParam(byIndex3.byKey("driven_id").asInt(), (float) byIndex3.byKey("min1").asDouble(), (float) byIndex3.byKey("max1").asDouble(), (float) byIndex3.byKey("min2").asDouble(), (float) byIndex3.byKey("max2").asDouble()));
                             }
                             immutableList = builder2.build();
@@ -65,16 +65,16 @@ class SLAvatarParamBuilder {
                         if (byIndex2.keyExists("skeleton")) {
                             EnumMap enumMap = new EnumMap(SLSkeletonBoneID.class);
                             LLSDNode byKey6 = byIndex2.byKey("skeleton");
-                            for (int i5 = 0; i5 < byKey6.getCount(); i5++) {
-                                LLSDNode byIndex4 = byKey6.byIndex(i5);
-                                SLSkeletonBoneID sLSkeletonBoneID = SLSkeletonBoneID.bones.get(byIndex4.byKey("bone_id").asString());
-                                if (sLSkeletonBoneID != null) {
-                                    enumMap.put(sLSkeletonBoneID, new SLAvatarParams.SkeletonParamDefinition(vectorFromNode(byIndex4, "scale"), vectorFromNode(byIndex4, "offset")));
+                            for (int n = 0; n < byKey6.getCount(); n++) {
+                                LLSDNode byIndex4 = byKey6.byIndex(n);
+                                SLSkeletonBoneID skeletonBoneID = SLSkeletonBoneID.bones.get(byIndex4.byKey("bone_id").asString());
+                                if (skeletonBoneID != null) {
+                                    enumMap.put(skeletonBoneID, new SLAvatarParams.SkeletonParamDefinition(vectorFromNode(byIndex4, "scale"), vectorFromNode(byIndex4, "offset")));
                                 }
                             }
                             immutableMap = Maps.immutableEnumMap(enumMap);
                         }
-                        builder.add(new SLAvatarParams.AvatarParam(valueOf, (float) byIndex2.byKey("minValue").asDouble(), (float) byIndex2.byKey("maxValue").asDouble(), (float) byIndex2.byKey("defValue").asDouble(), byIndex2.byKey("morph").asBoolean(), sLAvatarParamColor, sLAvatarParamAlpha, immutableList, immutableMap));
+                        builder.add(new SLAvatarParams.AvatarParam(valueOf, (float) byIndex2.byKey("minValue").asDouble(), (float) byIndex2.byKey("maxValue").asDouble(), (float) byIndex2.byKey("defValue").asDouble(), byIndex2.byKey("morph").asBoolean(), avatarParamColor, avatarParamAlpha, immutableList, immutableMap));
                     }
                     SLAvatarParams.ParamSet paramSet = new SLAvatarParams.ParamSet(byIndex.byKey("setId").asInt(), byIndex.byKey("appearanceIndex").asInt(), SLVisualParamID.valueOf(byIndex.byKey("setName").asString()), builder.build());
                     map.put(Integer.valueOf(paramSet.id), paramSet);
@@ -92,11 +92,11 @@ class SLAvatarParamBuilder {
     }
 
     @Nullable
-    private static ImmutableVector vectorFromNode(LLSDNode lLSDNode, String str) throws LLSDException {
-        if (!lLSDNode.keyExists(str)) {
+    private static ImmutableVector vectorFromNode(LLSDNode lsdNode, String str) throws LLSDException {
+        if (!lsdNode.keyExists(str)) {
             return null;
         }
-        LLSDNode byKey = lLSDNode.byKey(str);
+        LLSDNode byKey = lsdNode.byKey(str);
         return new ImmutableVector((float) byKey.byKey("x").asDouble(), (float) byKey.byKey("y").asDouble(), (float) byKey.byKey("z").asDouble());
     }
 }

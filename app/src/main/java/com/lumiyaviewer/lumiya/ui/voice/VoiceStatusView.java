@@ -537,10 +537,10 @@ public class VoiceStatusView extends FrameLayout {
                 this.speakerNameRetriever = null;
             }
         }
-        VoiceAudioProperties data2 = this.voiceAudioProperties.getData();
-        if (data2 != null) {
+        VoiceAudioProperties voiceAudioProperties = this.voiceAudioProperties.getData();
+        if (voiceAudioProperties != null) {
             Drawable[] compoundDrawables = this.voiceBluetoothButton.getCompoundDrawables();
-            switch (data2.bluetoothState) {
+            switch (voiceAudioProperties.bluetoothState) {
                 case Active:
                     i = R.drawable.active_button_underline;
                     break;
@@ -552,9 +552,9 @@ public class VoiceStatusView extends FrameLayout {
                     break;
             }
             this.voiceBluetoothButton.setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), i));
-            this.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(this.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), data2.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
+            this.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(this.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), voiceAudioProperties.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
             this.updatingAudioVolume = true;
-            this.voiceSpeakerVolumeControl.setProgress(Math.round(data2.speakerVolume * this.voiceSpeakerVolumeControl.getMax()));
+            this.voiceSpeakerVolumeControl.setProgress(Math.round(voiceAudioProperties.speakerVolume * this.voiceSpeakerVolumeControl.getMax()));
             this.updatingAudioVolume = false;
         }
     }
@@ -678,8 +678,8 @@ public class VoiceStatusView extends FrameLayout {
         serviceInstance.terminateVoiceCall(this.chatterID);
     }
 
-    public void setCanConnect(boolean z) {
-        this.canConnect = z;
+    public void setCanConnect(boolean canConnect) {
+        this.canConnect = canConnect;
         updateVoiceState();
     }
 
@@ -731,13 +731,13 @@ public class VoiceStatusView extends FrameLayout {
         this.onCallButtonListener = onClickListener;
     }
 
-    public void setShowActiveChatterName(boolean z) {
-        this.showActiveChatterName = z;
+    public void setShowActiveChatterName(boolean showActiveChatterName) {
+        this.showActiveChatterName = showActiveChatterName;
         updateVoiceState();
     }
 
-    public void setShowWhenInactive(boolean z) {
-        this.showWhenInactive = z;
+    public void setShowWhenInactive(boolean showWhenInactive) {
+        this.showWhenInactive = showWhenInactive;
         updateVoiceState();
     }
 }

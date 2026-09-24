@@ -44,8 +44,8 @@ public class ChatPass extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChatPass(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChatPass(this);
     }
 
     @Override

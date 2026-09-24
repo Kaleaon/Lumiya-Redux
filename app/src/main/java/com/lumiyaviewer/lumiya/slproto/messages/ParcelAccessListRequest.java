@@ -40,8 +40,8 @@ public class ParcelAccessListRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelAccessListRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelAccessListRequest(this);
     }
 
     @Override

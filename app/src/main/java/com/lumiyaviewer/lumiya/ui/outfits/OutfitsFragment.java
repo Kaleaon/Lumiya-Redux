@@ -137,17 +137,17 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     private void changeOutfit(boolean z) {
         InventoryEntryList data = this.entryList.getData();
-        SLAgentCircuit data2 = this.agentCircuit.getData();
-        if (data == null || data2 == null) {
+        SLAgentCircuit agentCircuit = this.agentCircuit.getData();
+        if (data == null || agentCircuit == null) {
             return;
         }
         ImmutableList.Builder builder = ImmutableList.builder();
-        for (SLInventoryEntry sLInventoryEntry : data) {
-            if (!sLInventoryEntry.isFolderOrFolderLink()) {
-                builder.add(sLInventoryEntry);
+        for (SLInventoryEntry inventoryEntry : data) {
+            if (!inventoryEntry.isFolderOrFolderLink()) {
+                builder.add(inventoryEntry);
             }
         }
-        data2.getModules().avatarAppearance.ChangeOutfit(builder.build(), z, data.getFolder());
+        agentCircuit.getModules().avatarAppearance.ChangeOutfit(builder.build(), z, data.getFolder());
     }
 
     @Nullable
@@ -179,9 +179,9 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
         showInventoryList(uuid);
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         if (this.adapter != null) {
-            this.adapter.setAvatarAppearance(sLAgentCircuit != null ? sLAgentCircuit.getModules().avatarAppearance : null);
+            this.adapter.setAvatarAppearance(agentCircuit != null ? agentCircuit.getModules().avatarAppearance : null);
         }
     }
 
@@ -200,9 +200,9 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
 
     public void onRootFolderEntryList(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
-            for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
-                if (sLInventoryEntry.isFolder && sLInventoryEntry.typeDefault == 48) {
-                    this.myOutfitsFolderUUID = sLInventoryEntry.uuid;
+            for (SLInventoryEntry inventoryEntry : inventoryEntryList) {
+                if (inventoryEntry.isFolder && inventoryEntry.typeDefault == 48) {
+                    this.myOutfitsFolderUUID = inventoryEntry.uuid;
                     this.rootFolderEntryList.unsubscribe();
                     if (getFolderUUID() == null) {
                         showInventoryList(getFolderUUID());
@@ -328,9 +328,9 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
             Object item = adapterView.getAdapter().getItem(i);
             if (item != this.listHeaderData) {
                 if (item instanceof SLInventoryEntry) {
-                    SLInventoryEntry sLInventoryEntry = (SLInventoryEntry) item;
-                    Debug.Printf("Inventory: Item click: item isFolder %b invType %d typeDefault %d assetType %d", Boolean.valueOf(sLInventoryEntry.isFolder), Integer.valueOf(sLInventoryEntry.invType), Integer.valueOf(sLInventoryEntry.typeDefault), Integer.valueOf(sLInventoryEntry.assetType));
-                    UUID uuid = (!sLInventoryEntry.isFolder || sLInventoryEntry.uuid == null) ? (sLInventoryEntry.isLink() && sLInventoryEntry.invType == 8) ? sLInventoryEntry.assetUUID : null : sLInventoryEntry.uuid;
+                    SLInventoryEntry item2 = (SLInventoryEntry) item;
+                    Debug.Printf("Inventory: Item click: item isFolder %b invType %d typeDefault %d assetType %d", Boolean.valueOf(item2.isFolder), Integer.valueOf(item2.invType), Integer.valueOf(item2.typeDefault), Integer.valueOf(item2.assetType));
+                    UUID uuid = (!item2.isFolder || item2.uuid == null) ? (item2.isLink() && item2.invType == 8) ? item2.assetUUID : null : item2.uuid;
                     if (uuid != null) {
                         navigateToFolder(uuid);
                         return;
@@ -389,31 +389,31 @@ public class OutfitsFragment extends FragmentWithTitle implements ReloadableFrag
     }
 
     @Override
-    public void onItemCheckboxClicked(SLInventoryEntry sLInventoryEntry) {
+    public void onItemCheckboxClicked(SLInventoryEntry inventoryEntry) {
         SLInventoryEntry resolveLink;
         UserManager userManager = getUserManager();
         SLAgentCircuit data = this.agentCircuit.getData();
         if (data == null || userManager == null) {
             return;
         }
-        SLAvatarAppearance sLAvatarAppearance = data.getModules().avatarAppearance;
+        SLAvatarAppearance avatarAppearance = data.getModules().avatarAppearance;
         InventoryDB database = userManager.getInventoryManager().getDatabase();
-        if (database != null && (resolveLink = database.resolveLink(sLInventoryEntry)) != null) {
-            sLInventoryEntry = resolveLink;
+        if (database != null && (resolveLink = database.resolveLink(inventoryEntry)) != null) {
+            inventoryEntry = resolveLink;
         }
-        if (sLAvatarAppearance.isItemWorn(sLInventoryEntry)) {
-            if (sLInventoryEntry.isWearable()) {
-                sLAvatarAppearance.TakeItemOff(sLInventoryEntry);
+        if (avatarAppearance.isItemWorn(inventoryEntry)) {
+            if (inventoryEntry.isWearable()) {
+                avatarAppearance.TakeItemOff(inventoryEntry);
                 return;
             } else {
-                sLAvatarAppearance.DetachInventoryItem(sLInventoryEntry);
+                avatarAppearance.DetachInventoryItem(inventoryEntry);
                 return;
             }
         }
-        if (sLInventoryEntry.isWearable()) {
-            sLAvatarAppearance.WearItem(sLInventoryEntry, false);
+        if (inventoryEntry.isWearable()) {
+            avatarAppearance.WearItem(inventoryEntry, false);
         } else {
-            sLAvatarAppearance.AttachInventoryItem(sLInventoryEntry, 0, false);
+            avatarAppearance.AttachInventoryItem(inventoryEntry, 0, false);
         }
     }
 

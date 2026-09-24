@@ -8,58 +8,58 @@ public class FrustrumPlanes {
     private final float[] params = new float[24];
     private final int[] pnIndex = new int[36];
 
-    public FrustrumPlanes(float[] fArr) {
+    public FrustrumPlanes(float[] floats) {
         int i = 0;
         while (true) {
             int i2 = i;
             if (i2 >= 6) {
                 return;
             }
-            initPlane(i2, fArr, 2 - (i2 / 2), (i2 & 1) != 0 ? -1.0f : 1.0f);
+            initPlane(i2, floats, 2 - (i2 / 2), (i2 & 1) != 0 ? -1.0f : 1.0f);
             i = i2 + 1;
         }
     }
 
-    private void initPlane(int i, float[] fArr, int i2, float f) {
+    private void initPlane(int i, float[] floats, int i2, float f) {
         int i3 = i * 4;
-        for (int i4 = 0; i4 < 4; i4++) {
-            this.params[i3 + i4] = fArr[(i4 * 4) + 3] + (fArr[(i4 * 4) + i2] * f);
+        for (int j = 0; j < 4; j++) {
+            this.params[i3 + j] = floats[(j * 4) + 3] + (floats[(j * 4) + i2] * f);
         }
         float f2 = 0.0f;
-        for (int i5 = 0; i5 < 3; i5++) {
-            float f3 = this.params[i3 + i5];
+        for (int k = 0; k < 3; k++) {
+            float f3 = this.params[i3 + k];
             f2 += f3 * f3;
         }
         float sqrt = (float) Math.sqrt(f2);
-        for (int i6 = 0; i6 < 4; i6++) {
-            float[] fArr2 = this.params;
-            int i7 = i3 + i6;
-            fArr2[i7] = fArr2[i7] / sqrt;
+        for (int m = 0; m < 4; m++) {
+            float[] params = this.params;
+            int i7 = i3 + m;
+            params[i7] = params[i7] / sqrt;
         }
-        for (int i8 = 0; i8 < 3; i8++) {
-            this.pnIndex[(i * 6) + i8] = this.params[i3 + i8] >= 0.0f ? i8 + 3 : i8;
-            this.pnIndex[(i * 6) + i8 + 3] = this.params[i3 + i8] >= 0.0f ? i8 : i8 + 3;
+        for (int n = 0; n < 3; n++) {
+            this.pnIndex[(i * 6) + n] = this.params[i3 + n] >= 0.0f ? n + 3 : n;
+            this.pnIndex[(i * 6) + n + 3] = this.params[i3 + n] >= 0.0f ? n : n + 3;
         }
     }
 
-    private float planeDistance(int i, int i2, float[] fArr) {
+    private float planeDistance(int i, int i2, float[] floats) {
         float f = 0.0f;
-        for (int i3 = 0; i3 < 3; i3++) {
-            f += this.params[i + i3] * fArr[this.pnIndex[i2 + i3]];
+        for (int j = 0; j < 3; j++) {
+            f += this.params[i + j] * floats[this.pnIndex[i2 + j]];
         }
         return this.params[i + 3] + f;
     }
 
-    public int testBoundingBox(float[] fArr, float[] fArr2) {
+    public int testBoundingBox(float[] floats, float[] floats2) {
         int i = 0;
         int i2 = 0;
-        for (int i3 = 0; i3 < 6; i3++) {
-            if (planeDistance(i2, i, fArr) < 0.0f) {
+        for (int j = 0; j < 6; j++) {
+            if (planeDistance(i2, i, floats) < 0.0f) {
                 return -1;
             }
-            float planeDistance = planeDistance(i2, i + 3, fArr);
-            if (i3 == 0) {
-                fArr2[0] = planeDistance;
+            float planeDistance = planeDistance(i2, i + 3, floats);
+            if (j == 0) {
+                floats2[0] = planeDistance;
             }
             if (planeDistance < 0.0f) {
                 return 0;

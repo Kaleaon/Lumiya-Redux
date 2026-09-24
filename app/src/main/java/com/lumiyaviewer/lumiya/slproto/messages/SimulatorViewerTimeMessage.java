@@ -36,8 +36,8 @@ public class SimulatorViewerTimeMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorViewerTimeMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorViewerTimeMessage(this);
     }
 
     @Override

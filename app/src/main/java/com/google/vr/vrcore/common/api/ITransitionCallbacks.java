@@ -15,8 +15,8 @@ public interface ITransitionCallbacks extends IInterface {
         private static class Proxy implements ITransitionCallbacks {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override

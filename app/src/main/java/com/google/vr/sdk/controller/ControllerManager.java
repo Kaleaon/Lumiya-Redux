@@ -216,11 +216,11 @@ public class ControllerManager {
             for (int i = 0; i < controllerEventPacket.getButtonEventCount(); i++) {
                 innerControllerListener.handleButtonEvent(controllerEventPacket.getButtonEvent(i));
             }
-            for (int i2 = 0; i2 < controllerEventPacket.getOrientationEventCount(); i2++) {
-                innerControllerListener.handleOrientationEvent(controllerEventPacket.getOrientationEvent(i2));
+            for (int j = 0; j < controllerEventPacket.getOrientationEventCount(); j++) {
+                innerControllerListener.handleOrientationEvent(controllerEventPacket.getOrientationEvent(j));
             }
-            for (int i3 = 0; i3 < controllerEventPacket.getTouchEventCount(); i3++) {
-                innerControllerListener.handleTouchEvent(controllerEventPacket.getTouchEvent(i3));
+            for (int k = 0; k < controllerEventPacket.getTouchEventCount(); k++) {
+                innerControllerListener.handleTouchEvent(controllerEventPacket.getTouchEvent(k));
             }
         }
 

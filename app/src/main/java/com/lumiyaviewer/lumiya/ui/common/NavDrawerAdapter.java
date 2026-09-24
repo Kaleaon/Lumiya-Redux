@@ -32,9 +32,9 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerAdapter.NavDrawerItem> impl
       new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_minimap, com.lumiyaviewer.lumiya.R.attr.MenuIconMinimapThemed, com.lumiyaviewer.lumiya.R.string.nav_minimap, MinimapActivity.class),
       new NavDrawerAdapter.NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_teleport_home, com.lumiyaviewer.lumiya.R.attr.MenuIconHomeThemed, com.lumiyaviewer.lumiya.R.string.nav_teleport_home) {
          @Override
-         public void onClick(Context var1) {
-            if (var1 instanceof Activity) {
-               TeleportHomeDialog.show((Activity)var1);
+         public void onClick(Context context) {
+            if (context instanceof Activity) {
+               TeleportHomeDialog.show((Activity)context);
             }
          }
       },
@@ -43,65 +43,65 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerAdapter.NavDrawerItem> impl
       new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_settings, com.lumiyaviewer.lumiya.R.attr.MenuIconSettingsThemed, com.lumiyaviewer.lumiya.R.string.nav_settings, SettingsActivity.class),
       new NavDrawerAdapter.NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_signout, com.lumiyaviewer.lumiya.R.attr.MenuIconSignOffThemed, com.lumiyaviewer.lumiya.R.string.nav_signout) {
          @Override
-         public void onClick(Context var1) {
-            if (var1 instanceof Activity) {
-               LogoutDialog.show((Activity)var1);
+         public void onClick(Context context) {
+            if (context instanceof Activity) {
+               LogoutDialog.show((Activity)context);
             }
          }
       }
    };
 
-   NavDrawerAdapter(Context var1) {
-      super(var1, com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, items);
+   NavDrawerAdapter(Context context) {
+      super(context, com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, items);
    }
 
    @Override
-   public View getView(int var1, View var2, ViewGroup var3) {
-      NavDrawerAdapter.NavDrawerItem var5 = this.getItem(var1);
-      if (var5 == null) {
+   public View getView(int var1, View view2, ViewGroup viewGroup) {
+      NavDrawerAdapter.NavDrawerItem navDrawerItem = this.getItem(var1);
+      if (navDrawerItem == null) {
          return null;
       } else {
-         View var4 = var2;
-         if (var2 == null) {
-            var4 = ((LayoutInflater)this.getContext().getSystemService("layout_inflater")).inflate(com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, var3, false);
+         View view = view2;
+         if (view2 == null) {
+            view = ((LayoutInflater)this.getContext().getSystemService("layout_inflater")).inflate(com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, viewGroup, false);
          }
 
-         TypedValue var6 = new TypedValue();
-         this.getContext().getTheme().resolveAttribute(var5.iconId, var6, true);
-         var4.<TextView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemName).setText(this.getContext().getString(var5.labelId));
-         var4.<ImageView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemIcon).setImageResource(var6.resourceId);
-         return var4;
+         TypedValue typedValue = new TypedValue();
+         this.getContext().getTheme().resolveAttribute(navDrawerItem.iconId, typedValue, true);
+         view.<TextView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemName).setText(this.getContext().getString(navDrawerItem.labelId));
+         view.<ImageView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemIcon).setImageResource(typedValue.resourceId);
+         return view;
       }
    }
 
    @Override
-   public void onItemClick(AdapterView<?> var1, View var2, int var3, long var4) {
-      NavDrawerAdapter.NavDrawerItem var6 = this.getItem(var3);
-      if (var6 != null) {
-         var6.onClick(var1.getContext());
+   public void onItemClick(AdapterView<?> adapterView, View view, int var3, long var4) {
+      NavDrawerAdapter.NavDrawerItem navDrawerItem = this.getItem(var3);
+      if (navDrawerItem != null) {
+         navDrawerItem.onClick(adapterView.getContext());
       }
    }
 
    private static class NavDrawerActivityItem extends NavDrawerAdapter.NavDrawerItem {
       final Class<?> activityClass;
 
-      NavDrawerActivityItem(int var1, int var2, int var3, Class<?> var4) {
+      NavDrawerActivityItem(int var1, int var2, int var3, Class<?> activityClass) {
          super(var1, var2, var3);
-         this.activityClass = var4;
+         this.activityClass = activityClass;
       }
 
       @Override
-      public void onClick(Context var1) {
-         Intent var3 = new Intent(var1, this.activityClass);
-         var3.addFlags(131072);
-         if (var1 instanceof Activity) {
-            UUID var2 = ActivityUtils.getActiveAgentID(((Activity)var1).getIntent());
-            if (var2 != null) {
-               var3.putExtra("activeAgentUUID", var2.toString());
+      public void onClick(Context context) {
+         Intent intent = new Intent(context, this.activityClass);
+         intent.addFlags(131072);
+         if (context instanceof Activity) {
+            UUID activeAgentID = ActivityUtils.getActiveAgentID(((Activity)context).getIntent());
+            if (activeAgentID != null) {
+               intent.putExtra("activeAgentUUID", activeAgentID.toString());
             }
          }
 
-         var1.startActivity(var3);
+         context.startActivity(intent);
       }
    }
 
@@ -110,13 +110,13 @@ class NavDrawerAdapter extends ArrayAdapter<NavDrawerAdapter.NavDrawerItem> impl
       final int itemId;
       final int labelId;
 
-      NavDrawerItem(int var1, int var2, int var3) {
-         this.itemId = var1;
-         this.iconId = var2;
-         this.labelId = var3;
+      NavDrawerItem(int itemId, int iconId, int labelId) {
+         this.itemId = itemId;
+         this.iconId = iconId;
+         this.labelId = labelId;
       }
 
-      public void onClick(Context var1) {
+      public void onClick(Context context) {
       }
    }
 }

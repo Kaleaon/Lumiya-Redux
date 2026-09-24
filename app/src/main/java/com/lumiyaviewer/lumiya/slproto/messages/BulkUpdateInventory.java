@@ -79,20 +79,20 @@ public class BulkUpdateInventory extends SLMessage {
             i2 = ((FolderData) it.next()).Name.length + 34 + i;
         }
         int i3 = i + 1;
-        Iterator<?> it2 = this.ItemData_Fields.iterator();
+        Iterator<?> iterator = this.ItemData_Fields.iterator();
         while (true) {
             int i4 = i3;
-            if (!it2.hasNext()) {
+            if (!iterator.hasNext()) {
                 return i4;
             }
-            ItemData itemData = (ItemData) it2.next();
+            ItemData itemData = (ItemData) iterator.next();
             i3 = itemData.Description.length + itemData.Name.length + 133 + 1 + 4 + 4 + i4;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleBulkUpdateInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleBulkUpdateInventory(this);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class BulkUpdateInventory extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.TransactionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             folderData.ParentID = unpackUUID(byteBuffer);
@@ -151,7 +151,7 @@ public class BulkUpdateInventory extends SLMessage {
             this.FolderData_Fields.add(folderData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             ItemData itemData = new ItemData();
             itemData.ItemID = unpackUUID(byteBuffer);
             itemData.CallbackID = unpackInt(byteBuffer);

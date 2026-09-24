@@ -27,8 +27,8 @@ public class TerrainTextureCache extends ResourceMemoryCache<TerrainPatchInfo, O
         private class TerrainRawTextureRequest implements ResourceConsumer {
             private final int layer;
 
-            public TerrainRawTextureRequest(UUID uuid, int i) {
-                this.layer = i;
+            public TerrainRawTextureRequest(UUID uuid, int layer) {
+                this.layer = layer;
                 TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuid, TextureClass.Terrain), this);
             }
 

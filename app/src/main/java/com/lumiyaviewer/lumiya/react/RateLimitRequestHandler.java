@@ -47,12 +47,12 @@ public class RateLimitRequestHandler<K, T> implements RequestHandler<K>, Request
                     }
                 }
                 if (this.requestsInFlight.size() < this.maxInFlight) {
-                    Iterator<K> it2 = this.pendingRequests.iterator();
-                    if (it2.hasNext()) {
-                        K next2 = it2.next();
-                        it2.remove();
-                        this.requestsInFlight.put(next2, Long.valueOf(currentTimeMillis));
-                        this.requestHandler.onRequest(next2);
+                    Iterator<K> iterator = this.pendingRequests.iterator();
+                    if (iterator.hasNext()) {
+                        K k = iterator.next();
+                        iterator.remove();
+                        this.requestsInFlight.put(k, Long.valueOf(currentTimeMillis));
+                        this.requestHandler.onRequest(k);
                     }
                 }
             }

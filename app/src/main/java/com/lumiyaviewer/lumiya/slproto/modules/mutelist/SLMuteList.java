@@ -35,8 +35,8 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
     private final ResultHandler<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListResultHandler;
     private final UserManager userManager;
 
-    public SLMuteList(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLMuteList(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.muteListData = new MuteListData();
         this.cachedCRC = null;
         this.muteListRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SubscriptionSingleKey>() {
@@ -47,7 +47,7 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
                 }
             }
         });
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
         if (this.userManager != null) {
             this.muteListCachedDataDao = this.userManager.getDaoSession().getMuteListCachedDataDao();
             this.muteListResultHandler = this.userManager.muteListPool().attachRequestHandler(this.muteListRequestHandler);
@@ -151,15 +151,15 @@ public class SLMuteList extends SLModule implements SLXfer.SLXferCompletionListe
     }
 
     @Override
-    public void onXferComplete(Object obj, String str, byte[] bArr) {
-        if (bArr != null) {
-            this.muteListData = new MuteListData(bArr);
+    public void onXferComplete(Object obj, String str, byte[] bytes) {
+        if (bytes != null) {
+            this.muteListData = new MuteListData(bytes);
             if (this.muteListCachedDataDao != null) {
-                CRC32 crc32 = new CRC32();
-                crc32.update(bArr);
-                long value = crc32.getValue();
+                CRC32 crC32 = new CRC32();
+                crC32.update(bytes);
+                long value = crC32.getValue();
                 this.muteListCachedDataDao.deleteAll();
-                this.muteListCachedDataDao.insert(new MuteListCachedData(null, (int) value, bArr));
+                this.muteListCachedDataDao.insert(new MuteListCachedData(null, (int) value, bytes));
             }
             this.userManager.muteListPool().requestUpdate(SubscriptionSingleKey.Value);
         }

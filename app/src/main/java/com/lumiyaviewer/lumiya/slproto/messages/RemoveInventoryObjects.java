@@ -48,8 +48,8 @@ public class RemoveInventoryObjects extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveInventoryObjects(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveInventoryObjects(this);
     }
 
     @Override
@@ -66,9 +66,9 @@ public class RemoveInventoryObjects extends SLMessage {
             packUUID(byteBuffer, ((FolderData) it.next()).FolderID);
         }
         byteBuffer.put((byte) this.ItemData_Fields.size());
-        Iterator<?> it2 = this.ItemData_Fields.iterator();
-        while (it2.hasNext()) {
-            packUUID(byteBuffer, ((ItemData) it2.next()).ItemID);
+        Iterator<?> iterator = this.ItemData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packUUID(byteBuffer, ((ItemData) iterator.next()).ItemID);
         }
     }
 
@@ -77,13 +77,13 @@ public class RemoveInventoryObjects extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             this.FolderData_Fields.add(folderData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             ItemData itemData = new ItemData();
             itemData.ItemID = unpackUUID(byteBuffer);
             this.ItemData_Fields.add(itemData);

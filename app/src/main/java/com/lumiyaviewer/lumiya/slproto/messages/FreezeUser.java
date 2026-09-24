@@ -41,8 +41,8 @@ public class FreezeUser extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFreezeUser(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFreezeUser(this);
     }
 
     @Override

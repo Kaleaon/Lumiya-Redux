@@ -19,13 +19,13 @@ public class SLAnimatedMeshData extends SLMeshData {
     private boolean texCoordsDirty;
     private boolean verticesDirty;
 
-    public SLAnimatedMeshData(SLPolyMesh sLPolyMesh, boolean z) {
-        super(sLPolyMesh);
+    public SLAnimatedMeshData(SLPolyMesh polyMesh, boolean z) {
+        super(polyMesh);
         this.VBOLoaded = false;
         this.glBuffers = new GLLoadableBuffer[4];
         this.texCoordsDirty = false;
         this.verticesDirty = false;
-        this.animated = sLPolyMesh.hasWeights ? !z : false;
+        this.animated = polyMesh.hasWeights ? !z : false;
         if (!this.animated) {
             this.animatedVertexData = null;
         } else {

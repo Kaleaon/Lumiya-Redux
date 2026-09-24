@@ -26,24 +26,24 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'Friends' ('UUID' TEXT PRIMARY KEY ,'RIGHTS_GIVEN' INTEGER NOT NULL ,'RIGHTS_HAS' INTEGER NOT NULL ,'IS_ONLINE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'Friends' ('UUID' TEXT PRIMARY KEY ,'RIGHTS_GIVEN' INTEGER NOT NULL ,'RIGHTS_HAS' INTEGER NOT NULL ,'IS_ONLINE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'Friends'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'Friends'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, Friend friend) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, Friend friend) {
+        sqLiteStatement.clearBindings();
         UUID uuid = friend.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(1, uuid.toString());
+            sqLiteStatement.bindString(1, uuid.toString());
         }
-        sQLiteStatement.bindLong(2, friend.getRightsGiven());
-        sQLiteStatement.bindLong(3, friend.getRightsHas());
-        sQLiteStatement.bindLong(4, friend.getIsOnline() ? 1L : 0L);
+        sqLiteStatement.bindLong(2, friend.getRightsGiven());
+        sqLiteStatement.bindLong(3, friend.getRightsHas());
+        sqLiteStatement.bindLong(4, friend.getIsOnline() ? 1L : 0L);
     }
 
     @Override

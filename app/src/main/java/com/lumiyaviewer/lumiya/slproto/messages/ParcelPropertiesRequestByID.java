@@ -40,8 +40,8 @@ public class ParcelPropertiesRequestByID extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelPropertiesRequestByID(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelPropertiesRequestByID(this);
     }
 
     @Override

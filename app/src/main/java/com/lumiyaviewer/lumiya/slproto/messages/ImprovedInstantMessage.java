@@ -60,8 +60,8 @@ public class ImprovedInstantMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImprovedInstantMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImprovedInstantMessage(this);
     }
 
     @Override

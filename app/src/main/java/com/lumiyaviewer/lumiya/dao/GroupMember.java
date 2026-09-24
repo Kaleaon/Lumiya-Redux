@@ -15,15 +15,15 @@ public class GroupMember {
     public GroupMember() {
     }
 
-    public GroupMember(UUID uuid, UUID uuid2, UUID uuid3, int i, String str, long j, String str2, boolean z) {
+    public GroupMember(UUID uuid, UUID requestID, UUID userID, int contribution, String onlineStatus, long agentPowers, String title, boolean isOwner) {
         this.groupID = uuid;
-        this.requestID = uuid2;
-        this.userID = uuid3;
-        this.contribution = i;
-        this.onlineStatus = str;
-        this.agentPowers = j;
-        this.title = str2;
-        this.isOwner = z;
+        this.requestID = requestID;
+        this.userID = userID;
+        this.contribution = contribution;
+        this.onlineStatus = onlineStatus;
+        this.agentPowers = agentPowers;
+        this.title = title;
+        this.isOwner = isOwner;
     }
 
     public long getAgentPowers() {
@@ -58,32 +58,32 @@ public class GroupMember {
         return this.userID;
     }
 
-    public void setAgentPowers(long j) {
-        this.agentPowers = j;
+    public void setAgentPowers(long agentPowers) {
+        this.agentPowers = agentPowers;
     }
 
-    public void setContribution(int i) {
-        this.contribution = i;
+    public void setContribution(int contribution) {
+        this.contribution = contribution;
     }
 
     public void setGroupID(UUID uuid) {
         this.groupID = uuid;
     }
 
-    public void setIsOwner(boolean z) {
-        this.isOwner = z;
+    public void setIsOwner(boolean isOwner) {
+        this.isOwner = isOwner;
     }
 
-    public void setOnlineStatus(String str) {
-        this.onlineStatus = str;
+    public void setOnlineStatus(String onlineStatus) {
+        this.onlineStatus = onlineStatus;
     }
 
     public void setRequestID(UUID uuid) {
         this.requestID = uuid;
     }
 
-    public void setTitle(String str) {
-        this.title = str;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setUserID(UUID uuid) {

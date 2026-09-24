@@ -47,8 +47,8 @@ public class UpdateGroupInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateGroupInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateGroupInfo(this);
     }
 
     @Override

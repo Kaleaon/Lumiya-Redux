@@ -45,17 +45,17 @@ public class AgentAnimation extends SLMessage {
         int size = (this.AnimationList_Fields.size() * 17) + 34 + 1;
         Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
         while (true) {
-            int i = size;
+            int size2 = size;
             if (!it.hasNext()) {
-                return i;
+                return size2;
             }
-            size = ((PhysicalAvatarEventList) it.next()).TypeData.length + 1 + i;
+            size = ((PhysicalAvatarEventList) it.next()).TypeData.length + 1 + size2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentAnimation(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentAnimation(this);
     }
 
     @Override
@@ -81,14 +81,14 @@ public class AgentAnimation extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             AnimationList animationList = new AnimationList();
             animationList.AnimID = unpackUUID(byteBuffer);
             animationList.StartAnim = unpackBoolean(byteBuffer);
             this.AnimationList_Fields.add(animationList);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             PhysicalAvatarEventList physicalAvatarEventList = new PhysicalAvatarEventList();
             physicalAvatarEventList.TypeData = unpackVariable(byteBuffer, 1);
             this.PhysicalAvatarEventList_Fields.add(physicalAvatarEventList);

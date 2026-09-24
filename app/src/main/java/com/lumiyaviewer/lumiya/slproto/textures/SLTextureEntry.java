@@ -18,13 +18,13 @@ public class SLTextureEntry {
     private final int faceMask;
     private final int hashValue;
 
-    private SLTextureEntry(SLTextureEntryFace sLTextureEntryFace, SLTextureEntryFace[] sLTextureEntryFaceArr) {
-        this.DefaultTexture = sLTextureEntryFace;
-        this.FaceTextures = sLTextureEntryFaceArr;
+    private SLTextureEntry(SLTextureEntryFace textureEntryFace, SLTextureEntryFace[] textureEntryFaces) {
+        this.DefaultTexture = textureEntryFace;
+        this.FaceTextures = textureEntryFaces;
         int i = 0;
-        for (int i2 = 0; i2 < sLTextureEntryFaceArr.length; i2++) {
-            if (sLTextureEntryFaceArr[i2] != null) {
-                i |= 1 << i2;
+        for (int j = 0; j < textureEntryFaces.length; j++) {
+            if (textureEntryFaces[j] != null) {
+                i |= 1 << j;
             }
         }
         this.faceMask = i;
@@ -41,20 +41,20 @@ public class SLTextureEntry {
             return;
         }
         MutableSLTextureEntryFace[] mutableSLTextureEntryFaceArr = new MutableSLTextureEntryFace[32];
-        int[] iArr = new int[1];
-        int[] iArr2 = new int[1];
+        int[] ints = new int[1];
+        int[] ints2 = new int[1];
         mutableSLTextureEntryFace.setTextureID(UUIDPool.getUUID(getUUID(byteBuffer)));
         while (true) {
-            int ReadFaceBitfield = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield == 0) {
                 break;
             }
             UUID uuid = UUIDPool.getUUID(getUUID(byteBuffer));
             int i2 = 1;
             int i3 = 0;
-            while (i3 < iArr2[0]) {
+            while (i3 < ints2[0]) {
                 if ((ReadFaceBitfield & i2) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i3, iArr).setTextureID(uuid);
+                    CreateFace(mutableSLTextureEntryFaceArr, i3, ints).setTextureID(uuid);
                 }
                 i3++;
                 i2 <<= 1;
@@ -62,16 +62,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setRGBA(byteBuffer.getInt());
         while (true) {
-            int ReadFaceBitfield2 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield2 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield2 == 0) {
                 break;
             }
             int i4 = byteBuffer.getInt();
             int i5 = 1;
             int i6 = 0;
-            while (i6 < iArr2[0]) {
+            while (i6 < ints2[0]) {
                 if ((ReadFaceBitfield2 & i5) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i6, iArr).setRGBA(i4);
+                    CreateFace(mutableSLTextureEntryFaceArr, i6, ints).setRGBA(i4);
                 }
                 i6++;
                 i5 <<= 1;
@@ -79,16 +79,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setRepeatU(byteBuffer.getFloat());
         while (true) {
-            int ReadFaceBitfield3 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield3 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield3 == 0) {
                 break;
             }
             float f = byteBuffer.getFloat();
             int i7 = 1;
             int i8 = 0;
-            while (i8 < iArr2[0]) {
+            while (i8 < ints2[0]) {
                 if ((ReadFaceBitfield3 & i7) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i8, iArr).setRepeatU(f);
+                    CreateFace(mutableSLTextureEntryFaceArr, i8, ints).setRepeatU(f);
                 }
                 i8++;
                 i7 <<= 1;
@@ -96,16 +96,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setRepeatV(byteBuffer.getFloat());
         while (true) {
-            int ReadFaceBitfield4 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield4 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield4 == 0) {
                 break;
             }
             float f2 = byteBuffer.getFloat();
             int i9 = 1;
             int i10 = 0;
-            while (i10 < iArr2[0]) {
+            while (i10 < ints2[0]) {
                 if ((ReadFaceBitfield4 & i9) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i10, iArr).setRepeatV(f2);
+                    CreateFace(mutableSLTextureEntryFaceArr, i10, ints).setRepeatV(f2);
                 }
                 i10++;
                 i9 <<= 1;
@@ -113,16 +113,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setOffsetU(getOffset(byteBuffer));
         while (true) {
-            int ReadFaceBitfield5 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield5 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield5 == 0) {
                 break;
             }
             float offset = getOffset(byteBuffer);
             int i11 = 1;
             int i12 = 0;
-            while (i12 < iArr2[0]) {
+            while (i12 < ints2[0]) {
                 if ((ReadFaceBitfield5 & i11) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i12, iArr).setOffsetU(offset);
+                    CreateFace(mutableSLTextureEntryFaceArr, i12, ints).setOffsetU(offset);
                 }
                 i12++;
                 i11 <<= 1;
@@ -130,16 +130,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setOffsetV(getOffset(byteBuffer));
         while (true) {
-            int ReadFaceBitfield6 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield6 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield6 == 0) {
                 break;
             }
             float offset2 = getOffset(byteBuffer);
             int i13 = 1;
             int i14 = 0;
-            while (i14 < iArr2[0]) {
+            while (i14 < ints2[0]) {
                 if ((ReadFaceBitfield6 & i13) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i14, iArr).setOffsetV(offset2);
+                    CreateFace(mutableSLTextureEntryFaceArr, i14, ints).setOffsetV(offset2);
                 }
                 i14++;
                 i13 <<= 1;
@@ -147,16 +147,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setRotation(getRotation(byteBuffer));
         while (true) {
-            int ReadFaceBitfield7 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield7 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield7 == 0) {
                 break;
             }
             float rotation = getRotation(byteBuffer);
             int i15 = 1;
             int i16 = 0;
-            while (i16 < iArr2[0]) {
+            while (i16 < ints2[0]) {
                 if ((ReadFaceBitfield7 & i15) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i16, iArr).setRotation(rotation);
+                    CreateFace(mutableSLTextureEntryFaceArr, i16, ints).setRotation(rotation);
                 }
                 i16++;
                 i15 <<= 1;
@@ -164,16 +164,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setMaterial(byteBuffer.get());
         while (true) {
-            int ReadFaceBitfield8 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield8 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield8 == 0) {
                 break;
             }
             byte b = byteBuffer.get();
             int i17 = 1;
             int i18 = 0;
-            while (i18 < iArr2[0]) {
+            while (i18 < ints2[0]) {
                 if ((ReadFaceBitfield8 & i17) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i18, iArr).setMaterial(b);
+                    CreateFace(mutableSLTextureEntryFaceArr, i18, ints).setMaterial(b);
                 }
                 i18++;
                 i17 <<= 1;
@@ -181,16 +181,16 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setMedia(byteBuffer.get());
         while (true) {
-            int ReadFaceBitfield9 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield9 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield9 == 0) {
                 break;
             }
             byte b2 = byteBuffer.get();
             int i19 = 1;
             int i20 = 0;
-            while (i20 < iArr2[0]) {
+            while (i20 < ints2[0]) {
                 if ((ReadFaceBitfield9 & i19) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i20, iArr).setMedia(b2);
+                    CreateFace(mutableSLTextureEntryFaceArr, i20, ints).setMedia(b2);
                 }
                 i20++;
                 i19 <<= 1;
@@ -198,22 +198,22 @@ public class SLTextureEntry {
         }
         mutableSLTextureEntryFace.setGlow(getGlow(byteBuffer));
         while (true) {
-            int ReadFaceBitfield10 = ReadFaceBitfield(byteBuffer, iArr2);
+            int ReadFaceBitfield10 = ReadFaceBitfield(byteBuffer, ints2);
             if (ReadFaceBitfield10 == 0) {
                 break;
             }
             float glow = getGlow(byteBuffer);
             int i21 = 1;
             int i22 = 0;
-            while (i22 < iArr2[0]) {
+            while (i22 < ints2[0]) {
                 if ((ReadFaceBitfield10 & i21) != 0) {
-                    CreateFace(mutableSLTextureEntryFaceArr, i22, iArr).setGlow(glow);
+                    CreateFace(mutableSLTextureEntryFaceArr, i22, ints).setGlow(glow);
                 }
                 i22++;
                 i21 <<= 1;
             }
         }
-        this.faceMask = iArr[0];
+        this.faceMask = ints[0];
         int i23 = 0;
         int i24 = -1;
         while (true) {
@@ -233,28 +233,28 @@ public class SLTextureEntry {
             this.FaceTextures = emptyFaces;
         } else {
             this.FaceTextures = new SLTextureEntryFace[i23];
-            for (int i25 = 0; i25 < i23; i25++) {
-                this.FaceTextures[i25] = SLTextureEntryFace.create(mutableSLTextureEntryFaceArr[i25]);
+            for (int j = 0; j < i23; j++) {
+                this.FaceTextures[j] = SLTextureEntryFace.create(mutableSLTextureEntryFaceArr[j]);
             }
         }
         this.hashValue = getHashValue();
     }
 
-    private static MutableSLTextureEntryFace CreateFace(MutableSLTextureEntryFace[] mutableSLTextureEntryFaceArr, int i, int[] iArr) {
+    private static MutableSLTextureEntryFace CreateFace(MutableSLTextureEntryFace[] mutableSLTextureEntryFaceArr, int i, int[] ints) {
         if (i >= 32) {
             return null;
         }
         if (mutableSLTextureEntryFaceArr[i] != null) {
             return mutableSLTextureEntryFaceArr[i];
         }
-        iArr[0] = iArr[0] | (1 << i);
+        ints[0] = ints[0] | (1 << i);
         mutableSLTextureEntryFaceArr[i] = new MutableSLTextureEntryFace(0);
         return mutableSLTextureEntryFaceArr[i];
     }
 
-    private int ReadFaceBitfield(ByteBuffer byteBuffer, int[] iArr) {
+    private int ReadFaceBitfield(ByteBuffer byteBuffer, int[] ints) {
         byte b;
-        iArr[0] = 0;
+        ints[0] = 0;
         if (byteBuffer.position() >= byteBuffer.limit()) {
             return 0;
         }
@@ -262,7 +262,7 @@ public class SLTextureEntry {
         do {
             b = byteBuffer.get();
             i = (i << 7) | (b & 0x7F);
-            iArr[0] = iArr[0] + 7;
+            ints[0] = ints[0] + 7;
         } while ((b & 128) != 0);
         return i;
     }
@@ -285,19 +285,19 @@ public class SLTextureEntry {
         }
         Debug.Log(String.format("WriteFaceBitfield: faceBits = 0x%08x, count %d", Integer.valueOf(i), Integer.valueOf(i2)));
         int i5 = (i2 - 1) * 7;
-        for (int i6 = 0; i6 < i2; i6++) {
+        for (int j = 0; j < i2; j++) {
             byte b = (byte) ((i >> i5) & Vr.VREvent.VrCore.ErrorCode.CONTROLLER_UNSTUCK);
-            if (i6 != i2 - 1) {
+            if (j != i2 - 1) {
                 b = (byte) (b | 128);
             }
-            Debug.Log(String.format("WriteFaceBitfield: i = %d, shift = %d, byte 0x%02x", Integer.valueOf(i6), Integer.valueOf(i5), Byte.valueOf(b)));
+            Debug.Log(String.format("WriteFaceBitfield: i = %d, shift = %d, byte 0x%02x", Integer.valueOf(j), Integer.valueOf(i5), Byte.valueOf(b)));
             byteBuffer.put(b);
             i5 -= 7;
         }
     }
 
-    public static SLTextureEntry create(SLTextureEntryFace sLTextureEntryFace, SLTextureEntryFace[] sLTextureEntryFaceArr) {
-        return pool.intern(new SLTextureEntry(sLTextureEntryFace, sLTextureEntryFaceArr));
+    public static SLTextureEntry create(SLTextureEntryFace textureEntryFace, SLTextureEntryFace[] textureEntryFaces) {
+        return pool.intern(new SLTextureEntry(textureEntryFace, textureEntryFaces));
     }
 
     public static SLTextureEntry create(ByteBuffer byteBuffer, int i) {
@@ -311,9 +311,9 @@ public class SLTextureEntry {
     private int getHashValue() {
         int length = this.FaceTextures.length + this.faceMask + this.DefaultTexture.hashCode();
         int i = 1;
-        for (int i2 = 0; i2 < this.FaceTextures.length; i2++) {
+        for (int j = 0; j < this.FaceTextures.length; j++) {
             if ((this.faceMask & i) != 0) {
-                length += this.FaceTextures[i2].hashCode();
+                length += this.FaceTextures[j].hashCode();
             }
             i <<= 1;
         }
@@ -348,16 +348,16 @@ public class SLTextureEntry {
     }
 
     private static void putUUID(ByteBuffer byteBuffer, UUID uuid) {
-        long j;
+        long mostSignificantBits;
         long j2 = 0;
         byteBuffer.order(ByteOrder.BIG_ENDIAN);
         if (uuid != null) {
-            j = uuid.getMostSignificantBits();
+            mostSignificantBits = uuid.getMostSignificantBits();
             j2 = uuid.getLeastSignificantBits();
         } else {
-            j = 0;
+            mostSignificantBits = 0;
         }
-        byteBuffer.putLong(j);
+        byteBuffer.putLong(mostSignificantBits);
         byteBuffer.putLong(j2);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
@@ -383,13 +383,13 @@ public class SLTextureEntry {
         if (obj == null || !(obj instanceof SLTextureEntry)) {
             return false;
         }
-        SLTextureEntry sLTextureEntry = (SLTextureEntry) obj;
-        if (this.faceMask != sLTextureEntry.faceMask || this.FaceTextures.length != sLTextureEntry.FaceTextures.length || !this.DefaultTexture.equals(sLTextureEntry.DefaultTexture)) {
+        SLTextureEntry textureEntry = (SLTextureEntry) obj;
+        if (this.faceMask != textureEntry.faceMask || this.FaceTextures.length != textureEntry.FaceTextures.length || !this.DefaultTexture.equals(textureEntry.DefaultTexture)) {
             return false;
         }
         int i = 1;
-        for (int i2 = 0; i2 < this.FaceTextures.length; i2++) {
-            if ((this.faceMask & i) != 0 && !this.FaceTextures[i2].equals(sLTextureEntry.FaceTextures[i2])) {
+        for (int j = 0; j < this.FaceTextures.length; j++) {
+            if ((this.faceMask & i) != 0 && !this.FaceTextures[j].equals(textureEntry.FaceTextures[j])) {
                 return false;
             }
             i <<= 1;
@@ -422,34 +422,34 @@ public class SLTextureEntry {
         }
         WriteFaceBitfield(allocate, 0);
         allocate.putInt(this.DefaultTexture.rgba());
-        for (int i2 = 0; i2 < this.FaceTextures.length; i2++) {
-            if (this.FaceTextures[i2] != null && this.FaceTextures[i2].getRGBA(this.DefaultTexture) != this.DefaultTexture.rgba()) {
-                WriteFaceBitfield(allocate, 1 << i2);
-                allocate.putInt(this.FaceTextures[i2].getRGBA(this.DefaultTexture));
+        for (int j = 0; j < this.FaceTextures.length; j++) {
+            if (this.FaceTextures[j] != null && this.FaceTextures[j].getRGBA(this.DefaultTexture) != this.DefaultTexture.rgba()) {
+                WriteFaceBitfield(allocate, 1 << j);
+                allocate.putInt(this.FaceTextures[j].getRGBA(this.DefaultTexture));
             }
         }
         WriteFaceBitfield(allocate, 0);
         allocate.putFloat(this.DefaultTexture.repeatU());
-        for (int i3 = 0; i3 < this.FaceTextures.length; i3++) {
-            if (this.FaceTextures[i3] != null && this.FaceTextures[i3].getRepeatU(this.DefaultTexture) != this.DefaultTexture.repeatU()) {
-                WriteFaceBitfield(allocate, 1 << i3);
-                allocate.putFloat(this.FaceTextures[i3].getRepeatU(this.DefaultTexture));
+        for (int k = 0; k < this.FaceTextures.length; k++) {
+            if (this.FaceTextures[k] != null && this.FaceTextures[k].getRepeatU(this.DefaultTexture) != this.DefaultTexture.repeatU()) {
+                WriteFaceBitfield(allocate, 1 << k);
+                allocate.putFloat(this.FaceTextures[k].getRepeatU(this.DefaultTexture));
             }
         }
         WriteFaceBitfield(allocate, 0);
         allocate.putFloat(this.DefaultTexture.repeatV());
-        for (int i4 = 0; i4 < this.FaceTextures.length; i4++) {
-            if (this.FaceTextures[i4] != null && this.FaceTextures[i4].getRepeatV(this.DefaultTexture) != this.DefaultTexture.repeatV()) {
-                WriteFaceBitfield(allocate, 1 << i4);
-                allocate.putFloat(this.FaceTextures[i4].getRepeatV(this.DefaultTexture));
+        for (int m = 0; m < this.FaceTextures.length; m++) {
+            if (this.FaceTextures[m] != null && this.FaceTextures[m].getRepeatV(this.DefaultTexture) != this.DefaultTexture.repeatV()) {
+                WriteFaceBitfield(allocate, 1 << m);
+                allocate.putFloat(this.FaceTextures[m].getRepeatV(this.DefaultTexture));
             }
         }
         WriteFaceBitfield(allocate, 0);
         putOffset(allocate, this.DefaultTexture.offsetU());
-        for (int i5 = 0; i5 < this.FaceTextures.length; i5++) {
-            if (this.FaceTextures[i5] != null && this.FaceTextures[i5].getOffsetU(this.DefaultTexture) != this.DefaultTexture.offsetU()) {
-                WriteFaceBitfield(allocate, 1 << i5);
-                putOffset(allocate, this.FaceTextures[i5].getOffsetU(this.DefaultTexture));
+        for (int n = 0; n < this.FaceTextures.length; n++) {
+            if (this.FaceTextures[n] != null && this.FaceTextures[n].getOffsetU(this.DefaultTexture) != this.DefaultTexture.offsetU()) {
+                WriteFaceBitfield(allocate, 1 << n);
+                putOffset(allocate, this.FaceTextures[n].getOffsetU(this.DefaultTexture));
             }
         }
         WriteFaceBitfield(allocate, 0);
@@ -493,10 +493,10 @@ public class SLTextureEntry {
             }
         }
         WriteFaceBitfield(allocate, 0);
-        byte[] bArr = new byte[allocate.position()];
+        byte[] bytes = new byte[allocate.position()];
         allocate.position(0);
-        allocate.get(bArr);
-        Debug.DumpBuffer("Baking: TEpacked: ", bArr);
-        return bArr;
+        allocate.get(bytes);
+        Debug.DumpBuffer("Baking: TEpacked: ", bytes);
+        return bytes;
     }
 }

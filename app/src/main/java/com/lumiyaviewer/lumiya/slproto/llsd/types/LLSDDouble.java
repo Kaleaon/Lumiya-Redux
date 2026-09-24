@@ -8,8 +8,8 @@ import org.xmlpull.v1.XmlSerializer;
 public class LLSDDouble extends LLSDNode {
     private double value;
 
-    public LLSDDouble(double d) {
-        this.value = d;
+    public LLSDDouble(double value) {
+        this.value = value;
     }
 
     public LLSDDouble(String str) {

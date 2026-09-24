@@ -8,19 +8,19 @@ final class AutoValue_GroupManager_GroupMemberRolesQuery extends GroupManager.Gr
     private final UUID memberID;
     private final UUID requestID;
 
-    AutoValue_GroupManager_GroupMemberRolesQuery(UUID uuid, UUID uuid2, UUID uuid3) {
+    AutoValue_GroupManager_GroupMemberRolesQuery(UUID uuid, UUID memberID, UUID requestID) {
         if (uuid == null) {
             throw new NullPointerException("Null groupID");
         }
         this.groupID = uuid;
-        if (uuid2 == null) {
+        if (memberID == null) {
             throw new NullPointerException("Null memberID");
         }
-        this.memberID = uuid2;
-        if (uuid3 == null) {
+        this.memberID = memberID;
+        if (requestID == null) {
             throw new NullPointerException("Null requestID");
         }
-        this.requestID = uuid3;
+        this.requestID = requestID;
     }
 
     public boolean equals(Object obj) {

@@ -41,8 +41,8 @@ public class ScriptSensorRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptSensorRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptSensorRequest(this);
     }
 
     @Override

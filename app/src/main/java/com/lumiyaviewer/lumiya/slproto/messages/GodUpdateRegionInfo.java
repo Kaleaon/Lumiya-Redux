@@ -56,8 +56,8 @@ public class GodUpdateRegionInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGodUpdateRegionInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGodUpdateRegionInfo(this);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class GodUpdateRegionInfo extends SLMessage {
         this.RegionInfo_Field.RedirectGridX = unpackInt(byteBuffer);
         this.RegionInfo_Field.RedirectGridY = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             RegionInfo2 regionInfo2 = new RegionInfo2();
             regionInfo2.RegionFlagsExtended = unpackLong(byteBuffer);
             this.RegionInfo2_Fields.add(regionInfo2);

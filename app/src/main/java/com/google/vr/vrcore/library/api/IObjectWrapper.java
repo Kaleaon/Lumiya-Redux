@@ -14,8 +14,8 @@ public interface IObjectWrapper extends IInterface {
         private static class Proxy implements IObjectWrapper {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override

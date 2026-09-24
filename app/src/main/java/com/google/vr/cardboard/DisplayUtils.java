@@ -30,13 +30,13 @@ public class DisplayUtils {
             display.getRealMetrics(displayMetrics);
         }
         if (displayMetrics.widthPixels < displayMetrics.heightPixels) {
-            int i = displayMetrics.widthPixels;
+            int widthPixels = displayMetrics.widthPixels;
             displayMetrics.widthPixels = displayMetrics.heightPixels;
-            displayMetrics.heightPixels = i;
+            displayMetrics.heightPixels = widthPixels;
         }
-        float f = displayMetrics.xdpi;
+        float xdpi = displayMetrics.xdpi;
         displayMetrics.xdpi = displayMetrics.ydpi;
-        displayMetrics.ydpi = f;
+        displayMetrics.ydpi = xdpi;
         return displayMetrics;
     }
 

@@ -111,17 +111,17 @@ public class ChildAgentUpdate extends SLMessage {
         int length = this.AgentData_Field.Throttles.length + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.length + 16 + 1 + 1 + (this.GroupData_Fields.size() * 25) + 1 + (this.AnimationData_Fields.size() * 32) + 1 + (this.GranterBlock_Fields.size() * 16) + 1;
         Iterator<?> it = this.NVPairData_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i + 1 + (this.VisualParam_Fields.size() * 1) + 1 + (this.AgentAccess_Fields.size() * 2) + 1 + (this.AgentInfo_Fields.size() * 4);
+                return length2 + 1 + (this.VisualParam_Fields.size() * 1) + 1 + (this.AgentAccess_Fields.size() * 2) + 1 + (this.AgentInfo_Fields.size() * 4);
             }
-            length = ((NVPairData) it.next()).NVPairs.length + 2 + i;
+            length = ((NVPairData) it.next()).NVPairs.length + 2 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentUpdate(this);
     }
 
     @Override
@@ -171,14 +171,14 @@ public class ChildAgentUpdate extends SLMessage {
             packUUID(byteBuffer, ((GranterBlock) it.next()).GranterID);
         }
         byteBuffer.put((byte) this.NVPairData_Fields.size());
-        Iterator<?> it2 = this.NVPairData_Fields.iterator();
-        while (it2.hasNext()) {
-            packVariable(byteBuffer, ((NVPairData) it2.next()).NVPairs, 2);
+        Iterator<?> iterator = this.NVPairData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packVariable(byteBuffer, ((NVPairData) iterator.next()).NVPairs, 2);
         }
         byteBuffer.put((byte) this.VisualParam_Fields.size());
-        Iterator<?> it3 = this.VisualParam_Fields.iterator();
-        while (it3.hasNext()) {
-            packByte(byteBuffer, (byte) ((VisualParam) it3.next()).ParamValue);
+        Iterator<?> iterator2 = this.VisualParam_Fields.iterator();
+        while (iterator2.hasNext()) {
+            packByte(byteBuffer, (byte) ((VisualParam) iterator2.next()).ParamValue);
         }
         byteBuffer.put((byte) this.AgentAccess_Fields.size());
         for (AgentAccess agentAccess : this.AgentAccess_Fields) {
@@ -186,9 +186,9 @@ public class ChildAgentUpdate extends SLMessage {
             packByte(byteBuffer, (byte) agentAccess.AgentMaxAccess);
         }
         byteBuffer.put((byte) this.AgentInfo_Fields.size());
-        Iterator<?> it4 = this.AgentInfo_Fields.iterator();
-        while (it4.hasNext()) {
-            packInt(byteBuffer, ((AgentInfo) it4.next()).Flags);
+        Iterator<?> iterator3 = this.AgentInfo_Fields.iterator();
+        while (iterator3.hasNext()) {
+            packInt(byteBuffer, ((AgentInfo) iterator3.next()).Flags);
         }
     }
 
@@ -221,7 +221,7 @@ public class ChildAgentUpdate extends SLMessage {
         this.AgentData_Field.AgentTextures = unpackVariable(byteBuffer, 2);
         this.AgentData_Field.ActiveGroupID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             GroupData groupData = new GroupData();
             groupData.GroupID = unpackUUID(byteBuffer);
             groupData.GroupPowers = unpackLong(byteBuffer);
@@ -229,23 +229,23 @@ public class ChildAgentUpdate extends SLMessage {
             this.GroupData_Fields.add(groupData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             AnimationData animationData = new AnimationData();
             animationData.Animation = unpackUUID(byteBuffer);
             animationData.ObjectID = unpackUUID(byteBuffer);
             this.AnimationData_Fields.add(animationData);
         }
         int i5 = byteBuffer.get() & 0xFF;
-        for (int i6 = 0; i6 < i5; i6++) {
+        for (int m = 0; m < i5; m++) {
             GranterBlock granterBlock = new GranterBlock();
             granterBlock.GranterID = unpackUUID(byteBuffer);
             this.GranterBlock_Fields.add(granterBlock);
         }
         int i7 = byteBuffer.get() & 0xFF;
-        for (int i8 = 0; i8 < i7; i8++) {
-            NVPairData nVPairData = new NVPairData();
-            nVPairData.NVPairs = unpackVariable(byteBuffer, 2);
-            this.NVPairData_Fields.add(nVPairData);
+        for (int n = 0; n < i7; n++) {
+            NVPairData nvPairData = new NVPairData();
+            nvPairData.NVPairs = unpackVariable(byteBuffer, 2);
+            this.NVPairData_Fields.add(nvPairData);
         }
         int i9 = byteBuffer.get() & 0xFF;
         for (int i10 = 0; i10 < i9; i10++) {

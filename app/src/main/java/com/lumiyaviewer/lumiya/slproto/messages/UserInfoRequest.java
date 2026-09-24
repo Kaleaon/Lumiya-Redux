@@ -30,8 +30,8 @@ public class UserInfoRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserInfoRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserInfoRequest(this);
     }
 
     @Override

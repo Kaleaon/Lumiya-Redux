@@ -31,8 +31,8 @@ public class AbortXfer extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAbortXfer(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAbortXfer(this);
     }
 
     @Override

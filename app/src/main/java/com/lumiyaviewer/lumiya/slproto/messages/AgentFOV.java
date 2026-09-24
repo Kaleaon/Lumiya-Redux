@@ -39,8 +39,8 @@ public class AgentFOV extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentFOV(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentFOV(this);
     }
 
     @Override

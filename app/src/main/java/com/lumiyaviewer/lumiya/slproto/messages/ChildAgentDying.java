@@ -31,8 +31,8 @@ public class ChildAgentDying extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentDying(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentDying(this);
     }
 
     @Override

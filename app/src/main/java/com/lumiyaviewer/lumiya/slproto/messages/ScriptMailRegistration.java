@@ -33,8 +33,8 @@ public class ScriptMailRegistration extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptMailRegistration(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptMailRegistration(this);
     }
 
     @Override

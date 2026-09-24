@@ -53,8 +53,8 @@ public class PickInfoUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickInfoUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickInfoUpdate(this);
     }
 
     @Override

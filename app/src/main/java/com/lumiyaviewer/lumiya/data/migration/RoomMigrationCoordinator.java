@@ -89,11 +89,11 @@ public final class RoomMigrationCoordinator {
     }
 
     private static void validateTable(SQLiteDatabase greenDb, LumiyaRoomDatabase roomDb, String table, String hashExpr) {
-        long gCount = singleLong(greenDb, "SELECT COUNT(*) FROM " + table);
-        long rCount = singleLong(roomDb.getOpenHelper().getWritableDatabase(), "SELECT COUNT(*) FROM " + table);
-        long gHash = singleLong(greenDb, "SELECT abs(sum(length(" + hashExpr + "))) FROM " + table);
-        long rHash = singleLong(roomDb.getOpenHelper().getWritableDatabase(), "SELECT abs(sum(length(" + hashExpr + "))) FROM " + table);
-        Debug.Printf("Room parity table=%s greenCount=%d roomCount=%d greenHash=%d roomHash=%d", table, gCount, rCount, gHash, rHash);
+        long singleLong = singleLong(greenDb, "SELECT COUNT(*) FROM " + table);
+        long singleLong2 = singleLong(roomDb.getOpenHelper().getWritableDatabase(), "SELECT COUNT(*) FROM " + table);
+        long singleLong3 = singleLong(greenDb, "SELECT abs(sum(length(" + hashExpr + "))) FROM " + table);
+        long singleLong4 = singleLong(roomDb.getOpenHelper().getWritableDatabase(), "SELECT abs(sum(length(" + hashExpr + "))) FROM " + table);
+        Debug.Printf("Room parity table=%s greenCount=%d roomCount=%d greenHash=%d roomHash=%d", table, singleLong, singleLong2, singleLong3, singleLong4);
     }
 
     private static long singleLong(SQLiteDatabase db, String query) {

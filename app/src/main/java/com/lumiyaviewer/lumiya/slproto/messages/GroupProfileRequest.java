@@ -39,8 +39,8 @@ public class GroupProfileRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupProfileRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupProfileRequest(this);
     }
 
     @Override

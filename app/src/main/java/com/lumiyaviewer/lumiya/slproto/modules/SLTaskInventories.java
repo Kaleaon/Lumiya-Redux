@@ -27,15 +27,15 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
     private final ResultHandler<Integer, SLTaskInventory> resultHandler;
     private final UserManager userManager;
 
-    public SLTaskInventories(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
-        this.requestHandler = new AsyncRequestHandler(sLAgentCircuit, new SimpleRequestHandler<Integer>() {
+    public SLTaskInventories(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
+        this.requestHandler = new AsyncRequestHandler(agentCircuit, new SimpleRequestHandler<Integer>() {
             @Override
             public void onRequest(@Nonnull Integer num) {
                 SLTaskInventories.this.RequestTaskInventory(num.intValue());
             }
         });
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
         if (this.userManager != null) {
             this.resultHandler = this.userManager.getObjectsManager().getTaskInventoryRequestSource().attachRequestHandler(this.requestHandler);
         } else {
@@ -53,13 +53,13 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
         SendMessage(requestTaskInventory);
     }
 
-    private SLTaskInventory parseTaskInventory(byte[] bArr) {
-        if (bArr == null) {
+    private SLTaskInventory parseTaskInventory(byte[] bytes) {
+        if (bytes == null) {
             return new SLTaskInventory();
         }
         try {
             ImmutableList.Builder builder = ImmutableList.builder();
-            SimpleStringParser simpleStringParser = new SimpleStringParser(SLMessage.stringFromVariableUTF(bArr), DELIM_ANY);
+            SimpleStringParser simpleStringParser = new SimpleStringParser(SLMessage.stringFromVariableUTF(bytes), DELIM_ANY);
             while (!simpleStringParser.endOfString()) {
                 String nextToken = simpleStringParser.nextToken(DELIM_ANY);
                 Debug.Printf("TaskInventory: got token: '%s'", nextToken);
@@ -100,11 +100,11 @@ public class SLTaskInventories extends SLModule implements SLXfer.SLXferCompleti
     }
 
     @Override
-    public void onXferComplete(Object obj, String str, byte[] bArr) {
+    public void onXferComplete(Object obj, String str, byte[] bytes) {
         if (obj instanceof UUID) {
             UUID uuid = (UUID) obj;
-            Debug.Printf("onXferComplete with file = '%s', data length = %d", str, Integer.valueOf(bArr.length));
-            SLTaskInventory parseTaskInventory = parseTaskInventory(bArr);
+            Debug.Printf("onXferComplete with file = '%s', data length = %d", str, Integer.valueOf(bytes.length));
+            SLTaskInventory parseTaskInventory = parseTaskInventory(bytes);
             Debug.Printf("task inventory count = %d", Integer.valueOf(parseTaskInventory.entries.size()));
             if (this.resultHandler != null) {
                 this.resultHandler.onResultData(Integer.valueOf(this.agentCircuit.getGridConnection().parcelInfo.getObjectLocalID(uuid)), parseTaskInventory);

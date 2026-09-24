@@ -6,11 +6,11 @@ final class AutoValue_MyAvatarState extends MyAvatarState {
     private final boolean isSitting;
     private final int sittingOn;
 
-    AutoValue_MyAvatarState(boolean z, int i, boolean z2, boolean z3) {
-        this.isSitting = z;
-        this.sittingOn = i;
-        this.isFlying = z2;
-        this.hasHUDs = z3;
+    AutoValue_MyAvatarState(boolean isSitting, int sittingOn, boolean isFlying, boolean hasHUDs) {
+        this.isSitting = isSitting;
+        this.sittingOn = sittingOn;
+        this.isFlying = isFlying;
+        this.hasHUDs = hasHUDs;
     }
 
     public boolean equals(Object obj) {

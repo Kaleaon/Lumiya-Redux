@@ -111,8 +111,8 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
 
         @Override
         public Boolean doInBackground(Void... voidArr) {
-            SLAgentCircuit sLAgentCircuit = (SLAgentCircuit) ParcelPropertiesFragment.this.agentCircuit.getData();
-            return Boolean.valueOf(sLAgentCircuit != null ? sLAgentCircuit.getModules().userProfiles.SetHomeLocation() : false);
+            SLAgentCircuit agentCircuit = (SLAgentCircuit) ParcelPropertiesFragment.this.agentCircuit.getData();
+            return Boolean.valueOf(agentCircuit != null ? agentCircuit.getModules().userProfiles.SetHomeLocation() : false);
         }
 
         @Override
@@ -138,7 +138,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         return bundle;
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         updateSimOptions();
     }
 
@@ -163,8 +163,8 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_ParcelPropertiesFragment_8181, reason: not valid java name */
-    /* synthetic */ void m514x74bd5c0c(SLAgentCircuit sLAgentCircuit, DialogInterface dialogInterface, int i) {
-        sLAgentCircuit.RestartRegion(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_INFO_READ_ERROR);
+    /* synthetic */ void m514x74bd5c0c(SLAgentCircuit agentCircuit, DialogInterface dialogInterface, int i) {
+        agentCircuit.RestartRegion(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_INFO_READ_ERROR);
         Toast.makeText(getContext(), R.string.region_restart_ok_message, Toast.LENGTH_LONG).show();
         dialogInterface.dismiss();
     }

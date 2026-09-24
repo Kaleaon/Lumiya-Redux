@@ -36,8 +36,8 @@ public class TransferInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferInfo(this);
     }
 
     @Override

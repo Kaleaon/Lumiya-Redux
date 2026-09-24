@@ -55,25 +55,25 @@ public class ServiceBridge implements ServiceConnection {
         @Override
         public void deprecatedOnControllerAccelEvent(ControllerAccelEvent controllerAccelEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerAccelEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addAccelEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerAccelEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addAccelEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
         @Override
         public void deprecatedOnControllerButtonEvent(ControllerButtonEvent controllerButtonEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerButtonEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addButtonEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerButtonEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addButtonEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
         @Override
@@ -84,37 +84,37 @@ public class ServiceBridge implements ServiceConnection {
         @Override
         public void deprecatedOnControllerGyroEvent(ControllerGyroEvent controllerGyroEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerGyroEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addGyroEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerGyroEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addGyroEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
         @Override
         public void deprecatedOnControllerOrientationEvent(ControllerOrientationEvent controllerOrientationEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerOrientationEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addOrientationEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerOrientationEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addOrientationEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
         @Override
         public void deprecatedOnControllerTouchEvent(ControllerTouchEvent controllerTouchEvent) {
             ControllerEventPacket obtain = ControllerEventPacket.obtain();
-            Parcel obtain2 = Parcel.obtain();
-            controllerTouchEvent.writeToParcel(obtain2, 0);
-            obtain2.setDataPosition(0);
-            obtain.addTouchEvent().readFromParcel(obtain2);
+            Parcel parcel = Parcel.obtain();
+            controllerTouchEvent.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            obtain.addTouchEvent().readFromParcel(parcel);
             ServiceBridge.this.callbacks.onControllerEventPacket(obtain);
             obtain.recycle();
-            obtain2.recycle();
+            parcel.recycle();
         }
 
         @Override
@@ -296,27 +296,27 @@ public class ServiceBridge implements ServiceConnection {
     }
 
     @UsedByNative
-    public void setAccelEnabled(boolean z) {
-        this.options.enableAccel = z;
+    public void setAccelEnabled(boolean accelEnabled) {
+        this.options.enableAccel = accelEnabled;
     }
 
     @UsedByNative
-    public void setGesturesEnabled(boolean z) {
-        this.options.enableGestures = z;
+    public void setGesturesEnabled(boolean gesturesEnabled) {
+        this.options.enableGestures = gesturesEnabled;
     }
 
     @UsedByNative
-    public void setGyroEnabled(boolean z) {
-        this.options.enableGyro = z;
+    public void setGyroEnabled(boolean gyroEnabled) {
+        this.options.enableGyro = gyroEnabled;
     }
 
     @UsedByNative
-    public void setOrientationEnabled(boolean z) {
-        this.options.enableOrientation = z;
+    public void setOrientationEnabled(boolean orientationEnabled) {
+        this.options.enableOrientation = orientationEnabled;
     }
 
     @UsedByNative
-    public void setTouchEnabled(boolean z) {
-        this.options.enableTouch = z;
+    public void setTouchEnabled(boolean touchEnabled) {
+        this.options.enableTouch = touchEnabled;
     }
 }

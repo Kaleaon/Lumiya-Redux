@@ -36,8 +36,8 @@ public interface Preferences {
             return new DeveloperPrefs().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static DeveloperPrefs parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (DeveloperPrefs) MessageNano.mergeFrom(new DeveloperPrefs(), bArr);
+        public static DeveloperPrefs parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (DeveloperPrefs) MessageNano.mergeFrom(new DeveloperPrefs(), bytes);
         }
 
         public final DeveloperPrefs clear() {
@@ -141,20 +141,20 @@ public interface Preferences {
             }
         }
 
-        public final DeveloperPrefs setMotophoPatchEnabled(boolean z) {
-            this.motophoPatchEnabled_ = z;
+        public final DeveloperPrefs setMotophoPatchEnabled(boolean motophoPatchEnabled) {
+            this.motophoPatchEnabled_ = motophoPatchEnabled;
             this.bitField0_ |= 4;
             return this;
         }
 
-        public final DeveloperPrefs setPerformanceMonitoringEnabled(boolean z) {
-            this.performanceMonitoringEnabled_ = z;
+        public final DeveloperPrefs setPerformanceMonitoringEnabled(boolean performanceMonitoringEnabled) {
+            this.performanceMonitoringEnabled_ = performanceMonitoringEnabled;
             this.bitField0_ |= 1;
             return this;
         }
 
-        public final DeveloperPrefs setSensorLoggingEnabled(boolean z) {
-            this.sensorLoggingEnabled_ = z;
+        public final DeveloperPrefs setSensorLoggingEnabled(boolean sensorLoggingEnabled) {
+            this.sensorLoggingEnabled_ = sensorLoggingEnabled;
             this.bitField0_ |= 2;
             return this;
         }
@@ -204,8 +204,8 @@ public interface Preferences {
             return new UserPrefs().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static UserPrefs parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (UserPrefs) MessageNano.mergeFrom(new UserPrefs(), bArr);
+        public static UserPrefs parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (UserPrefs) MessageNano.mergeFrom(new UserPrefs(), bytes);
         }
 
         public final UserPrefs clear() {
@@ -261,11 +261,11 @@ public interface Preferences {
                     case 0:
                         return this;
                     case 8:
-                        int readInt32 = codedInputByteBufferNano.readInt32();
-                        switch (readInt32) {
+                        int int32 = codedInputByteBufferNano.readInt32();
+                        switch (int32) {
                             case 0:
                             case 1:
-                                this.controllerHandedness_ = readInt32;
+                                this.controllerHandedness_ = int32;
                                 this.bitField0_ |= 1;
                                 break;
                         }
@@ -284,8 +284,8 @@ public interface Preferences {
             }
         }
 
-        public final UserPrefs setControllerHandedness(int i) {
-            this.controllerHandedness_ = i;
+        public final UserPrefs setControllerHandedness(int controllerHandedness) {
+            this.controllerHandedness_ = controllerHandedness;
             this.bitField0_ |= 1;
             return this;
         }

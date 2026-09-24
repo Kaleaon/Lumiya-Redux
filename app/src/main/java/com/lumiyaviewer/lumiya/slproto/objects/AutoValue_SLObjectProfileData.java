@@ -20,30 +20,30 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
     private final byte saleType;
     private final String touchName;
 
-    AutoValue_SLObjectProfileData(@Nullable UUID uuid, Optional<String> optional, Optional<String> optional2, @Nullable UUID uuid2, boolean z, @Nullable String str, boolean z2, byte b, int i, boolean z3, boolean z4, Optional<String> optional3, @Nullable PayInfo payInfo, boolean z5) {
+    AutoValue_SLObjectProfileData(@Nullable UUID uuid, Optional<String> optional, Optional<String> description, @Nullable UUID ownerUUID, boolean isTouchable, @Nullable String touchName, boolean isPayable, byte saleType, int salePrice, boolean isCopyable, boolean isDead, Optional<String> floatingText, @Nullable PayInfo payInfo, boolean isModifiable) {
         this.objectUUID = uuid;
         if (optional == null) {
             throw new NullPointerException("Null name");
         }
         this.name = optional;
-        if (optional2 == null) {
+        if (description == null) {
             throw new NullPointerException("Null description");
         }
-        this.description = optional2;
-        this.ownerUUID = uuid2;
-        this.isTouchable = z;
-        this.touchName = str;
-        this.isPayable = z2;
-        this.saleType = b;
-        this.salePrice = i;
-        this.isCopyable = z3;
-        this.isDead = z4;
-        if (optional3 == null) {
+        this.description = description;
+        this.ownerUUID = ownerUUID;
+        this.isTouchable = isTouchable;
+        this.touchName = touchName;
+        this.isPayable = isPayable;
+        this.saleType = saleType;
+        this.salePrice = salePrice;
+        this.isCopyable = isCopyable;
+        this.isDead = isDead;
+        if (floatingText == null) {
             throw new NullPointerException("Null floatingText");
         }
-        this.floatingText = optional3;
+        this.floatingText = floatingText;
         this.payInfo = payInfo;
-        this.isModifiable = z5;
+        this.isModifiable = isModifiable;
     }
 
     @Override
@@ -58,10 +58,10 @@ final class AutoValue_SLObjectProfileData extends SLObjectProfileData {
         if (!(obj instanceof SLObjectProfileData)) {
             return false;
         }
-        SLObjectProfileData sLObjectProfileData = (SLObjectProfileData) obj;
-        if (this.objectUUID != null ? this.objectUUID.equals(sLObjectProfileData.objectUUID()) : sLObjectProfileData.objectUUID() == null) {
-            if (this.name.equals(sLObjectProfileData.name()) && this.description.equals(sLObjectProfileData.description()) && (this.ownerUUID != null ? this.ownerUUID.equals(sLObjectProfileData.ownerUUID()) : sLObjectProfileData.ownerUUID() == null) && this.isTouchable == sLObjectProfileData.isTouchable() && (this.touchName != null ? this.touchName.equals(sLObjectProfileData.touchName()) : sLObjectProfileData.touchName() == null) && this.isPayable == sLObjectProfileData.isPayable() && this.saleType == sLObjectProfileData.saleType() && this.salePrice == sLObjectProfileData.salePrice() && this.isCopyable == sLObjectProfileData.isCopyable() && this.isDead == sLObjectProfileData.isDead() && this.floatingText.equals(sLObjectProfileData.floatingText()) && (this.payInfo != null ? this.payInfo.equals(sLObjectProfileData.payInfo()) : sLObjectProfileData.payInfo() == null)) {
-                return this.isModifiable == sLObjectProfileData.isModifiable();
+        SLObjectProfileData objectProfileData = (SLObjectProfileData) obj;
+        if (this.objectUUID != null ? this.objectUUID.equals(objectProfileData.objectUUID()) : objectProfileData.objectUUID() == null) {
+            if (this.name.equals(objectProfileData.name()) && this.description.equals(objectProfileData.description()) && (this.ownerUUID != null ? this.ownerUUID.equals(objectProfileData.ownerUUID()) : objectProfileData.ownerUUID() == null) && this.isTouchable == objectProfileData.isTouchable() && (this.touchName != null ? this.touchName.equals(objectProfileData.touchName()) : objectProfileData.touchName() == null) && this.isPayable == objectProfileData.isPayable() && this.saleType == objectProfileData.saleType() && this.salePrice == objectProfileData.salePrice() && this.isCopyable == objectProfileData.isCopyable() && this.isDead == objectProfileData.isDead() && this.floatingText.equals(objectProfileData.floatingText()) && (this.payInfo != null ? this.payInfo.equals(objectProfileData.payInfo()) : objectProfileData.payInfo() == null)) {
+                return this.isModifiable == objectProfileData.isModifiable();
             }
         }
         return false;

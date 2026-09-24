@@ -16,8 +16,8 @@ public interface IPerformanceService extends IInterface {
         private static class Proxy implements IPerformanceService {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -28,14 +28,14 @@ public interface IPerformanceService extends IInterface {
             @Override
             public float getCurrentThrottlingRelativeTemperature() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readFloat();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readFloat();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }

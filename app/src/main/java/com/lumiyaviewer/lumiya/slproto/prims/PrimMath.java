@@ -10,11 +10,11 @@ public class PrimMath {
         return ((f2 - f) * f3) + f;
     }
 
-    public static float[] lookAt(LLVector3 lLVector3, LLVector3 lLVector32, LLVector3 lLVector33) {
-        LLVector3 sub = LLVector3.sub(lLVector32, lLVector3);
+    public static float[] lookAt(LLVector3 vector35, LLVector3 vector36, LLVector3 vector37) {
+        LLVector3 sub = LLVector3.sub(vector36, vector35);
         sub.normVec();
-        LLVector3 lLVector34 = new LLVector3(sub);
-        lLVector34.setCross(lLVector33);
-        return new float[]{lLVector34.x, lLVector33.x, -sub.x, 0.0f, lLVector34.y, lLVector33.y, -sub.y, 0.0f, lLVector34.z, lLVector33.z, -sub.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        LLVector3 vector3 = new LLVector3(sub);
+        vector3.setCross(vector37);
+        return new float[]{vector3.x, vector37.x, -sub.x, 0.0f, vector3.y, vector37.y, -sub.y, 0.0f, vector3.z, vector37.z, -sub.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
     }
 }

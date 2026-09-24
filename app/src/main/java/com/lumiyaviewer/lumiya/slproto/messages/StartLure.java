@@ -53,8 +53,8 @@ public class StartLure extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStartLure(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStartLure(this);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class StartLure extends SLMessage {
         this.Info_Field.LureType = unpackByte(byteBuffer) & 0xFF;
         this.Info_Field.Message = unpackVariable(byteBuffer, 1);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             TargetData targetData = new TargetData();
             targetData.TargetID = unpackUUID(byteBuffer);
             this.TargetData_Fields.add(targetData);

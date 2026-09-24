@@ -26,8 +26,8 @@ public interface IControllerListener extends IInterface {
         private static class Proxy implements IControllerListener {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -72,7 +72,7 @@ public interface IControllerListener extends IInterface {
             @Override
             public boolean deprecatedOnControllerButtonEventV1(ControllerButtonEvent controllerButtonEvent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (controllerButtonEvent == null) {
@@ -81,11 +81,11 @@ public interface IControllerListener extends IInterface {
                         obtain.writeInt(1);
                         controllerButtonEvent.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(5, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -144,14 +144,14 @@ public interface IControllerListener extends IInterface {
             @Override
             public int getApiVersion() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -163,14 +163,14 @@ public interface IControllerListener extends IInterface {
             @Override
             public ControllerListenerOptions getOptions() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(9, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() == 0 ? null : ControllerListenerOptions.CREATOR.createFromParcel(obtain2);
+                    this.mRemote.transact(9, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() == 0 ? null : ControllerListenerOptions.CREATOR.createFromParcel(parcel);
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }

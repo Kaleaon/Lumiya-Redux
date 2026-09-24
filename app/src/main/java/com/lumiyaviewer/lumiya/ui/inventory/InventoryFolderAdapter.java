@@ -47,16 +47,16 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
     private SLAvatarAppearance avatarAppearance = null;
 
     public interface OnItemCheckboxClickListener {
-        void onItemCheckboxClicked(SLInventoryEntry sLInventoryEntry);
+        void onItemCheckboxClicked(SLInventoryEntry inventoryEntry);
     }
 
-    public InventoryFolderAdapter(LayoutInflater layoutInflater, boolean z) {
+    public InventoryFolderAdapter(LayoutInflater layoutInflater, boolean wornCheckboxes) {
         this.inflater = layoutInflater;
-        this.wornCheckboxes = z;
+        this.wornCheckboxes = wornCheckboxes;
     }
 
-    private boolean isItemWorn(SLInventoryEntry sLInventoryEntry) {
-        return sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false) != null;
+    private boolean isItemWorn(SLInventoryEntry inventoryEntry) {
+        return inventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false) != null;
     }
 
     @Override
@@ -80,9 +80,9 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        SLInventoryEntry sLInventoryEntry;
-        int i2;
-        int i3;
+        SLInventoryEntry item2;
+        int drawableResource;
+        int subtypeDrawableResource;
         boolean z = true;
         if (view == null) {
             view = this.inflater.inflate(R.layout.inventory_item, viewGroup, false);
@@ -94,28 +94,28 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
             int i4 = -1;
             int i5 = -1;
             if (item.assetType != SLAssetType.AT_LINK.getTypeCode() || this.database == null) {
-                sLInventoryEntry = item;
+                item2 = item;
             } else {
                 SLInventoryEntry resolveLink = this.database.resolveLink(item);
                 if (resolveLink != null) {
                     i4 = resolveLink.getDrawableResource();
                     i5 = R.drawable.inv_link;
-                    sLInventoryEntry = resolveLink;
+                    item2 = resolveLink;
                 } else {
-                    sLInventoryEntry = item;
+                    item2 = item;
                 }
             }
             if (i4 < 0) {
-                i2 = item.getDrawableResource();
-                i3 = item.getSubtypeDrawableResource();
+                drawableResource = item.getDrawableResource();
+                subtypeDrawableResource = item.getSubtypeDrawableResource();
             } else {
-                i2 = i4;
-                i3 = i5;
+                drawableResource = i4;
+                subtypeDrawableResource = i5;
             }
-            if (i2 >= 0) {
-                ((ImageView) view.findViewById(R.id.itemTypeIconView)).setImageResource(i2);
-                if (i3 >= 0) {
-                    ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageResource(i3);
+            if (drawableResource >= 0) {
+                ((ImageView) view.findViewById(R.id.itemTypeIconView)).setImageResource(drawableResource);
+                if (subtypeDrawableResource >= 0) {
+                    ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageResource(subtypeDrawableResource);
                 } else {
                     ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageBitmap(null);
                 }
@@ -129,15 +129,15 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
                 textView.setTypeface(null, 1);
             }
             if (this.wornCheckboxes) {
-                if ((item.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (item.isLink() && item.invType == SLInventoryType.IT_OBJECT.getTypeCode()) || item.isWearable() || sLInventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode()) ? true : sLInventoryEntry.isWearable()) {
-                    Object whatIsItemWornOn = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false);
+                if ((item.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (item.isLink() && item.invType == SLInventoryType.IT_OBJECT.getTypeCode()) || item.isWearable() || item2.assetType == SLAssetType.AT_OBJECT.getTypeCode()) ? true : item2.isWearable()) {
+                    Object whatIsItemWornOn = item2.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false);
                     boolean z2 = whatIsItemWornOn != null;
                     boolean isBodyPart = whatIsItemWornOn instanceof SLWearableType ? ((SLWearableType) whatIsItemWornOn).isBodyPart() : false;
                     if (this.avatarAppearance != null) {
                         if (z2) {
-                            if (!sLInventoryEntry.isWearable()) {
-                                z = this.avatarAppearance.canDetachItem(sLInventoryEntry);
-                            } else if (this.avatarAppearance.canTakeItemOff(sLInventoryEntry)) {
+                            if (!item2.isWearable()) {
+                                z = this.avatarAppearance.canDetachItem(item2);
+                            } else if (this.avatarAppearance.canTakeItemOff(item2)) {
                                 z = !isBodyPart;
                             }
                         }
@@ -180,8 +180,8 @@ public class InventoryFolderAdapter extends BaseAdapter implements View.OnClickL
         }
     }
 
-    public void setAvatarAppearance(@Nullable SLAvatarAppearance sLAvatarAppearance) {
-        this.avatarAppearance = sLAvatarAppearance;
+    public void setAvatarAppearance(@Nullable SLAvatarAppearance avatarAppearance) {
+        this.avatarAppearance = avatarAppearance;
         notifyDataSetChanged();
     }
 

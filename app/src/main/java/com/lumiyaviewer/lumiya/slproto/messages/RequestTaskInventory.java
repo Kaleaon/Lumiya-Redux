@@ -37,8 +37,8 @@ public class RequestTaskInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestTaskInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestTaskInventory(this);
     }
 
     @Override

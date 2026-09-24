@@ -34,8 +34,8 @@ public class AgentWearablesRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentWearablesRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentWearablesRequest(this);
     }
 
     @Override

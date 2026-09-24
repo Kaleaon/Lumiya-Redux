@@ -39,8 +39,8 @@ public class StateSave extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStateSave(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStateSave(this);
     }
 
     @Override

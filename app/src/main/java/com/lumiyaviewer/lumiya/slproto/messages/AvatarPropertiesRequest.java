@@ -33,8 +33,8 @@ public class AvatarPropertiesRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesRequest(this);
     }
 
     @Override

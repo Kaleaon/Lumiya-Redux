@@ -40,8 +40,8 @@ public class TeleportProgress extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportProgress(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportProgress(this);
     }
 
     @Override

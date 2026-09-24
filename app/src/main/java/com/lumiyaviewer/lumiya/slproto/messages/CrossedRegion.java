@@ -53,8 +53,8 @@ public class CrossedRegion extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCrossedRegion(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCrossedRegion(this);
     }
 
     @Override

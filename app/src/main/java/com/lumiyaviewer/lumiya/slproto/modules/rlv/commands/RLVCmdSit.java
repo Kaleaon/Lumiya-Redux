@@ -11,10 +11,10 @@ public class RLVCmdSit extends RLVCmdGenericRestriction {
     }
 
     @Override
-    protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
+    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
         if (str != null) {
             try {
-                rLVController.getModules().avatarControl.ForceSitOnObject(UUID.fromString(str));
+                rlvController.getModules().avatarControl.ForceSitOnObject(UUID.fromString(str));
             } catch (Exception e) {
                 Debug.Warning(e);
             }

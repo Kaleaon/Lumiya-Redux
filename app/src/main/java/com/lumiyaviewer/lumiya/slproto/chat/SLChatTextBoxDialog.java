@@ -28,10 +28,10 @@ public final class SLChatTextBoxDialog extends SLChatDialogEvent {
         this.enteredValue = chatMessage.getDialogSelectedOption();
     }
 
-    public SLChatTextBoxDialog(ScriptDialog scriptDialog, @Nonnull UUID uuid, int i) {
+    public SLChatTextBoxDialog(ScriptDialog scriptDialog, @Nonnull UUID uuid, int textBoxButtonIndex) {
         super(scriptDialog, uuid);
         this.enteredValue = null;
-        this.textBoxButtonIndex = i;
+        this.textBoxButtonIndex = textBoxButtonIndex;
     }
 
     @Override
@@ -77,12 +77,12 @@ public final class SLChatTextBoxDialog extends SLChatDialogEvent {
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 
-    public void onEnteredText(UserManager userManager, String str) {
-        this.enteredValue = str;
+    public void onEnteredText(UserManager userManager, String enteredValue) {
+        this.enteredValue = enteredValue;
         UUID sourceUUID = this.source.getSourceUUID();
         SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit();
         if (sourceUUID != null && activeAgentCircuit != null) {
-            activeAgentCircuit.SendScriptDialogReply(sourceUUID, this.chatChannel, this.textBoxButtonIndex, str);
+            activeAgentCircuit.SendScriptDialogReply(sourceUUID, this.chatChannel, this.textBoxButtonIndex, enteredValue);
         }
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }

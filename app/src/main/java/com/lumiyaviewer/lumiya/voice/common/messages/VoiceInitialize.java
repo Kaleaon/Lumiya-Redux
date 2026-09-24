@@ -6,8 +6,8 @@ import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessage;
 public class VoiceInitialize implements VoicePluginMessage {
     public final int appVersionCode;
 
-    public VoiceInitialize(int i) {
-        this.appVersionCode = i;
+    public VoiceInitialize(int appVersionCode) {
+        this.appVersionCode = appVersionCode;
     }
 
     public VoiceInitialize(Bundle bundle) {

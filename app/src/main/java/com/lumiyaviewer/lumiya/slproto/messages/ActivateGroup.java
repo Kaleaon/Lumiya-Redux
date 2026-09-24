@@ -32,8 +32,8 @@ public class ActivateGroup extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleActivateGroup(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleActivateGroup(this);
     }
 
     @Override

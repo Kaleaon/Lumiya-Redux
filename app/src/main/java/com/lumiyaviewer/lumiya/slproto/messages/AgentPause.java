@@ -31,8 +31,8 @@ public class AgentPause extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentPause(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentPause(this);
     }
 
     @Override

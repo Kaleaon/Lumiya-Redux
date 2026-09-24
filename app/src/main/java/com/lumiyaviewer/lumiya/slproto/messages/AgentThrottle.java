@@ -39,8 +39,8 @@ public class AgentThrottle extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentThrottle(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentThrottle(this);
     }
 
     @Override

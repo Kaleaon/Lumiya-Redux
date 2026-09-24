@@ -65,8 +65,8 @@ public class InventoryActivity extends MasterDetailsActivity {
 
         public final int subtitleResourceId;
 
-        SelectAction(int i) {
-            this.subtitleResourceId = i;
+        SelectAction(int subtitleResourceId) {
+            this.subtitleResourceId = subtitleResourceId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -89,14 +89,14 @@ public class InventoryActivity extends MasterDetailsActivity {
         return intent;
     }
 
-    public static Intent makeSelectActionIntent(Context context, UUID uuid, SelectAction selectAction, Bundle bundle, @Nullable SLAssetType sLAssetType) {
+    public static Intent makeSelectActionIntent(Context context, UUID uuid, SelectAction selectAction, Bundle bundle, @Nullable SLAssetType assetType) {
         Intent intent = new Intent(context, (Class<?>) InventoryActivity.class);
         intent.putExtra("activeAgentUUID", uuid.toString());
         intent.putExtra(SELECT_ITEM_INTENT_TAG, true);
         intent.putExtra(SELECT_ACTION_INTENT_TAG, selectAction.toString());
         intent.putExtra(SELECT_ACTION_PARAMS_TAG, bundle);
-        if (sLAssetType != null) {
-            intent.putExtra(SELECT_ACTION_ASSET_TYPE, sLAssetType.getTypeCode());
+        if (assetType != null) {
+            intent.putExtra(SELECT_ACTION_ASSET_TYPE, assetType.getTypeCode());
         }
         return intent;
     }
@@ -137,24 +137,24 @@ public class InventoryActivity extends MasterDetailsActivity {
     }
 
     public void updateSearchAction() {
-        String str;
+        String trimmed;
         if (this.activityStarted && this.searchActive) {
             UserManager userManager = ActivityUtils.getUserManager(getIntent());
             if (userManager != null) {
                 this.searchProcess.subscribe(userManager.getInventoryManager().getSearchProcess(), SubscriptionSingleKey.Value);
             }
-            str = Strings.nullToEmpty(this.nameFilter).trim();
+            trimmed = Strings.nullToEmpty(this.nameFilter).trim();
         } else {
             this.searchProcess.unsubscribe();
-            str = "";
+            trimmed = "";
         }
-        if (Objects.equal(this.fragmentSearchString, str)) {
+        if (Objects.equal(this.fragmentSearchString, trimmed)) {
             return;
         }
-        this.fragmentSearchString = str;
+        this.fragmentSearchString = trimmed;
         Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector);
         if (findFragmentById instanceof InventoryFragment) {
-            ((InventoryFragment) findFragmentById).setSearchString(Strings.emptyToNull(str));
+            ((InventoryFragment) findFragmentById).setSearchString(Strings.emptyToNull(trimmed));
         }
     }
 

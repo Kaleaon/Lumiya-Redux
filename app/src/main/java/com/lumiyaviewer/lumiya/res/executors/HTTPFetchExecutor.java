@@ -16,7 +16,7 @@ public class HTTPFetchExecutor extends WeakExecutor {
         super("ResourceHTTPFetch", GlobalOptions.getInstance().getMaxTextureDownloads(), new PriorityBlockingQueue());
     }
 
-    /* synthetic */ HTTPFetchExecutor(HTTPFetchExecutor hTTPFetchExecutor) {
+    /* synthetic */ HTTPFetchExecutor(HTTPFetchExecutor httpFetchExecutor) {
         this();
     }
 

@@ -8,8 +8,8 @@ import org.xmlpull.v1.XmlSerializer;
 public class LLSDInt extends LLSDNode {
     private int value;
 
-    public LLSDInt(int i) {
-        this.value = i;
+    public LLSDInt(int value) {
+        this.value = value;
     }
 
     public LLSDInt(String str) {

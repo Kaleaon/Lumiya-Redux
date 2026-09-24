@@ -64,11 +64,11 @@ public class ChatMessageSourceUser extends ChatMessageSource {
         chatMessage.setSenderLegacyName(this.legacyName);
     }
 
-    public void setDisplayName(@Nullable String str) {
-        this.displayName = str;
+    public void setDisplayName(@Nullable String displayName) {
+        this.displayName = displayName;
     }
 
-    public void setLegacyName(@Nullable String str) {
-        this.legacyName = str;
+    public void setLegacyName(@Nullable String legacyName) {
+        this.legacyName = legacyName;
     }
 }

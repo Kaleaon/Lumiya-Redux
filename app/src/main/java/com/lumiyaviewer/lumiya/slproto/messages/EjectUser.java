@@ -40,8 +40,8 @@ public class EjectUser extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEjectUser(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEjectUser(this);
     }
 
     @Override

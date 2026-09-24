@@ -14,9 +14,9 @@ public abstract class SLInventoryFetchRequest {
     protected final UUID folderUUID;
     protected final SLInventory inventory;
 
-    SLInventoryFetchRequest(SLInventory sLInventory, UUID uuid) throws SLInventory.NoInventoryItemException {
-        this.inventory = sLInventory;
-        this.db = sLInventory.getDatabase();
+    SLInventoryFetchRequest(SLInventory inventory, UUID uuid) throws SLInventory.NoInventoryItemException {
+        this.inventory = inventory;
+        this.db = inventory.getDatabase();
         this.folderUUID = uuid;
         SLInventoryEntry findEntry = this.db.findEntry(uuid);
         if (findEntry == null) {

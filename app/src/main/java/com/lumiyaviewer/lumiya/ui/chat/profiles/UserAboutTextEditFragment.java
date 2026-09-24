@@ -44,7 +44,7 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
     }
 
     @Override
-    protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
+    protected void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str) {
         if (this.avatarProperties != null) {
             String stringFromVariableUTF = SLMessage.stringFromVariableUTF(this.avatarProperties.PropertiesData_Field.AboutText);
             String stringFromVariableOEM = SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.FLAboutText);
@@ -53,7 +53,7 @@ public class UserAboutTextEditFragment extends ProfileTextFieldEditFragment {
             } else {
                 stringFromVariableUTF = str;
             }
-            sLAgentCircuit.getModules().userProfiles.UpdateAvatarProperties(this.avatarProperties.PropertiesData_Field.ImageID, this.avatarProperties.PropertiesData_Field.FLImageID, stringFromVariableUTF, stringFromVariableOEM, (this.avatarProperties.PropertiesData_Field.Flags & 1) != 0, (this.avatarProperties.PropertiesData_Field.Flags & 2) != 0, SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.ProfileURL));
+            agentCircuit.getModules().userProfiles.UpdateAvatarProperties(this.avatarProperties.PropertiesData_Field.ImageID, this.avatarProperties.PropertiesData_Field.FLImageID, stringFromVariableUTF, stringFromVariableOEM, (this.avatarProperties.PropertiesData_Field.Flags & 1) != 0, (this.avatarProperties.PropertiesData_Field.Flags & 2) != 0, SLMessage.stringFromVariableOEM(this.avatarProperties.PropertiesData_Field.ProfileURL));
         }
     }
 }

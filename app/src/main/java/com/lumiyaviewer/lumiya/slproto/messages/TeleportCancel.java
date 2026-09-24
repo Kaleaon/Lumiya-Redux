@@ -31,8 +31,8 @@ public class TeleportCancel extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportCancel(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportCancel(this);
     }
 
     @Override

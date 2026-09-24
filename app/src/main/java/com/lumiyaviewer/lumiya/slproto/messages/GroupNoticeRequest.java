@@ -40,8 +40,8 @@ public class GroupNoticeRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupNoticeRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupNoticeRequest(this);
     }
 
     @Override

@@ -13,9 +13,9 @@ class DrawListTerrainEntry extends DrawListEntry {
     private final int patchX;
     private final int patchY;
 
-    DrawListTerrainEntry(@Nonnull TerrainPatchInfo terrainPatchInfo, int i, int i2) {
-        this.patchX = i;
-        this.patchY = i2;
+    DrawListTerrainEntry(@Nonnull TerrainPatchInfo terrainPatchInfo, int patchX, int patchY) {
+        this.patchX = patchX;
+        this.patchY = patchY;
         updatePatchInfo(terrainPatchInfo);
     }
 

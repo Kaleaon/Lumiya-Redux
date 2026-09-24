@@ -4,12 +4,12 @@ final class AutoValue_DrawableTextParams extends DrawableTextParams {
     private final int backgroundColor;
     private final String text;
 
-    AutoValue_DrawableTextParams(String str, int i) {
-        if (str == null) {
+    AutoValue_DrawableTextParams(String text, int backgroundColor) {
+        if (text == null) {
             throw new NullPointerException("Null text");
         }
-        this.text = str;
-        this.backgroundColor = i;
+        this.text = text;
+        this.backgroundColor = backgroundColor;
     }
 
     @Override

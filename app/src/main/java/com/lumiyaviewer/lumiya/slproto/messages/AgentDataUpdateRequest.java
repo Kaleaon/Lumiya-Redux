@@ -30,8 +30,8 @@ public class AgentDataUpdateRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentDataUpdateRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentDataUpdateRequest(this);
     }
 
     @Override

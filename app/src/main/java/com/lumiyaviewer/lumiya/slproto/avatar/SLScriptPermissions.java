@@ -16,9 +16,9 @@ public enum SLScriptPermissions {
     private String message;
     private int permMask;
 
-    SLScriptPermissions(int i, String str) {
-        this.permMask = i;
-        this.message = str;
+    SLScriptPermissions(int permMask, String message) {
+        this.permMask = permMask;
+        this.message = message;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

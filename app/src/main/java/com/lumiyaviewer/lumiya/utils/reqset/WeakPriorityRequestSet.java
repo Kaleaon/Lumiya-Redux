@@ -34,9 +34,9 @@ public class WeakPriorityRequestSet<T> {
                 }
             }
             this.lock.unlock();
-            Iterator<?> it2 = linkedList.iterator();
-            while (it2.hasNext()) {
-                ((RequestListener) it2.next()).onNewRequest();
+            Iterator<?> iterator = linkedList.iterator();
+            while (iterator.hasNext()) {
+                ((RequestListener) iterator.next()).onNewRequest();
             }
         } catch (Throwable th) {
             this.lock.unlock();

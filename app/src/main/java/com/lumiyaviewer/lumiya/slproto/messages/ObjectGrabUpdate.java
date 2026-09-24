@@ -56,8 +56,8 @@ public class ObjectGrabUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectGrabUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectGrabUpdate(this);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ObjectGrabUpdate extends SLMessage {
         this.ObjectData_Field.GrabPosition = unpackLLVector3(byteBuffer);
         this.ObjectData_Field.TimeSinceLast = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             SurfaceInfo surfaceInfo = new SurfaceInfo();
             surfaceInfo.UVCoord = unpackLLVector3(byteBuffer);
             surfaceInfo.STCoord = unpackLLVector3(byteBuffer);

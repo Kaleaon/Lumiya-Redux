@@ -30,8 +30,8 @@ public class ReportAutosaveCrash extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleReportAutosaveCrash(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleReportAutosaveCrash(this);
     }
 
     @Override

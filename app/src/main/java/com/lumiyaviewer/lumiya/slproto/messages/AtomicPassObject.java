@@ -30,8 +30,8 @@ public class AtomicPassObject extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAtomicPassObject(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAtomicPassObject(this);
     }
 
     @Override

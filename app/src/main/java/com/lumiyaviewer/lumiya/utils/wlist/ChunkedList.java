@@ -62,9 +62,9 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
         checkConsistency();
     }
 
-    private void setLastChunk(int i) {
-        if (i < 0 || i >= this.count) {
-            throw new IndexOutOfBoundsException(String.format("index %d, count %d", Integer.valueOf(i), Integer.valueOf(this.count)));
+    private void setLastChunk(int lastChunk) {
+        if (lastChunk < 0 || lastChunk >= this.count) {
+            throw new IndexOutOfBoundsException(String.format("index %d, count %d", Integer.valueOf(lastChunk), Integer.valueOf(this.count)));
         }
         checkConsistency();
         if (this.lastChunk == null) {
@@ -73,17 +73,17 @@ public class ChunkedList<E> extends AbstractList<E> implements RandomAccess {
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();
         }
-        while (i < this.lastChunkStart) {
+        while (lastChunk < this.lastChunkStart) {
             this.lastChunkIndex--;
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();
             this.lastChunkStart -= this.lastChunkSize;
         }
-        while (i >= this.lastChunkStart + this.lastChunkSize) {
+        while (lastChunk >= this.lastChunkStart + this.lastChunkSize) {
             this.lastChunkIndex++;
             this.lastChunkStart += this.lastChunkSize;
             if (this.lastChunkIndex >= this.chunks.size()) {
-                throw new IllegalStateException(String.format("lastChunkIndex runaway, position %d, count %d, lastChunkStart %d", Integer.valueOf(i), Integer.valueOf(this.count), Integer.valueOf(this.lastChunkStart)));
+                throw new IllegalStateException(String.format("lastChunkIndex runaway, position %d, count %d, lastChunkStart %d", Integer.valueOf(lastChunk), Integer.valueOf(this.count), Integer.valueOf(this.lastChunkStart)));
             }
             this.lastChunk = this.chunks.get(this.lastChunkIndex);
             this.lastChunkSize = this.lastChunk.size();

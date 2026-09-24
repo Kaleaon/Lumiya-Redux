@@ -69,13 +69,13 @@ public class InventorySaveInfo implements Parcelable {
         this.inventoryOfferMessageId = parcel.readLong();
     }
 
-    public InventorySaveInfo(@Nonnull InventorySaveType inventorySaveType, @Nullable UUID uuid, @Nonnull String str, @Nullable UUID uuid2, @Nullable SLAssetType sLAssetType, long j) {
+    public InventorySaveInfo(@Nonnull InventorySaveType inventorySaveType, @Nullable UUID uuid, @Nonnull String saveItemName, @Nullable UUID notecardUUID, @Nullable SLAssetType assetType, long inventoryOfferMessageId) {
         this.saveType = inventorySaveType;
         this.saveItemUUID = uuid;
-        this.saveItemName = str;
-        this.notecardUUID = uuid2;
-        this.assetType = sLAssetType;
-        this.inventoryOfferMessageId = j;
+        this.saveItemName = saveItemName;
+        this.notecardUUID = notecardUUID;
+        this.assetType = assetType;
+        this.inventoryOfferMessageId = inventoryOfferMessageId;
     }
 
     @Override

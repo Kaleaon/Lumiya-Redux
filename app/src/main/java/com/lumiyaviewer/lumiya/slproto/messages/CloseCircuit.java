@@ -22,8 +22,8 @@ public class CloseCircuit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCloseCircuit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCloseCircuit(this);
     }
 
     @Override

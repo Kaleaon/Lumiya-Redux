@@ -63,7 +63,7 @@ public class DaydreamUtils {
         return (deviceParams == null || deviceParams.daydreamInternal == null) ? false : true;
     }
 
-    static void setIsDaydreamPhoneForTesting(boolean z) {
-        sDaydreamPhoneOverrideForTesting = z;
+    static void setIsDaydreamPhoneForTesting(boolean isDaydreamPhoneForTesting) {
+        sDaydreamPhoneOverrideForTesting = isDaydreamPhoneForTesting;
     }
 }

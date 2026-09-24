@@ -32,8 +32,8 @@ public class EstateCovenantRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEstateCovenantRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEstateCovenantRequest(this);
     }
 
     @Override

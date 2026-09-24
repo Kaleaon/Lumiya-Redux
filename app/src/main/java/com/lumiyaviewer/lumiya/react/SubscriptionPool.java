@@ -250,9 +250,9 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
                 }
             }
             if (hashSet2 != null) {
-                Iterator<K> it2 = hashSet2.iterator();
-                while (it2.hasNext()) {
-                    requestHandler.onRequest(it2.next());
+                Iterator<K> iterator = hashSet2.iterator();
+                while (iterator.hasNext()) {
+                    requestHandler.onRequest(iterator.next());
                 }
             }
         }
@@ -270,8 +270,8 @@ public class SubscriptionPool<K, T> implements Unsubscribable<K, T>, Refreshable
         return this;
     }
 
-    public SubscriptionPool<K, T> setRequestOnce(boolean z) {
-        this.requestOnce = z;
+    public SubscriptionPool<K, T> setRequestOnce(boolean requestOnce) {
+        this.requestOnce = requestOnce;
         return this;
     }
 

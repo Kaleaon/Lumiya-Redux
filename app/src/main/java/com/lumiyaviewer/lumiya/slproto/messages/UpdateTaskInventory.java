@@ -67,8 +67,8 @@ public class UpdateTaskInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateTaskInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateTaskInventory(this);
     }
 
     @Override

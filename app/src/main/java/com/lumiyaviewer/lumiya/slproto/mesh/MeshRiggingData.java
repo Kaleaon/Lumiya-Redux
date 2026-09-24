@@ -25,22 +25,22 @@ public class MeshRiggingData {
     private GLLoadableBuffer glRiggingDataBuffer = null;
     private final int hashCode = calcHashCode();
 
-    private MeshRiggingData(@Nonnull int[] iArr, @Nonnull float[] fArr, boolean z) {
-        this.joints = iArr;
-        this.jointMatrices = fArr;
-        this.hasExtendedBones = z;
+    private MeshRiggingData(@Nonnull int[] ints, @Nonnull float[] floats, boolean hasExtendedBones) {
+        this.joints = ints;
+        this.jointMatrices = floats;
+        this.hasExtendedBones = hasExtendedBones;
     }
 
     private DirectByteBuffer PrepareRiggingUniformBuffer(RenderContext renderContext) {
-        RiggedMeshProgram30 riggedMeshProgram30 = renderContext.currentRiggedMeshProgram;
-        DirectByteBuffer directByteBuffer = new DirectByteBuffer(riggedMeshProgram30.uRiggingDataBlockSize);
+        RiggedMeshProgram30 currentRiggedMeshProgram = renderContext.currentRiggedMeshProgram;
+        DirectByteBuffer directByteBuffer = new DirectByteBuffer(currentRiggedMeshProgram.uRiggingDataBlockSize);
         for (int i = 0; i < this.joints.length; i++) {
-            directByteBuffer.putRawInt(riggedMeshProgram30.uJointMapOffset + (riggedMeshProgram30.uJointMapArrayStride * i), this.joints[i]);
+            directByteBuffer.putRawInt(currentRiggedMeshProgram.uJointMapOffset + (currentRiggedMeshProgram.uJointMapArrayStride * i), this.joints[i]);
         }
-        for (int i2 = 0; i2 < this.joints.length; i2++) {
-            int i3 = (riggedMeshProgram30.uJointMatricesOffset + (riggedMeshProgram30.uJointMatricesArrayStride * i2)) / 4;
-            for (int i4 = 0; i4 < 4; i4++) {
-                directByteBuffer.loadFromFloatArray(((riggedMeshProgram30.uJointMatricesColumnStride * i4) / 4) + i3, this.jointMatrices, (i2 * 16) + (i4 * 4), 4);
+        for (int j = 0; j < this.joints.length; j++) {
+            int i3 = (currentRiggedMeshProgram.uJointMatricesOffset + (currentRiggedMeshProgram.uJointMatricesArrayStride * j)) / 4;
+            for (int k = 0; k < 4; k++) {
+                directByteBuffer.loadFromFloatArray(((currentRiggedMeshProgram.uJointMatricesColumnStride * k) / 4) + i3, this.jointMatrices, (j * 16) + (k * 4), 4);
             }
         }
         return directByteBuffer;
@@ -50,13 +50,13 @@ public class MeshRiggingData {
         return (Arrays.hashCode(this.joints) * 31) + Arrays.hashCode(this.jointMatrices);
     }
 
-    public static MeshRiggingData create(@Nonnull int[] iArr, @Nonnull float[] fArr, boolean z) {
-        return riggingDataPool.intern(new MeshRiggingData(iArr, fArr, z));
+    public static MeshRiggingData create(@Nonnull int[] ints, @Nonnull float[] floats, boolean z) {
+        return riggingDataPool.intern(new MeshRiggingData(ints, floats, z));
     }
 
-    void PrepareInfluenceBuffers(RenderContext renderContext, float[] fArr) {
+    void PrepareInfluenceBuffers(RenderContext renderContext, float[] floats) {
         GLES20.glUseProgram(renderContext.riggedMeshProgram.getHandle());
-        GLES20.glUniformMatrix4fv(renderContext.riggedMeshProgram.uBindShapeMatrix, 1, false, fArr, 0);
+        GLES20.glUniformMatrix4fv(renderContext.riggedMeshProgram.uBindShapeMatrix, 1, false, floats, 0);
         GLES20.glUniform4fv(renderContext.riggedMeshProgram.uJointVectors, this.mappedJointVectors.length / 4, this.mappedJointVectors, 0);
     }
 
@@ -67,8 +67,8 @@ public class MeshRiggingData {
         this.glRiggingDataBuffer.BindUniform(renderContext, 2);
     }
 
-    void UpdateRigged(MeshFace meshFace, float[] fArr, DirectByteBuffer directByteBuffer, int i) {
-        meshFace.UpdateRigged(directByteBuffer, i, fArr, this.mappedJointMatrices);
+    void UpdateRigged(MeshFace meshFace, float[] floats, DirectByteBuffer directByteBuffer, int i) {
+        meshFace.UpdateRigged(directByteBuffer, i, floats, this.mappedJointMatrices);
     }
 
     void UpdateRiggedMatrices(AvatarSkeleton avatarSkeleton) {
@@ -78,18 +78,18 @@ public class MeshRiggingData {
         if (this.mappedJointVectors == null) {
             this.mappedJointVectors = new float[this.joints.length * 3 * 4];
         }
-        float[] fArr = avatarSkeleton.jointWorldMatrix;
+        float[] jointWorldMatrix = avatarSkeleton.jointWorldMatrix;
         for (int i = 0; i < this.joints.length; i++) {
             if (this.joints[i] >= 0) {
-                Matrix.multiplyMM(this.mappedJointMatrices, i * 16, fArr, this.joints[i] * 16, this.jointMatrices, i * 16);
+                Matrix.multiplyMM(this.mappedJointMatrices, i * 16, jointWorldMatrix, this.joints[i] * 16, this.jointMatrices, i * 16);
             } else {
                 Matrix.setIdentityM(this.mappedJointMatrices, i * 16);
             }
-            for (int i2 = 0; i2 < 3; i2++) {
-                this.mappedJointVectors[(i * 3 * 4) + (i2 * 4) + 0] = this.mappedJointMatrices[(i * 16) + i2 + 0];
-                this.mappedJointVectors[(i * 3 * 4) + (i2 * 4) + 1] = this.mappedJointMatrices[(i * 16) + i2 + 4];
-                this.mappedJointVectors[(i * 3 * 4) + (i2 * 4) + 2] = this.mappedJointMatrices[(i * 16) + i2 + 8];
-                this.mappedJointVectors[(i * 3 * 4) + (i2 * 4) + 3] = this.mappedJointMatrices[(i * 16) + i2 + 12];
+            for (int j = 0; j < 3; j++) {
+                this.mappedJointVectors[(i * 3 * 4) + (j * 4) + 0] = this.mappedJointMatrices[(i * 16) + j + 0];
+                this.mappedJointVectors[(i * 3 * 4) + (j * 4) + 1] = this.mappedJointMatrices[(i * 16) + j + 4];
+                this.mappedJointVectors[(i * 3 * 4) + (j * 4) + 2] = this.mappedJointMatrices[(i * 16) + j + 8];
+                this.mappedJointVectors[(i * 3 * 4) + (j * 4) + 3] = this.mappedJointMatrices[(i * 16) + j + 12];
             }
         }
     }

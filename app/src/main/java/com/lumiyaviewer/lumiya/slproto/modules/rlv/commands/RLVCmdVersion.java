@@ -21,24 +21,24 @@ public class RLVCmdVersion implements RLVCommand {
     }
 
     @Override
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         try {
             int parseInt = Integer.parseInt(str);
-            switch (rLVCommands) {
+            switch (rlvCommands) {
                 case version:
                 case versionnew:
                     Object[] objArr = new Object[7];
-                    objArr[0] = rLVCommands == RLVCommands.versionnew ? "RestrainedLove" : "RestrainedLife";
+                    objArr[0] = rlvCommands == RLVCommands.versionnew ? "RestrainedLove" : "RestrainedLife";
                     objArr[1] = 1;
                     objArr[2] = 10;
                     objArr[3] = 1;
                     objArr[4] = 1;
                     objArr[5] = 10;
                     objArr[6] = 1;
-                    rLVController.sayOnChannel(parseInt, String.format("%s viewer v%d.%d.%d (RLVa %d.%d.%d)", objArr));
+                    rlvController.sayOnChannel(parseInt, String.format("%s viewer v%d.%d.%d (RLVa %d.%d.%d)", objArr));
                     break;
                 case versionnum:
-                    rLVController.sayOnChannel(parseInt, String.format("%d%02d%02d%02d", 1, 10, 1, 0));
+                    rlvController.sayOnChannel(parseInt, String.format("%d%02d%02d%02d", 1, 10, 1, 0));
                     break;
             }
         } catch (NumberFormatException e) {

@@ -30,9 +30,9 @@ class ObjectListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public SLObjectDisplayInfo getChild(int i, int i2) {
-        Object obj = (SLObjectDisplayInfo) this.objects.get(i);
-        if (obj instanceof SLObjectDisplayInfo.HasChildrenObjects) {
-            return ((SLObjectDisplayInfo.HasChildrenObjects) obj).getChildren().get(i2);
+        Object objectDisplayInfo = (SLObjectDisplayInfo) this.objects.get(i);
+        if (objectDisplayInfo instanceof SLObjectDisplayInfo.HasChildrenObjects) {
+            return ((SLObjectDisplayInfo.HasChildrenObjects) objectDisplayInfo).getChildren().get(i2);
         }
         return null;
     }
@@ -54,9 +54,9 @@ class ObjectListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        Object obj = (SLObjectDisplayInfo) this.objects.get(i);
-        if (obj instanceof SLObjectDisplayInfo.HasChildrenObjects) {
-            return ((SLObjectDisplayInfo.HasChildrenObjects) obj).getChildren().size();
+        Object objectDisplayInfo = (SLObjectDisplayInfo) this.objects.get(i);
+        if (objectDisplayInfo instanceof SLObjectDisplayInfo.HasChildrenObjects) {
+            return ((SLObjectDisplayInfo.HasChildrenObjects) objectDisplayInfo).getChildren().size();
         }
         return 0;
     }
@@ -125,22 +125,22 @@ class ObjectListAdapter extends BaseExpandableListAdapter {
         return view2;
     }
 
-    public View getView(SLObjectDisplayInfo sLObjectDisplayInfo, View view, ViewGroup viewGroup) {
+    public View getView(SLObjectDisplayInfo objectDisplayInfo, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = LayoutInflater.from(this.context).inflate(R.layout.object_list_item, viewGroup, false);
         }
-        view.findViewById(R.id.object_hierarchy_padding).setLayoutParams(new LinearLayout.LayoutParams((int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, this.context.getResources().getDisplayMetrics()) * sLObjectDisplayInfo.hierarchyLevel), -1));
-        view.findViewById(R.id.avatarIconView).setVisibility(sLObjectDisplayInfo instanceof SLAvatarObjectDisplayInfo ? View.VISIBLE : View.GONE);
-        if (sLObjectDisplayInfo.name != null) {
-            ((TextView) view.findViewById(R.id.objectNameTextView)).setText(sLObjectDisplayInfo.name);
+        view.findViewById(R.id.object_hierarchy_padding).setLayoutParams(new LinearLayout.LayoutParams((int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, this.context.getResources().getDisplayMetrics()) * objectDisplayInfo.hierarchyLevel), -1));
+        view.findViewById(R.id.avatarIconView).setVisibility(objectDisplayInfo instanceof SLAvatarObjectDisplayInfo ? View.VISIBLE : View.GONE);
+        if (objectDisplayInfo.name != null) {
+            ((TextView) view.findViewById(R.id.objectNameTextView)).setText(objectDisplayInfo.name);
         } else {
             ((TextView) view.findViewById(R.id.objectNameTextView)).setText(R.string.object_name_loading);
         }
-        ((TextView) view.findViewById(R.id.objectDistanceTextView)).setText(Float.isNaN(sLObjectDisplayInfo.distance) ? null : String.format("%d m", Integer.valueOf(Math.round(sLObjectDisplayInfo.distance))));
-        if (sLObjectDisplayInfo instanceof SLPrimObjectDisplayInfo) {
-            SLPrimObjectDisplayInfo sLPrimObjectDisplayInfo = (SLPrimObjectDisplayInfo) sLObjectDisplayInfo;
-            view.findViewById(R.id.touchIconView).setVisibility(sLPrimObjectDisplayInfo.touchable ? View.VISIBLE : View.INVISIBLE);
-            view.findViewById(R.id.payIconView).setVisibility(sLPrimObjectDisplayInfo.payable ? View.VISIBLE : View.INVISIBLE);
+        ((TextView) view.findViewById(R.id.objectDistanceTextView)).setText(Float.isNaN(objectDisplayInfo.distance) ? null : String.format("%d m", Integer.valueOf(Math.round(objectDisplayInfo.distance))));
+        if (objectDisplayInfo instanceof SLPrimObjectDisplayInfo) {
+            SLPrimObjectDisplayInfo primObjectDisplayInfo = (SLPrimObjectDisplayInfo) objectDisplayInfo;
+            view.findViewById(R.id.touchIconView).setVisibility(primObjectDisplayInfo.touchable ? View.VISIBLE : View.INVISIBLE);
+            view.findViewById(R.id.payIconView).setVisibility(primObjectDisplayInfo.payable ? View.VISIBLE : View.INVISIBLE);
         } else {
             view.findViewById(R.id.touchIconView).setVisibility(View.INVISIBLE);
             view.findViewById(R.id.payIconView).setVisibility(View.INVISIBLE);

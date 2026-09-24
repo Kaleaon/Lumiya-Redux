@@ -38,8 +38,8 @@ public class SimWideDeletes extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimWideDeletes(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimWideDeletes(this);
     }
 
     @Override

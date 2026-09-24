@@ -19,30 +19,30 @@ public class LLVector3 {
         this.z = 0.0f;
     }
 
-    public LLVector3(float f, float f2, float f3) {
+    public LLVector3(float x, float y, float z) {
         this.x = 0.0f;
         this.y = 0.0f;
         this.z = 0.0f;
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public LLVector3(LLVector3 lLVector3) {
+    public LLVector3(LLVector3 vector3) {
         this.x = 0.0f;
         this.y = 0.0f;
         this.z = 0.0f;
-        this.x = lLVector3.x;
-        this.y = lLVector3.y;
-        this.z = lLVector3.z;
+        this.x = vector3.x;
+        this.y = vector3.y;
+        this.z = vector3.z;
     }
 
-    public static LLVector3 cross(LLVector3 lLVector3, LLVector3 lLVector32) {
-        return new LLVector3((lLVector3.y * lLVector32.z) - (lLVector32.y * lLVector3.z), (lLVector3.z * lLVector32.x) - (lLVector32.z * lLVector3.x), (lLVector3.x * lLVector32.y) - (lLVector32.x * lLVector3.y));
+    public static LLVector3 cross(LLVector3 vector3, LLVector3 vector33) {
+        return new LLVector3((vector3.y * vector33.z) - (vector33.y * vector3.z), (vector3.z * vector33.x) - (vector33.z * vector3.x), (vector3.x * vector33.y) - (vector33.x * vector3.y));
     }
 
-    public static LLVector3 lerp(LLVector3 lLVector3, LLVector3 lLVector32, float f) {
-        return new LLVector3(lLVector3.x + ((lLVector32.x - lLVector3.x) * f), lLVector3.y + ((lLVector32.y - lLVector3.y) * f), lLVector3.z + ((lLVector32.z - lLVector3.z) * f));
+    public static LLVector3 lerp(LLVector3 vector3, LLVector3 vector33, float f) {
+        return new LLVector3(vector3.x + ((vector33.x - vector3.x) * f), vector3.y + ((vector33.y - vector3.y) * f), vector3.z + ((vector33.z - vector3.z) * f));
     }
 
     public static LLVector3 parseFloatVec(ByteBuffer byteBuffer) {
@@ -57,18 +57,18 @@ public class LLVector3 {
         return new LLVector3(LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f, f2), LLTersePacking.U8_to_float(byteBuffer.get() & 0xFF, f3, f4));
     }
 
-    public static LLVector3 scaleFromMatrix(float[] fArr) {
-        return new LLVector3((float) Math.sqrt((fArr[0] * fArr[0]) + (fArr[1] * fArr[1]) + (fArr[2] * fArr[2])), (float) Math.sqrt((fArr[4] * fArr[4]) + (fArr[5] * fArr[5]) + (fArr[6] * fArr[6])), (float) Math.sqrt((fArr[8] * fArr[8]) + (fArr[9] * fArr[9]) + (fArr[10] * fArr[10])));
+    public static LLVector3 scaleFromMatrix(float[] floats) {
+        return new LLVector3((float) Math.sqrt((floats[0] * floats[0]) + (floats[1] * floats[1]) + (floats[2] * floats[2])), (float) Math.sqrt((floats[4] * floats[4]) + (floats[5] * floats[5]) + (floats[6] * floats[6])), (float) Math.sqrt((floats[8] * floats[8]) + (floats[9] * floats[9]) + (floats[10] * floats[10])));
     }
 
-    public static LLVector3 sub(LLVector3 lLVector3, LLVector3 lLVector32) {
-        return new LLVector3(lLVector3.x - lLVector32.x, lLVector3.y - lLVector32.y, lLVector3.z - lLVector32.z);
+    public static LLVector3 sub(LLVector3 vector3, LLVector3 vector33) {
+        return new LLVector3(vector3.x - vector33.x, vector3.y - vector33.y, vector3.z - vector33.z);
     }
 
-    public void add(LLVector3 lLVector3) {
-        this.x += lLVector3.x;
-        this.y += lLVector3.y;
-        this.z += lLVector3.z;
+    public void add(LLVector3 vector3) {
+        this.x += vector3.x;
+        this.y += vector3.y;
+        this.z += vector3.z;
     }
 
     public void addMul(ImmutableVector immutableVector, float f) {
@@ -77,14 +77,14 @@ public class LLVector3 {
         this.z += immutableVector.z * f;
     }
 
-    public void addMul(LLVector3 lLVector3, float f) {
-        this.x += lLVector3.x * f;
-        this.y += lLVector3.y * f;
-        this.z += lLVector3.z * f;
+    public void addMul(LLVector3 vector3, float f) {
+        this.x += vector3.x * f;
+        this.y += vector3.y * f;
+        this.z += vector3.z * f;
     }
 
-    public float dot(LLVector3 lLVector3) {
-        return (this.x * lLVector3.x) + (this.y * lLVector3.y) + (this.z * lLVector3.z);
+    public float dot(LLVector3 vector3) {
+        return (this.x * vector3.x) + (this.y * vector3.y) + (this.z * vector3.z);
     }
 
     public boolean equals(Object obj) {
@@ -94,14 +94,14 @@ public class LLVector3 {
         if (!(obj instanceof LLVector3)) {
             return false;
         }
-        LLVector3 lLVector3 = (LLVector3) obj;
-        return this.x == lLVector3.x && this.y == lLVector3.y && this.z == lLVector3.z;
+        LLVector3 vector3 = (LLVector3) obj;
+        return this.x == vector3.x && this.y == vector3.y && this.z == vector3.z;
     }
 
-    public float getDistanceTo(LLVector3 lLVector3) {
-        float f = this.x - lLVector3.x;
-        float f2 = this.y - lLVector3.y;
-        float f3 = this.z - lLVector3.z;
+    public float getDistanceTo(LLVector3 vector3) {
+        float f = this.x - vector3.x;
+        float f2 = this.y - vector3.y;
+        float f3 = this.z - vector3.z;
         return (float) Math.sqrt((f * f) + (f2 * f2) + (f3 * f3));
     }
 
@@ -136,20 +136,20 @@ public class LLVector3 {
         this.z *= f;
     }
 
-    public void mul(LLQuaternion lLQuaternion) {
-        float f = (((-lLQuaternion.x) * this.x) - (lLQuaternion.y * this.y)) - (lLQuaternion.z * this.z);
-        float f2 = ((lLQuaternion.w * this.x) + (lLQuaternion.y * this.z)) - (lLQuaternion.z * this.y);
-        float f3 = ((lLQuaternion.w * this.y) + (lLQuaternion.z * this.x)) - (lLQuaternion.x * this.z);
-        float f4 = ((lLQuaternion.w * this.z) + (lLQuaternion.x * this.y)) - (lLQuaternion.y * this.x);
-        this.x = ((((-f) * lLQuaternion.x) + (lLQuaternion.w * f2)) - (lLQuaternion.z * f3)) + (lLQuaternion.y * f4);
-        this.y = ((((-f) * lLQuaternion.y) + (lLQuaternion.w * f3)) - (lLQuaternion.x * f4)) + (lLQuaternion.z * f2);
-        this.z = ((((-f) * lLQuaternion.z) + (f4 * lLQuaternion.w)) - (f2 * lLQuaternion.y)) + (lLQuaternion.x * f3);
+    public void mul(LLQuaternion quaternion) {
+        float f = (((-quaternion.x) * this.x) - (quaternion.y * this.y)) - (quaternion.z * this.z);
+        float f2 = ((quaternion.w * this.x) + (quaternion.y * this.z)) - (quaternion.z * this.y);
+        float f3 = ((quaternion.w * this.y) + (quaternion.z * this.x)) - (quaternion.x * this.z);
+        float f4 = ((quaternion.w * this.z) + (quaternion.x * this.y)) - (quaternion.y * this.x);
+        this.x = ((((-f) * quaternion.x) + (quaternion.w * f2)) - (quaternion.z * f3)) + (quaternion.y * f4);
+        this.y = ((((-f) * quaternion.y) + (quaternion.w * f3)) - (quaternion.x * f4)) + (quaternion.z * f2);
+        this.z = ((((-f) * quaternion.z) + (f4 * quaternion.w)) - (f2 * quaternion.y)) + (quaternion.x * f3);
     }
 
-    public void mul(LLVector3 lLVector3) {
-        this.x *= lLVector3.x;
-        this.y *= lLVector3.y;
-        this.z *= lLVector3.z;
+    public void mul(LLVector3 vector3) {
+        this.x *= vector3.x;
+        this.y *= vector3.y;
+        this.z *= vector3.z;
     }
 
     public void mulWeighted(ImmutableVector immutableVector, float f) {
@@ -158,10 +158,10 @@ public class LLVector3 {
         this.z *= (immutableVector.z * f) + 1.0f;
     }
 
-    public void mulWeighted(LLVector3 lLVector3, float f) {
-        this.x *= (lLVector3.x * f) + 1.0f;
-        this.y *= (lLVector3.y * f) + 1.0f;
-        this.z *= (lLVector3.z * f) + 1.0f;
+    public void mulWeighted(LLVector3 vector3, float f) {
+        this.x *= (vector3.x * f) + 1.0f;
+        this.y *= (vector3.y * f) + 1.0f;
+        this.z *= (vector3.z * f) + 1.0f;
     }
 
     public float normVec() {
@@ -179,69 +179,69 @@ public class LLVector3 {
         return sqrt;
     }
 
-    public void set(float f, float f2, float f3) {
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
+    public void set(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public void set(LLVector3 lLVector3) {
-        if (lLVector3 != null) {
-            this.x = lLVector3.x;
-            this.y = lLVector3.y;
-            this.z = lLVector3.z;
+    public void set(LLVector3 vector3) {
+        if (vector3 != null) {
+            this.x = vector3.x;
+            this.y = vector3.y;
+            this.z = vector3.z;
         }
     }
 
-    public void setAdd(LLVector3 lLVector3, LLVector3 lLVector32) {
-        this.x = lLVector3.x + lLVector32.x;
-        this.y = lLVector3.y + lLVector32.y;
-        this.z = lLVector3.z + lLVector32.z;
+    public void setAdd(LLVector3 vector3, LLVector3 vector33) {
+        this.x = vector3.x + vector33.x;
+        this.y = vector3.y + vector33.y;
+        this.z = vector3.z + vector33.z;
     }
 
-    public void setCross(LLVector3 lLVector3) {
-        float f = (this.y * lLVector3.z) - (lLVector3.y * this.z);
-        float f2 = (this.z * lLVector3.x) - (lLVector3.z * this.x);
-        float f3 = (this.x * lLVector3.y) - (lLVector3.x * this.y);
+    public void setCross(LLVector3 cross) {
+        float f = (this.y * cross.z) - (cross.y * this.z);
+        float f2 = (this.z * cross.x) - (cross.z * this.x);
+        float f3 = (this.x * cross.y) - (cross.x * this.y);
         this.x = f;
         this.y = f2;
         this.z = f3;
     }
 
-    public void setLerp(LLVector3 lLVector3, float f, LLVector3 lLVector32, float f2) {
-        this.x = (lLVector3.x * f) + (lLVector32.x * f2);
-        this.y = (lLVector3.y * f) + (lLVector32.y * f2);
-        this.z = (lLVector3.z * f) + (lLVector32.z * f2);
+    public void setLerp(LLVector3 vector3, float f, LLVector3 vector33, float f2) {
+        this.x = (vector3.x * f) + (vector33.x * f2);
+        this.y = (vector3.y * f) + (vector33.y * f2);
+        this.z = (vector3.z * f) + (vector33.z * f2);
     }
 
-    public void setLerp(LLVector3 lLVector3, LLVector3 lLVector32, float f) {
-        this.x = lLVector3.x + ((lLVector32.x - lLVector3.x) * f);
-        this.y = lLVector3.y + ((lLVector32.y - lLVector3.y) * f);
-        this.z = lLVector3.z + ((lLVector32.z - lLVector3.z) * f);
+    public void setLerp(LLVector3 vector3, LLVector3 vector33, float f) {
+        this.x = vector3.x + ((vector33.x - vector3.x) * f);
+        this.y = vector3.y + ((vector33.y - vector3.y) * f);
+        this.z = vector3.z + ((vector33.z - vector3.z) * f);
     }
 
-    public void setMul(LLVector3 lLVector3, float f) {
-        this.x = lLVector3.x * f;
-        this.y = lLVector3.y * f;
-        this.z = lLVector3.z * f;
+    public void setMul(LLVector3 vector3, float f) {
+        this.x = vector3.x * f;
+        this.y = vector3.y * f;
+        this.z = vector3.z * f;
     }
 
-    public void setMul(LLVector3 lLVector3, LLVector3 lLVector32) {
-        this.x = lLVector3.x * lLVector32.x;
-        this.y = lLVector3.y * lLVector32.y;
-        this.z = lLVector3.z * lLVector32.z;
+    public void setMul(LLVector3 vector3, LLVector3 vector33) {
+        this.x = vector3.x * vector33.x;
+        this.y = vector3.y * vector33.y;
+        this.z = vector3.z * vector33.z;
     }
 
-    public void setSub(LLVector3 lLVector3, LLVector3 lLVector32) {
-        this.x = lLVector3.x - lLVector32.x;
-        this.y = lLVector3.y - lLVector32.y;
-        this.z = lLVector3.z - lLVector32.z;
+    public void setSub(LLVector3 vector3, LLVector3 vector33) {
+        this.x = vector3.x - vector33.x;
+        this.y = vector3.y - vector33.y;
+        this.z = vector3.z - vector33.z;
     }
 
-    public void sub(LLVector3 lLVector3) {
-        this.x -= lLVector3.x;
-        this.y -= lLVector3.y;
-        this.z -= lLVector3.z;
+    public void sub(LLVector3 vector3) {
+        this.x -= vector3.x;
+        this.y -= vector3.y;
+        this.z -= vector3.z;
     }
 
     public LLSDNode toLLSD() {

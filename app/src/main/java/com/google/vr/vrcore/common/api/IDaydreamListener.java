@@ -20,8 +20,8 @@ public interface IDaydreamListener extends IInterface {
         private static class Proxy implements IDaydreamListener {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -60,14 +60,14 @@ public interface IDaydreamListener extends IInterface {
             @Override
             public int getTargetApiVersion() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt();
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -86,14 +86,14 @@ public interface IDaydreamListener extends IInterface {
             @Override
             public HeadTrackingState requestStopTracking() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() == 0 ? null : HeadTrackingState.CREATOR.createFromParcel(obtain2);
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() == 0 ? null : HeadTrackingState.CREATOR.createFromParcel(parcel);
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }

@@ -56,8 +56,8 @@ public abstract class ResourceRequest<ResourceParams, ResourceType> {
         return this.consumers.size() == 0;
     }
 
-    public void setCancelled(boolean z) {
-        this.isCancelled = z;
+    public void setCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     public final boolean willStart() {

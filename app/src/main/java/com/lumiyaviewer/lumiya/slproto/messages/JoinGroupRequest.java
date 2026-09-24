@@ -39,8 +39,8 @@ public class JoinGroupRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleJoinGroupRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleJoinGroupRequest(this);
     }
 
     @Override

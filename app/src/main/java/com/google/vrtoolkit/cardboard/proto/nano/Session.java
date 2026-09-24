@@ -40,8 +40,8 @@ public interface Session {
             return new TrackerState().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static TrackerState parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (TrackerState) MessageNano.mergeFrom(new TrackerState(), bArr);
+        public static TrackerState parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (TrackerState) MessageNano.mergeFrom(new TrackerState(), bytes);
         }
 
         public final TrackerState clear() {
@@ -155,9 +155,9 @@ public interface Session {
                         this.q = dArr;
                         break;
                     case 10:
-                        int readRawVarint32 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit = codedInputByteBufferNano.pushLimit(readRawVarint32);
-                        int i = readRawVarint32 / 8;
+                        int rawVarint32 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit = codedInputByteBufferNano.pushLimit(rawVarint32);
+                        int i = rawVarint32 / 8;
                         int length2 = this.q != null ? this.q.length : 0;
                         double[] dArr2 = new double[i + length2];
                         if (length2 != 0) {
@@ -190,9 +190,9 @@ public interface Session {
                         this.gyroscopeBias = dArr3;
                         break;
                     case 26:
-                        int readRawVarint322 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit2 = codedInputByteBufferNano.pushLimit(readRawVarint322);
-                        int i2 = readRawVarint322 / 8;
+                        int rawVarint325 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit2 = codedInputByteBufferNano.pushLimit(rawVarint325);
+                        int i2 = rawVarint325 / 8;
                         int length4 = this.gyroscopeBias != null ? this.gyroscopeBias.length : 0;
                         double[] dArr4 = new double[i2 + length4];
                         if (length4 != 0) {
@@ -206,35 +206,35 @@ public interface Session {
                         codedInputByteBufferNano.popLimit(pushLimit2);
                         break;
                     case 34:
-                        int readRawVarint323 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit3 = codedInputByteBufferNano.pushLimit(readRawVarint323);
-                        int i3 = readRawVarint323 / 4;
+                        int rawVarint326 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit3 = codedInputByteBufferNano.pushLimit(rawVarint326);
+                        int i3 = rawVarint326 / 4;
                         int length5 = this.lensOffset != null ? this.lensOffset.length : 0;
-                        float[] fArr = new float[i3 + length5];
+                        float[] floats = new float[i3 + length5];
                         if (length5 != 0) {
-                            System.arraycopy(this.lensOffset, 0, fArr, 0, length5);
+                            System.arraycopy(this.lensOffset, 0, floats, 0, length5);
                         }
-                        while (length5 < fArr.length) {
-                            fArr[length5] = codedInputByteBufferNano.readFloat();
+                        while (length5 < floats.length) {
+                            floats[length5] = codedInputByteBufferNano.readFloat();
                             length5++;
                         }
-                        this.lensOffset = fArr;
+                        this.lensOffset = floats;
                         codedInputByteBufferNano.popLimit(pushLimit3);
                         break;
                     case 37:
                         int repeatedFieldArrayLength3 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 37);
                         int length6 = this.lensOffset != null ? this.lensOffset.length : 0;
-                        float[] fArr2 = new float[repeatedFieldArrayLength3 + length6];
+                        float[] floats2 = new float[repeatedFieldArrayLength3 + length6];
                         if (length6 != 0) {
-                            System.arraycopy(this.lensOffset, 0, fArr2, 0, length6);
+                            System.arraycopy(this.lensOffset, 0, floats2, 0, length6);
                         }
-                        while (length6 < fArr2.length - 1) {
-                            fArr2[length6] = codedInputByteBufferNano.readFloat();
+                        while (length6 < floats2.length - 1) {
+                            floats2[length6] = codedInputByteBufferNano.readFloat();
                             codedInputByteBufferNano.readTag();
                             length6++;
                         }
-                        fArr2[length6] = codedInputByteBufferNano.readFloat();
-                        this.lensOffset = fArr2;
+                        floats2[length6] = codedInputByteBufferNano.readFloat();
+                        this.lensOffset = floats2;
                         break;
                     case 41:
                         int repeatedFieldArrayLength4 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 41);
@@ -252,9 +252,9 @@ public interface Session {
                         this.lastGyroscopeSample = dArr5;
                         break;
                     case 42:
-                        int readRawVarint324 = codedInputByteBufferNano.readRawVarint32();
-                        int pushLimit4 = codedInputByteBufferNano.pushLimit(readRawVarint324);
-                        int i4 = readRawVarint324 / 8;
+                        int rawVarint327 = codedInputByteBufferNano.readRawVarint32();
+                        int pushLimit4 = codedInputByteBufferNano.pushLimit(rawVarint327);
+                        int i4 = rawVarint327 / 8;
                         int length8 = this.lastGyroscopeSample != null ? this.lastGyroscopeSample.length : 0;
                         double[] dArr6 = new double[i4 + length8];
                         if (length8 != 0) {
@@ -280,14 +280,14 @@ public interface Session {
             }
         }
 
-        public final TrackerState setLastGyroscopeTimestamp(double d) {
-            this.lastGyroscopeTimestamp_ = d;
+        public final TrackerState setLastGyroscopeTimestamp(double lastGyroscopeTimestamp) {
+            this.lastGyroscopeTimestamp_ = lastGyroscopeTimestamp;
             this.bitField0_ |= 2;
             return this;
         }
 
-        public final TrackerState setTimeSinceEpochSeconds(long j) {
-            this.timeSinceEpochSeconds_ = j;
+        public final TrackerState setTimeSinceEpochSeconds(long timeSinceEpochSeconds) {
+            this.timeSinceEpochSeconds_ = timeSinceEpochSeconds;
             this.bitField0_ |= 1;
             return this;
         }
@@ -309,24 +309,24 @@ public interface Session {
                 int length2 = this.gyroscopeBias.length * 8;
                 codedOutputByteBufferNano.writeRawVarint32(26);
                 codedOutputByteBufferNano.writeRawVarint32(length2);
-                for (int i2 = 0; i2 < this.gyroscopeBias.length; i2++) {
-                    codedOutputByteBufferNano.writeDoubleNoTag(this.gyroscopeBias[i2]);
+                for (int j = 0; j < this.gyroscopeBias.length; j++) {
+                    codedOutputByteBufferNano.writeDoubleNoTag(this.gyroscopeBias[j]);
                 }
             }
             if (this.lensOffset != null && this.lensOffset.length > 0) {
                 int length3 = this.lensOffset.length * 4;
                 codedOutputByteBufferNano.writeRawVarint32(34);
                 codedOutputByteBufferNano.writeRawVarint32(length3);
-                for (int i3 = 0; i3 < this.lensOffset.length; i3++) {
-                    codedOutputByteBufferNano.writeFloatNoTag(this.lensOffset[i3]);
+                for (int k = 0; k < this.lensOffset.length; k++) {
+                    codedOutputByteBufferNano.writeFloatNoTag(this.lensOffset[k]);
                 }
             }
             if (this.lastGyroscopeSample != null && this.lastGyroscopeSample.length > 0) {
                 int length4 = this.lastGyroscopeSample.length * 8;
                 codedOutputByteBufferNano.writeRawVarint32(42);
                 codedOutputByteBufferNano.writeRawVarint32(length4);
-                for (int i4 = 0; i4 < this.lastGyroscopeSample.length; i4++) {
-                    codedOutputByteBufferNano.writeDoubleNoTag(this.lastGyroscopeSample[i4]);
+                for (int m = 0; m < this.lastGyroscopeSample.length; m++) {
+                    codedOutputByteBufferNano.writeDoubleNoTag(this.lastGyroscopeSample[m]);
                 }
             }
             if ((this.bitField0_ & 2) != 0) {

@@ -57,11 +57,11 @@ abstract class ChatterDisplayDataList {
                 chatterSubscription.isValid = true;
             }
         }
-        Iterator<Map.Entry<ChatterID, ChatterSubscription>> it2 = this.chatterSubscriptions.entrySet().iterator();
-        while (it2.hasNext()) {
-            ChatterSubscription value = it2.next().getValue();
+        Iterator<Map.Entry<ChatterID, ChatterSubscription>> iterator = this.chatterSubscriptions.entrySet().iterator();
+        while (iterator.hasNext()) {
+            ChatterSubscription value = iterator.next().getValue();
             if (!value.isValid) {
-                it2.remove();
+                iterator.remove();
                 value.dispose();
             }
         }

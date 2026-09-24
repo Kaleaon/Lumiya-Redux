@@ -35,8 +35,8 @@ public class AttachedSound extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAttachedSound(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAttachedSound(this);
     }
 
     @Override

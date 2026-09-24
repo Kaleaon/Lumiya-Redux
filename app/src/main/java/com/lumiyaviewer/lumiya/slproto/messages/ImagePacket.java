@@ -37,8 +37,8 @@ public class ImagePacket extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImagePacket(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImagePacket(this);
     }
 
     @Override

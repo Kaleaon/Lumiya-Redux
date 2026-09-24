@@ -38,8 +38,8 @@ public class RemoveTaskInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveTaskInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveTaskInventory(this);
     }
 
     @Override

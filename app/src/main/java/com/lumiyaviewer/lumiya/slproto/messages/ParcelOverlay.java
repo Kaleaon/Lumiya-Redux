@@ -38,8 +38,8 @@ public class ParcelOverlay extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelOverlay(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelOverlay(this);
     }
 
     @Override

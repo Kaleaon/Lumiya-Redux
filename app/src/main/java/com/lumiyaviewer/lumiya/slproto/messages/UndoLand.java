@@ -30,8 +30,8 @@ public class UndoLand extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUndoLand(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUndoLand(this);
     }
 
     @Override

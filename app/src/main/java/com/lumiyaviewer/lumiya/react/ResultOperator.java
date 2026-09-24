@@ -23,14 +23,14 @@ public abstract class ResultOperator<K, Tin, Tout> implements ResultHandler<K, T
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_1065, reason: not valid java name */
-    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(K obj, Throwable th) {
-        this.toHandler.onResultError(obj, th);
+    /* synthetic */ void m46lambda$com_lumiyaviewer_lumiya_react_ResultOperator_1065(K k, Throwable th) {
+        this.toHandler.onResultError(k, th);
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_ResultOperator_796, reason: not valid java name */
-    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(K obj, Tin obj2) {
-        this.toHandler.onResultData(obj, onData(obj2));
+    /* synthetic */ void m47lambda$com_lumiyaviewer_lumiya_react_ResultOperator_796(K k, Tin tin) {
+        this.toHandler.onResultData(k, onData(tin));
     }
 
     protected abstract Tout onData(Tin tin);

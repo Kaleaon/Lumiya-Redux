@@ -8,15 +8,15 @@ final class AutoValue_SearchGridQuery extends SearchGridQuery {
     private final SearchGridQuery.SearchType searchType;
     private final UUID searchUUID;
 
-    AutoValue_SearchGridQuery(UUID uuid, String str, SearchGridQuery.SearchType searchType) {
+    AutoValue_SearchGridQuery(UUID uuid, String searchText, SearchGridQuery.SearchType searchType) {
         if (uuid == null) {
             throw new NullPointerException("Null searchUUID");
         }
         this.searchUUID = uuid;
-        if (str == null) {
+        if (searchText == null) {
             throw new NullPointerException("Null searchText");
         }
-        this.searchText = str;
+        this.searchText = searchText;
         if (searchType == null) {
             throw new NullPointerException("Null searchType");
         }

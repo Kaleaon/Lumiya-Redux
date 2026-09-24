@@ -192,19 +192,19 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     private void connectToVoicePlugin(VoiceLoginInfo voiceLoginInfo, UserManager userManager) {
-        boolean z;
+        boolean bindService;
         if (this.voicePluginServiceConnection == null) {
             this.voicePluginServiceConnection = new VoicePluginServiceConnection(this);
             Intent intent = new Intent();
             intent.setComponent(new ComponentName("com.lumiyaviewer.lumiya.voice", "com.lumiyaviewer.lumiya.voice.VoiceService"));
             try {
-                z = bindService(intent, this.voicePluginServiceConnection, 1);
+                bindService = bindService(intent, this.voicePluginServiceConnection, 1);
             } catch (SecurityException e) {
                 Debug.Warning(e);
-                z = false;
+                bindService = false;
             }
-            Debug.Printf("LumiyaVoice: bindService = %b", Boolean.valueOf(z));
-            if (!z) {
+            Debug.Printf("LumiyaVoice: bindService = %b", Boolean.valueOf(bindService));
+            if (!bindService) {
                 this.voicePluginServiceConnection = null;
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
@@ -300,9 +300,9 @@ public class GridConnectionService extends Service implements SharedPreferences.
         showUnreadNotification(unreadNotifications);
     }
 
-    public void performLogin(SLAuthParams sLAuthParams) {
-        gridName = sLAuthParams.gridName;
-        gridConnection.Connect(sLAuthParams);
+    public void performLogin(SLAuthParams authParams) {
+        gridName = authParams.gridName;
+        gridConnection.Connect(authParams);
     }
 
     private void readPreferences(SharedPreferences sharedPreferences) {
@@ -432,9 +432,9 @@ public class GridConnectionService extends Service implements SharedPreferences.
             }
             if (unreadMessageSource3.unreadMessages().size() > 1) {
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-                Iterator<SLChatEvent> it2 = unreadMessageSource3.unreadMessages().iterator();
-                while (it2.hasNext()) {
-                    inboxStyle.addLine(it2.next().getPlainTextMessage(this, unreadMessageSource3.chatterID().getUserManager(), unreadMessageSource3.chatterID().getChatterType() == ChatterID.ChatterType.User, "  ", " "));
+                Iterator<SLChatEvent> iterator = unreadMessageSource3.unreadMessages().iterator();
+                while (iterator.hasNext()) {
+                    inboxStyle.addLine(iterator.next().getPlainTextMessage(this, unreadMessageSource3.chatterID().getUserManager(), unreadMessageSource3.chatterID().getChatterType() == ChatterID.ChatterType.User, "  ", " "));
                 }
                 inboxStyle.setBigContentTitle(or);
                 inboxStyle.setSummaryText(String.format(getString(R.string.unread_messages), Integer.valueOf(unreadNotificationInfo.totalUnreadCount())));
@@ -452,13 +452,13 @@ public class GridConnectionService extends Service implements SharedPreferences.
             } else {
                 builder.setContentTitle(getResources().getQuantityString(R.plurals.new_questions, unreadNotificationInfo.objectPopupInfo().objectPopupsCount(), Integer.valueOf(unreadNotificationInfo.objectPopupInfo().objectPopupsCount())));
             }
-            Iterator<UnreadNotificationInfo.UnreadMessageSource> it3 = unreadNotificationInfo.unreadSources().iterator();
+            Iterator<UnreadNotificationInfo.UnreadMessageSource> iterator2 = unreadNotificationInfo.unreadSources().iterator();
             while (true) {
-                if (!it3.hasNext()) {
+                if (!iterator2.hasNext()) {
                     str4 = null;
                     break;
                 }
-                UnreadNotificationInfo.UnreadMessageSource next = it3.next();
+                UnreadNotificationInfo.UnreadMessageSource next = iterator2.next();
                 if (next.chatterName().isPresent()) {
                     str4 = next.chatterName().orNull();
                     break;
@@ -469,9 +469,9 @@ public class GridConnectionService extends Service implements SharedPreferences.
             builder.setContentText(format);
             NotificationCompat.InboxStyle inboxStyle2 = new NotificationCompat.InboxStyle();
             for (UnreadNotificationInfo.UnreadMessageSource unreadMessageSource5 : unreadNotificationInfo.unreadSources()) {
-                Iterator<SLChatEvent> it4 = unreadMessageSource5.unreadMessages().iterator();
-                while (it4.hasNext()) {
-                    inboxStyle2.addLine(it4.next().getPlainTextMessage(this, unreadMessageSource5.chatterID().getUserManager(), false, "  ", " "));
+                Iterator<SLChatEvent> iterator3 = unreadMessageSource5.unreadMessages().iterator();
+                while (iterator3.hasNext()) {
+                    inboxStyle2.addLine(iterator3.next().getPlainTextMessage(this, unreadMessageSource5.chatterID().getUserManager(), false, "  ", " "));
                 }
             }
             inboxStyle2.setBigContentTitle(String.format(getString(R.string.unread_messages), Integer.valueOf(unreadNotificationInfo.totalUnreadCount())));
@@ -530,9 +530,9 @@ public class GridConnectionService extends Service implements SharedPreferences.
                 str5 = getResources().getQuantityString(R.plurals.new_questions, unreadNotificationInfo.objectPopupInfo().objectPopupsCount(), Integer.valueOf(unreadNotificationInfo.objectPopupInfo().objectPopupsCount()));
             } else {
                 str5 = orNull3.objectName() + ": " + orNull3.message();
-                int indexOf2 = str5.indexOf("\n");
-                if (indexOf2 >= 0) {
-                    str5 = str5.substring(0, indexOf2);
+                int index = str5.indexOf("\n");
+                if (index >= 0) {
+                    str5 = str5.substring(0, index);
                 }
                 if (str5.length() > 30) {
                     str5 = str5.substring(0, 30) + "...";
@@ -550,20 +550,20 @@ public class GridConnectionService extends Service implements SharedPreferences.
         if (str2 == null || (!z)) {
             LEDAction lEDAction = LEDAction.None;
             int i2 = 0;
-            NotificationType orNull4 = unreadNotificationInfo.totalUnreadCount() > 0 ? unreadNotificationInfo.mostImportantType().orNull() : null;
-            if (orNull4 == null && unreadNotificationInfo.objectPopupInfo().objectPopupsCount() != 0) {
-                orNull4 = NotificationType.LocalChat;
+            NotificationType notificationType = unreadNotificationInfo.totalUnreadCount() > 0 ? unreadNotificationInfo.mostImportantType().orNull() : null;
+            if (notificationType == null && unreadNotificationInfo.objectPopupInfo().objectPopupsCount() != 0) {
+                notificationType = NotificationType.LocalChat;
             }
-            if (orNull4 != null) {
-                NotificationSettings notifySettingsByType = notifySettingsByType(orNull4);
+            if (notificationType != null) {
+                NotificationSettings notifySettingsByType = notifySettingsByType(notificationType);
                 lEDAction = notifySettingsByType.getLEDAction();
                 i2 = notifySettingsByType.getLEDColor();
             }
-            NotificationType orNull5 = unreadNotificationInfo.freshMessagesCount() != 0 ? unreadNotificationInfo.mostImportantFreshType().orNull() : null;
-            if (orNull5 == null && unreadNotificationInfo.objectPopupInfo().freshObjectPopupsCount() != 0) {
-                orNull5 = NotificationType.LocalChat;
+            NotificationType notificationType2 = unreadNotificationInfo.freshMessagesCount() != 0 ? unreadNotificationInfo.mostImportantFreshType().orNull() : null;
+            if (notificationType2 == null && unreadNotificationInfo.objectPopupInfo().freshObjectPopupsCount() != 0) {
+                notificationType2 = NotificationType.LocalChat;
             }
-            NotificationSettings notifySettingsByType2 = orNull5 != null ? notifySettingsByType(orNull5) : null;
+            NotificationSettings notificationSettings = notificationType2 != null ? notifySettingsByType(notificationType2) : null;
             Debug.Printf("GridConnectionService: updateUnreadNotification: ledAction = %s, color = %08x", lEDAction.toString(), Integer.valueOf(i2));
             if (lEDAction != LEDAction.None) {
                 switch (lEDAction) {
@@ -581,10 +581,10 @@ public class GridConnectionService extends Service implements SharedPreferences.
                         break;
                 }
             }
-            if (!soundOnNotify || notifySettingsByType2 == null) {
+            if (!soundOnNotify || notificationSettings == null) {
                 Debug.Printf("GridConnectionService: will not emit sound.", new Object[0]);
             } else {
-                String ringtone = notifySettingsByType2.getRingtone();
+                String ringtone = notificationSettings.getRingtone();
                 if (ringtone != null) {
                     builder.setSound(Uri.parse(ringtone));
                     builder.setOnlyAlertOnce(false);
@@ -606,7 +606,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     private void updateCloudSyncStatus() {
-        boolean z;
+        boolean bindService;
         if (!this.cloudSyncEnabled || this.cloudSyncUserManager == null) {
             if (this.cloudSyncServiceConnection != null) {
                 this.cloudSyncServiceConnection.stopSyncing();
@@ -627,13 +627,13 @@ public class GridConnectionService extends Service implements SharedPreferences.
             Intent intent = new Intent();
             intent.setComponent(new ComponentName("com.lumiyaviewer.lumiya.cloud", "com.lumiyaviewer.lumiya.cloud.DriveSyncService"));
             try {
-                z = bindService(intent, this.cloudSyncServiceConnection, 1);
+                bindService = bindService(intent, this.cloudSyncServiceConnection, 1);
             } catch (SecurityException e2) {
                 Debug.Warning(e2);
-                z = false;
+                bindService = false;
             }
-            Debug.Printf("LumiyaCloud: bindService = %b", Boolean.valueOf(z));
-            if (z) {
+            Debug.Printf("LumiyaCloud: bindService = %b", Boolean.valueOf(bindService));
+            if (bindService) {
                 return;
             }
             this.cloudSyncServiceConnection.stopSyncing();
@@ -718,8 +718,8 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     @EventHandler
-    public void handleConnectEvent(SLLoginResultEvent sLLoginResultEvent) {
-        UserManager userManager = UserManager.getUserManager(sLLoginResultEvent.activeAgentUUID);
+    public void handleConnectEvent(SLLoginResultEvent loginResultEvent) {
+        UserManager userManager = UserManager.getUserManager(loginResultEvent.activeAgentUUID);
         if (userManager != null) {
             this.unreadNotifySubscription = userManager.getUnreadNotificationManager().getUnreadNotifications().subscribe(UnreadNotificationManager.unreadNotificationKey, UIThreadExecutor.getSerialInstance(), new Subscription.OnData() {
                 private final /* synthetic */ void $m$0(Object obj) {
@@ -735,7 +735,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
         }
         updateOnlineNotification();
         VoicePluginServiceConnection.setInstallOfferDisplayed(false);
-        if (sLLoginResultEvent.success) {
+        if (loginResultEvent.success) {
             startCloudSync(userManager);
             return;
         }
@@ -745,12 +745,12 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     @EventHandler
-    public void handleConnectionStateChangedEvent(SLConnectionStateChangedEvent sLConnectionStateChangedEvent) {
+    public void handleConnectionStateChangedEvent(SLConnectionStateChangedEvent connectionStateChangedEvent) {
         updateOnlineNotification();
     }
 
     @EventHandler
-    public void handleDisconnectEvent(SLDisconnectEvent sLDisconnectEvent) {
+    public void handleDisconnectEvent(SLDisconnectEvent disconnectEvent) {
         updateOnlineNotification();
         Debug.Log("GridConnectionService: stopping self because of disconnect.");
         stopCloudSync();

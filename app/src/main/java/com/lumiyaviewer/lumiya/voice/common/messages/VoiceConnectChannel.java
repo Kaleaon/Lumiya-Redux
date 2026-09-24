@@ -19,9 +19,9 @@ public class VoiceConnectChannel implements VoicePluginMessage {
         this.channelCredentials = bundle.getString("channelCredentials");
     }
 
-    public VoiceConnectChannel(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nullable String str) {
+    public VoiceConnectChannel(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nullable String channelCredentials) {
         this.voiceChannelInfo = voiceChannelInfo;
-        this.channelCredentials = str;
+        this.channelCredentials = channelCredentials;
     }
 
     @Override

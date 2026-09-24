@@ -39,9 +39,9 @@ public enum Shader {
     private int handle;
     private final int type;
 
-    Shader(int i, String str) {
-        this.type = i;
-        this.fileName = str;
+    Shader(int type, String fileName) {
+        this.type = type;
+        this.fileName = fileName;
     }
 
     private String getShaderCode(ShaderPreprocessor shaderPreprocessor) {
@@ -70,9 +70,9 @@ public enum Shader {
         this.handle = GLES20.glCreateShader(this.type);
         GLES20.glShaderSource(this.handle, shaderCode);
         GLES20.glCompileShader(this.handle);
-        int[] iArr = new int[1];
-        GLES20.glGetShaderiv(this.handle, 35713, iArr, 0);
-        if (iArr[0] != 1) {
+        int[] ints = new int[1];
+        GLES20.glGetShaderiv(this.handle, 35713, ints, 0);
+        if (ints[0] != 1) {
             throw new ShaderCompileException(String.format("Shader (%s) compile error: '%s'", this.fileName, GLES20.glGetShaderInfoLog(this.handle)));
         }
         return this.handle;

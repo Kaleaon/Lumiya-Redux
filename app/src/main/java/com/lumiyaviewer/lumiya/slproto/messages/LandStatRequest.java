@@ -41,8 +41,8 @@ public class LandStatRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLandStatRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLandStatRequest(this);
     }
 
     @Override

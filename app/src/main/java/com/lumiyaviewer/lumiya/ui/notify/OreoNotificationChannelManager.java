@@ -31,9 +31,9 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
         final NotificationType notificationType;
         final boolean showBadge;
 
-        private NotificationChannelSettings(int i, boolean z, NotificationType notificationType) {
-            this.importance = i;
-            this.showBadge = z;
+        private NotificationChannelSettings(int importance, boolean showBadge, NotificationType notificationType) {
+            this.importance = importance;
+            this.showBadge = showBadge;
             this.notificationType = notificationType;
         }
 
@@ -72,11 +72,11 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
     @Override
     @Nonnull
     public String getNotificationChannelName(@Nonnull NotificationChannels.Channel channel) {
-        String str;
+        String id;
         synchronized (this.lock) {
             NotificationChannel notificationChannel = this.channels.get(channel);
             if (notificationChannel != null) {
-                str = notificationChannel.getId();
+                id = notificationChannel.getId();
             } else {
                 Context context = LumiyaApp.getContext();
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification");
@@ -93,10 +93,10 @@ public class OreoNotificationChannelManager implements NotificationChannelManage
                 Debug.Printf("Notifications: Creating new notification channel with id '%s'", channel.channelId);
                 notificationManager.createNotificationChannel(notificationChannel2);
                 this.channels.put(channel, notificationChannel2);
-                str = channel.channelId;
+                id = channel.channelId;
             }
         }
-        return str;
+        return id;
     }
 
     @Override

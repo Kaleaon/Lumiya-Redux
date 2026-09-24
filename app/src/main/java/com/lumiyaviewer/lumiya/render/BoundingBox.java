@@ -44,13 +44,13 @@ public class BoundingBox {
         renderContext.glModelApplyMatrix(renderContext.boundingBoxProgram.uMVPMatrix);
     }
 
-    public void OcclusionQuery(RenderContext renderContext, GLQuery gLQuery) {
+    public void OcclusionQuery(RenderContext renderContext, GLQuery glQuery) {
         renderContext.glObjWorldApplyMatrix(renderContext.boundingBoxProgram.uObjWorldMatrix);
         renderContext.glObjScaleApplyVector(renderContext.boundingBoxProgram.uObjCoordScale);
         this.vertexArrayObject.Bind(0);
-        gLQuery.BeginOcclusionQuery(renderContext);
+        glQuery.BeginOcclusionQuery(renderContext);
         GLES20.glDrawArrays(4, 0, cubeVertices.length / 3);
-        gLQuery.EndOcclusionQuery();
+        glQuery.EndOcclusionQuery();
         this.vertexArrayObject.Unbind();
     }
 }

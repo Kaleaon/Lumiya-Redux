@@ -30,8 +30,8 @@ public class RebakeAvatarTextures extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRebakeAvatarTextures(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRebakeAvatarTextures(this);
     }
 
     @Override

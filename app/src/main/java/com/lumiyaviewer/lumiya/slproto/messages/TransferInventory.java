@@ -40,8 +40,8 @@ public class TransferInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferInventory(this);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TransferInventory extends SLMessage {
         this.InfoBlock_Field.DestID = unpackUUID(byteBuffer);
         this.InfoBlock_Field.TransactionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             InventoryBlock inventoryBlock = new InventoryBlock();
             inventoryBlock.InventoryID = unpackUUID(byteBuffer);
             inventoryBlock.Type = unpackByte(byteBuffer);

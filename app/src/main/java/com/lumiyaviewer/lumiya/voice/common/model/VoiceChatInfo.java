@@ -40,13 +40,13 @@ public class VoiceChatInfo {
         this.localMicActive = bundle.getBoolean("localMicActive");
     }
 
-    private VoiceChatInfo(@Nonnull VoiceChatState voiceChatState, @Nonnull VoiceChatState voiceChatState2, int i, @Nullable UUID uuid, boolean z, boolean z2) {
+    private VoiceChatInfo(@Nonnull VoiceChatState voiceChatState, @Nonnull VoiceChatState previousState, int numActiveSpeakers, @Nullable UUID uuid, boolean isConference, boolean localMicActive) {
         this.state = voiceChatState;
-        this.previousState = voiceChatState2;
-        this.numActiveSpeakers = i;
+        this.previousState = previousState;
+        this.numActiveSpeakers = numActiveSpeakers;
         this.activeSpeakerID = uuid;
-        this.isConference = z;
-        this.localMicActive = z2;
+        this.isConference = isConference;
+        this.localMicActive = localMicActive;
     }
 
     @Nonnull

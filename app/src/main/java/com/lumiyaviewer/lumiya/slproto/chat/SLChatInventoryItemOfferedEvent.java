@@ -43,13 +43,13 @@ public class SLChatInventoryItemOfferedEvent extends SLChatYesNoEvent {
         this.assetType = extractAssetType(improvedInstantMessage);
     }
 
-    public SLChatInventoryItemOfferedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str, UUID uuid2, SLAssetType sLAssetType) {
-        super(chatMessageSource, uuid, improvedInstantMessage, str);
-        this.itemName = str;
+    public SLChatInventoryItemOfferedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String itemName, UUID itemID, SLAssetType assetType) {
+        super(chatMessageSource, uuid, improvedInstantMessage, itemName);
+        this.itemName = itemName;
         this.origIMType = improvedInstantMessage.MessageBlock_Field.Dialog;
         this.sessionID = improvedInstantMessage.MessageBlock_Field.ID;
-        this.itemID = uuid2;
-        this.assetType = sLAssetType;
+        this.itemID = itemID;
+        this.assetType = assetType;
     }
 
     protected static SLAssetType extractAssetType(ImprovedInstantMessage improvedInstantMessage) {

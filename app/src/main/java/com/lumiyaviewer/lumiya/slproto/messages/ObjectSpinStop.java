@@ -37,8 +37,8 @@ public class ObjectSpinStop extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectSpinStop(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectSpinStop(this);
     }
 
     @Override

@@ -40,8 +40,8 @@ public class ScriptAnswerYes extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptAnswerYes(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptAnswerYes(this);
     }
 
     @Override

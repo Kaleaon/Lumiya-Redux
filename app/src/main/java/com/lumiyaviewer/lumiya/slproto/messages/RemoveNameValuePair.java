@@ -47,8 +47,8 @@ public class RemoveNameValuePair extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveNameValuePair(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveNameValuePair(this);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class RemoveNameValuePair extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.TaskData_Field.ID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             NameValueData nameValueData = new NameValueData();
             nameValueData.NVPair = unpackVariable(byteBuffer, 2);
             this.NameValueData_Fields.add(nameValueData);

@@ -9,8 +9,8 @@ public class UserPrefs {
         public static final int RIGHT_HANDED = 0;
     }
 
-    UserPrefs(long j) {
-        this.nativeUserPrefs = j;
+    UserPrefs(long nativeUserPrefs) {
+        this.nativeUserPrefs = nativeUserPrefs;
     }
 
     public int getControllerHandedness() {

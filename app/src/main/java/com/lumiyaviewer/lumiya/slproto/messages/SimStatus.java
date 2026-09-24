@@ -29,8 +29,8 @@ public class SimStatus extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimStatus(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimStatus(this);
     }
 
     @Override

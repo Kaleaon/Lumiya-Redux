@@ -42,8 +42,8 @@ public class UUIDGroupNameReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUUIDGroupNameReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUUIDGroupNameReply(this);
     }
 
     @Override
@@ -53,20 +53,20 @@ public class UUIDGroupNameReply extends SLMessage {
         byteBuffer.put((byte) 0x00);
         byteBuffer.put((byte) 0xEE);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
-        for (UUIDNameBlock uUIDNameBlock : this.UUIDNameBlock_Fields) {
-            packUUID(byteBuffer, uUIDNameBlock.ID);
-            packVariable(byteBuffer, uUIDNameBlock.GroupName, 1);
+        for (UUIDNameBlock uuidNameBlock : this.UUIDNameBlock_Fields) {
+            packUUID(byteBuffer, uuidNameBlock.ID);
+            packVariable(byteBuffer, uuidNameBlock.GroupName, 1);
         }
     }
 
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
-            UUIDNameBlock uUIDNameBlock = new UUIDNameBlock();
-            uUIDNameBlock.ID = unpackUUID(byteBuffer);
-            uUIDNameBlock.GroupName = unpackVariable(byteBuffer, 1);
-            this.UUIDNameBlock_Fields.add(uUIDNameBlock);
+        for (int j = 0; j < i; j++) {
+            UUIDNameBlock uuidNameBlock = new UUIDNameBlock();
+            uuidNameBlock.ID = unpackUUID(byteBuffer);
+            uuidNameBlock.GroupName = unpackVariable(byteBuffer, 1);
+            this.UUIDNameBlock_Fields.add(uuidNameBlock);
         }
     }
 }

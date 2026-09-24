@@ -76,8 +76,8 @@ public class ObjectAdd extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectAdd(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectAdd(this);
     }
 
     @Override

@@ -6,9 +6,9 @@ public class PrimDrawParams {
     private final SLTextureEntry textures;
     private final PrimVolumeParams volumeParams;
 
-    public PrimDrawParams(PrimVolumeParams primVolumeParams, SLTextureEntry sLTextureEntry) {
+    public PrimDrawParams(PrimVolumeParams primVolumeParams, SLTextureEntry textureEntry) {
         this.volumeParams = primVolumeParams;
-        this.textures = sLTextureEntry;
+        this.textures = textureEntry;
     }
 
     public boolean equals(Object obj) {

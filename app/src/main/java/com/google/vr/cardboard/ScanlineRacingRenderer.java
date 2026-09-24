@@ -28,7 +28,7 @@ public class ScanlineRacingRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onDrawFrame(GL10 gl10) {
+    public void onDrawFrame(GL10 gL10) {
         this.surfaceManager.consumerUpdateManagedSurfaces();
         Point renderReprojectionThread = this.gvrApi.renderReprojectionThread();
         if (renderReprojectionThread == null) {
@@ -43,12 +43,12 @@ public class ScanlineRacingRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onSurfaceChanged(GL10 gl10, int i, int i2) {
+    public void onSurfaceChanged(GL10 gL10, int i, int i2) {
         this.surfaceManager.consumerAttachToCurrentGLContext();
     }
 
     @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
+    public void onSurfaceCreated(GL10 gL10, EGLConfig eglConfig) {
         Thread.currentThread().setPriority(10);
         AndroidNCompat.setVrThread(Process.myTid());
         this.gvrApi.onSurfaceCreatedReprojectionThread();

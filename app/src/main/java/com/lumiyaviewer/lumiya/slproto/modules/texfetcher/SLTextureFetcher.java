@@ -27,15 +27,15 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
     private PriorityBinQueue<SLTextureFetchRequest> udpQueue;
     private Map<UUID, TextureUDPTransfer> udpTransfers;
 
-    public SLTextureFetcher(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps, String str) {
-        super(sLAgentCircuit);
+    public SLTextureFetcher(SLAgentCircuit agentCircuit, SLCaps caps, String agentAppearanceService) {
+        super(agentCircuit);
         this.capURL = null;
         this.agentAppearanceService = null;
         this.udpTransfers = new ConcurrentHashMap();
         this.udpQueue = new PriorityBinQueue<>(TexturePriority.values().length);
         this.lastCheckForStalls = 0L;
-        this.agentAppearanceService = str;
-        this.capURL = sLCaps.getCapability(SLCaps.SLCapability.GetTexture);
+        this.agentAppearanceService = agentAppearanceService;
+        this.capURL = caps.getCapability(SLCaps.SLCapability.GetTexture);
         Debug.Log("TextureFetcher: capURL = " + this.capURL);
     }
 
@@ -48,27 +48,27 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         }
     }
 
-    public void BeginFetch(SLTextureFetchRequest sLTextureFetchRequest) {
-        SLTextureFetchRequest sLTextureFetchRequest2 = null;
+    public void BeginFetch(SLTextureFetchRequest textureFetchRequest2) {
+        SLTextureFetchRequest textureFetchRequest = null;
         synchronized (this) {
-            File file = sLTextureFetchRequest.destFile;
+            File file = textureFetchRequest2.destFile;
             if (file.exists()) {
-                sLTextureFetchRequest.outputFile = file;
-                sLTextureFetchRequest2 = sLTextureFetchRequest;
+                textureFetchRequest2.outputFile = file;
+                textureFetchRequest = textureFetchRequest2;
             } else {
-                this.udpQueue.add(sLTextureFetchRequest);
+                this.udpQueue.add(textureFetchRequest2);
                 RunUDPQueue();
             }
         }
-        if (sLTextureFetchRequest2 == null || sLTextureFetchRequest2.onFetchComplete == null) {
+        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
             return;
         }
-        sLTextureFetchRequest2.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
+        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest2);
     }
 
-    public synchronized void CancelFetch(SLTextureFetchRequest sLTextureFetchRequest) {
-        this.udpQueue.remove(sLTextureFetchRequest);
-        this.udpTransfers.remove(sLTextureFetchRequest.textureID);
+    public synchronized void CancelFetch(SLTextureFetchRequest textureFetchRequest) {
+        this.udpQueue.remove(textureFetchRequest);
+        this.udpTransfers.remove(textureFetchRequest.textureID);
         RunUDPQueue();
     }
 
@@ -80,60 +80,60 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
 
     @SLMessageHandler
     public void HandleImageData(ImageData imageData) {
-        SLTextureFetchRequest sLTextureFetchRequest;
+        SLTextureFetchRequest textureFetchRequest;
         synchronized (this) {
-            sLTextureFetchRequest = null;
+            textureFetchRequest = null;
             TextureUDPTransfer textureUDPTransfer = this.udpTransfers.get(imageData.ImageID_Field.ID);
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImageData(imageData);
                 if (textureUDPTransfer.isCompleted()) {
                     this.udpTransfers.remove(imageData.ImageID_Field.ID);
-                    sLTextureFetchRequest = textureUDPTransfer.fetchReq;
+                    textureFetchRequest = textureUDPTransfer.fetchReq;
                     RunUDPQueue();
                 }
             }
         }
-        if (sLTextureFetchRequest == null || sLTextureFetchRequest.onFetchComplete == null) {
+        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
             return;
         }
-        sLTextureFetchRequest.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
+        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest);
     }
 
     @SLMessageHandler
     public void HandleImageNotInDatabase(ImageNotInDatabase imageNotInDatabase) {
-        SLTextureFetchRequest sLTextureFetchRequest;
+        SLTextureFetchRequest textureFetchRequest;
         synchronized (this) {
             Debug.Log("TextureUDP: Image not in database: " + imageNotInDatabase.ImageID_Field.ID);
             TextureUDPTransfer remove = this.udpTransfers.remove(imageNotInDatabase.ImageID_Field.ID);
-            sLTextureFetchRequest = remove != null ? remove.fetchReq : null;
+            textureFetchRequest = remove != null ? remove.fetchReq : null;
         }
-        if (sLTextureFetchRequest != null && sLTextureFetchRequest.onFetchComplete != null) {
-            sLTextureFetchRequest.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
+        if (textureFetchRequest != null && textureFetchRequest.onFetchComplete != null) {
+            textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest);
         }
         RunUDPQueue();
     }
 
     @SLMessageHandler
     public void HandleImagePacket(ImagePacket imagePacket) {
-        SLTextureFetchRequest sLTextureFetchRequest;
+        SLTextureFetchRequest textureFetchRequest;
         synchronized (this) {
-            sLTextureFetchRequest = null;
+            textureFetchRequest = null;
             TextureUDPTransfer textureUDPTransfer = this.udpTransfers.get(imagePacket.ImageID_Field.ID);
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImagePacket(imagePacket);
                 if (textureUDPTransfer.isCompleted()) {
                     this.udpTransfers.remove(imagePacket.ImageID_Field.ID);
-                    SLTextureFetchRequest sLTextureFetchRequest2 = textureUDPTransfer.fetchReq;
-                    sLTextureFetchRequest2.outputFile = textureUDPTransfer.getOutputFile();
+                    SLTextureFetchRequest fetchReq = textureUDPTransfer.fetchReq;
+                    fetchReq.outputFile = textureUDPTransfer.getOutputFile();
                     RunUDPQueue();
-                    sLTextureFetchRequest = sLTextureFetchRequest2;
+                    textureFetchRequest = fetchReq;
                 }
             }
         }
-        if (sLTextureFetchRequest == null || sLTextureFetchRequest.onFetchComplete == null) {
+        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
             return;
         }
-        sLTextureFetchRequest.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
+        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest);
     }
 
     @Override
@@ -158,14 +158,14 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
                     hashSet2 = hashSet;
                 }
                 if (hashSet2 != null) {
-                    Iterator it2 = hashSet2.iterator();
-                    while (it2.hasNext()) {
-                        TextureUDPTransfer remove = this.udpTransfers.remove((UUID) it2.next());
+                    Iterator iterator = hashSet2.iterator();
+                    while (iterator.hasNext()) {
+                        TextureUDPTransfer remove = this.udpTransfers.remove((UUID) iterator.next());
                         if (remove != null) {
-                            SLTextureFetchRequest sLTextureFetchRequest = remove.fetchReq;
-                            sLTextureFetchRequest.outputFile = null;
-                            if (sLTextureFetchRequest.onFetchComplete != null) {
-                                sLTextureFetchRequest.onFetchComplete.OnTextureFetchComplete(sLTextureFetchRequest);
+                            SLTextureFetchRequest fetchReq = remove.fetchReq;
+                            fetchReq.outputFile = null;
+                            if (fetchReq.onFetchComplete != null) {
+                                fetchReq.onFetchComplete.OnTextureFetchComplete(fetchReq);
                             }
                         }
                     }
@@ -181,8 +181,8 @@ public class SLTextureFetcher extends SLModule implements SLIdleHandler {
         this.udpQueue.clear();
     }
 
-    public void UpdatePriority(SLTextureFetchRequest sLTextureFetchRequest) {
-        this.udpQueue.updatePriority(sLTextureFetchRequest);
+    public void UpdatePriority(SLTextureFetchRequest textureFetchRequest) {
+        this.udpQueue.updatePriority(textureFetchRequest);
     }
 
     public String getAgentAppearanceService() {

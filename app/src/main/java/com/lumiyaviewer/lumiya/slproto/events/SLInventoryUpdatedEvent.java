@@ -7,10 +7,10 @@ public class SLInventoryUpdatedEvent {
     private Set<Long> updatedFolders;
     private Set<Long> updatedItems;
 
-    public SLInventoryUpdatedEvent(Set<Long> set, Set<Long> set2, boolean z) {
+    public SLInventoryUpdatedEvent(Set<Long> set, Set<Long> updatedItems, boolean needsReload) {
         this.updatedFolders = set;
-        this.updatedItems = set2;
-        this.needsReload = z;
+        this.updatedItems = updatedItems;
+        this.needsReload = needsReload;
     }
 
     public boolean isFolderUpdated(long j) {

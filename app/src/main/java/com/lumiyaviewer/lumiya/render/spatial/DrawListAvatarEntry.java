@@ -13,11 +13,11 @@ public class DrawListAvatarEntry extends DrawListObjectEntry {
     @Nonnull
     private final SLObjectAvatarInfo objectAvatarInfo;
 
-    public DrawListAvatarEntry(@Nonnull SLObjectAvatarInfo sLObjectAvatarInfo) {
-        super(sLObjectAvatarInfo);
+    public DrawListAvatarEntry(@Nonnull SLObjectAvatarInfo objectAvatarInfo) {
+        super(objectAvatarInfo);
         this.drawableAvatar = null;
         this.drawableAvatarStub = null;
-        this.objectAvatarInfo = sLObjectAvatarInfo;
+        this.objectAvatarInfo = objectAvatarInfo;
     }
 
     @Override
@@ -32,8 +32,8 @@ public class DrawListAvatarEntry extends DrawListObjectEntry {
             drawList.avatarStubs.add(drawableAvatarStub);
             return;
         }
-        WeakReference<DrawableAvatar> weakReference2 = this.drawableAvatar;
-        DrawableAvatar drawableAvatar = weakReference2 != null ? weakReference2.get() : null;
+        WeakReference<DrawableAvatar> drawableAvatar2 = this.drawableAvatar;
+        DrawableAvatar drawableAvatar = drawableAvatar2 != null ? drawableAvatar2.get() : null;
         if (drawableAvatar == null) {
             drawableAvatar = drawList.drawableStore.drawableAvatarCache.getUnchecked(this.objectAvatarInfo);
             this.drawableAvatar = new WeakReference<>(drawableAvatar);

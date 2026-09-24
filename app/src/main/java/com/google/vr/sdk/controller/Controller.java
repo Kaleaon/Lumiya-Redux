@@ -77,8 +77,8 @@ public class Controller {
         this.controllerEventListener = eventListener;
     }
 
-    boolean setHomeButtonState(boolean z) {
-        this.homeButtonState = z;
+    boolean setHomeButtonState(boolean homeButtonState) {
+        this.homeButtonState = homeButtonState;
         if (!this.enableRecenterShim) {
             return false;
         }

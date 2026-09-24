@@ -52,8 +52,8 @@ public class GroupTitlesReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupTitlesReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupTitlesReply(this);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class GroupTitlesReply extends SLMessage {
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         this.AgentData_Field.RequestID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             GroupData groupData = new GroupData();
             groupData.Title = unpackVariable(byteBuffer, 1);
             groupData.RoleID = unpackUUID(byteBuffer);

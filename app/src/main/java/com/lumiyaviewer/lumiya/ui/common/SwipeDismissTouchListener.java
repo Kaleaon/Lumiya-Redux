@@ -46,20 +46,20 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
         void onDismiss(View view, Object obj);
     }
 
-    public SwipeDismissTouchListener(View view, Object obj, DismissCallbacks dismissCallbacks, boolean z, boolean z2, boolean z3, boolean z4) {
-        this.canSwipeUp = z;
-        this.canSwipeDown = z2;
-        this.canSwipeLeft = z3;
-        this.canSwipeRight = z4;
-        this.canSwipeX = z3 ? true : z4;
-        this.canSwipeY = z ? true : z2;
+    public SwipeDismissTouchListener(View view, Object mToken, DismissCallbacks dismissCallbacks, boolean canSwipeUp, boolean canSwipeDown, boolean canSwipeLeft, boolean canSwipeRight) {
+        this.canSwipeUp = canSwipeUp;
+        this.canSwipeDown = canSwipeDown;
+        this.canSwipeLeft = canSwipeLeft;
+        this.canSwipeRight = canSwipeRight;
+        this.canSwipeX = canSwipeLeft ? true : canSwipeRight;
+        this.canSwipeY = canSwipeUp ? true : canSwipeDown;
         ViewConfiguration viewConfiguration = ViewConfiguration.get(view.getContext());
         this.mSlop = viewConfiguration.getScaledTouchSlop();
         this.mMinFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity() * 16;
         this.mMaxFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity();
         this.mAnimationTime = view.getContext().getResources().getInteger(R.integer.config_shortAnimTime);
         this.mView = view;
-        this.mToken = obj;
+        this.mToken = mToken;
         this.mCallbacks = dismissCallbacks;
     }
 
@@ -99,7 +99,7 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
         boolean z;
         boolean z2;
         float f;
-        float f2;
+        float mViewWidth;
         motionEvent.offsetLocation(this.mTranslationX, this.mTranslationY);
         if (this.mViewWidth < 2) {
             this.mViewWidth = this.mView.getWidth();
@@ -130,39 +130,39 @@ public class SwipeDismissTouchListener implements OnInterceptTouchEventListener 
                     boolean dismiss;
                     if (this.mSwiping && this.mSwipingX && this.canSwipeRight && rawX > this.mViewWidth / 2) {
                         dismiss = true;
-                        f2 = this.mViewWidth;
+                        mViewWidth = this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mSwiping && this.mSwipingX && this.canSwipeLeft && rawX < (-(this.mViewWidth / 2))) {
                         dismiss = true;
-                        f2 = -this.mViewWidth;
+                        mViewWidth = -this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mSwiping && this.mSwipingY && this.canSwipeDown && rawY > this.mViewHeight / 2) {
                         dismiss = true;
                         f = this.mViewHeight;
-                        f2 = 0.0f;
+                        mViewWidth = 0.0f;
                     } else if (this.mSwiping && this.mSwipingY && this.canSwipeUp && rawY < (-(this.mViewHeight / 2))) {
                         dismiss = true;
                         f = -this.mViewHeight;
-                        f2 = 0.0f;
+                        mViewWidth = 0.0f;
                     } else if (this.mMinFlingVelocity <= abs && abs <= this.mMaxFlingVelocity && abs2 < abs && this.mSwiping && this.mSwipingX) {
                         dismiss = (xVelocity < 0.0f) == (rawX < 0.0f) && (xVelocity < 0.0f ? this.canSwipeLeft : this.canSwipeRight);
-                        f2 = xVelocity < 0.0f ? -this.mViewWidth : this.mViewWidth;
+                        mViewWidth = xVelocity < 0.0f ? -this.mViewWidth : this.mViewWidth;
                         f = 0.0f;
                     } else if (this.mMinFlingVelocity > abs2 || abs2 > this.mMaxFlingVelocity || abs >= abs2 || !this.mSwiping) {
                         f = 0.0f;
-                        f2 = 0.0f;
+                        mViewWidth = 0.0f;
                         dismiss = false;
                     } else if (this.mSwipingY) {
                         dismiss = (yVelocity < 0.0f) == (rawY < 0.0f) && (yVelocity < 0.0f ? this.canSwipeUp : this.canSwipeDown);
                         f = yVelocity < 0.0f ? -this.mViewHeight : this.mViewHeight;
-                        f2 = 0.0f;
+                        mViewWidth = 0.0f;
                     } else {
                         f = 0.0f;
-                        f2 = 0.0f;
+                        mViewWidth = 0.0f;
                         dismiss = false;
                     }
                     if (dismiss) {
-                        this.mView.animate().translationX(f2).translationY(f).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() {
+                        this.mView.animate().translationX(mViewWidth).translationY(f).alpha(0.0f).setDuration(this.mAnimationTime).setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animator) {
                                 SwipeDismissTouchListener.this.performDismiss();

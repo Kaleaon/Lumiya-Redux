@@ -43,8 +43,8 @@ public class GrantGodlikePowers extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGrantGodlikePowers(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGrantGodlikePowers(this);
     }
 
     @Override

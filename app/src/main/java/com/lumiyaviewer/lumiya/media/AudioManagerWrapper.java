@@ -101,8 +101,8 @@ public class AudioManagerWrapper implements InvocationHandler {
         }
     }
 
-    public void setHandler(Handler handler, int i) {
+    public void setHandler(Handler handler, int msgCode) {
         this.mHandler = handler;
-        this.msgCode = i;
+        this.msgCode = msgCode;
     }
 }

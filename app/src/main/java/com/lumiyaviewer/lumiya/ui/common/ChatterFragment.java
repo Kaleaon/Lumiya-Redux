@@ -99,7 +99,7 @@ public abstract class ChatterFragment extends FragmentWithTitle implements Chatt
         onShowUser(chatterID);
     }
 
-    protected void setShowChatterTitle(boolean z) {
-        this.showChatterTitle = z;
+    protected void setShowChatterTitle(boolean showChatterTitle) {
+        this.showChatterTitle = showChatterTitle;
     }
 }

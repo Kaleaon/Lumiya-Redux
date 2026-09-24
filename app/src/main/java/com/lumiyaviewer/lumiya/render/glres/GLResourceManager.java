@@ -16,9 +16,9 @@ public class GLResourceManager {
     private final Set<GLCleanable> glCleanables = Collections.newSetFromMap(new WeakHashMap());
 
     public static abstract class GLGenericResourceReference extends PhantomReference<GLGenericResource> {
-        public GLGenericResourceReference(GLGenericResource gLGenericResource, GLResourceManager gLResourceManager) {
-            super(gLGenericResource, gLResourceManager.refQueue);
-            gLResourceManager.refSet.add(this);
+        public GLGenericResourceReference(GLGenericResource glGenericResource, GLResourceManager glResourceManager) {
+            super(glGenericResource, glResourceManager.refQueue);
+            glResourceManager.refSet.add(this);
         }
 
         public abstract void GLFree();
@@ -27,10 +27,10 @@ public class GLResourceManager {
     public static abstract class GLResourceReference extends GLGenericResourceReference {
         protected final int handle;
 
-        public GLResourceReference(GLResource gLResource, int i, GLResourceManager gLResourceManager) {
-            super(gLResource, gLResourceManager);
-            this.handle = i;
-            gLResourceManager.refSet.add(this);
+        public GLResourceReference(GLResource glResource, int handle, GLResourceManager glResourceManager) {
+            super(glResource, glResourceManager);
+            this.handle = handle;
+            glResourceManager.refSet.add(this);
         }
     }
 
@@ -52,9 +52,9 @@ public class GLResourceManager {
 
     public void Flush() {
         synchronized (this.glCleanableLock) {
-            for (GLCleanable gLCleanable : this.glCleanables) {
-                if (gLCleanable != null) {
-                    gLCleanable.GLCleanup();
+            for (GLCleanable glCleanable : this.glCleanables) {
+                if (glCleanable != null) {
+                    glCleanable.GLCleanup();
                 }
             }
             this.glCleanables.clear();
@@ -65,9 +65,9 @@ public class GLResourceManager {
         TextureMemoryTracker.releaseAllGLMemory();
     }
 
-    public void addCleanable(GLCleanable gLCleanable) {
+    public void addCleanable(GLCleanable glCleanable) {
         synchronized (this.glCleanableLock) {
-            this.glCleanables.add(gLCleanable);
+            this.glCleanables.add(glCleanable);
         }
     }
 }

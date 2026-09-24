@@ -43,8 +43,8 @@ public class ClassifiedGodDelete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleClassifiedGodDelete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleClassifiedGodDelete(this);
     }
 
     @Override

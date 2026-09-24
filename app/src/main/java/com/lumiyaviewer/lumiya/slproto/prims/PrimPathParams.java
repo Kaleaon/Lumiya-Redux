@@ -103,25 +103,25 @@ public class PrimPathParams {
     }
 
     public LLVector2 getBeginScale() {
-        LLVector2 lLVector2 = new LLVector2(1.0f, 1.0f);
+        LLVector2 vector2 = new LLVector2(1.0f, 1.0f);
         if (this.ScaleX > 1.0f) {
-            lLVector2.x = 2.0f - this.ScaleX;
+            vector2.x = 2.0f - this.ScaleX;
         }
         if (this.ScaleY > 1.0f) {
-            lLVector2.y = 2.0f - this.ScaleY;
+            vector2.y = 2.0f - this.ScaleY;
         }
-        return lLVector2;
+        return vector2;
     }
 
     public LLVector2 getEndScale() {
-        LLVector2 lLVector2 = new LLVector2(1.0f, 1.0f);
+        LLVector2 vector2 = new LLVector2(1.0f, 1.0f);
         if (this.ScaleX < 1.0f) {
-            lLVector2.x = this.ScaleX;
+            vector2.x = this.ScaleX;
         }
         if (this.ScaleY < 1.0f) {
-            lLVector2.y = this.ScaleY;
+            vector2.y = this.ScaleY;
         }
-        return lLVector2;
+        return vector2;
     }
 
     public final int hashCode() {

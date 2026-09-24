@@ -15,8 +15,8 @@ public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends
     }
 
     @Override
-    public MessageType loadCached(byte[] bArr) {
-        ByteBuffer order = ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder());
+    public MessageType loadCached(byte[] bytes) {
+        ByteBuffer order = ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder());
         int DecodeMessageIDGeneric = SLMessage.DecodeMessageIDGeneric(order);
         MessageType messagetype = (MessageType) SLMessageFactory.CreateByID(DecodeMessageIDGeneric);
         if (messagetype != null) {
@@ -29,8 +29,8 @@ public class SLMessageResponseCacher<Key, MessageType extends SLMessage> extends
 
     @Override
     public byte[] storeCached(@Nonnull MessageType messagetype) {
-        byte[] bArr = new byte[messagetype.CalcPayloadSize()];
-        messagetype.PackPayload(ByteBuffer.wrap(bArr).order(ByteOrder.nativeOrder()));
-        return bArr;
+        byte[] bytes = new byte[messagetype.CalcPayloadSize()];
+        messagetype.PackPayload(ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()));
+        return bytes;
     }
 }

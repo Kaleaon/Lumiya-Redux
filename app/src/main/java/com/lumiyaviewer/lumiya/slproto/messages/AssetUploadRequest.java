@@ -34,8 +34,8 @@ public class AssetUploadRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAssetUploadRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAssetUploadRequest(this);
     }
 
     @Override

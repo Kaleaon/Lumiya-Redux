@@ -21,44 +21,44 @@ public class SLSkeletonBone {
     private final float[] globalMatrix = new float[16];
     private final float[] tempMatrix = new float[16];
 
-    SLSkeletonBone(SLSkeletonBoneID sLSkeletonBoneID, LLVector3 lLVector3, LLVector3 lLVector32, SLSkeletonBone[] sLSkeletonBoneArr, SLSkeletonBone[] sLSkeletonBoneArr2) {
-        this.boneID = sLSkeletonBoneID;
-        this.boneIndex = sLSkeletonBoneID.ordinal();
-        this.basePosition = new LLVector3(lLVector32);
-        LLVector3 lLVector33 = new LLVector3(lLVector3);
+    SLSkeletonBone(SLSkeletonBoneID skeletonBoneID, LLVector3 vector34, LLVector3 vector35, SLSkeletonBone[] skeletonBones, SLSkeletonBone[] collisionVolumes) {
+        this.boneID = skeletonBoneID;
+        this.boneIndex = skeletonBoneID.ordinal();
+        this.basePosition = new LLVector3(vector35);
+        LLVector3 vector3 = new LLVector3(vector34);
         this.defaultBasePosition = new LLVector3(this.basePosition);
         this.offset = new LLVector3();
         this.scale = new LLVector3(1.0f, 1.0f, 1.0f);
-        this.childBones = sLSkeletonBoneArr;
-        this.collisionVolumes = sLSkeletonBoneArr2;
-        this.usePosition = sLSkeletonBoneID.isJoint ? this.basePosition : lLVector33;
+        this.childBones = skeletonBones;
+        this.collisionVolumes = collisionVolumes;
+        this.usePosition = skeletonBoneID.isJoint ? this.basePosition : vector3;
         this.parent = null;
         this.globalBaseX = 0.0f;
         this.globalBaseY = 0.0f;
         this.globalBaseZ = 0.0f;
-        if (sLSkeletonBoneArr != null) {
-            for (SLSkeletonBone sLSkeletonBone : sLSkeletonBoneArr) {
-                sLSkeletonBone.parent = this;
+        if (skeletonBones != null) {
+            for (SLSkeletonBone skeletonBone : skeletonBones) {
+                skeletonBone.parent = this;
             }
         }
-        if (sLSkeletonBoneArr2 != null) {
-            for (SLSkeletonBone sLSkeletonBone2 : sLSkeletonBoneArr2) {
-                sLSkeletonBone2.parent = this;
+        if (collisionVolumes != null) {
+            for (SLSkeletonBone skeletonBone2 : collisionVolumes) {
+                skeletonBone2.parent = this;
             }
         }
     }
 
-    void deform(LLVector3 lLVector3, LLVector3 lLVector32) {
-        this.offset.add(lLVector3);
-        this.scale.mul(lLVector32);
+    void deform(LLVector3 vector3, LLVector3 vector33) {
+        this.offset.add(vector3);
+        this.scale.mul(vector33);
     }
 
-    public void deformHierarchy(LLVector3 lLVector3, LLVector3 lLVector32) {
-        this.offset.add(lLVector3);
-        this.scale.mul(lLVector32);
+    public void deformHierarchy(LLVector3 vector3, LLVector3 vector33) {
+        this.offset.add(vector3);
+        this.scale.mul(vector33);
         if (this.collisionVolumes != null) {
-            for (SLSkeletonBone sLSkeletonBone : this.collisionVolumes) {
-                sLSkeletonBone.deform(lLVector3, lLVector32);
+            for (SLSkeletonBone skeletonBone : this.collisionVolumes) {
+                skeletonBone.deform(vector3, vector33);
             }
         }
     }
@@ -95,10 +95,10 @@ public class SLSkeletonBone {
         return this.scale.z;
     }
 
-    int prepareSkeleton(SLSkeletonBone[] sLSkeletonBoneArr, int i) {
+    int prepareSkeleton(SLSkeletonBone[] skeletonBones, int i) {
         int i2 = 0;
         int i3 = i + 1;
-        sLSkeletonBoneArr[i] = this;
+        skeletonBones[i] = this;
         if (this.parent == null) {
             this.globalBaseX = this.defaultBasePosition.x;
             this.globalBaseY = this.defaultBasePosition.y;
@@ -109,20 +109,20 @@ public class SLSkeletonBone {
             this.globalBaseZ = this.parent.globalBaseZ + this.defaultBasePosition.z;
         }
         if (this.childBones != null) {
-            SLSkeletonBone[] sLSkeletonBoneArr2 = this.childBones;
-            int length = sLSkeletonBoneArr2.length;
+            SLSkeletonBone[] childBones = this.childBones;
+            int length = childBones.length;
             int i4 = 0;
             while (i4 < length) {
-                int prepareSkeleton = sLSkeletonBoneArr2[i4].prepareSkeleton(sLSkeletonBoneArr, i3);
+                int prepareSkeleton = childBones[i4].prepareSkeleton(skeletonBones, i3);
                 i4++;
                 i3 = prepareSkeleton;
             }
         }
         if (this.collisionVolumes != null) {
-            SLSkeletonBone[] sLSkeletonBoneArr3 = this.collisionVolumes;
-            int length2 = sLSkeletonBoneArr3.length;
+            SLSkeletonBone[] collisionVolumes = this.collisionVolumes;
+            int length2 = collisionVolumes.length;
             while (i2 < length2) {
-                int prepareSkeleton2 = sLSkeletonBoneArr3[i2].prepareSkeleton(sLSkeletonBoneArr, i3);
+                int prepareSkeleton2 = collisionVolumes[i2].prepareSkeleton(skeletonBones, i3);
                 i2++;
                 i3 = prepareSkeleton2;
             }
@@ -130,18 +130,18 @@ public class SLSkeletonBone {
         return i3;
     }
 
-    void setPositionOverride(LLVector3 lLVector3) {
-        this.basePosition.set(lLVector3);
+    void setPositionOverride(LLVector3 positionOverride) {
+        this.basePosition.set(positionOverride);
     }
 
-    final void updateGlobalPos(AnimationSkeletonData animationSkeletonData, float[] fArr, float[] fArr2) {
+    final void updateGlobalPos(AnimationSkeletonData animationSkeletonData, float[] floats, float[] floats2) {
         float f;
         float f2;
         float f3;
-        int i = this.boneID.animatedIndex;
-        int i2 = i * 4;
-        int i3 = i * 16;
-        if (i >= 0) {
+        int animatedIndex = this.boneID.animatedIndex;
+        int i2 = animatedIndex * 4;
+        int i3 = animatedIndex * 16;
+        if (animatedIndex >= 0) {
             float[] animOffsets = animationSkeletonData.getAnimOffsets();
             float f4 = animOffsets[i2 + 3];
             if (f4 > 0.0f) {
@@ -167,12 +167,12 @@ public class SLSkeletonBone {
             Matrix.setIdentityM(this.tempMatrix, 0);
             Matrix.translateM(this.tempMatrix, 0, this.usePosition.x + this.offset.x + f3, this.usePosition.y + this.offset.y + f2, f + this.usePosition.z + this.offset.z);
         }
-        if (i >= 0) {
+        if (animatedIndex >= 0) {
             Matrix.multiplyMM(this.globalMatrix, 0, this.tempMatrix, 0, animationSkeletonData.getAnimMatrix(), i3);
         } else {
             System.arraycopy(this.tempMatrix, 0, this.globalMatrix, 0, 16);
         }
-        Matrix.scaleM(fArr2, this.boneIndex * 16, this.globalMatrix, 0, this.scale.x, this.scale.y, this.scale.z);
-        Matrix.translateM(fArr, this.boneIndex * 16, fArr2, this.boneIndex * 16, -this.globalBaseX, -this.globalBaseY, -this.globalBaseZ);
+        Matrix.scaleM(floats2, this.boneIndex * 16, this.globalMatrix, 0, this.scale.x, this.scale.y, this.scale.z);
+        Matrix.translateM(floats, this.boneIndex * 16, floats2, this.boneIndex * 16, -this.globalBaseX, -this.globalBaseY, -this.globalBaseZ);
     }
 }

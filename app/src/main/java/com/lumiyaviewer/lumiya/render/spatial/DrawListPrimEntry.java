@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 public class DrawListPrimEntry extends DrawListObjectEntry {
     private volatile WeakReference<DrawableObject> drawableObject;
 
-    public DrawListPrimEntry(@Nonnull SLObjectInfo sLObjectInfo) {
-        super(sLObjectInfo);
+    public DrawListPrimEntry(@Nonnull SLObjectInfo objectInfo) {
+        super(objectInfo);
         this.drawableObject = null;
     }
 

@@ -11,11 +11,11 @@ public class GroupRoleMember {
     public GroupRoleMember() {
     }
 
-    public GroupRoleMember(UUID uuid, UUID uuid2, UUID uuid3, UUID uuid4) {
+    public GroupRoleMember(UUID uuid, UUID requestID, UUID roleID, UUID userID) {
         this.groupID = uuid;
-        this.requestID = uuid2;
-        this.roleID = uuid3;
-        this.userID = uuid4;
+        this.requestID = requestID;
+        this.roleID = roleID;
+        this.userID = userID;
     }
 
     public UUID getGroupID() {

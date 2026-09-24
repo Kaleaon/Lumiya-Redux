@@ -39,8 +39,8 @@ public class RevokePermissions extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRevokePermissions(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRevokePermissions(this);
     }
 
     @Override

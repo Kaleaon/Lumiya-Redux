@@ -220,9 +220,9 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
                     if (unreadMessagesCount > i7) {
                         unreadMessagesCount = i7;
                     }
-                    Iterator<?> it2 = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
-                    while (it2.hasNext()) {
-                        SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject((ChatMessage) it2.next(), this.userManager.getUserID());
+                    Iterator<?> iterator = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(entry2.getKey()), new WhereCondition[0]).orderDesc(ChatMessageDao.Properties.Id).limit(unreadMessagesCount).list().iterator();
+                    while (iterator.hasNext()) {
+                        SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject((ChatMessage) iterator.next(), this.userManager.getUserID());
                         if (loadFromDatabaseObject != null) {
                             linkedList.add(0, loadFromDatabaseObject);
                         }
@@ -254,8 +254,8 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         return UnreadNotifications.create(this.userManager.getUserID(), builder.build());
     }
 
-    private void setEnabledMask(int i) {
-        if (this.maskEnabled.getAndSet(i) != i) {
+    private void setEnabledMask(int enabledMask) {
+        if (this.maskEnabled.getAndSet(enabledMask) != enabledMask) {
             updateUnreadNotifications();
         }
     }
@@ -334,12 +334,12 @@ public class UnreadNotificationManager implements ChatterNameRetriever.OnChatter
         this.totalUnreadCount.set(i3);
         this.totalSourcesCount.set(i2);
         this.mostImportantNotificationType.set(notificationType);
-        Iterator<Map.Entry<Long, ChatterNameRetriever>> it2 = this.chatterSources.entrySet().iterator();
-        while (it2.hasNext()) {
-            Map.Entry<Long, ChatterNameRetriever> next = it2.next();
+        Iterator<Map.Entry<Long, ChatterNameRetriever>> iterator = this.chatterSources.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Long, ChatterNameRetriever> next = iterator.next();
             if (hashSet == null || (!hashSet.contains(next.getKey()))) {
                 next.getValue().dispose();
-                it2.remove();
+                iterator.remove();
             }
         }
     }

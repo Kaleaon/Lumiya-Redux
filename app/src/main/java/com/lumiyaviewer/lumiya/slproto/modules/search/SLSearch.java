@@ -68,8 +68,8 @@ public class SLSearch extends SLModule {
     private final ResultHandler<SearchGridQuery, LazyList<SearchGridResult>> searchResultHandler;
     private final UserManager userManager;
 
-    public SLSearch(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLSearch(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.currentSearchQuery = new AtomicReference<>(null);
         this.searchRequestHandler = new AsyncRequestHandler(this.agentCircuit, new SimpleRequestHandler<SearchGridQuery>() {
 
@@ -101,7 +101,7 @@ public class SLSearch extends SLModule {
                 SLSearch.this.SendMessage(parcelInfoRequest);
             }
         }, false, 3, 15000L);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
         if (this.userManager != null) {
             this.searchResultHandler = this.userManager.getSearchManager().searchResults().attachRequestHandler(this.searchRequestHandler);
             this.parcelInfoResultHandler = this.userManager.parcelInfoData().getRequestSource().attachRequestHandler(this.parcelInfoRequestHandler);

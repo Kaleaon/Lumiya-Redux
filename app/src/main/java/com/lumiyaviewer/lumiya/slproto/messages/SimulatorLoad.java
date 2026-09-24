@@ -40,8 +40,8 @@ public class SimulatorLoad extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorLoad(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorLoad(this);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SimulatorLoad extends SLMessage {
         this.SimulatorLoadData_Field.AgentCount = unpackInt(byteBuffer);
         this.SimulatorLoadData_Field.CanAcceptAgents = unpackBoolean(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             AgentList agentList = new AgentList();
             agentList.CircuitCode = unpackInt(byteBuffer);
             agentList.X = unpackByte(byteBuffer) & 0xFF;

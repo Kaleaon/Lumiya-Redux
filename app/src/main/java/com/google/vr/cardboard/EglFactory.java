@@ -21,12 +21,12 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
     private boolean useProtected = false;
     private int eglContextClientVersion = 2;
 
-    private boolean supportsProtectedContent(EGL10 egl10, EGLDisplay eGLDisplay) {
-        return egl10.eglQueryString(eGLDisplay, 12373).contains("EGL_EXT_protected_content");
+    private boolean supportsProtectedContent(EGL10 egL10, EGLDisplay eglDisplay) {
+        return egL10.eglQueryString(eglDisplay, 12373).contains("EGL_EXT_protected_content");
     }
 
     @Override
-    public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
+    public EGLContext createContext(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig) {
         IntBuffer allocate = IntBuffer.allocate(8);
         allocate.put(EGL_CONTEXT_CLIENT_VERSION);
         allocate.put(this.eglContextClientVersion);
@@ -34,26 +34,26 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
             allocate.put(EGL_CONTEXT_PRIORITY_LEVEL);
             allocate.put(EGL_CONTEXT_PRIORITY_HIGH);
         }
-        if (this.useProtected && supportsProtectedContent(egl10, eGLDisplay)) {
+        if (this.useProtected && supportsProtectedContent(egL10, eglDisplay)) {
             allocate.put(EGL_PROTECTED_CONTENT_EXT);
             allocate.put(1);
         }
         while (allocate.hasRemaining()) {
             allocate.put(12344);
         }
-        EGLContext eglCreateContext = egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, allocate.array());
+        EGLContext eglCreateContext = egL10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, allocate.array());
         if (eglCreateContext != null || this.eglContextClientVersion <= 2) {
             return eglCreateContext;
         }
         Log.w(TAG, new StringBuilder(75).append("Failed to create EGL context with version ").append(this.eglContextClientVersion).append(", will try 2").toString());
         allocate.array()[1] = 2;
-        return egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, allocate.array());
+        return egL10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, allocate.array());
     }
 
     @Override
-    public EGLSurface createWindowSurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, Object obj) {
+    public EGLSurface createWindowSurface(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, Object obj) {
         try {
-            return egl10.eglCreateWindowSurface(eGLDisplay, eGLConfig, obj, (this.useProtected && supportsProtectedContent(egl10, eGLDisplay)) ? new int[]{EGL_PROTECTED_CONTENT_EXT, 1, 12344} : null);
+            return egL10.eglCreateWindowSurface(eglDisplay, eglConfig, obj, (this.useProtected && supportsProtectedContent(egL10, eglDisplay)) ? new int[]{EGL_PROTECTED_CONTENT_EXT, 1, 12344} : null);
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "eglCreateWindowSurface", e);
             return null;
@@ -61,27 +61,27 @@ public class EglFactory implements GLSurfaceView.EGLContextFactory, GLSurfaceVie
     }
 
     @Override
-    public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
-        egl10.eglDestroyContext(eGLDisplay, eGLContext);
+    public void destroyContext(EGL10 egL10, EGLDisplay eglDisplay, EGLContext eglContext) {
+        egL10.eglDestroyContext(eglDisplay, eglContext);
     }
 
     @Override
-    public void destroySurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLSurface eGLSurface) {
-        egl10.eglDestroySurface(eGLDisplay, eGLSurface);
+    public void destroySurface(EGL10 egL10, EGLDisplay eglDisplay, EGLSurface eglSurface) {
+        egL10.eglDestroySurface(eglDisplay, eglSurface);
     }
 
-    public void setEGLContextClientVersion(int i) {
-        this.eglContextClientVersion = i;
+    public void setEGLContextClientVersion(int eglContextClientVersion) {
+        this.eglContextClientVersion = eglContextClientVersion;
     }
 
-    public void setUsePriorityContext(boolean z) {
-        this.usePriority = z;
+    public void setUsePriorityContext(boolean usePriority) {
+        this.usePriority = usePriority;
     }
 
-    public void setUseProtectedBuffers(boolean z) {
-        if (z && Build.VERSION.SDK_INT < 17) {
+    public void setUseProtectedBuffers(boolean useProtected) {
+        if (useProtected && Build.VERSION.SDK_INT < 17) {
             throw new RuntimeException("Protected buffer support requires EGL 1.4, available only on Jelly Bean MR1 and later.");
         }
-        this.useProtected = z;
+        this.useProtected = useProtected;
     }
 }

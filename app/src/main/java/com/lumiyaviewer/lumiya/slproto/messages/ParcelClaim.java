@@ -51,8 +51,8 @@ public class ParcelClaim extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelClaim(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelClaim(this);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ParcelClaim extends SLMessage {
         this.Data_Field.IsGroupOwned = unpackBoolean(byteBuffer);
         this.Data_Field.Final = unpackBoolean(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ParcelData parcelData = new ParcelData();
             parcelData.West = unpackFloat(byteBuffer);
             parcelData.South = unpackFloat(byteBuffer);

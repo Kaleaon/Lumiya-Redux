@@ -38,9 +38,9 @@ public class NotificationSettings {
     private String getPreferenceValueName(Context context, String str, int i, int i2) {
         String[] stringArray = context.getResources().getStringArray(i);
         String[] stringArray2 = context.getResources().getStringArray(i2);
-        for (int i3 = 0; i3 < stringArray.length; i3++) {
-            if (stringArray[i3].equals(str)) {
-                return stringArray2[i3];
+        for (int j = 0; j < stringArray.length; j++) {
+            if (stringArray[j].equals(str)) {
+                return stringArray2[j];
             }
         }
         return "";

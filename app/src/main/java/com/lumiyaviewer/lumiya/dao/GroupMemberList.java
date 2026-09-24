@@ -13,9 +13,9 @@ public class GroupMemberList {
         this.groupID = uuid;
     }
 
-    public GroupMemberList(UUID uuid, UUID uuid2) {
+    public GroupMemberList(UUID uuid, UUID requestID) {
         this.groupID = uuid;
-        this.requestID = uuid2;
+        this.requestID = requestID;
     }
 
     public UUID getGroupID() {

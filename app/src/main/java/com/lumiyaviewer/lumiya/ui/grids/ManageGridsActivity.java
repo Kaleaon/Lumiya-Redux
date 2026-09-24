@@ -44,12 +44,12 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
                 view = from.inflate(R.layout.grid_list_item, viewGroup, false);
             }
             TextView textView = (TextView) view.findViewById(R.id.gridNameTextView);
-            TextView textView2 = (TextView) view.findViewById(R.id.gridURLTextView);
+            TextView viewById = (TextView) view.findViewById(R.id.gridURLTextView);
             GridList.GridInfo item = getItem(i);
             if (item != null) {
                 GridList.GridInfo gridInfo = item;
                 textView.setText(gridInfo.getGridName());
-                textView2.setText(gridInfo.getLoginURL());
+                viewById.setText(gridInfo.getLoginURL());
                 view.findViewById(R.id.gridLockedIcon).setVisibility(gridInfo.isPredefinedGrid() ? View.VISIBLE : View.INVISIBLE);
             }
             return view;

@@ -31,8 +31,8 @@ public class ExternalSurfaceManager implements GvrLayout.ExternalSurfaceManager 
         private final int[] glTextureId = new int[1];
         private boolean isAttached = false;
 
-        ExternalSurface(int i, ExternalSurfaceCallback externalSurfaceCallback) {
-            this.id = i;
+        ExternalSurface(int id, ExternalSurfaceCallback externalSurfaceCallback) {
+            this.id = id;
             this.callback = externalSurfaceCallback;
             Matrix.setIdentityM(this.transformMatrix, 0);
         }
@@ -152,19 +152,19 @@ public class ExternalSurfaceManager implements GvrLayout.ExternalSurfaceManager 
     }
 
     private int createExternalSurfaceImpl(GvrLayout.ExternalSurfaceListener externalSurfaceListener, Handler handler) {
-        int i;
+        int nextID;
         ExternalSurfaceCallback externalSurfaceCallback = null;
         synchronized (this.surfaceDataUpdateLock) {
             ExternalSurfaceData externalSurfaceData = new ExternalSurfaceData(this.surfaceData);
-            i = this.nextID;
-            this.nextID = i + 1;
+            nextID = this.nextID;
+            this.nextID = nextID + 1;
             if (externalSurfaceListener != null && handler != null) {
                 externalSurfaceCallback = new ExternalSurfaceCallback(externalSurfaceListener, handler);
             }
-            externalSurfaceData.surfaces.put(Integer.valueOf(i), new ExternalSurface(i, externalSurfaceCallback));
+            externalSurfaceData.surfaces.put(Integer.valueOf(nextID), new ExternalSurface(nextID, externalSurfaceCallback));
             this.surfaceData = externalSurfaceData;
         }
-        return i;
+        return nextID;
     }
 
     public void consumerAttachToCurrentGLContext() {
@@ -244,9 +244,9 @@ public class ExternalSurfaceManager implements GvrLayout.ExternalSurfaceManager 
             while (it.hasNext()) {
                 it.next().shutdown(this.gvrApi);
             }
-            Iterator<ExternalSurface> it2 = externalSurfaceData.surfacesToRelease.values().iterator();
-            while (it2.hasNext()) {
-                it2.next().shutdown(this.gvrApi);
+            Iterator<ExternalSurface> iterator = externalSurfaceData.surfacesToRelease.values().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().shutdown(this.gvrApi);
             }
         }
     }

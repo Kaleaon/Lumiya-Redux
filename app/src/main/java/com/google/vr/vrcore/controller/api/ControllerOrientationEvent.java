@@ -25,11 +25,11 @@ public final class ControllerOrientationEvent extends ControllerEvent {
     public ControllerOrientationEvent() {
     }
 
-    public ControllerOrientationEvent(float f, float f2, float f3, float f4) {
-        this.qx = f;
-        this.qy = f2;
-        this.qz = f3;
-        this.qw = f4;
+    public ControllerOrientationEvent(float qx, float qy, float qz, float qw) {
+        this.qx = qx;
+        this.qy = qy;
+        this.qz = qz;
+        this.qw = qw;
     }
 
     public ControllerOrientationEvent(Parcel parcel) {

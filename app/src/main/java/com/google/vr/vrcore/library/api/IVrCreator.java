@@ -18,22 +18,22 @@ public interface IVrCreator extends IInterface {
         private static class Proxy implements IVrCreator {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
-            public IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper iObjectWrapper) throws RemoteException {
+            public IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper objectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IVrNativeLibraryLoader.Stub.asInterface(obtain2.readStrongBinder());
+                    obtain.writeStrongBinder(objectWrapper != null ? objectWrapper.asBinder() : null);
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
+                    return IVrNativeLibraryLoader.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -48,18 +48,18 @@ public interface IVrCreator extends IInterface {
             }
 
             @Override
-            public IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2) throws RemoteException {
+            public IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper objectWrapper, IObjectWrapper iObjectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iObjectWrapper == null ? null : iObjectWrapper.asBinder());
-                    obtain.writeStrongBinder(iObjectWrapper2 != null ? iObjectWrapper2.asBinder() : null);
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return IVrNativeLibraryLoader.Stub.asInterface(obtain2.readStrongBinder());
+                    obtain.writeStrongBinder(objectWrapper == null ? null : objectWrapper.asBinder());
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.mRemote.transact(4, obtain, parcel, 0);
+                    parcel.readException();
+                    return IVrNativeLibraryLoader.Stub.asInterface(parcel.readStrongBinder());
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -106,7 +106,7 @@ public interface IVrCreator extends IInterface {
         }
     }
 
-    IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper iObjectWrapper) throws RemoteException;
+    IVrNativeLibraryLoader DEPRECATED_newNativeLibraryLoader(IObjectWrapper objectWrapper) throws RemoteException;
 
-    IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2) throws RemoteException;
+    IVrNativeLibraryLoader newNativeLibraryLoader(IObjectWrapper objectWrapper, IObjectWrapper iObjectWrapper) throws RemoteException;
 }

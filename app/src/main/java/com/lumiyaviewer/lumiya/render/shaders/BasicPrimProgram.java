@@ -64,7 +64,7 @@ public class BasicPrimProgram extends ShaderProgram {
         return super.getHandle();
     }
 
-    public void setTextureEnabled(boolean z) {
-        GLES20.glUniform1i(this.useTexture, z ? 1 : 0);
+    public void setTextureEnabled(boolean textureEnabled) {
+        GLES20.glUniform1i(this.useTexture, textureEnabled ? 1 : 0);
     }
 }

@@ -35,8 +35,8 @@ public interface SdkConfiguration {
             return new SdkConfigurationRequest().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static SdkConfigurationRequest parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (SdkConfigurationRequest) MessageNano.mergeFrom(new SdkConfigurationRequest(), bArr);
+        public static SdkConfigurationRequest parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (SdkConfigurationRequest) MessageNano.mergeFrom(new SdkConfigurationRequest(), bytes);
         }
 
         public final SdkConfigurationRequest clear() {

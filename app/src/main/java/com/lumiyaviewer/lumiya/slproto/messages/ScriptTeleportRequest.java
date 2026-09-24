@@ -38,8 +38,8 @@ public class ScriptTeleportRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptTeleportRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptTeleportRequest(this);
     }
 
     @Override

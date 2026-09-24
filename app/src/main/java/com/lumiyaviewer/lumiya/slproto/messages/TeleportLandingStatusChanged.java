@@ -31,8 +31,8 @@ public class TeleportLandingStatusChanged extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportLandingStatusChanged(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportLandingStatusChanged(this);
     }
 
     @Override

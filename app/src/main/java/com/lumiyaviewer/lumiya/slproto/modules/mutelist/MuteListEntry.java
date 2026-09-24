@@ -16,10 +16,10 @@ public class MuteListEntry {
     public final MuteType type;
     public final UUID uuid;
 
-    public MuteListEntry(MuteType muteType, UUID uuid, String str, int i) {
+    public MuteListEntry(MuteType muteType, UUID uuid, String name, int flags) {
         this.type = muteType;
         this.uuid = UUIDPool.getUUID(uuid);
-        this.name = str;
-        this.flags = i;
+        this.name = name;
+        this.flags = flags;
     }
 }

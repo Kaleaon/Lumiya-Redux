@@ -18,16 +18,16 @@ public class SLMeshData {
     public SLMeshData() {
     }
 
-    public SLMeshData(SLPolyMesh sLPolyMesh) {
-        this.referenceData = sLPolyMesh;
-        this.position = new LLVector3(sLPolyMesh.position);
-        this.scale = new LLVector3(sLPolyMesh.scale);
-        this.rotation = new LLQuaternion(sLPolyMesh.rotation);
-        this.numVertices = sLPolyMesh.numVertices;
-        this.vertexBuffer = new DirectByteBuffer(sLPolyMesh.vertexBuffer);
-        this.texCoordsBuffer = new DirectByteBuffer(sLPolyMesh.texCoordsBuffer);
-        this.numFaces = sLPolyMesh.numFaces;
-        this.indexBuffer = new DirectByteBuffer(sLPolyMesh.indexBuffer);
+    public SLMeshData(SLPolyMesh polyMesh) {
+        this.referenceData = polyMesh;
+        this.position = new LLVector3(polyMesh.position);
+        this.scale = new LLVector3(polyMesh.scale);
+        this.rotation = new LLQuaternion(polyMesh.rotation);
+        this.numVertices = polyMesh.numVertices;
+        this.vertexBuffer = new DirectByteBuffer(polyMesh.vertexBuffer);
+        this.texCoordsBuffer = new DirectByteBuffer(polyMesh.texCoordsBuffer);
+        this.numFaces = polyMesh.numFaces;
+        this.indexBuffer = new DirectByteBuffer(polyMesh.indexBuffer);
     }
 
     public void initFromReference() {

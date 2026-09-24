@@ -14,13 +14,13 @@ public final class MessageNanoPrinter {
     private MessageNanoPrinter() {
     }
 
-    private static void appendQuotedBytes(byte[] bArr, StringBuffer stringBuffer) {
-        if (bArr == null) {
+    private static void appendQuotedBytes(byte[] bytes, StringBuffer stringBuffer) {
+        if (bytes == null) {
             stringBuffer.append("\"\"");
             return;
         }
         stringBuffer.append('\"');
-        for (byte b : bArr) {
+        for (byte b : bytes) {
             int i = b & 0xFF;
             if (i == 92 || i == 34) {
                 stringBuffer.append('\\').append((char) i);

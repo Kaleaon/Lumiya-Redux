@@ -17,12 +17,12 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
     private final int totalUnreadCount;
     private final ImmutableList<UnreadNotificationInfo.UnreadMessageSource> unreadSources;
 
-    AutoValue_UnreadNotificationInfo(UUID uuid, int i, ImmutableList<UnreadNotificationInfo.UnreadMessageSource> immutableList, Optional<NotificationType> optional, int i2, Optional<NotificationType> optional2, Optional<UnreadNotificationInfo.UnreadMessageSource> optional3, UnreadNotificationInfo.ObjectPopupNotification objectPopupNotification) {
+    AutoValue_UnreadNotificationInfo(UUID uuid, int totalUnreadCount, ImmutableList<UnreadNotificationInfo.UnreadMessageSource> immutableList, Optional<NotificationType> optional, int freshMessagesCount, Optional<NotificationType> mostImportantFreshType, Optional<UnreadNotificationInfo.UnreadMessageSource> singleFreshSource, UnreadNotificationInfo.ObjectPopupNotification objectPopupNotification) {
         if (uuid == null) {
             throw new NullPointerException("Null agentUUID");
         }
         this.agentUUID = uuid;
-        this.totalUnreadCount = i;
+        this.totalUnreadCount = totalUnreadCount;
         if (immutableList == null) {
             throw new NullPointerException("Null unreadSources");
         }
@@ -31,15 +31,15 @@ final class AutoValue_UnreadNotificationInfo extends UnreadNotificationInfo {
             throw new NullPointerException("Null mostImportantType");
         }
         this.mostImportantType = optional;
-        this.freshMessagesCount = i2;
-        if (optional2 == null) {
+        this.freshMessagesCount = freshMessagesCount;
+        if (mostImportantFreshType == null) {
             throw new NullPointerException("Null mostImportantFreshType");
         }
-        this.mostImportantFreshType = optional2;
-        if (optional3 == null) {
+        this.mostImportantFreshType = mostImportantFreshType;
+        if (singleFreshSource == null) {
             throw new NullPointerException("Null singleFreshSource");
         }
-        this.singleFreshSource = optional3;
+        this.singleFreshSource = singleFreshSource;
         if (objectPopupNotification == null) {
             throw new NullPointerException("Null objectPopupInfo");
         }

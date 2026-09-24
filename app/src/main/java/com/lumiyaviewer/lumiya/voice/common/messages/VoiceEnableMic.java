@@ -10,8 +10,8 @@ public class VoiceEnableMic implements VoicePluginMessage {
         this.enableMic = bundle.getBoolean("enableMic");
     }
 
-    public VoiceEnableMic(boolean z) {
-        this.enableMic = z;
+    public VoiceEnableMic(boolean enableMic) {
+        this.enableMic = enableMic;
     }
 
     @Override

@@ -88,8 +88,8 @@ public class SLGroupManager extends SLModule {
     private ResultHandler<UUID, GroupTitlesReply> groupTitlesResultHandler;
     private final UserManager userManager;
 
-    public SLGroupManager(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLGroupManager(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.activeGroupID = null;
         this.groupProfileRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
             @Override
@@ -174,20 +174,20 @@ public class SLGroupManager extends SLModule {
                         while (it.hasNext()) {
                             Map.Entry entry = (Map.Entry) it.next();
                             UUID uuid2 = UUIDPool.getUUID((String) entry.getKey());
-                            LLSDNode lLSDNode = (LLSDNode) entry.getValue();
+                            LLSDNode llsdNode = (LLSDNode) entry.getValue();
                             boolean z = false;
-                            String asString2 = lLSDNode.keyExists("title") ? byKey.byIndex(lLSDNode.byKey("title").asInt()).asString() : byKey.byIndex(0).asString();
-                            long longValue = lLSDNode.keyExists("powers") ? UnsignedLong.valueOf(lLSDNode.byKey("powers").asString(), 16).longValue() : j;
-                            String asString3 = lLSDNode.keyExists("last_login") ? lLSDNode.byKey("last_login").asString() : "Unknown";
-                            int asInt = lLSDNode.keyExists("donated_square_meters") ? lLSDNode.byKey("donated_square_meters").asInt() : 0;
-                            if (lLSDNode.keyExists("owner")) {
-                                if (lLSDNode.byKey("owner").isString()) {
-                                    String asString4 = lLSDNode.byKey("owner").asString();
+                            String asString2 = llsdNode.keyExists("title") ? byKey.byIndex(llsdNode.byKey("title").asInt()).asString() : byKey.byIndex(0).asString();
+                            long longValue = llsdNode.keyExists("powers") ? UnsignedLong.valueOf(llsdNode.byKey("powers").asString(), 16).longValue() : j;
+                            String asString3 = llsdNode.keyExists("last_login") ? llsdNode.byKey("last_login").asString() : "Unknown";
+                            int asInt = llsdNode.keyExists("donated_square_meters") ? llsdNode.byKey("donated_square_meters").asInt() : 0;
+                            if (llsdNode.keyExists("owner")) {
+                                if (llsdNode.byKey("owner").isString()) {
+                                    String asString4 = llsdNode.byKey("owner").asString();
                                     if (asString4.equalsIgnoreCase("y") || asString4.equalsIgnoreCase("yes") || asString4.equalsIgnoreCase("true") || asString4.equalsIgnoreCase("1")) {
                                         z = true;
                                     }
-                                } else if (lLSDNode.byKey("owner").isBoolean()) {
-                                    z = lLSDNode.byKey("owner").asBoolean();
+                                } else if (llsdNode.byKey("owner").isBoolean()) {
+                                    z = llsdNode.byKey("owner").asBoolean();
                                 }
                             }
                             i2++;
@@ -207,8 +207,8 @@ public class SLGroupManager extends SLModule {
                 }
             }
         });
-        this.groupMemberDataURL = sLAgentCircuit.getCaps().getCapability(SLCaps.SLCapability.GroupMemberData);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.circuitInfo.agentID);
+        this.groupMemberDataURL = agentCircuit.getCaps().getCapability(SLCaps.SLCapability.GroupMemberData);
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID);
         if (this.userManager != null) {
             this.groupMemberDao = this.userManager.getDaoSession().getGroupMemberDao();
             this.groupRoleMemberDao = this.userManager.getDaoSession().getGroupRoleMemberDao();
@@ -310,7 +310,7 @@ public class SLGroupManager extends SLModule {
         groupRoleUpdate.isReliable = true;
         groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
             @Override
-            public void onMessageAcknowledged(SLMessage sLMessage) {
+            public void onMessageAcknowledged(SLMessage message) {
                 SLGroupManager.this.userManager.getGroupRoles().requestUpdate(uuid);
             }
         });
@@ -445,7 +445,7 @@ public class SLGroupManager extends SLModule {
         SendMessage(leaveGroupRequest);
     }
 
-    public void RequestMemberRoleChanges(final UUID uuid, final UUID uuid2, Collection<UUID> collection, Collection<UUID> collection2) {
+    public void RequestMemberRoleChanges(final UUID uuid, final UUID uuid2, Collection<UUID> collection, Collection<UUID> uuids) {
         final boolean equals = this.circuitInfo.agentID.equals(uuid2);
         GroupRoleChanges groupRoleChanges = new GroupRoleChanges();
         groupRoleChanges.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -459,7 +459,7 @@ public class SLGroupManager extends SLModule {
             roleChange.Change = 0;
             groupRoleChanges.RoleChange_Fields.add(roleChange);
         }
-        for (UUID uuid4 : collection2) {
+        for (UUID uuid4 : uuids) {
             Debug.Printf("GroupRoleChange: groupID %s memberID %s remove %s", uuid, uuid2, uuid4);
             GroupRoleChanges.RoleChange roleChange2 = new GroupRoleChanges.RoleChange();
             roleChange2.RoleID = uuid4;
@@ -500,7 +500,7 @@ public class SLGroupManager extends SLModule {
         this.agentCircuit.HandleChatEvent(ChatterID.getGroupChatterID(this.agentCircuit.getAgentUUID(), uuid2), new SLChatGroupInvitationSentEvent(new ChatMessageSourceUser(uuid), this.agentCircuit.getAgentUUID()), true);
     }
 
-    public void SendGroupNotice(UUID uuid, String str, String str2, SLInventoryEntry sLInventoryEntry) {
+    public void SendGroupNotice(UUID uuid, String str, String str2, SLInventoryEntry inventoryEntry) {
         ImprovedInstantMessage improvedInstantMessage = new ImprovedInstantMessage();
         improvedInstantMessage.AgentData_Field.AgentID = this.circuitInfo.agentID;
         improvedInstantMessage.AgentData_Field.SessionID = this.circuitInfo.sessionID;
@@ -515,9 +515,9 @@ public class SLGroupManager extends SLModule {
         improvedInstantMessage.MessageBlock_Field.Timestamp = 0;
         improvedInstantMessage.MessageBlock_Field.FromAgentName = SLMessage.stringToVariableOEM("todo");
         improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTF(str + "|" + str2);
-        if (sLInventoryEntry != null) {
+        if (inventoryEntry != null) {
             try {
-                improvedInstantMessage.MessageBlock_Field.BinaryBucket = SLMessage.stringToVariableOEM(new LLSDMap(new LLSDMap.LLSDMapEntry("item_id", new LLSDUUID(sLInventoryEntry.uuid)), new LLSDMap.LLSDMapEntry("owner_id", new LLSDUUID(sLInventoryEntry.ownerUUID))).serializeToXML());
+                improvedInstantMessage.MessageBlock_Field.BinaryBucket = SLMessage.stringToVariableOEM(new LLSDMap(new LLSDMap.LLSDMapEntry("item_id", new LLSDUUID(inventoryEntry.uuid)), new LLSDMap.LLSDMapEntry("owner_id", new LLSDUUID(inventoryEntry.ownerUUID))).serializeToXML());
             } catch (IOException e) {
                 e.printStackTrace();
                 improvedInstantMessage.MessageBlock_Field.BinaryBucket = new byte[0];
@@ -593,7 +593,7 @@ public class SLGroupManager extends SLModule {
         groupRoleUpdate.isReliable = true;
         groupRoleUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
             @Override
-            public void onMessageAcknowledged(SLMessage sLMessage) {
+            public void onMessageAcknowledged(SLMessage message) {
                 Debug.Printf("GroupRole: ack set properties for role %s", uuid2);
                 SLGroupManager.this.userManager.getGroupRoles().requestUpdate(uuid);
             }

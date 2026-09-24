@@ -81,15 +81,15 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
     private void DoLogin() {
         boolean z;
         String str;
-        String str2;
+        String text;
         SLURL slurl;
         SharedPreferences preferences = getPreferences(0);
         String editable = ((EditText) findViewById(R.id.editUserName)).getText().toString();
-        String editable2 = ((EditText) findViewById(R.id.editPassword)).getText().toString();
+        String text2 = ((EditText) findViewById(R.id.editPassword)).getText().toString();
         GridList.GridInfo selectedGrid = getSelectedGrid();
         boolean isChecked = ((CheckBox) findViewById(R.id.savePassword)).isChecked();
         String str3 = "";
-        if (editable2.equals(getString(R.string.saved_password))) {
+        if (text2.equals(getString(R.string.saved_password))) {
             str3 = preferences.getString(KEY_PASSWORD, "");
             z = true;
         } else {
@@ -103,8 +103,8 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
             Debug.Log("Login: using saved hash, hash = " + str3);
             str = str3;
         } else {
-            String passwordHash = SLAuth.getPasswordHash(editable2);
-            Debug.Log("Login: not using saved hash, password = " + editable2 + ", new hash: " + passwordHash);
+            String passwordHash = SLAuth.getPasswordHash(text2);
+            Debug.Log("Login: not using saved hash, password = " + text2 + ", new hash: " + passwordHash);
             str = passwordHash;
         }
         this.enableAutoClear = false;
@@ -127,10 +127,10 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
             edit.putString(KEY_PASSWORD, z2 ? str : "");
         }
         if (string.equals("")) {
-            str2 = UUID.randomUUID().toString();
-            edit.putString(KEY_CLIENT_ID, str2);
+            text = UUID.randomUUID().toString();
+            edit.putString(KEY_CLIENT_ID, text);
         } else {
-            str2 = string;
+            text = string;
         }
         edit.putString(KEY_SELECTED_GRID, selectedGrid.getGridUUID().toString());
         edit.apply();
@@ -149,7 +149,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         intent.setAction(GridConnectionService.LOGIN_ACTION);
         intent.putExtra(KEY_LOGIN, editable);
         intent.putExtra(KEY_PASSWORD, str);
-        intent.putExtra(KEY_CLIENT_ID, str2);
+        intent.putExtra(KEY_CLIENT_ID, text);
         intent.putExtra("start_location", loginStartLocation);
         intent.putExtra("login_url", selectedGrid.getLoginURL());
         intent.putExtra("grid_name", selectedGrid.getGridName());
@@ -229,8 +229,8 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
 
     private void showProgressView(boolean z) {
         View findViewById = findViewById(R.id.login_progress_layout);
-        View findViewById2 = findViewById(R.id.login_root_view);
-        if (findViewById != null && findViewById2 != null) {
+        View viewById = findViewById(R.id.login_root_view);
+        if (findViewById != null && viewById != null) {
             findViewById(R.id.login_progress_layout).setVisibility(z ? View.VISIBLE : View.GONE);
             findViewById(R.id.login_root_view).setVisibility(z ? View.GONE : View.VISIBLE);
         }
@@ -246,18 +246,18 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
 
     private void updateConnectingStatus() {
         SLGridConnection gridConnection;
-        boolean z = this.loggingIn;
-        if (!z && (gridConnection = GridConnectionService.getGridConnection()) != null && gridConnection.getConnectionState() == SLGridConnection.ConnectionState.Connecting) {
+        boolean loggingIn = this.loggingIn;
+        if (!loggingIn && (gridConnection = GridConnectionService.getGridConnection()) != null && gridConnection.getConnectionState() == SLGridConnection.ConnectionState.Connecting) {
             showProgressView(true);
             if (gridConnection.getIsReconnecting()) {
                 ((TextView) findViewById(R.id.connect_status_text)).setText(getString(R.string.status_reconnecting, new Object[]{Integer.valueOf(gridConnection.getReconnectAttempt())}));
-                z = true;
+                loggingIn = true;
             } else {
                 ((TextView) findViewById(R.id.connect_status_text)).setText(R.string.status_logging_in);
-                z = true;
+                loggingIn = true;
             }
         }
-        if (z) {
+        if (loggingIn) {
             return;
         }
         showProgressView(false);
@@ -294,16 +294,16 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
     }
 
     @EventHandler
-    public void handleLoginResult(SLLoginResultEvent sLLoginResultEvent) {
+    public void handleLoginResult(SLLoginResultEvent loginResultEvent) {
         this.loggingIn = false;
-        Debug.Printf("LoginProgressActivity: result.success = %b", Boolean.valueOf(sLLoginResultEvent.success));
-        if (sLLoginResultEvent.success) {
-            startChatActivity(sLLoginResultEvent.activeAgentUUID);
+        Debug.Printf("LoginProgressActivity: result.success = %b", Boolean.valueOf(loginResultEvent.success));
+        if (loginResultEvent.success) {
+            startChatActivity(loginResultEvent.activeAgentUUID);
             finish();
             return;
         }
         if (!isFinishing() && progressViewVisible()) {
-            String str = Strings.isNullOrEmpty(sLLoginResultEvent.message) ? "Login to Second Life has failed." : sLLoginResultEvent.message;
+            String str = Strings.isNullOrEmpty(loginResultEvent.message) ? "Login to Second Life has failed." : loginResultEvent.message;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Login failed");
             builder.setMessage(str);
@@ -314,7 +314,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
     }
 
     @EventHandler
-    public void handleReconnectingEvent(SLReconnectingEvent sLReconnectingEvent) {
+    public void handleReconnectingEvent(SLReconnectingEvent reconnectingEvent) {
         updateConnectingStatus();
     }
 
@@ -372,9 +372,9 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
                 break;
             case 5:
                 if (i2 == -1) {
-                    SharedPreferences.Editor edit2 = getPreferences(0).edit();
-                    edit2.putBoolean(KEY_TOS_ACCEPTED, true);
-                    edit2.apply();
+                    SharedPreferences.Editor editor = getPreferences(0).edit();
+                    editor.putBoolean(KEY_TOS_ACCEPTED, true);
+                    editor.apply();
                     DoLogin();
                     break;
                 }
@@ -437,9 +437,9 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
         ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             /* JADX WARN: Type inference failed for: r0v2, types: [android.widget.Adapter] */
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
-                if (i != LoginActivity.this.lastSelectedGrid) {
-                    Object item = adapterView.getAdapter().getItem(i);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int lastSelectedGrid, long j) {
+                if (lastSelectedGrid != LoginActivity.this.lastSelectedGrid) {
+                    Object item = adapterView.getAdapter().getItem(lastSelectedGrid);
                     if (item instanceof GridList.GridInfo) {
                         GridList.GridInfo gridInfo = (GridList.GridInfo) item;
                         if (gridInfo.getLoginURL() == null) {
@@ -447,7 +447,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
                             gridEditDialog.setOnGridEditResultListener(LoginActivity.this);
                             gridEditDialog.show();
                         } else {
-                            LoginActivity.this.lastSelectedGrid = i;
+                            LoginActivity.this.lastSelectedGrid = lastSelectedGrid;
                             LoginActivity.this.lastSelectedGridUUID = gridInfo.getGridUUID();
                         }
                     }

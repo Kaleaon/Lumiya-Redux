@@ -7,8 +7,8 @@ final class AutoValue_PayInfo extends PayInfo {
     private final int defaultPayPrice;
     private final ImmutableList<Integer> payPrices;
 
-    AutoValue_PayInfo(int i, @Nullable ImmutableList<Integer> immutableList) {
-        this.defaultPayPrice = i;
+    AutoValue_PayInfo(int defaultPayPrice, @Nullable ImmutableList<Integer> immutableList) {
+        this.defaultPayPrice = defaultPayPrice;
         this.payPrices = immutableList;
     }
 

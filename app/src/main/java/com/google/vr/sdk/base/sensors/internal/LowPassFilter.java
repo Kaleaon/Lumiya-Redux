@@ -18,20 +18,20 @@ public class LowPassFilter {
         addWeightedSample(vector3d, j, 1.0d);
     }
 
-    public void addWeightedSample(Vector3d vector3d, long j, double d) {
+    public void addWeightedSample(Vector3d vector3d, long lastTimestampNs, double d) {
         this.numSamples++;
         if (this.numSamples == 1) {
             this.filteredData.set(vector3d);
-            this.lastTimestampNs = j;
+            this.lastTimestampNs = lastTimestampNs;
             return;
         }
-        double d2 = (j - this.lastTimestampNs) * d * NANOS_TO_SECONDS;
+        double d2 = (lastTimestampNs - this.lastTimestampNs) * d * NANOS_TO_SECONDS;
         double d3 = d2 / (this.timeConstantSecs + d2);
         this.filteredData.scale(1.0d - d3);
         this.temp.set(vector3d);
         this.temp.scale(d3);
         Vector3d.add(this.temp, this.filteredData, this.filteredData);
-        this.lastTimestampNs = j;
+        this.lastTimestampNs = lastTimestampNs;
     }
 
     public Vector3d getFilteredData() {

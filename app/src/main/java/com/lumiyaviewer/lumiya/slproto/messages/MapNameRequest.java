@@ -43,8 +43,8 @@ public class MapNameRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapNameRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapNameRequest(this);
     }
 
     @Override

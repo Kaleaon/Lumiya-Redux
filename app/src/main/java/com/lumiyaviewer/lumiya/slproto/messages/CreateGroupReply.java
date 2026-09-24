@@ -43,8 +43,8 @@ public class CreateGroupReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCreateGroupReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCreateGroupReply(this);
     }
 
     @Override

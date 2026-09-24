@@ -46,8 +46,8 @@ public class ParcelMediaUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelMediaUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelMediaUpdate(this);
     }
 
     @Override

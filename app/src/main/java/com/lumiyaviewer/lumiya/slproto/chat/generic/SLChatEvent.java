@@ -258,9 +258,9 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
             return new ChatEventViewHolder(view, adapter);
         }
 
-        ChatMessageViewType(int i, boolean z, ChatEventViewHolder.Factory factory) {
-            this.resourceId = i;
-            this.alwaysInflate = z;
+        ChatMessageViewType(int resourceId, boolean alwaysInflate, ChatEventViewHolder.Factory factory) {
+            this.resourceId = resourceId;
+            this.alwaysInflate = alwaysInflate;
             this.viewHolderFactory = factory;
         }
 

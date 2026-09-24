@@ -34,10 +34,10 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
         private final int nonPackedTag;
         private final int packedTag;
 
-        public PrimitiveExtension(int i, Class<T> cls, int i2, boolean z, int i3, int i4) {
+        public PrimitiveExtension(int i, Class<T> cls, int i2, boolean z, int nonPackedTag, int packedTag) {
             super(i, cls, i2, z);
-            this.nonPackedTag = i3;
-            this.packedTag = i4;
+            this.nonPackedTag = nonPackedTag;
+            this.packedTag = packedTag;
         }
 
         private int computePackedDataSize(Object obj) {
@@ -377,11 +377,11 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
         }
     }
 
-    private Extension(int i, Class<T> cls, int i2, boolean z) {
-        this.type = i;
+    private Extension(int type, Class<T> cls, int tag, boolean repeated) {
+        this.type = type;
         this.clazz = cls;
-        this.tag = i2;
-        this.repeated = z;
+        this.tag = tag;
+        this.repeated = repeated;
     }
 
     @Deprecated
@@ -418,8 +418,8 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
             return null;
         }
         T cast = this.clazz.cast(Array.newInstance(this.clazz.getComponentType(), size));
-        for (int i2 = 0; i2 < size; i2++) {
-            Array.set(cast, i2, arrayList.get(i2));
+        for (int j = 0; j < size; j++) {
+            Array.set(cast, j, arrayList.get(j));
         }
         return cast;
     }
@@ -434,9 +434,9 @@ public class Extension<M extends ExtendableMessageNano<M>, T> {
     protected int computeRepeatedSerializedSize(Object obj) {
         int i = 0;
         int length = Array.getLength(obj);
-        for (int i2 = 0; i2 < length; i2++) {
-            if (Array.get(obj, i2) != null) {
-                i += computeSingularSerializedSize(Array.get(obj, i2));
+        for (int j = 0; j < length; j++) {
+            if (Array.get(obj, j) != null) {
+                i += computeSingularSerializedSize(Array.get(obj, j));
             }
         }
         return i;

@@ -38,8 +38,8 @@ public class ScriptReset extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptReset(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptReset(this);
     }
 
     @Override

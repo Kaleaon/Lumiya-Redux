@@ -34,8 +34,8 @@ public class SimulatorSetMap extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorSetMap(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorSetMap(this);
     }
 
     @Override

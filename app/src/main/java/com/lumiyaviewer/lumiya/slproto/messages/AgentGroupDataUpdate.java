@@ -55,8 +55,8 @@ public class AgentGroupDataUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentGroupDataUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentGroupDataUpdate(this);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class AgentGroupDataUpdate extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             GroupData groupData = new GroupData();
             groupData.GroupID = unpackUUID(byteBuffer);
             groupData.GroupPowers = unpackLong(byteBuffer);

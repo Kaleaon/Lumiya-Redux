@@ -91,66 +91,66 @@ public class Matrix3x3d {
     }
 
     public void minusEquals(Matrix3x3d matrix3x3d) {
-        double[] dArr = this.m;
-        dArr[0] = dArr[0] - matrix3x3d.m[0];
-        double[] dArr2 = this.m;
-        dArr2[1] = dArr2[1] - matrix3x3d.m[1];
-        double[] dArr3 = this.m;
-        dArr3[2] = dArr3[2] - matrix3x3d.m[2];
-        double[] dArr4 = this.m;
-        dArr4[3] = dArr4[3] - matrix3x3d.m[3];
-        double[] dArr5 = this.m;
-        dArr5[4] = dArr5[4] - matrix3x3d.m[4];
-        double[] dArr6 = this.m;
-        dArr6[5] = dArr6[5] - matrix3x3d.m[5];
-        double[] dArr7 = this.m;
-        dArr7[6] = dArr7[6] - matrix3x3d.m[6];
-        double[] dArr8 = this.m;
-        dArr8[7] = dArr8[7] - matrix3x3d.m[7];
-        double[] dArr9 = this.m;
-        dArr9[8] = dArr9[8] - matrix3x3d.m[8];
+        double[] m = this.m;
+        m[0] = m[0] - matrix3x3d.m[0];
+        double[] m2 = this.m;
+        m2[1] = m2[1] - matrix3x3d.m[1];
+        double[] m3 = this.m;
+        m3[2] = m3[2] - matrix3x3d.m[2];
+        double[] m4 = this.m;
+        m4[3] = m4[3] - matrix3x3d.m[3];
+        double[] m5 = this.m;
+        m5[4] = m5[4] - matrix3x3d.m[4];
+        double[] m6 = this.m;
+        m6[5] = m6[5] - matrix3x3d.m[5];
+        double[] m7 = this.m;
+        m7[6] = m7[6] - matrix3x3d.m[6];
+        double[] m8 = this.m;
+        m8[7] = m8[7] - matrix3x3d.m[7];
+        double[] m9 = this.m;
+        m9[8] = m9[8] - matrix3x3d.m[8];
     }
 
     public void plusEquals(Matrix3x3d matrix3x3d) {
-        double[] dArr = this.m;
-        dArr[0] = dArr[0] + matrix3x3d.m[0];
-        double[] dArr2 = this.m;
-        dArr2[1] = dArr2[1] + matrix3x3d.m[1];
-        double[] dArr3 = this.m;
-        dArr3[2] = dArr3[2] + matrix3x3d.m[2];
-        double[] dArr4 = this.m;
-        dArr4[3] = dArr4[3] + matrix3x3d.m[3];
-        double[] dArr5 = this.m;
-        dArr5[4] = dArr5[4] + matrix3x3d.m[4];
-        double[] dArr6 = this.m;
-        dArr6[5] = dArr6[5] + matrix3x3d.m[5];
-        double[] dArr7 = this.m;
-        dArr7[6] = dArr7[6] + matrix3x3d.m[6];
-        double[] dArr8 = this.m;
-        dArr8[7] = dArr8[7] + matrix3x3d.m[7];
-        double[] dArr9 = this.m;
-        dArr9[8] = dArr9[8] + matrix3x3d.m[8];
+        double[] m = this.m;
+        m[0] = m[0] + matrix3x3d.m[0];
+        double[] m2 = this.m;
+        m2[1] = m2[1] + matrix3x3d.m[1];
+        double[] m3 = this.m;
+        m3[2] = m3[2] + matrix3x3d.m[2];
+        double[] m4 = this.m;
+        m4[3] = m4[3] + matrix3x3d.m[3];
+        double[] m5 = this.m;
+        m5[4] = m5[4] + matrix3x3d.m[4];
+        double[] m6 = this.m;
+        m6[5] = m6[5] + matrix3x3d.m[5];
+        double[] m7 = this.m;
+        m7[6] = m7[6] + matrix3x3d.m[6];
+        double[] m8 = this.m;
+        m8[7] = m8[7] + matrix3x3d.m[7];
+        double[] m9 = this.m;
+        m9[8] = m9[8] + matrix3x3d.m[8];
     }
 
     public void scale(double d) {
-        double[] dArr = this.m;
-        dArr[0] = dArr[0] * d;
-        double[] dArr2 = this.m;
-        dArr2[1] = dArr2[1] * d;
-        double[] dArr3 = this.m;
-        dArr3[2] = dArr3[2] * d;
-        double[] dArr4 = this.m;
-        dArr4[3] = dArr4[3] * d;
-        double[] dArr5 = this.m;
-        dArr5[4] = dArr5[4] * d;
-        double[] dArr6 = this.m;
-        dArr6[5] = dArr6[5] * d;
-        double[] dArr7 = this.m;
-        dArr7[6] = dArr7[6] * d;
-        double[] dArr8 = this.m;
-        dArr8[7] = dArr8[7] * d;
-        double[] dArr9 = this.m;
-        dArr9[8] = dArr9[8] * d;
+        double[] m = this.m;
+        m[0] = m[0] * d;
+        double[] m2 = this.m;
+        m2[1] = m2[1] * d;
+        double[] m3 = this.m;
+        m3[2] = m3[2] * d;
+        double[] m4 = this.m;
+        m4[3] = m4[3] * d;
+        double[] m5 = this.m;
+        m5[4] = m5[4] * d;
+        double[] m6 = this.m;
+        m6[5] = m6[5] * d;
+        double[] m7 = this.m;
+        m7[6] = m7[6] * d;
+        double[] m8 = this.m;
+        m8[7] = m8[7] * d;
+        double[] m9 = this.m;
+        m9[8] = m9[8] * d;
     }
 
     public void set(double d, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9) {
@@ -188,50 +188,50 @@ public class Matrix3x3d {
     }
 
     public void setIdentity() {
-        double[] dArr = this.m;
-        double[] dArr2 = this.m;
-        double[] dArr3 = this.m;
-        double[] dArr4 = this.m;
-        double[] dArr5 = this.m;
+        double[] m = this.m;
+        double[] m2 = this.m;
+        double[] m3 = this.m;
+        double[] m4 = this.m;
+        double[] m5 = this.m;
         this.m[7] = 0.0d;
-        dArr5[6] = 0.0d;
-        dArr4[5] = 0.0d;
-        dArr3[3] = 0.0d;
-        dArr2[2] = 0.0d;
-        dArr[1] = 0.0d;
-        double[] dArr6 = this.m;
-        double[] dArr7 = this.m;
+        m5[6] = 0.0d;
+        m4[5] = 0.0d;
+        m3[3] = 0.0d;
+        m2[2] = 0.0d;
+        m[1] = 0.0d;
+        double[] m6 = this.m;
+        double[] m7 = this.m;
         this.m[8] = 1.0d;
-        dArr7[4] = 1.0d;
-        dArr6[0] = 1.0d;
+        m7[4] = 1.0d;
+        m6[0] = 1.0d;
     }
 
-    public void setSameDiagonal(double d) {
-        double[] dArr = this.m;
-        double[] dArr2 = this.m;
-        this.m[8] = d;
-        dArr2[4] = d;
-        dArr[0] = d;
+    public void setSameDiagonal(double sameDiagonal) {
+        double[] m = this.m;
+        double[] m2 = this.m;
+        this.m[8] = sameDiagonal;
+        m2[4] = sameDiagonal;
+        m[0] = sameDiagonal;
     }
 
     public void setZero() {
-        double[] dArr = this.m;
-        double[] dArr2 = this.m;
-        double[] dArr3 = this.m;
-        double[] dArr4 = this.m;
-        double[] dArr5 = this.m;
-        double[] dArr6 = this.m;
-        double[] dArr7 = this.m;
-        double[] dArr8 = this.m;
+        double[] m = this.m;
+        double[] m2 = this.m;
+        double[] m3 = this.m;
+        double[] m4 = this.m;
+        double[] m5 = this.m;
+        double[] m6 = this.m;
+        double[] m7 = this.m;
+        double[] m8 = this.m;
         this.m[8] = 0.0d;
-        dArr8[7] = 0.0d;
-        dArr7[6] = 0.0d;
-        dArr6[5] = 0.0d;
-        dArr5[4] = 0.0d;
-        dArr4[3] = 0.0d;
-        dArr3[2] = 0.0d;
-        dArr2[1] = 0.0d;
-        dArr[0] = 0.0d;
+        m8[7] = 0.0d;
+        m7[6] = 0.0d;
+        m6[5] = 0.0d;
+        m5[4] = 0.0d;
+        m4[3] = 0.0d;
+        m3[2] = 0.0d;
+        m2[1] = 0.0d;
+        m[0] = 0.0d;
     }
 
     public void transpose() {

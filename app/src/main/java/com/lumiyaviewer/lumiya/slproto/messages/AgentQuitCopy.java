@@ -37,8 +37,8 @@ public class AgentQuitCopy extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentQuitCopy(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentQuitCopy(this);
     }
 
     @Override

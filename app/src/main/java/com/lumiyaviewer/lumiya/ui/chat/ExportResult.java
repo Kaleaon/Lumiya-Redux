@@ -7,9 +7,9 @@ class ExportResult {
     final String rawText;
     final String rawTextTitle;
 
-    ExportResult(File file, String str, String str2) {
+    ExportResult(File file, String rawText, String rawTextTitle) {
         this.outputFile = file;
-        this.rawText = str;
-        this.rawTextTitle = str2;
+        this.rawText = rawText;
+        this.rawTextTitle = rawTextTitle;
     }
 }

@@ -59,8 +59,8 @@ public class ModifyLand extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleModifyLand(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleModifyLand(this);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ModifyLand extends SLMessage {
         this.ModifyBlock_Field.Seconds = unpackFloat(byteBuffer);
         this.ModifyBlock_Field.Height = unpackFloat(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ParcelData parcelData = new ParcelData();
             parcelData.LocalID = unpackInt(byteBuffer);
             parcelData.West = unpackFloat(byteBuffer);
@@ -109,7 +109,7 @@ public class ModifyLand extends SLMessage {
             this.ParcelData_Fields.add(parcelData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             ModifyBlockExtended modifyBlockExtended = new ModifyBlockExtended();
             modifyBlockExtended.BrushSize = unpackFloat(byteBuffer);
             this.ModifyBlockExtended_Fields.add(modifyBlockExtended);

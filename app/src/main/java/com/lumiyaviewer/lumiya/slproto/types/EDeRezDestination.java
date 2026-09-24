@@ -15,8 +15,8 @@ public enum EDeRezDestination {
 
     private final int code;
 
-    EDeRezDestination(int i) {
-        this.code = i;
+    EDeRezDestination(int code) {
+        this.code = code;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

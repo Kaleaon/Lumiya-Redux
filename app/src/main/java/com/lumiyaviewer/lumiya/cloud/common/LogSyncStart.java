@@ -7,8 +7,8 @@ public class LogSyncStart implements Bundleable {
     public final UUID agentUUID;
     public final int appVersionCode;
 
-    public LogSyncStart(int i, UUID uuid) {
-        this.appVersionCode = i;
+    public LogSyncStart(int appVersionCode, UUID uuid) {
+        this.appVersionCode = appVersionCode;
         this.agentUUID = uuid;
     }
 

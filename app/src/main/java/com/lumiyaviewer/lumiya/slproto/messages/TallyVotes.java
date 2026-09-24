@@ -21,8 +21,8 @@ public class TallyVotes extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTallyVotes(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTallyVotes(this);
     }
 
     @Override

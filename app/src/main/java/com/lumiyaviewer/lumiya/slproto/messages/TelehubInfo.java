@@ -46,8 +46,8 @@ public class TelehubInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTelehubInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTelehubInfo(this);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TelehubInfo extends SLMessage {
         this.TelehubBlock_Field.TelehubPos = unpackLLVector3(byteBuffer);
         this.TelehubBlock_Field.TelehubRot = unpackLLQuaternion(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             SpawnPointBlock spawnPointBlock = new SpawnPointBlock();
             spawnPointBlock.SpawnPointPos = unpackLLVector3(byteBuffer);
             this.SpawnPointBlock_Fields.add(spawnPointBlock);

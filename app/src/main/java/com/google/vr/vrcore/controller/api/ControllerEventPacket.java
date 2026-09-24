@@ -70,9 +70,9 @@ public class ControllerEventPacket implements Parcelable {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerAccelEvent[] controllerAccelEventArr = this.accelEvents;
-        int i = this.accelEventCount;
-        this.accelEventCount = i + 1;
-        return controllerAccelEventArr[i];
+        int accelEventCount = this.accelEventCount;
+        this.accelEventCount = accelEventCount + 1;
+        return controllerAccelEventArr[accelEventCount];
     }
 
     public ControllerButtonEvent addButtonEvent() {
@@ -80,9 +80,9 @@ public class ControllerEventPacket implements Parcelable {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerButtonEvent[] controllerButtonEventArr = this.buttonEvents;
-        int i = this.buttonEventCount;
-        this.buttonEventCount = i + 1;
-        return controllerButtonEventArr[i];
+        int buttonEventCount = this.buttonEventCount;
+        this.buttonEventCount = buttonEventCount + 1;
+        return controllerButtonEventArr[buttonEventCount];
     }
 
     public ControllerGyroEvent addGyroEvent() {
@@ -90,9 +90,9 @@ public class ControllerEventPacket implements Parcelable {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerGyroEvent[] controllerGyroEventArr = this.gyroEvents;
-        int i = this.gyroEventCount;
-        this.gyroEventCount = i + 1;
-        return controllerGyroEventArr[i];
+        int gyroEventCount = this.gyroEventCount;
+        this.gyroEventCount = gyroEventCount + 1;
+        return controllerGyroEventArr[gyroEventCount];
     }
 
     public ControllerOrientationEvent addOrientationEvent() {
@@ -100,9 +100,9 @@ public class ControllerEventPacket implements Parcelable {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerOrientationEvent[] controllerOrientationEventArr = this.orientationEvents;
-        int i = this.orientationEventCount;
-        this.orientationEventCount = i + 1;
-        return controllerOrientationEventArr[i];
+        int orientationEventCount = this.orientationEventCount;
+        this.orientationEventCount = orientationEventCount + 1;
+        return controllerOrientationEventArr[orientationEventCount];
     }
 
     public ControllerTouchEvent addTouchEvent() {
@@ -110,24 +110,24 @@ public class ControllerEventPacket implements Parcelable {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerTouchEvent[] controllerTouchEventArr = this.touchEvents;
-        int i = this.touchEventCount;
-        this.touchEventCount = i + 1;
-        return controllerTouchEventArr[i];
+        int touchEventCount = this.touchEventCount;
+        this.touchEventCount = touchEventCount + 1;
+        return controllerTouchEventArr[touchEventCount];
     }
 
     protected int calculateParcelByteLength() {
         int i = 24;
-        for (int i2 = 0; i2 < this.accelEventCount; i2++) {
-            i += this.accelEvents[i2].getByteSize();
+        for (int j = 0; j < this.accelEventCount; j++) {
+            i += this.accelEvents[j].getByteSize();
         }
-        for (int i3 = 0; i3 < this.buttonEventCount; i3++) {
-            i += this.buttonEvents[i3].getByteSize();
+        for (int k = 0; k < this.buttonEventCount; k++) {
+            i += this.buttonEvents[k].getByteSize();
         }
-        for (int i4 = 0; i4 < this.gyroEventCount; i4++) {
-            i += this.gyroEvents[i4].getByteSize();
+        for (int m = 0; m < this.gyroEventCount; m++) {
+            i += this.gyroEvents[m].getByteSize();
         }
-        for (int i5 = 0; i5 < this.orientationEventCount; i5++) {
-            i += this.orientationEvents[i5].getByteSize();
+        for (int n = 0; n < this.orientationEventCount; n++) {
+            i += this.orientationEvents[n].getByteSize();
         }
         for (int i6 = 0; i6 < this.touchEventCount; i6++) {
             i += this.touchEvents[i6].getByteSize();
@@ -233,23 +233,23 @@ public class ControllerEventPacket implements Parcelable {
         }
         this.buttonEventCount = parcel.readInt();
         checkIsValidEventCount(this.buttonEventCount);
-        for (int i2 = 0; i2 < this.buttonEventCount; i2++) {
-            this.buttonEvents[i2].readFromParcel(parcel);
+        for (int j = 0; j < this.buttonEventCount; j++) {
+            this.buttonEvents[j].readFromParcel(parcel);
         }
         this.gyroEventCount = parcel.readInt();
         checkIsValidEventCount(this.gyroEventCount);
-        for (int i3 = 0; i3 < this.gyroEventCount; i3++) {
-            this.gyroEvents[i3].readFromParcel(parcel);
+        for (int k = 0; k < this.gyroEventCount; k++) {
+            this.gyroEvents[k].readFromParcel(parcel);
         }
         this.orientationEventCount = parcel.readInt();
         checkIsValidEventCount(this.orientationEventCount);
-        for (int i4 = 0; i4 < this.orientationEventCount; i4++) {
-            this.orientationEvents[i4].readFromParcel(parcel);
+        for (int m = 0; m < this.orientationEventCount; m++) {
+            this.orientationEvents[m].readFromParcel(parcel);
         }
         this.touchEventCount = parcel.readInt();
         checkIsValidEventCount(this.touchEventCount);
-        for (int i5 = 0; i5 < this.touchEventCount; i5++) {
-            this.touchEvents[i5].readFromParcel(parcel);
+        for (int n = 0; n < this.touchEventCount; n++) {
+            this.touchEvents[n].readFromParcel(parcel);
         }
     }
 
@@ -266,20 +266,20 @@ public class ControllerEventPacket implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(1);
         parcel.writeInt(this.accelEventCount);
-        for (int i2 = 0; i2 < this.accelEventCount; i2++) {
-            this.accelEvents[i2].writeToParcel(parcel, i);
+        for (int j = 0; j < this.accelEventCount; j++) {
+            this.accelEvents[j].writeToParcel(parcel, i);
         }
         parcel.writeInt(this.buttonEventCount);
-        for (int i3 = 0; i3 < this.buttonEventCount; i3++) {
-            this.buttonEvents[i3].writeToParcel(parcel, i);
+        for (int k = 0; k < this.buttonEventCount; k++) {
+            this.buttonEvents[k].writeToParcel(parcel, i);
         }
         parcel.writeInt(this.gyroEventCount);
-        for (int i4 = 0; i4 < this.gyroEventCount; i4++) {
-            this.gyroEvents[i4].writeToParcel(parcel, i);
+        for (int m = 0; m < this.gyroEventCount; m++) {
+            this.gyroEvents[m].writeToParcel(parcel, i);
         }
         parcel.writeInt(this.orientationEventCount);
-        for (int i5 = 0; i5 < this.orientationEventCount; i5++) {
-            this.orientationEvents[i5].writeToParcel(parcel, i);
+        for (int n = 0; n < this.orientationEventCount; n++) {
+            this.orientationEvents[n].writeToParcel(parcel, i);
         }
         parcel.writeInt(this.touchEventCount);
         for (int i6 = 0; i6 < this.touchEventCount; i6++) {

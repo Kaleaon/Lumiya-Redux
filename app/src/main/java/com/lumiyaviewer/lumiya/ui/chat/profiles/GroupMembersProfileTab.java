@@ -105,15 +105,15 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             notifyDataSetChanged();
         }
 
-        public void setSelectedPosition(int i) {
-            if (i != this.selectedPosition) {
-                int i2 = this.selectedPosition;
-                this.selectedPosition = i;
-                if (i2 != -1) {
-                    notifyItemChanged(i2);
+        public void setSelectedPosition(int selectedPosition2) {
+            if (selectedPosition2 != this.selectedPosition) {
+                int selectedPosition = this.selectedPosition;
+                this.selectedPosition = selectedPosition2;
+                if (selectedPosition != -1) {
+                    notifyItemChanged(selectedPosition);
                 }
-                if (i != -1) {
-                    notifyItemChanged(i);
+                if (selectedPosition2 != -1) {
+                    notifyItemChanged(selectedPosition2);
                 }
             }
         }
@@ -136,7 +136,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
         private final ChatterPicView userPicView;
         private final TextView userTitleText;
 
-        GroupMemberViewHolder(View view, UUID uuid, int i) {
+        GroupMemberViewHolder(View view, UUID uuid, int cardSelectedColor) {
             super(view);
             this.boundChatterID = null;
             this.chatterNameRetriever = null;
@@ -152,7 +152,7 @@ public class GroupMembersProfileTab extends ChatterReloadableFragment implements
             this.groupMemberRolesButton = (Button) view.findViewById(R.id.group_member_roles_button);
             this.groupMemberEjectButton = (Button) view.findViewById(R.id.group_member_eject_button);
             this.cardSelectedElevation = this.cardView.getCardElevation();
-            this.cardSelectedColor = i;
+            this.cardSelectedColor = cardSelectedColor;
             this.cardView.setOnClickListener(this);
             this.groupMemberChatButton.setOnClickListener(this);
             this.groupMemberProfileButton.setOnClickListener(this);

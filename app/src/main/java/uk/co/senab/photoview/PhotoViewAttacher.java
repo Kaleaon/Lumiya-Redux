@@ -99,11 +99,11 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
         private final float mZoomEnd;
         private final float mZoomStart;
 
-        public AnimatedZoomRunnable(float f, float f2, float f3, float f4) {
-            this.mFocalX = f3;
-            this.mFocalY = f4;
-            this.mZoomStart = f;
-            this.mZoomEnd = f2;
+        public AnimatedZoomRunnable(float mZoomStart, float mZoomEnd, float mFocalX, float mFocalY) {
+            this.mFocalX = mFocalX;
+            this.mFocalY = mFocalY;
+            this.mZoomStart = mZoomStart;
+            this.mZoomEnd = mZoomEnd;
         }
 
         private float interpolate() {
@@ -731,12 +731,12 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     @Override
-    public void setAllowParentInterceptOnEdge(boolean z) {
-        this.mAllowParentInterceptOnEdge = z;
+    public void setAllowParentInterceptOnEdge(boolean mAllowParentInterceptOnEdge) {
+        this.mAllowParentInterceptOnEdge = mAllowParentInterceptOnEdge;
     }
 
-    public void setBaseRotation(float f) {
-        this.mBaseRotation = f % 360.0f;
+    public void setBaseRotation(float baseRotation) {
+        this.mBaseRotation = baseRotation % 360.0f;
         update();
         setRotationBy(this.mBaseRotation);
         checkAndDisplayMatrix();
@@ -758,21 +758,21 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     @Override
-    public void setMaximumScale(float f) {
-        checkZoomLevels(this.mMinScale, this.mMidScale, f);
-        this.mMaxScale = f;
+    public void setMaximumScale(float mMaxScale) {
+        checkZoomLevels(this.mMinScale, this.mMidScale, mMaxScale);
+        this.mMaxScale = mMaxScale;
     }
 
     @Override
-    public void setMediumScale(float f) {
-        checkZoomLevels(this.mMinScale, f, this.mMaxScale);
-        this.mMidScale = f;
+    public void setMediumScale(float mMidScale) {
+        checkZoomLevels(this.mMinScale, mMidScale, this.mMaxScale);
+        this.mMidScale = mMidScale;
     }
 
     @Override
-    public void setMinimumScale(float f) {
-        checkZoomLevels(f, this.mMidScale, this.mMaxScale);
-        this.mMinScale = f;
+    public void setMinimumScale(float mMinScale) {
+        checkZoomLevels(mMinScale, this.mMidScale, this.mMaxScale);
+        this.mMinScale = mMinScale;
     }
 
     @Override
@@ -815,20 +815,20 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     @Override
-    public void setRotationBy(float f) {
-        this.mSuppMatrix.postRotate(f % 360.0f);
+    public void setRotationBy(float rotationBy) {
+        this.mSuppMatrix.postRotate(rotationBy % 360.0f);
         checkAndDisplayMatrix();
     }
 
     @Override
-    public void setRotationTo(float f) {
-        this.mSuppMatrix.setRotate(f % 360.0f);
+    public void setRotationTo(float rotationTo) {
+        this.mSuppMatrix.setRotate(rotationTo % 360.0f);
         checkAndDisplayMatrix();
     }
 
     @Override
-    public void setScale(float f) {
-        setScale(f, false);
+    public void setScale(float scale) {
+        setScale(scale, false);
     }
 
     @Override
@@ -858,11 +858,11 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     @Override
-    public void setScaleLevels(float f, float f2, float f3) {
-        checkZoomLevels(f, f2, f3);
-        this.mMinScale = f;
-        this.mMidScale = f2;
-        this.mMaxScale = f3;
+    public void setScaleLevels(float mMinScale, float mMidScale, float mMaxScale) {
+        checkZoomLevels(mMinScale, mMidScale, mMaxScale);
+        this.mMinScale = mMinScale;
+        this.mMidScale = mMidScale;
+        this.mMaxScale = mMaxScale;
     }
 
     @Override
@@ -878,16 +878,16 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     @Override
-    public void setZoomTransitionDuration(int i) {
-        if (i < 0) {
-            i = 200;
+    public void setZoomTransitionDuration(int zoomTransitionDuration) {
+        if (zoomTransitionDuration < 0) {
+            zoomTransitionDuration = 200;
         }
-        this.ZOOM_DURATION = i;
+        this.ZOOM_DURATION = zoomTransitionDuration;
     }
 
     @Override
-    public void setZoomable(boolean z) {
-        this.mZoomEnabled = z;
+    public void setZoomable(boolean mZoomEnabled) {
+        this.mZoomEnabled = mZoomEnabled;
         update();
     }
 

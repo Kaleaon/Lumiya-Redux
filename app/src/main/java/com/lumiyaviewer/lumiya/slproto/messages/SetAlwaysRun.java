@@ -32,8 +32,8 @@ public class SetAlwaysRun extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetAlwaysRun(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetAlwaysRun(this);
     }
 
     @Override

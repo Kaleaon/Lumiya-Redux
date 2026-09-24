@@ -26,9 +26,9 @@ public class SLAuth {
         public final String name;
         public final String value;
 
-        private LoginRequestField(String str, String str2) {
-            this.name = str;
-            this.value = str2;
+        private LoginRequestField(String name, String value) {
+            this.name = name;
+            this.value = value;
         }
 
         /* synthetic */ LoginRequestField(String str, String str2, LoginRequestField loginRequestField) {

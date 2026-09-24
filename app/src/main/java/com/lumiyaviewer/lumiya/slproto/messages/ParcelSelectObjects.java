@@ -48,8 +48,8 @@ public class ParcelSelectObjects extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelSelectObjects(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelSelectObjects(this);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ParcelSelectObjects extends SLMessage {
         this.ParcelData_Field.LocalID = unpackInt(byteBuffer);
         this.ParcelData_Field.ReturnType = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ReturnIDs returnIDs = new ReturnIDs();
             returnIDs.ReturnID = unpackUUID(byteBuffer);
             this.ReturnIDs_Fields.add(returnIDs);

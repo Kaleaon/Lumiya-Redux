@@ -31,8 +31,8 @@ public class ForceScriptControlRelease extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleForceScriptControlRelease(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleForceScriptControlRelease(this);
     }
 
     @Override

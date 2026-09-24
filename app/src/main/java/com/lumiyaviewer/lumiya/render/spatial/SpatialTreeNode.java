@@ -30,7 +30,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         this.splitAxis = longestAxis();
     }
 
-    public SpatialTreeNode(SpatialTreeNode spatialTreeNode, int i) {
+    public SpatialTreeNode(SpatialTreeNode spatialTreeNode, int indexInParent) {
         this.children = null;
         this.singleChild = null;
         this.depthBin = -1;
@@ -39,7 +39,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         this.spatialTree = spatialTreeNode.spatialTree;
         this.position = new float[12];
         this.parent = spatialTreeNode;
-        this.indexInParent = i;
+        this.indexInParent = indexInParent;
         boolean z = true;
         int i2 = 0;
         while (i2 < 3) {
@@ -47,7 +47,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
             float f2 = spatialTreeNode.position[i2 + 9] - f;
             if (i2 == spatialTreeNode.splitAxis) {
                 f2 /= MIN_SIZE;
-                f += (f2 / MIN_SIZE) * i;
+                f += (f2 / MIN_SIZE) * indexInParent;
             }
             this.position[i2 + 6] = f;
             this.position[i2 + 9] = f + f2;
@@ -60,16 +60,16 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         this.splitAxis = longestAxis();
     }
 
-    private void enlargeForBoundingBox(boolean z, float[] fArr) {
+    private void enlargeForBoundingBox(boolean z, float[] floats) {
         if (this.parent != null) {
             boolean z2 = false;
             for (int i = 0; i < 3; i++) {
-                if (z || fArr[i] < this.position[i]) {
-                    this.position[i] = fArr[i];
+                if (z || floats[i] < this.position[i]) {
+                    this.position[i] = floats[i];
                     z2 = true;
                 }
-                if (z || fArr[i + 3] > this.position[i + 3]) {
-                    this.position[i + 3] = fArr[i + 3];
+                if (z || floats[i + 3] > this.position[i + 3]) {
+                    this.position[i + 3] = floats[i + 3];
                     z2 = true;
                 }
             }
@@ -144,13 +144,13 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         boolean z;
         boolean z2 = true;
         if (this.parent != null) {
-            float[] fArr = new float[6];
+            float[] floats = new float[6];
             DrawListEntry first = getFirst();
             boolean z3 = false;
             while (first != null) {
                 for (int i = 0; i < 3; i++) {
-                    fArr[i] = z3 ? Math.min(fArr[i], first.boundingBox[i]) : first.boundingBox[i];
-                    fArr[i + 3] = z3 ? Math.max(fArr[i + 3], first.boundingBox[i + 3]) : first.boundingBox[i + 3];
+                    floats[i] = z3 ? Math.min(floats[i], first.boundingBox[i]) : first.boundingBox[i];
+                    floats[i + 3] = z3 ? Math.max(floats[i + 3], first.boundingBox[i + 3]) : first.boundingBox[i + 3];
                 }
                 first = first.getNext();
                 z3 = true;
@@ -162,9 +162,9 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
                 while (i2 < length) {
                     SpatialTreeNode spatialTreeNode = spatialTreeNodeArr[i2];
                     if (spatialTreeNode != null) {
-                        for (int i3 = 0; i3 < 3; i3++) {
-                            fArr[i3] = z3 ? Math.min(fArr[i3], spatialTreeNode.position[i3]) : spatialTreeNode.position[i3];
-                            fArr[i3 + 3] = z3 ? Math.max(fArr[i3 + 3], spatialTreeNode.position[i3 + 3]) : spatialTreeNode.position[i3 + 3];
+                        for (int j = 0; j < 3; j++) {
+                            floats[j] = z3 ? Math.min(floats[j], spatialTreeNode.position[j]) : spatialTreeNode.position[j];
+                            floats[j + 3] = z3 ? Math.max(floats[j + 3], spatialTreeNode.position[j + 3]) : spatialTreeNode.position[j + 3];
                         }
                         z = true;
                     } else {
@@ -180,14 +180,14 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
                     if (i4 >= 6) {
                         z2 = false;
                         break;
-                    } else if (this.position[i4] != fArr[i4]) {
+                    } else if (this.position[i4] != floats[i4]) {
                         break;
                     } else {
                         i4++;
                     }
                 }
                 if (z2) {
-                    System.arraycopy(fArr, 0, this.position, 0, 6);
+                    System.arraycopy(floats, 0, this.position, 0, 6);
                     this.parent.shrinkBoundingBox();
                     this.spatialTree.setTreeWalkNeeded();
                 }
@@ -219,7 +219,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         }
     }
 
-    protected SpatialTreeNode findNode(float[] fArr) {
+    protected SpatialTreeNode findNode(float[] floats) {
         boolean z;
         float f;
         int i;
@@ -232,11 +232,11 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         while (i2 < 3) {
             float f3 = (this.position[(this.splitAxis + 6) + 3] - this.position[this.splitAxis + 6]) / MIN_SIZE;
             float f4 = this.position[this.splitAxis + 6] + ((f3 / MIN_SIZE) * i2);
-            if (fArr[this.splitAxis] < f4 || fArr[this.splitAxis + 3] > f4 + f3) {
+            if (floats[this.splitAxis] < f4 || floats[this.splitAxis + 3] > f4 + f3) {
                 f = f2;
                 i = i3;
             } else {
-                f = Math.abs(((f3 / MIN_SIZE) + f4) - ((fArr[this.splitAxis] + fArr[this.splitAxis + 3]) / MIN_SIZE));
+                f = Math.abs(((f3 / MIN_SIZE) + f4) - ((floats[this.splitAxis] + floats[this.splitAxis + 3]) / MIN_SIZE));
                 if (f < f2) {
                     i = i2;
                 } else {
@@ -265,7 +265,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
                 this.singleChild = null;
             }
         }
-        return this.children[i3].findNode(fArr);
+        return this.children[i3].findNode(floats);
     }
 
     @Override
@@ -289,13 +289,13 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         this.spatialTree.spatialObjectIndex.requestEntryRemoval(drawListEntry);
     }
 
-    public int walkTree(FrustrumPlanes frustrumPlanes, int i, float[] fArr) {
+    public int walkTree(FrustrumPlanes frustrumPlanes, int i, float[] floats) {
         int i2;
         if (this.singleChild != null && getFirst() == null) {
-            return this.singleChild.walkTree(frustrumPlanes, i, fArr);
+            return this.singleChild.walkTree(frustrumPlanes, i, floats);
         }
         if (i != -1) {
-            i = frustrumPlanes.testBoundingBox(this.position, fArr);
+            i = frustrumPlanes.testBoundingBox(this.position, floats);
         }
         if (i == -1) {
             this.spatialTree.removeEntry(this);
@@ -303,7 +303,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         } else {
             i2 = 1;
             if (getFirst() != null) {
-                this.spatialTree.setEntryDepth(this, fArr[0]);
+                this.spatialTree.setEntryDepth(this, floats[0]);
             } else {
                 this.spatialTree.removeEntry(this);
             }
@@ -311,7 +311,7 @@ public class SpatialTreeNode extends InlineList<DrawListEntry> {
         if (this.children != null) {
             for (SpatialTreeNode spatialTreeNode : this.children) {
                 if (spatialTreeNode != null) {
-                    i2 += spatialTreeNode.walkTree(frustrumPlanes, i, fArr);
+                    i2 += spatialTreeNode.walkTree(frustrumPlanes, i, floats);
                 }
             }
         }

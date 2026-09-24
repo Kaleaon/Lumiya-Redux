@@ -155,10 +155,10 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             }
             i = -1;
             if (i != this.selectedPosition) {
-                int i3 = this.selectedPosition;
+                int selectedPosition = this.selectedPosition;
                 this.selectedPosition = i;
                 notifyItemChanged(this.selectedPosition);
-                notifyItemChanged(i3);
+                notifyItemChanged(selectedPosition);
             }
         }
     }

@@ -9,9 +9,9 @@ final class AutoValue_UnreadNotificationInfo_ObjectPopupNotification extends Unr
     private final Optional<UnreadNotificationInfo.ObjectPopupMessage> lastObjectPopup;
     private final int objectPopupsCount;
 
-    AutoValue_UnreadNotificationInfo_ObjectPopupNotification(int i, int i2, Optional<UnreadNotificationInfo.ObjectPopupMessage> optional) {
-        this.freshObjectPopupsCount = i;
-        this.objectPopupsCount = i2;
+    AutoValue_UnreadNotificationInfo_ObjectPopupNotification(int freshObjectPopupsCount, int objectPopupsCount, Optional<UnreadNotificationInfo.ObjectPopupMessage> optional) {
+        this.freshObjectPopupsCount = freshObjectPopupsCount;
+        this.objectPopupsCount = objectPopupsCount;
         if (optional == null) {
             throw new NullPointerException("Null lastObjectPopup");
         }

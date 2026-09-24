@@ -4,15 +4,15 @@ public interface SLMessageEventListener {
 
     public static abstract class SLMessageBaseEventListener implements SLMessageEventListener {
         @Override
-        public void onMessageAcknowledged(SLMessage sLMessage) {
+        public void onMessageAcknowledged(SLMessage message) {
         }
 
         @Override
-        public void onMessageTimeout(SLMessage sLMessage) {
+        public void onMessageTimeout(SLMessage message) {
         }
     }
 
-    void onMessageAcknowledged(SLMessage sLMessage);
+    void onMessageAcknowledged(SLMessage message);
 
-    void onMessageTimeout(SLMessage sLMessage);
+    void onMessageTimeout(SLMessage message);
 }

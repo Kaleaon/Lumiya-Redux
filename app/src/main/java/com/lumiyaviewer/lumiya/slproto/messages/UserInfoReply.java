@@ -40,8 +40,8 @@ public class UserInfoReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserInfoReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserInfoReply(this);
     }
 
     @Override

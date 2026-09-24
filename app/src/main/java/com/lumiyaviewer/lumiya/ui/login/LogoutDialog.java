@@ -73,7 +73,7 @@ public class LogoutDialog extends ProgressDialog {
     }
 
     @EventHandler
-    public void handleDisconnectEvent(SLDisconnectEvent sLDisconnectEvent) {
+    public void handleDisconnectEvent(SLDisconnectEvent disconnectEvent) {
         Debug.Printf("LogoutDialog: disconnect event", new Object[0]);
         dismiss();
     }

@@ -30,13 +30,13 @@ public class SLCapEventQueue implements Runnable {
         public LLSDNode eventBody;
         public CapsEventType eventType;
 
-        public CapsEvent(String str, LLSDNode lLSDNode) {
+        public CapsEvent(String str, LLSDNode lsdNode) {
             try {
                 this.eventType = CapsEventType.valueOf(str);
             } catch (IllegalArgumentException e) {
                 this.eventType = CapsEventType.UnknownCapsEvent;
             }
-            this.eventBody = lLSDNode;
+            this.eventBody = lsdNode;
         }
     }
 
@@ -62,10 +62,10 @@ public class SLCapEventQueue implements Runnable {
         void OnCapsEvent(CapsEvent capsEvent);
     }
 
-    public SLCapEventQueue(String str, ICapsEventHandler iCapsEventHandler) {
+    public SLCapEventQueue(String capURL, ICapsEventHandler capsEventHandler) {
         this.eventHandler = null;
-        this.capURL = str;
-        this.eventHandler = iCapsEventHandler;
+        this.capURL = capURL;
+        this.eventHandler = capsEventHandler;
         this.workingThread.start();
     }
 

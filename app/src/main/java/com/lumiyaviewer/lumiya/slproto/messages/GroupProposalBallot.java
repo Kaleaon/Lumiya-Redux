@@ -41,8 +41,8 @@ public class GroupProposalBallot extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupProposalBallot(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupProposalBallot(this);
     }
 
     @Override

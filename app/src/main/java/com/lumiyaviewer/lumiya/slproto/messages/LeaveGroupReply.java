@@ -40,8 +40,8 @@ public class LeaveGroupReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLeaveGroupReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLeaveGroupReply(this);
     }
 
     @Override

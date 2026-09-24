@@ -33,7 +33,7 @@ abstract class ChatterListAdapter extends BaseAdapter implements ListAdapter {
         return this.viewBuilder.getView(this.inflater, view, viewGroup, this.userDistanceInline);
     }
 
-    void setUserDistanceInline(boolean z) {
-        this.userDistanceInline = z;
+    void setUserDistanceInline(boolean userDistanceInline) {
+        this.userDistanceInline = userDistanceInline;
     }
 }

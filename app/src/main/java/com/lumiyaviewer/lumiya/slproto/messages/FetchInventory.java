@@ -38,8 +38,8 @@ public class FetchInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFetchInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFetchInventory(this);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class FetchInventory extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.OwnerID = unpackUUID(byteBuffer);
             inventoryData.ItemID = unpackUUID(byteBuffer);

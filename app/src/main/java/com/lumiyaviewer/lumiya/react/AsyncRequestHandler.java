@@ -17,13 +17,13 @@ public class AsyncRequestHandler<K> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553, reason: not valid java name */
-    /* synthetic */ void m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(K obj) {
-        this.baseHandler.onRequest(obj);
+    /* synthetic */ void m27lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_553(K k) {
+        this.baseHandler.onRequest(k);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690, reason: not valid java name */
-    /* synthetic */ void m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(K obj) {
-        this.baseHandler.onRequestCancelled(obj);
+    /* synthetic */ void m28lambda$com_lumiyaviewer_lumiya_react_AsyncRequestHandler_690(K k) {
+        this.baseHandler.onRequestCancelled(k);
     }
 
     @Override

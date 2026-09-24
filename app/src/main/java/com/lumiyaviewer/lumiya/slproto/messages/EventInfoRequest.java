@@ -40,8 +40,8 @@ public class EventInfoRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventInfoRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventInfoRequest(this);
     }
 
     @Override

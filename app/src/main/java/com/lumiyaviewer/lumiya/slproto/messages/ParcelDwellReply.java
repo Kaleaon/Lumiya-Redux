@@ -41,8 +41,8 @@ public class ParcelDwellReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDwellReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDwellReply(this);
     }
 
     @Override

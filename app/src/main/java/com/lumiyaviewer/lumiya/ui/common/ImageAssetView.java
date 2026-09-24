@@ -121,9 +121,9 @@ public class ImageAssetView extends View {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.chatBubbleText, typedValue, true);
-        int i = typedValue.data;
+        int data = typedValue.data;
         this.textPaint.setStyle(Paint.Style.STROKE);
-        this.textPaint.setColor(i);
+        this.textPaint.setColor(data);
         this.textPaint.setTextAlign(Paint.Align.CENTER);
         this.textPaint.setAntiAlias(true);
         this.textPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14.0f, displayMetrics));
@@ -176,8 +176,8 @@ public class ImageAssetView extends View {
         canvas.drawBitmap(this.imageBitmap, this.bitmapSrcRect, this.bitmapDestRect, this.bitmapPaint);
         Rect rect = this.bitmapDestRect;
         rect.left--;
-        Rect rect2 = this.bitmapDestRect;
-        rect2.top--;
+        Rect bitmapDestRect = this.bitmapDestRect;
+        bitmapDestRect.top--;
         canvas.drawRect(this.bitmapDestRect, this.bitmapPaint);
     }
 
@@ -198,8 +198,8 @@ public class ImageAssetView extends View {
         setMeasuredDimension(size, min);
     }
 
-    public void setAlignTop(boolean z) {
-        this.alignTop = z;
+    public void setAlignTop(boolean alignTop) {
+        this.alignTop = alignTop;
         invalidate();
     }
 
@@ -231,8 +231,8 @@ public class ImageAssetView extends View {
         invalidate();
     }
 
-    public void setVerticalFit(boolean z) {
-        this.verticalFit = z;
+    public void setVerticalFit(boolean verticalFit) {
+        this.verticalFit = verticalFit;
         requestLayout();
     }
 }

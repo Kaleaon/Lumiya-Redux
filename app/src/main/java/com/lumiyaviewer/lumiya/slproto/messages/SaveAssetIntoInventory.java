@@ -42,8 +42,8 @@ public class SaveAssetIntoInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSaveAssetIntoInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSaveAssetIntoInventory(this);
     }
 
     @Override

@@ -10,10 +10,10 @@ final class AutoValue_CurrentLocationInfo extends CurrentLocationInfo {
     private final ParcelData parcelData;
     private final VoiceChannelInfo parcelVoiceChannel;
 
-    AutoValue_CurrentLocationInfo(@Nullable ParcelData parcelData, int i, int i2, @Nullable VoiceChannelInfo voiceChannelInfo) {
+    AutoValue_CurrentLocationInfo(@Nullable ParcelData parcelData, int nearbyUsers, int inChatRangeUsers, @Nullable VoiceChannelInfo voiceChannelInfo) {
         this.parcelData = parcelData;
-        this.nearbyUsers = i;
-        this.inChatRangeUsers = i2;
+        this.nearbyUsers = nearbyUsers;
+        this.inChatRangeUsers = inChatRangeUsers;
         this.parcelVoiceChannel = voiceChannelInfo;
     }
 

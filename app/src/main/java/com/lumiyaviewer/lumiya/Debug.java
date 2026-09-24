@@ -15,10 +15,10 @@ public class Debug {
     public static void DumpBuffer(String str, ByteBuffer byteBuffer) {
     }
 
-    public static void DumpBuffer(String str, byte[] bArr) {
+    public static void DumpBuffer(String str, byte[] bytes) {
     }
 
-    public static void DumpBuffer(String str, byte[] bArr, int i) {
+    public static void DumpBuffer(String str, byte[] bytes, int i) {
     }
 
     public static void Log(String str) {

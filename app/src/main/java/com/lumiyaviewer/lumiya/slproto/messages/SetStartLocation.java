@@ -36,8 +36,8 @@ public class SetStartLocation extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetStartLocation(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetStartLocation(this);
     }
 
     @Override

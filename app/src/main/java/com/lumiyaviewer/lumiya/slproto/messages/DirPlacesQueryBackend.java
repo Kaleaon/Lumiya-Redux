@@ -44,8 +44,8 @@ public class DirPlacesQueryBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPlacesQueryBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPlacesQueryBackend(this);
     }
 
     @Override

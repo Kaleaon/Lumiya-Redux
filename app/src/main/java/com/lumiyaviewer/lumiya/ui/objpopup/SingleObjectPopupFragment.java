@@ -76,29 +76,29 @@ public class SingleObjectPopupFragment extends Fragment {
     @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
-        boolean z;
-        SLChatEvent sLChatEvent;
+        boolean mustAnimatePopup;
+        SLChatEvent displayedObjectPopup2;
         View inflate = layoutInflater.inflate(R.layout.object_popups_single_fragment_layout, viewGroup, false);
         UserManager userManager = getUserManager();
         if (userManager != null) {
             SLChatEvent displayedObjectPopup = userManager.getObjectPopupsManager().getDisplayedObjectPopup();
             if (displayedObjectPopup != null) {
-                sLChatEvent = displayedObjectPopup;
-                z = userManager.getObjectPopupsManager().mustAnimatePopup(displayedObjectPopup);
+                displayedObjectPopup2 = displayedObjectPopup;
+                mustAnimatePopup = userManager.getObjectPopupsManager().mustAnimatePopup(displayedObjectPopup);
             } else {
-                sLChatEvent = displayedObjectPopup;
-                z = false;
+                displayedObjectPopup2 = displayedObjectPopup;
+                mustAnimatePopup = false;
             }
         } else {
-            z = false;
-            sLChatEvent = null;
+            mustAnimatePopup = false;
+            displayedObjectPopup2 = null;
         }
-        if (sLChatEvent == null) {
+        if (displayedObjectPopup2 == null) {
             hideAndDismiss();
         } else {
             CoordinatorLayout coordinatorLayout = (CoordinatorLayout) inflate.findViewById(R.id.single_object_popup_container);
-            ChatEventViewHolder createViewHolder = SLChatEvent.createViewHolder(LayoutInflater.from(getContext()), sLChatEvent.getViewType().ordinal(), coordinatorLayout, null);
-            sLChatEvent.bindViewHolder(createViewHolder, userManager, null);
+            ChatEventViewHolder createViewHolder = SLChatEvent.createViewHolder(LayoutInflater.from(getContext()), displayedObjectPopup2.getViewType().ordinal(), coordinatorLayout, null);
+            displayedObjectPopup2.bindViewHolder(createViewHolder, userManager, null);
             coordinatorLayout.addView(createViewHolder.itemView);
             ViewGroup.LayoutParams layoutParams = createViewHolder.itemView.getLayoutParams();
             if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
@@ -107,7 +107,7 @@ public class SingleObjectPopupFragment extends Fragment {
                 swipeDismissAdvancedBehavior.setListener(this.dismissListener);
                 ((CoordinatorLayout.LayoutParams) layoutParams).setBehavior(swipeDismissAdvancedBehavior);
             }
-            if (z) {
+            if (mustAnimatePopup) {
                 createViewHolder.itemView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_from_above));
             }
         }

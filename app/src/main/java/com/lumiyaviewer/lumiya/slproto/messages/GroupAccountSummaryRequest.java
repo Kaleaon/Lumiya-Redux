@@ -43,8 +43,8 @@ public class GroupAccountSummaryRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupAccountSummaryRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupAccountSummaryRequest(this);
     }
 
     @Override

@@ -59,8 +59,8 @@ public class GroupAccountSummaryReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupAccountSummaryReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupAccountSummaryReply(this);
     }
 
     @Override

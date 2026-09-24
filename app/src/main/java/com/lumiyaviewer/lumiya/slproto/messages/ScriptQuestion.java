@@ -36,8 +36,8 @@ public class ScriptQuestion extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptQuestion(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptQuestion(this);
     }
 
     @Override

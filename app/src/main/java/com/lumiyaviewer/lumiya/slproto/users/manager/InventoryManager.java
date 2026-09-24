@@ -91,11 +91,11 @@ public class InventoryManager {
         }
 
         @Override
-        public void onData(SLInventoryEntry sLInventoryEntry) {
-            if (sLInventoryEntry != null) {
-                Debug.Printf("Inventory: folder subscription got name: %s with folderId = '%s'", sLInventoryEntry.name, sLInventoryEntry.uuid);
+        public void onData(SLInventoryEntry inventoryEntry) {
+            if (inventoryEntry != null) {
+                Debug.Printf("Inventory: folder subscription got name: %s with folderId = '%s'", inventoryEntry.name, inventoryEntry.uuid);
             }
-            InventoryManager.this.entryListPool.onResultData(this.query, this.query.query(sLInventoryEntry, InventoryManager.this.inventoryDB));
+            InventoryManager.this.entryListPool.onResultData(this.query, this.query.query(inventoryEntry, InventoryManager.this.inventoryDB));
         }
 
         @Override
@@ -117,9 +117,9 @@ public class InventoryManager {
         public final SLInventoryEntry inventoryEntry;
         public final boolean isCut;
 
-        public InventoryClipboardEntry(boolean z, @Nonnull SLInventoryEntry sLInventoryEntry) {
-            this.isCut = z;
-            this.inventoryEntry = sLInventoryEntry;
+        public InventoryClipboardEntry(boolean isCut, @Nonnull SLInventoryEntry inventoryEntry) {
+            this.isCut = isCut;
+            this.inventoryEntry = inventoryEntry;
         }
     }
 

@@ -56,9 +56,9 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
         switch (view.getId()) {
             case R.id.okButton:
                 String charSequence = ((TextView) findViewById(R.id.gridNameText)).getText().toString();
-                String charSequence2 = ((TextView) findViewById(R.id.gridLoginURIText)).getText().toString();
+                String text = ((TextView) findViewById(R.id.gridLoginURIText)).getText().toString();
                 if (!charSequence.equals("")) {
-                    if (!charSequence2.equals("")) {
+                    if (!text.equals("")) {
                         GridList.GridInfo gridByName = this.gridList.getGridByName(charSequence);
                         if (gridByName != null && gridByName != this.editGrid) {
                             Toast.makeText(getContext(), getContext().getString(R.string.grid_exists_error), Toast.LENGTH_SHORT).show();
@@ -68,11 +68,11 @@ public class GridEditDialog extends AppCompatDialog implements View.OnClickListe
                             if (this.onGridEditResultListener != null) {
                                 GridList.GridInfo gridInfo = this.editGrid;
                                 if (gridInfo == null) {
-                                    gridInfo = new GridList.GridInfo(charSequence, charSequence2, false, UUID.randomUUID());
+                                    gridInfo = new GridList.GridInfo(charSequence, text, false, UUID.randomUUID());
                                     z = true;
                                 } else {
                                     gridInfo.setGridName(charSequence);
-                                    gridInfo.setLoginURL(charSequence2);
+                                    gridInfo.setLoginURL(text);
                                 }
                                 this.onGridEditResultListener.onGridAdded(gridInfo, z);
                                 break;

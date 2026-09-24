@@ -22,9 +22,9 @@ public class SLAvatarParamColor {
         }
     }
 
-    SLAvatarParamColor(@Nonnull ColorOperation colorOperation, @Nonnull int[] iArr) {
+    SLAvatarParamColor(@Nonnull ColorOperation colorOperation, @Nonnull int[] ints) {
         this.colorOperation = colorOperation;
-        this.colorValues = iArr;
+        this.colorValues = ints;
     }
 
     public static int colorAdd(int i, int i2) {
@@ -92,9 +92,9 @@ public class SLAvatarParamColor {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        SLAvatarParamColor sLAvatarParamColor = (SLAvatarParamColor) obj;
-        if (this.colorOperation == sLAvatarParamColor.colorOperation) {
-            return Arrays.equals(this.colorValues, sLAvatarParamColor.colorValues);
+        SLAvatarParamColor avatarParamColor = (SLAvatarParamColor) obj;
+        if (this.colorOperation == avatarParamColor.colorOperation) {
+            return Arrays.equals(this.colorValues, avatarParamColor.colorValues);
         }
         return false;
     }

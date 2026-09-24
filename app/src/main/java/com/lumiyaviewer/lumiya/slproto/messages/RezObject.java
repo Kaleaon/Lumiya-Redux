@@ -78,8 +78,8 @@ public class RezObject extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezObject(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezObject(this);
     }
 
     @Override

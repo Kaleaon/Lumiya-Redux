@@ -38,14 +38,14 @@ public class UUIDNameReply extends SLMessage {
             if (!it.hasNext()) {
                 return i2;
             }
-            UUIDNameBlock uUIDNameBlock = (UUIDNameBlock) it.next();
-            i = uUIDNameBlock.LastName.length + uUIDNameBlock.FirstName.length + 17 + 1 + i2;
+            UUIDNameBlock uuidNameBlock = (UUIDNameBlock) it.next();
+            i = uuidNameBlock.LastName.length + uuidNameBlock.FirstName.length + 17 + 1 + i2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUUIDNameReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUUIDNameReply(this);
     }
 
     @Override
@@ -55,22 +55,22 @@ public class UUIDNameReply extends SLMessage {
         byteBuffer.put((byte) 0x00);
         byteBuffer.put((byte) 0xEC);
         byteBuffer.put((byte) this.UUIDNameBlock_Fields.size());
-        for (UUIDNameBlock uUIDNameBlock : this.UUIDNameBlock_Fields) {
-            packUUID(byteBuffer, uUIDNameBlock.ID);
-            packVariable(byteBuffer, uUIDNameBlock.FirstName, 1);
-            packVariable(byteBuffer, uUIDNameBlock.LastName, 1);
+        for (UUIDNameBlock uuidNameBlock : this.UUIDNameBlock_Fields) {
+            packUUID(byteBuffer, uuidNameBlock.ID);
+            packVariable(byteBuffer, uuidNameBlock.FirstName, 1);
+            packVariable(byteBuffer, uuidNameBlock.LastName, 1);
         }
     }
 
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
-            UUIDNameBlock uUIDNameBlock = new UUIDNameBlock();
-            uUIDNameBlock.ID = unpackUUID(byteBuffer);
-            uUIDNameBlock.FirstName = unpackVariable(byteBuffer, 1);
-            uUIDNameBlock.LastName = unpackVariable(byteBuffer, 1);
-            this.UUIDNameBlock_Fields.add(uUIDNameBlock);
+        for (int j = 0; j < i; j++) {
+            UUIDNameBlock uuidNameBlock = new UUIDNameBlock();
+            uuidNameBlock.ID = unpackUUID(byteBuffer);
+            uuidNameBlock.FirstName = unpackVariable(byteBuffer, 1);
+            uuidNameBlock.LastName = unpackVariable(byteBuffer, 1);
+            this.UUIDNameBlock_Fields.add(uuidNameBlock);
         }
     }
 }

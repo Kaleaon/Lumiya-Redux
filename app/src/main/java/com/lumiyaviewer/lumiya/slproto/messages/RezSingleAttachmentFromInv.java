@@ -45,8 +45,8 @@ public class RezSingleAttachmentFromInv extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezSingleAttachmentFromInv(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezSingleAttachmentFromInv(this);
     }
 
     @Override

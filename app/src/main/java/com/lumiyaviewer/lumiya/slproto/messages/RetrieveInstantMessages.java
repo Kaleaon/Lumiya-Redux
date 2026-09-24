@@ -32,8 +32,8 @@ public class RetrieveInstantMessages extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRetrieveInstantMessages(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRetrieveInstantMessages(this);
     }
 
     @Override

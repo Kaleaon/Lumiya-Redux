@@ -140,9 +140,9 @@ public class MeshCache extends ResourceFileCache<UUID, MeshData> {
         return new File(getBaseDir(), String.format("%02x/%s.mesh", Integer.valueOf(((hashCode >> 24) ^ (((hashCode >> 8) ^ hashCode) ^ (hashCode >> 16))) & 255), uuid.toString()));
     }
 
-    public void setCapURL(String str) {
+    public void setCapURL(String capURL) {
         synchronized (this.capURLlock) {
-            this.capURL = str;
+            this.capURL = capURL;
             this.capURLlock.notifyAll();
         }
     }

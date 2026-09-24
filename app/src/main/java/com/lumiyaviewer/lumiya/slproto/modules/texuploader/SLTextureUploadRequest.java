@@ -24,12 +24,12 @@ public class SLTextureUploadRequest implements Runnable {
     private int textureLayer;
 
     public interface TextureUploadCompleteListener {
-        void OnTextureUploadComplete(SLTextureUploadRequest sLTextureUploadRequest);
+        void OnTextureUploadComplete(SLTextureUploadRequest textureUploadRequest);
     }
 
-    public SLTextureUploadRequest(File file, int i) {
+    public SLTextureUploadRequest(File file, int textureLayer) {
         this.sourceFile = file;
-        this.textureLayer = i;
+        this.textureLayer = textureLayer;
     }
 
     public UUID getTextureID() {
@@ -75,8 +75,8 @@ public class SLTextureUploadRequest implements Runnable {
         }
     }
 
-    public void setCapURL(String str) {
-        this.capURL = str;
+    public void setCapURL(String capURL) {
+        this.capURL = capURL;
     }
 
     public void setOnUploadComplete(TextureUploadCompleteListener textureUploadCompleteListener) {

@@ -66,8 +66,8 @@ public class DirEventsReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirEventsReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirEventsReply(this);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DirEventsReply extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.QueryData_Field.QueryID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             QueryReplies queryReplies = new QueryReplies();
             queryReplies.OwnerID = unpackUUID(byteBuffer);
             queryReplies.Name = unpackVariable(byteBuffer, 1);
@@ -110,7 +110,7 @@ public class DirEventsReply extends SLMessage {
             this.QueryReplies_Fields.add(queryReplies);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             StatusData statusData = new StatusData();
             statusData.Status = unpackInt(byteBuffer);
             this.StatusData_Fields.add(statusData);

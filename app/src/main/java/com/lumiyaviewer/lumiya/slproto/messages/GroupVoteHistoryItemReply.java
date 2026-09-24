@@ -65,17 +65,17 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         int length = this.HistoryItemData_Field.TerseDateID.length + 17 + 1 + this.HistoryItemData_Field.StartDateTime.length + 1 + this.HistoryItemData_Field.EndDateTime.length + 16 + 1 + this.HistoryItemData_Field.VoteType.length + 1 + this.HistoryItemData_Field.VoteResult.length + 4 + 4 + 2 + this.HistoryItemData_Field.ProposalText.length + 56 + 1;
         Iterator<?> it = this.VoteItem_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
-            length = ((VoteItem) it.next()).VoteCast.length + 17 + 4 + i;
+            length = ((VoteItem) it.next()).VoteCast.length + 17 + 4 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupVoteHistoryItemReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupVoteHistoryItemReply(this);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class GroupVoteHistoryItemReply extends SLMessage {
         this.HistoryItemData_Field.Quorum = unpackInt(byteBuffer);
         this.HistoryItemData_Field.ProposalText = unpackVariable(byteBuffer, 2);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             VoteItem voteItem = new VoteItem();
             voteItem.CandidateID = unpackUUID(byteBuffer);
             voteItem.VoteCast = unpackVariable(byteBuffer, 1);

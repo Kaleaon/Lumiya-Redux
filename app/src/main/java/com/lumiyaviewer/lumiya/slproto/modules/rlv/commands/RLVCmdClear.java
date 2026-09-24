@@ -9,15 +9,15 @@ import java.util.UUID;
 
 public class RLVCmdClear implements RLVCommand {
     @Override
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         HashSet hashSet = new HashSet();
-        for (RLVRestrictionType rLVRestrictionType : RLVRestrictionType.values()) {
+        for (RLVRestrictionType rlvRestrictionType : RLVRestrictionType.values()) {
             if (str == "") {
-                hashSet.add(rLVRestrictionType);
-            } else if (rLVRestrictionType.toString().contains(str)) {
-                hashSet.add(rLVRestrictionType);
+                hashSet.add(rlvRestrictionType);
+            } else if (rlvRestrictionType.toString().contains(str)) {
+                hashSet.add(rlvRestrictionType);
             }
         }
-        rLVController.getRestrictions().removeRestrictions(uuid, hashSet);
+        rlvController.getRestrictions().removeRestrictions(uuid, hashSet);
     }
 }

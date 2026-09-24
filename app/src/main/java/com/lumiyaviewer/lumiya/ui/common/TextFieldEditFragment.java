@@ -167,13 +167,13 @@ public abstract class TextFieldEditFragment extends ChatterFragment implements B
         }
     }
 
-    protected abstract void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str);
+    protected abstract void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str);
 
-    protected void setOriginalText(String str) {
-        this.originalText = str;
+    protected void setOriginalText(String originalText) {
+        this.originalText = originalText;
         View view = getView();
         if (view != null) {
-            ((TextView) view.findViewById(R.id.field_edit_text)).setText(str);
+            ((TextView) view.findViewById(R.id.field_edit_text)).setText(originalText);
         }
     }
 }

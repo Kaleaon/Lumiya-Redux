@@ -98,8 +98,8 @@ public class AndroidNCompat {
         return isAtLeastN() && context.getPackageManager().hasSystemFeature("android.software.vr.mode");
     }
 
-    public static void setSdkLevelForTesting(int i) {
-        sSdkLevelOverride = i;
+    public static void setSdkLevelForTesting(int sdkLevelForTesting) {
+        sSdkLevelOverride = sdkLevelForTesting;
     }
 
     public static boolean setSustainedPerformanceMode(Activity activity, boolean z) {
@@ -149,11 +149,11 @@ public class AndroidNCompat {
         }
     }
 
-    public static void setVrThread(int i) {
+    public static void setVrThread(int vrThread) {
         if (isAtLeastN()) {
             try {
                 try {
-                    ActivityManager.class.getMethod("setVrThread", Integer.TYPE).invoke(null, Integer.valueOf(i));
+                    ActivityManager.class.getMethod("setVrThread", Integer.TYPE).invoke(null, Integer.valueOf(vrThread));
                 } catch (IllegalAccessException | RuntimeException | InvocationTargetException e) {
                     String str = TAG;
                     String valueOf = String.valueOf(e);

@@ -33,8 +33,8 @@ public enum AvatarTextureFaceIndex {
 
     private String bakedTextureName;
 
-    AvatarTextureFaceIndex(String str) {
-        this.bakedTextureName = str;
+    AvatarTextureFaceIndex(String bakedTextureName) {
+        this.bakedTextureName = bakedTextureName;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

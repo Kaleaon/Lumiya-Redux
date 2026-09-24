@@ -30,39 +30,39 @@ public class UserDao extends AbstractDao<User, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'Users' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'USER_NAME' TEXT,'DISPLAY_NAME' TEXT,'BAD_UUID' INTEGER NOT NULL ,'IS_FRIEND' INTEGER NOT NULL ,'RIGHTS_GIVEN' INTEGER NOT NULL ,'RIGHTS_HAS' INTEGER NOT NULL );");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_Users_UUID ON Users (UUID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'Users' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'USER_NAME' TEXT,'DISPLAY_NAME' TEXT,'BAD_UUID' INTEGER NOT NULL ,'IS_FRIEND' INTEGER NOT NULL ,'RIGHTS_GIVEN' INTEGER NOT NULL ,'RIGHTS_HAS' INTEGER NOT NULL );");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_Users_UUID ON Users (UUID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'Users'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'Users'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, User user) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, User user) {
+        sqLiteStatement.clearBindings();
         Long id = user.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
         UUID uuid = user.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(2, uuid.toString());
+            sqLiteStatement.bindString(2, uuid.toString());
         }
         String userName = user.getUserName();
         if (userName != null) {
-            sQLiteStatement.bindString(3, userName);
+            sqLiteStatement.bindString(3, userName);
         }
         String displayName = user.getDisplayName();
         if (displayName != null) {
-            sQLiteStatement.bindString(4, displayName);
+            sqLiteStatement.bindString(4, displayName);
         }
-        sQLiteStatement.bindLong(5, user.getBadUUID() ? 1L : 0L);
-        sQLiteStatement.bindLong(6, user.getIsFriend() ? 1L : 0L);
-        sQLiteStatement.bindLong(7, user.getRightsGiven());
-        sQLiteStatement.bindLong(8, user.getRightsHas());
+        sqLiteStatement.bindLong(5, user.getBadUUID() ? 1L : 0L);
+        sqLiteStatement.bindLong(6, user.getIsFriend() ? 1L : 0L);
+        sqLiteStatement.bindLong(7, user.getRightsGiven());
+        sqLiteStatement.bindLong(8, user.getRightsHas());
     }
 
     @Override

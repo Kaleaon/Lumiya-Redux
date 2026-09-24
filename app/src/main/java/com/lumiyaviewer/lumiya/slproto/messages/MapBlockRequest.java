@@ -46,8 +46,8 @@ public class MapBlockRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapBlockRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapBlockRequest(this);
     }
 
     @Override

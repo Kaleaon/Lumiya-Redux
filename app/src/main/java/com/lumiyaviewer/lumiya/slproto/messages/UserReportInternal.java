@@ -47,8 +47,8 @@ public class UserReportInternal extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserReportInternal(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserReportInternal(this);
     }
 
     @Override

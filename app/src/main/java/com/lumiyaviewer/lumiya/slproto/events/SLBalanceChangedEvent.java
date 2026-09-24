@@ -5,9 +5,9 @@ public class SLBalanceChangedEvent {
     public final int oldBalance;
     public final boolean oldBalanceValid;
 
-    public SLBalanceChangedEvent(boolean z, int i, int i2) {
-        this.oldBalanceValid = z;
-        this.oldBalance = i;
-        this.newBalance = i2;
+    public SLBalanceChangedEvent(boolean oldBalanceValid, int oldBalance, int newBalance) {
+        this.oldBalanceValid = oldBalanceValid;
+        this.oldBalance = oldBalance;
+        this.newBalance = newBalance;
     }
 }

@@ -18,22 +18,22 @@ public class DrawableAvatarStub implements ChatterNameRetriever.OnChatterNameUpd
     protected final DrawableStore drawableStore;
     private volatile String nameTag;
 
-    DrawableAvatarStub(DrawableStore drawableStore, UUID uuid, SLObjectAvatarInfo sLObjectAvatarInfo) {
+    DrawableAvatarStub(DrawableStore drawableStore, UUID uuid, SLObjectAvatarInfo objectAvatarInfo) {
         this.drawableStore = drawableStore;
-        this.avatarObject = sLObjectAvatarInfo;
-        this.chatterNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(uuid, sLObjectAvatarInfo.getId()), this, null);
+        this.avatarObject = objectAvatarInfo;
+        this.chatterNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(uuid, objectAvatarInfo.getId()), this, null);
     }
 
-    private void setNameTag(String str) {
-        if (Objects.equal(this.nameTag, str)) {
+    private void setNameTag(String nameTag) {
+        if (Objects.equal(this.nameTag, nameTag)) {
             return;
         }
-        this.nameTag = str;
+        this.nameTag = nameTag;
         Object[] objArr = new Object[1];
-        objArr[0] = str != null ? str : "null";
+        objArr[0] = nameTag != null ? nameTag : "null";
         Debug.Printf("DrawableAvatar: setting: nameTag = %s", objArr);
-        if (str != null) {
-            this.drawableNameTag = new DrawableHoverText(this.drawableStore.textTextureCache, str, Integer.MIN_VALUE);
+        if (nameTag != null) {
+            this.drawableNameTag = new DrawableHoverText(this.drawableStore.textTextureCache, nameTag, Integer.MIN_VALUE);
         }
     }
 
@@ -50,14 +50,14 @@ public class DrawableAvatarStub implements ChatterNameRetriever.OnChatterNameUpd
         if (!this.avatarObject.isMyAvatar() || this.avatarObject.parentID != 0) {
             return this.avatarObject.worldMatrix;
         }
-        float[] fArr = new float[32];
+        float[] floats = new float[32];
         LLQuaternion rotation = this.avatarObject.getRotation();
         if (rotation != null) {
-            Matrix.setIdentityM(fArr, 16);
-            Matrix.translateM(fArr, 16, renderContext.myAviPosition.x, renderContext.myAviPosition.y, renderContext.myAviPosition.z);
-            Matrix.multiplyMM(fArr, 0, fArr, 16, rotation.getInverseMatrix(), 0);
+            Matrix.setIdentityM(floats, 16);
+            Matrix.translateM(floats, 16, renderContext.myAviPosition.x, renderContext.myAviPosition.y, renderContext.myAviPosition.z);
+            Matrix.multiplyMM(floats, 0, floats, 16, rotation.getInverseMatrix(), 0);
         }
-        return fArr;
+        return floats;
     }
 
     @Override

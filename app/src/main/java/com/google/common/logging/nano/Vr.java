@@ -61,8 +61,8 @@ public interface Vr {
                 return new Application().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Application parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Application) MessageNano.mergeFrom(new Application(), bArr);
+            public static Application parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Application) MessageNano.mergeFrom(new Application(), bytes);
             }
 
             public final Application clear() {
@@ -171,8 +171,8 @@ public interface Vr {
                 return new AudioStats().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static AudioStats parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (AudioStats) MessageNano.mergeFrom(new AudioStats(), bArr);
+            public static AudioStats parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (AudioStats) MessageNano.mergeFrom(new AudioStats(), bytes);
             }
 
             public final AudioStats clear() {
@@ -201,25 +201,25 @@ public interface Vr {
                     }
                     if (this.numberOfSimultaneousSoundObjects != null && this.numberOfSimultaneousSoundObjects.length > 0) {
                         audioStats.numberOfSimultaneousSoundObjects = new HistogramBucket[this.numberOfSimultaneousSoundObjects.length];
-                        for (int i2 = 0; i2 < this.numberOfSimultaneousSoundObjects.length; i2++) {
-                            if (this.numberOfSimultaneousSoundObjects[i2] != null) {
-                                audioStats.numberOfSimultaneousSoundObjects[i2] = this.numberOfSimultaneousSoundObjects[i2].clone();
+                        for (int j = 0; j < this.numberOfSimultaneousSoundObjects.length; j++) {
+                            if (this.numberOfSimultaneousSoundObjects[j] != null) {
+                                audioStats.numberOfSimultaneousSoundObjects[j] = this.numberOfSimultaneousSoundObjects[j].clone();
                             }
                         }
                     }
                     if (this.numberOfSimultaneousSoundFields != null && this.numberOfSimultaneousSoundFields.length > 0) {
                         audioStats.numberOfSimultaneousSoundFields = new HistogramBucket[this.numberOfSimultaneousSoundFields.length];
-                        for (int i3 = 0; i3 < this.numberOfSimultaneousSoundFields.length; i3++) {
-                            if (this.numberOfSimultaneousSoundFields[i3] != null) {
-                                audioStats.numberOfSimultaneousSoundFields[i3] = this.numberOfSimultaneousSoundFields[i3].clone();
+                        for (int k = 0; k < this.numberOfSimultaneousSoundFields.length; k++) {
+                            if (this.numberOfSimultaneousSoundFields[k] != null) {
+                                audioStats.numberOfSimultaneousSoundFields[k] = this.numberOfSimultaneousSoundFields[k].clone();
                             }
                         }
                     }
                     if (this.cpuMeasurementsPercent != null && this.cpuMeasurementsPercent.length > 0) {
                         audioStats.cpuMeasurementsPercent = new HistogramBucket[this.cpuMeasurementsPercent.length];
-                        for (int i4 = 0; i4 < this.cpuMeasurementsPercent.length; i4++) {
-                            if (this.cpuMeasurementsPercent[i4] != null) {
-                                audioStats.cpuMeasurementsPercent[i4] = this.cpuMeasurementsPercent[i4].clone();
+                        for (int m = 0; m < this.cpuMeasurementsPercent.length; m++) {
+                            if (this.cpuMeasurementsPercent[m] != null) {
+                                audioStats.cpuMeasurementsPercent[m] = this.cpuMeasurementsPercent[m].clone();
                             }
                         }
                     }
@@ -242,38 +242,38 @@ public interface Vr {
                     computeSerializedSize += CodedOutputByteBufferNano.computeInt32Size(3, this.framesPerBuffer.intValue());
                 }
                 if (this.renderingTimePerBufferMilliseconds != null && this.renderingTimePerBufferMilliseconds.length > 0) {
-                    int i = computeSerializedSize;
-                    for (int i2 = 0; i2 < this.renderingTimePerBufferMilliseconds.length; i2++) {
-                        HistogramBucket histogramBucket = this.renderingTimePerBufferMilliseconds[i2];
+                    int computeSerializedSize2 = computeSerializedSize;
+                    for (int j = 0; j < this.renderingTimePerBufferMilliseconds.length; j++) {
+                        HistogramBucket histogramBucket = this.renderingTimePerBufferMilliseconds[j];
                         if (histogramBucket != null) {
-                            i += CodedOutputByteBufferNano.computeMessageSize(4, histogramBucket);
+                            computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(4, histogramBucket);
                         }
                     }
-                    computeSerializedSize = i;
+                    computeSerializedSize = computeSerializedSize2;
                 }
                 if (this.numberOfSimultaneousSoundObjects != null && this.numberOfSimultaneousSoundObjects.length > 0) {
-                    int i3 = computeSerializedSize;
-                    for (int i4 = 0; i4 < this.numberOfSimultaneousSoundObjects.length; i4++) {
-                        HistogramBucket histogramBucket2 = this.numberOfSimultaneousSoundObjects[i4];
+                    int computeSerializedSize3 = computeSerializedSize;
+                    for (int k = 0; k < this.numberOfSimultaneousSoundObjects.length; k++) {
+                        HistogramBucket histogramBucket2 = this.numberOfSimultaneousSoundObjects[k];
                         if (histogramBucket2 != null) {
-                            i3 += CodedOutputByteBufferNano.computeMessageSize(5, histogramBucket2);
+                            computeSerializedSize3 += CodedOutputByteBufferNano.computeMessageSize(5, histogramBucket2);
                         }
                     }
-                    computeSerializedSize = i3;
+                    computeSerializedSize = computeSerializedSize3;
                 }
                 if (this.numberOfSimultaneousSoundFields != null && this.numberOfSimultaneousSoundFields.length > 0) {
-                    int i5 = computeSerializedSize;
-                    for (int i6 = 0; i6 < this.numberOfSimultaneousSoundFields.length; i6++) {
-                        HistogramBucket histogramBucket3 = this.numberOfSimultaneousSoundFields[i6];
+                    int computeSerializedSize4 = computeSerializedSize;
+                    for (int m = 0; m < this.numberOfSimultaneousSoundFields.length; m++) {
+                        HistogramBucket histogramBucket3 = this.numberOfSimultaneousSoundFields[m];
                         if (histogramBucket3 != null) {
-                            i5 += CodedOutputByteBufferNano.computeMessageSize(6, histogramBucket3);
+                            computeSerializedSize4 += CodedOutputByteBufferNano.computeMessageSize(6, histogramBucket3);
                         }
                     }
-                    computeSerializedSize = i5;
+                    computeSerializedSize = computeSerializedSize4;
                 }
                 if (this.cpuMeasurementsPercent != null && this.cpuMeasurementsPercent.length > 0) {
-                    for (int i7 = 0; i7 < this.cpuMeasurementsPercent.length; i7++) {
-                        HistogramBucket histogramBucket4 = this.cpuMeasurementsPercent[i7];
+                    for (int n = 0; n < this.cpuMeasurementsPercent.length; n++) {
+                        HistogramBucket histogramBucket4 = this.cpuMeasurementsPercent[n];
                         if (histogramBucket4 != null) {
                             computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(7, histogramBucket4);
                         }
@@ -290,13 +290,13 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
                                 case 3:
-                                    this.renderingMode = Integer.valueOf(readInt32);
+                                    this.renderingMode = Integer.valueOf(int32);
                                     break;
                             }
                         case 16:
@@ -325,53 +325,53 @@ public interface Vr {
                         case 42:
                             int repeatedFieldArrayLength2 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 42);
                             int length2 = this.numberOfSimultaneousSoundObjects != null ? this.numberOfSimultaneousSoundObjects.length : 0;
-                            HistogramBucket[] histogramBucketArr2 = new HistogramBucket[repeatedFieldArrayLength2 + length2];
+                            HistogramBucket[] histogramBuckets = new HistogramBucket[repeatedFieldArrayLength2 + length2];
                             if (length2 != 0) {
-                                System.arraycopy(this.numberOfSimultaneousSoundObjects, 0, histogramBucketArr2, 0, length2);
+                                System.arraycopy(this.numberOfSimultaneousSoundObjects, 0, histogramBuckets, 0, length2);
                             }
-                            while (length2 < histogramBucketArr2.length - 1) {
-                                histogramBucketArr2[length2] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr2[length2]);
+                            while (length2 < histogramBuckets.length - 1) {
+                                histogramBuckets[length2] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets[length2]);
                                 codedInputByteBufferNano.readTag();
                                 length2++;
                             }
-                            histogramBucketArr2[length2] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr2[length2]);
-                            this.numberOfSimultaneousSoundObjects = histogramBucketArr2;
+                            histogramBuckets[length2] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets[length2]);
+                            this.numberOfSimultaneousSoundObjects = histogramBuckets;
                             break;
                         case 50:
                             int repeatedFieldArrayLength3 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 50);
                             int length3 = this.numberOfSimultaneousSoundFields != null ? this.numberOfSimultaneousSoundFields.length : 0;
-                            HistogramBucket[] histogramBucketArr3 = new HistogramBucket[repeatedFieldArrayLength3 + length3];
+                            HistogramBucket[] histogramBuckets2 = new HistogramBucket[repeatedFieldArrayLength3 + length3];
                             if (length3 != 0) {
-                                System.arraycopy(this.numberOfSimultaneousSoundFields, 0, histogramBucketArr3, 0, length3);
+                                System.arraycopy(this.numberOfSimultaneousSoundFields, 0, histogramBuckets2, 0, length3);
                             }
-                            while (length3 < histogramBucketArr3.length - 1) {
-                                histogramBucketArr3[length3] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr3[length3]);
+                            while (length3 < histogramBuckets2.length - 1) {
+                                histogramBuckets2[length3] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets2[length3]);
                                 codedInputByteBufferNano.readTag();
                                 length3++;
                             }
-                            histogramBucketArr3[length3] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr3[length3]);
-                            this.numberOfSimultaneousSoundFields = histogramBucketArr3;
+                            histogramBuckets2[length3] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets2[length3]);
+                            this.numberOfSimultaneousSoundFields = histogramBuckets2;
                             break;
                         case 58:
                             int repeatedFieldArrayLength4 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 58);
                             int length4 = this.cpuMeasurementsPercent != null ? this.cpuMeasurementsPercent.length : 0;
-                            HistogramBucket[] histogramBucketArr4 = new HistogramBucket[repeatedFieldArrayLength4 + length4];
+                            HistogramBucket[] histogramBuckets3 = new HistogramBucket[repeatedFieldArrayLength4 + length4];
                             if (length4 != 0) {
-                                System.arraycopy(this.cpuMeasurementsPercent, 0, histogramBucketArr4, 0, length4);
+                                System.arraycopy(this.cpuMeasurementsPercent, 0, histogramBuckets3, 0, length4);
                             }
-                            while (length4 < histogramBucketArr4.length - 1) {
-                                histogramBucketArr4[length4] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr4[length4]);
+                            while (length4 < histogramBuckets3.length - 1) {
+                                histogramBuckets3[length4] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets3[length4]);
                                 codedInputByteBufferNano.readTag();
                                 length4++;
                             }
-                            histogramBucketArr4[length4] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr4[length4]);
-                            this.cpuMeasurementsPercent = histogramBucketArr4;
+                            histogramBuckets3[length4] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets3[length4]);
+                            this.cpuMeasurementsPercent = histogramBuckets3;
                             break;
                         default:
                             if (!super.storeUnknownField(codedInputByteBufferNano, readTag)) {
@@ -402,24 +402,24 @@ public interface Vr {
                     }
                 }
                 if (this.numberOfSimultaneousSoundObjects != null && this.numberOfSimultaneousSoundObjects.length > 0) {
-                    for (int i2 = 0; i2 < this.numberOfSimultaneousSoundObjects.length; i2++) {
-                        HistogramBucket histogramBucket2 = this.numberOfSimultaneousSoundObjects[i2];
+                    for (int j = 0; j < this.numberOfSimultaneousSoundObjects.length; j++) {
+                        HistogramBucket histogramBucket2 = this.numberOfSimultaneousSoundObjects[j];
                         if (histogramBucket2 != null) {
                             codedOutputByteBufferNano.writeMessage(5, histogramBucket2);
                         }
                     }
                 }
                 if (this.numberOfSimultaneousSoundFields != null && this.numberOfSimultaneousSoundFields.length > 0) {
-                    for (int i3 = 0; i3 < this.numberOfSimultaneousSoundFields.length; i3++) {
-                        HistogramBucket histogramBucket3 = this.numberOfSimultaneousSoundFields[i3];
+                    for (int k = 0; k < this.numberOfSimultaneousSoundFields.length; k++) {
+                        HistogramBucket histogramBucket3 = this.numberOfSimultaneousSoundFields[k];
                         if (histogramBucket3 != null) {
                             codedOutputByteBufferNano.writeMessage(6, histogramBucket3);
                         }
                     }
                 }
                 if (this.cpuMeasurementsPercent != null && this.cpuMeasurementsPercent.length > 0) {
-                    for (int i4 = 0; i4 < this.cpuMeasurementsPercent.length; i4++) {
-                        HistogramBucket histogramBucket4 = this.cpuMeasurementsPercent[i4];
+                    for (int m = 0; m < this.cpuMeasurementsPercent.length; m++) {
+                        HistogramBucket histogramBucket4 = this.cpuMeasurementsPercent[m];
                         if (histogramBucket4 != null) {
                             codedOutputByteBufferNano.writeMessage(7, histogramBucket4);
                         }
@@ -485,8 +485,8 @@ public interface Vr {
                     return new Capture().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Capture parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Capture) MessageNano.mergeFrom(new Capture(), bArr);
+                public static Capture parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Capture) MessageNano.mergeFrom(new Capture(), bytes);
                 }
 
                 public final Capture clear() {
@@ -542,14 +542,14 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
                                     case 4:
-                                        this.outcome = Integer.valueOf(readInt32);
+                                        this.outcome = Integer.valueOf(int32);
                                         break;
                                 }
                             case 21:
@@ -642,8 +642,8 @@ public interface Vr {
                     return new Share().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Share parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Share) MessageNano.mergeFrom(new Share(), bArr);
+                public static Share parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Share) MessageNano.mergeFrom(new Share(), bytes);
                 }
 
                 public final Share clear() {
@@ -683,8 +683,8 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
@@ -693,7 +693,7 @@ public interface Vr {
                                     case 5:
                                     case 6:
                                     case 7:
-                                        this.type = Integer.valueOf(readInt32);
+                                        this.type = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -756,8 +756,8 @@ public interface Vr {
                     return new ShareStart().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static ShareStart parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (ShareStart) MessageNano.mergeFrom(new ShareStart(), bArr);
+                public static ShareStart parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (ShareStart) MessageNano.mergeFrom(new ShareStart(), bytes);
                 }
 
                 public final ShareStart clear() {
@@ -793,12 +793,12 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.originScreen = Integer.valueOf(readInt32);
+                                        this.originScreen = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -857,8 +857,8 @@ public interface Vr {
                     return new View().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static View parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (View) MessageNano.mergeFrom(new View(), bArr);
+                public static View parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (View) MessageNano.mergeFrom(new View(), bytes);
                 }
 
                 public final View clear() {
@@ -902,12 +902,12 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.orientation = Integer.valueOf(readInt32);
+                                        this.orientation = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -965,8 +965,8 @@ public interface Vr {
                 return new Cyclops().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Cyclops parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Cyclops) MessageNano.mergeFrom(new Cyclops(), bArr);
+            public static Cyclops parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Cyclops) MessageNano.mergeFrom(new Cyclops(), bytes);
             }
 
             public final Cyclops clear() {
@@ -1103,8 +1103,8 @@ public interface Vr {
                 return new DoublePrecisionTransform().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static DoublePrecisionTransform parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (DoublePrecisionTransform) MessageNano.mergeFrom(new DoublePrecisionTransform(), bArr);
+            public static DoublePrecisionTransform parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (DoublePrecisionTransform) MessageNano.mergeFrom(new DoublePrecisionTransform(), bytes);
             }
 
             public final DoublePrecisionTransform clear() {
@@ -1267,8 +1267,8 @@ public interface Vr {
                         return new ControllerState().mergeFrom(codedInputByteBufferNano);
                     }
 
-                    public static ControllerState parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                        return (ControllerState) MessageNano.mergeFrom(new ControllerState(), bArr);
+                    public static ControllerState parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                        return (ControllerState) MessageNano.mergeFrom(new ControllerState(), bytes);
                     }
 
                     public final ControllerState clear() {
@@ -1308,12 +1308,12 @@ public interface Vr {
                                 case 0:
                                     return this;
                                 case 8:
-                                    int readInt32 = codedInputByteBufferNano.readInt32();
-                                    switch (readInt32) {
+                                    int int32 = codedInputByteBufferNano.readInt32();
+                                    switch (int32) {
                                         case 0:
                                         case 1:
                                         case 2:
-                                            this.role = Integer.valueOf(readInt32);
+                                            this.role = Integer.valueOf(int32);
                                             break;
                                     }
                                 case 18:
@@ -1362,8 +1362,8 @@ public interface Vr {
                     return new Actor().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Actor parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Actor) MessageNano.mergeFrom(new Actor(), bArr);
+                public static Actor parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Actor) MessageNano.mergeFrom(new Actor(), bytes);
                 }
 
                 public final Actor clear() {
@@ -1404,14 +1404,14 @@ public interface Vr {
                     if (this.controllerStates == null || this.controllerStates.length <= 0) {
                         return computeSerializedSize;
                     }
-                    int i = computeSerializedSize;
-                    for (int i2 = 0; i2 < this.controllerStates.length; i2++) {
-                        ControllerState controllerState = this.controllerStates[i2];
+                    int computeSerializedSize2 = computeSerializedSize;
+                    for (int j = 0; j < this.controllerStates.length; j++) {
+                        ControllerState controllerState = this.controllerStates[j];
                         if (controllerState != null) {
-                            i += CodedOutputByteBufferNano.computeMessageSize(3, controllerState);
+                            computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(3, controllerState);
                         }
                     }
-                    return i;
+                    return computeSerializedSize2;
                 }
 
                 @Override
@@ -1493,8 +1493,8 @@ public interface Vr {
                     return new AppState().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static AppState parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (AppState) MessageNano.mergeFrom(new AppState(), bArr);
+                public static AppState parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (AppState) MessageNano.mergeFrom(new AppState(), bytes);
                 }
 
                 public final AppState clear() {
@@ -1577,8 +1577,8 @@ public interface Vr {
                     return new ControllerState().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static ControllerState parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (ControllerState) MessageNano.mergeFrom(new ControllerState(), bArr);
+                public static ControllerState parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (ControllerState) MessageNano.mergeFrom(new ControllerState(), bytes);
                 }
 
                 public final ControllerState clear() {
@@ -1618,12 +1618,12 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.role = Integer.valueOf(readInt32);
+                                        this.role = Integer.valueOf(int32);
                                         break;
                                 }
                             case 18:
@@ -1676,8 +1676,8 @@ public interface Vr {
                     return new Environment().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Environment parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Environment) MessageNano.mergeFrom(new Environment(), bArr);
+                public static Environment parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Environment) MessageNano.mergeFrom(new Environment(), bytes);
                 }
 
                 public final Environment clear() {
@@ -1762,8 +1762,8 @@ public interface Vr {
                     return new Menu().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Menu parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Menu) MessageNano.mergeFrom(new Menu(), bArr);
+                public static Menu parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Menu) MessageNano.mergeFrom(new Menu(), bytes);
                 }
 
                 public final Menu clear() {
@@ -1899,8 +1899,8 @@ public interface Vr {
                     return new Preferences().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Preferences parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Preferences) MessageNano.mergeFrom(new Preferences(), bArr);
+                public static Preferences parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Preferences) MessageNano.mergeFrom(new Preferences(), bytes);
                 }
 
                 public final Preferences clear() {
@@ -1944,48 +1944,48 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.labelsState = Integer.valueOf(readInt32);
+                                        this.labelsState = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
-                                int readInt322 = codedInputByteBufferNano.readInt32();
-                                switch (readInt322) {
+                                int int326 = codedInputByteBufferNano.readInt32();
+                                switch (int326) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.comfortModeState = Integer.valueOf(readInt322);
+                                        this.comfortModeState = Integer.valueOf(int326);
                                         break;
                                 }
                             case 24:
-                                int readInt323 = codedInputByteBufferNano.readInt32();
-                                switch (readInt323) {
+                                int int327 = codedInputByteBufferNano.readInt32();
+                                switch (int327) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.startConfiguration = Integer.valueOf(readInt323);
+                                        this.startConfiguration = Integer.valueOf(int327);
                                         break;
                                 }
                             case 32:
-                                int readInt324 = codedInputByteBufferNano.readInt32();
-                                switch (readInt324) {
+                                int int328 = codedInputByteBufferNano.readInt32();
+                                switch (int328) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.guestMode = Integer.valueOf(readInt324);
+                                        this.guestMode = Integer.valueOf(int328);
                                         break;
                                 }
                             case 40:
-                                int readInt325 = codedInputByteBufferNano.readInt32();
-                                switch (readInt325) {
+                                int int329 = codedInputByteBufferNano.readInt32();
+                                switch (int329) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.humanScaleMode = Integer.valueOf(readInt325);
+                                        this.humanScaleMode = Integer.valueOf(int329);
                                         break;
                                 }
                             default:
@@ -2049,8 +2049,8 @@ public interface Vr {
                     return new SplashScreen().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static SplashScreen parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (SplashScreen) MessageNano.mergeFrom(new SplashScreen(), bArr);
+                public static SplashScreen parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (SplashScreen) MessageNano.mergeFrom(new SplashScreen(), bytes);
                 }
 
                 public final SplashScreen clear() {
@@ -2094,11 +2094,11 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
-                                        this.exitType = Integer.valueOf(readInt32);
+                                        this.exitType = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -2161,8 +2161,8 @@ public interface Vr {
                     return new Tour().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Tour parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Tour) MessageNano.mergeFrom(new Tour(), bArr);
+                public static Tour parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Tour) MessageNano.mergeFrom(new Tour(), bytes);
                 }
 
                 public final Tour clear() {
@@ -2249,8 +2249,8 @@ public interface Vr {
                     return new Tutorial().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Tutorial parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Tutorial) MessageNano.mergeFrom(new Tutorial(), bArr);
+                public static Tutorial parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Tutorial) MessageNano.mergeFrom(new Tutorial(), bytes);
                 }
 
                 public final Tutorial clear() {
@@ -2345,8 +2345,8 @@ public interface Vr {
                     return new View().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static View parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (View) MessageNano.mergeFrom(new View(), bArr);
+                public static View parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (View) MessageNano.mergeFrom(new View(), bytes);
                 }
 
                 public final View clear() {
@@ -2390,13 +2390,13 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
-                                        this.mode = Integer.valueOf(readInt32);
+                                        this.mode = Integer.valueOf(int32);
                                         break;
                                 }
                             case 18:
@@ -2451,8 +2451,8 @@ public interface Vr {
                 return new EarthVr().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static EarthVr parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (EarthVr) MessageNano.mergeFrom(new EarthVr(), bArr);
+            public static EarthVr parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (EarthVr) MessageNano.mergeFrom(new EarthVr(), bytes);
             }
 
             public final EarthVr clear() {
@@ -2511,9 +2511,9 @@ public interface Vr {
                     }
                     if (this.actors != null && this.actors.length > 0) {
                         earthVr.actors = new Actor[this.actors.length];
-                        for (int i2 = 0; i2 < this.actors.length; i2++) {
-                            if (this.actors[i2] != null) {
-                                earthVr.actors[i2] = this.actors[i2].clone();
+                        for (int j = 0; j < this.actors.length; j++) {
+                            if (this.actors[j] != null) {
+                                earthVr.actors[j] = this.actors[j].clone();
                             }
                         }
                     }
@@ -2539,14 +2539,14 @@ public interface Vr {
                     computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(2, this.startFromHeadTransform);
                 }
                 if (this.controllerStates != null && this.controllerStates.length > 0) {
-                    int i = computeSerializedSize;
-                    for (int i2 = 0; i2 < this.controllerStates.length; i2++) {
-                        ControllerState controllerState = this.controllerStates[i2];
+                    int computeSerializedSize2 = computeSerializedSize;
+                    for (int j = 0; j < this.controllerStates.length; j++) {
+                        ControllerState controllerState = this.controllerStates[j];
                         if (controllerState != null) {
-                            i += CodedOutputByteBufferNano.computeMessageSize(3, controllerState);
+                            computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(3, controllerState);
                         }
                     }
-                    computeSerializedSize = i;
+                    computeSerializedSize = computeSerializedSize2;
                 }
                 if (this.appState != null) {
                     computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(4, this.appState);
@@ -2567,8 +2567,8 @@ public interface Vr {
                     computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(9, this.tutorial);
                 }
                 if (this.actors != null && this.actors.length > 0) {
-                    for (int i3 = 0; i3 < this.actors.length; i3++) {
-                        Actor actor = this.actors[i3];
+                    for (int k = 0; k < this.actors.length; k++) {
+                        Actor actor = this.actors[k];
                         if (actor != null) {
                             computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(10, actor);
                         }
@@ -2725,8 +2725,8 @@ public interface Vr {
                     codedOutputByteBufferNano.writeMessage(9, this.tutorial);
                 }
                 if (this.actors != null && this.actors.length > 0) {
-                    for (int i2 = 0; i2 < this.actors.length; i2++) {
-                        Actor actor = this.actors[i2];
+                    for (int j = 0; j < this.actors.length; j++) {
+                        Actor actor = this.actors[j];
                         if (actor != null) {
                             codedOutputByteBufferNano.writeMessage(10, actor);
                         }
@@ -2774,8 +2774,8 @@ public interface Vr {
                     return new Pano().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Pano parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Pano) MessageNano.mergeFrom(new Pano(), bArr);
+                public static Pano parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Pano) MessageNano.mergeFrom(new Pano(), bytes);
                 }
 
                 public final Pano clear() {
@@ -2821,12 +2821,12 @@ public interface Vr {
                                 this.heightPixels = Integer.valueOf(codedInputByteBufferNano.readInt32());
                                 break;
                             case 24:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.stereoFormat = Integer.valueOf(readInt32);
+                                        this.stereoFormat = Integer.valueOf(int32);
                                         break;
                                 }
                             default:
@@ -2885,8 +2885,8 @@ public interface Vr {
                     return new Video().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Video parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Video) MessageNano.mergeFrom(new Video(), bArr);
+                public static Video parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Video) MessageNano.mergeFrom(new Video(), bytes);
                 }
 
                 public final Video clear() {
@@ -2936,12 +2936,12 @@ public interface Vr {
                                 this.heightPixels = Integer.valueOf(codedInputByteBufferNano.readInt32());
                                 break;
                             case 24:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.stereoFormat = Integer.valueOf(readInt32);
+                                        this.stereoFormat = Integer.valueOf(int32);
                                         break;
                                 }
                             case 32:
@@ -3000,8 +3000,8 @@ public interface Vr {
                 return new EmbedVrWidget().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static EmbedVrWidget parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (EmbedVrWidget) MessageNano.mergeFrom(new EmbedVrWidget(), bArr);
+            public static EmbedVrWidget parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (EmbedVrWidget) MessageNano.mergeFrom(new EmbedVrWidget(), bytes);
             }
 
             public final EmbedVrWidget clear() {
@@ -3052,13 +3052,13 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
                                 case 3:
-                                    this.viewMode = Integer.valueOf(readInt32);
+                                    this.viewMode = Integer.valueOf(int32);
                                     break;
                             }
                         case 18:
@@ -3324,8 +3324,8 @@ public interface Vr {
                 return new HeadMount().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static HeadMount parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (HeadMount) MessageNano.mergeFrom(new HeadMount(), bArr);
+            public static HeadMount parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (HeadMount) MessageNano.mergeFrom(new HeadMount(), bytes);
             }
 
             public final HeadMount clear() {
@@ -3412,8 +3412,8 @@ public interface Vr {
                 return new HistogramBucket().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static HistogramBucket parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (HistogramBucket) MessageNano.mergeFrom(new HistogramBucket(), bArr);
+            public static HistogramBucket parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (HistogramBucket) MessageNano.mergeFrom(new HistogramBucket(), bytes);
             }
 
             public final HistogramBucket clear() {
@@ -3511,8 +3511,8 @@ public interface Vr {
                     return new KeyboardEvent().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static KeyboardEvent parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (KeyboardEvent) MessageNano.mergeFrom(new KeyboardEvent(), bArr);
+                public static KeyboardEvent parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (KeyboardEvent) MessageNano.mergeFrom(new KeyboardEvent(), bytes);
                 }
 
                 public final KeyboardEvent clear() {
@@ -3568,8 +3568,8 @@ public interface Vr {
                     if (this.systemLanguages != null && this.systemLanguages.length > 0) {
                         int i = 0;
                         int i2 = 0;
-                        for (int i3 = 0; i3 < this.systemLanguages.length; i3++) {
-                            String str = this.systemLanguages[i3];
+                        for (int j = 0; j < this.systemLanguages.length; j++) {
+                            String str = this.systemLanguages[j];
                             if (str != null) {
                                 i2++;
                                 i += CodedOutputByteBufferNano.computeStringSizeNoTag(str);
@@ -3580,8 +3580,8 @@ public interface Vr {
                     if (this.enabledLanguages != null && this.enabledLanguages.length > 0) {
                         int i4 = 0;
                         int i5 = 0;
-                        for (int i6 = 0; i6 < this.enabledLanguages.length; i6++) {
-                            String str2 = this.enabledLanguages[i6];
+                        for (int k = 0; k < this.enabledLanguages.length; k++) {
+                            String str2 = this.enabledLanguages[k];
                             if (str2 != null) {
                                 i5++;
                                 i4 += CodedOutputByteBufferNano.computeStringSizeNoTag(str2);
@@ -3609,8 +3609,8 @@ public interface Vr {
                                 this.clientTimestamp = Long.valueOf(codedInputByteBufferNano.readInt64());
                                 break;
                             case 16:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
@@ -3623,7 +3623,7 @@ public interface Vr {
                                     case 1000:
                                     case 1001:
                                     case 2000:
-                                        this.eventType = Integer.valueOf(readInt32);
+                                        this.eventType = Integer.valueOf(int32);
                                         break;
                                 }
                             case 26:
@@ -3672,11 +3672,11 @@ public interface Vr {
                                 this.language = codedInputByteBufferNano.readString();
                                 break;
                             case 64:
-                                int readInt322 = codedInputByteBufferNano.readInt32();
-                                switch (readInt322) {
+                                int int323 = codedInputByteBufferNano.readInt32();
+                                switch (int323) {
                                     case 0:
                                     case 1:
-                                        this.inputType = Integer.valueOf(readInt322);
+                                        this.inputType = Integer.valueOf(int323);
                                         break;
                                 }
                             case 74:
@@ -3714,8 +3714,8 @@ public interface Vr {
                         }
                     }
                     if (this.enabledLanguages != null && this.enabledLanguages.length > 0) {
-                        for (int i2 = 0; i2 < this.enabledLanguages.length; i2++) {
-                            String str2 = this.enabledLanguages[i2];
+                        for (int j = 0; j < this.enabledLanguages.length; j++) {
+                            String str2 = this.enabledLanguages[j];
                             if (str2 != null) {
                                 codedOutputByteBufferNano.writeString(6, str2);
                             }
@@ -3780,8 +3780,8 @@ public interface Vr {
                     return new KeyboardTextEntry().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static KeyboardTextEntry parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (KeyboardTextEntry) MessageNano.mergeFrom(new KeyboardTextEntry(), bArr);
+                public static KeyboardTextEntry parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (KeyboardTextEntry) MessageNano.mergeFrom(new KeyboardTextEntry(), bytes);
                 }
 
                 public final KeyboardTextEntry clear() {
@@ -3825,12 +3825,12 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 4:
                                     case 5:
-                                        this.type = Integer.valueOf(readInt32);
+                                        this.type = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -3894,8 +3894,8 @@ public interface Vr {
                 return new Keyboard().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Keyboard parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Keyboard) MessageNano.mergeFrom(new Keyboard(), bArr);
+            public static Keyboard parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Keyboard) MessageNano.mergeFrom(new Keyboard(), bytes);
             }
 
             public final Keyboard clear() {
@@ -4017,8 +4017,8 @@ public interface Vr {
                 return new Launcher().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Launcher parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Launcher) MessageNano.mergeFrom(new Launcher(), bArr);
+            public static Launcher parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Launcher) MessageNano.mergeFrom(new Launcher(), bytes);
             }
 
             public final Launcher clear() {
@@ -4050,8 +4050,8 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
@@ -4059,7 +4059,7 @@ public interface Vr {
                                 case 6:
                                 case 7:
                                 case 8:
-                                    this.navItem = Integer.valueOf(readInt32);
+                                    this.navItem = Integer.valueOf(int32);
                                     break;
                             }
                         default:
@@ -4125,8 +4125,8 @@ public interface Vr {
                     return new LoadTime().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static LoadTime parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (LoadTime) MessageNano.mergeFrom(new LoadTime(), bArr);
+                public static LoadTime parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (LoadTime) MessageNano.mergeFrom(new LoadTime(), bytes);
                 }
 
                 public final LoadTime clear() {
@@ -4162,8 +4162,8 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
@@ -4175,7 +4175,7 @@ public interface Vr {
                                     case 8:
                                     case 9:
                                     case 10:
-                                        this.assetType = Integer.valueOf(readInt32);
+                                        this.assetType = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -4256,8 +4256,8 @@ public interface Vr {
                 return new Lullaby().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Lullaby parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Lullaby) MessageNano.mergeFrom(new Lullaby(), bArr);
+            public static Lullaby parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Lullaby) MessageNano.mergeFrom(new Lullaby(), bytes);
             }
 
             public final Lullaby clear() {
@@ -4305,8 +4305,8 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 1000:
@@ -4339,7 +4339,7 @@ public interface Vr {
                                 case UiElement.PLAY_STORE_TOS_DIALOG_EXIT_VR_BUTTON /* 2019 */:
                                 case UiElement.PLAY_STORE_NETWORK_ERROR /* 2020 */:
                                 case UiElement.PLAY_STORE_NETWORK_ERROR_RETRY_BUTTON /* 2021 */:
-                                    this.uiElement = Integer.valueOf(readInt32);
+                                    this.uiElement = Integer.valueOf(int32);
                                     break;
                             }
                         case 16:
@@ -4423,8 +4423,8 @@ public interface Vr {
                 return new PerformanceStats().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static PerformanceStats parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (PerformanceStats) MessageNano.mergeFrom(new PerformanceStats(), bArr);
+            public static PerformanceStats parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (PerformanceStats) MessageNano.mergeFrom(new PerformanceStats(), bytes);
             }
 
             public final PerformanceStats clear() {
@@ -4470,33 +4470,33 @@ public interface Vr {
                     }
                     if (this.appRenderTime != null && this.appRenderTime.length > 0) {
                         performanceStats.appRenderTime = new HistogramBucket[this.appRenderTime.length];
-                        for (int i2 = 0; i2 < this.appRenderTime.length; i2++) {
-                            if (this.appRenderTime[i2] != null) {
-                                performanceStats.appRenderTime[i2] = this.appRenderTime[i2].clone();
+                        for (int j = 0; j < this.appRenderTime.length; j++) {
+                            if (this.appRenderTime[j] != null) {
+                                performanceStats.appRenderTime[j] = this.appRenderTime[j].clone();
                             }
                         }
                     }
                     if (this.presentTime != null && this.presentTime.length > 0) {
                         performanceStats.presentTime = new HistogramBucket[this.presentTime.length];
-                        for (int i3 = 0; i3 < this.presentTime.length; i3++) {
-                            if (this.presentTime[i3] != null) {
-                                performanceStats.presentTime[i3] = this.presentTime[i3].clone();
+                        for (int k = 0; k < this.presentTime.length; k++) {
+                            if (this.presentTime[k] != null) {
+                                performanceStats.presentTime[k] = this.presentTime[k].clone();
                             }
                         }
                     }
                     if (this.totalRenderTime != null && this.totalRenderTime.length > 0) {
                         performanceStats.totalRenderTime = new HistogramBucket[this.totalRenderTime.length];
-                        for (int i4 = 0; i4 < this.totalRenderTime.length; i4++) {
-                            if (this.totalRenderTime[i4] != null) {
-                                performanceStats.totalRenderTime[i4] = this.totalRenderTime[i4].clone();
+                        for (int m = 0; m < this.totalRenderTime.length; m++) {
+                            if (this.totalRenderTime[m] != null) {
+                                performanceStats.totalRenderTime[m] = this.totalRenderTime[m].clone();
                             }
                         }
                     }
                     if (this.postFrameTime != null && this.postFrameTime.length > 0) {
                         performanceStats.postFrameTime = new HistogramBucket[this.postFrameTime.length];
-                        for (int i5 = 0; i5 < this.postFrameTime.length; i5++) {
-                            if (this.postFrameTime[i5] != null) {
-                                performanceStats.postFrameTime[i5] = this.postFrameTime[i5].clone();
+                        for (int n = 0; n < this.postFrameTime.length; n++) {
+                            if (this.postFrameTime[n] != null) {
+                                performanceStats.postFrameTime[n] = this.postFrameTime[n].clone();
                             }
                         }
                     }
@@ -4547,14 +4547,14 @@ public interface Vr {
                     computeSerializedSize += CodedOutputByteBufferNano.computeInt32Size(1, this.averageFps.intValue());
                 }
                 if (this.frameTime != null && this.frameTime.length > 0) {
-                    int i = computeSerializedSize;
-                    for (int i2 = 0; i2 < this.frameTime.length; i2++) {
-                        HistogramBucket histogramBucket = this.frameTime[i2];
+                    int computeSerializedSize2 = computeSerializedSize;
+                    for (int j = 0; j < this.frameTime.length; j++) {
+                        HistogramBucket histogramBucket = this.frameTime[j];
                         if (histogramBucket != null) {
-                            i += CodedOutputByteBufferNano.computeMessageSize(2, histogramBucket);
+                            computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(2, histogramBucket);
                         }
                     }
-                    computeSerializedSize = i;
+                    computeSerializedSize = computeSerializedSize2;
                 }
                 if (this.memoryConsumptionKilobytes != null) {
                     computeSerializedSize += CodedOutputByteBufferNano.computeInt32Size(3, this.memoryConsumptionKilobytes.intValue());
@@ -4572,54 +4572,54 @@ public interface Vr {
                     computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(7, this.timeSeriesData);
                 }
                 if (this.appRenderTime != null && this.appRenderTime.length > 0) {
-                    int i3 = computeSerializedSize;
-                    for (int i4 = 0; i4 < this.appRenderTime.length; i4++) {
-                        HistogramBucket histogramBucket2 = this.appRenderTime[i4];
+                    int computeSerializedSize3 = computeSerializedSize;
+                    for (int k = 0; k < this.appRenderTime.length; k++) {
+                        HistogramBucket histogramBucket2 = this.appRenderTime[k];
                         if (histogramBucket2 != null) {
-                            i3 += CodedOutputByteBufferNano.computeMessageSize(8, histogramBucket2);
+                            computeSerializedSize3 += CodedOutputByteBufferNano.computeMessageSize(8, histogramBucket2);
                         }
                     }
-                    computeSerializedSize = i3;
+                    computeSerializedSize = computeSerializedSize3;
                 }
                 if (this.presentTime != null && this.presentTime.length > 0) {
-                    int i5 = computeSerializedSize;
-                    for (int i6 = 0; i6 < this.presentTime.length; i6++) {
-                        HistogramBucket histogramBucket3 = this.presentTime[i6];
+                    int computeSerializedSize4 = computeSerializedSize;
+                    for (int m = 0; m < this.presentTime.length; m++) {
+                        HistogramBucket histogramBucket3 = this.presentTime[m];
                         if (histogramBucket3 != null) {
-                            i5 += CodedOutputByteBufferNano.computeMessageSize(9, histogramBucket3);
+                            computeSerializedSize4 += CodedOutputByteBufferNano.computeMessageSize(9, histogramBucket3);
                         }
                     }
-                    computeSerializedSize = i5;
+                    computeSerializedSize = computeSerializedSize4;
                 }
                 if (this.totalRenderTime != null && this.totalRenderTime.length > 0) {
-                    int i7 = computeSerializedSize;
-                    for (int i8 = 0; i8 < this.totalRenderTime.length; i8++) {
-                        HistogramBucket histogramBucket4 = this.totalRenderTime[i8];
+                    int computeSerializedSize5 = computeSerializedSize;
+                    for (int n = 0; n < this.totalRenderTime.length; n++) {
+                        HistogramBucket histogramBucket4 = this.totalRenderTime[n];
                         if (histogramBucket4 != null) {
-                            i7 += CodedOutputByteBufferNano.computeMessageSize(10, histogramBucket4);
+                            computeSerializedSize5 += CodedOutputByteBufferNano.computeMessageSize(10, histogramBucket4);
                         }
                     }
-                    computeSerializedSize = i7;
+                    computeSerializedSize = computeSerializedSize5;
                 }
                 if (this.postFrameTime != null && this.postFrameTime.length > 0) {
-                    int i9 = computeSerializedSize;
-                    for (int i10 = 0; i10 < this.postFrameTime.length; i10++) {
-                        HistogramBucket histogramBucket5 = this.postFrameTime[i10];
+                    int computeSerializedSize6 = computeSerializedSize;
+                    for (int i = 0; i < this.postFrameTime.length; i++) {
+                        HistogramBucket histogramBucket5 = this.postFrameTime[i];
                         if (histogramBucket5 != null) {
-                            i9 += CodedOutputByteBufferNano.computeMessageSize(11, histogramBucket5);
+                            computeSerializedSize6 += CodedOutputByteBufferNano.computeMessageSize(11, histogramBucket5);
                         }
                     }
-                    computeSerializedSize = i9;
+                    computeSerializedSize = computeSerializedSize6;
                 }
                 if (this.consecutiveDroppedFrames != null && this.consecutiveDroppedFrames.length > 0) {
-                    int i11 = computeSerializedSize;
+                    int computeSerializedSize7 = computeSerializedSize;
                     for (int i12 = 0; i12 < this.consecutiveDroppedFrames.length; i12++) {
                         HistogramBucket histogramBucket6 = this.consecutiveDroppedFrames[i12];
                         if (histogramBucket6 != null) {
-                            i11 += CodedOutputByteBufferNano.computeMessageSize(12, histogramBucket6);
+                            computeSerializedSize7 += CodedOutputByteBufferNano.computeMessageSize(12, histogramBucket6);
                         }
                     }
-                    computeSerializedSize = i11;
+                    computeSerializedSize = computeSerializedSize7;
                 }
                 if (this.scanlineRacingVsyncOvershootUs != null && this.scanlineRacingVsyncOvershootUs.length > 0) {
                     for (int i13 = 0; i13 < this.scanlineRacingVsyncOvershootUs.length; i13++) {
@@ -4698,246 +4698,246 @@ public interface Vr {
                         case 66:
                             int repeatedFieldArrayLength2 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 66);
                             int length2 = this.appRenderTime != null ? this.appRenderTime.length : 0;
-                            HistogramBucket[] histogramBucketArr2 = new HistogramBucket[repeatedFieldArrayLength2 + length2];
+                            HistogramBucket[] histogramBuckets = new HistogramBucket[repeatedFieldArrayLength2 + length2];
                             if (length2 != 0) {
-                                System.arraycopy(this.appRenderTime, 0, histogramBucketArr2, 0, length2);
+                                System.arraycopy(this.appRenderTime, 0, histogramBuckets, 0, length2);
                             }
-                            while (length2 < histogramBucketArr2.length - 1) {
-                                histogramBucketArr2[length2] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr2[length2]);
+                            while (length2 < histogramBuckets.length - 1) {
+                                histogramBuckets[length2] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets[length2]);
                                 codedInputByteBufferNano.readTag();
                                 length2++;
                             }
-                            histogramBucketArr2[length2] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr2[length2]);
-                            this.appRenderTime = histogramBucketArr2;
+                            histogramBuckets[length2] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets[length2]);
+                            this.appRenderTime = histogramBuckets;
                             break;
                         case 74:
                             int repeatedFieldArrayLength3 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 74);
                             int length3 = this.presentTime != null ? this.presentTime.length : 0;
-                            HistogramBucket[] histogramBucketArr3 = new HistogramBucket[repeatedFieldArrayLength3 + length3];
+                            HistogramBucket[] histogramBuckets2 = new HistogramBucket[repeatedFieldArrayLength3 + length3];
                             if (length3 != 0) {
-                                System.arraycopy(this.presentTime, 0, histogramBucketArr3, 0, length3);
+                                System.arraycopy(this.presentTime, 0, histogramBuckets2, 0, length3);
                             }
-                            while (length3 < histogramBucketArr3.length - 1) {
-                                histogramBucketArr3[length3] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr3[length3]);
+                            while (length3 < histogramBuckets2.length - 1) {
+                                histogramBuckets2[length3] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets2[length3]);
                                 codedInputByteBufferNano.readTag();
                                 length3++;
                             }
-                            histogramBucketArr3[length3] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr3[length3]);
-                            this.presentTime = histogramBucketArr3;
+                            histogramBuckets2[length3] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets2[length3]);
+                            this.presentTime = histogramBuckets2;
                             break;
                         case 82:
                             int repeatedFieldArrayLength4 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 82);
                             int length4 = this.totalRenderTime != null ? this.totalRenderTime.length : 0;
-                            HistogramBucket[] histogramBucketArr4 = new HistogramBucket[repeatedFieldArrayLength4 + length4];
+                            HistogramBucket[] histogramBuckets3 = new HistogramBucket[repeatedFieldArrayLength4 + length4];
                             if (length4 != 0) {
-                                System.arraycopy(this.totalRenderTime, 0, histogramBucketArr4, 0, length4);
+                                System.arraycopy(this.totalRenderTime, 0, histogramBuckets3, 0, length4);
                             }
-                            while (length4 < histogramBucketArr4.length - 1) {
-                                histogramBucketArr4[length4] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr4[length4]);
+                            while (length4 < histogramBuckets3.length - 1) {
+                                histogramBuckets3[length4] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets3[length4]);
                                 codedInputByteBufferNano.readTag();
                                 length4++;
                             }
-                            histogramBucketArr4[length4] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr4[length4]);
-                            this.totalRenderTime = histogramBucketArr4;
+                            histogramBuckets3[length4] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets3[length4]);
+                            this.totalRenderTime = histogramBuckets3;
                             break;
                         case 90:
                             int repeatedFieldArrayLength5 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 90);
                             int length5 = this.postFrameTime != null ? this.postFrameTime.length : 0;
-                            HistogramBucket[] histogramBucketArr5 = new HistogramBucket[repeatedFieldArrayLength5 + length5];
+                            HistogramBucket[] histogramBuckets4 = new HistogramBucket[repeatedFieldArrayLength5 + length5];
                             if (length5 != 0) {
-                                System.arraycopy(this.postFrameTime, 0, histogramBucketArr5, 0, length5);
+                                System.arraycopy(this.postFrameTime, 0, histogramBuckets4, 0, length5);
                             }
-                            while (length5 < histogramBucketArr5.length - 1) {
-                                histogramBucketArr5[length5] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr5[length5]);
+                            while (length5 < histogramBuckets4.length - 1) {
+                                histogramBuckets4[length5] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets4[length5]);
                                 codedInputByteBufferNano.readTag();
                                 length5++;
                             }
-                            histogramBucketArr5[length5] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr5[length5]);
-                            this.postFrameTime = histogramBucketArr5;
+                            histogramBuckets4[length5] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets4[length5]);
+                            this.postFrameTime = histogramBuckets4;
                             break;
                         case 98:
                             int repeatedFieldArrayLength6 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 98);
                             int length6 = this.consecutiveDroppedFrames != null ? this.consecutiveDroppedFrames.length : 0;
-                            HistogramBucket[] histogramBucketArr6 = new HistogramBucket[repeatedFieldArrayLength6 + length6];
+                            HistogramBucket[] histogramBuckets5 = new HistogramBucket[repeatedFieldArrayLength6 + length6];
                             if (length6 != 0) {
-                                System.arraycopy(this.consecutiveDroppedFrames, 0, histogramBucketArr6, 0, length6);
+                                System.arraycopy(this.consecutiveDroppedFrames, 0, histogramBuckets5, 0, length6);
                             }
-                            while (length6 < histogramBucketArr6.length - 1) {
-                                histogramBucketArr6[length6] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr6[length6]);
+                            while (length6 < histogramBuckets5.length - 1) {
+                                histogramBuckets5[length6] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets5[length6]);
                                 codedInputByteBufferNano.readTag();
                                 length6++;
                             }
-                            histogramBucketArr6[length6] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr6[length6]);
-                            this.consecutiveDroppedFrames = histogramBucketArr6;
+                            histogramBuckets5[length6] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets5[length6]);
+                            this.consecutiveDroppedFrames = histogramBuckets5;
                             break;
                         case 106:
                             int repeatedFieldArrayLength7 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 106);
                             int length7 = this.scanlineRacingVsyncOvershootUs != null ? this.scanlineRacingVsyncOvershootUs.length : 0;
-                            HistogramBucket[] histogramBucketArr7 = new HistogramBucket[repeatedFieldArrayLength7 + length7];
+                            HistogramBucket[] histogramBuckets6 = new HistogramBucket[repeatedFieldArrayLength7 + length7];
                             if (length7 != 0) {
-                                System.arraycopy(this.scanlineRacingVsyncOvershootUs, 0, histogramBucketArr7, 0, length7);
+                                System.arraycopy(this.scanlineRacingVsyncOvershootUs, 0, histogramBuckets6, 0, length7);
                             }
-                            while (length7 < histogramBucketArr7.length - 1) {
-                                histogramBucketArr7[length7] = new HistogramBucket();
-                                codedInputByteBufferNano.readMessage(histogramBucketArr7[length7]);
+                            while (length7 < histogramBuckets6.length - 1) {
+                                histogramBuckets6[length7] = new HistogramBucket();
+                                codedInputByteBufferNano.readMessage(histogramBuckets6[length7]);
                                 codedInputByteBufferNano.readTag();
                                 length7++;
                             }
-                            histogramBucketArr7[length7] = new HistogramBucket();
-                            codedInputByteBufferNano.readMessage(histogramBucketArr7[length7]);
-                            this.scanlineRacingVsyncOvershootUs = histogramBucketArr7;
+                            histogramBuckets6[length7] = new HistogramBucket();
+                            codedInputByteBufferNano.readMessage(histogramBuckets6[length7]);
+                            this.scanlineRacingVsyncOvershootUs = histogramBuckets6;
                             break;
                         case 112:
                             this.thermalExitFlowShown = Integer.valueOf(codedInputByteBufferNano.readInt32());
                             break;
                         case VrCore.ErrorCode.CONTROLLER_GATT_SERVICE_NOT_FOUND /* 122 */:
-                            int readRawVarint32 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit = codedInputByteBufferNano.pushLimit(readRawVarint32);
-                            int i = readRawVarint32 / 4;
+                            int rawVarint32 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit = codedInputByteBufferNano.pushLimit(rawVarint32);
+                            int i = rawVarint32 / 4;
                             int length8 = this.cpuThrottlingTemperature != null ? this.cpuThrottlingTemperature.length : 0;
-                            float[] fArr = new float[i + length8];
+                            float[] floats = new float[i + length8];
                             if (length8 != 0) {
-                                System.arraycopy(this.cpuThrottlingTemperature, 0, fArr, 0, length8);
+                                System.arraycopy(this.cpuThrottlingTemperature, 0, floats, 0, length8);
                             }
-                            while (length8 < fArr.length) {
-                                fArr[length8] = codedInputByteBufferNano.readFloat();
+                            while (length8 < floats.length) {
+                                floats[length8] = codedInputByteBufferNano.readFloat();
                                 length8++;
                             }
-                            this.cpuThrottlingTemperature = fArr;
+                            this.cpuThrottlingTemperature = floats;
                             codedInputByteBufferNano.popLimit(pushLimit);
                             break;
                         case VrCore.ErrorCode.CONTROLLER_BATTERY_READ_FAILED /* 125 */:
                             int repeatedFieldArrayLength8 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, VrCore.ErrorCode.CONTROLLER_BATTERY_READ_FAILED);
                             int length9 = this.cpuThrottlingTemperature != null ? this.cpuThrottlingTemperature.length : 0;
-                            float[] fArr2 = new float[repeatedFieldArrayLength8 + length9];
+                            float[] floats2 = new float[repeatedFieldArrayLength8 + length9];
                             if (length9 != 0) {
-                                System.arraycopy(this.cpuThrottlingTemperature, 0, fArr2, 0, length9);
+                                System.arraycopy(this.cpuThrottlingTemperature, 0, floats2, 0, length9);
                             }
-                            while (length9 < fArr2.length - 1) {
-                                fArr2[length9] = codedInputByteBufferNano.readFloat();
+                            while (length9 < floats2.length - 1) {
+                                floats2[length9] = codedInputByteBufferNano.readFloat();
                                 codedInputByteBufferNano.readTag();
                                 length9++;
                             }
-                            fArr2[length9] = codedInputByteBufferNano.readFloat();
-                            this.cpuThrottlingTemperature = fArr2;
+                            floats2[length9] = codedInputByteBufferNano.readFloat();
+                            this.cpuThrottlingTemperature = floats2;
                             break;
                         case 130:
-                            int readRawVarint322 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit2 = codedInputByteBufferNano.pushLimit(readRawVarint322);
-                            int i2 = readRawVarint322 / 4;
+                            int rawVarint327 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit2 = codedInputByteBufferNano.pushLimit(rawVarint327);
+                            int i2 = rawVarint327 / 4;
                             int length10 = this.gpuThrottlingTemperature != null ? this.gpuThrottlingTemperature.length : 0;
-                            float[] fArr3 = new float[i2 + length10];
+                            float[] floats3 = new float[i2 + length10];
                             if (length10 != 0) {
-                                System.arraycopy(this.gpuThrottlingTemperature, 0, fArr3, 0, length10);
+                                System.arraycopy(this.gpuThrottlingTemperature, 0, floats3, 0, length10);
                             }
-                            while (length10 < fArr3.length) {
-                                fArr3[length10] = codedInputByteBufferNano.readFloat();
+                            while (length10 < floats3.length) {
+                                floats3[length10] = codedInputByteBufferNano.readFloat();
                                 length10++;
                             }
-                            this.gpuThrottlingTemperature = fArr3;
+                            this.gpuThrottlingTemperature = floats3;
                             codedInputByteBufferNano.popLimit(pushLimit2);
                             break;
                         case 133:
                             int repeatedFieldArrayLength9 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 133);
                             int length11 = this.gpuThrottlingTemperature != null ? this.gpuThrottlingTemperature.length : 0;
-                            float[] fArr4 = new float[repeatedFieldArrayLength9 + length11];
+                            float[] floats4 = new float[repeatedFieldArrayLength9 + length11];
                             if (length11 != 0) {
-                                System.arraycopy(this.gpuThrottlingTemperature, 0, fArr4, 0, length11);
+                                System.arraycopy(this.gpuThrottlingTemperature, 0, floats4, 0, length11);
                             }
-                            while (length11 < fArr4.length - 1) {
-                                fArr4[length11] = codedInputByteBufferNano.readFloat();
+                            while (length11 < floats4.length - 1) {
+                                floats4[length11] = codedInputByteBufferNano.readFloat();
                                 codedInputByteBufferNano.readTag();
                                 length11++;
                             }
-                            fArr4[length11] = codedInputByteBufferNano.readFloat();
-                            this.gpuThrottlingTemperature = fArr4;
+                            floats4[length11] = codedInputByteBufferNano.readFloat();
+                            this.gpuThrottlingTemperature = floats4;
                             break;
                         case 138:
-                            int readRawVarint323 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit3 = codedInputByteBufferNano.pushLimit(readRawVarint323);
-                            int i3 = readRawVarint323 / 4;
+                            int rawVarint328 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit3 = codedInputByteBufferNano.pushLimit(rawVarint328);
+                            int i3 = rawVarint328 / 4;
                             int length12 = this.batteryThrottlingTemperature != null ? this.batteryThrottlingTemperature.length : 0;
-                            float[] fArr5 = new float[i3 + length12];
+                            float[] floats5 = new float[i3 + length12];
                             if (length12 != 0) {
-                                System.arraycopy(this.batteryThrottlingTemperature, 0, fArr5, 0, length12);
+                                System.arraycopy(this.batteryThrottlingTemperature, 0, floats5, 0, length12);
                             }
-                            while (length12 < fArr5.length) {
-                                fArr5[length12] = codedInputByteBufferNano.readFloat();
+                            while (length12 < floats5.length) {
+                                floats5[length12] = codedInputByteBufferNano.readFloat();
                                 length12++;
                             }
-                            this.batteryThrottlingTemperature = fArr5;
+                            this.batteryThrottlingTemperature = floats5;
                             codedInputByteBufferNano.popLimit(pushLimit3);
                             break;
                         case 141:
                             int repeatedFieldArrayLength10 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 141);
                             int length13 = this.batteryThrottlingTemperature != null ? this.batteryThrottlingTemperature.length : 0;
-                            float[] fArr6 = new float[repeatedFieldArrayLength10 + length13];
+                            float[] floats6 = new float[repeatedFieldArrayLength10 + length13];
                             if (length13 != 0) {
-                                System.arraycopy(this.batteryThrottlingTemperature, 0, fArr6, 0, length13);
+                                System.arraycopy(this.batteryThrottlingTemperature, 0, floats6, 0, length13);
                             }
-                            while (length13 < fArr6.length - 1) {
-                                fArr6[length13] = codedInputByteBufferNano.readFloat();
+                            while (length13 < floats6.length - 1) {
+                                floats6[length13] = codedInputByteBufferNano.readFloat();
                                 codedInputByteBufferNano.readTag();
                                 length13++;
                             }
-                            fArr6[length13] = codedInputByteBufferNano.readFloat();
-                            this.batteryThrottlingTemperature = fArr6;
+                            floats6[length13] = codedInputByteBufferNano.readFloat();
+                            this.batteryThrottlingTemperature = floats6;
                             break;
                         case 146:
-                            int readRawVarint324 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit4 = codedInputByteBufferNano.pushLimit(readRawVarint324);
-                            int i4 = readRawVarint324 / 4;
+                            int rawVarint329 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit4 = codedInputByteBufferNano.pushLimit(rawVarint329);
+                            int i4 = rawVarint329 / 4;
                             int length14 = this.cpuShutdownTemperature != null ? this.cpuShutdownTemperature.length : 0;
-                            float[] fArr7 = new float[i4 + length14];
+                            float[] floats7 = new float[i4 + length14];
                             if (length14 != 0) {
-                                System.arraycopy(this.cpuShutdownTemperature, 0, fArr7, 0, length14);
+                                System.arraycopy(this.cpuShutdownTemperature, 0, floats7, 0, length14);
                             }
-                            while (length14 < fArr7.length) {
-                                fArr7[length14] = codedInputByteBufferNano.readFloat();
+                            while (length14 < floats7.length) {
+                                floats7[length14] = codedInputByteBufferNano.readFloat();
                                 length14++;
                             }
-                            this.cpuShutdownTemperature = fArr7;
+                            this.cpuShutdownTemperature = floats7;
                             codedInputByteBufferNano.popLimit(pushLimit4);
                             break;
                         case 149:
                             int repeatedFieldArrayLength11 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 149);
                             int length15 = this.cpuShutdownTemperature != null ? this.cpuShutdownTemperature.length : 0;
-                            float[] fArr8 = new float[repeatedFieldArrayLength11 + length15];
+                            float[] floats8 = new float[repeatedFieldArrayLength11 + length15];
                             if (length15 != 0) {
-                                System.arraycopy(this.cpuShutdownTemperature, 0, fArr8, 0, length15);
+                                System.arraycopy(this.cpuShutdownTemperature, 0, floats8, 0, length15);
                             }
-                            while (length15 < fArr8.length - 1) {
-                                fArr8[length15] = codedInputByteBufferNano.readFloat();
+                            while (length15 < floats8.length - 1) {
+                                floats8[length15] = codedInputByteBufferNano.readFloat();
                                 codedInputByteBufferNano.readTag();
                                 length15++;
                             }
-                            fArr8[length15] = codedInputByteBufferNano.readFloat();
-                            this.cpuShutdownTemperature = fArr8;
+                            floats8[length15] = codedInputByteBufferNano.readFloat();
+                            this.cpuShutdownTemperature = floats8;
                             break;
                         case 154:
-                            int readRawVarint325 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit5 = codedInputByteBufferNano.pushLimit(readRawVarint325);
-                            int i5 = readRawVarint325 / 4;
+                            int rawVarint325 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit5 = codedInputByteBufferNano.pushLimit(rawVarint325);
+                            int i5 = rawVarint325 / 4;
                             int length16 = this.gpuShutdownTemperature != null ? this.gpuShutdownTemperature.length : 0;
-                            float[] fArr9 = new float[i5 + length16];
+                            float[] floats9 = new float[i5 + length16];
                             if (length16 != 0) {
-                                System.arraycopy(this.gpuShutdownTemperature, 0, fArr9, 0, length16);
+                                System.arraycopy(this.gpuShutdownTemperature, 0, floats9, 0, length16);
                             }
-                            while (length16 < fArr9.length) {
-                                fArr9[length16] = codedInputByteBufferNano.readFloat();
+                            while (length16 < floats9.length) {
+                                floats9[length16] = codedInputByteBufferNano.readFloat();
                                 length16++;
                             }
-                            this.gpuShutdownTemperature = fArr9;
+                            this.gpuShutdownTemperature = floats9;
                             codedInputByteBufferNano.popLimit(pushLimit5);
                             break;
                         case 157:
@@ -4956,9 +4956,9 @@ public interface Vr {
                             this.gpuShutdownTemperature = fArr10;
                             break;
                         case 162:
-                            int readRawVarint326 = codedInputByteBufferNano.readRawVarint32();
-                            int pushLimit6 = codedInputByteBufferNano.pushLimit(readRawVarint326);
-                            int i6 = readRawVarint326 / 4;
+                            int rawVarint326 = codedInputByteBufferNano.readRawVarint32();
+                            int pushLimit6 = codedInputByteBufferNano.pushLimit(rawVarint326);
+                            int i6 = rawVarint326 / 4;
                             int length18 = this.batteryShutdownTemperature != null ? this.batteryShutdownTemperature.length : 0;
                             float[] fArr11 = new float[i6 + length18];
                             if (length18 != 0) {
@@ -5024,32 +5024,32 @@ public interface Vr {
                     codedOutputByteBufferNano.writeMessage(7, this.timeSeriesData);
                 }
                 if (this.appRenderTime != null && this.appRenderTime.length > 0) {
-                    for (int i2 = 0; i2 < this.appRenderTime.length; i2++) {
-                        HistogramBucket histogramBucket2 = this.appRenderTime[i2];
+                    for (int j = 0; j < this.appRenderTime.length; j++) {
+                        HistogramBucket histogramBucket2 = this.appRenderTime[j];
                         if (histogramBucket2 != null) {
                             codedOutputByteBufferNano.writeMessage(8, histogramBucket2);
                         }
                     }
                 }
                 if (this.presentTime != null && this.presentTime.length > 0) {
-                    for (int i3 = 0; i3 < this.presentTime.length; i3++) {
-                        HistogramBucket histogramBucket3 = this.presentTime[i3];
+                    for (int k = 0; k < this.presentTime.length; k++) {
+                        HistogramBucket histogramBucket3 = this.presentTime[k];
                         if (histogramBucket3 != null) {
                             codedOutputByteBufferNano.writeMessage(9, histogramBucket3);
                         }
                     }
                 }
                 if (this.totalRenderTime != null && this.totalRenderTime.length > 0) {
-                    for (int i4 = 0; i4 < this.totalRenderTime.length; i4++) {
-                        HistogramBucket histogramBucket4 = this.totalRenderTime[i4];
+                    for (int m = 0; m < this.totalRenderTime.length; m++) {
+                        HistogramBucket histogramBucket4 = this.totalRenderTime[m];
                         if (histogramBucket4 != null) {
                             codedOutputByteBufferNano.writeMessage(10, histogramBucket4);
                         }
                     }
                 }
                 if (this.postFrameTime != null && this.postFrameTime.length > 0) {
-                    for (int i5 = 0; i5 < this.postFrameTime.length; i5++) {
-                        HistogramBucket histogramBucket5 = this.postFrameTime[i5];
+                    for (int n = 0; n < this.postFrameTime.length; n++) {
+                        HistogramBucket histogramBucket5 = this.postFrameTime[n];
                         if (histogramBucket5 != null) {
                             codedOutputByteBufferNano.writeMessage(11, histogramBucket5);
                         }
@@ -5154,8 +5154,8 @@ public interface Vr {
                     return new OpenMedia().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static OpenMedia parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (OpenMedia) MessageNano.mergeFrom(new OpenMedia(), bArr);
+                public static OpenMedia parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (OpenMedia) MessageNano.mergeFrom(new OpenMedia(), bytes);
                 }
 
                 public final OpenMedia clear() {
@@ -5194,24 +5194,24 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
                                     case 4:
-                                        this.type = Integer.valueOf(readInt32);
+                                        this.type = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
-                                int readInt322 = codedInputByteBufferNano.readInt32();
-                                switch (readInt322) {
+                                int int323 = codedInputByteBufferNano.readInt32();
+                                switch (int323) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
-                                        this.source = Integer.valueOf(readInt322);
+                                        this.source = Integer.valueOf(int323);
                                         break;
                                 }
                             case 24:
@@ -5264,8 +5264,8 @@ public interface Vr {
                     return new WarmWelcome().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static WarmWelcome parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (WarmWelcome) MessageNano.mergeFrom(new WarmWelcome(), bArr);
+                public static WarmWelcome parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (WarmWelcome) MessageNano.mergeFrom(new WarmWelcome(), bytes);
                 }
 
                 public final WarmWelcome clear() {
@@ -5337,8 +5337,8 @@ public interface Vr {
                 return new Photos().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Photos parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Photos) MessageNano.mergeFrom(new Photos(), bArr);
+            public static Photos parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Photos) MessageNano.mergeFrom(new Photos(), bytes);
             }
 
             public final Photos clear() {
@@ -5455,8 +5455,8 @@ public interface Vr {
                 return new QrCodeScan().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static QrCodeScan parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (QrCodeScan) MessageNano.mergeFrom(new QrCodeScan(), bArr);
+            public static QrCodeScan parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (QrCodeScan) MessageNano.mergeFrom(new QrCodeScan(), bytes);
             }
 
             public final QrCodeScan clear() {
@@ -5492,13 +5492,13 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
                                 case 3:
-                                    this.status = Integer.valueOf(readInt32);
+                                    this.status = Integer.valueOf(int32);
                                     break;
                             }
                         case 18:
@@ -5550,8 +5550,8 @@ public interface Vr {
                 return new Renderer().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Renderer parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Renderer) MessageNano.mergeFrom(new Renderer(), bArr);
+            public static Renderer parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Renderer) MessageNano.mergeFrom(new Renderer(), bytes);
             }
 
             public final Renderer clear() {
@@ -5667,8 +5667,8 @@ public interface Vr {
                     return new AsyncReprojectionConfig().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static AsyncReprojectionConfig parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (AsyncReprojectionConfig) MessageNano.mergeFrom(new AsyncReprojectionConfig(), bArr);
+                public static AsyncReprojectionConfig parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (AsyncReprojectionConfig) MessageNano.mergeFrom(new AsyncReprojectionConfig(), bytes);
                 }
 
                 public final AsyncReprojectionConfig clear() {
@@ -5757,8 +5757,8 @@ public interface Vr {
                 return new SdkConfigurationParams().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static SdkConfigurationParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (SdkConfigurationParams) MessageNano.mergeFrom(new SdkConfigurationParams(), bArr);
+            public static SdkConfigurationParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (SdkConfigurationParams) MessageNano.mergeFrom(new SdkConfigurationParams(), bytes);
             }
 
             public final SdkConfigurationParams clear() {
@@ -5837,13 +5837,13 @@ public interface Vr {
                             this.cpuLateLatchingEnabled = Boolean.valueOf(codedInputByteBufferNano.readBool());
                             break;
                         case 48:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 2:
                                 case 3:
-                                    this.daydreamImageAlignment = Integer.valueOf(readInt32);
+                                    this.daydreamImageAlignment = Integer.valueOf(int32);
                                     break;
                             }
                         case 58:
@@ -5924,8 +5924,8 @@ public interface Vr {
                     return new GyroscopeStats().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static GyroscopeStats parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (GyroscopeStats) MessageNano.mergeFrom(new GyroscopeStats(), bArr);
+                public static GyroscopeStats parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (GyroscopeStats) MessageNano.mergeFrom(new GyroscopeStats(), bytes);
                 }
 
                 public final GyroscopeStats clear() {
@@ -6058,8 +6058,8 @@ public interface Vr {
                     return new Vector3().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Vector3 parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Vector3) MessageNano.mergeFrom(new Vector3(), bArr);
+                public static Vector3 parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Vector3) MessageNano.mergeFrom(new Vector3(), bytes);
                 }
 
                 public final Vector3 clear() {
@@ -6151,8 +6151,8 @@ public interface Vr {
                 return new SensorStats().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static SensorStats parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (SensorStats) MessageNano.mergeFrom(new SensorStats(), bArr);
+            public static SensorStats parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (SensorStats) MessageNano.mergeFrom(new SensorStats(), bytes);
             }
 
             public final SensorStats clear() {
@@ -6254,8 +6254,8 @@ public interface Vr {
                     return new PanoSession().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static PanoSession parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (PanoSession) MessageNano.mergeFrom(new PanoSession(), bArr);
+                public static PanoSession parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (PanoSession) MessageNano.mergeFrom(new PanoSession(), bytes);
                 }
 
                 public final PanoSession clear() {
@@ -6315,14 +6315,14 @@ public interface Vr {
                             case 0:
                                 return this;
                             case 8:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
                                     case 4:
-                                        this.source = Integer.valueOf(readInt32);
+                                        this.source = Integer.valueOf(int32);
                                         break;
                                 }
                             case 16:
@@ -6404,8 +6404,8 @@ public interface Vr {
                 return new StreetView().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static StreetView parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (StreetView) MessageNano.mergeFrom(new StreetView(), bArr);
+            public static StreetView parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (StreetView) MessageNano.mergeFrom(new StreetView(), bytes);
             }
 
             public final StreetView clear() {
@@ -6501,8 +6501,8 @@ public interface Vr {
                     return new TimeIntervalData().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static TimeIntervalData parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (TimeIntervalData) MessageNano.mergeFrom(new TimeIntervalData(), bArr);
+                public static TimeIntervalData parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (TimeIntervalData) MessageNano.mergeFrom(new TimeIntervalData(), bytes);
                 }
 
                 public final TimeIntervalData clear() {
@@ -6595,97 +6595,97 @@ public interface Vr {
                                 this.thermalWarningsShown = Integer.valueOf(codedInputByteBufferNano.readInt32());
                                 break;
                             case 58:
-                                int readRawVarint32 = codedInputByteBufferNano.readRawVarint32();
-                                int pushLimit = codedInputByteBufferNano.pushLimit(readRawVarint32);
-                                int i = readRawVarint32 / 4;
+                                int rawVarint32 = codedInputByteBufferNano.readRawVarint32();
+                                int pushLimit = codedInputByteBufferNano.pushLimit(rawVarint32);
+                                int i = rawVarint32 / 4;
                                 int length = this.cpuTemperature != null ? this.cpuTemperature.length : 0;
-                                float[] fArr = new float[i + length];
+                                float[] floats = new float[i + length];
                                 if (length != 0) {
-                                    System.arraycopy(this.cpuTemperature, 0, fArr, 0, length);
+                                    System.arraycopy(this.cpuTemperature, 0, floats, 0, length);
                                 }
-                                while (length < fArr.length) {
-                                    fArr[length] = codedInputByteBufferNano.readFloat();
+                                while (length < floats.length) {
+                                    floats[length] = codedInputByteBufferNano.readFloat();
                                     length++;
                                 }
-                                this.cpuTemperature = fArr;
+                                this.cpuTemperature = floats;
                                 codedInputByteBufferNano.popLimit(pushLimit);
                                 break;
                             case 61:
                                 int repeatedFieldArrayLength = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 61);
                                 int length2 = this.cpuTemperature != null ? this.cpuTemperature.length : 0;
-                                float[] fArr2 = new float[repeatedFieldArrayLength + length2];
+                                float[] floats2 = new float[repeatedFieldArrayLength + length2];
                                 if (length2 != 0) {
-                                    System.arraycopy(this.cpuTemperature, 0, fArr2, 0, length2);
+                                    System.arraycopy(this.cpuTemperature, 0, floats2, 0, length2);
                                 }
-                                while (length2 < fArr2.length - 1) {
-                                    fArr2[length2] = codedInputByteBufferNano.readFloat();
+                                while (length2 < floats2.length - 1) {
+                                    floats2[length2] = codedInputByteBufferNano.readFloat();
                                     codedInputByteBufferNano.readTag();
                                     length2++;
                                 }
-                                fArr2[length2] = codedInputByteBufferNano.readFloat();
-                                this.cpuTemperature = fArr2;
+                                floats2[length2] = codedInputByteBufferNano.readFloat();
+                                this.cpuTemperature = floats2;
                                 break;
                             case 66:
-                                int readRawVarint322 = codedInputByteBufferNano.readRawVarint32();
-                                int pushLimit2 = codedInputByteBufferNano.pushLimit(readRawVarint322);
-                                int i2 = readRawVarint322 / 4;
+                                int rawVarint324 = codedInputByteBufferNano.readRawVarint32();
+                                int pushLimit2 = codedInputByteBufferNano.pushLimit(rawVarint324);
+                                int i2 = rawVarint324 / 4;
                                 int length3 = this.gpuTemperature != null ? this.gpuTemperature.length : 0;
-                                float[] fArr3 = new float[i2 + length3];
+                                float[] floats3 = new float[i2 + length3];
                                 if (length3 != 0) {
-                                    System.arraycopy(this.gpuTemperature, 0, fArr3, 0, length3);
+                                    System.arraycopy(this.gpuTemperature, 0, floats3, 0, length3);
                                 }
-                                while (length3 < fArr3.length) {
-                                    fArr3[length3] = codedInputByteBufferNano.readFloat();
+                                while (length3 < floats3.length) {
+                                    floats3[length3] = codedInputByteBufferNano.readFloat();
                                     length3++;
                                 }
-                                this.gpuTemperature = fArr3;
+                                this.gpuTemperature = floats3;
                                 codedInputByteBufferNano.popLimit(pushLimit2);
                                 break;
                             case 69:
                                 int repeatedFieldArrayLength2 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 69);
                                 int length4 = this.gpuTemperature != null ? this.gpuTemperature.length : 0;
-                                float[] fArr4 = new float[repeatedFieldArrayLength2 + length4];
+                                float[] floats4 = new float[repeatedFieldArrayLength2 + length4];
                                 if (length4 != 0) {
-                                    System.arraycopy(this.gpuTemperature, 0, fArr4, 0, length4);
+                                    System.arraycopy(this.gpuTemperature, 0, floats4, 0, length4);
                                 }
-                                while (length4 < fArr4.length - 1) {
-                                    fArr4[length4] = codedInputByteBufferNano.readFloat();
+                                while (length4 < floats4.length - 1) {
+                                    floats4[length4] = codedInputByteBufferNano.readFloat();
                                     codedInputByteBufferNano.readTag();
                                     length4++;
                                 }
-                                fArr4[length4] = codedInputByteBufferNano.readFloat();
-                                this.gpuTemperature = fArr4;
+                                floats4[length4] = codedInputByteBufferNano.readFloat();
+                                this.gpuTemperature = floats4;
                                 break;
                             case 74:
-                                int readRawVarint323 = codedInputByteBufferNano.readRawVarint32();
-                                int pushLimit3 = codedInputByteBufferNano.pushLimit(readRawVarint323);
-                                int i3 = readRawVarint323 / 4;
+                                int rawVarint325 = codedInputByteBufferNano.readRawVarint32();
+                                int pushLimit3 = codedInputByteBufferNano.pushLimit(rawVarint325);
+                                int i3 = rawVarint325 / 4;
                                 int length5 = this.batteryTemperature != null ? this.batteryTemperature.length : 0;
-                                float[] fArr5 = new float[i3 + length5];
+                                float[] floats5 = new float[i3 + length5];
                                 if (length5 != 0) {
-                                    System.arraycopy(this.batteryTemperature, 0, fArr5, 0, length5);
+                                    System.arraycopy(this.batteryTemperature, 0, floats5, 0, length5);
                                 }
-                                while (length5 < fArr5.length) {
-                                    fArr5[length5] = codedInputByteBufferNano.readFloat();
+                                while (length5 < floats5.length) {
+                                    floats5[length5] = codedInputByteBufferNano.readFloat();
                                     length5++;
                                 }
-                                this.batteryTemperature = fArr5;
+                                this.batteryTemperature = floats5;
                                 codedInputByteBufferNano.popLimit(pushLimit3);
                                 break;
                             case 77:
                                 int repeatedFieldArrayLength3 = WireFormatNano.getRepeatedFieldArrayLength(codedInputByteBufferNano, 77);
                                 int length6 = this.batteryTemperature != null ? this.batteryTemperature.length : 0;
-                                float[] fArr6 = new float[repeatedFieldArrayLength3 + length6];
+                                float[] floats6 = new float[repeatedFieldArrayLength3 + length6];
                                 if (length6 != 0) {
-                                    System.arraycopy(this.batteryTemperature, 0, fArr6, 0, length6);
+                                    System.arraycopy(this.batteryTemperature, 0, floats6, 0, length6);
                                 }
-                                while (length6 < fArr6.length - 1) {
-                                    fArr6[length6] = codedInputByteBufferNano.readFloat();
+                                while (length6 < floats6.length - 1) {
+                                    floats6[length6] = codedInputByteBufferNano.readFloat();
                                     codedInputByteBufferNano.readTag();
                                     length6++;
                                 }
-                                fArr6[length6] = codedInputByteBufferNano.readFloat();
-                                this.batteryTemperature = fArr6;
+                                floats6[length6] = codedInputByteBufferNano.readFloat();
+                                this.batteryTemperature = floats6;
                                 break;
                             default:
                                 if (!super.storeUnknownField(codedInputByteBufferNano, readTag)) {
@@ -6722,13 +6722,13 @@ public interface Vr {
                         }
                     }
                     if (this.gpuTemperature != null && this.gpuTemperature.length > 0) {
-                        for (int i2 = 0; i2 < this.gpuTemperature.length; i2++) {
-                            codedOutputByteBufferNano.writeFloat(8, this.gpuTemperature[i2]);
+                        for (int j = 0; j < this.gpuTemperature.length; j++) {
+                            codedOutputByteBufferNano.writeFloat(8, this.gpuTemperature[j]);
                         }
                     }
                     if (this.batteryTemperature != null && this.batteryTemperature.length > 0) {
-                        for (int i3 = 0; i3 < this.batteryTemperature.length; i3++) {
-                            codedOutputByteBufferNano.writeFloat(9, this.batteryTemperature[i3]);
+                        for (int k = 0; k < this.batteryTemperature.length; k++) {
+                            codedOutputByteBufferNano.writeFloat(9, this.batteryTemperature[k]);
                         }
                     }
                     super.writeTo(codedOutputByteBufferNano);
@@ -6754,8 +6754,8 @@ public interface Vr {
                 return new TimeSeriesData().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static TimeSeriesData parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (TimeSeriesData) MessageNano.mergeFrom(new TimeSeriesData(), bArr);
+            public static TimeSeriesData parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (TimeSeriesData) MessageNano.mergeFrom(new TimeSeriesData(), bytes);
             }
 
             public final TimeSeriesData clear() {
@@ -6793,14 +6793,14 @@ public interface Vr {
                 if (this.timeIntervalData == null || this.timeIntervalData.length <= 0) {
                     return computeSerializedSize;
                 }
-                int i = computeSerializedSize;
-                for (int i2 = 0; i2 < this.timeIntervalData.length; i2++) {
-                    TimeIntervalData timeIntervalData = this.timeIntervalData[i2];
+                int computeSerializedSize2 = computeSerializedSize;
+                for (int j = 0; j < this.timeIntervalData.length; j++) {
+                    TimeIntervalData timeIntervalData = this.timeIntervalData[j];
                     if (timeIntervalData != null) {
-                        i += CodedOutputByteBufferNano.computeMessageSize(2, timeIntervalData);
+                        computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(2, timeIntervalData);
                     }
                 }
-                return i;
+                return computeSerializedSize2;
             }
 
             @Override
@@ -6885,8 +6885,8 @@ public interface Vr {
                 return new Transform().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static Transform parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (Transform) MessageNano.mergeFrom(new Transform(), bArr);
+            public static Transform parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (Transform) MessageNano.mergeFrom(new Transform(), bytes);
             }
 
             public final Transform clear() {
@@ -7056,8 +7056,8 @@ public interface Vr {
                     return new Controller().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Controller parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Controller) MessageNano.mergeFrom(new Controller(), bArr);
+                public static Controller parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Controller) MessageNano.mergeFrom(new Controller(), bytes);
                 }
 
                 public final Controller clear() {
@@ -7169,22 +7169,22 @@ public interface Vr {
                                 this.sampleCount = Integer.valueOf(codedInputByteBufferNano.readInt32());
                                 break;
                             case 96:
-                                int readInt32 = codedInputByteBufferNano.readInt32();
-                                switch (readInt32) {
+                                int int32 = codedInputByteBufferNano.readInt32();
+                                switch (int32) {
                                     case 0:
                                     case 1:
                                     case 2:
-                                        this.sensorType = Integer.valueOf(readInt32);
+                                        this.sensorType = Integer.valueOf(int32);
                                         break;
                                 }
                             case 104:
-                                int readInt322 = codedInputByteBufferNano.readInt32();
-                                switch (readInt322) {
+                                int int323 = codedInputByteBufferNano.readInt32();
+                                switch (int323) {
                                     case 0:
                                     case 1:
                                     case 2:
                                     case 3:
-                                        this.axis = Integer.valueOf(readInt322);
+                                        this.axis = Integer.valueOf(int323);
                                         break;
                                 }
                             default:
@@ -7329,8 +7329,8 @@ public interface Vr {
                 return new VrCore().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static VrCore parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (VrCore) MessageNano.mergeFrom(new VrCore(), bArr);
+            public static VrCore parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (VrCore) MessageNano.mergeFrom(new VrCore(), bytes);
             }
 
             public final VrCore clear() {
@@ -7391,8 +7391,8 @@ public interface Vr {
                         case 0:
                             return this;
                         case 8:
-                            int readInt32 = codedInputByteBufferNano.readInt32();
-                            switch (readInt32) {
+                            int int32 = codedInputByteBufferNano.readInt32();
+                            switch (int32) {
                                 case 0:
                                 case 1:
                                 case 101:
@@ -7447,12 +7447,12 @@ public interface Vr {
                                 case ErrorCode.NO_ZEN_RULE /* 301 */:
                                 case ErrorCode.INVALID_READ /* 401 */:
                                 case ErrorCode.DISALLOWED_WRITE /* 402 */:
-                                    this.errorCode = Integer.valueOf(readInt32);
+                                    this.errorCode = Integer.valueOf(int32);
                                     break;
                             }
                         case 16:
-                            int readInt322 = codedInputByteBufferNano.readInt32();
-                            switch (readInt322) {
+                            int int323 = codedInputByteBufferNano.readInt32();
+                            switch (int323) {
                                 case 0:
                                 case 1:
                                 case 2:
@@ -7462,7 +7462,7 @@ public interface Vr {
                                 case 6:
                                 case 7:
                                 case 8:
-                                    this.permission = Integer.valueOf(readInt322);
+                                    this.permission = Integer.valueOf(int323);
                                     break;
                             }
                         case 26:
@@ -7573,8 +7573,8 @@ public interface Vr {
                         return new StepStateChange().mergeFrom(codedInputByteBufferNano);
                     }
 
-                    public static StepStateChange parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                        return (StepStateChange) MessageNano.mergeFrom(new StepStateChange(), bArr);
+                    public static StepStateChange parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                        return (StepStateChange) MessageNano.mergeFrom(new StepStateChange(), bytes);
                     }
 
                     public final StepStateChange clear() {
@@ -7612,8 +7612,8 @@ public interface Vr {
                                 case 0:
                                     return this;
                                 case 8:
-                                    int readInt32 = codedInputByteBufferNano.readInt32();
-                                    switch (readInt32) {
+                                    int int32 = codedInputByteBufferNano.readInt32();
+                                    switch (int32) {
                                         case 0:
                                         case 1:
                                         case 2:
@@ -7623,29 +7623,29 @@ public interface Vr {
                                         case 6:
                                         case 7:
                                         case 8:
-                                            this.step = Integer.valueOf(readInt32);
+                                            this.step = Integer.valueOf(int32);
                                             break;
                                     }
                                 case 16:
-                                    int readInt322 = codedInputByteBufferNano.readInt32();
-                                    switch (readInt322) {
+                                    int int324 = codedInputByteBufferNano.readInt32();
+                                    switch (int324) {
                                         case 0:
                                         case 1:
                                         case 2:
                                         case 3:
                                         case 4:
-                                            this.previousStepState = Integer.valueOf(readInt322);
+                                            this.previousStepState = Integer.valueOf(int324);
                                             break;
                                     }
                                 case 24:
-                                    int readInt323 = codedInputByteBufferNano.readInt32();
-                                    switch (readInt323) {
+                                    int int325 = codedInputByteBufferNano.readInt32();
+                                    switch (int325) {
                                         case 0:
                                         case 1:
                                         case 2:
                                         case 3:
                                         case 4:
-                                            this.newStepState = Integer.valueOf(readInt323);
+                                            this.newStepState = Integer.valueOf(int325);
                                             break;
                                     }
                                 default:
@@ -7696,8 +7696,8 @@ public interface Vr {
                         return new View().mergeFrom(codedInputByteBufferNano);
                     }
 
-                    public static View parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                        return (View) MessageNano.mergeFrom(new View(), bArr);
+                    public static View parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                        return (View) MessageNano.mergeFrom(new View(), bytes);
                     }
 
                     public final View clear() {
@@ -7733,8 +7733,8 @@ public interface Vr {
                                 case 0:
                                     return this;
                                 case 8:
-                                    int readInt32 = codedInputByteBufferNano.readInt32();
-                                    switch (readInt32) {
+                                    int int32 = codedInputByteBufferNano.readInt32();
+                                    switch (int32) {
                                         case 0:
                                         case 1:
                                         case 2:
@@ -7744,7 +7744,7 @@ public interface Vr {
                                         case 6:
                                         case 7:
                                         case 8:
-                                            this.step = Integer.valueOf(readInt32);
+                                            this.step = Integer.valueOf(int32);
                                             break;
                                     }
                                 case 16:
@@ -7790,8 +7790,8 @@ public interface Vr {
                     return new Setup().mergeFrom(codedInputByteBufferNano);
                 }
 
-                public static Setup parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                    return (Setup) MessageNano.mergeFrom(new Setup(), bArr);
+                public static Setup parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                    return (Setup) MessageNano.mergeFrom(new Setup(), bytes);
                 }
 
                 public final Setup clear() {
@@ -7886,8 +7886,8 @@ public interface Vr {
                 return new VrHome().mergeFrom(codedInputByteBufferNano);
             }
 
-            public static VrHome parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-                return (VrHome) MessageNano.mergeFrom(new VrHome(), bArr);
+            public static VrHome parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+                return (VrHome) MessageNano.mergeFrom(new VrHome(), bytes);
             }
 
             public final VrHome clear() {
@@ -7966,8 +7966,8 @@ public interface Vr {
             return new VREvent().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static VREvent parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (VREvent) MessageNano.mergeFrom(new VREvent(), bArr);
+        public static VREvent parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (VREvent) MessageNano.mergeFrom(new VREvent(), bytes);
         }
 
         public final VREvent clear() {
@@ -8000,70 +8000,70 @@ public interface Vr {
         @Override
         public final VREvent clone() {
             try {
-                VREvent vREvent = (VREvent) super.clone();
+                VREvent vrEvent = (VREvent) super.clone();
                 if (this.headMount != null) {
-                    vREvent.headMount = this.headMount.clone();
+                    vrEvent.headMount = this.headMount.clone();
                 }
                 if (this.application != null) {
-                    vREvent.application = this.application.clone();
+                    vrEvent.application = this.application.clone();
                 }
                 if (this.installedVrApplications != null && this.installedVrApplications.length > 0) {
-                    vREvent.installedVrApplications = new Application[this.installedVrApplications.length];
+                    vrEvent.installedVrApplications = new Application[this.installedVrApplications.length];
                     for (int i = 0; i < this.installedVrApplications.length; i++) {
                         if (this.installedVrApplications[i] != null) {
-                            vREvent.installedVrApplications[i] = this.installedVrApplications[i].clone();
+                            vrEvent.installedVrApplications[i] = this.installedVrApplications[i].clone();
                         }
                     }
                 }
                 if (this.cyclops != null) {
-                    vREvent.cyclops = this.cyclops.clone();
+                    vrEvent.cyclops = this.cyclops.clone();
                 }
                 if (this.qrCodeScan != null) {
-                    vREvent.qrCodeScan = this.qrCodeScan.clone();
+                    vrEvent.qrCodeScan = this.qrCodeScan.clone();
                 }
                 if (this.performanceStats != null) {
-                    vREvent.performanceStats = this.performanceStats.clone();
+                    vrEvent.performanceStats = this.performanceStats.clone();
                 }
                 if (this.sensorStats != null) {
-                    vREvent.sensorStats = this.sensorStats.clone();
+                    vrEvent.sensorStats = this.sensorStats.clone();
                 }
                 if (this.audioStats != null) {
-                    vREvent.audioStats = this.audioStats.clone();
+                    vrEvent.audioStats = this.audioStats.clone();
                 }
                 if (this.embedVrWidget != null) {
-                    vREvent.embedVrWidget = this.embedVrWidget.clone();
+                    vrEvent.embedVrWidget = this.embedVrWidget.clone();
                 }
                 if (this.vrCore != null) {
-                    vREvent.vrCore = this.vrCore.clone();
+                    vrEvent.vrCore = this.vrCore.clone();
                 }
                 if (this.earthVr != null) {
-                    vREvent.earthVr = this.earthVr.clone();
+                    vrEvent.earthVr = this.earthVr.clone();
                 }
                 if (this.launcher != null) {
-                    vREvent.launcher = this.launcher.clone();
+                    vrEvent.launcher = this.launcher.clone();
                 }
                 if (this.keyboard != null) {
-                    vREvent.keyboard = this.keyboard.clone();
+                    vrEvent.keyboard = this.keyboard.clone();
                 }
                 if (this.renderer != null) {
-                    vREvent.renderer = this.renderer.clone();
+                    vrEvent.renderer = this.renderer.clone();
                 }
                 if (this.lullaby != null) {
-                    vREvent.lullaby = this.lullaby.clone();
+                    vrEvent.lullaby = this.lullaby.clone();
                 }
                 if (this.streetView != null) {
-                    vREvent.streetView = this.streetView.clone();
+                    vrEvent.streetView = this.streetView.clone();
                 }
                 if (this.photos != null) {
-                    vREvent.photos = this.photos.clone();
+                    vrEvent.photos = this.photos.clone();
                 }
                 if (this.vrHome != null) {
-                    vREvent.vrHome = this.vrHome.clone();
+                    vrEvent.vrHome = this.vrHome.clone();
                 }
                 if (this.sdkConfiguration != null) {
-                    vREvent.sdkConfiguration = this.sdkConfiguration.clone();
+                    vrEvent.sdkConfiguration = this.sdkConfiguration.clone();
                 }
-                return vREvent;
+                return vrEvent;
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }
@@ -8082,14 +8082,14 @@ public interface Vr {
                 computeSerializedSize += CodedOutputByteBufferNano.computeInt64Size(3, this.durationMs.longValue());
             }
             if (this.installedVrApplications != null && this.installedVrApplications.length > 0) {
-                int i = computeSerializedSize;
-                for (int i2 = 0; i2 < this.installedVrApplications.length; i2++) {
-                    Application application = this.installedVrApplications[i2];
+                int computeSerializedSize2 = computeSerializedSize;
+                for (int j = 0; j < this.installedVrApplications.length; j++) {
+                    Application application = this.installedVrApplications[j];
                     if (application != null) {
-                        i += CodedOutputByteBufferNano.computeMessageSize(4, application);
+                        computeSerializedSize2 += CodedOutputByteBufferNano.computeMessageSize(4, application);
                     }
                 }
-                computeSerializedSize = i;
+                computeSerializedSize = computeSerializedSize2;
             }
             if (this.cyclops != null) {
                 computeSerializedSize += CodedOutputByteBufferNano.computeMessageSize(5, this.cyclops);
@@ -8200,8 +8200,8 @@ public interface Vr {
                         this.cohort = codedInputByteBufferNano.readString();
                         break;
                     case 64:
-                        int readInt32 = codedInputByteBufferNano.readInt32();
-                        switch (readInt32) {
+                        int int32 = codedInputByteBufferNano.readInt32();
+                        switch (int32) {
                             case 0:
                             case 1:
                             case 2:
@@ -8211,7 +8211,7 @@ public interface Vr {
                             case 6:
                             case 11:
                             case 21:
-                                this.lifetimeCountBucket = Integer.valueOf(readInt32);
+                                this.lifetimeCountBucket = Integer.valueOf(int32);
                                 break;
                         }
                     case 74:

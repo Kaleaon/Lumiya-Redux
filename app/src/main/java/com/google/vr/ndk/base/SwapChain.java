@@ -9,8 +9,8 @@ public class SwapChain {
     private final Frame[] frames = new Frame[2];
     private long nativeSwapChain;
 
-    SwapChain(long j) {
-        this.nativeSwapChain = j;
+    SwapChain(long nativeSwapChain) {
+        this.nativeSwapChain = nativeSwapChain;
         this.frames[0] = new Frame();
         this.frames[1] = new Frame();
         this.currentFrame = 0;

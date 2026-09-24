@@ -14,10 +14,10 @@ public class AvatarPickerForShare extends AvatarPickerFragment {
     private static final String INVENTORY_ENTRY_KEY = "inventoryEntry";
     private final InventoryFragmentHelper inventoryFragmentHelper = new InventoryFragmentHelper(this);
 
-    public static Bundle makeArguments(UUID uuid, SLInventoryEntry sLInventoryEntry) {
+    public static Bundle makeArguments(UUID uuid, SLInventoryEntry inventoryEntry) {
         Bundle bundle = new Bundle();
         bundle.putString("activeAgentUUID", uuid.toString());
-        bundle.putParcelable(INVENTORY_ENTRY_KEY, sLInventoryEntry);
+        bundle.putParcelable(INVENTORY_ENTRY_KEY, inventoryEntry);
         return bundle;
     }
 

@@ -39,8 +39,8 @@ public class ParcelObjectOwnersRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelObjectOwnersRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelObjectOwnersRequest(this);
     }
 
     @Override

@@ -83,13 +83,13 @@ public class VrParamsProviderJni {
     }
 
     @UsedByNative
-    private static boolean writeDeviceParams(Context context, byte[] bArr) {
+    private static boolean writeDeviceParams(Context context, byte[] bytes) {
         CardboardDevice.DeviceParams deviceParams = null;
         VrParamsProvider create = VrParamsProviderFactory.create(context);
-        if (bArr != null) {
+        if (bytes != null) {
             try {
                 try {
-                    deviceParams = (CardboardDevice.DeviceParams) MessageNano.mergeFrom(new CardboardDevice.DeviceParams(), bArr);
+                    deviceParams = (CardboardDevice.DeviceParams) MessageNano.mergeFrom(new CardboardDevice.DeviceParams(), bytes);
                 } catch (InvalidProtocolBufferNanoException e) {
                     String valueOf = String.valueOf(e);
                     Log.w(TAG, new StringBuilder(String.valueOf(valueOf).length() + 31).append("Error parsing protocol buffer: ").append(valueOf).toString());

@@ -40,8 +40,8 @@ public class JoinGroupReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleJoinGroupReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleJoinGroupReply(this);
     }
 
     @Override

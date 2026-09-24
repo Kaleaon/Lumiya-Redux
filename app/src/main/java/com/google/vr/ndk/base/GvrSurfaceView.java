@@ -52,49 +52,49 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     private abstract class BaseConfigChooser implements GLSurfaceView.EGLConfigChooser {
         protected int[] mConfigSpec;
 
-        public BaseConfigChooser(int[] iArr) {
-            this.mConfigSpec = filterConfigSpec(iArr);
+        public BaseConfigChooser(int[] ints) {
+            this.mConfigSpec = filterConfigSpec(ints);
         }
 
-        private int[] filterConfigSpec(int[] iArr) {
+        private int[] filterConfigSpec(int[] ints2) {
             if (GvrSurfaceView.this.mEGLContextClientVersion != 2 && GvrSurfaceView.this.mEGLContextClientVersion != 3) {
-                return iArr;
+                return ints2;
             }
-            int length = iArr.length;
-            int[] iArr2 = new int[length + 2];
-            System.arraycopy(iArr, 0, iArr2, 0, length - 1);
-            iArr2[length - 1] = 12352;
+            int length = ints2.length;
+            int[] ints = new int[length + 2];
+            System.arraycopy(ints2, 0, ints, 0, length - 1);
+            ints[length - 1] = 12352;
             if (GvrSurfaceView.this.mEGLContextClientVersion != 2) {
-                iArr2[length] = 64;
+                ints[length] = 64;
             } else {
-                iArr2[length] = 4;
+                ints[length] = 4;
             }
-            iArr2[length + 1] = 12344;
-            return iArr2;
+            ints[length + 1] = 12344;
+            return ints;
         }
 
         @Override
-        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay) {
-            int[] iArr = new int[1];
-            if (!egl10.eglChooseConfig(eGLDisplay, this.mConfigSpec, null, 0, iArr)) {
+        public EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay) {
+            int[] ints = new int[1];
+            if (!egL10.eglChooseConfig(eglDisplay, this.mConfigSpec, null, 0, ints)) {
                 throw new IllegalArgumentException("eglChooseConfig failed");
             }
-            int i = iArr[0];
+            int i = ints[0];
             if (i <= 0) {
                 throw new IllegalArgumentException("No configs match configSpec");
             }
-            EGLConfig[] eGLConfigArr = new EGLConfig[i];
-            if (!egl10.eglChooseConfig(eGLDisplay, this.mConfigSpec, eGLConfigArr, i, iArr)) {
+            EGLConfig[] eglConfigs = new EGLConfig[i];
+            if (!egL10.eglChooseConfig(eglDisplay, this.mConfigSpec, eglConfigs, i, ints)) {
                 throw new IllegalArgumentException("eglChooseConfig#2 failed");
             }
-            EGLConfig chooseConfig = chooseConfig(egl10, eGLDisplay, eGLConfigArr);
+            EGLConfig chooseConfig = chooseConfig(egL10, eglDisplay, eglConfigs);
             if (chooseConfig != null) {
                 return chooseConfig;
             }
             throw new IllegalArgumentException("No config chosen");
         }
 
-        abstract EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr);
+        abstract EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig[] eglConfigs);
     }
 
     private class ComponentSizeChooser extends BaseConfigChooser {
@@ -106,33 +106,33 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         protected int mStencilSize;
         private int[] mValue;
 
-        public ComponentSizeChooser(int i, int i2, int i3, int i4, int i5, int i6) {
-            super(new int[]{12324, i, 12323, i2, 12322, i3, 12321, i4, 12325, i5, 12326, i6, 12344});
+        public ComponentSizeChooser(int mRedSize, int mGreenSize, int mBlueSize, int mAlphaSize, int mDepthSize, int mStencilSize) {
+            super(new int[]{12324, mRedSize, 12323, mGreenSize, 12322, mBlueSize, 12321, mAlphaSize, 12325, mDepthSize, 12326, mStencilSize, 12344});
             this.mValue = new int[1];
-            this.mRedSize = i;
-            this.mGreenSize = i2;
-            this.mBlueSize = i3;
-            this.mAlphaSize = i4;
-            this.mDepthSize = i5;
-            this.mStencilSize = i6;
+            this.mRedSize = mRedSize;
+            this.mGreenSize = mGreenSize;
+            this.mBlueSize = mBlueSize;
+            this.mAlphaSize = mAlphaSize;
+            this.mDepthSize = mDepthSize;
+            this.mStencilSize = mStencilSize;
         }
 
-        private int findConfigAttrib(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, int i, int i2) {
-            return !egl10.eglGetConfigAttrib(eGLDisplay, eGLConfig, i, this.mValue) ? i2 : this.mValue[0];
+        private int findConfigAttrib(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, int i, int i2) {
+            return !egL10.eglGetConfigAttrib(eglDisplay, eglConfig, i, this.mValue) ? i2 : this.mValue[0];
         }
 
         @Override
-        public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr) {
-            for (EGLConfig eGLConfig : eGLConfigArr) {
-                int findConfigAttrib = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12325, 0);
-                int findConfigAttrib2 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12326, 0);
-                if (findConfigAttrib >= this.mDepthSize && findConfigAttrib2 >= this.mStencilSize) {
-                    int findConfigAttrib3 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12324, 0);
-                    int findConfigAttrib4 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12323, 0);
-                    int findConfigAttrib5 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12322, 0);
-                    int findConfigAttrib6 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12321, 0);
-                    if (findConfigAttrib3 == this.mRedSize && findConfigAttrib4 == this.mGreenSize && findConfigAttrib5 == this.mBlueSize && findConfigAttrib6 == this.mAlphaSize) {
-                        return eGLConfig;
+        public EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig[] eglConfigs) {
+            for (EGLConfig eglConfig : eglConfigs) {
+                int findConfigAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12325, 0);
+                int configAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12326, 0);
+                if (findConfigAttrib >= this.mDepthSize && configAttrib >= this.mStencilSize) {
+                    int configAttrib2 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12324, 0);
+                    int configAttrib3 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12323, 0);
+                    int configAttrib4 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12322, 0);
+                    int configAttrib5 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12321, 0);
+                    if (configAttrib2 == this.mRedSize && configAttrib3 == this.mGreenSize && configAttrib4 == this.mBlueSize && configAttrib5 == this.mAlphaSize) {
+                        return eglConfig;
                     }
                 }
             }
@@ -147,24 +147,24 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         @Override
-        public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
-            int[] iArr = {EGL_CONTEXT_CLIENT_VERSION, GvrSurfaceView.this.mEGLContextClientVersion, 12344};
-            EGLContext eGLContext = EGL10.EGL_NO_CONTEXT;
+        public EGLContext createContext(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig) {
+            int[] ints = {EGL_CONTEXT_CLIENT_VERSION, GvrSurfaceView.this.mEGLContextClientVersion, 12344};
+            EGLContext eglContext = EGL10.EGL_NO_CONTEXT;
             if (GvrSurfaceView.this.mEGLContextClientVersion == 0) {
-                iArr = null;
+                ints = null;
             }
-            return egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
+            return egL10.eglCreateContext(eglDisplay, eglConfig, eglContext, ints);
         }
 
         @Override
-        public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
-            if (egl10.eglDestroyContext(eGLDisplay, eGLContext)) {
+        public void destroyContext(EGL10 egL10, EGLDisplay eglDisplay, EGLContext eglContext) {
+            if (egL10.eglDestroyContext(eglDisplay, eglContext)) {
                 return;
             }
-            String valueOf = String.valueOf(eGLDisplay);
-            String valueOf2 = String.valueOf(eGLContext);
+            String valueOf = String.valueOf(eglDisplay);
+            String valueOf2 = String.valueOf(eglContext);
             Log.e("DefaultContextFactory", new StringBuilder(String.valueOf(valueOf).length() + 18 + String.valueOf(valueOf2).length()).append("display:").append(valueOf).append(" context: ").append(valueOf2).toString());
-            EglHelper.throwEglException("eglDestroyContex", egl10.eglGetError());
+            EglHelper.throwEglException("eglDestroyContex", egL10.eglGetError());
         }
     }
 
@@ -173,9 +173,9 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         @Override
-        public EGLSurface createWindowSurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, Object obj) {
+        public EGLSurface createWindowSurface(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, Object obj) {
             try {
-                return egl10.eglCreateWindowSurface(eGLDisplay, eGLConfig, obj, null);
+                return egL10.eglCreateWindowSurface(eglDisplay, eglConfig, obj, null);
             } catch (IllegalArgumentException e) {
                 Log.e(GvrSurfaceView.TAG, "eglCreateWindowSurface", e);
                 return null;
@@ -183,8 +183,8 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         @Override
-        public void destroySurface(EGL10 egl10, EGLDisplay eGLDisplay, EGLSurface eGLSurface) {
-            egl10.eglDestroySurface(eGLDisplay, eGLSurface);
+        public void destroySurface(EGL10 egL10, EGLDisplay eglDisplay, EGLSurface eglSurface) {
+            egL10.eglDestroySurface(eglDisplay, eglSurface);
         }
     }
 
@@ -410,12 +410,12 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             private GLThreadManager() {
             }
 
-            public void releaseEglContextLocked(GLThread gLThread) {
+            public void releaseEglContextLocked(GLThread glThread) {
                 notifyAll();
             }
 
-            public synchronized void threadExiting(GLThread gLThread) {
-                gLThread.mExited = true;
+            public synchronized void threadExiting(GLThread glThread) {
+                glThread.mExited = true;
                 notifyAll();
             }
         }
@@ -682,19 +682,19 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         public int getRenderMode() {
-            int i;
+            int mRenderMode;
             synchronized (this.mGLThreadManager) {
-                i = this.mRenderMode;
+                mRenderMode = this.mRenderMode;
             }
-            return i;
+            return mRenderMode;
         }
 
         public int getSwapMode() {
-            int i;
+            int mRequestedSwapMode;
             synchronized (this.mGLThreadManager) {
-                i = this.mRequestedSwapMode;
+                mRequestedSwapMode = this.mRequestedSwapMode;
             }
-            return i;
+            return mRequestedSwapMode;
         }
 
         public void onPause() {
@@ -727,10 +727,10 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        public void onWindowResize(int i, int i2) {
+        public void onWindowResize(int mWidth, int mHeight) {
             synchronized (this.mGLThreadManager) {
-                this.mWidth = i;
-                this.mHeight = i2;
+                this.mWidth = mWidth;
+                this.mHeight = mHeight;
                 this.mSizeChanged = true;
                 this.mRequestRender = true;
                 this.mRenderComplete = false;
@@ -812,22 +812,22 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
             }
         }
 
-        public void setRenderMode(int i) {
-            if (i < 0 || i > 1) {
+        public void setRenderMode(int mRenderMode) {
+            if (mRenderMode < 0 || mRenderMode > 1) {
                 throw new IllegalArgumentException("renderMode");
             }
             synchronized (this.mGLThreadManager) {
-                this.mRenderMode = i;
+                this.mRenderMode = mRenderMode;
                 this.mGLThreadManager.notifyAll();
             }
         }
 
-        public void setSwapMode(int i) {
-            if (i < 0 || i > 2) {
+        public void setSwapMode(int mRequestedSwapMode) {
+            if (mRequestedSwapMode < 0 || mRequestedSwapMode > 2) {
                 throw new IllegalArgumentException("swapMode");
             }
             synchronized (this.mGLThreadManager) {
-                this.mRequestedSwapMode = i;
+                this.mRequestedSwapMode = mRequestedSwapMode;
                 this.mGLThreadManager.notifyAll();
             }
         }
@@ -891,9 +891,9 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         }
 
         @Override
-        public void write(char[] cArr, int i, int i2) {
-            for (int i3 = 0; i3 < i2; i3++) {
-                char c = cArr[i + i3];
+        public void write(char[] chars, int i, int i2) {
+            for (int j = 0; j < i2; j++) {
+                char c = chars[i + j];
                 if (c != '\n') {
                     this.mBuilder.append(c);
                 } else {
@@ -1003,48 +1003,48 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mGLThread.requestRender();
     }
 
-    public void setDebugFlags(int i) {
-        this.mDebugFlags = i;
+    public void setDebugFlags(int mDebugFlags) {
+        this.mDebugFlags = mDebugFlags;
     }
 
     public void setEGLConfigChooser(int i, int i2, int i3, int i4, int i5, int i6) {
         setEGLConfigChooser(new ComponentSizeChooser(i, i2, i3, i4, i5, i6));
     }
 
-    public void setEGLConfigChooser(GLSurfaceView.EGLConfigChooser eGLConfigChooser) {
+    public void setEGLConfigChooser(GLSurfaceView.EGLConfigChooser eglConfigChooser) {
         checkRenderThreadState();
-        this.mEGLConfigChooser = eGLConfigChooser;
+        this.mEGLConfigChooser = eglConfigChooser;
     }
 
-    public void setEGLConfigChooser(boolean z) {
-        setEGLConfigChooser(new SimpleEGLConfigChooser(z));
+    public void setEGLConfigChooser(boolean eglConfigChooser) {
+        setEGLConfigChooser(new SimpleEGLConfigChooser(eglConfigChooser));
     }
 
-    public void setEGLContextClientVersion(int i) {
+    public void setEGLContextClientVersion(int mEGLContextClientVersion) {
         checkRenderThreadState();
-        this.mEGLContextClientVersion = i;
+        this.mEGLContextClientVersion = mEGLContextClientVersion;
     }
 
-    public void setEGLContextFactory(GLSurfaceView.EGLContextFactory eGLContextFactory) {
+    public void setEGLContextFactory(GLSurfaceView.EGLContextFactory eglContextFactory) {
         checkRenderThreadState();
-        this.mEGLContextFactory = eGLContextFactory;
+        this.mEGLContextFactory = eglContextFactory;
     }
 
-    public void setEGLWindowSurfaceFactory(GLSurfaceView.EGLWindowSurfaceFactory eGLWindowSurfaceFactory) {
+    public void setEGLWindowSurfaceFactory(GLSurfaceView.EGLWindowSurfaceFactory eglWindowSurfaceFactory) {
         checkRenderThreadState();
-        this.mEGLWindowSurfaceFactory = eGLWindowSurfaceFactory;
+        this.mEGLWindowSurfaceFactory = eglWindowSurfaceFactory;
     }
 
-    public void setGLWrapper(GLWrapper gLWrapper) {
-        this.mGLWrapper = gLWrapper;
+    public void setGLWrapper(GLWrapper glWrapper) {
+        this.mGLWrapper = glWrapper;
     }
 
-    public void setPreserveEGLContextOnPause(boolean z) {
-        this.mPreserveEGLContextOnPause = z;
+    public void setPreserveEGLContextOnPause(boolean mPreserveEGLContextOnPause) {
+        this.mPreserveEGLContextOnPause = mPreserveEGLContextOnPause;
     }
 
-    public void setRenderMode(int i) {
-        this.mGLThread.setRenderMode(i);
+    public void setRenderMode(int renderMode) {
+        this.mGLThread.setRenderMode(renderMode);
     }
 
     public void setRenderer(GLSurfaceView.Renderer renderer) {
@@ -1063,11 +1063,11 @@ public class GvrSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         this.mGLThread.start();
     }
 
-    public void setSwapMode(int i) {
-        if (i == 1 && Build.VERSION.SDK_INT < 17) {
+    public void setSwapMode(int swapMode) {
+        if (swapMode == 1 && Build.VERSION.SDK_INT < 17) {
             Log.e(TAG, "setSwapMode(SWAPMODE_SINGLE) requires Jellybean MR1 (EGL14 dependency)");
         } else {
-            this.mGLThread.setSwapMode(i);
+            this.mGLThread.setSwapMode(swapMode);
         }
     }
 

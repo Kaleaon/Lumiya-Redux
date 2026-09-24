@@ -33,8 +33,8 @@ public class FeatureDisabled extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFeatureDisabled(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFeatureDisabled(this);
     }
 
     @Override

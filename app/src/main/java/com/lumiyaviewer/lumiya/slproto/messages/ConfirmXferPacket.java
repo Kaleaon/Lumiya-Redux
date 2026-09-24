@@ -31,8 +31,8 @@ public class ConfirmXferPacket extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleConfirmXferPacket(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleConfirmXferPacket(this);
     }
 
     @Override

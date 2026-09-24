@@ -69,7 +69,7 @@ public class ChatScriptDialogViewHolder extends ChatEventViewHolder implements V
         }
     }
 
-    public void setDialogEvent(@Nullable SLChatScriptDialog sLChatScriptDialog) {
-        this.dialogEvent = sLChatScriptDialog;
+    public void setDialogEvent(@Nullable SLChatScriptDialog chatScriptDialog) {
+        this.dialogEvent = chatScriptDialog;
     }
 }

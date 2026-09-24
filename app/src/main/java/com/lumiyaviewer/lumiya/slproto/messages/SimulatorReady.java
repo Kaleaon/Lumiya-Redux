@@ -45,8 +45,8 @@ public class SimulatorReady extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorReady(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorReady(this);
     }
 
     @Override

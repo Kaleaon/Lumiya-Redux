@@ -20,10 +20,10 @@ public class LogSyncStatus implements Bundleable {
         GoogleDriveError
     }
 
-    public LogSyncStatus(int i, @Nonnull Status status, @Nullable String str) {
-        this.pluginVersionCode = i;
+    public LogSyncStatus(int pluginVersionCode, @Nonnull Status status, @Nullable String errorMessage) {
+        this.pluginVersionCode = pluginVersionCode;
         this.status = status;
-        this.errorMessage = str;
+        this.errorMessage = errorMessage;
     }
 
     public LogSyncStatus(Bundle bundle) {

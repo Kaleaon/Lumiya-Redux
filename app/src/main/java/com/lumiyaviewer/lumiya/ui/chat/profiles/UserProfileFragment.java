@@ -77,8 +77,8 @@ public class UserProfileFragment extends UserFunctionsFragment {
         private final int tabCaption;
         private final Class<? extends Fragment> tabClass;
 
-        ProfileTab(int i, Class cls) {
-            this.tabCaption = i;
+        ProfileTab(int tabCaption, Class cls) {
+            this.tabCaption = tabCaption;
             this.tabClass = cls;
         }
 

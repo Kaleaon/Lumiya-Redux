@@ -25,14 +25,14 @@ public class ScreenOnFlagHelper implements SensorEventListener {
         this.activity = activity;
     }
 
-    private void setKeepScreenOnFlag(boolean z) {
-        if (z != this.isFlagSet) {
-            if (z) {
+    private void setKeepScreenOnFlag(boolean isFlagSet) {
+        if (isFlagSet != this.isFlagSet) {
+            if (isFlagSet) {
                 this.activity.getWindow().addFlags(128);
             } else {
                 this.activity.getWindow().clearFlags(128);
             }
-            this.isFlagSet = z;
+            this.isFlagSet = isFlagSet;
         }
     }
 
@@ -57,8 +57,8 @@ public class ScreenOnFlagHelper implements SensorEventListener {
         }
     }
 
-    public void setScreenAlwaysOn(boolean z) {
-        this.screenAlwaysOn = z;
+    public void setScreenAlwaysOn(boolean screenAlwaysOn) {
+        this.screenAlwaysOn = screenAlwaysOn;
         updateFlag();
     }
 

@@ -39,9 +39,9 @@ public class UploadImageAsyncTask extends AsyncTask<UploadImageParams, Void, Upl
         public final String errorMessage;
         public final boolean success;
 
-        private UploadImageResult(boolean z, @Nullable String str) {
-            this.success = z;
-            this.errorMessage = str;
+        private UploadImageResult(boolean success, @Nullable String errorMessage) {
+            this.success = success;
+            this.errorMessage = errorMessage;
         }
 
         /* synthetic */ UploadImageResult(boolean z, String str, UploadImageResult uploadImageResult) {

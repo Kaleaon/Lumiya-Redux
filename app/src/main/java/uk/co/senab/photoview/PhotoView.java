@@ -110,8 +110,8 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setAllowParentInterceptOnEdge(boolean z) {
-        this.mAttacher.setAllowParentInterceptOnEdge(z);
+    public void setAllowParentInterceptOnEdge(boolean allowParentInterceptOnEdge) {
+        this.mAttacher.setAllowParentInterceptOnEdge(allowParentInterceptOnEdge);
     }
 
     @Override
@@ -138,8 +138,8 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setImageResource(int i) {
-        super.setImageResource(i);
+    public void setImageResource(int imageResource) {
+        super.setImageResource(imageResource);
         if (this.mAttacher == null) {
             return;
         }
@@ -156,18 +156,18 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setMaximumScale(float f) {
-        this.mAttacher.setMaximumScale(f);
+    public void setMaximumScale(float maximumScale) {
+        this.mAttacher.setMaximumScale(maximumScale);
     }
 
     @Override
-    public void setMediumScale(float f) {
-        this.mAttacher.setMediumScale(f);
+    public void setMediumScale(float mediumScale) {
+        this.mAttacher.setMediumScale(mediumScale);
     }
 
     @Override
-    public void setMinimumScale(float f) {
-        this.mAttacher.setMinimumScale(f);
+    public void setMinimumScale(float minimumScale) {
+        this.mAttacher.setMinimumScale(minimumScale);
     }
 
     @Override
@@ -206,18 +206,18 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setRotationBy(float f) {
-        this.mAttacher.setRotationBy(f);
+    public void setRotationBy(float rotationBy) {
+        this.mAttacher.setRotationBy(rotationBy);
     }
 
     @Override
-    public void setRotationTo(float f) {
-        this.mAttacher.setRotationTo(f);
+    public void setRotationTo(float rotationTo) {
+        this.mAttacher.setRotationTo(rotationTo);
     }
 
     @Override
-    public void setScale(float f) {
-        this.mAttacher.setScale(f);
+    public void setScale(float scale) {
+        this.mAttacher.setScale(scale);
     }
 
     @Override
@@ -245,12 +245,12 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setZoomTransitionDuration(int i) {
-        this.mAttacher.setZoomTransitionDuration(i);
+    public void setZoomTransitionDuration(int zoomTransitionDuration) {
+        this.mAttacher.setZoomTransitionDuration(zoomTransitionDuration);
     }
 
     @Override
-    public void setZoomable(boolean z) {
-        this.mAttacher.setZoomable(z);
+    public void setZoomable(boolean zoomable) {
+        this.mAttacher.setZoomable(zoomable);
     }
 }

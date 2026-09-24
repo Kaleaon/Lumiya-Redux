@@ -41,8 +41,8 @@ public class DirPopularQueryBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPopularQueryBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPopularQueryBackend(this);
     }
 
     @Override

@@ -34,8 +34,8 @@ public class CompleteAgentMovement extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCompleteAgentMovement(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCompleteAgentMovement(this);
     }
 
     @Override

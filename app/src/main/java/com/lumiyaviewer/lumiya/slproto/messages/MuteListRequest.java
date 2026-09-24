@@ -38,8 +38,8 @@ public class MuteListRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMuteListRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMuteListRequest(this);
     }
 
     @Override

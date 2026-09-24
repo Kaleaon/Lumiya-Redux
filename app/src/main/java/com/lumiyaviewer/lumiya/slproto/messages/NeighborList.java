@@ -36,15 +36,15 @@ public class NeighborList extends SLMessage {
     @Override
     public int CalcPayloadSize() {
         int i = 1;
-        for (int i2 = 0; i2 < 4; i2++) {
-            i += this.NeighborBlock_Fields[i2].Name.length + 29 + 1;
+        for (int j = 0; j < 4; j++) {
+            i += this.NeighborBlock_Fields[j].Name.length + 29 + 1;
         }
         return i;
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleNeighborList(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleNeighborList(this);
     }
 
     @Override

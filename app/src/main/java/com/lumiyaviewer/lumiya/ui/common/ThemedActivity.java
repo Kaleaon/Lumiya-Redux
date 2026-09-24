@@ -25,8 +25,8 @@ public class ThemedActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle bundle) {
         this.selectedThemeId = GlobalOptions.getInstance().getThemeResourceId();
         Debug.Printf("Theme: activity theme 0x%x", Integer.valueOf(this.selectedThemeId));
-        int i = this.selectedThemeId;
-        setTheme(this instanceof ThemeMapper ? ((ThemeMapper) this).mapThemeResourceId(i) : i);
+        int selectedThemeId = this.selectedThemeId;
+        setTheme(this instanceof ThemeMapper ? ((ThemeMapper) this).mapThemeResourceId(selectedThemeId) : selectedThemeId);
         super.onCreate(bundle);
     }
 

@@ -51,8 +51,8 @@ public class ParcelBuy extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelBuy(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelBuy(this);
     }
 
     @Override

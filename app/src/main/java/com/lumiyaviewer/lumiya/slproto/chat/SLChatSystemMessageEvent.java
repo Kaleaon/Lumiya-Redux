@@ -18,9 +18,9 @@ public final class SLChatSystemMessageEvent extends SLChatEvent {
         this.text = chatMessage.getMessageText();
     }
 
-    public SLChatSystemMessageEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, @Nonnull String str) {
+    public SLChatSystemMessageEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, @Nonnull String text) {
         super(chatMessageSource, uuid);
-        this.text = str;
+        this.text = text;
     }
 
     @Override

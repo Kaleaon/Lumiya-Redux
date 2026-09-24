@@ -64,9 +64,9 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    public void DoConnect(SLAuthParams sLAuthParams, String str) {
+    public void DoConnect(SLAuthParams authParams, String str) {
         try {
-            SLAuthReply Login = new SLAuth().Login(sLAuthParams.withLocation(str));
+            SLAuthReply Login = new SLAuth().Login(authParams.withLocation(str));
             if (!Login.success) {
                 setConnectionState(ConnectionState.Idle);
                 reconnectOrDrop(true, false, Login.message);
@@ -138,20 +138,20 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    private void startCircuit(SLAuthReply sLAuthReply, SLTempCircuit sLTempCircuit) {
-        Debug.Log("login reply: ip = " + sLAuthReply.simAddress.toString() + ", port = " + sLAuthReply.simPort + ", ccode = " + sLAuthReply.circuitCode);
-        if (sLAuthReply.inventoryRoot != null) {
-            Debug.Log("inventory root: " + sLAuthReply.inventoryRoot.toString());
+    private void startCircuit(SLAuthReply authReply, SLTempCircuit tempCircuit) {
+        Debug.Log("login reply: ip = " + authReply.simAddress.toString() + ", port = " + authReply.simPort + ", ccode = " + authReply.circuitCode);
+        if (authReply.inventoryRoot != null) {
+            Debug.Log("inventory root: " + authReply.inventoryRoot.toString());
         } else {
             Debug.Log("inventory root is null");
         }
-        SLCaps sLCaps = new SLCaps();
-        sLCaps.GetCapabilites(this.authReply.loginURL, this.authReply.seedCapability);
+        SLCaps caps = new SLCaps();
+        caps.GetCapabilites(this.authReply.loginURL, this.authReply.seedCapability);
         try {
-            this.agentCircuit = new SLAgentCircuit(this, new SLCircuitInfo(sLAuthReply), sLAuthReply, sLCaps, sLTempCircuit);
+            this.agentCircuit = new SLAgentCircuit(this, new SLCircuitInfo(authReply), authReply, caps, tempCircuit);
             this.modules = this.agentCircuit.getModules();
             try {
-                this.capEventQueue = new SLCapEventQueue(sLCaps.getCapabilityOrThrow(SLCaps.SLCapability.EventQueueGet), this.agentCircuit);
+                this.capEventQueue = new SLCapEventQueue(caps.getCapabilityOrThrow(SLCaps.SLCapability.EventQueueGet), this.agentCircuit);
             } catch (SLCaps.NoSuchCapabilityException e) {
                 e.printStackTrace();
             }
@@ -192,15 +192,15 @@ public class SLGridConnection extends SLConnection {
         closeConnectionObjects();
     }
 
-    public synchronized void Connect(SLAuthParams sLAuthParams) {
+    public synchronized void Connect(SLAuthParams authParams) {
         if (this.connectionState == ConnectionState.Idle) {
-            this.authParams = sLAuthParams;
+            this.authParams = authParams;
             this.userWantsConnected = true;
             this.reconnectAttempts = 0;
             this.isReconnecting = false;
             this.hadConnected = false;
             this.firstConnect = true;
-            startConnecting(false, sLAuthParams.startLocation);
+            startConnecting(false, authParams.startLocation);
         }
     }
 
@@ -215,7 +215,7 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    public synchronized void HandleTeleportFinish(SLAuthReply sLAuthReply) {
+    public synchronized void HandleTeleportFinish(SLAuthReply authReply) {
         if (this.agentCircuit != null) {
             this.agentCircuit.CloseCircuit();
             this.agentCircuit = null;
@@ -224,17 +224,17 @@ public class SLGridConnection extends SLConnection {
             this.capEventQueue.stopQueue();
             this.capEventQueue = null;
         }
-        this.authReply = sLAuthReply;
-        startCircuit(sLAuthReply, this.tempCircuits.remove(this.authReply));
+        this.authReply = authReply;
+        startCircuit(authReply, this.tempCircuits.remove(this.authReply));
     }
 
-    synchronized void addTempCircuit(SLAuthReply sLAuthReply) {
-        if (!this.tempCircuits.containsKey(sLAuthReply)) {
+    synchronized void addTempCircuit(SLAuthReply authReply) {
+        if (!this.tempCircuits.containsKey(authReply)) {
             try {
-                SLTempCircuit sLTempCircuit = new SLTempCircuit(this, new SLCircuitInfo(sLAuthReply), sLAuthReply);
-                this.tempCircuits.put(sLAuthReply, sLTempCircuit);
-                AddCircuit(sLTempCircuit);
-                sLTempCircuit.SendUseCode();
+                SLTempCircuit tempCircuit = new SLTempCircuit(this, new SLCircuitInfo(authReply), authReply);
+                this.tempCircuits.put(authReply, tempCircuit);
+                AddCircuit(tempCircuit);
+                tempCircuit.SendUseCode();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -341,13 +341,13 @@ public class SLGridConnection extends SLConnection {
         }
     }
 
-    synchronized void removeTempCircuit(SLTempCircuit sLTempCircuit) {
+    synchronized void removeTempCircuit(SLTempCircuit tempCircuit) {
         Iterator<Map.Entry<SLAuthReply, SLTempCircuit>> it = this.tempCircuits.entrySet().iterator();
         while (it.hasNext()) {
-            if (it.next().getValue() == sLTempCircuit) {
+            if (it.next().getValue() == tempCircuit) {
                 it.remove();
             }
         }
-        sLTempCircuit.CloseCircuit();
+        tempCircuit.CloseCircuit();
     }
 }

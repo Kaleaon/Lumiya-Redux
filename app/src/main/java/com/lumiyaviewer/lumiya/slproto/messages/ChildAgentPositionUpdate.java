@@ -42,8 +42,8 @@ public class ChildAgentPositionUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentPositionUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentPositionUpdate(this);
     }
 
     @Override

@@ -7,9 +7,9 @@ final class AutoValue_UnreadMessageInfo extends UnreadMessageInfo {
     private final SLChatEvent lastMessage;
     private final int unreadCount;
 
-    AutoValue_UnreadMessageInfo(int i, @Nullable SLChatEvent sLChatEvent) {
-        this.unreadCount = i;
-        this.lastMessage = sLChatEvent;
+    AutoValue_UnreadMessageInfo(int unreadCount, @Nullable SLChatEvent chatEvent) {
+        this.unreadCount = unreadCount;
+        this.lastMessage = chatEvent;
     }
 
     public boolean equals(Object obj) {

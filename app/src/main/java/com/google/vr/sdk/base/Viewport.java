@@ -21,14 +21,14 @@ public class Viewport {
         return this.x == viewport.x && this.y == viewport.y && this.width == viewport.width && this.height == viewport.height;
     }
 
-    public void getAsArray(int[] iArr, int i) {
-        if (i + 4 > iArr.length) {
+    public void getAsArray(int[] ints, int i) {
+        if (i + 4 > ints.length) {
             throw new IllegalArgumentException("Not enough space to write the result");
         }
-        iArr[i] = this.x;
-        iArr[i + 1] = this.y;
-        iArr[i + 2] = this.width;
-        iArr[i + 3] = this.height;
+        ints[i] = this.x;
+        ints[i + 1] = this.y;
+        ints[i + 2] = this.width;
+        ints[i + 3] = this.height;
     }
 
     public int hashCode() {
@@ -44,11 +44,11 @@ public class Viewport {
     }
 
     @UsedByNative
-    public void setViewport(int i, int i2, int i3, int i4) {
-        this.x = i;
-        this.y = i2;
-        this.width = i3;
-        this.height = i4;
+    public void setViewport(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public String toString() {

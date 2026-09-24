@@ -12,9 +12,9 @@ public class VoiceAudioProperties implements VoicePluginMessage {
     public final float speakerVolume;
     public final boolean speakerphoneOn;
 
-    public VoiceAudioProperties(float f, boolean z, @Nonnull VoiceBluetoothState voiceBluetoothState) {
-        this.speakerVolume = f;
-        this.speakerphoneOn = z;
+    public VoiceAudioProperties(float speakerVolume, boolean speakerphoneOn, @Nonnull VoiceBluetoothState voiceBluetoothState) {
+        this.speakerVolume = speakerVolume;
+        this.speakerphoneOn = speakerphoneOn;
         this.bluetoothState = voiceBluetoothState;
     }
 

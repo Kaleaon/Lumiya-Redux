@@ -31,8 +31,8 @@ public class ViewerFrozenMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleViewerFrozenMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleViewerFrozenMessage(this);
     }
 
     @Override

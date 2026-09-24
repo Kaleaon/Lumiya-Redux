@@ -31,8 +31,8 @@ public class HealthMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleHealthMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleHealthMessage(this);
     }
 
     @Override

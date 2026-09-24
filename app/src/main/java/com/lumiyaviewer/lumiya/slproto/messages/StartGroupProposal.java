@@ -43,8 +43,8 @@ public class StartGroupProposal extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStartGroupProposal(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStartGroupProposal(this);
     }
 
     @Override

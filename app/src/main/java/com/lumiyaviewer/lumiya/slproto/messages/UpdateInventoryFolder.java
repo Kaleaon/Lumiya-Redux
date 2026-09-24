@@ -49,8 +49,8 @@ public class UpdateInventoryFolder extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateInventoryFolder(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateInventoryFolder(this);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class UpdateInventoryFolder extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             FolderData folderData = new FolderData();
             folderData.FolderID = unpackUUID(byteBuffer);
             folderData.ParentID = unpackUUID(byteBuffer);

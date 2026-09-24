@@ -41,8 +41,8 @@ public class ViewerStartAuction extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleViewerStartAuction(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleViewerStartAuction(this);
     }
 
     @Override

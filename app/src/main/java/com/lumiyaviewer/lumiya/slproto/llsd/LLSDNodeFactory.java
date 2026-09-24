@@ -107,10 +107,10 @@ public class LLSDNodeFactory {
 
     public static LLSDNode parseNode(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException, LLSDXMLException {
         String name = xmlPullParser.getName();
-        LLSDNodeConstructor lLSDNodeConstructor = tagMap.get(name);
-        if (lLSDNodeConstructor == null) {
+        LLSDNodeConstructor lsdNodeConstructor = tagMap.get(name);
+        if (lsdNodeConstructor == null) {
             throw new LLSDXMLException("Invalid tag name: " + name);
         }
-        return lLSDNodeConstructor.createNodeFromXML(xmlPullParser);
+        return lsdNodeConstructor.createNodeFromXML(xmlPullParser);
     }
 }

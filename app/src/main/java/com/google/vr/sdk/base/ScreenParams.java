@@ -22,12 +22,12 @@ public class ScreenParams {
         if (this.height <= this.width) {
             return;
         }
-        int i = this.width;
+        int width = this.width;
         this.width = this.height;
-        this.height = i;
-        float f = this.xMetersPerPixel;
+        this.height = width;
+        float xMetersPerPixel = this.xMetersPerPixel;
         this.xMetersPerPixel = this.yMetersPerPixel;
-        this.yMetersPerPixel = f;
+        this.yMetersPerPixel = xMetersPerPixel;
     }
 
     public ScreenParams(ScreenParams screenParams) {
@@ -87,16 +87,16 @@ public class ScreenParams {
         return this.width * this.xMetersPerPixel;
     }
 
-    public void setBorderSizeMeters(float f) {
-        this.borderSizeMeters = f;
+    public void setBorderSizeMeters(float borderSizeMeters) {
+        this.borderSizeMeters = borderSizeMeters;
     }
 
-    public void setHeight(int i) {
-        this.height = i;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
-    public void setWidth(int i) {
-        this.width = i;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public String toString() {

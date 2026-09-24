@@ -20,8 +20,8 @@ public class SimulatorShutdownRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorShutdownRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorShutdownRequest(this);
     }
 
     @Override

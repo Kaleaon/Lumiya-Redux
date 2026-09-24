@@ -38,8 +38,8 @@ public class UpdateUserInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateUserInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateUserInfo(this);
     }
 
     @Override

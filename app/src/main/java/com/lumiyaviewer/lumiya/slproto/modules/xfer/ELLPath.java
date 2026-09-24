@@ -22,8 +22,8 @@ public enum ELLPath {
 
     private int code;
 
-    ELLPath(int i) {
-        this.code = i;
+    ELLPath(int code) {
+        this.code = code;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

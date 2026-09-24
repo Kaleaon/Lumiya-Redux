@@ -32,8 +32,8 @@ public class VelocityInterpolateOff extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleVelocityInterpolateOff(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleVelocityInterpolateOff(this);
     }
 
     @Override

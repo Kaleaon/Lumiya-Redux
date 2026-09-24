@@ -47,8 +47,8 @@ public class Error extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleError(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleError(this);
     }
 
     @Override

@@ -43,8 +43,8 @@ public class ParcelJoin extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelJoin(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelJoin(this);
     }
 
     @Override

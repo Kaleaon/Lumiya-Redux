@@ -30,8 +30,8 @@ public class ConfirmAuctionStart extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleConfirmAuctionStart(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleConfirmAuctionStart(this);
     }
 
     @Override

@@ -27,8 +27,8 @@ public final class CodedOutputByteBufferNano {
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
     }
 
-    private CodedOutputByteBufferNano(byte[] bArr, int i, int i2) {
-        this(ByteBuffer.wrap(bArr, i, i2));
+    private CodedOutputByteBufferNano(byte[] bytes, int i, int i2) {
+        this(ByteBuffer.wrap(bytes, i, i2));
     }
 
     public static int computeBoolSize(int i, boolean z) {
@@ -39,12 +39,12 @@ public final class CodedOutputByteBufferNano {
         return 1;
     }
 
-    public static int computeBytesSize(int i, byte[] bArr) {
-        return computeTagSize(i) + computeBytesSizeNoTag(bArr);
+    public static int computeBytesSize(int i, byte[] bytes) {
+        return computeTagSize(i) + computeBytesSizeNoTag(bytes);
     }
 
-    public static int computeBytesSizeNoTag(byte[] bArr) {
-        return computeRawVarint32Size(bArr.length) + bArr.length;
+    public static int computeBytesSizeNoTag(byte[] bytes) {
+        return computeRawVarint32Size(bytes.length) + bytes.length;
     }
 
     public static int computeDoubleSize(int i, double d) {
@@ -268,7 +268,7 @@ public final class CodedOutputByteBufferNano {
         return computeRawVarint64Size(j);
     }
 
-    private static int encode(CharSequence charSequence, byte[] bArr, int i, int i2) {
+    private static int encode(CharSequence charSequence, byte[] bytes, int i, int i2) {
         int i3;
         int i4 = 0;
         int length = charSequence.length();
@@ -278,7 +278,7 @@ public final class CodedOutputByteBufferNano {
             if (charAt >= 128) {
                 break;
             }
-            bArr[i + i4] = (byte) charAt;
+            bytes[i + i4] = (byte) charAt;
             i4++;
         }
         if (i4 == length) {
@@ -289,12 +289,12 @@ public final class CodedOutputByteBufferNano {
             char charAt = charSequence.charAt(i4);
             if (charAt < 128 && i6 < i5) {
                 i3 = i6 + 1;
-                bArr[i6] = (byte) charAt;
+                bytes[i6] = (byte) charAt;
             } else if (charAt < 2048 && i6 <= i5 - 2) {
                 int i7 = i6 + 1;
-                bArr[i6] = (byte) ((charAt >>> 6) | 0x3C0);
+                bytes[i6] = (byte) ((charAt >>> 6) | 0x3C0);
                 i3 = i7 + 1;
-                bArr[i7] = (byte) ((charAt & '?') | 128);
+                bytes[i7] = (byte) ((charAt & '?') | 128);
             } else {
                 if ((charAt >= 55296 && 57343 >= charAt) || i6 > i5 - 3) {
                     if (i6 > i5 - 4) {
@@ -306,23 +306,23 @@ public final class CodedOutputByteBufferNano {
                         if (Character.isSurrogatePair(charAt, charAt2)) {
                             int codePoint = Character.toCodePoint(charAt, charAt2);
                             int i8 = i6 + 1;
-                            bArr[i6] = (byte) ((codePoint >>> 18) | 240);
+                            bytes[i6] = (byte) ((codePoint >>> 18) | 240);
                             int i9 = i8 + 1;
-                            bArr[i8] = (byte) (((codePoint >>> 12) & 63) | 128);
+                            bytes[i8] = (byte) (((codePoint >>> 12) & 63) | 128);
                             int i10 = i9 + 1;
-                            bArr[i9] = (byte) (((codePoint >>> 6) & 63) | 128);
+                            bytes[i9] = (byte) (((codePoint >>> 6) & 63) | 128);
                             i3 = i10 + 1;
-                            bArr[i10] = (byte) ((codePoint & 63) | 128);
+                            bytes[i10] = (byte) ((codePoint & 63) | 128);
                         }
                     }
                     throw new IllegalArgumentException("Unpaired surrogate at index " + (i4 - 1));
                 }
                 int i11 = i6 + 1;
-                bArr[i6] = (byte) ((charAt >>> '\f') | 480);
+                bytes[i6] = (byte) ((charAt >>> '\f') | 480);
                 int i12 = i11 + 1;
-                bArr[i11] = (byte) (((charAt >>> 6) & 63) | 128);
+                bytes[i11] = (byte) (((charAt >>> 6) & 63) | 128);
                 i3 = i12 + 1;
-                bArr[i12] = (byte) ((charAt & '?') | 128);
+                bytes[i12] = (byte) ((charAt & '?') | 128);
             }
             i4++;
             i6 = i3;
@@ -395,23 +395,23 @@ public final class CodedOutputByteBufferNano {
             i++;
         }
         int i2 = i;
-        int i3 = length;
+        int length2 = length;
         while (true) {
             if (i2 >= length) {
                 break;
             }
             char charAt = charSequence.charAt(i2);
             if (charAt >= 2048) {
-                i3 += encodedLengthGeneral(charSequence, i2);
+                length2 += encodedLengthGeneral(charSequence, i2);
                 break;
             }
             i2++;
-            i3 = ((127 - charAt) >>> 31) + i3;
+            length2 = ((127 - charAt) >>> 31) + length2;
         }
-        if (i3 >= length) {
-            return i3;
+        if (length2 >= length) {
+            return length2;
         }
-        throw new IllegalArgumentException("UTF-8 length does not fit in int: " + (i3 + SLGroupInfo.GP_LAND_ADMIN));
+        throw new IllegalArgumentException("UTF-8 length does not fit in int: " + (length2 + SLGroupInfo.GP_LAND_ADMIN));
     }
 
     private static int encodedLengthGeneral(CharSequence charSequence, int i) {
@@ -436,12 +436,12 @@ public final class CodedOutputByteBufferNano {
         return i2;
     }
 
-    public static CodedOutputByteBufferNano newInstance(byte[] bArr) {
-        return newInstance(bArr, 0, bArr.length);
+    public static CodedOutputByteBufferNano newInstance(byte[] bytes) {
+        return newInstance(bytes, 0, bytes.length);
     }
 
-    public static CodedOutputByteBufferNano newInstance(byte[] bArr, int i, int i2) {
-        return new CodedOutputByteBufferNano(bArr, i, i2);
+    public static CodedOutputByteBufferNano newInstance(byte[] bytes, int i, int i2) {
+        return new CodedOutputByteBufferNano(bytes, i, i2);
     }
 
     public void checkNoSpaceLeft() {
@@ -471,14 +471,14 @@ public final class CodedOutputByteBufferNano {
         writeRawByte(z ? 1 : 0);
     }
 
-    public void writeBytes(int i, byte[] bArr) throws IOException {
+    public void writeBytes(int i, byte[] bytes) throws IOException {
         writeTag(i, 2);
-        writeBytesNoTag(bArr);
+        writeBytesNoTag(bytes);
     }
 
-    public void writeBytesNoTag(byte[] bArr) throws IOException {
-        writeRawVarint32(bArr.length);
-        writeRawBytes(bArr);
+    public void writeBytesNoTag(byte[] bytes) throws IOException {
+        writeRawVarint32(bytes.length);
+        writeRawBytes(bytes);
     }
 
     public void writeDouble(int i, double d) throws IOException {
@@ -640,15 +640,15 @@ public final class CodedOutputByteBufferNano {
         writeRawByte((byte) i);
     }
 
-    public void writeRawBytes(byte[] bArr) throws IOException {
-        writeRawBytes(bArr, 0, bArr.length);
+    public void writeRawBytes(byte[] bytes) throws IOException {
+        writeRawBytes(bytes, 0, bytes.length);
     }
 
-    public void writeRawBytes(byte[] bArr, int i, int i2) throws IOException {
+    public void writeRawBytes(byte[] bytes, int i, int i2) throws IOException {
         if (this.buffer.remaining() < i2) {
             throw new OutOfSpaceException(this.buffer.position(), this.buffer.limit());
         }
-        this.buffer.put(bArr, i, i2);
+        this.buffer.put(bytes, i, i2);
     }
 
     public void writeRawLittleEndian32(int i) throws IOException {

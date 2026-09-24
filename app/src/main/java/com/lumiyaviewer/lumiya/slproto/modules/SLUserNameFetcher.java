@@ -38,8 +38,8 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
     private final Thread workingThread;
     private final LLSDXMLRequest xmlReq;
 
-    public SLUserNameFetcher(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    public SLUserNameFetcher(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
         this.lock = new ReentrantLock();
         this.hasNamesToFetch = this.lock.newCondition();
         this.udpLock = new Object();
@@ -63,10 +63,10 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
                 }
             }
         };
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.circuitInfo.agentID);
-        this.caps = sLCaps;
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID);
+        this.caps = caps;
         this.threadMustExit = false;
-        if (sLCaps.getCapability(SLCaps.SLCapability.GetDisplayNames) != null) {
+        if (caps.getCapability(SLCaps.SLCapability.GetDisplayNames) != null) {
             this.xmlReq = new LLSDXMLRequest();
             this.workingThread = new Thread(this.threadRunnable, "DisplayNameFetcher");
             this.workingThread.start();
@@ -84,13 +84,13 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
 
     public boolean FetchSomeNamesOverHTTP() {
         String str;
-        LLSDNode lLSDNode;
-        List<UUID> uUIDsToFetch = getUUIDsToFetch(4);
-        if (uUIDsToFetch.isEmpty()) {
+        LLSDNode lsdNode;
+        List<UUID> uuiDsToFetch = getUUIDsToFetch(4);
+        if (uuiDsToFetch.isEmpty()) {
             return false;
         }
         String str2 = this.caps.getCapability(SLCaps.SLCapability.GetDisplayNames) + "/";
-        Iterator<UUID> it = uUIDsToFetch.iterator();
+        Iterator<UUID> it = uuiDsToFetch.iterator();
         boolean z = true;
         while (true) {
             str = str2;
@@ -102,18 +102,18 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
             }
         }
         try {
-            lLSDNode = this.xmlReq.PerformRequest(str, null);
+            lsdNode = this.xmlReq.PerformRequest(str, null);
         } catch (LLSDXMLException e) {
             e.printStackTrace();
-            lLSDNode = null;
+            lsdNode = null;
         } catch (IOException e) {
             e.printStackTrace();
-            lLSDNode = null;
+            lsdNode = null;
         }
-        if (lLSDNode != null) {
+        if (lsdNode != null) {
             try {
-                if (lLSDNode.keyExists("agents")) {
-                    LLSDNode byKey = lLSDNode.byKey("agents");
+                if (lsdNode.keyExists("agents")) {
+                    LLSDNode byKey = lsdNode.byKey("agents");
                     for (int i = 0; i < byKey.getCount(); i++) {
                         LLSDNode byIndex = byKey.byIndex(i);
                         UUID asUUID = byIndex.byKey("id").asUUID();
@@ -125,10 +125,10 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
                         }
                     }
                 }
-                if (lLSDNode.keyExists("bad_ids")) {
-                    LLSDNode byKey2 = lLSDNode.byKey("bad_ids");
-                    for (int i2 = 0; i2 < byKey2.getCount(); i2++) {
-                        UUID fromString = UUID.fromString(byKey2.byIndex(i2).asString());
+                if (lsdNode.keyExists("bad_ids")) {
+                    LLSDNode byKey2 = lsdNode.byKey("bad_ids");
+                    for (int j = 0; j < byKey2.getCount(); j++) {
+                        UUID fromString = UUID.fromString(byKey2.byIndex(j).asString());
                         if (this.userManager != null) {
                             this.userManager.setUserBadUUID(fromString);
                             this.userNameRequests.completeRequest(fromString);
@@ -143,21 +143,21 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
     }
 
     private void FetchSomeNamesOverUDP() {
-        List<UUID> uUIDsToFetch = getUUIDsToFetch(4);
-        if (uUIDsToFetch.isEmpty()) {
+        List<UUID> uuiDsToFetch = getUUIDsToFetch(4);
+        if (uuiDsToFetch.isEmpty()) {
             this.isWaitingReply = false;
             return;
         }
-        UUIDNameRequest uUIDNameRequest = new UUIDNameRequest();
-        for (UUID uuid : uUIDsToFetch) {
-            UUIDNameRequest.UUIDNameBlock uUIDNameBlock = new UUIDNameRequest.UUIDNameBlock();
-            uUIDNameBlock.ID = uuid;
-            uUIDNameRequest.UUIDNameBlock_Fields.add(uUIDNameBlock);
+        UUIDNameRequest uuidNameRequest = new UUIDNameRequest();
+        for (UUID uuid : uuiDsToFetch) {
+            UUIDNameRequest.UUIDNameBlock uuidNameBlock = new UUIDNameRequest.UUIDNameBlock();
+            uuidNameBlock.ID = uuid;
+            uuidNameRequest.UUIDNameBlock_Fields.add(uuidNameBlock);
         }
         this.isWaitingReply = true;
         this.waitingReplySince = System.currentTimeMillis();
-        uUIDNameRequest.isReliable = true;
-        SendMessage(uUIDNameRequest);
+        uuidNameRequest.isReliable = true;
+        SendMessage(uuidNameRequest);
     }
 
     private List<UUID> getUUIDsToFetch(int i) {
@@ -186,10 +186,10 @@ public class SLUserNameFetcher extends SLModule implements RequestListener {
     }
 
     @SLMessageHandler
-    public synchronized void HandleUUIDNameReply(UUIDNameReply uUIDNameReply) {
-        for (UUIDNameReply.UUIDNameBlock uUIDNameBlock : uUIDNameReply.UUIDNameBlock_Fields) {
-            UUID uuid = uUIDNameBlock.ID;
-            String str = SLMessage.stringFromVariableOEM(uUIDNameBlock.FirstName) + " " + SLMessage.stringFromVariableOEM(uUIDNameBlock.LastName);
+    public synchronized void HandleUUIDNameReply(UUIDNameReply uuidNameReply) {
+        for (UUIDNameReply.UUIDNameBlock uuidNameBlock : uuidNameReply.UUIDNameBlock_Fields) {
+            UUID uuid = uuidNameBlock.ID;
+            String str = SLMessage.stringFromVariableOEM(uuidNameBlock.FirstName) + " " + SLMessage.stringFromVariableOEM(uuidNameBlock.LastName);
             if (this.userManager != null) {
                 this.userManager.updateUserNames(uuid, str, str);
                 this.userNameRequests.completeRequest(uuid);

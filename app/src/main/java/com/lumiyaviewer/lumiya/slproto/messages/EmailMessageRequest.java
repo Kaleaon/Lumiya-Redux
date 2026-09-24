@@ -32,8 +32,8 @@ public class EmailMessageRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEmailMessageRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEmailMessageRequest(this);
     }
 
     @Override

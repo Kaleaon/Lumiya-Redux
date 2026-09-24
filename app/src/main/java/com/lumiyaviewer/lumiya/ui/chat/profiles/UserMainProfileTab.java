@@ -234,13 +234,13 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
                     Linkify.addLinks(this.userWebProfileLink, 15);
                     this.userWebProfileCardView.setVisibility(View.VISIBLE);
                 }
-                String trim2 = SLMessage.stringFromVariableUTF(this.avatarNotes.get().Data_Field.Notes).trim();
-                if (trim2.isEmpty()) {
+                String trimmed = SLMessage.stringFromVariableUTF(this.avatarNotes.get().Data_Field.Notes).trim();
+                if (trimmed.isEmpty()) {
                     this.textProfileNotesText.setText(R.string.user_notes_no_notes);
                     this.textProfileNotesText.setTypeface(null, 2);
                     this.userProfileNotesCaption.setVisibility(View.GONE);
                 } else {
-                    this.textProfileNotesText.setText(trim2);
+                    this.textProfileNotesText.setText(trimmed);
                     this.textProfileNotesText.setTypeface(null, 0);
                     this.userProfileNotesCaption.setVisibility(View.VISIBLE);
                 }

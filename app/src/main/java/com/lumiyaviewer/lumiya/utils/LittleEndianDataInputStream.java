@@ -52,15 +52,15 @@ public class LittleEndianDataInputStream implements DataInput {
     }
 
     @Override
-    public void readFully(byte[] bArr) throws IOException {
-        if (this.inputStream.read(bArr, 0, bArr.length) != bArr.length) {
+    public void readFully(byte[] bytes) throws IOException {
+        if (this.inputStream.read(bytes, 0, bytes.length) != bytes.length) {
             throw new EOFException("End of stream");
         }
     }
 
     @Override
-    public void readFully(byte[] bArr, int i, int i2) throws IOException {
-        if (this.inputStream.read(bArr, i, i2) != i2) {
+    public void readFully(byte[] bytes, int i, int i2) throws IOException {
+        if (this.inputStream.read(bytes, i, i2) != i2) {
             throw new EOFException("End of stream");
         }
     }

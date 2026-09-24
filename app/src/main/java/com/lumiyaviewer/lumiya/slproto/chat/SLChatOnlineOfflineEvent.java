@@ -12,14 +12,14 @@ import javax.annotation.Nonnull;
 public final class SLChatOnlineOfflineEvent extends SLChatEvent {
     private final boolean wentOnline;
 
-    public SLChatOnlineOfflineEvent(ChatMessage chatMessage, @Nonnull UUID uuid, boolean z) {
+    public SLChatOnlineOfflineEvent(ChatMessage chatMessage, @Nonnull UUID uuid, boolean wentOnline) {
         super(chatMessage, uuid);
-        this.wentOnline = z;
+        this.wentOnline = wentOnline;
     }
 
-    public SLChatOnlineOfflineEvent(ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean z) {
+    public SLChatOnlineOfflineEvent(ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean wentOnline) {
         super(chatMessageSource, uuid);
-        this.wentOnline = z;
+        this.wentOnline = wentOnline;
     }
 
     @Override

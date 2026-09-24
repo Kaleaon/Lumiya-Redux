@@ -41,8 +41,8 @@ public class RequestObjectPropertiesFamily extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestObjectPropertiesFamily(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestObjectPropertiesFamily(this);
     }
 
     @Override

@@ -32,8 +32,8 @@ public class TeleportLandmarkRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportLandmarkRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportLandmarkRequest(this);
     }
 
     @Override

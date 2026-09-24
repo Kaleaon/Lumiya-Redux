@@ -19,37 +19,37 @@ public class GLBuffer extends GLResource {
     private static class GLResourceBufferReference extends GLResourceManager.GLResourceReference {
         private final DirectByteBuffer rawBuffer;
 
-        public GLResourceBufferReference(GLResource gLResource, int i, GLResourceManager gLResourceManager, DirectByteBuffer directByteBuffer) {
-            super(gLResource, i, gLResourceManager);
+        public GLResourceBufferReference(GLResource glResource, int i, GLResourceManager glResourceManager, DirectByteBuffer directByteBuffer) {
+            super(glResource, i, glResourceManager);
             this.rawBuffer = directByteBuffer;
         }
 
         @Override
         public void GLFree() {
-            int[] iArr = (int[]) GLBuffer.idBuffer.get();
-            iArr[0] = this.handle;
-            Debug.Printf("GLBuffer: deleted buffer %d", Integer.valueOf(iArr[0]));
-            GLES11.glDeleteBuffers(1, iArr, 0);
+            int[] ints = (int[]) GLBuffer.idBuffer.get();
+            ints[0] = this.handle;
+            Debug.Printf("GLBuffer: deleted buffer %d", Integer.valueOf(ints[0]));
+            GLES11.glDeleteBuffers(1, ints, 0);
             if (this.rawBuffer != null) {
                 TextureMemoryTracker.releaseBufferMemory(this.rawBuffer.getCapacity());
             }
         }
     }
 
-    public GLBuffer(GLResourceManager gLResourceManager, DirectByteBuffer directByteBuffer) {
-        super(gLResourceManager);
+    public GLBuffer(GLResourceManager glResourceManager, DirectByteBuffer directByteBuffer) {
+        super(glResourceManager);
         this.rawBuffer = directByteBuffer;
         if (directByteBuffer != null) {
             TextureMemoryTracker.allocBufferMemory(directByteBuffer.getCapacity());
         }
-        new GLResourceBufferReference(this, this.handle, gLResourceManager, this.rawBuffer);
+        new GLResourceBufferReference(this, this.handle, glResourceManager, this.rawBuffer);
     }
 
     @Override
-    protected int Allocate(GLResourceManager gLResourceManager) {
-        int[] iArr = idBuffer.get();
-        GLES11.glGenBuffers(1, iArr, 0);
-        Debug.Printf("GLBuffer: allocated buffer %d", Integer.valueOf(iArr[0]));
-        return iArr[0];
+    protected int Allocate(GLResourceManager glResourceManager) {
+        int[] ints = idBuffer.get();
+        GLES11.glGenBuffers(1, ints, 0);
+        Debug.Printf("GLBuffer: allocated buffer %d", Integer.valueOf(ints[0]));
+        return ints[0];
     }
 }

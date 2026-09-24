@@ -20,10 +20,10 @@ public class LogFlushMessages implements Bundleable {
         this.chatterName = bundle.getString("chatterName");
     }
 
-    public LogFlushMessages(UUID uuid, @Nullable String str, @Nullable String str2) {
+    public LogFlushMessages(UUID uuid, @Nullable String agentName, @Nullable String chatterName) {
         this.agentUUID = uuid;
-        this.agentName = str;
-        this.chatterName = str2;
+        this.agentName = agentName;
+        this.chatterName = chatterName;
     }
 
     @Override

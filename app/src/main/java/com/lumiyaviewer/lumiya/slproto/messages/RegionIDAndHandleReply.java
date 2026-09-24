@@ -30,8 +30,8 @@ public class RegionIDAndHandleReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRegionIDAndHandleReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRegionIDAndHandleReply(this);
     }
 
     @Override

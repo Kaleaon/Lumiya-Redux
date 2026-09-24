@@ -54,8 +54,8 @@ public class GroupRoleUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupRoleUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupRoleUpdate(this);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class GroupRoleUpdate extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.GroupID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             RoleData roleData = new RoleData();
             roleData.RoleID = unpackUUID(byteBuffer);
             roleData.Name = unpackVariable(byteBuffer, 1);

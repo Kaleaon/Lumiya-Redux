@@ -31,9 +31,9 @@ public class LLSDResponseCacher<Key> extends ResponseCacher<Key, LLSDNode> {
 
     /* JADX WARN: Can't rename method to resolve collision */
     @Override
-    public LLSDNode loadCached(byte[] bArr) {
+    public LLSDNode loadCached(byte[] bytes) {
         try {
-            return LLSDNode.fromBinary(new DataInputStream(new ByteArrayInputStream(bArr)));
+            return LLSDNode.fromBinary(new DataInputStream(new ByteArrayInputStream(bytes)));
         } catch (LLSDException e) {
             Debug.Warning(e);
             return null;
@@ -41,11 +41,11 @@ public class LLSDResponseCacher<Key> extends ResponseCacher<Key, LLSDNode> {
     }
 
     @Override
-    public byte[] storeCached(@Nonnull LLSDNode lLSDNode) {
+    public byte[] storeCached(@Nonnull LLSDNode lsdNode) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         try {
-            lLSDNode.toBinary(dataOutputStream);
+            lsdNode.toBinary(dataOutputStream);
             dataOutputStream.flush();
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {

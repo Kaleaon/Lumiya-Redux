@@ -19,10 +19,10 @@ public class SLChatTextEvent extends SLChatEvent {
         this.text = chatMessage.getMessageText();
     }
 
-    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String str) {
+    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, ImprovedInstantMessage improvedInstantMessage, String text) {
         super(improvedInstantMessage, uuid, chatMessageSource);
-        if (str != null) {
-            this.text = str;
+        if (text != null) {
+            this.text = text;
         } else if (improvedInstantMessage != null) {
             this.text = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message);
         } else {
@@ -35,9 +35,9 @@ public class SLChatTextEvent extends SLChatEvent {
         this.text = SLMessage.stringFromVariableUTF(loadURL.Data_Field.Message) + ": " + SLMessage.stringFromVariableUTF(loadURL.Data_Field.URL);
     }
 
-    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, String str) {
+    public SLChatTextEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, String text) {
         super(chatMessageSource, uuid);
-        this.text = str;
+        this.text = text;
     }
 
     @Override

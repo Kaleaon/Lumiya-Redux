@@ -9,10 +9,10 @@ public class EventUserInfoChanged {
     public final int changedMask;
     public final UUID userUUID;
 
-    public EventUserInfoChanged(UUID uuid, UUID uuid2, int i) {
+    public EventUserInfoChanged(UUID uuid, UUID userUUID, int changedMask) {
         this.agentUUID = uuid;
-        this.userUUID = uuid2;
-        this.changedMask = i;
+        this.userUUID = userUUID;
+        this.changedMask = changedMask;
     }
 
     public boolean isNameChanged() {

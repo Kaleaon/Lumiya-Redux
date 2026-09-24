@@ -42,7 +42,7 @@ public class SpatialObjectIndex {
         @Override
         public void run() {
             TerrainData terrainData;
-            int i;
+            int intValue2;
             boolean z;
             boolean z2;
             DrawListTerrainEntry drawListTerrainEntry;
@@ -56,23 +56,23 @@ public class SpatialObjectIndex {
                         int intValue = ((Integer) entry.getKey()).intValue();
                         TerrainData terrainData2 = (TerrainData) entry.getValue();
                         it.remove();
-                        i = intValue;
+                        intValue2 = intValue;
                         terrainData = terrainData2;
                         z = true;
                     } else {
                         terrainData = null;
-                        i = -1;
+                        intValue2 = -1;
                         z = false;
                     }
                 }
                 if (!z) {
                     break;
                 }
-                if (i < 0 || terrainData == null) {
+                if (intValue2 < 0 || terrainData == null) {
                     z2 = z3;
                 } else {
-                    int i2 = i % 16;
-                    int i3 = i / 16;
+                    int i2 = intValue2 % 16;
+                    int i3 = intValue2 / 16;
                     TerrainPatchInfo patchInfo = terrainData.getPatchInfo(i2, i3);
                     if (patchInfo != null) {
                         synchronized (SpatialObjectIndex.this.terrainLock) {
@@ -134,11 +134,11 @@ public class SpatialObjectIndex {
         @Override
         public void run() {
             DrawListObjectEntry[] drawListObjectEntryArr;
-            DrawListObjectEntry[] drawListObjectEntryArr2;
+            DrawListObjectEntry[] drawListObjectEntries;
             if (SpatialObjectIndex.this.initialUpdateCompleted && (!SpatialObjectIndex.this.indexDisabled)) {
                 synchronized (SpatialObjectIndex.this.objectUpdateRemoveLock) {
                     drawListObjectEntryArr = (DrawListObjectEntry[]) SpatialObjectIndex.this.objectsToUpdate.toArray(new DrawListObjectEntry[SpatialObjectIndex.this.objectsToUpdate.size()]);
-                    drawListObjectEntryArr2 = (DrawListObjectEntry[]) SpatialObjectIndex.this.objectsToRemove.toArray(new DrawListObjectEntry[SpatialObjectIndex.this.objectsToRemove.size()]);
+                    drawListObjectEntries = (DrawListObjectEntry[]) SpatialObjectIndex.this.objectsToRemove.toArray(new DrawListObjectEntry[SpatialObjectIndex.this.objectsToRemove.size()]);
                     SpatialObjectIndex.this.objectsToUpdate.clear();
                     SpatialObjectIndex.this.objectsToRemove.clear();
                 }
@@ -146,7 +146,7 @@ public class SpatialObjectIndex {
                 for (DrawListObjectEntry drawListObjectEntry : drawListObjectEntryArr) {
                     z |= !drawListObjectEntry.getObjectInfo().isDead ? SpatialObjectIndex.this.handleUpdateObject(drawListObjectEntry) : SpatialObjectIndex.this.handleRemoveObject(drawListObjectEntry);
                 }
-                for (DrawListObjectEntry drawListObjectEntry2 : drawListObjectEntryArr2) {
+                for (DrawListObjectEntry drawListObjectEntry2 : drawListObjectEntries) {
                     z |= SpatialObjectIndex.this.handleRemoveObject(drawListObjectEntry2);
                 }
                 if (z || SpatialObjectIndex.this.spatialTree.isDrawListChanged() || SpatialObjectIndex.this.spatialTree.isTreeWalkNeeded()) {
@@ -157,11 +157,11 @@ public class SpatialObjectIndex {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    public SpatialObjectIndex(DrawableStore drawableStore, int i) {
+    public SpatialObjectIndex(DrawableStore drawableStore, int avatarCountLimit) {
         this.avatarCountLimit = 5;
         this.drawableStore = drawableStore;
-        this.avatarCountLimit = i;
-        this.objectsInFrustrum = DrawList.create(drawableStore, null, i);
+        this.avatarCountLimit = avatarCountLimit;
+        this.objectsInFrustrum = DrawList.create(drawableStore, null, avatarCountLimit);
     }
 
     public DrawList getObjectsInCells(int i) {
@@ -207,8 +207,8 @@ public class SpatialObjectIndex {
         this.indexDisabled = true;
     }
 
-    DrawableAvatar getDrawableAvatar(SLObjectInfo sLObjectInfo) {
-        return this.drawableStore.drawableAvatarCache.getIfPresent(sLObjectInfo);
+    DrawableAvatar getDrawableAvatar(SLObjectInfo objectInfo) {
+        return this.drawableStore.drawableAvatarCache.getIfPresent(objectInfo);
     }
 
     public DrawList getObjectsInFrustrum() {
@@ -221,8 +221,8 @@ public class SpatialObjectIndex {
         }
     }
 
-    public void setAvatarCountLimit(int i) {
-        this.avatarCountLimit = i;
+    public void setAvatarCountLimit(int avatarCountLimit) {
+        this.avatarCountLimit = avatarCountLimit;
     }
 
     public void setViewport(FrustrumInfo frustrumInfo, FrustrumPlanes frustrumPlanes) {

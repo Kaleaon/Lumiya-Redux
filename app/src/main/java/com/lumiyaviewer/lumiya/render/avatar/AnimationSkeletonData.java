@@ -33,19 +33,19 @@ public class AnimationSkeletonData {
             this.animPosArray[i].set(0.0f, 0.0f, 0.0f);
         }
         avatarAnimationList.animate(avatarSkeleton, this.animPriorityRotArray, this.animPriorityPosArray, this.animRotArray, this.animPosArray);
-        for (int i2 = 0; i2 < 133; i2++) {
-            this.animRotArray[i2].getInverseMatrix(this.animMatrix_Swap, i2 * 16);
-            this.animOffsets_Swap[(i2 * 4) + 0] = this.animPosArray[i2].x;
-            this.animOffsets_Swap[(i2 * 4) + 1] = this.animPosArray[i2].y;
-            this.animOffsets_Swap[(i2 * 4) + 2] = this.animPosArray[i2].z;
-            this.animOffsets_Swap[(i2 * 4) + 3] = 1.0f - this.animPriorityPosArray[i2];
+        for (int j = 0; j < 133; j++) {
+            this.animRotArray[j].getInverseMatrix(this.animMatrix_Swap, j * 16);
+            this.animOffsets_Swap[(j * 4) + 0] = this.animPosArray[j].x;
+            this.animOffsets_Swap[(j * 4) + 1] = this.animPosArray[j].y;
+            this.animOffsets_Swap[(j * 4) + 2] = this.animPosArray[j].z;
+            this.animOffsets_Swap[(j * 4) + 3] = 1.0f - this.animPriorityPosArray[j];
         }
-        float[] fArr = this.animMatrix;
+        float[] animMatrix = this.animMatrix;
         this.animMatrix = this.animMatrix_Swap;
-        this.animMatrix_Swap = fArr;
-        float[] fArr2 = this.animOffsets;
+        this.animMatrix_Swap = animMatrix;
+        float[] animOffsets = this.animOffsets;
         this.animOffsets = this.animOffsets_Swap;
-        this.animOffsets_Swap = fArr2;
+        this.animOffsets_Swap = animOffsets;
     }
 
     public final float[] getAnimMatrix() {

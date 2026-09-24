@@ -7,15 +7,15 @@ final class AutoValue_GroupManager_GroupMembersQuery extends GroupManager.GroupM
     private final UUID groupID;
     private final UUID requestID;
 
-    AutoValue_GroupManager_GroupMembersQuery(UUID uuid, UUID uuid2) {
+    AutoValue_GroupManager_GroupMembersQuery(UUID uuid, UUID requestID) {
         if (uuid == null) {
             throw new NullPointerException("Null groupID");
         }
         this.groupID = uuid;
-        if (uuid2 == null) {
+        if (requestID == null) {
             throw new NullPointerException("Null requestID");
         }
-        this.requestID = uuid2;
+        this.requestID = requestID;
     }
 
     public boolean equals(Object obj) {

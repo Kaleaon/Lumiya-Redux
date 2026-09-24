@@ -41,8 +41,8 @@ public class GroupMembersRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupMembersRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupMembersRequest(this);
     }
 
     @Override

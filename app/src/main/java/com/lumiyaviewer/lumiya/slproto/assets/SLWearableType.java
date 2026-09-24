@@ -25,17 +25,17 @@ public enum SLWearableType {
     private String name;
     private int typeCode;
 
-    SLWearableType(int i, SLAssetType sLAssetType, boolean z, String str) {
-        this.typeCode = i;
-        this.assetType = sLAssetType;
-        this.isCritical = z;
-        this.name = str;
+    SLWearableType(int typeCode, SLAssetType assetType, boolean isCritical, String name) {
+        this.typeCode = typeCode;
+        this.assetType = assetType;
+        this.isCritical = isCritical;
+        this.name = name;
     }
 
     public static SLWearableType getByCode(int i) {
-        for (SLWearableType sLWearableType : valuesCustom()) {
-            if (sLWearableType.typeCode == i) {
-                return sLWearableType;
+        for (SLWearableType wearableType : valuesCustom()) {
+            if (wearableType.typeCode == i) {
+                return wearableType;
             }
         }
         return null;

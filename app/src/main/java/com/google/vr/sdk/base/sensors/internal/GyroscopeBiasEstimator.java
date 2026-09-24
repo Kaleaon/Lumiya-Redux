@@ -22,8 +22,8 @@ public class GyroscopeBiasEstimator {
         private int consecutiveIsStatic;
         private final int minStaticFrames;
 
-        IsStaticCounter(int i) {
-            this.minStaticFrames = i;
+        IsStaticCounter(int minStaticFrames) {
+            this.minStaticFrames = minStaticFrames;
         }
 
         void appendFrame(boolean z) {

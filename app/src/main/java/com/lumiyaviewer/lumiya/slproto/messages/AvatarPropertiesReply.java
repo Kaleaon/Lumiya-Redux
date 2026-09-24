@@ -50,8 +50,8 @@ public class AvatarPropertiesReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesReply(this);
     }
 
     @Override

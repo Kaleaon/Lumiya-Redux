@@ -30,8 +30,8 @@ public class CompletePingCheck extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCompletePingCheck(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCompletePingCheck(this);
     }
 
     @Override

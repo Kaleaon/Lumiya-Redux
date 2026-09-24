@@ -38,7 +38,7 @@ public class TerrainPatchGeometry {
         directByteBuffer2.position(0);
         this.index_count = 0;
         this.water_index_count = 0;
-        LLVector3 lLVector3 = new LLVector3();
+        LLVector3 vector3 = new LLVector3();
         float waterHeight = terrainPatchHeightMap.getWaterHeight();
         float[] heightArray = terrainPatchHeightMap.getHeightArray();
         float[] normalArray = terrainPatchHeightMap.getNormalArray();
@@ -49,18 +49,18 @@ public class TerrainPatchGeometry {
             if (i3 >= 17) {
                 break;
             }
-            for (int i4 = 0; i4 < 17; i4++) {
-                directByteBuffer.putFloat(i4);
+            for (int j = 0; j < 17; j++) {
+                directByteBuffer.putFloat(j);
                 directByteBuffer.putFloat(i3);
-                directByteBuffer.putFloat(heightArray[i2 + i4]);
-                lLVector3.set(-normalArray[(i2 + i4) * 2], normalArray[((i2 + i4) * 2) + 1], 2.0f);
-                lLVector3.normVec();
-                directByteBuffer.putFloat(lLVector3.x);
-                directByteBuffer.putFloat(lLVector3.y);
-                directByteBuffer.putFloat(lLVector3.z);
-                directByteBuffer.putFloat(i4 / 16.0f);
+                directByteBuffer.putFloat(heightArray[i2 + j]);
+                vector3.set(-normalArray[(i2 + j) * 2], normalArray[((i2 + j) * 2) + 1], 2.0f);
+                vector3.normVec();
+                directByteBuffer.putFloat(vector3.x);
+                directByteBuffer.putFloat(vector3.y);
+                directByteBuffer.putFloat(vector3.z);
+                directByteBuffer.putFloat(j / 16.0f);
                 directByteBuffer.putFloat(i3 / 16.0f);
-                directByteBuffer2.putFloat(i4);
+                directByteBuffer2.putFloat(j);
                 directByteBuffer2.putFloat(i3);
                 directByteBuffer2.putFloat(waterHeight);
             }
@@ -80,8 +80,8 @@ public class TerrainPatchGeometry {
                 this.waterIndexBuffer = new GLLoadableBuffer(directByteBuffer4);
                 return;
             }
-            for (int i8 = 0; i8 < 16; i8++) {
-                int i9 = i6 + i8;
+            for (int k = 0; k < 16; k++) {
+                int i9 = i6 + k;
                 int i10 = i9 + 1;
                 int i11 = i9 + 17;
                 int i12 = i11 + 1;
@@ -129,20 +129,20 @@ public class TerrainPatchGeometry {
         GLES20.glUniform2fv(renderContext.waterProgram.uDirection, 4, waterDirection, 0);
     }
 
-    public final void GLDraw(RenderContext renderContext, float[] fArr, GLLoadedTexture gLLoadedTexture) {
+    public final void GLDraw(RenderContext renderContext, float[] floats, GLLoadedTexture glLoadedTexture) {
         if (this.index_count == 0) {
             return;
         }
         if (!renderContext.hasGL20) {
-            renderContext.glObjWorldPushAndMultMatrixf(fArr, 0);
+            renderContext.glObjWorldPushAndMultMatrixf(floats, 0);
         }
         if (renderContext.hasGL20) {
             GLES20.glUseProgram(renderContext.primProgram.getHandle());
             this.vertexBuffer.Bind20(renderContext, renderContext.primProgram.vPosition, 3, 5126, 32, 0);
             this.vertexBuffer.Bind20(renderContext, renderContext.primProgram.vNormal, 3, 5126, 32, 12);
-            GLES20.glUniformMatrix4fv(renderContext.primProgram.uObjWorldMatrix, 1, false, fArr, 0);
-            if (gLLoadedTexture != null) {
-                gLLoadedTexture.GLDraw();
+            GLES20.glUniformMatrix4fv(renderContext.primProgram.uObjWorldMatrix, 1, false, floats, 0);
+            if (glLoadedTexture != null) {
+                glLoadedTexture.GLDraw();
                 this.vertexBuffer.Bind20(renderContext, renderContext.primProgram.vTexCoord, 2, 5126, 32, 24);
                 GLES20.glUniform1i(renderContext.primProgram.sTexture, 0);
                 GLES20.glUniform4f(renderContext.primProgram.vColor, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -158,9 +158,9 @@ public class TerrainPatchGeometry {
             this.indexBuffer.DrawElements20(4, this.index_count, 5123, 0);
         } else {
             GLES10.glDisableClientState(32885);
-            if (gLLoadedTexture != null) {
+            if (glLoadedTexture != null) {
                 GLES10.glEnable(3553);
-                gLLoadedTexture.GLDraw();
+                glLoadedTexture.GLDraw();
                 GLES10.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
                 this.vertexBuffer.Bind(renderContext, 32888, 2, 5126, 32, 24);
             } else {
@@ -176,7 +176,7 @@ public class TerrainPatchGeometry {
             if (renderContext.hasGL20) {
                 GLES20.glDisable(2884);
                 GLES20.glUseProgram(renderContext.waterProgram.getHandle());
-                GLES20.glUniformMatrix4fv(renderContext.waterProgram.uObjWorldMatrix, 1, false, fArr, 0);
+                GLES20.glUniformMatrix4fv(renderContext.waterProgram.uObjWorldMatrix, 1, false, floats, 0);
                 this.waterVertexBuffer.Bind20(renderContext, renderContext.waterProgram.vPosition, 3, 5126, 0, 0);
                 this.waterIndexBuffer.BindElements20(renderContext);
                 this.waterIndexBuffer.DrawElements20(4, this.water_index_count, 5123, 0);

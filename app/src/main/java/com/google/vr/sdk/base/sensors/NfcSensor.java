@@ -154,14 +154,14 @@ public class NfcSensor {
         boolean z2 = false;
         if (tag != null) {
             synchronized (this.tagLock) {
-                Tag tag2 = this.currentTag;
+                Tag currentTag = this.currentTag;
                 Ndef ndef = this.currentNdef;
-                boolean z3 = this.currentTagIsCardboard;
+                boolean currentTagIsCardboard = this.currentTagIsCardboard;
                 closeCurrentNfcTag();
                 this.currentTag = tag;
                 this.currentNdef = Ndef.get(tag);
                 if (this.currentNdef == null) {
-                    if (z3) {
+                    if (currentTagIsCardboard) {
                         sendDisconnectionEvent();
                     }
                     return;
@@ -170,11 +170,11 @@ public class NfcSensor {
                     z = false;
                 } else {
                     byte[] id = this.currentTag.getId();
-                    byte[] id2 = tag2.getId();
+                    byte[] id2 = currentTag.getId();
                     if (id != null && id2 != null && Arrays.equals(id, id2)) {
                         z2 = true;
                     }
-                    if (!z2 && z3) {
+                    if (!z2 && currentTagIsCardboard) {
                         sendDisconnectionEvent();
                         z = z2;
                     } else {
@@ -214,7 +214,7 @@ public class NfcSensor {
                 } catch (Exception e) {
                     String valueOf = String.valueOf(e.toString());
                     Log.e(TAG, valueOf.length() == 0 ? new String("Error reading NFC tag: ") : "Error reading NFC tag: ".concat(valueOf));
-                    if (z && z3) {
+                    if (z && currentTagIsCardboard) {
                         sendDisconnectionEvent();
                     }
                 }
@@ -280,11 +280,11 @@ public class NfcSensor {
     }
 
     public boolean isDeviceInCardboard() {
-        boolean z;
+        boolean currentTagIsCardboard;
         synchronized (this.tagLock) {
-            z = this.currentTagIsCardboard;
+            currentTagIsCardboard = this.currentTagIsCardboard;
         }
-        return z;
+        return currentTagIsCardboard;
     }
 
     public boolean isNfcEnabled() {

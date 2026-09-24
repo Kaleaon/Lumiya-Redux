@@ -15,8 +15,8 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
     private final AvatarVisualState avatarVisualState;
     private final boolean isMyAvatar;
 
-    public SLObjectAvatarInfo(UUID uuid, UUID uuid2, boolean z) {
-        this.isMyAvatar = z;
+    public SLObjectAvatarInfo(UUID uuid, UUID uuid2, boolean isMyAvatar) {
+        this.isMyAvatar = isMyAvatar;
         this.avatarVisualState = new AvatarVisualState(uuid, this, uuid2);
     }
 
@@ -28,12 +28,12 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
         this.avatarVisualState.ApplyAvatarAppearance(avatarAppearance);
     }
 
-    public void ApplyAvatarTextures(SLTextureEntry sLTextureEntry, boolean z) {
-        this.avatarVisualState.ApplyTextures(sLTextureEntry, z);
+    public void ApplyAvatarTextures(SLTextureEntry textureEntry, boolean z) {
+        this.avatarVisualState.ApplyTextures(textureEntry, z);
     }
 
-    public void ApplyAvatarVisualParams(int[] iArr) {
-        this.avatarVisualState.ApplyVisualParams(iArr);
+    public void ApplyAvatarVisualParams(int[] ints) {
+        this.avatarVisualState.ApplyVisualParams(ints);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SLObjectAvatarInfo extends SLObjectInfo {
     }
 
     @Override
-    public void onTexturesUpdate(SLTextureEntry sLTextureEntry) {
-        this.avatarVisualState.ApplyTextures(sLTextureEntry, false);
+    public void onTexturesUpdate(SLTextureEntry textureEntry) {
+        this.avatarVisualState.ApplyTextures(textureEntry, false);
     }
 }

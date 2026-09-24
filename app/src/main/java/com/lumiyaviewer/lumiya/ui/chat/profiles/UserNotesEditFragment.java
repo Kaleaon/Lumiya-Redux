@@ -52,7 +52,7 @@ public class UserNotesEditFragment extends TextFieldEditFragment implements Back
     }
 
     @Override
-    protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
-        sLAgentCircuit.getModules().userProfiles.SaveUserNotes(chatterID.getOptionalChatterUUID(), str);
+    protected void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str) {
+        agentCircuit.getModules().userProfiles.SaveUserNotes(chatterID.getOptionalChatterUUID(), str);
     }
 }

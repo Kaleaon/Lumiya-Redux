@@ -18,9 +18,9 @@ public final class SLChatLureRequestedEvent extends SLChatEvent {
         this.message = chatMessage.getMessageText();
     }
 
-    public SLChatLureRequestedEvent(String str, @Nonnull UUID uuid) {
+    public SLChatLureRequestedEvent(String message, @Nonnull UUID uuid) {
         super(ChatMessageSourceUnknown.getInstance(), uuid);
-        this.message = str;
+        this.message = message;
     }
 
     @Override

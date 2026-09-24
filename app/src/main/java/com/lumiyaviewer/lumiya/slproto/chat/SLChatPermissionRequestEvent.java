@@ -32,9 +32,9 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
         int i = 0;
         this.ObjectOwner = SLMessage.stringFromVariableOEM(scriptQuestion.Data_Field.ObjectOwner);
         this.ItemID = scriptQuestion.Data_Field.ItemID;
-        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.values()) {
-            if ((scriptQuestion.Data_Field.Questions & sLScriptPermissions.getPermMask()) != 0) {
-                i |= sLScriptPermissions.getPermMask();
+        for (SLScriptPermissions scriptPermissions : SLScriptPermissions.values()) {
+            if ((scriptQuestion.Data_Field.Questions & scriptPermissions.getPermMask()) != 0) {
+                i |= scriptPermissions.getPermMask();
             }
         }
         this.Questions = i;
@@ -68,12 +68,12 @@ public final class SLChatPermissionRequestEvent extends SLChatYesNoEvent {
     @Override
     public String getText(Context context, @Nonnull UserManager userManager) {
         String str = "";
-        for (SLScriptPermissions sLScriptPermissions : SLScriptPermissions.values()) {
-            if ((this.Questions & sLScriptPermissions.getPermMask()) != 0) {
+        for (SLScriptPermissions scriptPermissions : SLScriptPermissions.values()) {
+            if ((this.Questions & scriptPermissions.getPermMask()) != 0) {
                 if (!str.equals("")) {
                     str = str + ", ";
                 }
-                str = str + sLScriptPermissions.getMessage();
+                str = str + scriptPermissions.getMessage();
             }
         }
         return context.getString(R.string.permission_request_format, this.ObjectOwner, str);

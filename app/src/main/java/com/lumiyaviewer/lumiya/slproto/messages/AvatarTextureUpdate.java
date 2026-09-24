@@ -56,8 +56,8 @@ public class AvatarTextureUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarTextureUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarTextureUpdate(this);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class AvatarTextureUpdate extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.TexturesChanged = unpackBoolean(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             WearableData wearableData = new WearableData();
             wearableData.CacheID = unpackUUID(byteBuffer);
             wearableData.TextureIndex = unpackByte(byteBuffer) & 0xFF;
@@ -94,7 +94,7 @@ public class AvatarTextureUpdate extends SLMessage {
             this.WearableData_Fields.add(wearableData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             TextureData textureData = new TextureData();
             textureData.TextureID = unpackUUID(byteBuffer);
             this.TextureData_Fields.add(textureData);

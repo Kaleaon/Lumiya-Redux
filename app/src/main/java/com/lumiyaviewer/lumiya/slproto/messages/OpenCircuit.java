@@ -32,8 +32,8 @@ public class OpenCircuit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleOpenCircuit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleOpenCircuit(this);
     }
 
     @Override

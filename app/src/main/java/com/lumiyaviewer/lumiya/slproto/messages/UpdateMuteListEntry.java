@@ -40,8 +40,8 @@ public class UpdateMuteListEntry extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateMuteListEntry(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateMuteListEntry(this);
     }
 
     @Override

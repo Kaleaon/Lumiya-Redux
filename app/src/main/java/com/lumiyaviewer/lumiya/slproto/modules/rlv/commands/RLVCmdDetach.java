@@ -12,14 +12,14 @@ public class RLVCmdDetach extends RLVCmdGenericRestriction {
     }
 
     @Override
-    protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
+    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
         UUID attachmentUUID;
-        SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
+        SLAvatarAppearance avatarAppearance = rlvController.getModules().avatarAppearance;
         for (int i = 0; i < 56; i++) {
             if (SLAttachmentPoint.attachmentPoints[i] != null) {
                 String lowerCase = SLAttachmentPoint.attachmentPoints[i].name.toLowerCase();
-                if ((str.equals("") || lowerCase.equalsIgnoreCase(str)) && (attachmentUUID = sLAvatarAppearance.getAttachmentUUID(i)) != null && rLVController.getRestrictions().isAllowed(RLVRestrictionType.detach, lowerCase, attachmentUUID)) {
-                    sLAvatarAppearance.DetachItemFromPoint(i);
+                if ((str.equals("") || lowerCase.equalsIgnoreCase(str)) && (attachmentUUID = avatarAppearance.getAttachmentUUID(i)) != null && rlvController.getRestrictions().isAllowed(RLVRestrictionType.detach, lowerCase, attachmentUUID)) {
+                    avatarAppearance.DetachItemFromPoint(i);
                 }
             }
         }

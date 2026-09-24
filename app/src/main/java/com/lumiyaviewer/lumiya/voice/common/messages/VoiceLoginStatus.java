@@ -21,10 +21,10 @@ public class VoiceLoginStatus implements VoicePluginMessage {
         this.errorMessage = bundle.getString("errorMessage");
     }
 
-    public VoiceLoginStatus(@Nullable VoiceLoginInfo voiceLoginInfo, boolean z, @Nullable String str) {
+    public VoiceLoginStatus(@Nullable VoiceLoginInfo voiceLoginInfo, boolean loggedIn, @Nullable String errorMessage) {
         this.voiceLoginInfo = voiceLoginInfo;
-        this.loggedIn = z;
-        this.errorMessage = str;
+        this.loggedIn = loggedIn;
+        this.errorMessage = errorMessage;
     }
 
     @Override

@@ -9,8 +9,8 @@ public enum TextureClass {
 
     private final String storePath;
 
-    TextureClass(String str) {
-        this.storePath = str;
+    TextureClass(String storePath) {
+        this.storePath = storePath;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

@@ -12,13 +12,13 @@ public class RLVCmdRemoveOutfit extends RLVCmdGenericRestriction {
     }
 
     @Override
-    protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
-        SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
-        for (SLWearableType sLWearableType : SLWearableType.values()) {
-            if (!sLWearableType.isBodyPart()) {
-                String name = sLWearableType.getName();
+    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
+        SLAvatarAppearance avatarAppearance = rlvController.getModules().avatarAppearance;
+        for (SLWearableType wearableType : SLWearableType.values()) {
+            if (!wearableType.isBodyPart()) {
+                String name = wearableType.getName();
                 if (str.equals("") || name.equalsIgnoreCase(str)) {
-                    sLAvatarAppearance.ForceTakeItemOff(sLWearableType);
+                    avatarAppearance.ForceTakeItemOff(wearableType);
                 }
             }
         }

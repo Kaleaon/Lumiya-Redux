@@ -40,8 +40,8 @@ public class ClassifiedInfoRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleClassifiedInfoRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleClassifiedInfoRequest(this);
     }
 
     @Override

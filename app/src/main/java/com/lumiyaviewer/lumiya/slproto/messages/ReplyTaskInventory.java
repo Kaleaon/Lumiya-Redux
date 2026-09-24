@@ -33,8 +33,8 @@ public class ReplyTaskInventory extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleReplyTaskInventory(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleReplyTaskInventory(this);
     }
 
     @Override

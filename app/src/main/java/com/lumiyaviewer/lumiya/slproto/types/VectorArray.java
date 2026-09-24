@@ -6,18 +6,18 @@ public class VectorArray {
     protected int numComponents;
     protected int offset;
 
-    public VectorArray(int i, int i2) {
-        this.data = new float[i * i2];
-        this.numComponents = i;
-        this.length = i2;
+    public VectorArray(int numComponents, int length) {
+        this.data = new float[numComponents * length];
+        this.numComponents = numComponents;
+        this.length = length;
         this.offset = 0;
     }
 
-    public VectorArray(VectorArray vectorArray, int i) {
+    public VectorArray(VectorArray vectorArray, int offset) {
         this.data = vectorArray.data;
         this.numComponents = vectorArray.numComponents;
         this.length = vectorArray.length;
-        this.offset = i;
+        this.offset = offset;
     }
 
     public final float[] getData() {

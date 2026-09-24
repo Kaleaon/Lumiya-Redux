@@ -40,8 +40,8 @@ public class OfferCallingCard extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleOfferCallingCard(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleOfferCallingCard(this);
     }
 
     @Override

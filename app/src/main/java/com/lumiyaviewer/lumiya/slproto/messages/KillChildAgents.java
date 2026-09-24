@@ -29,8 +29,8 @@ public class KillChildAgents extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleKillChildAgents(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleKillChildAgents(this);
     }
 
     @Override

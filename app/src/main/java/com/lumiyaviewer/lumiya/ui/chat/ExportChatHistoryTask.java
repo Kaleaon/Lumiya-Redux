@@ -72,13 +72,13 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
     }
 
     @Override
-    public ExportResult doInBackground(ChatterID... chatterIDArr) {
+    public ExportResult doInBackground(ChatterID... chatterID2) {
         ChatterID chatterID;
         UserManager userManager;
         File file = null;
         FileOutputStream fileOutputStream;
         LazyList<ChatMessage> lazyList;
-        if (chatterIDArr.length != 1 || (userManager = (chatterID = chatterIDArr[0]).getUserManager()) == null) {
+        if (chatterID2.length != 1 || (userManager = (chatterID = chatterID2[0]).getUserManager()) == null) {
             return null;
         }
         ChatterNameRetriever chatterNameRetriever = new ChatterNameRetriever(chatterID, this.onChatterNameUpdated, UIThreadExecutor.getInstance());
@@ -133,12 +133,12 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                                 fileOutputStream.close();
                             }
                             file = file4;
-                        } catch (Throwable th2) {
-                            Debug.Warning(th2);
+                        } catch (Throwable e) {
+                            Debug.Warning(e);
                             lazyList = null;
                         }
-                    } catch (Throwable th3) {
-                        Debug.Warning(th3);
+                    } catch (Throwable e5) {
+                        Debug.Warning(e5);
                         fileOutputStream = null;
                         lazyList = null;
                     }
@@ -157,26 +157,26 @@ public class ExportChatHistoryTask extends AsyncTask<ChatterID, Void, ExportResu
                     StringBuilder sb = new StringBuilder();
                     LazyList<ChatMessage> messages = userManager.getChatterList().getActiveChattersManager().getMessages(chatterID);
                     if (messages != null) {
-                        Iterator<ChatMessage> it2 = messages.iterator();
-                        while (it2.hasNext()) {
-                            SLChatEvent loadFromDatabaseObject2 = SLChatEvent.loadFromDatabaseObject(it2.next(), userManager.getUserID());
-                            if (loadFromDatabaseObject2 != null) {
-                                sb.append("[").append(dateTimeInstance.format(loadFromDatabaseObject2.getTimestamp())).append("] ").append(loadFromDatabaseObject2.getPlainTextMessage(this.context, userManager, false).toString()).append("\n");
+                        Iterator<ChatMessage> iterator = messages.iterator();
+                        while (iterator.hasNext()) {
+                            SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(iterator.next(), userManager.getUserID());
+                            if (fromDatabaseObject != null) {
+                                sb.append("[").append(dateTimeInstance.format(fromDatabaseObject.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, userManager, false).toString()).append("\n");
                             }
                             if (isCancelled()) {
                                 break;
                             }
                         }
                     }
-                    String sb2 = sb.toString();
+                    String text = sb.toString();
                     if (!isCancelled()) {
-                        return new ExportResult(null, sb2, str);
+                        return new ExportResult(null, text, str);
                     }
                 }
                 return null;
-            } catch (Throwable th4) {
+            } catch (Throwable e6) {
                 this.nameReadyLock.unlock();
-                throw th4;
+                throw e6;
             }
         } catch (InterruptedException e4) {
             return null;

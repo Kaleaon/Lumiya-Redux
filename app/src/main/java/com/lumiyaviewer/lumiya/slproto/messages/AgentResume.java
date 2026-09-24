@@ -31,8 +31,8 @@ public class AgentResume extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentResume(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentResume(this);
     }
 
     @Override

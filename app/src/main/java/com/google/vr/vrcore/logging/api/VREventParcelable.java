@@ -23,9 +23,9 @@ public class VREventParcelable implements Parcelable {
         }
     };
 
-    public VREventParcelable(int i, Vr.VREvent vREvent) {
-        this.eventCode = i;
-        this.event = vREvent;
+    public VREventParcelable(int eventCode, Vr.VREvent vrEvent) {
+        this.eventCode = eventCode;
+        this.event = vrEvent;
     }
 
     private VREventParcelable(Parcel parcel) {

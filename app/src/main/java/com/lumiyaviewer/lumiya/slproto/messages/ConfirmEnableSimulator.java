@@ -31,8 +31,8 @@ public class ConfirmEnableSimulator extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleConfirmEnableSimulator(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleConfirmEnableSimulator(this);
     }
 
     @Override

@@ -53,17 +53,17 @@ public class AvatarAnimation extends SLMessage {
         int size = (this.AnimationList_Fields.size() * 20) + 18 + 1 + (this.AnimationSourceList_Fields.size() * 16) + 1;
         Iterator<?> it = this.PhysicalAvatarEventList_Fields.iterator();
         while (true) {
-            int i = size;
+            int size2 = size;
             if (!it.hasNext()) {
-                return i;
+                return size2;
             }
-            size = ((PhysicalAvatarEventList) it.next()).TypeData.length + 1 + i;
+            size = ((PhysicalAvatarEventList) it.next()).TypeData.length + 1 + size2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarAnimation(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarAnimation(this);
     }
 
     @Override
@@ -82,9 +82,9 @@ public class AvatarAnimation extends SLMessage {
             packUUID(byteBuffer, ((AnimationSourceList) it.next()).ObjectID);
         }
         byteBuffer.put((byte) this.PhysicalAvatarEventList_Fields.size());
-        Iterator<?> it2 = this.PhysicalAvatarEventList_Fields.iterator();
-        while (it2.hasNext()) {
-            packVariable(byteBuffer, ((PhysicalAvatarEventList) it2.next()).TypeData, 1);
+        Iterator<?> iterator = this.PhysicalAvatarEventList_Fields.iterator();
+        while (iterator.hasNext()) {
+            packVariable(byteBuffer, ((PhysicalAvatarEventList) iterator.next()).TypeData, 1);
         }
     }
 
@@ -92,20 +92,20 @@ public class AvatarAnimation extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Sender_Field.ID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             AnimationList animationList = new AnimationList();
             animationList.AnimID = unpackUUID(byteBuffer);
             animationList.AnimSequenceID = unpackInt(byteBuffer);
             this.AnimationList_Fields.add(animationList);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             AnimationSourceList animationSourceList = new AnimationSourceList();
             animationSourceList.ObjectID = unpackUUID(byteBuffer);
             this.AnimationSourceList_Fields.add(animationSourceList);
         }
         int i5 = byteBuffer.get() & 0xFF;
-        for (int i6 = 0; i6 < i5; i6++) {
+        for (int m = 0; m < i5; m++) {
             PhysicalAvatarEventList physicalAvatarEventList = new PhysicalAvatarEventList();
             physicalAvatarEventList.TypeData = unpackVariable(byteBuffer, 1);
             this.PhysicalAvatarEventList_Fields.add(physicalAvatarEventList);

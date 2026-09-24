@@ -34,8 +34,8 @@ public class DeRezAck extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDeRezAck(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDeRezAck(this);
     }
 
     @Override

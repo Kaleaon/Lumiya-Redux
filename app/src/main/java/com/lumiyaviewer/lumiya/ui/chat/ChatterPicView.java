@@ -218,7 +218,7 @@ public class ChatterPicView extends View {
         this.attachedMessageSource = chatMessageSource;
     }
 
-    public void setChatterID(@Nullable ChatterID chatterID, @Nullable String str) {
+    public void setChatterID(@Nullable ChatterID chatterID, @Nullable String chatterName) {
         boolean z = true;
         boolean z2 = false;
         if (this.forceIcon != null && chatterID != null) {
@@ -237,38 +237,38 @@ public class ChatterPicView extends View {
             }
             z2 = true;
         }
-        if (Objects.equal(this.chatterName, str)) {
+        if (Objects.equal(this.chatterName, chatterName)) {
             z = z2;
         } else {
-            this.chatterName = str;
+            this.chatterName = chatterName;
         }
         if (z) {
             postInvalidate();
         }
     }
 
-    public void setDefaultIcon(int i, boolean z) {
-        if (this.thumbnailDefaultIcon != i) {
-            this.thumbnailDefaultIcon = i;
+    public void setDefaultIcon(int thumbnailDefaultIcon, boolean z) {
+        if (this.thumbnailDefaultIcon != thumbnailDefaultIcon) {
+            this.thumbnailDefaultIcon = thumbnailDefaultIcon;
             if (this.thumbnailDefaultIcon == -1) {
                 this.defaultIconDrawable = null;
             } else if (z) {
-                this.defaultIconDrawable = ContextCompat.getDrawable(getContext(), i);
+                this.defaultIconDrawable = ContextCompat.getDrawable(getContext(), thumbnailDefaultIcon);
             } else {
                 TypedValue typedValue = new TypedValue();
-                getContext().getTheme().resolveAttribute(i, typedValue, true);
+                getContext().getTheme().resolveAttribute(thumbnailDefaultIcon, typedValue, true);
                 this.defaultIconDrawable = ContextCompat.getDrawable(getContext(), typedValue.resourceId);
             }
             postInvalidate();
         }
     }
 
-    public void setForceIcon(int i) {
-        if (i == -1) {
+    public void setForceIcon(int forceIcon) {
+        if (forceIcon == -1) {
             this.forceIcon = null;
             postInvalidate();
         } else {
-            this.forceIcon = ContextCompat.getDrawable(getContext(), i);
+            this.forceIcon = ContextCompat.getDrawable(getContext(), forceIcon);
             setChatterID(null, null);
             postInvalidate();
         }

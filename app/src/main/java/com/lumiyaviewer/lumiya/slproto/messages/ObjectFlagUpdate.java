@@ -47,8 +47,8 @@ public class ObjectFlagUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectFlagUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectFlagUpdate(this);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ObjectFlagUpdate extends SLMessage {
         this.AgentData_Field.IsPhantom = unpackBoolean(byteBuffer);
         this.AgentData_Field.CastsShadows = unpackBoolean(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ExtraPhysics extraPhysics = new ExtraPhysics();
             extraPhysics.PhysicsShapeType = unpackByte(byteBuffer) & 0xFF;
             extraPhysics.Density = unpackFloat(byteBuffer);

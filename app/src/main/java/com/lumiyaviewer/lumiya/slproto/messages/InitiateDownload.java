@@ -40,8 +40,8 @@ public class InitiateDownload extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInitiateDownload(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInitiateDownload(this);
     }
 
     @Override

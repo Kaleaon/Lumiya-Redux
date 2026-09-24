@@ -38,8 +38,8 @@ public class MapLayerRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapLayerRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapLayerRequest(this);
     }
 
     @Override

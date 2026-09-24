@@ -238,13 +238,13 @@ public class DetailsActivity extends ConnectedActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] iArr) {
-        super.onRequestPermissionsResult(i, strArr, iArr);
+    public void onRequestPermissionsResult(int i, @NonNull String[] strArr, @NonNull int[] ints) {
+        super.onRequestPermissionsResult(i, strArr, ints);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments != null) {
             Iterator<?> it = fragments.iterator();
             while (it.hasNext()) {
-                ((Fragment) it.next()).onRequestPermissionsResult(i, strArr, iArr);
+                ((Fragment) it.next()).onRequestPermissionsResult(i, strArr, ints);
             }
         }
     }
@@ -294,9 +294,9 @@ public class DetailsActivity extends ConnectedActivity {
         return true;
     }
 
-    public void setDefaultTitle(@Nullable String str, @Nullable String str2) {
-        this.defaultTitle = str;
-        this.defaultSubTitle = str2;
+    public void setDefaultTitle(@Nullable String defaultTitle, @Nullable String defaultSubTitle) {
+        this.defaultTitle = defaultTitle;
+        this.defaultSubTitle = defaultSubTitle;
         updateTitle();
     }
 

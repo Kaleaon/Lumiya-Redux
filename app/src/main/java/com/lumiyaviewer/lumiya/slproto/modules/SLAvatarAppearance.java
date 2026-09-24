@@ -123,13 +123,13 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         private final int objectLocalID;
         private final SLWearableType wornOn;
 
-        WornItem(SLWearableType sLWearableType, int i, UUID uuid, String str, int i2, boolean z) {
-            this.wornOn = sLWearableType;
-            this.attachedTo = i;
+        WornItem(SLWearableType wearableType, int attachedTo, UUID uuid, String name, int objectLocalID, boolean isTouchable) {
+            this.wornOn = wearableType;
+            this.attachedTo = attachedTo;
             this.itemID = uuid;
-            this.name = str;
-            this.objectLocalID = i2;
-            this.isTouchable = z;
+            this.name = name;
+            this.objectLocalID = objectLocalID;
+            this.isTouchable = isTouchable;
         }
 
         int getAttachedTo() {
@@ -157,8 +157,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    public SLAvatarAppearance(SLAgentCircuit sLAgentCircuit, SLInventory sLInventory, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    public SLAvatarAppearance(SLAgentCircuit agentCircuit, SLInventory inventory, SLCaps caps) {
+        super(agentCircuit);
         this.setAppearanceSerialNum = 1;
         this.agentSizeKnown = false;
         this.needUpdateAppearance = false;
@@ -186,12 +186,12 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             }
         });
         this.bakeProcess = null;
-        this.caps = sLCaps;
-        this.inventory = sLInventory;
-        this.parcelInfo = sLAgentCircuit.getGridConnection().parcelInfo;
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID());
-        this.currentOutfitFolder = new SubscriptionData<>(sLAgentCircuit, obj -> onCurrentOutfitFolder((InventoryEntryList) obj));
-        this.findCofFolder = new SubscriptionData<>(sLAgentCircuit, obj -> onCofFolderEntry((InventoryEntryList) obj));
+        this.caps = caps;
+        this.inventory = inventory;
+        this.parcelInfo = agentCircuit.getGridConnection().parcelInfo;
+        this.userManager = UserManager.getUserManager(agentCircuit.getAgentUUID());
+        this.currentOutfitFolder = new SubscriptionData<>(agentCircuit, obj -> onCurrentOutfitFolder((InventoryEntryList) obj));
+        this.findCofFolder = new SubscriptionData<>(agentCircuit, obj -> onCofFolderEntry((InventoryEntryList) obj));
         if (this.userManager != null) {
             this.wornItemsResultHandler = this.userManager.wornItems().attachRequestHandler(this.wornItemsRequestHandler);
         } else {
@@ -288,14 +288,14 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         AgentIsNowWearing agentIsNowWearing = new AgentIsNowWearing();
         agentIsNowWearing.AgentData_Field.AgentID = this.circuitInfo.agentID;
         agentIsNowWearing.AgentData_Field.SessionID = this.circuitInfo.sessionID;
-        for (SLWearableType sLWearableType : SLWearableType.values()) {
-            Map<UUID, SLWearable> row = this.wornWearables.row(sLWearableType);
+        for (SLWearableType wearableType : SLWearableType.values()) {
+            Map<UUID, SLWearable> row = this.wornWearables.row(wearableType);
             if (row != null) {
                 z = true;
-                for (SLWearable sLWearable : row.values()) {
+                for (SLWearable wearable : row.values()) {
                     AgentIsNowWearing.WearableData wearableData = new AgentIsNowWearing.WearableData();
-                    wearableData.ItemID = sLWearable.itemID;
-                    wearableData.WearableType = sLWearableType.getTypeCode();
+                    wearableData.ItemID = wearable.itemID;
+                    wearableData.WearableType = wearableType.getTypeCode();
                     agentIsNowWearing.WearableData_Fields.add(wearableData);
                     z = false;
                 }
@@ -305,7 +305,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             if (z) {
                 AgentIsNowWearing.WearableData wearableData2 = new AgentIsNowWearing.WearableData();
                 wearableData2.ItemID = new UUID(0L, 0L);
-                wearableData2.WearableType = sLWearableType.getTypeCode();
+                wearableData2.WearableType = wearableType.getTypeCode();
                 agentIsNowWearing.WearableData_Fields.add(wearableData2);
             }
         }
@@ -340,9 +340,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             if (agentAvatar != null) {
                 agentAvatar.ApplyAvatarVisualParams(this.agentVisualParams);
             }
-            for (int i : this.agentVisualParams) {
+            for (int agentVisualParam : this.agentVisualParams) {
                 AgentSetAppearance.VisualParam visualParam = new AgentSetAppearance.VisualParam();
-                visualParam.ParamValue = i;
+                visualParam.ParamValue = agentVisualParam;
                 agentSetAppearance.VisualParam_Fields.add(visualParam);
             }
             if (this.agentSizeKnown && areWearablesReady()) {
@@ -375,10 +375,10 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             HashMap<UUID, SLWearable> hashMap = new HashMap<>();
             HashMap<UUID, String> hashMap2 = new HashMap<>();
             HashSet hashSet = new HashSet();
-            for (SLWearable sLWearable : this.wornWearables.values()) {
-                if (!sLWearable.getIsFailed()) {
-                    hashSet.add(sLWearable.itemID);
-                    hashMap.put(sLWearable.itemID, sLWearable);
+            for (SLWearable wearable : this.wornWearables.values()) {
+                if (!wearable.getIsFailed()) {
+                    hashSet.add(wearable.itemID);
+                    hashMap.put(wearable.itemID, wearable);
                 }
             }
             Map<UUID, String> map = this.wantedAttachments.get();
@@ -386,25 +386,25 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 hashMap2.putAll(map);
             }
             boolean z3 = true;
-            for (SLInventoryEntry sLInventoryEntry : data) {
-                if (sLInventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode()) {
-                    if (sLInventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
-                        if (!hashSet.contains(sLInventoryEntry.assetUUID)) {
-                            linkedList.add(sLInventoryEntry.uuid);
+            for (SLInventoryEntry inventoryEntry : data) {
+                if (inventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode()) {
+                    if (inventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
+                        if (!hashSet.contains(inventoryEntry.assetUUID)) {
+                            linkedList.add(inventoryEntry.uuid);
                         }
-                    } else if (sLInventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode() && map != null && !map.containsKey(sLInventoryEntry.assetUUID)) {
-                        Debug.Printf("Attached entry %s (%s) not found in wanted attachments", sLInventoryEntry.assetUUID, sLInventoryEntry.name);
-                        linkedList.add(sLInventoryEntry.uuid);
+                    } else if (inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode() && map != null && !map.containsKey(inventoryEntry.assetUUID)) {
+                        Debug.Printf("Attached entry %s (%s) not found in wanted attachments", inventoryEntry.assetUUID, inventoryEntry.name);
+                        linkedList.add(inventoryEntry.uuid);
                     }
-                    hashMap.remove(sLInventoryEntry.assetUUID);
-                    hashMap2.remove(sLInventoryEntry.assetUUID);
+                    hashMap.remove(inventoryEntry.assetUUID);
+                    hashMap2.remove(inventoryEntry.assetUUID);
                     z2 = z3;
-                } else if (sLInventoryEntry.assetType != SLAssetType.AT_LINK_FOLDER.getTypeCode() || this.wantedOutfitFolder == null) {
+                } else if (inventoryEntry.assetType != SLAssetType.AT_LINK_FOLDER.getTypeCode() || this.wantedOutfitFolder == null) {
                     z2 = z3;
-                } else if (this.wantedOutfitFolder.uuid.equals(sLInventoryEntry.assetUUID)) {
+                } else if (this.wantedOutfitFolder.uuid.equals(inventoryEntry.assetUUID)) {
                     z2 = false;
                 } else {
-                    linkedList.add(sLInventoryEntry.uuid);
+                    linkedList.add(inventoryEntry.uuid);
                     z2 = z3;
                 }
                 z3 = z2;
@@ -416,9 +416,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 this.inventory.DeleteMultiInventoryItemRaw(folder, linkedList);
                 z = true;
             }
-            for (SLWearable sLWearable2 : hashMap.values()) {
-                Debug.Printf("Update COF: adding %s, name = '%s'", sLWearable2.itemID, sLWearable2.getName());
-                this.inventory.LinkInventoryItem(folder, sLWearable2.itemID, SLInventoryType.IT_WEARABLE.getTypeCode(), SLAssetType.AT_LINK.getTypeCode(), sLWearable2.getName(), "");
+            for (SLWearable wearable2 : hashMap.values()) {
+                Debug.Printf("Update COF: adding %s, name = '%s'", wearable2.itemID, wearable2.getName());
+                this.inventory.LinkInventoryItem(folder, wearable2.itemID, SLInventoryType.IT_WEARABLE.getTypeCode(), SLAssetType.AT_LINK.getTypeCode(), wearable2.getName(), "");
                 z = true;
             }
             for (Object entryObj : hashMap2.entrySet()) {
@@ -441,9 +441,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
     }
 
     private void UpdateCurrentOutfitLink(@Nonnull InventoryEntryList inventoryEntryList) {
-        for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
-            if (sLInventoryEntry.assetType == SLAssetType.AT_LINK_FOLDER.getTypeCode()) {
-                this.userManager.wornOutfitLink().setData(SubscriptionSingleKey.Value, sLInventoryEntry.assetUUID);
+        for (SLInventoryEntry inventoryEntry : inventoryEntryList) {
+            if (inventoryEntry.assetType == SLAssetType.AT_LINK_FOLDER.getTypeCode()) {
+                this.userManager.wornOutfitLink().setData(SubscriptionSingleKey.Value, inventoryEntry.assetUUID);
                 return;
             }
         }
@@ -457,11 +457,11 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         if (data != null && database != null) {
             List<SLInventoryEntry> linkedList = new LinkedList<>();
             LinkedList<SLInventoryEntry> linkedList2 = new LinkedList();
-            for (SLInventoryEntry sLInventoryEntry : data) {
-                if (sLInventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
-                    linkedList.add(sLInventoryEntry);
-                } else if (sLInventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (sLInventoryEntry.isLink() && sLInventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode())) {
-                    linkedList2.add(sLInventoryEntry);
+            for (SLInventoryEntry inventoryEntry : data) {
+                if (inventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
+                    linkedList.add(inventoryEntry);
+                } else if (inventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (inventoryEntry.isLink() && inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode())) {
+                    linkedList2.add(inventoryEntry);
                 }
             }
             if (WearItemList(database, linkedList, false)) {
@@ -476,8 +476,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 HashMap hashMap = new HashMap();
                 UUID randomUUID = UUID.randomUUID();
                 RezMultipleAttachmentsFromInv rezMultipleAttachmentsFromInv2 = null;
-                for (SLInventoryEntry sLInventoryEntry2 : linkedList2) {
-                    SLInventoryEntry resolveLink = database.resolveLink(sLInventoryEntry2);
+                for (SLInventoryEntry inventoryEntry2 : linkedList2) {
+                    SLInventoryEntry resolveLink = database.resolveLink(inventoryEntry2);
                     if (resolveLink != null) {
                         if (rezMultipleAttachmentsFromInv2 == null) {
                             rezMultipleAttachmentsFromInv2 = new RezMultipleAttachmentsFromInv();
@@ -488,8 +488,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                             rezMultipleAttachmentsFromInv2.HeaderData_Field.FirstDetachAll = false;
                         }
                         RezMultipleAttachmentsFromInv.ObjectData objectData = new RezMultipleAttachmentsFromInv.ObjectData();
-                        Debug.Printf("Re-attaching attachment: entry %s (%s)", resolveLink.uuid, sLInventoryEntry2.name);
-                        hashMap.put(resolveLink.uuid, sLInventoryEntry2.name);
+                        Debug.Printf("Re-attaching attachment: entry %s (%s)", resolveLink.uuid, inventoryEntry2.name);
+                        hashMap.put(resolveLink.uuid, inventoryEntry2.name);
                         objectData.ItemID = resolveLink.uuid;
                         objectData.OwnerID = resolveLink.ownerUUID;
                         objectData.AttachmentPt = 128;
@@ -497,8 +497,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                         objectData.GroupMask = resolveLink.groupMask;
                         objectData.EveryoneMask = resolveLink.everyoneMask;
                         objectData.NextOwnerMask = resolveLink.nextOwnerMask;
-                        objectData.Name = SLMessage.stringToVariableOEM(sLInventoryEntry2.name);
-                        objectData.Description = SLMessage.stringToVariableOEM(sLInventoryEntry2.description);
+                        objectData.Name = SLMessage.stringToVariableOEM(inventoryEntry2.name);
+                        objectData.Description = SLMessage.stringToVariableOEM(inventoryEntry2.description);
                         rezMultipleAttachmentsFromInv2.ObjectData_Fields.add(objectData);
                         if (rezMultipleAttachmentsFromInv2.ObjectData_Fields.size() >= 4) {
                             rezMultipleAttachmentsFromInv2.isReliable = true;
@@ -542,15 +542,15 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
     private void UpdateWearableNames() {
         SLInventoryEntry resolveLink;
         SLWearableType byCode;
-        SLWearable sLWearable;
+        SLWearable wearable;
         InventoryEntryList data = this.currentOutfitFolder.getData();
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         if (data == null || database == null) {
             return;
         }
-        for (SLInventoryEntry sLInventoryEntry : data) {
-            if (!sLInventoryEntry.isFolderOrFolderLink() && (resolveLink = database.resolveLink(sLInventoryEntry)) != null && resolveLink.invType == SLInventoryType.IT_WEARABLE.getTypeCode() && (byCode = SLWearableType.getByCode(resolveLink.flags & 255)) != null && (sLWearable = this.wornWearables.get(byCode, resolveLink.assetUUID)) != null) {
-                sLWearable.setInventoryName(resolveLink.name);
+        for (SLInventoryEntry inventoryEntry : data) {
+            if (!inventoryEntry.isFolderOrFolderLink() && (resolveLink = database.resolveLink(inventoryEntry)) != null && resolveLink.invType == SLInventoryType.IT_WEARABLE.getTypeCode() && (byCode = SLWearableType.getByCode(resolveLink.flags & 255)) != null && (wearable = this.wornWearables.get(byCode, resolveLink.assetUUID)) != null) {
+                wearable.setInventoryName(resolveLink.name);
             }
         }
     }
@@ -561,7 +561,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z3;
         boolean z4;
         boolean z5 = false;
-        RLVController rLVController = this.agentCircuit.getModules().rlvController;
+        RLVController rlvController = this.agentCircuit.getModules().rlvController;
         HashBasedTable create = HashBasedTable.create(this.wornWearables);
         Iterator<SLInventoryEntry> it = list.iterator();
         while (true) {
@@ -572,18 +572,18 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             SLInventoryEntry resolveLink = inventoryDB.resolveLink((SLInventoryEntry) it.next());
             if (resolveLink != null && (byCode = SLWearableType.getByCode(resolveLink.flags & 255)) != null) {
                 boolean isBodyPart = !z ? byCode.isBodyPart() : true;
-                if (!rLVController.canWearItem(byCode)) {
+                if (!rlvController.canWearItem(byCode)) {
                     z3 = false;
                 } else if (isBodyPart) {
-                    if (!rLVController.canTakeItemOff(byCode)) {
+                    if (!rlvController.canTakeItemOff(byCode)) {
                         boolean z6 = false;
-                        Iterator<UUID> it2 = create.row(byCode).keySet().iterator();
+                        Iterator<UUID> iterator = create.row(byCode).keySet().iterator();
                         while (true) {
                             z4 = z6;
-                            if (!it2.hasNext()) {
+                            if (!iterator.hasNext()) {
                                 break;
                             }
-                            z6 = !((UUID) it2.next()).equals(resolveLink.assetUUID) ? true : z4;
+                            z6 = !((UUID) iterator.next()).equals(resolveLink.assetUUID) ? true : z4;
                         }
                         if (z4) {
                             z3 = false;
@@ -597,9 +597,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                     if (isBodyPart) {
                         HashSet hashSet = new HashSet(create.row(byCode).keySet());
                         hashSet.remove(resolveLink.assetUUID);
-                        Iterator it3 = hashSet.iterator();
-                        while (it3.hasNext()) {
-                            SLWearable remove = (SLWearable) create.remove(byCode, (UUID) it3.next());
+                        Iterator iterator2 = hashSet.iterator();
+                        while (iterator2.hasNext()) {
+                            SLWearable remove = (SLWearable) create.remove(byCode, (UUID) iterator2.next());
                             if (remove != null) {
                                 remove.dispose();
                             }
@@ -619,13 +619,13 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return z2;
     }
 
-    private SLWearable addWearable(Table<SLWearableType, UUID, SLWearable> table, SLWearableType sLWearableType, UUID uuid, UUID uuid2, String str) {
-        SLWearable sLWearable = new SLWearable(this.userManager, this.agentCircuit, uuid, uuid2, sLWearableType, this);
+    private SLWearable addWearable(Table<SLWearableType, UUID, SLWearable> table, SLWearableType wearableType, UUID uuid, UUID uuid2, String str) {
+        SLWearable wearable = new SLWearable(this.userManager, this.agentCircuit, uuid, uuid2, wearableType, this);
         if (str != null) {
-            sLWearable.setInventoryName(str);
+            wearable.setInventoryName(str);
         }
-        table.put(sLWearableType, uuid2, sLWearable);
-        return sLWearable;
+        table.put(wearableType, uuid2, wearable);
+        return wearable;
     }
 
     private boolean areWearablesReady() {
@@ -640,17 +640,17 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         boolean z6 = false;
         boolean z7 = false;
         while (i < length) {
-            SLWearableType sLWearableType = valuesCustom[i];
-            boolean isCritical = sLWearableType.getIsCritical();
-            Map<UUID, SLWearable> row = this.wornWearables.row(sLWearableType);
+            SLWearableType wearableType = valuesCustom[i];
+            boolean isCritical = wearableType.getIsCritical();
+            Map<UUID, SLWearable> row = this.wornWearables.row(wearableType);
             if (row != null) {
                 z = false;
                 z2 = z7;
-                for (SLWearable sLWearable : row.values()) {
-                    if (sLWearable.getIsValid()) {
+                for (SLWearable wearable : row.values()) {
+                    if (wearable.getIsValid()) {
                         z4 = true;
                         z5 = z2;
-                    } else if (sLWearable.getIsFailed()) {
+                    } else if (wearable.getIsFailed()) {
                         z4 = z;
                         z5 = z2;
                     } else {
@@ -668,7 +668,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 z3 = z6;
             } else if (!z) {
                 Object[] objArr = new Object[2];
-                objArr[0] = sLWearableType;
+                objArr[0] = wearableType;
                 objArr[1] = Integer.valueOf(row != null ? row.size() : 0);
                 Debug.Printf("missing wearables on critical layer %s (worn: %d entries)", objArr);
                 z3 = true;
@@ -692,9 +692,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             return true;
         }
         try {
-            for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                if (sLObjectInfo.attachedToUUID != null && (!sLObjectInfo.isDead) && sLObjectInfo.attachedToUUID.equals(uuid)) {
-                    if (!this.agentCircuit.getModules().rlvController.canDetachItem(sLObjectInfo.attachmentID, sLObjectInfo.getId())) {
+            for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                if (objectInfo.attachedToUUID != null && (!objectInfo.isDead) && objectInfo.attachedToUUID.equals(uuid)) {
+                    if (!this.agentCircuit.getModules().rlvController.canDetachItem(objectInfo.attachmentID, objectInfo.getId())) {
                         return false;
                     }
                 }
@@ -706,8 +706,8 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    private boolean canWearItem(SLWearableType sLWearableType) {
-        return this.agentCircuit.getModules().rlvController.canWearItem(sLWearableType);
+    private boolean canWearItem(SLWearableType wearableType) {
+        return this.agentCircuit.getModules().rlvController.canWearItem(wearableType);
     }
 
     private float getAgentHeight() {
@@ -716,9 +716,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
 
     private int[] getAppearanceParams() {
         SLAvatarParams.AvatarParam avatarParam;
-        int[] iArr = new int[218];
+        int[] ints = new int[218];
         for (int i = 0; i < 218; i++) {
-            iArr[i] = 0;
+            ints[i] = 0;
             SLAvatarParams.ParamSet paramSet = SLAvatarParams.paramDefs[i];
             if (paramSet != null && paramSet.params.size() > 0 && (avatarParam = paramSet.params.get(0)) != null) {
                 int round = Math.round(((avatarParam.defValue - avatarParam.minValue) * 255.0f) / (avatarParam.maxValue - avatarParam.minValue));
@@ -727,7 +727,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 } else if (round > 255) {
                     round = 255;
                 }
-                iArr[i] = round;
+                ints[i] = round;
             }
         }
         Iterator<SLWearable> it = this.wornWearables.values().iterator();
@@ -744,7 +744,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                         } else if (round2 > 255) {
                             round2 = 255;
                         }
-                        iArr[paramSet2.appearanceIndex] = round2;
+                        ints[paramSet2.appearanceIndex] = round2;
                         switch (paramSet2.id) {
                             case 33:
                                 this.agentSizeVPHeight = wearableParam.paramValue;
@@ -773,7 +773,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             }
         }
         this.agentSizeKnown = true;
-        return iArr;
+        return ints;
     }
 
     public ImmutableList<WornItem> getWornItems() {
@@ -782,15 +782,15 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         Iterator<Table.Cell<SLWearableType, UUID, SLWearable>> it = this.wornWearables.cellSet().iterator();
         while (it.hasNext()) {
             Table.Cell cell = (Table.Cell) it.next();
-            SLWearable sLWearable = (SLWearable) cell.getValue();
-            if (sLWearable != null) {
-                builder.add(new WornItem((SLWearableType) cell.getRowKey(), 0, (UUID) cell.getColumnKey(), sLWearable.getName(), 0, false));
+            SLWearable wearable = (SLWearable) cell.getValue();
+            if (wearable != null) {
+                builder.add(new WornItem((SLWearableType) cell.getRowKey(), 0, (UUID) cell.getColumnKey(), wearable.getName(), 0, false));
             }
         }
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
-                for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                    builder.add(new WornItem(null, sLObjectInfo.attachmentID, sLObjectInfo.getId(), sLObjectInfo.getName(), sLObjectInfo.localID, sLObjectInfo.isTouchable()));
+                for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                    builder.add(new WornItem(null, objectInfo.attachmentID, objectInfo.getId(), objectInfo.getName(), objectInfo.localID, objectInfo.isTouchable()));
                 }
             } catch (NoSuchElementException e) {
                 Debug.Warning(e);
@@ -799,17 +799,17 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return builder.build();
     }
 
-    private boolean isItemWorn(SLInventoryEntry sLInventoryEntry, boolean z) {
-        return sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, z) != null;
+    private boolean isItemWorn(SLInventoryEntry inventoryEntry, boolean z) {
+        return inventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, z) != null;
     }
 
     public void onCofFolderEntry(InventoryEntryList inventoryEntryList) {
         if (inventoryEntryList != null) {
-            for (SLInventoryEntry sLInventoryEntry : inventoryEntryList) {
-                if (sLInventoryEntry != null && sLInventoryEntry.isFolder && sLInventoryEntry.typeDefault == 46) {
-                    this.cofFolderUUID.set(sLInventoryEntry.uuid);
+            for (SLInventoryEntry inventoryEntry : inventoryEntryList) {
+                if (inventoryEntry != null && inventoryEntry.isFolder && inventoryEntry.typeDefault == 46) {
+                    this.cofFolderUUID.set(inventoryEntry.uuid);
                     this.findCofFolder.unsubscribe();
-                    this.currentOutfitFolder.subscribe(this.userManager.getInventoryManager().getInventoryEntries(), InventoryQuery.create(sLInventoryEntry.uuid, (String) null, true, true, false, (SLAssetType) null));
+                    this.currentOutfitFolder.subscribe(this.userManager.getInventoryManager().getInventoryEntries(), InventoryQuery.create(inventoryEntry.uuid, (String) null, true, true, false, (SLAssetType) null));
                     return;
                 }
             }
@@ -849,27 +849,27 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    public void AttachInventoryItem(SLInventoryEntry sLInventoryEntry, int i, boolean z) {
+    public void AttachInventoryItem(SLInventoryEntry inventoryEntry, int i, boolean z) {
         boolean z2;
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         if (database != null) {
-            sLInventoryEntry = database.resolveLink(sLInventoryEntry);
+            inventoryEntry = database.resolveLink(inventoryEntry);
         }
-        if (sLInventoryEntry == null) {
+        if (inventoryEntry == null) {
             return;
         }
-        if (sLInventoryEntry.assetType == SLAssetType.AT_CLOTHING.getTypeCode() || sLInventoryEntry.assetType == SLAssetType.AT_BODYPART.getTypeCode()) {
-            WearItem(sLInventoryEntry, z);
+        if (inventoryEntry.assetType == SLAssetType.AT_CLOTHING.getTypeCode() || inventoryEntry.assetType == SLAssetType.AT_BODYPART.getTypeCode()) {
+            WearItem(inventoryEntry, z);
             return;
         }
-        Debug.Printf("Outfits: Attaching inventory item %s", sLInventoryEntry.uuid.toString());
+        Debug.Printf("Outfits: Attaching inventory item %s", inventoryEntry.uuid.toString());
         Map<UUID, String> map = this.wantedAttachments.get();
-        if (map == null || (!map.containsKey(sLInventoryEntry.uuid))) {
+        if (map == null || (!map.containsKey(inventoryEntry.uuid))) {
             HashMap hashMap = new HashMap();
             if (map != null) {
                 hashMap.putAll(map);
             }
-            hashMap.put(sLInventoryEntry.uuid, sLInventoryEntry.name);
+            hashMap.put(inventoryEntry.uuid, inventoryEntry.name);
             this.wantedAttachments.set(ImmutableMap.copyOf((Map) hashMap));
             z2 = true;
         } else {
@@ -881,15 +881,15 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         if (!z) {
             i |= 128;
         }
-        rezSingleAttachmentFromInv.ObjectData_Field.ItemID = sLInventoryEntry.uuid;
-        rezSingleAttachmentFromInv.ObjectData_Field.OwnerID = sLInventoryEntry.ownerUUID;
+        rezSingleAttachmentFromInv.ObjectData_Field.ItemID = inventoryEntry.uuid;
+        rezSingleAttachmentFromInv.ObjectData_Field.OwnerID = inventoryEntry.ownerUUID;
         rezSingleAttachmentFromInv.ObjectData_Field.AttachmentPt = i;
-        rezSingleAttachmentFromInv.ObjectData_Field.ItemFlags = sLInventoryEntry.flags;
-        rezSingleAttachmentFromInv.ObjectData_Field.GroupMask = sLInventoryEntry.groupMask;
-        rezSingleAttachmentFromInv.ObjectData_Field.EveryoneMask = sLInventoryEntry.everyoneMask;
-        rezSingleAttachmentFromInv.ObjectData_Field.NextOwnerMask = sLInventoryEntry.nextOwnerMask;
-        rezSingleAttachmentFromInv.ObjectData_Field.Name = SLMessage.stringToVariableOEM(sLInventoryEntry.name);
-        rezSingleAttachmentFromInv.ObjectData_Field.Description = SLMessage.stringToVariableOEM(sLInventoryEntry.description);
+        rezSingleAttachmentFromInv.ObjectData_Field.ItemFlags = inventoryEntry.flags;
+        rezSingleAttachmentFromInv.ObjectData_Field.GroupMask = inventoryEntry.groupMask;
+        rezSingleAttachmentFromInv.ObjectData_Field.EveryoneMask = inventoryEntry.everyoneMask;
+        rezSingleAttachmentFromInv.ObjectData_Field.NextOwnerMask = inventoryEntry.nextOwnerMask;
+        rezSingleAttachmentFromInv.ObjectData_Field.Name = SLMessage.stringToVariableOEM(inventoryEntry.name);
+        rezSingleAttachmentFromInv.ObjectData_Field.Description = SLMessage.stringToVariableOEM(inventoryEntry.description);
         rezSingleAttachmentFromInv.isReliable = true;
         SendMessage(rezSingleAttachmentFromInv);
         if (z2) {
@@ -899,7 +899,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    public void ChangeOutfit(List<SLInventoryEntry> list, boolean z, SLInventoryEntry sLInventoryEntry) {
+    public void ChangeOutfit(List<SLInventoryEntry> list, boolean z, SLInventoryEntry wantedOutfitFolder) {
         boolean z2;
         boolean z3;
         boolean z4;
@@ -909,7 +909,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         SLWearableType byCode;
         boolean z7;
         boolean z8;
-        SLWearable sLWearable;
+        SLWearable removed;
         RezMultipleAttachmentsFromInv rezMultipleAttachmentsFromInv2;
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         Map<UUID, String> map = this.wantedAttachments.get();
@@ -920,13 +920,13 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         } else {
             z2 = false;
         }
-        if (sLInventoryEntry != null) {
+        if (wantedOutfitFolder != null) {
             if (z) {
                 if (this.wantedOutfitFolder == null) {
-                    this.wantedOutfitFolder = sLInventoryEntry;
+                    this.wantedOutfitFolder = wantedOutfitFolder;
                     z3 = true;
-                } else if (!this.wantedOutfitFolder.uuid.equals(sLInventoryEntry.uuid)) {
-                    this.wantedOutfitFolder = sLInventoryEntry;
+                } else if (!this.wantedOutfitFolder.uuid.equals(wantedOutfitFolder.uuid)) {
+                    this.wantedOutfitFolder = wantedOutfitFolder;
                     z3 = true;
                 }
             }
@@ -936,13 +936,13 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
         UUID randomUUID = UUID.randomUUID();
         ArrayList arrayList = new ArrayList();
-        for (SLInventoryEntry sLInventoryEntry2 : list) {
-            SLInventoryEntry resolveLink = database != null ? database.resolveLink(sLInventoryEntry2) : sLInventoryEntry2;
+        for (SLInventoryEntry inventoryEntry : list) {
+            SLInventoryEntry resolveLink = database != null ? database.resolveLink(inventoryEntry) : inventoryEntry;
             if (resolveLink != null) {
-                sLInventoryEntry2 = resolveLink;
+                inventoryEntry = resolveLink;
             }
-            if (sLInventoryEntry2 != null && (sLInventoryEntry2.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (sLInventoryEntry2.isLink() && sLInventoryEntry2.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
-                arrayList.add(sLInventoryEntry2);
+            if (inventoryEntry != null && (inventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (inventoryEntry.isLink() && inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
+                arrayList.add(inventoryEntry);
             }
         }
         RezMultipleAttachmentsFromInv rezMultipleAttachmentsFromInv3 = new RezMultipleAttachmentsFromInv();
@@ -959,7 +959,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             if (!it.hasNext()) {
                 break;
             }
-            SLInventoryEntry sLInventoryEntry3 = (SLInventoryEntry) it.next();
+            SLInventoryEntry inventoryEntry2 = (SLInventoryEntry) it.next();
             if (rezMultipleAttachmentsFromInv == null) {
                 RezMultipleAttachmentsFromInv rezMultipleAttachmentsFromInv4 = new RezMultipleAttachmentsFromInv();
                 rezMultipleAttachmentsFromInv4.AgentData_Field.AgentID = this.circuitInfo.agentID;
@@ -972,19 +972,19 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                 rezMultipleAttachmentsFromInv2 = rezMultipleAttachmentsFromInv;
             }
             RezMultipleAttachmentsFromInv.ObjectData objectData = new RezMultipleAttachmentsFromInv.ObjectData();
-            UUID uuid = sLInventoryEntry3.uuid;
-            Debug.Printf("Wearing: entry '%s' actualUUID %s", sLInventoryEntry3.name, uuid);
-            hashMap.put(uuid, sLInventoryEntry3.name);
+            UUID uuid = inventoryEntry2.uuid;
+            Debug.Printf("Wearing: entry '%s' actualUUID %s", inventoryEntry2.name, uuid);
+            hashMap.put(uuid, inventoryEntry2.name);
             z3 = true;
             objectData.ItemID = uuid;
-            objectData.OwnerID = sLInventoryEntry3.ownerUUID;
+            objectData.OwnerID = inventoryEntry2.ownerUUID;
             objectData.AttachmentPt = 128;
-            objectData.ItemFlags = sLInventoryEntry3.flags;
-            objectData.GroupMask = sLInventoryEntry3.groupMask;
-            objectData.EveryoneMask = sLInventoryEntry3.everyoneMask;
-            objectData.NextOwnerMask = sLInventoryEntry3.nextOwnerMask;
-            objectData.Name = SLMessage.stringToVariableOEM(sLInventoryEntry3.name);
-            objectData.Description = SLMessage.stringToVariableOEM(sLInventoryEntry3.description);
+            objectData.ItemFlags = inventoryEntry2.flags;
+            objectData.GroupMask = inventoryEntry2.groupMask;
+            objectData.EveryoneMask = inventoryEntry2.everyoneMask;
+            objectData.NextOwnerMask = inventoryEntry2.nextOwnerMask;
+            objectData.Name = SLMessage.stringToVariableOEM(inventoryEntry2.name);
+            objectData.Description = SLMessage.stringToVariableOEM(inventoryEntry2.description);
             rezMultipleAttachmentsFromInv2.ObjectData_Fields.add(objectData);
             if (rezMultipleAttachmentsFromInv2.ObjectData_Fields.size() >= 4) {
                 rezMultipleAttachmentsFromInv2.isReliable = true;
@@ -999,30 +999,30 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
             SendMessage(rezMultipleAttachmentsFromInv);
         }
         boolean z9 = false;
-        RLVController rLVController = this.agentCircuit.getModules().rlvController;
+        RLVController rlvController = this.agentCircuit.getModules().rlvController;
         HashSet hashSet = new HashSet();
         Table<SLWearableType, UUID, SLWearable> create = HashBasedTable.create(this.wornWearables);
-        Iterator<SLInventoryEntry> it2 = list.iterator();
+        Iterator<SLInventoryEntry> iterator = list.iterator();
         while (true) {
             z5 = z9;
-            if (!it2.hasNext()) {
+            if (!iterator.hasNext()) {
                 break;
             }
-            SLInventoryEntry sLInventoryEntry4 = (SLInventoryEntry) it2.next();
-            SLInventoryEntry resolveLink2 = database != null ? database.resolveLink(sLInventoryEntry4) : sLInventoryEntry4;
-            if (resolveLink2 != null && ((resolveLink2.assetType == SLAssetType.AT_BODYPART.getTypeCode() || resolveLink2.assetType == SLAssetType.AT_CLOTHING.getTypeCode()) && (byCode = SLWearableType.getByCode(resolveLink2.flags & 255)) != null)) {
-                if (!rLVController.canWearItem(byCode)) {
+            SLInventoryEntry inventoryEntry3 = (SLInventoryEntry) iterator.next();
+            SLInventoryEntry inventoryEntry4 = database != null ? database.resolveLink(inventoryEntry3) : inventoryEntry3;
+            if (inventoryEntry4 != null && ((inventoryEntry4.assetType == SLAssetType.AT_BODYPART.getTypeCode() || inventoryEntry4.assetType == SLAssetType.AT_CLOTHING.getTypeCode()) && (byCode = SLWearableType.getByCode(inventoryEntry4.flags & 255)) != null)) {
+                if (!rlvController.canWearItem(byCode)) {
                     z7 = false;
                 } else if (byCode.isBodyPart()) {
-                    if (!rLVController.canTakeItemOff(byCode)) {
+                    if (!rlvController.canTakeItemOff(byCode)) {
                         boolean z10 = false;
-                        Iterator it3 = create.row(byCode).keySet().iterator();
+                        Iterator iterator2 = create.row(byCode).keySet().iterator();
                         while (true) {
                             z8 = z10;
-                            if (!it3.hasNext()) {
+                            if (!iterator2.hasNext()) {
                                 break;
                             } else {
-                                z10 = !((UUID) it3.next()).equals(resolveLink2.assetUUID) ? true : z8;
+                                z10 = !((UUID) iterator2.next()).equals(inventoryEntry4.assetUUID) ? true : z8;
                             }
                         }
                         if (z8) {
@@ -1034,20 +1034,20 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
                     z7 = true;
                 }
                 if (z7) {
-                    hashSet.add(resolveLink2.assetUUID);
-                    if (!create.contains(byCode, resolveLink2.assetUUID)) {
-                        addWearable(create, byCode, resolveLink2.uuid, resolveLink2.assetUUID, resolveLink2.name);
+                    hashSet.add(inventoryEntry4.assetUUID);
+                    if (!create.contains(byCode, inventoryEntry4.assetUUID)) {
+                        addWearable(create, byCode, inventoryEntry4.uuid, inventoryEntry4.assetUUID, inventoryEntry4.name);
                         z5 = true;
                         if (byCode.isBodyPart()) {
                             HashSet<UUID> hashSet2 = new HashSet();
                             for (UUID uuid2 : create.row(byCode).keySet()) {
-                                if (!uuid2.equals(resolveLink2.assetUUID)) {
+                                if (!uuid2.equals(inventoryEntry4.assetUUID)) {
                                     hashSet2.add(uuid2);
                                 }
                             }
                             for (UUID uuid3 : hashSet2) {
-                                if (create.row(byCode).size() > 1 && (sLWearable = (SLWearable) create.remove(byCode, uuid3)) != null) {
-                                    sLWearable.dispose();
+                                if (create.row(byCode).size() > 1 && (removed = (SLWearable) create.remove(byCode, uuid3)) != null) {
+                                    removed.dispose();
                                 }
                             }
                         }
@@ -1058,21 +1058,21 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
         if (z) {
             z6 = z5;
-            for (SLWearableType sLWearableType : SLWearableType.values()) {
-                if (!sLWearableType.isBodyPart() && rLVController.canTakeItemOff(sLWearableType)) {
-                    Map<UUID, SLWearable> row = create.row(sLWearableType);
+            for (SLWearableType wearableType : SLWearableType.values()) {
+                if (!wearableType.isBodyPart() && rlvController.canTakeItemOff(wearableType)) {
+                    Map<UUID, SLWearable> row = create.row(wearableType);
                     HashSet hashSet3 = new HashSet();
                     for (UUID uuid4 : row.keySet()) {
                         if (!hashSet.contains(uuid4)) {
                             hashSet3.add(uuid4);
                         }
                     }
-                    Iterator it4 = hashSet3.iterator();
+                    Iterator iterator3 = hashSet3.iterator();
                     boolean z11 = z6;
-                    while (it4.hasNext()) {
-                        SLWearable sLWearable2 = (SLWearable) row.remove((UUID) it4.next());
-                        if (sLWearable2 != null) {
-                            sLWearable2.dispose();
+                    while (iterator3.hasNext()) {
+                        SLWearable removed2 = (SLWearable) row.remove((UUID) iterator3.next());
+                        if (removed2 != null) {
+                            removed2.dispose();
                         }
                         z11 = true;
                     }
@@ -1101,10 +1101,10 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    public void DetachInventoryItem(SLInventoryEntry sLInventoryEntry) {
+    public void DetachInventoryItem(SLInventoryEntry inventoryEntry) {
         boolean z;
-        if (canDetachItem(sLInventoryEntry)) {
-            UUID uuid = sLInventoryEntry.isLink() ? sLInventoryEntry.assetUUID : sLInventoryEntry.uuid;
+        if (canDetachItem(inventoryEntry)) {
+            UUID uuid = inventoryEntry.isLink() ? inventoryEntry.assetUUID : inventoryEntry.uuid;
             Debug.Log("Outfits: Detaching inventory item " + uuid);
             Map<UUID, String> map = this.wantedAttachments.get();
             if (map == null) {
@@ -1140,12 +1140,12 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         HashSet hashSet = null;
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
-                for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                    if (sLObjectInfo.attachedToUUID != null && (!sLObjectInfo.isDead) && sLObjectInfo.attachmentID == i && this.agentCircuit.getModules().rlvController.canDetachItem(i, sLObjectInfo.getId())) {
+                for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                    if (objectInfo.attachedToUUID != null && (!objectInfo.isDead) && objectInfo.attachmentID == i && this.agentCircuit.getModules().rlvController.canDetachItem(i, objectInfo.getId())) {
                         if (hashSet == null) {
                             hashSet = new HashSet();
                         }
-                        hashSet.add(Integer.valueOf(sLObjectInfo.localID));
+                        hashSet.add(Integer.valueOf(objectInfo.localID));
                     }
                     hashSet = hashSet;
                 }
@@ -1161,14 +1161,14 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         }
     }
 
-    public void ForceTakeItemOff(SLWearableType sLWearableType) {
+    public void ForceTakeItemOff(SLWearableType wearableType) {
         boolean z;
-        if (this.wornWearables.row(sLWearableType).isEmpty()) {
+        if (this.wornWearables.row(wearableType).isEmpty()) {
             z = false;
         } else {
             z = true;
             HashBasedTable create = HashBasedTable.create(this.wornWearables);
-            create.rowKeySet().remove(sLWearableType);
+            create.rowKeySet().remove(wearableType);
             this.wornWearables = ImmutableTable.copyOf(create);
             this.userManager.getWornWearablesPool().setData(SubscriptionSingleKey.Value, this.wornWearables);
             this.userManager.wornItems().requestUpdate(SubscriptionSingleKey.Value);
@@ -1205,9 +1205,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         Iterator it = hashSet2.iterator();
         while (it.hasNext()) {
             Map<SLWearableType, SLWearable> column = create.column((UUID) it.next());
-            Iterator<SLWearable> it2 = column.values().iterator();
-            while (it2.hasNext()) {
-                ((SLWearable) it2.next()).dispose();
+            Iterator<SLWearable> iterator = column.values().iterator();
+            while (iterator.hasNext()) {
+                ((SLWearable) iterator.next()).dispose();
             }
             column.clear();
         }
@@ -1269,9 +1269,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         super.HandleCloseCircuit();
     }
 
-    public void OnMyAvatarCreated(SLObjectAvatarInfo sLObjectAvatarInfo) {
+    public void OnMyAvatarCreated(SLObjectAvatarInfo objectAvatarInfo) {
         if (this.agentVisualParams != null) {
-            sLObjectAvatarInfo.ApplyAvatarVisualParams(this.agentVisualParams);
+            objectAvatarInfo.ApplyAvatarVisualParams(this.agentVisualParams);
         }
     }
 
@@ -1283,31 +1283,31 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         SendMessage(agentWearablesRequest);
     }
 
-    public void TakeItemOff(SLInventoryEntry sLInventoryEntry) {
+    public void TakeItemOff(SLInventoryEntry inventoryEntry) {
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         if (database != null) {
-            sLInventoryEntry = database.resolveLink(sLInventoryEntry);
+            inventoryEntry = database.resolveLink(inventoryEntry);
         }
-        if (sLInventoryEntry != null) {
-            TakeItemOff(sLInventoryEntry.assetUUID);
+        if (inventoryEntry != null) {
+            TakeItemOff(inventoryEntry.assetUUID);
         }
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     public void TakeItemOff(UUID uuid) {
         boolean z;
-        RLVController rLVController = this.agentCircuit.getModules().rlvController;
+        RLVController rlvController = this.agentCircuit.getModules().rlvController;
         HashBasedTable create = HashBasedTable.create(this.wornWearables);
         SLWearableType[] valuesCustom = SLWearableType.values();
         int length = valuesCustom.length;
         int i = 0;
         boolean z2 = false;
         while (i < length) {
-            SLWearableType sLWearableType = valuesCustom[i];
-            if (rLVController.canTakeItemOff(sLWearableType)) {
-                SLWearable sLWearable = (SLWearable) create.remove(sLWearableType, uuid);
-                if (sLWearable != null) {
-                    sLWearable.dispose();
+            SLWearableType wearableType = valuesCustom[i];
+            if (rlvController.canTakeItemOff(wearableType)) {
+                SLWearable removed = (SLWearable) create.remove(wearableType, uuid);
+                if (removed != null) {
+                    removed.dispose();
                     create.columnKeySet().remove(uuid);
                     z = true;
                 } else {
@@ -1333,9 +1333,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         HashMap hashMap = new HashMap();
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
-                for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                    if (sLObjectInfo.attachedToUUID != null && (!sLObjectInfo.isDead)) {
-                        hashMap.put(sLObjectInfo.attachedToUUID, Strings.nullToEmpty(sLObjectInfo.getName()));
+                for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                    if (objectInfo.attachedToUUID != null && (!objectInfo.isDead)) {
+                        hashMap.put(objectInfo.attachedToUUID, Strings.nullToEmpty(objectInfo.getName()));
                     }
                 }
             } catch (NoSuchElementException e) {
@@ -1353,30 +1353,30 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         this.userManager.wornItems().requestUpdate(SubscriptionSingleKey.Value);
     }
 
-    public void WearItem(SLInventoryEntry sLInventoryEntry, boolean z) {
+    public void WearItem(SLInventoryEntry inventoryEntry, boolean z) {
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         if (database != null) {
-            WearItemList(database, ImmutableList.of(sLInventoryEntry), z);
+            WearItemList(database, ImmutableList.of(inventoryEntry), z);
             SendAgentIsNowWearing();
             ForceUpdateAppearance(false);
         }
     }
 
-    public boolean canDetachItem(SLInventoryEntry sLInventoryEntry) {
-        if (sLInventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode()) {
-            if (sLInventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
+    public boolean canDetachItem(SLInventoryEntry inventoryEntry) {
+        if (inventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode()) {
+            if (inventoryEntry.invType == SLInventoryType.IT_WEARABLE.getTypeCode()) {
                 return true;
             }
-            if (sLInventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode() && this.wornAttachments.containsKey(sLInventoryEntry.assetUUID)) {
-                return canDetachItem(sLInventoryEntry.assetUUID);
+            if (inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode() && this.wornAttachments.containsKey(inventoryEntry.assetUUID)) {
+                return canDetachItem(inventoryEntry.assetUUID);
             }
         } else {
-            if (sLInventoryEntry.assetType == SLAssetType.AT_BODYPART.getTypeCode() || sLInventoryEntry.assetType == SLAssetType.AT_CLOTHING.getTypeCode()) {
+            if (inventoryEntry.assetType == SLAssetType.AT_BODYPART.getTypeCode() || inventoryEntry.assetType == SLAssetType.AT_CLOTHING.getTypeCode()) {
                 return true;
             }
-            if (sLInventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode()) {
-                if (!this.wornAttachments.containsKey(sLInventoryEntry.uuid) || canDetachItem(sLInventoryEntry.uuid)) {
-                    return !this.wornAttachments.containsKey(sLInventoryEntry.assetUUID) || canDetachItem(sLInventoryEntry.assetUUID);
+            if (inventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode()) {
+                if (!this.wornAttachments.containsKey(inventoryEntry.uuid) || canDetachItem(inventoryEntry.uuid)) {
+                    return !this.wornAttachments.containsKey(inventoryEntry.assetUUID) || canDetachItem(inventoryEntry.assetUUID);
                 }
                 return false;
             }
@@ -1388,37 +1388,37 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return this.agentCircuit.getModules().rlvController.canDetachItem(wornItem.getAttachedTo(), wornItem.itemID());
     }
 
-    public boolean canTakeItemOff(SLWearableType sLWearableType) {
-        return this.agentCircuit.getModules().rlvController.canTakeItemOff(sLWearableType);
+    public boolean canTakeItemOff(SLWearableType wearableType) {
+        return this.agentCircuit.getModules().rlvController.canTakeItemOff(wearableType);
     }
 
-    public boolean canTakeItemOff(SLInventoryEntry sLInventoryEntry) {
-        Object whatIsItemWornOn = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false);
+    public boolean canTakeItemOff(SLInventoryEntry inventoryEntry) {
+        Object whatIsItemWornOn = inventoryEntry.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false);
         if (whatIsItemWornOn == null) {
             return true;
         }
-        RLVController rLVController = this.agentCircuit.getModules().rlvController;
+        RLVController rlvController = this.agentCircuit.getModules().rlvController;
         if (whatIsItemWornOn instanceof SLWearableType) {
-            return rLVController.canTakeItemOff((SLWearableType) whatIsItemWornOn);
+            return rlvController.canTakeItemOff((SLWearableType) whatIsItemWornOn);
         }
         return true;
     }
 
-    public boolean canWearItem(SLInventoryEntry sLInventoryEntry) {
+    public boolean canWearItem(SLInventoryEntry inventoryEntry) {
         InventoryDB database = this.userManager != null ? this.userManager.getInventoryManager().getDatabase() : null;
         if (database != null) {
-            sLInventoryEntry = database.resolveLink(sLInventoryEntry);
+            inventoryEntry = database.resolveLink(inventoryEntry);
         }
-        if (sLInventoryEntry == null) {
+        if (inventoryEntry == null) {
             return false;
         }
-        SLWearableType byCode = SLWearableType.getByCode(sLInventoryEntry.flags & 255);
+        SLWearableType byCode = SLWearableType.getByCode(inventoryEntry.flags & 255);
         return byCode == null || canWearItem(byCode);
     }
 
-    public void finishBaking(BakeProcess bakeProcess, SLTextureEntry sLTextureEntry) {
-        if (sLTextureEntry != null) {
-            this.agentBakedTextures = sLTextureEntry;
+    public void finishBaking(BakeProcess bakeProcess, SLTextureEntry textureEntry) {
+        if (textureEntry != null) {
+            this.agentBakedTextures = textureEntry;
             SendAvatarSetAppearance();
         }
         if (this.bakeProcess == bakeProcess) {
@@ -1430,9 +1430,9 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         SLObjectAvatarInfo agentAvatar;
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
-                for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                    if (sLObjectInfo.attachedToUUID != null && (!sLObjectInfo.isDead) && sLObjectInfo.attachmentID == i) {
-                        return sLObjectInfo.getId();
+                for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                    if (objectInfo.attachedToUUID != null && (!objectInfo.isDead) && objectInfo.attachmentID == i) {
+                        return objectInfo.getId();
                     }
                 }
             } catch (NoSuchElementException e) {
@@ -1442,22 +1442,22 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
         return null;
     }
 
-    public boolean hasWornWearable(SLWearableType sLWearableType) {
-        return this.wornWearables.containsRow(sLWearableType);
+    public boolean hasWornWearable(SLWearableType wearableType) {
+        return this.wornWearables.containsRow(wearableType);
     }
 
-    public boolean isItemWorn(SLInventoryEntry sLInventoryEntry) {
-        return isItemWorn(sLInventoryEntry, false);
+    public boolean isItemWorn(SLInventoryEntry inventoryEntry) {
+        return isItemWorn(inventoryEntry, false);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_SLAvatarAppearance_17963, reason: not valid java name */
     /* synthetic */ void m212x366f8fcf(int i, String str) {
-        LLSDXMLRequest lLSDXMLRequest = new LLSDXMLRequest();
-        LLSDMap lLSDMap = new LLSDMap(new LLSDMap.LLSDMapEntry("cof_version", new LLSDInt(i)));
+        LLSDXMLRequest llsdxmlRequest = new LLSDXMLRequest();
+        LLSDMap llsdMap = new LLSDMap(new LLSDMap.LLSDMapEntry("cof_version", new LLSDInt(i)));
         int i2 = 3;
         while (i2 > 0) {
             try {
-                LLSDNode PerformRequest = lLSDXMLRequest.PerformRequest(str, lLSDMap);
+                LLSDNode PerformRequest = llsdxmlRequest.PerformRequest(str, llsdMap);
                 if (PerformRequest != null && PerformRequest.keyExists("error")) {
                     LLSDNode byKey = PerformRequest.byKey("error");
                     if (byKey.isString()) {
@@ -1483,7 +1483,7 @@ public class SLAvatarAppearance extends SLModule implements SLWearable.OnWearabl
     }
 
     @Override
-    public void onWearableStatusChanged(SLWearable sLWearable) {
+    public void onWearableStatusChanged(SLWearable wearable) {
         updateIfWearablesReady();
     }
 }

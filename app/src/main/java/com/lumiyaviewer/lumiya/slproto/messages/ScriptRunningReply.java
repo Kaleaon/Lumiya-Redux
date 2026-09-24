@@ -33,8 +33,8 @@ public class ScriptRunningReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptRunningReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptRunningReply(this);
     }
 
     @Override

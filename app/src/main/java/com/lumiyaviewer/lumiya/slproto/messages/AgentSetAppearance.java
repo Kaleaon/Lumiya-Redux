@@ -55,8 +55,8 @@ public class AgentSetAppearance extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentSetAppearance(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentSetAppearance(this);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class AgentSetAppearance extends SLMessage {
         this.AgentData_Field.SerialNum = unpackInt(byteBuffer);
         this.AgentData_Field.Size = unpackLLVector3(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             WearableData wearableData = new WearableData();
             wearableData.CacheID = unpackUUID(byteBuffer);
             wearableData.TextureIndex = unpackByte(byteBuffer) & 0xFF;
@@ -97,7 +97,7 @@ public class AgentSetAppearance extends SLMessage {
         }
         this.ObjectData_Field.TextureEntry = unpackVariable(byteBuffer, 2);
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             VisualParam visualParam = new VisualParam();
             visualParam.ParamValue = unpackByte(byteBuffer) & 0xFF;
             this.VisualParam_Fields.add(visualParam);

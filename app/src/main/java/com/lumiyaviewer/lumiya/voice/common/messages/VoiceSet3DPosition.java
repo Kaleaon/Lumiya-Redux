@@ -23,10 +23,10 @@ public class VoiceSet3DPosition implements VoicePluginMessage {
         this.listenerPosition = new Voice3DPosition(bundle.getBundle("listenerPosition"));
     }
 
-    public VoiceSet3DPosition(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nonnull Voice3DPosition voice3DPosition, @Nonnull Voice3DPosition voice3DPosition2) {
+    public VoiceSet3DPosition(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nonnull Voice3DPosition voice3DPosition, @Nonnull Voice3DPosition listenerPosition) {
         this.voiceChannelInfo = voiceChannelInfo;
         this.speakerPosition = voice3DPosition;
-        this.listenerPosition = voice3DPosition2;
+        this.listenerPosition = listenerPosition;
     }
 
     @Override

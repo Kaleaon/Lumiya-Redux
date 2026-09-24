@@ -47,8 +47,8 @@ public class KickUser extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleKickUser(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleKickUser(this);
     }
 
     @Override

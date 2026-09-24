@@ -16,8 +16,8 @@ public interface IVrNativeLibraryLoader extends IInterface {
         private static class Proxy implements IVrNativeLibraryLoader {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -28,14 +28,14 @@ public interface IVrNativeLibraryLoader extends IInterface {
             @Override
             public void closeNativeGvrLibrary(long j) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeLong(j);
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -47,17 +47,17 @@ public interface IVrNativeLibraryLoader extends IInterface {
             @Override
             public long loadNativeGvrLibrary(int i, int i2, int i3) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     obtain.writeInt(i);
                     obtain.writeInt(i2);
                     obtain.writeInt(i3);
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readLong();
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readLong();
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }

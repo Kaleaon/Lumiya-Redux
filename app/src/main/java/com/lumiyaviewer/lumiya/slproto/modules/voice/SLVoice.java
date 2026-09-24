@@ -73,8 +73,8 @@ public class SLVoice extends SLModule {
     @Nullable
     private volatile VoicePluginServiceConnection voicePluginServiceConnection;
 
-    public SLVoice(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    public SLVoice(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
         this.requestedGroupChats = Collections.synchronizedSet(new HashSet());
         this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
             private final /* synthetic */ void $m$0(Object obj) {
@@ -99,9 +99,9 @@ public class SLVoice extends SLModule {
         this.currentParcelVoiceChannel = null;
         this.voiceLoginInfo = null;
         this.userManager = UserManager.getUserManager(this.agentCircuit.getAgentUUID());
-        this.capURL = sLCaps.getCapability(SLCaps.SLCapability.ProvisionVoiceAccountRequest);
-        this.parcelVoiceCapURL = sLCaps.getCapability(SLCaps.SLCapability.ParcelVoiceInfoRequest);
-        this.chatSessionRequestURL = sLCaps.getCapability(SLCaps.SLCapability.ChatSessionRequest);
+        this.capURL = caps.getCapability(SLCaps.SLCapability.ProvisionVoiceAccountRequest);
+        this.parcelVoiceCapURL = caps.getCapability(SLCaps.SLCapability.ParcelVoiceInfoRequest);
+        this.chatSessionRequestURL = caps.getCapability(SLCaps.SLCapability.ChatSessionRequest);
         if (this.userManager != null) {
             this.voiceLoggedInSubscription.subscribe(this.userManager.getVoiceLoggedIn(), SubscriptionSingleKey.Value);
         }
@@ -114,21 +114,21 @@ public class SLVoice extends SLModule {
         updateVoiceEnabledStatus();
     }
 
-    public void onParcelVoiceInfoResult(LLSDNode lLSDNode) {
-        if (lLSDNode != null) {
+    public void onParcelVoiceInfoResult(LLSDNode lsdNode) {
+        if (lsdNode != null) {
             try {
-                Debug.Printf("SLVoice: parcel voice info '%s'", lLSDNode.serializeToXML());
+                Debug.Printf("SLVoice: parcel voice info '%s'", lsdNode.serializeToXML());
             } catch (Exception e) {
                 Debug.Warning(e);
             }
         }
     }
 
-    public void onProvisionVoiceAccountResult(LLSDNode lLSDNode) {
-        if (lLSDNode != null) {
+    public void onProvisionVoiceAccountResult(LLSDNode lsdNode) {
+        if (lsdNode != null) {
             try {
-                Debug.Printf("SLVoice: result '%s'", lLSDNode.serializeToXML());
-                this.voiceLoginInfo = new VoiceLoginInfo(lLSDNode.byKey("voice_sip_uri_hostname").asString(), lLSDNode.byKey("voice_account_server_name").asString(), this.agentCircuit.getAgentUUID(), lLSDNode.byKey("username").asString(), lLSDNode.byKey("password").asString());
+                Debug.Printf("SLVoice: result '%s'", lsdNode.serializeToXML());
+                this.voiceLoginInfo = new VoiceLoginInfo(lsdNode.byKey("voice_sip_uri_hostname").asString(), lsdNode.byKey("voice_account_server_name").asString(), this.agentCircuit.getAgentUUID(), lsdNode.byKey("username").asString(), lsdNode.byKey("password").asString());
                 updateVoiceEnabledStatus();
                 return;
             } catch (Exception e) {
@@ -196,14 +196,14 @@ public class SLVoice extends SLModule {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_12525, reason: not valid java name */
-    /* synthetic */ void m264x4b46af5c(int i, LLSDNode lLSDNode) {
+    /* synthetic */ void m264x4b46af5c(int i, LLSDNode lsdNode) {
         boolean z;
         VoiceChannelInfo voiceChannelInfo;
         this.currentParcelID = i;
-        if (lLSDNode != null) {
+        if (lsdNode != null) {
             synchronized (this.parcelVoiceChannelLock) {
                 try {
-                    voiceChannelInfo = new VoiceChannelInfo(lLSDNode.byKey("voice_credentials").byKey("channel_uri").asString(), true, true);
+                    voiceChannelInfo = new VoiceChannelInfo(lsdNode.byKey("voice_credentials").byKey("channel_uri").asString(), true, true);
                 } catch (LLSDException e) {
                     Debug.Printf("Voice: error retrieving parcel voice info for %d (%s)", Integer.valueOf(i), e.getMessage());
                     voiceChannelInfo = null;
@@ -312,14 +312,14 @@ public class SLVoice extends SLModule {
         }
         new LLSDXMLAsyncRequest(this.chatSessionRequestURL, new LLSDMap(new LLSDMap.LLSDMapEntry("method", new LLSDString(NotificationCompat.CATEGORY_CALL)), new LLSDMap.LLSDMapEntry("session-id", new LLSDUUID(uuid))), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
             @Override
-            public void onLLSDXMLResult(LLSDNode lLSDNode) {
+            public void onLLSDXMLResult(LLSDNode lsdNode) {
                 ChatterID groupChatterID = ChatterID.getGroupChatterID(SLVoice.this.userManager.getUserID(), uuid);
                 try {
-                    if (lLSDNode == null) {
+                    if (lsdNode == null) {
                         throw new LLSDException("Null result");
                     }
-                    String asString = lLSDNode.byKey("voice_credentials").byKey("channel_uri").asString();
-                    String asString2 = lLSDNode.byKey("voice_credentials").byKey("channel_credentials").asString();
+                    String asString = lsdNode.byKey("voice_credentials").byKey("channel_uri").asString();
+                    String asString2 = lsdNode.byKey("voice_credentials").byKey("channel_credentials").asString();
                     VoicePluginServiceConnection voicePluginServiceConnection = SLVoice.this.voicePluginServiceConnection;
                     if (SLVoice.this.voiceEnabled && SLVoice.this.voiceLoggedIn && voicePluginServiceConnection != null) {
                         VoiceChannelInfo voiceChannelInfo = new VoiceChannelInfo(asString, false, true);

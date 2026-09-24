@@ -24,11 +24,11 @@ public class SLBaseAvatar {
         public AvatarTextureFaceIndex textureFaceIndex;
         public BakedTextureIndex textureIndex;
 
-        public MeshEntry(BakedTextureIndex bakedTextureIndex, AvatarTextureFaceIndex avatarTextureFaceIndex, String str, SLPolyMesh sLPolyMesh) {
+        public MeshEntry(BakedTextureIndex bakedTextureIndex, AvatarTextureFaceIndex avatarTextureFaceIndex, String meshName, SLPolyMesh polyMesh) {
             this.textureIndex = bakedTextureIndex;
             this.textureFaceIndex = avatarTextureFaceIndex;
-            this.meshName = str;
-            this.polyMesh = sLPolyMesh;
+            this.meshName = meshName;
+            this.polyMesh = polyMesh;
         }
     }
 
@@ -44,7 +44,7 @@ public class SLBaseAvatar {
         this.meshes.put(MeshIndex.MESH_ID_SKIRT, new MeshEntry(BakedTextureIndex.BAKED_SKIRT, AvatarTextureFaceIndex.TEX_SKIRT_BAKED, "skirtMesh", loadMesh("avatar_skirt")));
     }
 
-    /* synthetic */ SLBaseAvatar(SLBaseAvatar sLBaseAvatar) {
+    /* synthetic */ SLBaseAvatar(SLBaseAvatar baseAvatar) {
         this();
     }
 
@@ -66,12 +66,12 @@ public class SLBaseAvatar {
                 dataInputStream = null;
                 inputStream = null;
             }
-            SLPolyMesh sLPolyMesh = new SLPolyMesh(new DataInputStream(open), dataInputStream);
+            SLPolyMesh polyMesh = new SLPolyMesh(new DataInputStream(open), dataInputStream);
             open.close();
             if (inputStream != null) {
                 inputStream.close();
             }
-            return sLPolyMesh;
+            return polyMesh;
         } catch (Exception e) {
             Debug.Warning(e);
             return null;

@@ -32,8 +32,8 @@ public class ImageNotInDatabase extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImageNotInDatabase(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImageNotInDatabase(this);
     }
 
     @Override

@@ -24,30 +24,30 @@ public class UserPicDao extends AbstractDao<UserPic, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'USER_PIC' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'BITMAP' BLOB);");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_USER_PIC_UUID ON USER_PIC (UUID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'USER_PIC' ('_id' INTEGER PRIMARY KEY ,'UUID' TEXT,'BITMAP' BLOB);");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_USER_PIC_UUID ON USER_PIC (UUID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'USER_PIC'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'USER_PIC'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, UserPic userPic) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, UserPic userPic) {
+        sqLiteStatement.clearBindings();
         Long id = userPic.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
         String uuid = userPic.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(2, uuid);
+            sqLiteStatement.bindString(2, uuid);
         }
         byte[] bitmap = userPic.getBitmap();
         if (bitmap != null) {
-            sQLiteStatement.bindBlob(3, bitmap);
+            sqLiteStatement.bindBlob(3, bitmap);
         }
     }
 

@@ -38,9 +38,9 @@ public class AvatarPickerForInvite extends AvatarPickerFragment {
         final UUID roleID;
         final String roleTitle;
 
-        private RoleEntry(UUID uuid, String str) {
+        private RoleEntry(UUID uuid, String roleTitle) {
             this.roleID = uuid;
-            this.roleTitle = str;
+            this.roleTitle = roleTitle;
         }
 
         /* synthetic */ RoleEntry(UUID uuid, String str, RoleEntry roleEntry) {

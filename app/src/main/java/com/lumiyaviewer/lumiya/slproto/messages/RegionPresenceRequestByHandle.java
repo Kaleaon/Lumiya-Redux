@@ -29,8 +29,8 @@ public class RegionPresenceRequestByHandle extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRegionPresenceRequestByHandle(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRegionPresenceRequestByHandle(this);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RegionPresenceRequestByHandle extends SLMessage {
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             RegionData regionData = new RegionData();
             regionData.RegionHandle = unpackLong(byteBuffer);
             this.RegionData_Fields.add(regionData);

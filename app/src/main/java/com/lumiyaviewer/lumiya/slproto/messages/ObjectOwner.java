@@ -50,8 +50,8 @@ public class ObjectOwner extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectOwner(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectOwner(this);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ObjectOwner extends SLMessage {
         this.HeaderData_Field.OwnerID = unpackUUID(byteBuffer);
         this.HeaderData_Field.GroupID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectLocalID = unpackInt(byteBuffer);
             this.ObjectData_Fields.add(objectData);

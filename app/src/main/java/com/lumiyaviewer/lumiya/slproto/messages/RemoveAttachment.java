@@ -38,8 +38,8 @@ public class RemoveAttachment extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveAttachment(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveAttachment(this);
     }
 
     @Override

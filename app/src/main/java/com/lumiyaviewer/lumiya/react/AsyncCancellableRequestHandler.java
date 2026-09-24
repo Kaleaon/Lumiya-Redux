@@ -24,15 +24,15 @@ public class AsyncCancellableRequestHandler<K> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_AsyncCancellableRequestHandler_993, reason: not valid java name */
-    /* synthetic */ void m26x869f759f(K obj) {
+    /* synthetic */ void m26x869f759f(K k) {
         try {
-            this.baseHandler.onRequest(obj);
+            this.baseHandler.onRequest(k);
             synchronized (this.lock) {
-                this.activeRequests.remove(obj);
+                this.activeRequests.remove(k);
             }
         } catch (Throwable th) {
             synchronized (this.lock) {
-                this.activeRequests.remove(obj);
+                this.activeRequests.remove(k);
                 throw th;
             }
         }

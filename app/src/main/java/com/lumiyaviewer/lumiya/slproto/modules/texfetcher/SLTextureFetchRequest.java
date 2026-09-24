@@ -20,15 +20,15 @@ public class SLTextureFetchRequest implements HasPriority {
     private int visibleRangeCategory = -1;
 
     public interface TextureFetchCompleteListener {
-        void OnTextureFetchComplete(SLTextureFetchRequest sLTextureFetchRequest);
+        void OnTextureFetchComplete(SLTextureFetchRequest textureFetchRequest);
     }
 
-    public SLTextureFetchRequest(UUID uuid, int i, TextureClass textureClass, AvatarTextureFaceIndex avatarTextureFaceIndex, UUID uuid2, File file) {
+    public SLTextureFetchRequest(UUID uuid, int textureLayer, TextureClass textureClass, AvatarTextureFaceIndex avatarTextureFaceIndex, UUID avatarUUID, File file) {
         this.textureID = uuid;
-        this.textureLayer = i;
+        this.textureLayer = textureLayer;
         this.textureClass = textureClass;
         this.avatarFaceIndex = avatarTextureFaceIndex;
-        this.avatarUUID = uuid2;
+        this.avatarUUID = avatarUUID;
         this.destFile = file;
     }
 

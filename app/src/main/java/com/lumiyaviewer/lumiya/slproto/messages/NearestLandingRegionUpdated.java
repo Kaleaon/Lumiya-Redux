@@ -32,8 +32,8 @@ public class NearestLandingRegionUpdated extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleNearestLandingRegionUpdated(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleNearestLandingRegionUpdated(this);
     }
 
     @Override

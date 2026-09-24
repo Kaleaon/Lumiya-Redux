@@ -16,9 +16,9 @@ public class SLLandmark {
         }
     }
 
-    public SLLandmark(byte[] bArr) throws LandmarkFormatException {
+    public SLLandmark(byte[] bytes) throws LandmarkFormatException {
         try {
-            String[] split = new String(bArr, "ISO-8859-1").trim().split("\n+");
+            String[] split = new String(bytes, "ISO-8859-1").trim().split("\n+");
             if (split.length < 1) {
                 throw new LandmarkFormatException();
             }

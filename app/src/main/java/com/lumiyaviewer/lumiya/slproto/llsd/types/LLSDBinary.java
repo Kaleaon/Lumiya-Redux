@@ -13,8 +13,8 @@ public class LLSDBinary extends LLSDNode {
         this.value = Base64.decode(str);
     }
 
-    public LLSDBinary(byte[] bArr) {
-        this.value = bArr;
+    public LLSDBinary(byte[] bytes) {
+        this.value = bytes;
     }
 
     @Override
@@ -25,8 +25,8 @@ public class LLSDBinary extends LLSDNode {
     @Override
     public int asInt() {
         int i = 0;
-        for (int i2 = 0; i2 < 4 && i2 < this.value.length; i2++) {
-            i = (i << 8) | (this.value[i2] & 0xFF);
+        for (int j = 0; j < 4 && j < this.value.length; j++) {
+            i = (i << 8) | (this.value[j] & 0xFF);
         }
         return i;
     }

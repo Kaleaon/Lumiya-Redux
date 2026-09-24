@@ -45,9 +45,9 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
             throw new IllegalStateException("ControllerEventPacket capacity exceeded.");
         }
         ControllerPositionEvent[] controllerPositionEventArr = this.positionEvents;
-        int i = this.positionEventCount;
-        this.positionEventCount = i + 1;
-        return controllerPositionEventArr[i];
+        int positionEventCount = this.positionEventCount;
+        this.positionEventCount = positionEventCount + 1;
+        return controllerPositionEventArr[positionEventCount];
     }
 
     @Override
@@ -111,8 +111,8 @@ public final class ControllerEventPacket2 extends ControllerEventPacket {
         parcel.writeInt(calculateParcelByteLength);
         super.writeToParcel(parcel, i);
         parcel.writeInt(this.positionEventCount);
-        for (int i2 = 0; i2 < this.positionEventCount; i2++) {
-            this.positionEvents[i2].writeToParcel(parcel, i);
+        for (int j = 0; j < this.positionEventCount; j++) {
+            this.positionEvents[j].writeToParcel(parcel, i);
         }
         if (parcel.dataPosition() - dataPosition != calculateParcelByteLength) {
             throw new IllegalStateException("Parcelable implemented incorrectly, getByteSize() must return the correct size for each ControllerEvent subclass.");

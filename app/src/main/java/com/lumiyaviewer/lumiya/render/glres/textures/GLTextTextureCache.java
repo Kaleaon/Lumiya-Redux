@@ -11,8 +11,8 @@ import com.lumiyaviewer.lumiya.res.text.DrawableTextParams;
 public class GLTextTextureCache extends GLResourceCache<DrawableTextParams, DrawableTextBitmap, GLLoadedTextTexture> {
     private final DrawableTextCache drawableTextCache;
 
-    public GLTextTextureCache(GLLoadQueue gLLoadQueue, DrawableTextCache drawableTextCache) {
-        super(gLLoadQueue);
+    public GLTextTextureCache(GLLoadQueue glLoadQueue, DrawableTextCache drawableTextCache) {
+        super(glLoadQueue);
         this.drawableTextCache = drawableTextCache;
     }
 

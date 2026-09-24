@@ -29,11 +29,11 @@ public class LogMessageBatch implements Bundleable {
         this.messages = builder.build();
     }
 
-    public LogMessageBatch(UUID uuid, String str, List<LogChatMessage> list, long j) {
+    public LogMessageBatch(UUID uuid, String agentName, List<LogChatMessage> list, long lastMessageID) {
         this.agentUUID = uuid;
-        this.agentName = str;
+        this.agentName = agentName;
         this.messages = ImmutableList.copyOf((Collection) list);
-        this.lastMessageID = j;
+        this.lastMessageID = lastMessageID;
     }
 
     @Override

@@ -43,8 +43,8 @@ public class PickGodDelete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickGodDelete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickGodDelete(this);
     }
 
     @Override

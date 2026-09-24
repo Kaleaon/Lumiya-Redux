@@ -86,11 +86,11 @@ class DrawableAttachments {
                 if (z || z2) {
                     this.glAnimationDataBuffer.getRawBuffer().loadFromFloatArray(0, avatarSkeleton.jointWorldMatrix, 0, (SLSkeletonBoneID.VALUES.length + 47) * 16);
                 }
-                GLLoadableBuffer gLLoadableBuffer = this.glAnimationDataBuffer;
+                GLLoadableBuffer glAnimationDataBuffer = this.glAnimationDataBuffer;
                 if (z) {
                     z2 = true;
                 }
-                gLLoadableBuffer.BindUniformDynamic(renderContext, 1, z2);
+                glAnimationDataBuffer.BindUniformDynamic(renderContext, 1, z2);
                 Iterator<DrawableObject> it = this.rigged.iterator();
                 int i = 0;
                 while (it.hasNext()) {
@@ -98,16 +98,16 @@ class DrawableAttachments {
                 }
                 if ((i & 2) != 0) {
                     renderContext.setupRiggedMeshProgram(false);
-                    Iterator<DrawableObject> it2 = this.rigged.iterator();
-                    while (it2.hasNext()) {
-                        it2.next().DrawRigged30(renderContext, 2);
+                    Iterator<DrawableObject> iterator = this.rigged.iterator();
+                    while (iterator.hasNext()) {
+                        iterator.next().DrawRigged30(renderContext, 2);
                     }
                 }
                 renderContext.clearRiggedMeshProgram();
             } else {
-                Iterator<DrawableObject> it3 = this.rigged.iterator();
-                while (it3.hasNext()) {
-                    it3.next().DrawRigged(renderContext, avatarSkeleton, 3);
+                Iterator<DrawableObject> iterator2 = this.rigged.iterator();
+                while (iterator2.hasNext()) {
+                    iterator2.next().DrawRigged(renderContext, avatarSkeleton, 3);
                 }
             }
         }

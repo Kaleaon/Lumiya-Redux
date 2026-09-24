@@ -22,8 +22,8 @@ public class UnsubscribeLoad extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUnsubscribeLoad(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUnsubscribeLoad(this);
     }
 
     @Override

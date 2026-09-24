@@ -33,8 +33,8 @@ public class ParcelMediaCommandMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelMediaCommandMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelMediaCommandMessage(this);
     }
 
     @Override

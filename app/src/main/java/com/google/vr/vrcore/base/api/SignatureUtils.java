@@ -16,9 +16,9 @@ public class SignatureUtils {
         return new Signature(Base64.decode(str, 0));
     }
 
-    public static boolean verifySignature(PackageInfo packageInfo, Signature... signatureArr) {
+    public static boolean verifySignature(PackageInfo packageInfo, Signature... signature3) {
         for (Signature signature : packageInfo.signatures) {
-            for (Signature signature2 : signatureArr) {
+            for (Signature signature2 : signature3) {
                 if (signature2.equals(signature)) {
                     return true;
                 }

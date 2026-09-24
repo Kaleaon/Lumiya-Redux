@@ -10,13 +10,13 @@ public final class DBHandle implements SQLiteDatabase.CursorFactory {
     private final SQLiteDatabase sqliteDB;
 
     private class DBHandleCursor extends SQLiteCursor {
-        public DBHandleCursor(SQLiteDatabase sQLiteDatabase, SQLiteCursorDriver sQLiteCursorDriver, String str, SQLiteQuery sQLiteQuery) {
-            super(sQLiteDatabase, sQLiteCursorDriver, str, sQLiteQuery);
+        public DBHandleCursor(SQLiteDatabase sqLiteDatabase, SQLiteCursorDriver sqLiteCursorDriver, String str, SQLiteQuery sqLiteQuery) {
+            super(sqLiteDatabase, sqLiteCursorDriver, str, sqLiteQuery);
         }
     }
 
-    public DBHandle(SQLiteDatabase sQLiteDatabase) {
-        this.sqliteDB = sQLiteDatabase;
+    public DBHandle(SQLiteDatabase sqLiteDatabase) {
+        this.sqliteDB = sqLiteDatabase;
     }
 
     public final SQLiteDatabase getDB() {
@@ -24,7 +24,7 @@ public final class DBHandle implements SQLiteDatabase.CursorFactory {
     }
 
     @Override
-    public Cursor newCursor(SQLiteDatabase sQLiteDatabase, SQLiteCursorDriver sQLiteCursorDriver, String str, SQLiteQuery sQLiteQuery) {
-        return new DBHandleCursor(sQLiteDatabase, sQLiteCursorDriver, str, sQLiteQuery);
+    public Cursor newCursor(SQLiteDatabase sqLiteDatabase, SQLiteCursorDriver sqLiteCursorDriver, String str, SQLiteQuery sqLiteQuery) {
+        return new DBHandleCursor(sqLiteDatabase, sqLiteCursorDriver, str, sqLiteQuery);
     }
 }

@@ -55,8 +55,8 @@ public class GroupProfileReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupProfileReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupProfileReply(this);
     }
 
     @Override

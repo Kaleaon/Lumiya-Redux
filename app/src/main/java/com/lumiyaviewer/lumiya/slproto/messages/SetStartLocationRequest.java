@@ -44,8 +44,8 @@ public class SetStartLocationRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetStartLocationRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetStartLocationRequest(this);
     }
 
     @Override

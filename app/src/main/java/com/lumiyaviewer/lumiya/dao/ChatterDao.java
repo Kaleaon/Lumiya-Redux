@@ -30,38 +30,38 @@ public class ChatterDao extends AbstractDao<Chatter, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'CHATTER' ('_id' INTEGER PRIMARY KEY ,'TYPE' INTEGER NOT NULL ,'UUID' TEXT,'ACTIVE' INTEGER NOT NULL ,'MUTED' INTEGER NOT NULL ,'UNREAD_COUNT' INTEGER NOT NULL ,'LAST_MESSAGE_ID' INTEGER,'LAST_SESSION_ID' TEXT);");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHATTER_TYPE_UUID ON CHATTER (TYPE,UUID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'CHATTER' ('_id' INTEGER PRIMARY KEY ,'TYPE' INTEGER NOT NULL ,'UUID' TEXT,'ACTIVE' INTEGER NOT NULL ,'MUTED' INTEGER NOT NULL ,'UNREAD_COUNT' INTEGER NOT NULL ,'LAST_MESSAGE_ID' INTEGER,'LAST_SESSION_ID' TEXT);");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHATTER_TYPE_UUID ON CHATTER (TYPE,UUID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHATTER'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHATTER'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, Chatter chatter) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, Chatter chatter) {
+        sqLiteStatement.clearBindings();
         Long id = chatter.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindLong(2, chatter.getType());
+        sqLiteStatement.bindLong(2, chatter.getType());
         UUID uuid = chatter.getUuid();
         if (uuid != null) {
-            sQLiteStatement.bindString(3, uuid.toString());
+            sqLiteStatement.bindString(3, uuid.toString());
         }
-        sQLiteStatement.bindLong(4, chatter.getActive() ? 1L : 0L);
-        sQLiteStatement.bindLong(5, chatter.getMuted() ? 1L : 0L);
-        sQLiteStatement.bindLong(6, chatter.getUnreadCount());
+        sqLiteStatement.bindLong(4, chatter.getActive() ? 1L : 0L);
+        sqLiteStatement.bindLong(5, chatter.getMuted() ? 1L : 0L);
+        sqLiteStatement.bindLong(6, chatter.getUnreadCount());
         Long lastMessageID = chatter.getLastMessageID();
         if (lastMessageID != null) {
-            sQLiteStatement.bindLong(7, lastMessageID.longValue());
+            sqLiteStatement.bindLong(7, lastMessageID.longValue());
         }
         UUID lastSessionID = chatter.getLastSessionID();
         if (lastSessionID != null) {
-            sQLiteStatement.bindString(8, lastSessionID.toString());
+            sqLiteStatement.bindString(8, lastSessionID.toString());
         }
     }
 

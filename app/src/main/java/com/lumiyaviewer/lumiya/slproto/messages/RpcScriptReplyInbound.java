@@ -34,8 +34,8 @@ public class RpcScriptReplyInbound extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcScriptReplyInbound(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcScriptReplyInbound(this);
     }
 
     @Override

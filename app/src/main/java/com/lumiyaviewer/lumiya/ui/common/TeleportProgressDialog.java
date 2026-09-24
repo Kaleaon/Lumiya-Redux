@@ -72,9 +72,9 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_common_TeleportProgressDialog_1322, reason: not valid java name */
-    static /* synthetic */ void m556x70f40358(SLAgentCircuit sLAgentCircuit, UUID uuid, Context context, UserManager userManager) {
-        if (sLAgentCircuit.getModules().rlvController.canTeleportToLandmark()) {
-            sLAgentCircuit.TeleportToLandmarkAsset(uuid);
+    static /* synthetic */ void m556x70f40358(SLAgentCircuit agentCircuit, UUID uuid, Context context, UserManager userManager) {
+        if (agentCircuit.getModules().rlvController.canTeleportToLandmark()) {
+            agentCircuit.TeleportToLandmarkAsset(uuid);
             new TeleportProgressDialog(context, userManager, R.string.teleporting_progress_message).show();
         }
     }
@@ -86,15 +86,15 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
     }
 
     @EventHandler
-    public void handleTeleportResult(SLTeleportResultEvent sLTeleportResultEvent) {
+    public void handleTeleportResult(SLTeleportResultEvent teleportResultEvent) {
         boolean isShowing = isShowing();
-        Debug.Log("TeleportResult: success = " + sLTeleportResultEvent.success);
+        Debug.Log("TeleportResult: success = " + teleportResultEvent.success);
         try {
             dismiss();
         } catch (Exception e) {
             Debug.Warning(e);
         }
-        if (sLTeleportResultEvent.success) {
+        if (teleportResultEvent.success) {
             Intent intent = new Intent(getContext(), (Class<?>) ChatNewActivity.class);
             if (this.userManager != null) {
                 ActivityUtils.setActiveAgentID(intent, this.userManager.getUserID());
@@ -106,7 +106,7 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
         if (isShowing) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(getContext().getString(R.string.teleport_failed_dialog_title));
-            builder.setMessage(sLTeleportResultEvent.message);
+            builder.setMessage(teleportResultEvent.message);
             builder.setCancelable(true);
             builder.create().show();
         }

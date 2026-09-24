@@ -15,8 +15,8 @@ public final class NativeCallbacks implements ServiceBridge.Callbacks {
     private final long userData;
 
     @UsedByNative
-    public NativeCallbacks(long j) {
-        this.userData = j;
+    public NativeCallbacks(long userData) {
+        this.userData = userData;
     }
 
     private final native void handleAccelEvent(long j, long j2, float f, float f2, float f3);
@@ -58,20 +58,20 @@ public final class NativeCallbacks implements ServiceBridge.Callbacks {
                 ControllerAccelEvent accelEvent = controllerEventPacket.getAccelEvent(i);
                 handleAccelEvent(this.userData, accelEvent.timestampNanos, accelEvent.x, accelEvent.y, accelEvent.z);
             }
-            for (int i2 = 0; !this.closed && i2 < controllerEventPacket.getButtonEventCount(); i2++) {
-                ControllerButtonEvent buttonEvent = controllerEventPacket.getButtonEvent(i2);
+            for (int j = 0; !this.closed && j < controllerEventPacket.getButtonEventCount(); j++) {
+                ControllerButtonEvent buttonEvent = controllerEventPacket.getButtonEvent(j);
                 handleButtonEvent(this.userData, buttonEvent.timestampNanos, buttonEvent.button, buttonEvent.down);
             }
-            for (int i3 = 0; !this.closed && i3 < controllerEventPacket.getGyroEventCount(); i3++) {
-                ControllerGyroEvent gyroEvent = controllerEventPacket.getGyroEvent(i3);
+            for (int k = 0; !this.closed && k < controllerEventPacket.getGyroEventCount(); k++) {
+                ControllerGyroEvent gyroEvent = controllerEventPacket.getGyroEvent(k);
                 handleGyroEvent(this.userData, gyroEvent.timestampNanos, gyroEvent.x, gyroEvent.y, gyroEvent.z);
             }
-            for (int i4 = 0; !this.closed && i4 < controllerEventPacket.getOrientationEventCount(); i4++) {
-                ControllerOrientationEvent orientationEvent = controllerEventPacket.getOrientationEvent(i4);
+            for (int m = 0; !this.closed && m < controllerEventPacket.getOrientationEventCount(); m++) {
+                ControllerOrientationEvent orientationEvent = controllerEventPacket.getOrientationEvent(m);
                 handleOrientationEvent(this.userData, orientationEvent.timestampNanos, orientationEvent.qx, orientationEvent.qy, orientationEvent.qz, orientationEvent.qw);
             }
-            for (int i5 = 0; !this.closed && i5 < controllerEventPacket.getTouchEventCount(); i5++) {
-                ControllerTouchEvent touchEvent = controllerEventPacket.getTouchEvent(i5);
+            for (int n = 0; !this.closed && n < controllerEventPacket.getTouchEventCount(); n++) {
+                ControllerTouchEvent touchEvent = controllerEventPacket.getTouchEvent(n);
                 handleTouchEvent(this.userData, touchEvent.timestampNanos, touchEvent.action, touchEvent.x, touchEvent.y);
             }
         }

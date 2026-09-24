@@ -20,8 +20,8 @@ public class SLWorldMap extends SLModule {
     private int teleportTargetZ;
     private UUID teleportToAgentUUID;
 
-    public SLWorldMap(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLWorldMap(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.teleportToAgentUUID = null;
     }
 
@@ -106,18 +106,18 @@ public class SLWorldMap extends SLModule {
         }
     }
 
-    public boolean TeleportToRegionByName(String str, int i, int i2, int i3) {
+    public boolean TeleportToRegionByName(String teleportTargetName, int teleportTargetX, int teleportTargetY, int teleportTargetZ) {
         if (!this.agentCircuit.getModules().rlvController.canTeleportToLocation()) {
             return false;
         }
-        this.teleportTargetName = str;
-        this.teleportTargetX = i;
-        this.teleportTargetY = i2;
-        this.teleportTargetZ = i3;
+        this.teleportTargetName = teleportTargetName;
+        this.teleportTargetX = teleportTargetX;
+        this.teleportTargetY = teleportTargetY;
+        this.teleportTargetZ = teleportTargetZ;
         MapNameRequest mapNameRequest = new MapNameRequest();
         mapNameRequest.AgentData_Field.AgentID = this.circuitInfo.agentID;
         mapNameRequest.AgentData_Field.SessionID = this.circuitInfo.sessionID;
-        mapNameRequest.NameData_Field.Name = SLMessage.stringToVariableOEM(str);
+        mapNameRequest.NameData_Field.Name = SLMessage.stringToVariableOEM(teleportTargetName);
         mapNameRequest.isReliable = true;
         SendMessage(mapNameRequest);
         return true;

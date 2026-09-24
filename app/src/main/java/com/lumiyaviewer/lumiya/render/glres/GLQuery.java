@@ -23,16 +23,16 @@ public class GLQuery extends GLResource {
     private int queryStartedFrameCount;
 
     private static class GLQueryReference extends GLResourceManager.GLResourceReference {
-        GLQueryReference(GLResource gLResource, int i, GLResourceManager gLResourceManager) {
-            super(gLResource, i, gLResourceManager);
+        GLQueryReference(GLResource glResource, int i, GLResourceManager glResourceManager) {
+            super(glResource, i, glResourceManager);
         }
 
         @Override
         public void GLFree() {
-            int[] iArr = (int[]) GLQuery.idQuery.get();
-            iArr[0] = this.handle;
-            Debug.Printf("GLBuffer: deleted buffer %d", Integer.valueOf(iArr[0]));
-            GLES30.glDeleteQueries(1, iArr, 0);
+            int[] ints = (int[]) GLQuery.idQuery.get();
+            ints[0] = this.handle;
+            Debug.Printf("GLBuffer: deleted buffer %d", Integer.valueOf(ints[0]));
+            GLES30.glDeleteQueries(1, ints, 0);
         }
     }
 
@@ -47,19 +47,19 @@ public class GLQuery extends GLResource {
         }
     }
 
-    public GLQuery(GLResourceManager gLResourceManager) {
-        super(gLResourceManager);
+    public GLQuery(GLResourceManager glResourceManager) {
+        super(glResourceManager);
         this.isQueryRunning = false;
         this.queryResult = OcclusionQueryResult.NotReady;
         this.queryStartedFrameCount = 0;
-        new GLQueryReference(this, this.handle, gLResourceManager);
+        new GLQueryReference(this, this.handle, glResourceManager);
     }
 
     @Override
-    protected int Allocate(GLResourceManager gLResourceManager) {
-        int[] iArr = idQuery.get();
-        GLES30.glGenQueries(1, iArr, 0);
-        return iArr[0];
+    protected int Allocate(GLResourceManager glResourceManager) {
+        int[] ints = idQuery.get();
+        GLES30.glGenQueries(1, ints, 0);
+        return ints[0];
     }
 
     public void BeginOcclusionQuery(RenderContext renderContext) {
@@ -79,14 +79,14 @@ public class GLQuery extends GLResource {
             this.queryResult = OcclusionQueryResult.NotReady;
             return true;
         }
-        int[] iArr = idQuery.get();
-        GLES30.glGetQueryObjectuiv(this.handle, 34919, iArr, 0);
-        if (iArr[0] == 0) {
+        int[] ints = idQuery.get();
+        GLES30.glGetQueryObjectuiv(this.handle, 34919, ints, 0);
+        if (ints[0] == 0) {
             return false;
         }
         this.isQueryRunning = false;
-        GLES30.glGetQueryObjectuiv(this.handle, 34918, iArr, 0);
-        this.queryResult = iArr[0] != 0 ? OcclusionQueryResult.Visible : OcclusionQueryResult.Invisible;
+        GLES30.glGetQueryObjectuiv(this.handle, 34918, ints, 0);
+        this.queryResult = ints[0] != 0 ? OcclusionQueryResult.Visible : OcclusionQueryResult.Invisible;
         return true;
     }
 

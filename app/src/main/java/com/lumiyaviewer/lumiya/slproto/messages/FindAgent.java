@@ -44,8 +44,8 @@ public class FindAgent extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFindAgent(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFindAgent(this);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FindAgent extends SLMessage {
         this.AgentBlock_Field.Prey = unpackUUID(byteBuffer);
         this.AgentBlock_Field.SpaceIP = unpackIPAddress(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             LocationBlock locationBlock = new LocationBlock();
             locationBlock.GlobalX = unpackDouble(byteBuffer);
             locationBlock.GlobalY = unpackDouble(byteBuffer);

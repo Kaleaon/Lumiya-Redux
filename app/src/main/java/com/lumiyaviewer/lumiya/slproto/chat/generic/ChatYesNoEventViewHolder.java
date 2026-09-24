@@ -62,13 +62,13 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
         }
         if (this.fadeAnimatorSet == null) {
             ObjectAnimator objectAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_background_fade);
-            ObjectAnimator objectAnimator2 = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_text_unfade);
-            ObjectAnimator clone = objectAnimator2.clone();
+            ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(this.cardView.getContext(), R.animator.cardview_text_unfade);
+            ObjectAnimator clone = animator.clone();
             objectAnimator.setTarget(this.cardView);
-            objectAnimator2.setTarget(this.textView);
+            animator.setTarget(this.textView);
             clone.setTarget(this.questionMsg);
             this.fadeAnimatorSet = new AnimatorSet();
-            this.fadeAnimatorSet.playTogether(objectAnimator, objectAnimator2, clone);
+            this.fadeAnimatorSet.playTogether(objectAnimator, animator, clone);
         }
         this.fadeAnimatorSet.start();
         this.cardViewFaded = true;
@@ -115,7 +115,7 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
         }
     }
 
-    public void setEvent(SLChatYesNoEvent sLChatYesNoEvent) {
-        this.yesNoEvent = sLChatYesNoEvent;
+    public void setEvent(SLChatYesNoEvent chatYesNoEvent) {
+        this.yesNoEvent = chatYesNoEvent;
     }
 }

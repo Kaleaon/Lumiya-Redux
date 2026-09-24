@@ -54,8 +54,8 @@ public class PlacesQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePlacesQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePlacesQuery(this);
     }
 
     @Override

@@ -65,8 +65,8 @@ public class SimulatorPresentAtLocation extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorPresentAtLocation(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorPresentAtLocation(this);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class SimulatorPresentAtLocation extends SLMessage {
         this.SimulatorBlock_Field.EstateID = unpackInt(byteBuffer);
         this.SimulatorBlock_Field.ParentEstateID = unpackInt(byteBuffer);
         int i2 = byteBuffer.get() & 0xFF;
-        for (int i3 = 0; i3 < i2; i3++) {
+        for (int j = 0; j < i2; j++) {
             TelehubBlock telehubBlock = new TelehubBlock();
             telehubBlock.HasTelehub = unpackBoolean(byteBuffer);
             telehubBlock.TelehubPos = unpackLLVector3(byteBuffer);

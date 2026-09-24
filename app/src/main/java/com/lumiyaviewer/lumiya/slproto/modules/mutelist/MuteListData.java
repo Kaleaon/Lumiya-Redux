@@ -37,13 +37,13 @@ public class MuteListData {
         this.muteListNames = ImmutableMap.copyOf((Map) map2);
     }
 
-    public MuteListData(byte[] bArr) {
-        int i;
+    public MuteListData(byte[] bytes) {
+        int intToken2;
         ImmutableMap.Builder builder = ImmutableMap.builder();
         ImmutableMap.Builder builder2 = ImmutableMap.builder();
-        if (bArr != null) {
+        if (bytes != null) {
             try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bArr)));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
                 while (true) {
                     String readLine = bufferedReader.readLine();
                     if (readLine == null) {
@@ -57,14 +57,14 @@ public class MuteListData {
                         String nextToken2 = simpleStringParser.nextToken("|");
                         simpleStringParser.skipAllDelimiters("|");
                         try {
-                            i = simpleStringParser.getIntToken(" ");
+                            intToken2 = simpleStringParser.getIntToken(" ");
                         } catch (SimpleStringParser.StringParsingException e) {
-                            i = 0;
+                            intToken2 = 0;
                         }
-                        Debug.Printf("MuteList: line '%s' type %d idstring '%s' name '%s' flags %d", readLine.trim(), Integer.valueOf(intToken), nextToken, nextToken2, Integer.valueOf(i));
+                        Debug.Printf("MuteList: line '%s' type %d idstring '%s' name '%s' flags %d", readLine.trim(), Integer.valueOf(intToken), nextToken, nextToken2, Integer.valueOf(intToken2));
                         if (intToken >= 0 && intToken < MuteType.values().length) {
                             MuteType muteType = MuteType.values()[intToken];
-                            MuteListEntry muteListEntry = new MuteListEntry(muteType, UUID.fromString(nextToken), nextToken2, i);
+                            MuteListEntry muteListEntry = new MuteListEntry(muteType, UUID.fromString(nextToken), nextToken2, intToken2);
                             if (muteType == MuteType.BY_NAME) {
                                 builder2.put(nextToken2, muteListEntry);
                             } else {

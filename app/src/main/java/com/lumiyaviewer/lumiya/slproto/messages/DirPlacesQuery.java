@@ -43,8 +43,8 @@ public class DirPlacesQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPlacesQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPlacesQuery(this);
     }
 
     @Override

@@ -69,11 +69,11 @@ public class FragmentWithTitle extends StateAwareFragment implements FragmentHas
         }
     }
 
-    public void setTitle(@Nullable String str, @Nullable String str2) {
-        this.fragmentTitle = str;
-        this.fragmentSubTitle = str2;
+    public void setTitle(@Nullable String fragmentTitle, @Nullable String fragmentSubTitle) {
+        this.fragmentTitle = fragmentTitle;
+        this.fragmentSubTitle = fragmentSubTitle;
         FragmentActivity activity = getActivity();
-        Debug.Printf("updateTitle: title '%s', subTitle '%s', activity %s, fragment %s", str, str2, activity, this);
+        Debug.Printf("updateTitle: title '%s', subTitle '%s', activity %s, fragment %s", fragmentTitle, fragmentSubTitle, activity, this);
         if (activity instanceof DetailsActivity) {
             ((DetailsActivity) activity).onFragmentTitleUpdated();
         }

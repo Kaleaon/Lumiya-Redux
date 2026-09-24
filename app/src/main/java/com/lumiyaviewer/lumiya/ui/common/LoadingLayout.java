@@ -121,10 +121,10 @@ public class LoadingLayout extends FrameLayout {
         }
     }
 
-    public void setButteryProgressBar(boolean z) {
-        this.butteryBarVisible = z;
+    public void setButteryProgressBar(boolean butteryBarVisible) {
+        this.butteryBarVisible = butteryBarVisible;
         if (this.butteryProgressBar != null) {
-            this.butteryProgressBar.setVisibility(z ? View.VISIBLE : View.GONE);
+            this.butteryProgressBar.setVisibility(butteryBarVisible ? View.VISIBLE : View.GONE);
         }
     }
 

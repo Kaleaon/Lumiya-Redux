@@ -57,40 +57,40 @@ public class PrimVolumeFace {
             resizeIndices(size2);
         }
         int size3 = (this.TypeMask & 512) != 0 ? primVolume.Profile.Total * (primVolume.Path.Path.size() - 1) : this.BeginS;
-        LLVector2 lLVector2 = new LLVector2();
-        LLVector2 lLVector22 = new LLVector2();
-        LLVector3 lLVector3 = this.Extents[0];
-        LLVector3 lLVector32 = this.Extents[1];
+        LLVector2 vector2 = new LLVector2();
+        LLVector2 vector23 = new LLVector2();
+        LLVector3 vector3 = this.Extents[0];
+        LLVector3 vector32 = this.Extents[1];
         Vector2Array vector2Array = this.TexCoords;
         Vector3Array vector3Array2 = this.Positions;
         Vector3Array vector3Array3 = this.Normals;
-        for (int i2 = 0; i2 < size; i2++) {
+        for (int j = 0; j < size; j++) {
             if ((this.TypeMask & 512) != 0) {
-                vector2Array.set(i2, 0.5f + arrayList.get(i2).x, arrayList.get(i2).y + 0.5f);
+                vector2Array.set(j, 0.5f + arrayList.get(j).x, arrayList.get(j).y + 0.5f);
             } else {
-                vector2Array.set(i2, 0.5f + arrayList.get(i2).x, 0.5f - arrayList.get(i2).y);
+                vector2Array.set(j, 0.5f + arrayList.get(j).x, 0.5f - arrayList.get(j).y);
             }
-            vector3Array2.set(i2, vector3Array, i2 + size3);
-            if (i2 == 0) {
-                vector3Array2.get(i2, lLVector3);
-                vector3Array2.get(i2, lLVector32);
-                vector2Array.get(i2, lLVector2);
-                vector2Array.get(i2, lLVector22);
+            vector3Array2.set(j, vector3Array, j + size3);
+            if (j == 0) {
+                vector3Array2.get(j, vector3);
+                vector3Array2.get(j, vector32);
+                vector2Array.get(j, vector2);
+                vector2Array.get(j, vector23);
             } else {
-                vector3Array2.minMaxVector(i2, lLVector3, lLVector32);
-                vector2Array.minMaxVector(i2, lLVector2, lLVector22);
+                vector3Array2.minMaxVector(j, vector3, vector32);
+                vector2Array.minMaxVector(j, vector2, vector23);
             }
         }
-        this.Center = new LLVector3(lLVector3);
-        this.Center.add(lLVector32);
+        this.Center = new LLVector3(vector3);
+        this.Center.add(vector32);
         this.Center.mul(0.5f);
-        LLVector2 sum = LLVector2.sum(lLVector2, lLVector22);
+        LLVector2 sum = LLVector2.sum(vector2, vector23);
         sum.mul(0.5f);
-        LLVector3 lLVector33 = new LLVector3(this.Center);
-        LLVector3 lLVector34 = new LLVector3(this.Center);
-        vector3Array2.subFromVector(lLVector33, 0);
-        vector3Array2.subFromVector(lLVector34, 1);
-        LLVector3 cross = (this.TypeMask & 512) != 0 ? LLVector3.cross(lLVector33, lLVector34) : LLVector3.cross(lLVector34, lLVector33);
+        LLVector3 vector33 = new LLVector3(this.Center);
+        LLVector3 vector34 = new LLVector3(this.Center);
+        vector3Array2.subFromVector(vector33, 0);
+        vector3Array2.subFromVector(vector34, 1);
+        LLVector3 cross = (this.TypeMask & 512) != 0 ? LLVector3.cross(vector33, vector34) : LLVector3.cross(vector34, vector33);
         cross.normVec();
         if ((this.TypeMask & 64) == 0 && (this.TypeMask & 128) == 0) {
             vector3Array2.set(size, this.Center);
@@ -107,10 +107,10 @@ public class PrimVolumeFace {
                 i3 = 1;
                 i4 = 2;
             }
-            for (int i5 = 0; i5 < i - 2; i5++) {
-                this.Indices[i5 * 3] = (short) (i - 1);
-                this.Indices[(i5 * 3) + i3] = (short) i5;
-                this.Indices[(i5 * 3) + i4] = (short) (i5 + 1);
+            for (int k = 0; k < i - 2; k++) {
+                this.Indices[k * 3] = (short) (i - 1);
+                this.Indices[(k * 3) + i3] = (short) k;
+                this.Indices[(k * 3) + i4] = (short) (k + 1);
             }
             return true;
         }
@@ -123,18 +123,18 @@ public class PrimVolumeFace {
                 if (i7 - i6 <= 1) {
                     return true;
                 }
-                LLVector3 lLVector35 = new LLVector3(arrayList.get(i6));
-                LLVector3 lLVector36 = new LLVector3(arrayList.get(i7));
-                LLVector3 lLVector37 = new LLVector3(arrayList.get(i6 + 1));
-                LLVector3 lLVector38 = new LLVector3(arrayList.get(i7 - 1));
-                lLVector35.z = 0.0f;
-                lLVector36.z = 0.0f;
-                lLVector37.z = 0.0f;
-                lLVector38.z = 0.0f;
-                float f = ((lLVector35.x * lLVector37.y) - (lLVector37.x * lLVector35.y)) + ((lLVector37.x * lLVector36.y) - (lLVector36.x * lLVector37.y)) + ((lLVector36.x * lLVector35.y) - (lLVector35.x * lLVector36.y));
-                float f2 = ((lLVector35.x * lLVector38.y) - (lLVector38.x * lLVector35.y)) + ((lLVector38.x * lLVector37.y) - (lLVector37.x * lLVector38.y)) + ((lLVector37.x * lLVector35.y) - (lLVector35.x * lLVector37.y));
-                float f3 = ((lLVector36.x * lLVector35.y) - (lLVector35.x * lLVector36.y)) + ((lLVector35.x * lLVector38.y) - (lLVector38.x * lLVector35.y)) + ((lLVector38.x * lLVector36.y) - (lLVector36.x * lLVector38.y));
-                float f4 = ((lLVector36.x * lLVector37.y) - (lLVector37.x * lLVector36.y)) + ((lLVector37.x * lLVector38.y) - (lLVector38.x * lLVector37.y)) + ((lLVector38.x * lLVector36.y) - (lLVector36.x * lLVector38.y));
+                LLVector3 vector35 = new LLVector3(arrayList.get(i6));
+                LLVector3 vector36 = new LLVector3(arrayList.get(i7));
+                LLVector3 vector37 = new LLVector3(arrayList.get(i6 + 1));
+                LLVector3 vector38 = new LLVector3(arrayList.get(i7 - 1));
+                vector35.z = 0.0f;
+                vector36.z = 0.0f;
+                vector37.z = 0.0f;
+                vector38.z = 0.0f;
+                float f = ((vector35.x * vector37.y) - (vector37.x * vector35.y)) + ((vector37.x * vector36.y) - (vector36.x * vector37.y)) + ((vector36.x * vector35.y) - (vector35.x * vector36.y));
+                float f2 = ((vector35.x * vector38.y) - (vector38.x * vector35.y)) + ((vector38.x * vector37.y) - (vector37.x * vector38.y)) + ((vector37.x * vector35.y) - (vector35.x * vector37.y));
+                float f3 = ((vector36.x * vector35.y) - (vector35.x * vector36.y)) + ((vector35.x * vector38.y) - (vector38.x * vector35.y)) + ((vector38.x * vector36.y) - (vector36.x * vector38.y));
+                float f4 = ((vector36.x * vector37.y) - (vector37.x * vector36.y)) + ((vector37.x * vector38.y) - (vector38.x * vector37.y)) + ((vector38.x * vector36.y) - (vector36.x * vector38.y));
                 boolean z3 = f >= 0.0f;
                 if (f4 < 0.0f) {
                     z3 = false;
@@ -146,7 +146,7 @@ public class PrimVolumeFace {
                 if (!z3) {
                     z2 = false;
                 } else if (z4) {
-                    z2 = LLVector3.sub(lLVector35, lLVector37).magVecSquared() < LLVector3.sub(lLVector36, lLVector38).magVecSquared();
+                    z2 = LLVector3.sub(vector35, vector37).magVecSquared() < LLVector3.sub(vector36, vector38).magVecSquared();
                 } else {
                     z2 = true;
                 }
@@ -177,17 +177,17 @@ public class PrimVolumeFace {
                 if (i15 - i14 <= 1) {
                     return true;
                 }
-                LLVector3 lLVector39 = new LLVector3(arrayList.get(i14));
+                LLVector3 vector39 = new LLVector3(arrayList.get(i14));
                 LLVector3 lLVector310 = new LLVector3(arrayList.get(i15));
                 LLVector3 lLVector311 = new LLVector3(arrayList.get(i14 + 1));
                 LLVector3 lLVector312 = new LLVector3(arrayList.get(i15 - 1));
-                lLVector39.z = 0.0f;
+                vector39.z = 0.0f;
                 lLVector310.z = 0.0f;
                 lLVector311.z = 0.0f;
                 lLVector312.z = 0.0f;
-                float f5 = ((lLVector39.x * lLVector311.y) - (lLVector311.x * lLVector39.y)) + ((lLVector311.x * lLVector310.y) - (lLVector310.x * lLVector311.y)) + ((lLVector310.x * lLVector39.y) - (lLVector39.x * lLVector310.y));
-                float f6 = ((lLVector39.x * lLVector312.y) - (lLVector312.x * lLVector39.y)) + ((lLVector312.x * lLVector311.y) - (lLVector311.x * lLVector312.y)) + ((lLVector311.x * lLVector39.y) - (lLVector39.x * lLVector311.y));
-                float f7 = ((lLVector310.x * lLVector39.y) - (lLVector39.x * lLVector310.y)) + ((lLVector39.x * lLVector312.y) - (lLVector312.x * lLVector39.y)) + ((lLVector312.x * lLVector310.y) - (lLVector310.x * lLVector312.y));
+                float f5 = ((vector39.x * lLVector311.y) - (lLVector311.x * vector39.y)) + ((lLVector311.x * lLVector310.y) - (lLVector310.x * lLVector311.y)) + ((lLVector310.x * vector39.y) - (vector39.x * lLVector310.y));
+                float f6 = ((vector39.x * lLVector312.y) - (lLVector312.x * vector39.y)) + ((lLVector312.x * lLVector311.y) - (lLVector311.x * lLVector312.y)) + ((lLVector311.x * vector39.y) - (vector39.x * lLVector311.y));
+                float f7 = ((lLVector310.x * vector39.y) - (vector39.x * lLVector310.y)) + ((vector39.x * lLVector312.y) - (lLVector312.x * vector39.y)) + ((lLVector312.x * lLVector310.y) - (lLVector310.x * lLVector312.y));
                 float f8 = ((lLVector310.x * lLVector311.y) - (lLVector311.x * lLVector310.y)) + ((lLVector311.x * lLVector312.y) - (lLVector312.x * lLVector311.y)) + ((lLVector312.x * lLVector310.y) - (lLVector310.x * lLVector312.y));
                 boolean z5 = f5 >= 0.0f;
                 if (f8 < 0.0f) {
@@ -200,7 +200,7 @@ public class PrimVolumeFace {
                 if (!z5) {
                     z = false;
                 } else if (z6) {
-                    z = LLVector3.sub(lLVector39, lLVector311).magVecSquared() < LLVector3.sub(lLVector310, lLVector312).magVecSquared();
+                    z = LLVector3.sub(vector39, lLVector311).magVecSquared() < LLVector3.sub(lLVector310, lLVector312).magVecSquared();
                 } else {
                     z = true;
                 }
@@ -291,109 +291,109 @@ public class PrimVolumeFace {
             }
             i9 = i11 + 1;
         }
-        LLVector3 lLVector3 = this.Extents[0];
-        LLVector3 lLVector32 = this.Extents[1];
-        vector3Array2.get(0, lLVector3);
-        vector3Array2.get(0, lLVector32);
-        vector3Array2.minMaxVector(lLVector3, lLVector32);
-        this.Center = new LLVector3(lLVector3);
-        this.Center.add(lLVector32);
+        LLVector3 vector3 = this.Extents[0];
+        LLVector3 vector39 = this.Extents[1];
+        vector3Array2.get(0, vector3);
+        vector3Array2.get(0, vector39);
+        vector3Array2.minMaxVector(vector3, vector39);
+        this.Center = new LLVector3(vector3);
+        this.Center.add(vector39);
         this.Center.mul(0.5f);
         int i18 = 0;
         int i19 = 0;
         boolean z5 = (this.TypeMask & 256) != 0;
-        for (int i20 = 0; i20 < this.NumT - 1; i20++) {
-            for (int i21 = 0; i21 < this.NumS - 1; i21++) {
+        for (int j = 0; j < this.NumT - 1; j++) {
+            for (int k = 0; k < this.NumS - 1; k++) {
                 int i22 = i18 + 1;
-                this.Indices[i18] = (short) ((this.NumS * i20) + i21);
+                this.Indices[i18] = (short) ((this.NumS * j) + k);
                 int i23 = i22 + 1;
-                this.Indices[i22] = (short) (i21 + 1 + (this.NumS * (i20 + 1)));
+                this.Indices[i22] = (short) (k + 1 + (this.NumS * (j + 1)));
                 int i24 = i23 + 1;
-                this.Indices[i23] = (short) ((this.NumS * (i20 + 1)) + i21);
+                this.Indices[i23] = (short) ((this.NumS * (j + 1)) + k);
                 int i25 = i24 + 1;
-                this.Indices[i24] = (short) ((this.NumS * i20) + i21);
+                this.Indices[i24] = (short) ((this.NumS * j) + k);
                 int i26 = i25 + 1;
-                this.Indices[i25] = (short) (i21 + 1 + (this.NumS * i20));
+                this.Indices[i25] = (short) (k + 1 + (this.NumS * j));
                 i18 = i26 + 1;
-                this.Indices[i26] = (short) (i21 + 1 + (this.NumS * (i20 + 1)));
+                this.Indices[i26] = (short) (k + 1 + (this.NumS * (j + 1)));
                 int i27 = i19 + 1;
-                this.Edge[i19] = ((this.NumS - 1) * 2 * i20) + (i21 * 2) + 1;
-                if (i20 < this.NumT - 2) {
-                    this.Edge[i27] = ((this.NumS - 1) * 2 * (i20 + 1)) + (i21 * 2) + 1;
+                this.Edge[i19] = ((this.NumS - 1) * 2 * j) + (k * 2) + 1;
+                if (j < this.NumT - 2) {
+                    this.Edge[i27] = ((this.NumS - 1) * 2 * (j + 1)) + (k * 2) + 1;
                     i = i27 + 1;
                 } else if (this.NumT <= 3 || primVolume.Path.Open) {
                     this.Edge[i27] = -1;
                     i = i27 + 1;
                 } else {
-                    this.Edge[i27] = (i21 * 2) + 1;
+                    this.Edge[i27] = (k * 2) + 1;
                     i = i27 + 1;
                 }
-                if (i21 > 0) {
-                    this.Edge[i] = ((((this.NumS - 1) * 2) * i20) + (i21 * 2)) - 1;
+                if (k > 0) {
+                    this.Edge[i] = ((((this.NumS - 1) * 2) * j) + (k * 2)) - 1;
                     i2 = i + 1;
                 } else if (z5 || primVolume.Path.Open) {
                     this.Edge[i] = -1;
                     i2 = i + 1;
                 } else {
-                    this.Edge[i] = ((this.NumS - 1) * 2 * i20) + ((this.NumS - 2) * 2) + 1;
+                    this.Edge[i] = ((this.NumS - 1) * 2 * j) + ((this.NumS - 2) * 2) + 1;
                     i2 = i + 1;
                 }
-                if (i20 > 0) {
+                if (j > 0) {
                     i3 = i2 + 1;
-                    this.Edge[i2] = ((this.NumS - 1) * 2 * (i20 - 1)) + (i21 * 2);
+                    this.Edge[i2] = ((this.NumS - 1) * 2 * (j - 1)) + (k * 2);
                 } else if (this.NumT <= 3 || primVolume.Path.Open) {
                     i3 = i2 + 1;
                     this.Edge[i2] = -1;
                 } else {
                     i3 = i2 + 1;
-                    this.Edge[i2] = ((this.NumS - 1) * 2 * (this.NumT - 2)) + (i21 * 2);
+                    this.Edge[i2] = ((this.NumS - 1) * 2 * (this.NumT - 2)) + (k * 2);
                 }
-                if (i21 < this.NumS - 2) {
+                if (k < this.NumS - 2) {
                     i4 = i3 + 1;
-                    this.Edge[i3] = ((this.NumS - 1) * 2 * i20) + ((i21 + 1) * 2);
+                    this.Edge[i3] = ((this.NumS - 1) * 2 * j) + ((k + 1) * 2);
                 } else if (z5 || primVolume.Path.Open) {
                     i4 = i3 + 1;
                     this.Edge[i3] = -1;
                 } else {
                     i4 = i3 + 1;
-                    this.Edge[i3] = (this.NumS - 1) * 2 * i20;
+                    this.Edge[i3] = (this.NumS - 1) * 2 * j;
                 }
                 i19 = i4 + 1;
-                this.Edge[i4] = ((this.NumS - 1) * 2 * i20) + (i21 * 2);
+                this.Edge[i4] = ((this.NumS - 1) * 2 * j) + (k * 2);
             }
         }
         this.Normals.clear();
-        LLVector3[] lLVector3Arr = new LLVector3[3];
+        LLVector3[] vector3s = new LLVector3[3];
         short[] sArr = new short[3];
-        for (int i28 = 0; i28 < 3; i28++) {
-            lLVector3Arr[i28] = new LLVector3();
+        for (int m = 0; m < 3; m++) {
+            vector3s[m] = new LLVector3();
         }
-        LLVector3 lLVector33 = new LLVector3();
-        LLVector3 lLVector34 = new LLVector3();
-        for (int i29 = 0; i29 < this.NumIndices / 3; i29++) {
+        LLVector3 vector33 = new LLVector3();
+        LLVector3 vector34 = new LLVector3();
+        for (int n = 0; n < this.NumIndices / 3; n++) {
             for (int i30 = 0; i30 < 3; i30++) {
-                sArr[i30] = this.Indices[(i29 * 3) + i30];
-                vector3Array2.get(sArr[i30], lLVector3Arr[i30]);
+                sArr[i30] = this.Indices[(n * 3) + i30];
+                vector3Array2.get(sArr[i30], vector3s[i30]);
             }
-            lLVector33.setSub(lLVector3Arr[0], lLVector3Arr[1]);
-            lLVector34.setSub(lLVector3Arr[0], lLVector3Arr[2]);
-            lLVector33.setCross(lLVector34);
+            vector33.setSub(vector3s[0], vector3s[1]);
+            vector34.setSub(vector3s[0], vector3s[2]);
+            vector33.setCross(vector34);
             for (int i31 = 0; i31 < 3; i31++) {
-                this.Normals.add(sArr[i31], lLVector33);
+                this.Normals.add(sArr[i31], vector33);
             }
-            this.Normals.add(sArr[(i29 & 1) + 1], lLVector33);
+            this.Normals.add(sArr[(n & 1) + 1], vector33);
         }
-        LLVector3 lLVector35 = new LLVector3();
-        LLVector3 lLVector36 = new LLVector3();
-        LLVector3 lLVector37 = new LLVector3();
-        vector3Array2.get(0, lLVector36);
-        vector3Array2.get(this.NumS * (this.NumT - 2), lLVector37);
-        lLVector35.setSub(lLVector36, lLVector37);
-        boolean z6 = lLVector35.dot(lLVector35) < 1.0E-6f;
-        vector3Array2.get(this.NumS - 1, lLVector36);
-        vector3Array2.get(((this.NumS * (this.NumT - 2)) + this.NumS) - 1, lLVector37);
-        lLVector35.setSub(lLVector36, lLVector37);
-        boolean z7 = lLVector35.dot(lLVector35) < 1.0E-6f;
+        LLVector3 vector35 = new LLVector3();
+        LLVector3 vector36 = new LLVector3();
+        LLVector3 vector37 = new LLVector3();
+        vector3Array2.get(0, vector36);
+        vector3Array2.get(this.NumS * (this.NumT - 2), vector37);
+        vector35.setSub(vector36, vector37);
+        boolean z6 = vector35.dot(vector35) < 1.0E-6f;
+        vector3Array2.get(this.NumS - 1, vector36);
+        vector3Array2.get(((this.NumS * (this.NumT - 2)) + this.NumS) - 1, vector37);
+        vector35.setSub(vector36, vector37);
+        boolean z7 = vector35.dot(vector35) < 1.0E-6f;
         if (b2 == 0) {
             if (!primVolume.Path.Open) {
                 for (int i32 = 0; i32 < this.NumS; i32++) {
@@ -425,19 +425,19 @@ public class PrimVolumeFace {
         boolean z9 = b2 == 1 || b2 == 2 || b2 == 4;
         boolean z10 = b2 == 2;
         if (z8) {
-            LLVector3 lLVector38 = new LLVector3();
+            LLVector3 vector38 = new LLVector3();
             for (int i36 = 0; i36 < this.NumS; i36++) {
-                vector3Array3.addToVector(i36, lLVector38);
+                vector3Array3.addToVector(i36, vector38);
             }
             for (int i37 = 0; i37 < this.NumS; i37++) {
-                vector3Array3.set(i37, lLVector38);
+                vector3Array3.set(i37, vector38);
             }
-            lLVector38.set(0.0f, 0.0f, 0.0f);
+            vector38.set(0.0f, 0.0f, 0.0f);
             for (int i38 = 0; i38 < this.NumS; i38++) {
-                vector3Array3.addToVector((this.NumS * (this.NumT - 1)) + i38, lLVector38);
+                vector3Array3.addToVector((this.NumS * (this.NumT - 1)) + i38, vector38);
             }
             for (int i39 = 0; i39 < this.NumS; i39++) {
-                vector3Array3.set((this.NumS * (this.NumT - 1)) + i39, lLVector38);
+                vector3Array3.set((this.NumS * (this.NumT - 1)) + i39, vector38);
             }
         }
         if (z9) {
@@ -461,11 +461,11 @@ public class PrimVolumeFace {
         int i2 = primVolume.Profile.Total;
         int size = primVolume.Path.Path.size();
         int size2 = (arrayList.size() - 1) / 4;
-        LLVector3 lLVector3 = this.Extents[0];
-        LLVector3 lLVector32 = this.Extents[1];
+        LLVector3 vector3 = this.Extents[0];
+        LLVector3 vector37 = this.Extents[1];
         int i3 = (this.TypeMask & 512) != 0 ? i2 * (size - 1) : this.BeginS;
         VertexArray vertexArray = new VertexArray(4);
-        LLVector3 lLVector33 = new LLVector3();
+        LLVector3 vector38 = new LLVector3();
         Vector3Array vertices = vertexArray.getVertices();
         Vector2Array texCoords = vertexArray.getTexCoords();
         int i4 = 0;
@@ -478,13 +478,13 @@ public class PrimVolumeFace {
             texCoords.set(i5, 0.5f + arrayList.get(size2 * i5).x, 0.5f - arrayList.get(size2 * i5).y);
             i4 = i5 + 1;
         }
-        LLVector3 lLVector34 = new LLVector3();
-        vertices.getSub(1, 0, lLVector33);
-        vertices.getSub(2, 1, lLVector34);
-        lLVector33.setCross(lLVector34);
-        lLVector33.normVec();
+        LLVector3 vector39 = new LLVector3();
+        vertices.getSub(1, 0, vector38);
+        vertices.getSub(2, 1, vector39);
+        vector38.setCross(vector39);
+        vector38.normVec();
         if ((this.TypeMask & 512) == 0) {
-            lLVector33.mul(-1.0f);
+            vector38.mul(-1.0f);
         } else {
             texCoords.swap(0, 3);
             texCoords.swap(1, 2);
@@ -492,25 +492,25 @@ public class PrimVolumeFace {
         resizeVertices((size2 + 1) * (size2 + 1));
         Vector3Array vector3Array2 = this.Positions;
         int i6 = 0;
-        LLVector3 lLVector35 = new LLVector3();
-        LLVector3 lLVector36 = new LLVector3();
-        LLVector2 lLVector2 = new LLVector2();
-        LLVector2 lLVector22 = new LLVector2();
-        for (int i8 = 0; i8 < size2 + 1; i8++) {
-            for (int i10 = 0; i10 < size2 + 1; i10++) {
-                    this.vertexArray.LerpPlanarVertex(i6, vertexArray, 0, vertexArray, 1, vertexArray, 3, i8 / size2, i10 / size2, lLVector35, lLVector36, lLVector2, lLVector22);
-                    this.vertexArray.getNormals().set(i6, lLVector33);
-                    if (i8 == 0 && i10 == 0) {
-                        vector3Array2.get(i6, lLVector3);
-                        vector3Array2.get(i6, lLVector32);
+        LLVector3 vector35 = new LLVector3();
+        LLVector3 vector36 = new LLVector3();
+        LLVector2 vector2 = new LLVector2();
+        LLVector2 vector23 = new LLVector2();
+        for (int j = 0; j < size2 + 1; j++) {
+            for (int k = 0; k < size2 + 1; k++) {
+                    this.vertexArray.LerpPlanarVertex(i6, vertexArray, 0, vertexArray, 1, vertexArray, 3, j / size2, k / size2, vector35, vector36, vector2, vector23);
+                    this.vertexArray.getNormals().set(i6, vector38);
+                    if (j == 0 && k == 0) {
+                        vector3Array2.get(i6, vector3);
+                        vector3Array2.get(i6, vector37);
                     } else {
-                        vector3Array2.minMaxVector(i6, lLVector3, lLVector32);
+                        vector3Array2.minMaxVector(i6, vector3, vector37);
                     }
                     i6++;
             }
         }
-        this.Center = new LLVector3(lLVector3);
-        this.Center.add(lLVector32);
+        this.Center = new LLVector3(vector3);
+        this.Center.add(vector37);
         this.Center.mul(0.5f);
         resizeIndices(size2 * size2 * 6);
         short[] sArr = this.Indices;

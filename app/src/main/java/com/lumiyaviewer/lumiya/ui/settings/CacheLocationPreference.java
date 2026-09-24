@@ -28,8 +28,8 @@ public class CacheLocationPreference extends Preference {
         if (indexOf >= 0) {
             str = str.substring(0, indexOf);
         }
-        int indexOf2 = str.indexOf("/com.lumiyaviewer.lumiya");
-        return indexOf2 >= 0 ? str.substring(0, indexOf2) : str;
+        int index = str.indexOf("/com.lumiyaviewer.lumiya");
+        return index >= 0 ? str.substring(0, index) : str;
     }
 
     @Override

@@ -8,9 +8,9 @@ abstract class ShaderProgram {
     protected int handle;
     private final Shader vertexShader;
 
-    ShaderProgram(Shader shader, Shader shader2) {
+    ShaderProgram(Shader shader, Shader fragmentShader) {
         this.vertexShader = shader;
-        this.fragmentShader = shader2;
+        this.fragmentShader = fragmentShader;
     }
 
     public int Compile(ShaderPreprocessor shaderPreprocessor) throws ShaderCompileException {
@@ -21,9 +21,9 @@ abstract class ShaderProgram {
         GLES20.glAttachShader(this.handle, this.vertexShader.getHandle());
         GLES20.glAttachShader(this.handle, this.fragmentShader.getHandle());
         GLES20.glLinkProgram(this.handle);
-        int[] iArr = new int[1];
-        GLES20.glGetProgramiv(this.handle, 35714, iArr, 0);
-        if (iArr[0] != 1) {
+        int[] ints = new int[1];
+        GLES20.glGetProgramiv(this.handle, 35714, ints, 0);
+        if (ints[0] != 1) {
             throw new ShaderCompileException(String.format("Shader link error: '%s'", GLES20.glGetProgramInfoLog(this.handle)));
         }
         Debug.Printf("Shaders: Binding variables...", new Object[0]);

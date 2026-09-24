@@ -53,13 +53,13 @@ public class TaskInventoryFragment extends FragmentWithTitle {
     private SLObjectProfileData objectProfileData = null;
     private final Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() {
         @Override
-        public void onData(SLTaskInventory sLTaskInventory) {
-            TaskInventoryFragment.this.taskInventory = sLTaskInventory;
+        public void onData(SLTaskInventory taskInventory) {
+            TaskInventoryFragment.this.taskInventory = taskInventory;
             View view = TaskInventoryFragment.this.getView();
             if (view != null) {
                 ListAdapter adapter = ((ListView) view.findViewById(R.id.taskInventoryListView)).getAdapter();
                 if (adapter instanceof TaskInventoryListAdapter) {
-                    ((TaskInventoryListAdapter) adapter).setData(sLTaskInventory);
+                    ((TaskInventoryListAdapter) adapter).setData(taskInventory);
                 }
                 ((TextView) view.findViewById(R.id.taskInventoryEmptyText)).setText(R.string.object_contents_empty);
                 view.findViewById(R.id.taskInventoryLoading).setVisibility(View.GONE);
@@ -92,11 +92,11 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         @Override
         @Nullable
         public Void apply(@Nullable final UUID uuid) {
-            Executor uIThreadExecutor = UIThreadExecutor.getInstance();
+            Executor executor = UIThreadExecutor.getInstance();
             final int i = this.val$taskID;
             final UserManager userManager = this.val$userManager;
             final ProgressDialog progressDialog = this.val$progressDialog;
-            uIThreadExecutor.execute(new Runnable() {
+            executor.execute(new Runnable() {
                 private final /* synthetic */ void $m$0() {
                     AnonymousClass2.this.m700x9b244ddf((UserManager) userManager, i, (ProgressDialog) progressDialog, (UUID) uuid);
                 }
@@ -130,10 +130,10 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         return this.objectProfileData.isModifiable();
     }
 
-    private boolean canModifyObjectContents(SLInventoryEntry sLInventoryEntry) {
+    private boolean canModifyObjectContents(SLInventoryEntry inventoryEntry) {
         UserManager userManager = getUserManager();
         if (userManager != null) {
-            return userManager.getUserID().equals(sLInventoryEntry.ownerUUID) ? (sLInventoryEntry.ownerMask & 16384) != 0 : (sLInventoryEntry.everyoneMask & 16384) != 0;
+            return userManager.getUserID().equals(inventoryEntry.ownerUUID) ? (inventoryEntry.ownerMask & 16384) != 0 : (inventoryEntry.everyoneMask & 16384) != 0;
         }
         return false;
     }
@@ -148,7 +148,7 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         if (this.taskInventory == null || this.objectProfileData == null || userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || (modules = activeAgentCircuit.getModules()) == null) {
             return;
         }
-        SLInventory sLInventory = modules.inventory;
+        SLInventory inventory = modules.inventory;
         if (this.taskInventory.entries.size() == 0) {
             return;
         }
@@ -193,11 +193,11 @@ public class TaskInventoryFragment extends FragmentWithTitle {
         }
         String or = this.objectProfileData.name().or(getString(R.string.default_object_contents_folder));
         HashSet hashSet = new HashSet();
-        Iterator<SLInventoryEntry> it2 = this.taskInventory.entries.iterator();
-        while (it2.hasNext()) {
-            hashSet.add(it2.next().uuid);
+        Iterator<SLInventoryEntry> iterator = this.taskInventory.entries.iterator();
+        while (iterator.hasNext()) {
+            hashSet.add(iterator.next().uuid);
         }
-        sLInventory.CopyObjectContents(or, objectLocalID, hashSet, new AnonymousClass2(userManager, objectLocalID, ProgressDialog.show(getContext(), null, getString(R.string.copying_object_contents), true, true)));
+        inventory.CopyObjectContents(or, objectLocalID, hashSet, new AnonymousClass2(userManager, objectLocalID, ProgressDialog.show(getContext(), null, getString(R.string.copying_object_contents), true, true)));
     }
 
     private int getObjectLocalID() {
@@ -260,8 +260,8 @@ public class TaskInventoryFragment extends FragmentWithTitle {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_objects_TaskInventoryFragment_5570, reason: not valid java name */
-    /* synthetic */ void m699x1db91107(SLObjectProfileData sLObjectProfileData) {
-        this.objectProfileData = sLObjectProfileData;
+    /* synthetic */ void m699x1db91107(SLObjectProfileData objectProfileData) {
+        this.objectProfileData = objectProfileData;
         if (this.objectProfileData.name().isPresent()) {
             setTitle(getString(R.string.object_contents_title), this.objectProfileData.name().or(getString(R.string.object_name_loading)));
         }

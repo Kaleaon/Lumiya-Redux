@@ -63,9 +63,9 @@ public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChat
             }
         }
         if (hashSet != null) {
-            Iterator it2 = hashSet.iterator();
-            while (it2.hasNext()) {
-                ((ChatterNameRetriever) it2.next()).dispose();
+            Iterator iterator = hashSet.iterator();
+            while (iterator.hasNext()) {
+                ((ChatterNameRetriever) iterator.next()).dispose();
             }
         }
     }
@@ -95,9 +95,9 @@ public class MultipleChatterNameRetriever implements ChatterNameRetriever.OnChat
             }
         }
         if (hashSet != null) {
-            Iterator it2 = hashSet.iterator();
-            while (it2.hasNext()) {
-                ((ChatterNameRetriever) it2.next()).dispose();
+            Iterator iterator = hashSet.iterator();
+            while (iterator.hasNext()) {
+                ((ChatterNameRetriever) iterator.next()).dispose();
             }
         }
     }

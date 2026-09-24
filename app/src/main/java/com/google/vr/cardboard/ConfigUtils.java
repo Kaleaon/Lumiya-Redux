@@ -98,9 +98,9 @@ public class ConfigUtils {
                 Log.e(TAG, "Error parsing param record: incorrect sentinel.");
                 return null;
             }
-            byte[] bArr = new byte[i3];
-            if (inputStream.read(bArr, 0, i3) != -1) {
-                return (T) MessageNano.mergeFrom(cls.newInstance(), bArr);
+            byte[] bytes = new byte[i3];
+            if (inputStream.read(bytes, 0, i3) != -1) {
+                return (T) MessageNano.mergeFrom(cls.newInstance(), bytes);
             }
             Log.e(TAG, "Error parsing param record: end of stream.");
             return null;

@@ -7,9 +7,9 @@ public abstract class EventRateLimiter {
     private volatile long lastTimeFired = 0;
     private volatile boolean isPending = false;
 
-    protected EventRateLimiter(EventBus eventBus, long j) {
+    protected EventRateLimiter(EventBus eventBus, long minInterval) {
         this.bus = eventBus;
-        this.minInterval = j;
+        this.minInterval = minInterval;
     }
 
     public void fire() {

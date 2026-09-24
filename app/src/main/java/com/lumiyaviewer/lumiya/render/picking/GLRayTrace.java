@@ -12,10 +12,10 @@ public class GLRayTrace {
         public final float s;
         public final float t;
 
-        RayIntersectInfo(LLVector4 lLVector4, float f, float f2) {
-            this.intersectPoint = lLVector4;
-            this.s = f;
-            this.t = f2;
+        RayIntersectInfo(LLVector4 intersectPoint, float s, float t) {
+            this.intersectPoint = intersectPoint;
+            this.s = s;
+            this.t = t;
         }
 
         public String toString() {
@@ -23,27 +23,27 @@ public class GLRayTrace {
         }
     }
 
-    public static float getIntersectionDepth(RenderContext renderContext, LLVector4 lLVector4, float[] fArr) {
-        float[] fArr2 = new float[8];
-        Matrix.multiplyMV(fArr2, 0, fArr, 0, new float[]{lLVector4.x, lLVector4.y, lLVector4.z, 1.0f}, 0);
+    public static float getIntersectionDepth(RenderContext renderContext, LLVector4 vector4, float[] floats2) {
+        float[] floats = new float[8];
+        Matrix.multiplyMV(floats, 0, floats2, 0, new float[]{vector4.x, vector4.y, vector4.z, 1.0f}, 0);
         if (renderContext.hasGL20) {
-            Matrix.multiplyMV(fArr2, 4, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), fArr2, 0);
+            Matrix.multiplyMV(floats, 4, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), floats, 0);
         } else {
-            Matrix.multiplyMV(fArr2, 4, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), fArr2, 0);
+            Matrix.multiplyMV(floats, 4, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), floats, 0);
         }
-        return fArr2[6];
+        return floats[6];
     }
 
-    public static RayIntersectInfo intersect_RayTriangle(LLVector3 lLVector3, LLVector3 lLVector32, LLVector3[] lLVector3Arr, int i) {
-        LLVector3 sub = LLVector3.sub(lLVector3Arr[i + 1], lLVector3Arr[i + 0]);
-        LLVector3 sub2 = LLVector3.sub(lLVector3Arr[i + 2], lLVector3Arr[i + 0]);
-        LLVector3 cross = LLVector3.cross(sub, sub2);
+    public static RayIntersectInfo intersect_RayTriangle(LLVector3 vector35, LLVector3 vector36, LLVector3[] vector3s, int i) {
+        LLVector3 sub = LLVector3.sub(vector3s[i + 1], vector3s[i + 0]);
+        LLVector3 vector3 = LLVector3.sub(vector3s[i + 2], vector3s[i + 0]);
+        LLVector3 cross = LLVector3.cross(sub, vector3);
         if (cross.isZero()) {
             return null;
         }
-        LLVector3 sub3 = LLVector3.sub(lLVector32, lLVector3);
-        float f = -cross.dot(LLVector3.sub(lLVector3, lLVector3Arr[i + 0]));
-        float dot = cross.dot(sub3);
+        LLVector3 vector37 = LLVector3.sub(vector36, vector35);
+        float f = -cross.dot(LLVector3.sub(vector35, vector3s[i + 0]));
+        float dot = cross.dot(vector37);
         if (Math.abs(dot) < 1.0E-7f) {
             return null;
         }
@@ -51,15 +51,15 @@ public class GLRayTrace {
         if (f2 < 0.0d) {
             return null;
         }
-        LLVector3 lLVector33 = new LLVector3(sub3);
-        lLVector33.mul(f2);
-        lLVector33.add(lLVector3);
+        LLVector3 vector38 = new LLVector3(vector37);
+        vector38.mul(f2);
+        vector38.add(vector35);
         float dot2 = sub.dot(sub);
-        float dot3 = sub.dot(sub2);
-        float dot4 = sub2.dot(sub2);
-        LLVector3 sub4 = LLVector3.sub(lLVector33, lLVector3Arr[i + 0]);
-        float dot5 = sub4.dot(sub);
-        float dot6 = sub4.dot(sub2);
+        float dot3 = sub.dot(vector3);
+        float dot4 = vector3.dot(vector3);
+        LLVector3 vector39 = LLVector3.sub(vector38, vector3s[i + 0]);
+        float dot5 = vector39.dot(sub);
+        float dot6 = vector39.dot(vector3);
         float f3 = (dot3 * dot3) - (dot2 * dot4);
         if (Math.abs(f3) < 1.0E-7f) {
             return null;
@@ -72,6 +72,6 @@ public class GLRayTrace {
         if (f5 < 0.0d || f4 + f5 > 1.0d) {
             return null;
         }
-        return new RayIntersectInfo(new LLVector4(lLVector33.x, lLVector33.y, lLVector33.z, f2), f4, f5);
+        return new RayIntersectInfo(new LLVector4(vector38.x, vector38.y, vector38.z, f2), f4, f5);
     }
 }

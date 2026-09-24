@@ -43,8 +43,8 @@ public class ChatFromSimulator extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChatFromSimulator(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChatFromSimulator(this);
     }
 
     @Override

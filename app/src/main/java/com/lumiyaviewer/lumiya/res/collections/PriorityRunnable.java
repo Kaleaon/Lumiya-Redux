@@ -5,8 +5,8 @@ import com.lumiyaviewer.lumiya.utils.HasPriority;
 public abstract class PriorityRunnable implements Runnable, HasPriority {
     private final int priority;
 
-    public PriorityRunnable(int i) {
-        this.priority = i;
+    public PriorityRunnable(int priority) {
+        this.priority = priority;
     }
 
     @Override

@@ -39,23 +39,23 @@ public class SLDisplayNameFetcher extends SLModule {
     private final Thread workingThread;
     private final LLSDXMLRequest xmlReq;
 
-    public SLDisplayNameFetcher(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    public SLDisplayNameFetcher(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
         this.threadMustExit = new AtomicBoolean(false);
         this.requestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
             @Override
             public void onRequest(@Nonnull UUID uuid) {
-                UUIDNameRequest uUIDNameRequest = new UUIDNameRequest();
-                UUIDNameRequest.UUIDNameBlock uUIDNameBlock = new UUIDNameRequest.UUIDNameBlock();
-                uUIDNameBlock.ID = uuid;
-                uUIDNameRequest.UUIDNameBlock_Fields.add(uUIDNameBlock);
-                while (uUIDNameRequest.UUIDNameBlock_Fields.size() < 4 && SLDisplayNameFetcher.this.requestQueue != null && ((UUID) SLDisplayNameFetcher.this.requestQueue.getNextRequest()) != null) {
-                    UUIDNameRequest.UUIDNameBlock uUIDNameBlock2 = new UUIDNameRequest.UUIDNameBlock();
-                    uUIDNameBlock2.ID = uuid;
-                    uUIDNameRequest.UUIDNameBlock_Fields.add(uUIDNameBlock2);
+                UUIDNameRequest uuidNameRequest = new UUIDNameRequest();
+                UUIDNameRequest.UUIDNameBlock uuidNameBlock = new UUIDNameRequest.UUIDNameBlock();
+                uuidNameBlock.ID = uuid;
+                uuidNameRequest.UUIDNameBlock_Fields.add(uuidNameBlock);
+                while (uuidNameRequest.UUIDNameBlock_Fields.size() < 4 && SLDisplayNameFetcher.this.requestQueue != null && ((UUID) SLDisplayNameFetcher.this.requestQueue.getNextRequest()) != null) {
+                    UUIDNameRequest.UUIDNameBlock uuidNameBlock2 = new UUIDNameRequest.UUIDNameBlock();
+                    uuidNameBlock2.ID = uuid;
+                    uuidNameRequest.UUIDNameBlock_Fields.add(uuidNameBlock2);
                 }
-                uUIDNameRequest.isReliable = true;
-                SLDisplayNameFetcher.this.SendMessage(uUIDNameRequest);
+                uuidNameRequest.isReliable = true;
+                SLDisplayNameFetcher.this.SendMessage(uuidNameRequest);
             }
         }, false, 3, 15000L);
         this.httpThreadRunnable = new Runnable() {
@@ -81,15 +81,15 @@ public class SLDisplayNameFetcher extends SLModule {
                         Debug.Warning(e);
                     }
                 }
-                Iterator it2 = hashSet.iterator();
-                while (it2.hasNext()) {
-                    userNameRequestQueue.returnRequest((UUID) it2.next());
+                Iterator iterator = hashSet.iterator();
+                while (iterator.hasNext()) {
+                    userNameRequestQueue.returnRequest((UUID) iterator.next());
                 }
             }
         };
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.circuitInfo.agentID);
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID);
         this.requestQueue = this.userManager != null ? this.userManager.getUserNameRequestQueue() : null;
-        if (sLCaps.getCapability(SLCaps.SLCapability.GetDisplayNames) == null) {
+        if (caps.getCapability(SLCaps.SLCapability.GetDisplayNames) == null) {
             this.capsURL = null;
             this.workingThread = null;
             this.xmlReq = null;
@@ -97,7 +97,7 @@ public class SLDisplayNameFetcher extends SLModule {
             this.resultHandler = this.requestQueue != null ? this.requestQueue.attachRequestHandler(this.requestHandler) : null;
             return;
         }
-        this.capsURL = sLCaps.getCapability(SLCaps.SLCapability.GetDisplayNames);
+        this.capsURL = caps.getCapability(SLCaps.SLCapability.GetDisplayNames);
         this.useDisplayNames = true;
         this.resultHandler = this.requestQueue != null ? this.requestQueue.getResultHandler() : null;
         this.xmlReq = new LLSDXMLRequest();
@@ -135,8 +135,8 @@ public class SLDisplayNameFetcher extends SLModule {
                 }
                 if (PerformRequest.keyExists("bad_ids")) {
                     LLSDNode byKey2 = PerformRequest.byKey("bad_ids");
-                    for (int i2 = 0; i2 < byKey2.getCount(); i2++) {
-                        UUID fromString = UUID.fromString(byKey2.byIndex(i2).asString());
+                    for (int j = 0; j < byKey2.getCount(); j++) {
+                        UUID fromString = UUID.fromString(byKey2.byIndex(j).asString());
                         UserName userName2 = new UserName(fromString, null, null, true);
                         if (this.resultHandler != null) {
                             this.resultHandler.onResultData(fromString, userName2);
@@ -165,10 +165,10 @@ public class SLDisplayNameFetcher extends SLModule {
     }
 
     @SLMessageHandler
-    public void HandleUUIDNameReply(UUIDNameReply uUIDNameReply) {
-        for (UUIDNameReply.UUIDNameBlock uUIDNameBlock : uUIDNameReply.UUIDNameBlock_Fields) {
-            UUID uuid = uUIDNameBlock.ID;
-            String str = SLMessage.stringFromVariableOEM(uUIDNameBlock.FirstName) + " " + SLMessage.stringFromVariableOEM(uUIDNameBlock.LastName);
+    public void HandleUUIDNameReply(UUIDNameReply uuidNameReply) {
+        for (UUIDNameReply.UUIDNameBlock uuidNameBlock : uuidNameReply.UUIDNameBlock_Fields) {
+            UUID uuid = uuidNameBlock.ID;
+            String str = SLMessage.stringFromVariableOEM(uuidNameBlock.FirstName) + " " + SLMessage.stringFromVariableOEM(uuidNameBlock.LastName);
             UserName userName = new UserName(uuid, str, str, false);
             if (this.resultHandler != null) {
                 this.resultHandler.onResultData(uuid, userName);

@@ -21,11 +21,11 @@ public class SLChatBalanceChangedEvent extends SLChatEvent {
         this.newBalance = chatMessage.getNewBalance().intValue();
     }
 
-    public SLChatBalanceChangedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean z, int i, int i2) {
+    public SLChatBalanceChangedEvent(@Nonnull ChatMessageSource chatMessageSource, @Nonnull UUID uuid, boolean transactionAmountValid, int transactionAmount, int newBalance) {
         super(chatMessageSource, uuid);
-        this.transactionAmountValid = z;
-        this.transactionAmount = i;
-        this.newBalance = i2;
+        this.transactionAmountValid = transactionAmountValid;
+        this.transactionAmount = transactionAmount;
+        this.newBalance = newBalance;
     }
 
     @Override

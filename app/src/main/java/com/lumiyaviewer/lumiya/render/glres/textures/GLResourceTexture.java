@@ -17,30 +17,30 @@ public class GLResourceTexture extends GLSizedResource {
     private static class GLResourceTexturesReference extends GLResourceManager.GLResourceReference {
         private final int loadedSize;
 
-        public GLResourceTexturesReference(GLResource gLResource, int i, GLResourceManager gLResourceManager, int i2) {
-            super(gLResource, i, gLResourceManager);
-            this.loadedSize = i2;
-            TextureMemoryTracker.allocTextureMemory(i2);
+        public GLResourceTexturesReference(GLResource glResource, int i, GLResourceManager glResourceManager, int loadedSize) {
+            super(glResource, i, glResourceManager);
+            this.loadedSize = loadedSize;
+            TextureMemoryTracker.allocTextureMemory(loadedSize);
         }
 
         @Override
         public void GLFree() {
             TextureMemoryTracker.releaseTextureMemory(this.loadedSize);
-            int[] iArr = (int[]) GLResourceTexture.idBuffer.get();
-            iArr[0] = this.handle;
-            GLES11.glDeleteTextures(1, iArr, 0);
+            int[] ints = (int[]) GLResourceTexture.idBuffer.get();
+            ints[0] = this.handle;
+            GLES11.glDeleteTextures(1, ints, 0);
         }
     }
 
-    public GLResourceTexture(GLResourceManager gLResourceManager, int i) {
-        super(gLResourceManager, i);
-        new GLResourceTexturesReference(this, this.handle, gLResourceManager, i);
+    public GLResourceTexture(GLResourceManager glResourceManager, int i) {
+        super(glResourceManager, i);
+        new GLResourceTexturesReference(this, this.handle, glResourceManager, i);
     }
 
     @Override
-    protected int Allocate(GLResourceManager gLResourceManager) {
-        int[] iArr = idBuffer.get();
-        GLES11.glGenTextures(1, iArr, 0);
-        return iArr[0];
+    protected int Allocate(GLResourceManager glResourceManager) {
+        int[] ints = idBuffer.get();
+        GLES11.glGenTextures(1, ints, 0);
+        return ints[0];
     }
 }

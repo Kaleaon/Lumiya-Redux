@@ -39,8 +39,8 @@ public class ParcelGodMarkAsContent extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelGodMarkAsContent(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelGodMarkAsContent(this);
     }
 
     @Override

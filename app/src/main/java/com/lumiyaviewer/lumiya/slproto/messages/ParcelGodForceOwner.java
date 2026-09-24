@@ -38,8 +38,8 @@ public class ParcelGodForceOwner extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelGodForceOwner(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelGodForceOwner(this);
     }
 
     @Override

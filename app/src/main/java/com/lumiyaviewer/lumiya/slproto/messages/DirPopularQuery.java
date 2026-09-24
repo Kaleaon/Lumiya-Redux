@@ -40,8 +40,8 @@ public class DirPopularQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPopularQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPopularQuery(this);
     }
 
     @Override

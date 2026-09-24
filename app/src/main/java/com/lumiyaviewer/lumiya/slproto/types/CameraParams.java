@@ -73,30 +73,30 @@ public class CameraParams {
     }
 
     private void processManualControl(HeadTransformCompat headTransformCompat) {
-        float f;
-        float f2;
+        float wrapAngle;
+        float pitchDegrees;
         if (this.isManualControl) {
             long currentTimeMillis = System.currentTimeMillis();
             float f3 = (currentTimeMillis - this.manualControlStartTime) / 1000.0f;
             if (headTransformCompat != null) {
-                f = wrapAngle(headTransformCompat.yawDegrees + headTransformCompat.viewExtraYaw);
-                f2 = headTransformCompat.pitchDegrees;
+                wrapAngle = wrapAngle(headTransformCompat.yawDegrees + headTransformCompat.viewExtraYaw);
+                pitchDegrees = headTransformCompat.pitchDegrees;
             } else {
                 this.heading = wrapAngle(this.heading + (this.manualTurnSpeed * f3));
-                f = this.heading;
-                f2 = this.tilt;
+                wrapAngle = this.heading;
+                pitchDegrees = this.tilt;
             }
             if (this.manualMoveSpeed != 0.0f || this.manualFlySpeed != 0.0f || this.manualStrafeSpeed != 0.0f) {
-                LLQuaternion mayaQ = LLQuaternion.mayaQ(0.0f, f2, f, LLQuaternion.Order.YZX);
-                LLVector3 lLVector3 = new LLVector3(1.0f, 0.0f, 0.0f);
-                LLVector3 lLVector32 = new LLVector3(0.0f, 0.0f, 1.0f);
-                LLVector3 lLVector33 = new LLVector3(0.0f, 1.0f, 0.0f);
-                lLVector3.mul(mayaQ);
-                lLVector32.mul(mayaQ);
-                lLVector33.mul(mayaQ);
-                this.position.addMul(lLVector3, this.manualMoveSpeed * f3);
-                this.position.addMul(lLVector32, this.manualFlySpeed * f3);
-                this.position.addMul(lLVector33, this.manualStrafeSpeed * f3);
+                LLQuaternion mayaQ = LLQuaternion.mayaQ(0.0f, pitchDegrees, wrapAngle, LLQuaternion.Order.YZX);
+                LLVector3 vector3 = new LLVector3(1.0f, 0.0f, 0.0f);
+                LLVector3 vector34 = new LLVector3(0.0f, 0.0f, 1.0f);
+                LLVector3 vector35 = new LLVector3(0.0f, 1.0f, 0.0f);
+                vector3.mul(mayaQ);
+                vector34.mul(mayaQ);
+                vector35.mul(mayaQ);
+                this.position.addMul(vector3, this.manualMoveSpeed * f3);
+                this.position.addMul(vector34, this.manualFlySpeed * f3);
+                this.position.addMul(vector35, this.manualStrafeSpeed * f3);
             }
             this.manualControlStartTime = currentTimeMillis;
         }
@@ -111,120 +111,120 @@ public class CameraParams {
     }
 
     public void copyFrom(@Nullable CameraParams cameraParams) {
-        float f;
-        float f2;
-        float f3;
-        float f4;
-        float f5;
-        boolean z;
+        float x;
+        float y;
+        float z2;
+        float heading;
+        float tilt;
+        boolean isValid;
         if (cameraParams != null) {
             synchronized (cameraParams.lock) {
                 cameraParams.processFling();
                 cameraParams.processManualControl(null);
-                f = cameraParams.position.x;
-                f2 = cameraParams.position.y;
-                f3 = cameraParams.position.z;
-                f4 = cameraParams.heading;
-                f5 = cameraParams.tilt;
-                z = cameraParams.isValid;
+                x = cameraParams.position.x;
+                y = cameraParams.position.y;
+                z2 = cameraParams.position.z;
+                heading = cameraParams.heading;
+                tilt = cameraParams.tilt;
+                isValid = cameraParams.isValid;
                 if (cameraParams.useOffset) {
-                    LLVector3 lLVector3 = new LLVector3(this.offset);
-                    lLVector3.mul(LLQuaternion.mayaQ(0.0f, f5, f4, LLQuaternion.Order.YZX));
-                    f += lLVector3.x;
-                    f2 += lLVector3.y;
-                    f3 += lLVector3.z;
+                    LLVector3 vector3 = new LLVector3(this.offset);
+                    vector3.mul(LLQuaternion.mayaQ(0.0f, tilt, heading, LLQuaternion.Order.YZX));
+                    x += vector3.x;
+                    y += vector3.y;
+                    z2 += vector3.z;
                 }
             }
             synchronized (this.lock) {
-                this.position.set(f, f2, f3);
-                this.heading = f4;
-                this.tilt = f5;
-                this.isValid = z;
+                this.position.set(x, y, z2);
+                this.heading = heading;
+                this.tilt = tilt;
+                this.isValid = isValid;
             }
         }
     }
 
-    public void fling(float f, float f2) {
+    public void fling(float headingFlingSpeed, float tiltFlingSpeed) {
         synchronized (this.lock) {
-            this.headingFlingSpeed = f;
-            this.tiltFlingSpeed = f2;
+            this.headingFlingSpeed = headingFlingSpeed;
+            this.tiltFlingSpeed = tiltFlingSpeed;
             this.flingStartTime = System.currentTimeMillis();
             this.isFlinging = true;
         }
     }
 
     public float getHeading() {
-        float f;
+        float heading;
         synchronized (this.lock) {
-            f = this.heading;
+            heading = this.heading;
         }
-        return f;
+        return heading;
     }
 
     @Nonnull
     public LLVector3 getPosition() {
-        LLVector3 lLVector3;
+        LLVector3 position;
         synchronized (this.lock) {
-            lLVector3 = this.position;
+            position = this.position;
         }
-        return lLVector3;
+        return position;
     }
 
     public float getTilt() {
-        float f;
+        float tilt;
         synchronized (this.lock) {
-            f = this.tilt;
+            tilt = this.tilt;
         }
-        return f;
+        return tilt;
     }
 
     public void getVRCamera(@Nullable CameraParams cameraParams, HeadTransformCompat headTransformCompat) {
-        float f;
-        float f2;
-        float f3;
-        float f4;
-        float f5;
-        boolean z;
+        float x;
+        float y;
+        float z2;
+        float heading;
+        float tilt;
+        boolean isValid;
         if (cameraParams != null) {
             synchronized (cameraParams.lock) {
                 cameraParams.processManualControl(headTransformCompat);
-                f = cameraParams.position.x;
-                f2 = cameraParams.position.y;
-                f3 = cameraParams.position.z;
-                f4 = cameraParams.heading;
-                f5 = cameraParams.tilt;
-                z = cameraParams.isValid;
+                x = cameraParams.position.x;
+                y = cameraParams.position.y;
+                z2 = cameraParams.position.z;
+                heading = cameraParams.heading;
+                tilt = cameraParams.tilt;
+                isValid = cameraParams.isValid;
                 if (cameraParams.useOffset) {
-                    LLVector3 lLVector3 = new LLVector3(this.offsetVR);
-                    lLVector3.mul(LLQuaternion.mayaQ(0.0f, f5, f4, LLQuaternion.Order.YZX));
-                    f += lLVector3.x;
-                    f2 += lLVector3.y;
-                    f3 += lLVector3.z;
+                    LLVector3 vector3 = new LLVector3(this.offsetVR);
+                    vector3.mul(LLQuaternion.mayaQ(0.0f, tilt, heading, LLQuaternion.Order.YZX));
+                    x += vector3.x;
+                    y += vector3.y;
+                    z2 += vector3.z;
                 }
             }
             synchronized (this.lock) {
-                this.position.set(f, f2, f3);
-                this.heading = f4;
-                this.tilt = f5;
-                this.isValid = z;
+                this.position.set(x, y, z2);
+                this.heading = heading;
+                this.tilt = tilt;
+                this.isValid = isValid;
             }
         }
     }
 
     public boolean isFlinging() {
-        boolean z;
+        boolean isFlinging;
         synchronized (this.lock) {
-            z = this.isFlinging;
+            isFlinging = this.isFlinging;
         }
-        return z;
+        return isFlinging;
     }
 
     public boolean isValid() {
-        boolean z;
+        boolean isValid;
         synchronized (this.lock) {
-            z = this.isValid;
+            isValid = this.isValid;
         }
-        return z;
+        return isValid;
     }
 
     public void rotate(float f, float f2) {
@@ -235,39 +235,39 @@ public class CameraParams {
         }
     }
 
-    public void set(@Nullable LLVector3 lLVector3, float f, float f2) {
+    public void set(@Nullable LLVector3 vector3, float heading, float tilt) {
         synchronized (this.lock) {
-            if (lLVector3 != null) {
-                this.position.set(lLVector3);
+            if (vector3 != null) {
+                this.position.set(vector3);
             }
-            this.heading = f;
-            this.tilt = f2;
+            this.heading = heading;
+            this.tilt = tilt;
             this.isValid = true;
         }
     }
 
-    public void setHeading(float f) {
+    public void setHeading(float heading) {
         synchronized (this.lock) {
-            this.heading = f;
+            this.heading = heading;
         }
     }
 
-    public void setPosition(@Nullable LLVector3 lLVector3) {
+    public void setPosition(@Nullable LLVector3 position) {
         synchronized (this.lock) {
-            if (lLVector3 != null) {
-                this.position.set(lLVector3);
+            if (position != null) {
+                this.position.set(position);
             }
             this.useOffset = true;
             this.isValid = true;
         }
     }
 
-    public void setPosition(@Nullable LLVector3 lLVector3, float f) {
+    public void setPosition(@Nullable LLVector3 vector3, float heading) {
         synchronized (this.lock) {
-            if (lLVector3 != null) {
-                this.position.set(lLVector3);
+            if (vector3 != null) {
+                this.position.set(vector3);
             }
-            this.heading = f;
+            this.heading = heading;
             this.tilt = 0.0f;
             this.isFlinging = false;
             this.isValid = true;
@@ -275,25 +275,25 @@ public class CameraParams {
         }
     }
 
-    public void startManualControl(float f, float f2, float f3, float f4) {
+    public void startManualControl(float manualTurnSpeed, float manualMoveSpeed, float manualFlySpeed, float manualStrafeSpeed) {
         synchronized (this.lock) {
             if (!this.isManualControl) {
-                LLVector3 lLVector3 = new LLVector3(this.position);
+                LLVector3 vector3 = new LLVector3(this.position);
                 LLQuaternion mayaQ = LLQuaternion.mayaQ(0.0f, this.tilt, this.heading, LLQuaternion.Order.YZX);
                 if (!this.useOffset) {
-                    LLVector3 lLVector32 = new LLVector3(this.offset);
-                    lLVector32.mul(mayaQ);
-                    lLVector3.add(lLVector32);
+                    LLVector3 vector33 = new LLVector3(this.offset);
+                    vector33.mul(mayaQ);
+                    vector3.add(vector33);
                     this.useOffset = true;
                 }
-                this.position.set(lLVector3);
+                this.position.set(vector3);
                 this.isManualControl = true;
                 this.manualControlStartTime = System.currentTimeMillis();
             }
-            this.manualMoveSpeed = f2;
-            this.manualTurnSpeed = f;
-            this.manualFlySpeed = f3;
-            this.manualStrafeSpeed = f4;
+            this.manualMoveSpeed = manualMoveSpeed;
+            this.manualTurnSpeed = manualTurnSpeed;
+            this.manualFlySpeed = manualFlySpeed;
+            this.manualStrafeSpeed = manualStrafeSpeed;
         }
     }
 
@@ -306,27 +306,27 @@ public class CameraParams {
     public void zoom(float f, float f2, float f3, float f4, float f5) {
         synchronized (this.lock) {
             float f6 = f - 1.0f;
-            LLVector3 lLVector3 = new LLVector3(this.position);
+            LLVector3 vector3 = new LLVector3(this.position);
             LLQuaternion mayaQ = LLQuaternion.mayaQ(0.0f, this.tilt, this.heading, LLQuaternion.Order.YZX);
             if (!this.useOffset) {
-                LLVector3 lLVector32 = new LLVector3(this.offset);
-                lLVector32.mul(mayaQ);
-                lLVector3.add(lLVector32);
+                LLVector3 vector36 = new LLVector3(this.offset);
+                vector36.mul(mayaQ);
+                vector3.add(vector36);
                 this.useOffset = true;
             }
-            LLVector3 lLVector33 = new LLVector3(1.0f, 0.0f, 0.0f);
-            LLVector3 lLVector34 = new LLVector3(0.0f, 0.0f, 1.0f);
-            LLVector3 lLVector35 = new LLVector3(0.0f, 1.0f, 0.0f);
-            lLVector33.mul(mayaQ);
-            lLVector33.mul(f6);
-            lLVector34.mul(mayaQ);
-            lLVector34.mul((f6 * f3) + f5);
-            lLVector35.mul(mayaQ);
-            lLVector35.mul((f6 * f2) + f4);
-            lLVector3.add(lLVector33);
-            lLVector3.add(lLVector34);
-            lLVector3.add(lLVector35);
-            this.position.set(lLVector3);
+            LLVector3 vector37 = new LLVector3(1.0f, 0.0f, 0.0f);
+            LLVector3 vector38 = new LLVector3(0.0f, 0.0f, 1.0f);
+            LLVector3 vector39 = new LLVector3(0.0f, 1.0f, 0.0f);
+            vector37.mul(mayaQ);
+            vector37.mul(f6);
+            vector38.mul(mayaQ);
+            vector38.mul((f6 * f3) + f5);
+            vector39.mul(mayaQ);
+            vector39.mul((f6 * f2) + f4);
+            vector3.add(vector37);
+            vector3.add(vector38);
+            vector3.add(vector39);
+            this.position.set(vector3);
         }
     }
 }

@@ -36,8 +36,8 @@ public class AddCircuitCode extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAddCircuitCode(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAddCircuitCode(this);
     }
 
     @Override

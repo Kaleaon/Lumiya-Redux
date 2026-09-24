@@ -75,12 +75,12 @@ public class SLMessageRouter {
         }
     }
 
-    public synchronized boolean handleEventQueueMessage(SLCapEventQueue.CapsEventType capsEventType, LLSDNode lLSDNode) {
+    public synchronized boolean handleEventQueueMessage(SLCapEventQueue.CapsEventType capsEventType, LLSDNode lsdNode) {
         HandlerList handlerList = this.eventQueueMessageHandlers.get(capsEventType);
         if (handlerList == null) {
             return false;
         }
-        handlerList.invokeAll(lLSDNode);
+        handlerList.invokeAll(lsdNode);
         return true;
     }
 
@@ -109,12 +109,12 @@ public class SLMessageRouter {
                 }
                 handlerList.add(handlerInfo);
             }
-            SLEventQueueMessageHandler sLEventQueueMessageHandler = (SLEventQueueMessageHandler) method.getAnnotation(SLEventQueueMessageHandler.class);
-            if (sLEventQueueMessageHandler != null) {
+            SLEventQueueMessageHandler annotation = (SLEventQueueMessageHandler) method.getAnnotation(SLEventQueueMessageHandler.class);
+            if (annotation != null) {
                 if (method.getParameterTypes().length != 1) {
                     throw new IllegalArgumentException("SLMessageHandler methods must specify a single LLSDNode paramter.");
                 }
-                SLCapEventQueue.CapsEventType eventName = sLEventQueueMessageHandler.eventName();
+                SLCapEventQueue.CapsEventType eventName = annotation.eventName();
                 HandlerInfo handlerInfo2 = new HandlerInfo(method, obj);
                 HandlerList handlerList2 = this.eventQueueMessageHandlers.get(eventName);
                 if (handlerList2 == null) {
@@ -131,9 +131,9 @@ public class SLMessageRouter {
         while (it.hasNext()) {
             ((HandlerList) it.next()).deleteAll(obj);
         }
-        Iterator<HandlerList> it2 = this.eventQueueMessageHandlers.values().iterator();
-        while (it2.hasNext()) {
-            ((HandlerList) it2.next()).deleteAll(obj);
+        Iterator<HandlerList> iterator = this.eventQueueMessageHandlers.values().iterator();
+        while (iterator.hasNext()) {
+            ((HandlerList) iterator.next()).deleteAll(obj);
         }
     }
 }

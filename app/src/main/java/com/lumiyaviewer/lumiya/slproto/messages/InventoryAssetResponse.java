@@ -32,8 +32,8 @@ public class InventoryAssetResponse extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInventoryAssetResponse(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInventoryAssetResponse(this);
     }
 
     @Override

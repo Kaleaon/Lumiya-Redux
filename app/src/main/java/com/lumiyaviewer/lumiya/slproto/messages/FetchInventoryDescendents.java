@@ -41,8 +41,8 @@ public class FetchInventoryDescendents extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFetchInventoryDescendents(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFetchInventoryDescendents(this);
     }
 
     @Override

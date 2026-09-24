@@ -36,8 +36,8 @@ public class GodKickUser extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGodKickUser(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGodKickUser(this);
     }
 
     @Override

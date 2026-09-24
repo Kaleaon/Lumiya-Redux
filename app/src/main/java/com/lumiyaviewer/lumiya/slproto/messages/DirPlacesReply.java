@@ -57,17 +57,17 @@ public class DirPlacesReply extends SLMessage {
         int size = (this.QueryData_Fields.size() * 16) + 21 + 1;
         Iterator<?> it = this.QueryReplies_Fields.iterator();
         while (true) {
-            int i = size;
+            int size2 = size;
             if (!it.hasNext()) {
-                return i + 1 + (this.StatusData_Fields.size() * 4);
+                return size2 + 1 + (this.StatusData_Fields.size() * 4);
             }
-            size = ((QueryReplies) it.next()).Name.length + 17 + 1 + 1 + 4 + i;
+            size = ((QueryReplies) it.next()).Name.length + 17 + 1 + 1 + 4 + size2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirPlacesReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirPlacesReply(this);
     }
 
     @Override
@@ -91,9 +91,9 @@ public class DirPlacesReply extends SLMessage {
             packFloat(byteBuffer, queryReplies.Dwell);
         }
         byteBuffer.put((byte) this.StatusData_Fields.size());
-        Iterator<?> it2 = this.StatusData_Fields.iterator();
-        while (it2.hasNext()) {
-            packInt(byteBuffer, ((StatusData) it2.next()).Status);
+        Iterator<?> iterator = this.StatusData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packInt(byteBuffer, ((StatusData) iterator.next()).Status);
         }
     }
 
@@ -101,13 +101,13 @@ public class DirPlacesReply extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             QueryData queryData = new QueryData();
             queryData.QueryID = unpackUUID(byteBuffer);
             this.QueryData_Fields.add(queryData);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             QueryReplies queryReplies = new QueryReplies();
             queryReplies.ParcelID = unpackUUID(byteBuffer);
             queryReplies.Name = unpackVariable(byteBuffer, 1);
@@ -117,7 +117,7 @@ public class DirPlacesReply extends SLMessage {
             this.QueryReplies_Fields.add(queryReplies);
         }
         int i5 = byteBuffer.get() & 0xFF;
-        for (int i6 = 0; i6 < i5; i6++) {
+        for (int m = 0; m < i5; m++) {
             StatusData statusData = new StatusData();
             statusData.Status = unpackInt(byteBuffer);
             this.StatusData_Fields.add(statusData);

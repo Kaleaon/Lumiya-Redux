@@ -7,8 +7,8 @@ public enum SLAvatarGlobalColor {
 
     private int[] paramIDs;
 
-    SLAvatarGlobalColor(int[] iArr) {
-        this.paramIDs = iArr;
+    SLAvatarGlobalColor(int[] ints) {
+        this.paramIDs = ints;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

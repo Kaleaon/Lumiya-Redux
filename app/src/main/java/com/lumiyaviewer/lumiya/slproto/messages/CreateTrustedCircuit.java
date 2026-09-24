@@ -34,8 +34,8 @@ public class CreateTrustedCircuit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCreateTrustedCircuit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCreateTrustedCircuit(this);
     }
 
     @Override

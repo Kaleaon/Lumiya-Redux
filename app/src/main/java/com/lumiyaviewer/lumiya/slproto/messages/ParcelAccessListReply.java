@@ -44,8 +44,8 @@ public class ParcelAccessListReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelAccessListReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelAccessListReply(this);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ParcelAccessListReply extends SLMessage {
         this.Data_Field.Flags = unpackInt(byteBuffer);
         this.Data_Field.LocalID = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             List list = new List();
             list.ID = unpackUUID(byteBuffer);
             list.Time = unpackInt(byteBuffer);

@@ -30,8 +30,8 @@ public class SimulatorMapUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimulatorMapUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimulatorMapUpdate(this);
     }
 
     @Override

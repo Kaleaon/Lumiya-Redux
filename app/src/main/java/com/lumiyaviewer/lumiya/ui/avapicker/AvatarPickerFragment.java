@@ -83,8 +83,8 @@ public abstract class AvatarPickerFragment extends FragmentWithTitle implements 
 
         public final int drawableId;
 
-        ContactListType(int i) {
-            this.drawableId = i;
+        ContactListType(int drawableId) {
+            this.drawableId = drawableId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */

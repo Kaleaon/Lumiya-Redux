@@ -132,10 +132,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     private final float[] extTextureHitVector = {0.0f, 0.0f, 0.0f, 1.0f};
     private final float[] extTextureResultVector = new float[4];
 
-    public WorldViewRenderer(Handler handler, boolean z, @Nonnull UserManager userManager, int i) {
+    public WorldViewRenderer(Handler handler, boolean requestGL20, @Nonnull UserManager userManager, int fontSize) {
         this.stateHandler = handler;
-        this.requestGL20 = z;
-        this.fontSize = i;
+        this.requestGL20 = requestGL20;
+        this.fontSize = fontSize;
         this.agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID());
     }
 
@@ -158,20 +158,20 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         }
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
-        if (sLAgentCircuit == null) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
+        if (agentCircuit == null) {
             this.avatarControl = null;
             this.parcelInfo = null;
             return;
         }
         Debug.Printf("WorldViewRenderer: got new agentCircuit.", new Object[0]);
         this.initialUpdateDone = false;
-        this.avatarControl = sLAgentCircuit.getModules().avatarControl;
-        this.parcelInfo = sLAgentCircuit.getGridConnection().parcelInfo;
+        this.avatarControl = agentCircuit.getModules().avatarControl;
+        this.parcelInfo = agentCircuit.getGridConnection().parcelInfo;
         this.initialUpdateDone = false;
         RenderContext renderContext = this.renderContext.get();
         if (renderContext != null) {
-            renderContext.setMeshCapURL(sLAgentCircuit.getCaps().getCapability(SLCaps.SLCapability.GetMesh));
+            renderContext.setMeshCapURL(agentCircuit.getCaps().getCapability(SLCaps.SLCapability.GetMesh));
             if (this.parcelInfo != null) {
                 PrimComputeExecutor.getInstance().execute(this.initSpatialIndexRunnable);
             }
@@ -180,7 +180,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
 
     private void processObjectPick() {
         Handler handler;
-        float f;
+        float needPickX;
         RenderContext renderContext;
         ObjectIntersectInfo objectIntersectInfo;
         boolean z = false;
@@ -188,13 +188,13 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         synchronized (this.pickLock) {
             if (this.needPickObject) {
                 this.needPickObject = false;
-                f = this.needPickX;
+                needPickX = this.needPickX;
                 f2 = this.needPickY;
                 handler = this.pickHandler;
                 z = true;
             } else {
                 handler = null;
-                f = Float.NaN;
+                needPickX = Float.NaN;
             }
         }
         if (!z || (renderContext = this.renderContext.get()) == null) {
@@ -204,11 +204,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         try {
             Iterator<DrawableObject> it = this.currentDrawList.objects.iterator();
             while (it.hasNext()) {
-                objectIntersectInfo = tryPickObject(renderContext, f, f2, (DrawableObject) it.next(), objectIntersectInfo);
+                objectIntersectInfo = tryPickObject(renderContext, needPickX, f2, (DrawableObject) it.next(), objectIntersectInfo);
             }
-            Iterator<DrawableAvatar> it2 = this.currentDrawList.avatars.iterator();
-            while (it2.hasNext()) {
-                objectIntersectInfo = tryPickObject(renderContext, f, f2, (DrawableAvatar) it2.next(), objectIntersectInfo);
+            Iterator<DrawableAvatar> iterator = this.currentDrawList.avatars.iterator();
+            while (iterator.hasNext()) {
+                objectIntersectInfo = tryPickObject(renderContext, needPickX, f2, (DrawableAvatar) iterator.next(), objectIntersectInfo);
             }
         } catch (Exception e) {
             Debug.Warning(e);
@@ -219,11 +219,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         handler.sendMessage(handler.obtainMessage(1, objectIntersectInfo));
     }
 
-    private void setIsFlinging(boolean z) {
+    private void setIsFlinging(boolean isFlinging) {
         boolean z2 = false;
         synchronized (this.responsiveModeLock) {
-            if (this.isFlinging != z) {
-                this.isFlinging = z;
+            if (this.isFlinging != isFlinging) {
+                this.isFlinging = isFlinging;
                 z2 = true;
             }
         }
@@ -239,8 +239,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         GLES10.glReadPixels(0, 0, i, i2, 6408, 5121, directByteBuffer.asByteBuffer());
         Bitmap createBitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
         createBitmap.copyPixelsFromBuffer(directByteBuffer.asByteBuffer());
-        Bitmap createBitmap2 = Bitmap.createBitmap(i, i2, Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(createBitmap2);
+        Bitmap bitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
         Matrix matrix = new Matrix();
         matrix.setScale(1.0f, -1.0f);
         matrix.postTranslate(0.0f, i2);
@@ -258,7 +258,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             canvas.drawText(str, this.fontSize, f, paint);
             f = f + (paint.descent() - paint.ascent()) + (this.fontSize * 0.5f);
         }
-        handler.sendMessage(handler.obtainMessage(5, createBitmap2));
+        handler.sendMessage(handler.obtainMessage(5, bitmap));
     }
 
     private ObjectIntersectInfo tryPickObject(RenderContext renderContext, float f, float f2, IntersectPickable intersectPickable, ObjectIntersectInfo objectIntersectInfo) {
@@ -267,14 +267,14 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     private void updateResponsive() {
-        boolean z;
+        boolean isResponsiveMode;
         boolean z2;
         synchronized (this.responsiveModeLock) {
-            z = this.isResponsiveMode;
+            isResponsiveMode = this.isResponsiveMode;
             z2 = !this.isInteracting ? this.isFlinging : true;
             this.isResponsiveMode = z2;
         }
-        if (z != z2) {
+        if (isResponsiveMode != z2) {
             if (z2) {
                 PrimComputeExecutor.getInstance().pause();
             } else {
@@ -284,11 +284,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     @Override
-    public EGLContext createContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig) {
+    public EGLContext createContext(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig) {
         Debug.Printf("EGL: createContext called.", new Object[0]);
         if (GpuCapabilities.shouldAttemptEs3Context(this.requestGL20)) {
             Debug.Printf("EGL: trying to create 3.0 context.", new Object[0]);
-            EGLContext eglCreateContext = egl10.eglCreateContext(eGLDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
+            EGLContext eglCreateContext = egL10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
             if (eglCreateContext != null && eglCreateContext != EGL10.EGL_NO_CONTEXT) {
                 Debug.Printf("EGL: 3.0 context apparently created.", new Object[0]);
                 this.createdGL30 = true;
@@ -298,21 +298,21 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         }
         Debug.Printf("EGL: Creating regular context.", new Object[0]);
         this.createdGL30 = false;
-        int[] iArr = {EGL_CONTEXT_CLIENT_VERSION, 2, 12344};
-        EGLContext eGLContext = EGL10.EGL_NO_CONTEXT;
+        int[] ints = {EGL_CONTEXT_CLIENT_VERSION, 2, 12344};
+        EGLContext eglContext = EGL10.EGL_NO_CONTEXT;
         if (!this.requestGL20) {
-            iArr = null;
+            ints = null;
         }
-        return egl10.eglCreateContext(eGLDisplay, eGLConfig, eGLContext, iArr);
+        return egL10.eglCreateContext(eglDisplay, eglConfig, eglContext, ints);
     }
 
     @Override
     @SuppressLint({"DefaultLocale"})
-    public void destroyContext(EGL10 egl10, EGLDisplay eGLDisplay, EGLContext eGLContext) {
+    public void destroyContext(EGL10 egL10, EGLDisplay eglDisplay, EGLContext eglContext) {
         Debug.Printf("EGL: destroyContext called.", new Object[0]);
         onRendererShutdown();
-        if (!egl10.eglDestroyContext(eGLDisplay, eGLContext)) {
-            throw new RuntimeException(String.format("EGLError code %d", Integer.valueOf(egl10.eglGetError())));
+        if (!egL10.eglDestroyContext(eglDisplay, eglContext)) {
+            throw new RuntimeException(String.format("EGLError code %d", Integer.valueOf(egL10.eglGetError())));
         }
         Debug.Printf("EGL: destroyContext exiting.", new Object[0]);
     }
@@ -343,20 +343,20 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         renderContext.quad.DrawSingleQuadShader(renderContext, renderContext.rawShaderProgram.vPosition, renderContext.rawShaderProgram.vTexCoord);
     }
 
-    public void drawExternalTexture(@Nonnull GLExternalTexture gLExternalTexture, float[] fArr, float f, float f2, float f3, float f4, float f5, float[] fArr2, int i) {
+    public void drawExternalTexture(@Nonnull GLExternalTexture glExternalTexture, float[] floats, float f, float f2, float f3, float f4, float f5, float[] floats2, int i) {
         RenderContext renderContext = this.renderContext.get();
         if (renderContext == null || renderContext.extTextureProgram == null) {
             return;
         }
-        gLExternalTexture.update(fArr);
+        glExternalTexture.update(floats);
         GLES20.glDisable(2929);
         GLES20.glDisable(2884);
         GLES20.glEnable(3042);
         renderContext.renderBackend.useProgram(renderContext.extTextureProgram.getHandle());
         GLES20.glActiveTexture(33984);
-        gLExternalTexture.bind();
+        glExternalTexture.bind();
         renderContext.renderBackend.setUniform1i(renderContext.extTextureProgram.textureSampler, 0);
-        renderContext.renderBackend.setUniformMatrix4fv(renderContext.extTextureProgram.vTextureTransformMatrix, fArr, 0);
+        renderContext.renderBackend.setUniformMatrix4fv(renderContext.extTextureProgram.vTextureTransformMatrix, floats, 0);
         android.opengl.Matrix.setIdentityM(this.extTextureMatrix, 0);
         android.opengl.Matrix.rotateM(this.extTextureMatrix, 0, -f2, 1.0f, 0.0f, 0.0f);
         android.opengl.Matrix.rotateM(this.extTextureMatrix, 0, -f3, 0.0f, 1.0f, 0.0f);
@@ -366,8 +366,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         android.opengl.Matrix.multiplyMM(this.extTextureMatrix, 32, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), this.extTextureMatrix, 16);
         android.opengl.Matrix.invertM(this.extTextureMatrix, 48, this.extTextureMatrix, 32);
         android.opengl.Matrix.multiplyMV(this.extTextureResultVector, 0, this.extTextureMatrix, 48, this.extTextureHitVector, 0);
-        fArr2[i] = this.extTextureResultVector[0];
-        fArr2[i + 1] = this.extTextureResultVector[1];
+        floats2[i] = this.extTextureResultVector[0];
+        floats2[i + 1] = this.extTextureResultVector[1];
         renderContext.renderBackend.setUniformMatrix4fv(renderContext.extTextureProgram.uMVPMatrix, this.extTextureMatrix, 32);
         renderContext.quad.DrawSingleQuadShader(renderContext, renderContext.extTextureProgram.vPosition, renderContext.extTextureProgram.vTexCoord);
     }
@@ -381,13 +381,13 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_render_WorldViewRenderer_6642, reason: not valid java name */
     /* synthetic */ void m60lambda$com_lumiyaviewer_lumiya_render_WorldViewRenderer_6642() {
-        SLParcelInfo sLParcelInfo;
-        if (this.initialUpdateDone || (sLParcelInfo = this.parcelInfo) == null) {
+        SLParcelInfo parcelInfo;
+        if (this.initialUpdateDone || (parcelInfo = this.parcelInfo) == null) {
             return;
         }
         Debug.Printf("WorldViewRenderer: making new spatial index.", new Object[0]);
-        sLParcelInfo.initSpatialIndex();
-        sLParcelInfo.terrainData.updateEntireTerrain();
+        parcelInfo.initSpatialIndex();
+        parcelInfo.terrainData.updateEntireTerrain();
         RenderContext renderContext = this.renderContext.get();
         if (renderContext != null) {
             renderContext.drawableStore.spatialObjectIndex.completeInitialUpdate();
@@ -396,26 +396,26 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     @Override
-    public void onDrawFrame(GL10 gl10) {
+    public void onDrawFrame(GL10 gL10) {
         onPrepareFrame(null);
-        onDrawFrame(gl10, null, null, null, null, null, 0);
+        onDrawFrame(gL10, null, null, null, null, null, 0);
         onFinishFrame();
     }
 
-    public synchronized void onDrawFrame(GL10 gl10, @Nullable HeadTransformCompat headTransformCompat, @Nullable float[] fArr, @Nullable int[] iArr, @Nullable float[] fArr2, @Nullable float[] fArr3, int i) {
+    public synchronized void onDrawFrame(GL10 gL10, @Nullable HeadTransformCompat headTransformCompat, @Nullable float[] floats, @Nullable int[] ints, @Nullable float[] floats2, @Nullable float[] floats3, int i) {
         if (this.drawingEnabled.get()) {
             RenderContext renderContext = this.renderContext.get();
             if (renderContext == null) {
                 return;
             }
-            if (fArr2 != null && headTransformCompat != null) {
+            if (floats2 != null && headTransformCompat != null) {
                 renderContext.glModelResetIdentity();
-                if (fArr3 != null) {
-                    renderContext.setActiveProjectionMatrix(fArr3, i);
+                if (floats3 != null) {
+                    renderContext.setActiveProjectionMatrix(floats3, i);
                 } else {
                     renderContext.setActiveProjectionMatrix(renderContext.projectionMatrix);
                 }
-                renderContext.glModelMultMatrixf(fArr2, 0);
+                renderContext.glModelMultMatrixf(floats2, 0);
                 renderContext.glModelRotatef((-headTransformCompat.viewExtraYaw) + 90.0f, 0.0f, 1.0f, 0.0f);
                 renderContext.glModelRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
                 renderContext.glModelTranslatef(-renderContext.frameCamera.x, -renderContext.frameCamera.y, -renderContext.frameCamera.z);
@@ -428,11 +428,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                     GLES20.glBindFramebuffer(36160, this.Framebuffers[0]);
                     GLES20.glBindTexture(3553, this.Colorbuffers[0]);
                     GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.Colorbuffers[0], 0);
-                    if (iArr != null) {
+                    if (ints != null) {
                         GLES20.glViewport(0, 0, renderContext.viewportRect[2], renderContext.viewportRect[3]);
                     }
-                } else if (iArr != null) {
-                    GLES20.glViewport(iArr[0], iArr[1], iArr[2], iArr[3]);
+                } else if (ints != null) {
+                    GLES20.glViewport(ints[0], ints[1], ints[2], ints[3]);
                 }
                 GLES20.glEnable(2884);
                 GLES20.glEnable(2929);
@@ -448,8 +448,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 GLES10.glBlendFunc(770, 771);
                 GLES10.glClear(16640);
                 GLES10.glTexEnvf(8960, 8704, 8448.0f);
-                if (iArr != null) {
-                    GLES20.glViewport(iArr[0], iArr[1], iArr[2], iArr[3]);
+                if (ints != null) {
+                    GLES20.glViewport(ints[0], ints[1], ints[2], ints[3]);
                 }
             }
             boolean z = true;
@@ -466,8 +466,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             }
             try {
                 if (this.drawingEnabled.get() && this.currentDrawList != null && this.currentFrustrumInfo != null) {
-                    if (fArr2 == null && fArr != null) {
-                        renderContext.glModelTranslatef(fArr[0], fArr[1], fArr[2]);
+                    if (floats2 == null && floats != null) {
+                        renderContext.glModelTranslatef(floats[0], floats[1], floats[2]);
                     }
                     renderContext.initAllPrimPrograms(true);
                     renderContext.curPrimProgram = null;
@@ -479,11 +479,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                         GLES10.glDisable(3008);
                     }
                     ArrayList<DrawableObject> arrayList = drawList.objects;
-                    int[] iArr2 = drawList.renderPasses;
+                    int[] renderPasses = drawList.renderPasses;
                     int size = arrayList.size();
                     renderContext.clearFaceTexture();
-                    for (int i3 = 0; i3 < size; i3++) {
-                        iArr2[i3] = arrayList.get(i3).Draw(renderContext, 1);
+                    for (int j = 0; j < size; j++) {
+                        renderPasses[j] = arrayList.get(j).Draw(renderContext, 1);
                     }
                     renderContext.curPrimProgram = null;
                     renderContext.clearFaceTexture();
@@ -510,16 +510,16 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                     }
                     renderContext.curPrimProgram = null;
                     renderContext.clearFaceTexture();
-                    for (int i4 = size - 1; i4 >= 0; i4--) {
-                        if ((iArr2[i4] & 2) != 0) {
-                            arrayList.get(i4).Draw(renderContext, 2);
+                    for (int k = size - 1; k >= 0; k--) {
+                        if ((renderPasses[k] & 2) != 0) {
+                            arrayList.get(k).Draw(renderContext, 2);
                         }
                     }
                     if (renderContext.hasGL30) {
                         BoundingBox.PrepareOcclusionQueries(renderContext);
-                        Iterator<DrawableObject> it2 = arrayList.iterator();
-                        while (it2.hasNext()) {
-                            it2.next().TestOcclusion(renderContext, this.currentFrustrumInfo.mvpMatrix);
+                        Iterator<DrawableObject> iterator = arrayList.iterator();
+                        while (iterator.hasNext()) {
+                            iterator.next().TestOcclusion(renderContext, this.currentFrustrumInfo.mvpMatrix);
                         }
                         BoundingBox.EndOcclusionQueries(renderContext);
                     }
@@ -528,9 +528,9 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                         this.screenshotHandler = null;
                     }
                     if (this.drawPickedObject != null && (!this.drawPickedObject.isAvatar())) {
-                        Iterator<DrawableObject> it3 = drawList.objects.iterator();
-                        while (it3.hasNext()) {
-                            ((DrawableObject) it3.next()).DrawIfPicked(renderContext, this.drawPickedObject);
+                        Iterator<DrawableObject> iterator2 = drawList.objects.iterator();
+                        while (iterator2.hasNext()) {
+                            ((DrawableObject) iterator2.next()).DrawIfPicked(renderContext, this.drawPickedObject);
                         }
                     }
                     if (!renderContext.hasGL20) {
@@ -551,14 +551,14 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                             drawableAvatar2.DrawNameTag(renderContext);
                         }
                     }
-                    Iterator<DrawableAvatarStub> it4 = drawList.avatarStubs.iterator();
-                    while (it4.hasNext()) {
-                        ((DrawableAvatarStub) it4.next()).DrawNameTag(renderContext);
+                    Iterator<DrawableAvatarStub> iterator3 = drawList.avatarStubs.iterator();
+                    while (iterator3.hasNext()) {
+                        ((DrawableAvatarStub) iterator3.next()).DrawNameTag(renderContext);
                     }
                     if (this.hoverTextEnableObjects) {
-                        Iterator<DrawableObject> it5 = drawList.objects.iterator();
-                        while (it5.hasNext()) {
-                            ((DrawableObject) it5.next()).DrawHoverText(renderContext, false);
+                        Iterator<DrawableObject> iterator4 = drawList.objects.iterator();
+                        while (iterator4.hasNext()) {
+                            ((DrawableObject) iterator4.next()).DrawHoverText(renderContext, false);
                         }
                     }
                     renderContext.quad.EndDrawQuads(renderContext);
@@ -574,10 +574,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                         renderContext.setActiveProjectionMatrix(renderContext.projectionHUDMatrix);
                         renderContext.glModelRotatef(90.0f, 0.0f, 1.0f, 0.0f);
                         renderContext.glModelRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-                        DrawableAvatar drawableAvatar3 = drawList.myAvatar;
-                        if (drawableAvatar3 != null) {
-                            drawableAvatar3.setDisplayedHUDid(this.displayedHUDid);
-                            DrawableHUD drawableHUD = drawableAvatar3.getDrawableHUD();
+                        DrawableAvatar myAvatar = drawList.myAvatar;
+                        if (myAvatar != null) {
+                            myAvatar.setDisplayedHUDid(this.displayedHUDid);
+                            DrawableHUD drawableHUD = myAvatar.getDrawableHUD();
                             if (drawableHUD != null) {
                                 ObjectIntersectInfo Draw = drawableHUD.Draw(renderContext, this.hudScaleFactor, this.hudOffsetX, this.hudOffsetY, remove, false);
                                 if (Draw != null) {
@@ -609,8 +609,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
             }
             if (renderContext.hasGL20 && renderContext.useFXAA && this.Colorbuffers != null) {
                 GLES20.glBindFramebuffer(36160, this.systemFramebuffer[0]);
-                if (iArr != null) {
-                    GLES20.glViewport(iArr[0], iArr[1], iArr[2], iArr[3]);
+                if (ints != null) {
+                    GLES20.glViewport(ints[0], ints[1], ints[2], ints[3]);
                 }
                 GLES20.glDisable(2929);
                 GLES20.glDisable(3042);
@@ -710,14 +710,14 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 renderContext.underWater = this.parcelInfo.terrainData.isUnderWater(renderContext.frameCamera.z);
                 renderContext.waterTime = (this.thisFrameTime % 1000000) / 1000.0f;
                 if (renderContext.hasGL20) {
-                    float f = this.forcedTime;
-                    if (Float.isNaN(f)) {
+                    float forcedTime = this.forcedTime;
+                    if (Float.isNaN(forcedTime)) {
                         if (this.parcelInfo.getSunHour(this.simSunHour, Float.isNaN(this.simSunHour[0]))) {
                             Debug.Printf("Windlight: using sim hour of %f", Float.valueOf(this.simSunHour[0]));
                             renderContext.windlightDay.InterpolatePreset(renderContext.windlightPreset, this.simSunHour[0]);
                         }
-                    } else if (Float.isNaN(this.simSunHour[0]) || this.simSunHour[0] != f) {
-                        this.simSunHour[0] = f;
+                    } else if (Float.isNaN(this.simSunHour[0]) || this.simSunHour[0] != forcedTime) {
+                        this.simSunHour[0] = forcedTime;
                         Debug.Printf("Windlight: using forced hour of %f", Float.valueOf(this.simSunHour[0]));
                         renderContext.windlightDay.InterpolatePreset(renderContext.windlightPreset, this.simSunHour[0]);
                     }
@@ -751,7 +751,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     @Override
-    public void onSurfaceChanged(GL10 gl10, int i, int i2) {
+    public void onSurfaceChanged(GL10 gL10, int i, int i2) {
         RenderContext renderContext = this.renderContext.get();
         if (renderContext == null) {
             return;
@@ -811,10 +811,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 GLES20.glUniform1i(renderContext.fxaaProgram.textureSampler, 0);
                 GLES20.glUniform1i(renderContext.fxaaProgram.noAAtextureSampler, 1);
                 GLES20.glUniform2f(renderContext.fxaaProgram.texcoordOffset, 1.0f / i, 1.0f / i2);
-                float[] fArr = new float[16];
-                android.opengl.Matrix.setIdentityM(fArr, 0);
-                android.opengl.Matrix.scaleM(fArr, 0, 2.0f, 2.0f, 1.0f);
-                GLES20.glUniformMatrix4fv(renderContext.fxaaProgram.uMVPMatrix, 1, false, fArr, 0);
+                float[] floats = new float[16];
+                android.opengl.Matrix.setIdentityM(floats, 0);
+                android.opengl.Matrix.scaleM(floats, 0, 2.0f, 2.0f, 1.0f);
+                GLES20.glUniformMatrix4fv(renderContext.fxaaProgram.uMVPMatrix, 1, false, floats, 0);
                 GLES20.glBindFramebuffer(36160, this.systemFramebuffer[0]);
             }
         } else {
@@ -827,11 +827,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         float tan = (float) Math.tan((renderContext.FOVAngle * 3.141592653589793d) / 360.0d);
         renderContext.getClass();
         float f = tan * 0.5f;
-        float f2 = this.drawDistance;
+        float drawDistance = this.drawDistance;
         Debug.Log("Renderer: Using drawDistance = " + this.drawDistance);
         renderContext.projectionMatrix.reset();
         renderContext.getClass();
-        renderContext.projectionMatrix.glFrustumf((-renderContext.aspectRatio) * f, renderContext.aspectRatio * f, -f, f, 0.5f, f2);
+        renderContext.projectionMatrix.glFrustumf((-renderContext.aspectRatio) * f, renderContext.aspectRatio * f, -f, f, 0.5f, drawDistance);
         renderContext.drawDistance = this.drawDistance;
         renderContext.projectionHUDMatrix.reset();
         renderContext.projectionHUDMatrix.glOrthof((-renderContext.aspectRatio) * 1.0f, renderContext.aspectRatio * 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -842,11 +842,11 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     }
 
     @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig) {
-        onSurfaceCreated(gl10, eGLConfig, false);
+    public void onSurfaceCreated(GL10 gL10, EGLConfig eglConfig) {
+        onSurfaceCreated(gL10, eglConfig, false);
     }
 
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eGLConfig, boolean z) {
+    public void onSurfaceCreated(GL10 gL10, EGLConfig eglConfig, boolean z) {
         TextureMemoryTracker.setActiveRenderer(this);
         this.drawingEnabled.set(true);
         this.firstFrameCount.set(1);
@@ -854,7 +854,7 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.gpuCapabilities = GpuCapabilities.probe(this.requestGL20, this.createdGL30);
         this.createdGL30 = this.gpuCapabilities.supportsEs3;
         Debug.Printf("Renderer: VBO support %s, GL11 %s, GL30 %s, tier %s", Boolean.valueOf(this.gpuCapabilities.supportsVbo), Boolean.valueOf(this.gpuCapabilities.reportsEs11), Boolean.valueOf(this.gpuCapabilities.supportsEs3), this.gpuCapabilities.selectedTier);
-        RenderContext renderContext = new RenderContext(eGLConfig, this.gpuCapabilities, this.avatarCountLimit, GlobalOptions.getInstance().getTerrainTextures(), this.fontSize, z, this);
+        RenderContext renderContext = new RenderContext(eglConfig, this.gpuCapabilities, this.avatarCountLimit, GlobalOptions.getInstance().getTerrainTextures(), this.fontSize, z, this);
         Debug.AlwaysPrintf("Renderer: created context, GL30 %b, GL20 %b", Boolean.valueOf(renderContext.hasGL30), Boolean.valueOf(renderContext.hasGL20));
         if (renderContext.hasGL20) {
             if (renderContext.getShaderCompileErrors()) {
@@ -888,10 +888,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.firstFrameTime = System.currentTimeMillis();
     }
 
-    public void pickObject(float f, float f2, Handler handler) {
+    public void pickObject(float needPickX, float needPickY, Handler handler) {
         synchronized (this.pickLock) {
-            this.needPickX = f;
-            this.needPickY = f2;
+            this.needPickX = needPickX;
+            this.needPickY = needPickY;
             this.needPickObject = true;
             this.pickHandler = handler;
         }
@@ -901,49 +901,49 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         this.screenshotHandler = handler;
     }
 
-    public void setAvatarCountLimit(int i) {
-        this.avatarCountLimit = i;
-        SpatialIndex.getInstance().setAvatarCountLimit(i);
+    public void setAvatarCountLimit(int avatarCountLimit) {
+        this.avatarCountLimit = avatarCountLimit;
+        SpatialIndex.getInstance().setAvatarCountLimit(avatarCountLimit);
     }
 
-    public void setDisplayedHUDid(int i) {
-        this.displayedHUDid = i;
+    public void setDisplayedHUDid(int displayedHUDid) {
+        this.displayedHUDid = displayedHUDid;
     }
 
-    public void setDrawDistance(int i) {
-        this.drawDistance = i;
+    public void setDrawDistance(int drawDistance) {
+        this.drawDistance = drawDistance;
         RenderContext renderContext = this.renderContext.get();
         if (renderContext != null) {
-            renderContext.drawDistance = i;
+            renderContext.drawDistance = drawDistance;
         }
     }
 
-    public void setDrawPickedObject(SLObjectInfo sLObjectInfo) {
-        this.drawPickedObject = sLObjectInfo;
+    public void setDrawPickedObject(SLObjectInfo objectInfo) {
+        this.drawPickedObject = objectInfo;
     }
 
-    public void setForcedTime(boolean z, float f) {
+    public void setForcedTime(boolean z, float forcedTime) {
         if (z) {
-            this.forcedTime = f;
+            this.forcedTime = forcedTime;
         } else {
             this.forcedTime = Float.NaN;
         }
     }
 
-    public void setHUDOffset(float f, float f2) {
-        this.hudOffsetX = f;
-        this.hudOffsetY = f2;
+    public void setHUDOffset(float hudOffsetX, float hudOffsetY) {
+        this.hudOffsetX = hudOffsetX;
+        this.hudOffsetY = hudOffsetY;
     }
 
-    public void setHUDScaleFactor(float f) {
-        this.hudScaleFactor = f;
+    public void setHUDScaleFactor(float hudScaleFactor) {
+        this.hudScaleFactor = hudScaleFactor;
     }
 
-    public void setIsInteracting(boolean z) {
+    public void setIsInteracting(boolean isInteracting) {
         boolean z2 = false;
         synchronized (this.responsiveModeLock) {
-            if (this.isInteracting != z) {
-                this.isInteracting = z;
+            if (this.isInteracting != isInteracting) {
+                this.isInteracting = isInteracting;
                 z2 = true;
             }
         }
@@ -952,8 +952,8 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
         }
     }
 
-    public void setOwnAvatarHidden(boolean z) {
-        this.ownAvatarHidden = z;
+    public void setOwnAvatarHidden(boolean ownAvatarHidden) {
+        this.ownAvatarHidden = ownAvatarHidden;
     }
 
     public void touchHUD(float f, float f2, Handler handler) {

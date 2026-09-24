@@ -33,8 +33,8 @@ public class RequestInventoryAsset extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestInventoryAsset(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestInventoryAsset(this);
     }
 
     @Override

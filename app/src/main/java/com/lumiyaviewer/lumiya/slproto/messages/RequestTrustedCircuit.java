@@ -23,8 +23,8 @@ public class RequestTrustedCircuit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestTrustedCircuit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestTrustedCircuit(this);
     }
 
     @Override

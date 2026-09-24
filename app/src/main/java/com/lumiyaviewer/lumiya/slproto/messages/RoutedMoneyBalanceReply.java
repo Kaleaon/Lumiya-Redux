@@ -62,8 +62,8 @@ public class RoutedMoneyBalanceReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRoutedMoneyBalanceReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRoutedMoneyBalanceReply(this);
     }
 
     @Override

@@ -29,21 +29,21 @@ class AvatarAnimationList {
         this.animations = ImmutableList.copyOf((Collection) arrayList);
     }
 
-    void animate(AvatarSkeleton avatarSkeleton, float[] fArr, float[] fArr2, LLQuaternion[] lLQuaternionArr, LLVector3[] lLVector3Arr) {
+    void animate(AvatarSkeleton avatarSkeleton, float[] floats, float[] floats2, LLQuaternion[] quaternions, LLVector3[] vector3s) {
         Iterator<AvatarRunningAnimation> it = this.animations.iterator();
         while (it.hasNext()) {
-            it.next().animate(avatarSkeleton, fArr, fArr2, lLQuaternionArr, lLVector3Arr);
+            it.next().animate(avatarSkeleton, floats, floats2, quaternions, vector3s);
         }
-        int length = fArr.length;
+        int length = floats.length;
         for (int i = 0; i < length; i++) {
-            float f = 1.0f - fArr[i];
+            float f = 1.0f - floats[i];
             if (f > 0.01f && f < 1.0f) {
                 float f2 = 1.0f / f;
-                lLQuaternionArr[i].x *= f2;
-                lLQuaternionArr[i].y *= f2;
-                lLQuaternionArr[i].z *= f2;
-                LLQuaternion lLQuaternion = lLQuaternionArr[i];
-                lLQuaternion.w = f2 * lLQuaternion.w;
+                quaternions[i].x *= f2;
+                quaternions[i].y *= f2;
+                quaternions[i].z *= f2;
+                LLQuaternion quaternion = quaternions[i];
+                quaternion.w = f2 * quaternion.w;
             }
         }
     }

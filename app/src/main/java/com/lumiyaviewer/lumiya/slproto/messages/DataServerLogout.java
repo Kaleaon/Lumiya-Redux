@@ -34,8 +34,8 @@ public class DataServerLogout extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDataServerLogout(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDataServerLogout(this);
     }
 
     @Override

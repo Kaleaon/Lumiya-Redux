@@ -12,9 +12,9 @@ public class VoiceSetAudioProperties implements VoicePluginMessage {
     public final float speakerVolume;
     public final boolean speakerVolumeValid;
 
-    public VoiceSetAudioProperties(float f, boolean z, @Nullable VoiceAudioDevice voiceAudioDevice) {
-        this.speakerVolume = f;
-        this.speakerVolumeValid = z;
+    public VoiceSetAudioProperties(float speakerVolume, boolean speakerVolumeValid, @Nullable VoiceAudioDevice voiceAudioDevice) {
+        this.speakerVolume = speakerVolume;
+        this.speakerVolumeValid = speakerVolumeValid;
         this.audioDevice = voiceAudioDevice;
     }
 

@@ -44,8 +44,8 @@ public class RegionHandshakeReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRegionHandshakeReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRegionHandshakeReply(this);
     }
 
     @Override

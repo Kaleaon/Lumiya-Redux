@@ -38,8 +38,8 @@ public class DataHomeLocationRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDataHomeLocationRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDataHomeLocationRequest(this);
     }
 
     @Override

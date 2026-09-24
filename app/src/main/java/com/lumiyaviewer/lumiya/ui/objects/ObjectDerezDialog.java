@@ -20,9 +20,9 @@ public class ObjectDerezDialog {
         public final EDeRezDestination deRezDestination;
         public final int derezQuestionId;
 
-        DerezAction(int i, EDeRezDestination eDeRezDestination) {
-            this.derezQuestionId = i;
-            this.deRezDestination = eDeRezDestination;
+        DerezAction(int derezQuestionId, EDeRezDestination deRezDestination) {
+            this.derezQuestionId = derezQuestionId;
+            this.deRezDestination = deRezDestination;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */
@@ -32,9 +32,9 @@ public class ObjectDerezDialog {
     }
 
     public static void askForObjectDerez(Context context, @Nonnull final DerezAction derezAction, final UUID uuid, final int i) {
-        int i2 = derezAction.derezQuestionId;
+        int derezQuestionId = derezAction.derezQuestionId;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(context.getString(i2)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(context.getString(derezQuestionId)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i3) {
                 SLAgentCircuit activeAgentCircuit;

@@ -12,11 +12,11 @@ public class SLModule {
     protected final EventBus eventBus = EventBus.getInstance();
     protected SLGridConnection gridConn;
 
-    public SLModule(SLAgentCircuit sLAgentCircuit) {
-        this.agentCircuit = sLAgentCircuit;
-        this.circuitInfo = sLAgentCircuit.circuitInfo;
-        this.gridConn = sLAgentCircuit.getGridConnection();
-        sLAgentCircuit.RegisterMessageHandler(this);
+    public SLModule(SLAgentCircuit agentCircuit) {
+        this.agentCircuit = agentCircuit;
+        this.circuitInfo = agentCircuit.circuitInfo;
+        this.gridConn = agentCircuit.getGridConnection();
+        agentCircuit.RegisterMessageHandler(this);
     }
 
     public void HandleCircuitReady() {
@@ -28,8 +28,8 @@ public class SLModule {
     public void HandleGlobalOptionsChange() {
     }
 
-    public void SendMessage(SLMessage sLMessage) {
-        this.agentCircuit.SendMessage(sLMessage);
+    public void SendMessage(SLMessage message) {
+        this.agentCircuit.SendMessage(message);
     }
 
     public SLCircuitInfo getCircuitInfo() {

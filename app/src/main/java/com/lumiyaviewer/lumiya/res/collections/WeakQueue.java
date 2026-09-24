@@ -131,14 +131,14 @@ public class WeakQueue<T> implements BlockingQueue<T> {
                 }
                 it.remove();
             }
-            Iterator<T> it2 = this.lowPriorityQueue.iterator();
-            while (it2.hasNext() && i2 < i) {
-                T next2 = it2.next();
-                if (next2 != null) {
-                    collection.add(next2);
+            Iterator<T> iterator = this.lowPriorityQueue.iterator();
+            while (iterator.hasNext() && i2 < i) {
+                T t = iterator.next();
+                if (t != null) {
+                    collection.add(t);
                     i2++;
                 }
-                it2.remove();
+                iterator.remove();
             }
             return i2;
         } finally {
@@ -219,12 +219,12 @@ public class WeakQueue<T> implements BlockingQueue<T> {
                 }
             }
             if (!this.lowPriorityQueue.isEmpty()) {
-                Iterator<T> it2 = this.lowPriorityQueue.iterator();
-                while (it2.hasNext()) {
-                    T next2 = it2.next();
-                    if (next2 != null) {
-                        it2.remove();
-                        return next2;
+                Iterator<T> iterator = this.lowPriorityQueue.iterator();
+                while (iterator.hasNext()) {
+                    T t = iterator.next();
+                    if (t != null) {
+                        iterator.remove();
+                        return t;
                     }
                 }
             }
@@ -339,12 +339,12 @@ public class WeakQueue<T> implements BlockingQueue<T> {
     public <T1> T1[] toArray(T1[] t1Arr) {
         this.lock.lock();
         try {
-            T1[] t1Arr2 = (T1[]) toArray();
-            if (t1Arr2.length > t1Arr.length) {
-                return t1Arr2;
+            T1[] t1s = (T1[]) toArray();
+            if (t1s.length > t1Arr.length) {
+                return t1s;
             }
             Arrays.fill(t1Arr, (Object) null);
-            System.arraycopy(t1Arr2, 0, t1Arr, 0, t1Arr2.length);
+            System.arraycopy(t1s, 0, t1Arr, 0, t1s.length);
             return t1Arr;
         } finally {
             this.lock.unlock();

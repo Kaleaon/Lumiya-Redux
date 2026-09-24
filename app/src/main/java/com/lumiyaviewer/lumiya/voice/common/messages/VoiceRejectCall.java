@@ -16,8 +16,8 @@ public class VoiceRejectCall implements VoicePluginMessage {
         this.voiceChannelInfo = new VoiceChannelInfo(bundle.getBundle("voiceChannelInfo"));
     }
 
-    public VoiceRejectCall(@Nonnull String str, VoiceChannelInfo voiceChannelInfo) {
-        this.sessionHandle = str;
+    public VoiceRejectCall(@Nonnull String sessionHandle, VoiceChannelInfo voiceChannelInfo) {
+        this.sessionHandle = sessionHandle;
         this.voiceChannelInfo = voiceChannelInfo;
     }
 

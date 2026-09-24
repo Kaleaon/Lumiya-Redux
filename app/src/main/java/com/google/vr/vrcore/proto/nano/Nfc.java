@@ -34,8 +34,8 @@ public interface Nfc {
             return new NfcParams().mergeFrom(codedInputByteBufferNano);
         }
 
-        public static NfcParams parseFrom(byte[] bArr) throws InvalidProtocolBufferNanoException {
-            return (NfcParams) MessageNano.mergeFrom(new NfcParams(), bArr);
+        public static NfcParams parseFrom(byte[] bytes) throws InvalidProtocolBufferNanoException {
+            return (NfcParams) MessageNano.mergeFrom(new NfcParams(), bytes);
         }
 
         public final NfcParams clear() {
@@ -95,8 +95,8 @@ public interface Nfc {
             }
         }
 
-        public final NfcParams setViewerId(int i) {
-            this.viewerId_ = i;
+        public final NfcParams setViewerId(int viewerId) {
+            this.viewerId_ = viewerId;
             this.bitField0_ |= 1;
             return this;
         }

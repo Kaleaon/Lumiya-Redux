@@ -18,8 +18,8 @@ public class InventoryDB {
     public static final int MAX_UPDATES_PER_TRANSACTION = 16;
     private final SQLiteDatabase db;
 
-    public InventoryDB(SQLiteDatabase sQLiteDatabase) {
-        this.db = sQLiteDatabase;
+    public InventoryDB(SQLiteDatabase sqLiteDatabase) {
+        this.db = sqLiteDatabase;
     }
 
     public void beginTransaction() {
@@ -30,8 +30,8 @@ public class InventoryDB {
         }
     }
 
-    public void deleteEntry(@Nonnull SLInventoryEntry sLInventoryEntry) throws DBObject.DatabaseBindingException {
-        sLInventoryEntry.delete(this.db);
+    public void deleteEntry(@Nonnull SLInventoryEntry inventoryEntry) throws DBObject.DatabaseBindingException {
+        inventoryEntry.delete(this.db);
     }
 
     public void endTransaction() {
@@ -49,25 +49,25 @@ public class InventoryDB {
         if (findEntry != null) {
             return findEntry;
         }
-        SLInventoryEntry sLInventoryEntry = new SLInventoryEntry();
-        sLInventoryEntry.uuid = uuid;
-        return sLInventoryEntry;
+        SLInventoryEntry inventoryEntry = new SLInventoryEntry();
+        inventoryEntry.uuid = uuid;
+        return inventoryEntry;
     }
 
     @Nullable
     public SLInventoryEntry findSpecialFolder(long j, int i) {
         Cursor query = SLInventoryEntry.query(this.db, "isFolder AND typeDefault = ? AND parent_id = ?", new String[]{Integer.toString(i), Long.toString(j)}, (String) null);
-        SLInventoryEntry sLInventoryEntry = query.moveToNext() ? new SLInventoryEntry(query) : null;
+        SLInventoryEntry inventoryEntry = query.moveToNext() ? new SLInventoryEntry(query) : null;
         query.close();
-        return sLInventoryEntry;
+        return inventoryEntry;
     }
 
     @Nullable
     public SLInventoryEntry findSpecialFolder(UUID uuid, int i) {
         Cursor query = SLInventoryEntry.query(this.db, "isFolder AND typeDefault = ? AND parentUUID_high = ? AND parentUUID_low = ?", new String[]{Integer.toString(i), Long.toString(uuid.getMostSignificantBits()), Long.toString(uuid.getLeastSignificantBits())}, (String) null);
-        SLInventoryEntry sLInventoryEntry = query.moveToNext() ? new SLInventoryEntry(query) : null;
+        SLInventoryEntry inventoryEntry = query.moveToNext() ? new SLInventoryEntry(query) : null;
         query.close();
-        return sLInventoryEntry;
+        return inventoryEntry;
     }
 
     public SQLiteDatabase getDatabase() {
@@ -97,8 +97,8 @@ public class InventoryDB {
     }
 
     @Nullable
-    public SLInventoryEntry resolveLink(@Nullable SLInventoryEntry sLInventoryEntry) {
-        return (sLInventoryEntry == null || !sLInventoryEntry.isLink()) ? sLInventoryEntry : findEntry(sLInventoryEntry.assetUUID);
+    public SLInventoryEntry resolveLink(@Nullable SLInventoryEntry inventoryEntry) {
+        return (inventoryEntry == null || !inventoryEntry.isLink()) ? inventoryEntry : findEntry(inventoryEntry.assetUUID);
     }
 
     public void retainChildren(long j, Set<UUID> set) {
@@ -150,8 +150,8 @@ public class InventoryDB {
         }
     }
 
-    public void saveEntry(@Nonnull SLInventoryEntry sLInventoryEntry) throws DBObject.DatabaseBindingException {
-        sLInventoryEntry.save(this.db);
+    public void saveEntry(@Nonnull SLInventoryEntry inventoryEntry) throws DBObject.DatabaseBindingException {
+        inventoryEntry.save(this.db);
     }
 
     public void setTransactionSuccessful() {

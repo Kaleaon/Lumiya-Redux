@@ -163,7 +163,7 @@ public class SyncManager {
         long j;
         int i;
         CloudSyncServiceConnection cloudSyncServiceConnection;
-        Chatter chatterLoad;
+        Chatter chatter;
         if (!this.syncMessageSent.getAndSet(true)) {
             if (this.myNameRetriever == null) {
                 this.myNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), new ChatterNameRetriever.OnChatterNameUpdated() {
@@ -179,13 +179,13 @@ public class SyncManager {
             }
             String resolvedName = this.myNameRetriever.getResolvedName();
             if (resolvedName != null) {
-                Query<ChatMessage> queryForCurrentThread = this.messagesQuery.forCurrentThread();
-                queryForCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
-                LazyList<ChatMessage> lazyListListLazy = queryForCurrentThread.listLazy();
+                Query<ChatMessage> forCurrentThread = this.messagesQuery.forCurrentThread();
+                forCurrentThread.setParameter(0, Long.valueOf(this.lastConfirmedMessageID));
+                LazyList<ChatMessage> listLazy = forCurrentThread.listLazy();
                 ImmutableList.Builder builder = ImmutableList.builder();
                 int i2 = 0;
                 long j2 = 0;
-                Iterator<ChatMessage> it = lazyListListLazy.iterator();
+                Iterator<ChatMessage> it = listLazy.iterator();
                 while (true) {
                     j = j2;
                     i = i2;
@@ -193,13 +193,13 @@ public class SyncManager {
                         break;
                     }
                     ChatMessage next = it.next();
-                    SLChatEvent sLChatEventLoadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
-                    if (sLChatEventLoadFromDatabaseObject != null && (chatterLoad = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
-                        String strResolveChatterName = resolveChatterName(chatterLoad);
-                        if (strResolveChatterName == null) {
+                    SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(next, this.userManager.getUserID());
+                    if (fromDatabaseObject != null && (chatter = this.chatterDao.load(Long.valueOf(next.getChatterID()))) != null) {
+                        String chatterName = resolveChatterName(chatter);
+                        if (chatterName == null) {
                             break;
                         }
-                        LogChatMessage logChatMessage = new LogChatMessage(chatterLoad.getType(), chatterLoad.getUuid(), next.getId().longValue(), strResolveChatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(sLChatEventLoadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
+                        LogChatMessage logChatMessage = new LogChatMessage(chatter.getType(), chatter.getUuid(), next.getId().longValue(), chatterName, new StringBuilder().append("[").append(this.dateFormat.format(next.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)).toString());
                         builder.add(logChatMessage);
                         j = logChatMessage.messageID;
                         i++;
@@ -210,16 +210,16 @@ public class SyncManager {
                     j2 = j;
                     i2 = i;
                 }
-                lazyListListLazy.close();
+                listLazy.close();
                 if (i != 0) {
                     LogMessageBatch logMessageBatch = new LogMessageBatch(this.userManager.getUserID(), resolvedName, builder.build(), j);
                     CloudSyncServiceConnection cloudSyncServiceConnection2 = this.syncServiceConnection.get();
                     zSendMessage = cloudSyncServiceConnection2 != null ? cloudSyncServiceConnection2.sendMessage(MessageType.LogMessageBatch, logMessageBatch) : false;
                     if (!this.flushChatterNames.isEmpty() && (cloudSyncServiceConnection = this.syncServiceConnection.get()) != null) {
-                        Iterator<String> it2 = this.flushChatterNames.iterator();
-                        if (it2.hasNext()) {
-                            String next2 = it2.next();
-                            it2.remove();
+                        Iterator<String> iterator = this.flushChatterNames.iterator();
+                        if (iterator.hasNext()) {
+                            String next2 = iterator.next();
+                            iterator.remove();
                             cloudSyncServiceConnection.sendMessage(MessageType.LogFlushMessages, new LogFlushMessages(this.userManager.getUserID(), resolvedName, next2));
                         }
                     }
@@ -290,8 +290,8 @@ public class SyncManager {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_SyncManager_9602, reason: not valid java name */
-    /* synthetic */ void m375xcf5b71e5(long j) {
-        this.lastConfirmedMessageID = j;
+    /* synthetic */ void m375xcf5b71e5(long lastConfirmedMessageID) {
+        this.lastConfirmedMessageID = lastConfirmedMessageID;
         this.syncMessageSent.set(false);
         syncMoreMessages();
     }

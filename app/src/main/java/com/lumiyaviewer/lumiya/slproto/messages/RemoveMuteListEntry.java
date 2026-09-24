@@ -38,8 +38,8 @@ public class RemoveMuteListEntry extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveMuteListEntry(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveMuteListEntry(this);
     }
 
     @Override

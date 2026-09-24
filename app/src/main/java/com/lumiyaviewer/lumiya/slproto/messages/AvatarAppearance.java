@@ -55,8 +55,8 @@ public class AvatarAppearance extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarAppearance(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarAppearance(this);
     }
 
     @Override
@@ -87,13 +87,13 @@ public class AvatarAppearance extends SLMessage {
         this.Sender_Field.IsTrial = unpackBoolean(byteBuffer);
         this.ObjectData_Field.TextureEntry = unpackVariable(byteBuffer, 2);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             VisualParam visualParam = new VisualParam();
             visualParam.ParamValue = unpackByte(byteBuffer) & 0xFF;
             this.VisualParam_Fields.add(visualParam);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             AppearanceData appearanceData = new AppearanceData();
             appearanceData.AppearanceVersion = unpackByte(byteBuffer) & 0xFF;
             appearanceData.CofVersion = unpackInt(byteBuffer);

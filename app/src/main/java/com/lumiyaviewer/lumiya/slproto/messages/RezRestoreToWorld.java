@@ -59,8 +59,8 @@ public class RezRestoreToWorld extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRezRestoreToWorld(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRezRestoreToWorld(this);
     }
 
     @Override

@@ -74,8 +74,8 @@ public class UpdateAttachment extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateAttachment(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateAttachment(this);
     }
 
     @Override

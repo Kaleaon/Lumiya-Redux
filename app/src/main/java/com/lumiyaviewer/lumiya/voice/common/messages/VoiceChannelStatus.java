@@ -24,10 +24,10 @@ public class VoiceChannelStatus implements VoicePluginMessage {
         this.errorMessage = bundle.getString("errorMessage");
     }
 
-    public VoiceChannelStatus(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nonnull VoiceChatInfo voiceChatInfo, @Nullable String str) {
+    public VoiceChannelStatus(@Nonnull VoiceChannelInfo voiceChannelInfo, @Nonnull VoiceChatInfo voiceChatInfo, @Nullable String errorMessage) {
         this.channelInfo = voiceChannelInfo;
         this.chatInfo = voiceChatInfo;
-        this.errorMessage = str;
+        this.errorMessage = errorMessage;
     }
 
     @Override

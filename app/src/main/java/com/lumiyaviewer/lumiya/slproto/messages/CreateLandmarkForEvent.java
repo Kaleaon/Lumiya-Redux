@@ -45,8 +45,8 @@ public class CreateLandmarkForEvent extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCreateLandmarkForEvent(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCreateLandmarkForEvent(this);
     }
 
     @Override

@@ -40,8 +40,8 @@ public class AgentAlertMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentAlertMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentAlertMessage(this);
     }
 
     @Override

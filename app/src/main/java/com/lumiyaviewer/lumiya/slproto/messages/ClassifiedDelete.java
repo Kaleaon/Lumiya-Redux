@@ -40,8 +40,8 @@ public class ClassifiedDelete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleClassifiedDelete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleClassifiedDelete(this);
     }
 
     @Override

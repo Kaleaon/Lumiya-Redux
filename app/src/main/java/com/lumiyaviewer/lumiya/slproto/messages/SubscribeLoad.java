@@ -22,8 +22,8 @@ public class SubscribeLoad extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSubscribeLoad(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSubscribeLoad(this);
     }
 
     @Override

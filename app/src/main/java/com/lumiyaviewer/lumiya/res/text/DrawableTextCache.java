@@ -11,9 +11,9 @@ public class DrawableTextCache extends ResourceMemoryCache<DrawableTextParams, D
     private static class TextGenRequest extends ResourceRequest<DrawableTextParams, DrawableTextBitmap> implements Runnable {
         private final int fontSize;
 
-        TextGenRequest(DrawableTextParams drawableTextParams, int i, ResourceManager<DrawableTextParams, DrawableTextBitmap> resourceManager) {
+        TextGenRequest(DrawableTextParams drawableTextParams, int fontSize, ResourceManager<DrawableTextParams, DrawableTextBitmap> resourceManager) {
             super(drawableTextParams, resourceManager);
-            this.fontSize = i;
+            this.fontSize = fontSize;
         }
 
         @Override
@@ -27,8 +27,8 @@ public class DrawableTextCache extends ResourceMemoryCache<DrawableTextParams, D
         }
     }
 
-    public DrawableTextCache(int i) {
-        this.fontSize = i;
+    public DrawableTextCache(int fontSize) {
+        this.fontSize = fontSize;
     }
 
     protected ResourceRequest<DrawableTextParams, DrawableTextBitmap> CreateNewRequest(DrawableTextParams drawableTextParams, ResourceManager<DrawableTextParams, DrawableTextBitmap> resourceManager) {

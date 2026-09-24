@@ -38,8 +38,8 @@ public class RequestXfer extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestXfer(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestXfer(this);
     }
 
     @Override

@@ -11,10 +11,10 @@ public class VoiceInitializeReply implements VoicePluginMessage {
     public final String errorMessage;
     public final int pluginVersionCode;
 
-    public VoiceInitializeReply(int i, @Nullable String str, boolean z) {
-        this.pluginVersionCode = i;
-        this.errorMessage = str;
-        this.appVersionOk = z;
+    public VoiceInitializeReply(int pluginVersionCode, @Nullable String errorMessage, boolean appVersionOk) {
+        this.pluginVersionCode = pluginVersionCode;
+        this.errorMessage = errorMessage;
+        this.appVersionOk = appVersionOk;
     }
 
     public VoiceInitializeReply(Bundle bundle) {

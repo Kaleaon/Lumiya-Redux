@@ -87,9 +87,9 @@ public class UserPicBitmapCache extends ResourceMemoryCache<UUID, Bitmap> {
             if (future != null) {
                 future.cancel(false);
             }
-            Future<?> future2 = this.loaderFuture;
-            if (future2 != null) {
-                future2.cancel(false);
+            Future<?> loaderFuture = this.loaderFuture;
+            if (loaderFuture != null) {
+                loaderFuture.cancel(false);
             }
             TextureCache.getInstance().getTextureCompressedCache().CancelRequest(this);
             super.cancelRequest();

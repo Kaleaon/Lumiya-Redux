@@ -41,8 +41,8 @@ public class SendPostcard extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSendPostcard(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSendPostcard(this);
     }
 
     @Override

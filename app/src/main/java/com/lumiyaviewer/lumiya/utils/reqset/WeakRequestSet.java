@@ -84,10 +84,10 @@ class WeakRequestSet<T> {
                     break;
                 }
                 Map.Entry<T, Set<WeakReference<Object>>> next = it.next();
-                Iterator<WeakReference<Object>> it2 = next.getValue().iterator();
-                while (it2.hasNext()) {
-                    if (it2.next().get() == null) {
-                        it2.remove();
+                Iterator<WeakReference<Object>> iterator = next.getValue().iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next().get() == null) {
+                        iterator.remove();
                     }
                 }
                 if (!next.getValue().isEmpty()) {

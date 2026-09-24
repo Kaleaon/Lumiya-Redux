@@ -12,14 +12,14 @@ final class AutoValue_AssetKey extends AssetKey {
     private final int sourceType;
     private final UUID taskUUID;
 
-    AutoValue_AssetKey(int i, int i2, @Nullable UUID uuid, int i3, @Nullable UUID uuid2, @Nullable UUID uuid3, @Nullable UUID uuid4) {
-        this.channelType = i;
-        this.sourceType = i2;
+    AutoValue_AssetKey(int channelType, int sourceType, @Nullable UUID uuid, int assetType, @Nullable UUID ownerUUID, @Nullable UUID itemUUID, @Nullable UUID taskUUID) {
+        this.channelType = channelType;
+        this.sourceType = sourceType;
         this.assetUUID = uuid;
-        this.assetType = i3;
-        this.ownerUUID = uuid2;
-        this.itemUUID = uuid3;
-        this.taskUUID = uuid4;
+        this.assetType = assetType;
+        this.ownerUUID = ownerUUID;
+        this.itemUUID = itemUUID;
+        this.taskUUID = taskUUID;
     }
 
     @Override

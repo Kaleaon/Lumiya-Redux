@@ -47,8 +47,8 @@ public class ObjectPropertiesFamily extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectPropertiesFamily(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectPropertiesFamily(this);
     }
 
     @Override

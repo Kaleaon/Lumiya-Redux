@@ -97,10 +97,10 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
             memberViewHolder.recycle();
         }
 
-        public void setData(LazyList<GroupRoleMember> lazyList, boolean z, boolean z2) {
+        public void setData(LazyList<GroupRoleMember> lazyList, boolean canDeleteMembers, boolean canDeleteMyself) {
             this.data = lazyList;
-            this.canDeleteMembers = z;
-            this.canDeleteMyself = z2;
+            this.canDeleteMembers = canDeleteMembers;
+            this.canDeleteMyself = canDeleteMyself;
             notifyDataSetChanged();
         }
     }
@@ -126,7 +126,7 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
             this.roleMemberRemoveButton.setOnClickListener(this);
         }
 
-        void bindToData(GroupRoleMember groupRoleMember, boolean z, boolean z2) {
+        void bindToData(GroupRoleMember groupRoleMember, boolean z, boolean canDelete) {
             ChatterID.ChatterIDUser userChatterID = groupRoleMember != null ? ChatterID.getUserChatterID(this.agentUUID, groupRoleMember.getUserID()) : null;
             if (!Objects.equal(userChatterID, this.boundChatterID)) {
                 if (this.chatterNameRetriever != null) {
@@ -143,11 +143,11 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
                 }
             }
             if (z) {
-                z2 = true;
+                canDelete = true;
             } else if (!this.agentUUID.equals(this.boundChatterID.getChatterUUID())) {
-                z2 = false;
+                canDelete = false;
             }
-            this.canDelete = z2;
+            this.canDelete = canDelete;
             this.roleMemberRemoveButton.setVisibility(this.canDelete ? View.VISIBLE : View.GONE);
         }
 
@@ -306,8 +306,8 @@ public class GroupRoleMembersFragment extends ChatterFragment implements Loadabl
             }
         }
         if ((myGroupPowers & 512) != 0) {
-            GroupProfileReply data2 = this.groupProfile.getData();
-            if ((data2 == null || this.RoleID == null) ? false : this.RoleID.equals(data2.GroupData_Field.OwnerRole)) {
+            GroupProfileReply groupProfileReply = this.groupProfile.getData();
+            if ((groupProfileReply == null || this.RoleID == null) ? false : this.RoleID.equals(groupProfileReply.GroupData_Field.OwnerRole)) {
                 z2 = false;
             } else {
                 z2 = true;

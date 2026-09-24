@@ -34,8 +34,8 @@ public class RpcChannelRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcChannelRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcChannelRequest(this);
     }
 
     @Override

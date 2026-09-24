@@ -28,9 +28,9 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
     private static class AssetLoadRequest extends ResourceRequest<UUID, AnimationData> implements Runnable {
         private final String assetName;
 
-        AssetLoadRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager, String str) {
+        AssetLoadRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager, String assetName) {
             super(uuid, resourceManager);
-            this.assetName = str;
+            this.assetName = assetName;
         }
 
         @Override
@@ -165,8 +165,8 @@ public class AnimationCache extends ResourceMemoryCache<UUID, AnimationData> {
 
     @Override
     protected ResourceRequest<UUID, AnimationData> CreateNewRequest(UUID uuid, ResourceManager<UUID, AnimationData> resourceManager) {
-        String uuid2 = uuid.toString();
-        return this.assetAnimations.contains(uuid2) ? new AssetLoadRequest(uuid, resourceManager, uuid2) : new DownloadRequest(uuid, resourceManager);
+        String text = uuid.toString();
+        return this.assetAnimations.contains(text) ? new AssetLoadRequest(uuid, resourceManager, text) : new DownloadRequest(uuid, resourceManager);
     }
 
     public void setAssetResponseCacher(AssetResponseCacher assetResponseCacher) {

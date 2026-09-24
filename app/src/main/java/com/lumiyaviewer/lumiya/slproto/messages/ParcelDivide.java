@@ -44,8 +44,8 @@ public class ParcelDivide extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDivide(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDivide(this);
     }
 
     @Override

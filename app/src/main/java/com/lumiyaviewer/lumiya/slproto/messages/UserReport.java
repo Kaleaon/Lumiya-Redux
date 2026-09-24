@@ -50,8 +50,8 @@ public class UserReport extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUserReport(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUserReport(this);
     }
 
     @Override

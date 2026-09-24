@@ -18,8 +18,8 @@ public class LLSDBoolean extends LLSDNode {
         }
     }
 
-    public LLSDBoolean(boolean z) {
-        this.value = z;
+    public LLSDBoolean(boolean value) {
+        this.value = value;
     }
 
     @Override

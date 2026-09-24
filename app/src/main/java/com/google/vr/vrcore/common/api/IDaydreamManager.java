@@ -30,8 +30,8 @@ public interface IDaydreamManager extends IInterface {
         private static class Proxy implements IDaydreamManager {
             private IBinder mRemote;
 
-            Proxy(IBinder iBinder) {
-                this.mRemote = iBinder;
+            Proxy(IBinder mRemote) {
+                this.mRemote = mRemote;
             }
 
             @Override
@@ -42,7 +42,7 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public boolean deprecatedLaunchInVr(PendingIntent pendingIntent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -51,11 +51,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         pendingIntent.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(4, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -63,7 +63,7 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public boolean exitFromVr(PendingIntent pendingIntent) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -72,11 +72,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         pendingIntent.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(10, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(10, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -86,11 +86,11 @@ public interface IDaydreamManager extends IInterface {
             }
 
             @Override
-            public void handleInsertionIntoHeadset(byte[] bArr) throws RemoteException {
+            public void handleInsertionIntoHeadset(byte[] bytes) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeByteArray(bArr);
+                    obtain.writeByteArray(bytes);
                     this.mRemote.transact(11, obtain, null, 1);
                 } finally {
                     obtain.recycle();
@@ -111,7 +111,7 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public boolean launchInVr(PendingIntent pendingIntent, ComponentName componentName) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (pendingIntent == null) {
@@ -126,11 +126,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(7, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(7, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -138,30 +138,30 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public boolean launchVrHome() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    this.mRemote.transact(8, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(8, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
 
             @Override
-            public boolean launchVrTransition(ITransitionCallbacks iTransitionCallbacks) throws RemoteException {
+            public boolean launchVrTransition(ITransitionCallbacks transitionCallbacks) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
-                    obtain.writeStrongBinder(iTransitionCallbacks != null ? iTransitionCallbacks.asBinder() : null);
-                    this.mRemote.transact(9, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    obtain.writeStrongBinder(transitionCallbacks != null ? transitionCallbacks.asBinder() : null);
+                    this.mRemote.transact(9, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -169,7 +169,7 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public int prepareVr(ComponentName componentName, HeadTrackingState headTrackingState) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -178,15 +178,15 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(3, obtain, obtain2, 0);
-                    obtain2.readException();
-                    int readInt = obtain2.readInt();
-                    if (obtain2.readInt() != 0) {
-                        headTrackingState.readFromParcel(obtain2);
+                    this.mRemote.transact(3, obtain, parcel, 0);
+                    parcel.readException();
+                    int readInt = parcel.readInt();
+                    if (parcel.readInt() != 0) {
+                        headTrackingState.readFromParcel(parcel);
                     }
                     return readInt;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -209,9 +209,9 @@ public interface IDaydreamManager extends IInterface {
             }
 
             @Override
-            public boolean registerListener(ComponentName componentName, IDaydreamListener iDaydreamListener) throws RemoteException {
+            public boolean registerListener(ComponentName componentName, IDaydreamListener daydreamListener) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -220,12 +220,12 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    obtain.writeStrongBinder(iDaydreamListener != null ? iDaydreamListener.asBinder() : null);
-                    this.mRemote.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    obtain.writeStrongBinder(daydreamListener != null ? daydreamListener.asBinder() : null);
+                    this.mRemote.transact(1, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -244,7 +244,7 @@ public interface IDaydreamManager extends IInterface {
             @Override
             public boolean unregisterListener(ComponentName componentName) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
+                Parcel parcel = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken(Stub.DESCRIPTOR);
                     if (componentName == null) {
@@ -253,11 +253,11 @@ public interface IDaydreamManager extends IInterface {
                         obtain.writeInt(1);
                         componentName.writeToParcel(obtain, 0);
                     }
-                    this.mRemote.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                    return obtain2.readInt() != 0;
+                    this.mRemote.transact(2, obtain, parcel, 0);
+                    parcel.readException();
+                    return parcel.readInt() != 0;
                 } finally {
-                    obtain2.recycle();
+                    parcel.recycle();
                     obtain.recycle();
                 }
             }
@@ -364,7 +364,7 @@ public interface IDaydreamManager extends IInterface {
 
     boolean exitFromVr(PendingIntent pendingIntent) throws RemoteException;
 
-    void handleInsertionIntoHeadset(byte[] bArr) throws RemoteException;
+    void handleInsertionIntoHeadset(byte[] bytes) throws RemoteException;
 
     void handleRemovalFromHeadset() throws RemoteException;
 
@@ -372,13 +372,13 @@ public interface IDaydreamManager extends IInterface {
 
     boolean launchVrHome() throws RemoteException;
 
-    boolean launchVrTransition(ITransitionCallbacks iTransitionCallbacks) throws RemoteException;
+    boolean launchVrTransition(ITransitionCallbacks transitionCallbacks) throws RemoteException;
 
     int prepareVr(ComponentName componentName, HeadTrackingState headTrackingState) throws RemoteException;
 
     void registerDaydreamIntent(PendingIntent pendingIntent) throws RemoteException;
 
-    boolean registerListener(ComponentName componentName, IDaydreamListener iDaydreamListener) throws RemoteException;
+    boolean registerListener(ComponentName componentName, IDaydreamListener daydreamListener) throws RemoteException;
 
     void unregisterDaydreamIntent() throws RemoteException;
 

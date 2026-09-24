@@ -32,8 +32,8 @@ public class LogoutRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLogoutRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLogoutRequest(this);
     }
 
     @Override

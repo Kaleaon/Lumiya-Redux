@@ -39,8 +39,8 @@ public class AvatarPickerRequestBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPickerRequestBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPickerRequestBackend(this);
     }
 
     @Override

@@ -38,8 +38,8 @@ public class UseCircuitCode extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUseCircuitCode(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUseCircuitCode(this);
     }
 
     @Override

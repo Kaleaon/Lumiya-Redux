@@ -13,8 +13,8 @@ public abstract class AssetKey {
         return new AutoValue_AssetKey(2, 2, uuid3, i, uuid2, uuid, null);
     }
 
-    public static AssetKey createInventoryKey(SLInventoryEntry sLInventoryEntry, @Nullable UUID uuid) {
-        return new AutoValue_AssetKey(2, 3, sLInventoryEntry.assetUUID, sLInventoryEntry.assetType, sLInventoryEntry.ownerUUID, sLInventoryEntry.uuid, uuid);
+    public static AssetKey createInventoryKey(SLInventoryEntry inventoryEntry, @Nullable UUID uuid) {
+        return new AutoValue_AssetKey(2, 3, inventoryEntry.assetUUID, inventoryEntry.assetType, inventoryEntry.ownerUUID, inventoryEntry.uuid, uuid);
     }
 
     public abstract int assetType();

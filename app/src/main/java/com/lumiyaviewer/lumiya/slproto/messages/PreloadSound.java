@@ -33,8 +33,8 @@ public class PreloadSound extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePreloadSound(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePreloadSound(this);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PreloadSound extends SLMessage {
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             DataBlock dataBlock = new DataBlock();
             dataBlock.ObjectID = unpackUUID(byteBuffer);
             dataBlock.OwnerID = unpackUUID(byteBuffer);

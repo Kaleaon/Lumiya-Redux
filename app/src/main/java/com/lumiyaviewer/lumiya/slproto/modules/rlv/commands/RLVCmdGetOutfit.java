@@ -10,20 +10,20 @@ import java.util.UUID;
 
 public class RLVCmdGetOutfit implements RLVCommand {
     @Override
-    public void Handle(RLVController rLVController, UUID uuid, RLVCommands rLVCommands, String str, String str2) {
+    public void Handle(RLVController rlvController, UUID uuid, RLVCommands rlvCommands, String str, String str2) {
         try {
             int parseInt = Integer.parseInt(str);
-            SLAvatarAppearance sLAvatarAppearance = rLVController.getModules().avatarAppearance;
+            SLAvatarAppearance avatarAppearance = rlvController.getModules().avatarAppearance;
             String str3 = "";
-            for (SLWearableType sLWearableType : new SLWearableType[]{SLWearableType.WT_GLOVES, SLWearableType.WT_JACKET, SLWearableType.WT_PANTS, SLWearableType.WT_SHIRT, SLWearableType.WT_SHOES, SLWearableType.WT_SKIRT, SLWearableType.WT_SOCKS, SLWearableType.WT_UNDERPANTS, SLWearableType.WT_UNDERSHIRT, SLWearableType.WT_SKIN, SLWearableType.WT_EYES, SLWearableType.WT_HAIR, SLWearableType.WT_SHAPE, SLWearableType.WT_ALPHA, SLWearableType.WT_TATTOO}) {
-                if (!sLWearableType.isBodyPart()) {
-                    String name = sLWearableType.getName();
+            for (SLWearableType wearableType : new SLWearableType[]{SLWearableType.WT_GLOVES, SLWearableType.WT_JACKET, SLWearableType.WT_PANTS, SLWearableType.WT_SHIRT, SLWearableType.WT_SHOES, SLWearableType.WT_SKIRT, SLWearableType.WT_SOCKS, SLWearableType.WT_UNDERPANTS, SLWearableType.WT_UNDERSHIRT, SLWearableType.WT_SKIN, SLWearableType.WT_EYES, SLWearableType.WT_HAIR, SLWearableType.WT_SHAPE, SLWearableType.WT_ALPHA, SLWearableType.WT_TATTOO}) {
+                if (!wearableType.isBodyPart()) {
+                    String name = wearableType.getName();
                     if (str2.equals("") || name.equalsIgnoreCase(str2)) {
-                        str3 = sLAvatarAppearance.hasWornWearable(sLWearableType) ? str3 + "1" : str3 + "0";
+                        str3 = avatarAppearance.hasWornWearable(wearableType) ? str3 + "1" : str3 + "0";
                     }
                 }
             }
-            rLVController.sayOnChannel(parseInt, str3);
+            rlvController.sayOnChannel(parseInt, str3);
         } catch (NumberFormatException e) {
             Debug.Warning(e);
         }

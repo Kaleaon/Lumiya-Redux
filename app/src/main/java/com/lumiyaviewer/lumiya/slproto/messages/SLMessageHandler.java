@@ -3,7 +3,7 @@ package com.lumiyaviewer.lumiya.slproto.messages;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
 
 public class SLMessageHandler {
-    public void DefaultMessageHandler(SLMessage sLMessage) {
+    public void DefaultMessageHandler(SLMessage message) {
     }
 
     public void HandleAbortXfer(AbortXfer abortXfer) {
@@ -1790,20 +1790,20 @@ public class SLMessageHandler {
         DefaultMessageHandler(transferRequest);
     }
 
-    public void HandleUUIDGroupNameReply(UUIDGroupNameReply uUIDGroupNameReply) {
-        DefaultMessageHandler(uUIDGroupNameReply);
+    public void HandleUUIDGroupNameReply(UUIDGroupNameReply uuidGroupNameReply) {
+        DefaultMessageHandler(uuidGroupNameReply);
     }
 
-    public void HandleUUIDGroupNameRequest(UUIDGroupNameRequest uUIDGroupNameRequest) {
-        DefaultMessageHandler(uUIDGroupNameRequest);
+    public void HandleUUIDGroupNameRequest(UUIDGroupNameRequest uuidGroupNameRequest) {
+        DefaultMessageHandler(uuidGroupNameRequest);
     }
 
-    public void HandleUUIDNameReply(UUIDNameReply uUIDNameReply) {
-        DefaultMessageHandler(uUIDNameReply);
+    public void HandleUUIDNameReply(UUIDNameReply uuidNameReply) {
+        DefaultMessageHandler(uuidNameReply);
     }
 
-    public void HandleUUIDNameRequest(UUIDNameRequest uUIDNameRequest) {
-        DefaultMessageHandler(uUIDNameRequest);
+    public void HandleUUIDNameRequest(UUIDNameRequest uuidNameRequest) {
+        DefaultMessageHandler(uuidNameRequest);
     }
 
     public void HandleUndo(Undo undo) {

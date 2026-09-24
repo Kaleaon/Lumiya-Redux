@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
 class FriendDisplayDataList extends ChatterDisplayDataList {
     private final boolean onlineFriends;
 
-    public FriendDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated, boolean z) {
+    public FriendDisplayDataList(@Nonnull UserManager userManager, OnListUpdated onListUpdated, boolean onlineFriends) {
         super(userManager, onListUpdated, null);
-        this.onlineFriends = z;
+        this.onlineFriends = onlineFriends;
     }
 
     @Override

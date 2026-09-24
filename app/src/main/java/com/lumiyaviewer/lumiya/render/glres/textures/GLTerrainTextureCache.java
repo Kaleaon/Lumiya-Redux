@@ -12,8 +12,8 @@ import com.lumiyaviewer.lumiya.slproto.terrain.TerrainPatchInfo;
 public class GLTerrainTextureCache extends GLResourceCache<TerrainPatchInfo, OpenJPEG, GLLoadedTexture> {
     private final TerrainTextureCache terrainTextureCache;
 
-    public GLTerrainTextureCache(GLLoadQueue gLLoadQueue, TerrainTextureCache terrainTextureCache) {
-        super(gLLoadQueue);
+    public GLTerrainTextureCache(GLLoadQueue glLoadQueue, TerrainTextureCache terrainTextureCache) {
+        super(glLoadQueue);
         this.terrainTextureCache = terrainTextureCache;
     }
 

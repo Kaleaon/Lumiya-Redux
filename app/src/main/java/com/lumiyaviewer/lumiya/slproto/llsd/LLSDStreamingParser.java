@@ -34,7 +34,7 @@ public class LLSDStreamingParser {
 
         void onMapEnd(String str) throws LLSDXMLException, InterruptedException;
 
-        void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException;
+        void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException;
     }
 
     public static class LLSDDefaultContentHandler implements LLSDContentHandler {
@@ -57,49 +57,49 @@ public class LLSDStreamingParser {
         }
 
         @Override
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
         }
     }
 
-    public static void parseAny(InputStream inputStream, String str, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException {
+    public static void parseAny(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 65536);
             switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
                 case llsdBinary:
-                    parseBinary(new DataInputStream(bufferedInputStream), lLSDContentHandler);
+                    parseBinary(new DataInputStream(bufferedInputStream), lsdContentHandler);
                     return;
                 case llsdXML:
-                    parseXML(bufferedInputStream, "UTF-8", lLSDContentHandler);
+                    parseXML(bufferedInputStream, "UTF-8", lsdContentHandler);
                     return;
                 default:
                     return;
             }
         } catch (IOException e) {
-            LLSDXMLException lLSDXMLException = new LLSDXMLException("I/O error");
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException("I/O error");
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         }
     }
 
-    public static void parseBinary(DataInputStream dataInputStream, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException {
+    public static void parseBinary(DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
-            parseBinaryNode(1, null, dataInputStream, lLSDContentHandler);
+            parseBinaryNode(1, null, dataInputStream, lsdContentHandler);
         } catch (LLSDValueTypeException e) {
-            LLSDXMLException lLSDXMLException = new LLSDXMLException("Invalid value type");
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException("Invalid value type");
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         } catch (IOException e2) {
-            LLSDXMLException lLSDXMLException2 = new LLSDXMLException("I/O error");
-            lLSDXMLException2.initCause(e2);
-            throw lLSDXMLException2;
+            LLSDXMLException llsdxmlException2 = new LLSDXMLException("I/O error");
+            llsdxmlException2.initCause(e2);
+            throw llsdxmlException2;
         } catch (InterruptedException e3) {
-            LLSDXMLException lLSDXMLException3 = new LLSDXMLException("Interrupted");
-            lLSDXMLException3.initCause(e3);
-            throw lLSDXMLException3;
+            LLSDXMLException llsdxmlException3 = new LLSDXMLException("Interrupted");
+            llsdxmlException3.initCause(e3);
+            throw llsdxmlException3;
         }
     }
 
-    private static void parseBinaryNode(int i, String str, DataInputStream dataInputStream, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException, LLSDValueTypeException, InterruptedException, IOException {
+    private static void parseBinaryNode(int i, String str, DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, LLSDValueTypeException, InterruptedException, IOException {
         int i2;
         int i3 = i;
         while (i3 > 0) {
@@ -108,24 +108,24 @@ public class LLSDStreamingParser {
                 case 10:
                     continue;
                 case 33:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDUndefined());
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDUndefined());
                     i3--;
                     continue;
                 case 48:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(false));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDBoolean(false));
                     i3--;
                     continue;
                 case 49:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(true));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDBoolean(true));
                     i3--;
                     continue;
                 case 60:
                     break;
                 case 91:
                     int readInt = dataInputStream.readInt();
-                    LLSDContentHandler onArrayBegin = lLSDContentHandler.onArrayBegin(str);
+                    LLSDContentHandler onArrayBegin = lsdContentHandler.onArrayBegin(str);
                     if (onArrayBegin == null) {
-                        onArrayBegin = lLSDContentHandler;
+                        onArrayBegin = lsdContentHandler;
                     }
                     parseBinaryNode(readInt, null, dataInputStream, onArrayBegin);
                     if (dataInputStream.readByte() != 93) {
@@ -135,62 +135,62 @@ public class LLSDStreamingParser {
                     i3--;
                     continue;
                 case 98:
-                    byte[] bArr = new byte[dataInputStream.readInt()];
-                    dataInputStream.readFully(bArr);
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDBinary(bArr));
+                    byte[] bytes = new byte[dataInputStream.readInt()];
+                    dataInputStream.readFully(bytes);
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDBinary(bytes));
                     i3--;
                     continue;
                 case 100:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDDate(new Date(Math.round(dataInputStream.readDouble() * 1000.0d))));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDDate(new Date(Math.round(dataInputStream.readDouble() * 1000.0d))));
                     i3--;
                     continue;
                 case 105:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDInt(dataInputStream.readInt()));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDInt(dataInputStream.readInt()));
                     i3--;
                     continue;
                 case 108:
                     int readInt2 = dataInputStream.readInt();
                     if (readInt2 == 0) {
-                        lLSDContentHandler.onPrimitiveValue(str, new LLSDURI(""));
+                        lsdContentHandler.onPrimitiveValue(str, new LLSDURI(""));
                     } else {
-                        byte[] bArr2 = new byte[readInt2];
-                        dataInputStream.readFully(bArr2);
-                        lLSDContentHandler.onPrimitiveValue(str, new LLSDURI(SLMessage.stringFromVariableUTF(bArr2)));
+                        byte[] bytes2 = new byte[readInt2];
+                        dataInputStream.readFully(bytes2);
+                        lsdContentHandler.onPrimitiveValue(str, new LLSDURI(SLMessage.stringFromVariableUTF(bytes2)));
                     }
                     i3--;
                     continue;
                 case 114:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDDouble(dataInputStream.readDouble()));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDDouble(dataInputStream.readDouble()));
                     i3--;
                     continue;
                 case 115:
                     int readInt3 = dataInputStream.readInt();
                     if (readInt3 == 0) {
-                        lLSDContentHandler.onPrimitiveValue(str, new LLSDString(""));
+                        lsdContentHandler.onPrimitiveValue(str, new LLSDString(""));
                     } else {
-                        byte[] bArr3 = new byte[readInt3];
-                        dataInputStream.readFully(bArr3);
-                        lLSDContentHandler.onPrimitiveValue(str, new LLSDString(SLMessage.stringFromVariableUTF(bArr3)));
+                        byte[] bytes3 = new byte[readInt3];
+                        dataInputStream.readFully(bytes3);
+                        lsdContentHandler.onPrimitiveValue(str, new LLSDString(SLMessage.stringFromVariableUTF(bytes3)));
                     }
                     i3--;
                     continue;
                 case 117:
-                    lLSDContentHandler.onPrimitiveValue(str, new LLSDUUID(new UUID(dataInputStream.readLong(), dataInputStream.readLong())));
+                    lsdContentHandler.onPrimitiveValue(str, new LLSDUUID(new UUID(dataInputStream.readLong(), dataInputStream.readLong())));
                     i3--;
                     continue;
                 case Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_CHARACTERISTIC_NOT_FOUND /* 123 */:
                     int readInt4 = dataInputStream.readInt();
-                    LLSDContentHandler onMapBegin = lLSDContentHandler.onMapBegin(str);
+                    LLSDContentHandler onMapBegin = lsdContentHandler.onMapBegin(str);
                     if (onMapBegin == null) {
-                        onMapBegin = lLSDContentHandler;
+                        onMapBegin = lsdContentHandler;
                     }
-                    for (int i4 = 0; i4 < readInt4; i4++) {
+                    for (int j = 0; j < readInt4; j++) {
                         if (dataInputStream.readByte() != 107) {
                             throw new LLSDXMLException("Map key expected");
                         }
-                        byte[] bArr4 = new byte[dataInputStream.readInt()];
-                        dataInputStream.readFully(bArr4);
-                        parseBinaryNode(1, SLMessage.stringFromVariableUTF(bArr4), dataInputStream, onMapBegin);
+                        byte[] bytes4 = new byte[dataInputStream.readInt()];
+                        dataInputStream.readFully(bytes4);
+                        parseBinaryNode(1, SLMessage.stringFromVariableUTF(bytes4), dataInputStream, onMapBegin);
                     }
                     if (dataInputStream.readByte() != 125) {
                         throw new LLSDXMLException("Map terminator expected");
@@ -207,37 +207,37 @@ public class LLSDStreamingParser {
         }
     }
 
-    public static void parseXML(InputStream inputStream, String str, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException {
+    public static void parseXML(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
             XmlPullParser newPullParser = XmlPullParserFactory.newInstance().newPullParser();
             newPullParser.setInput(inputStream, str);
             newPullParser.nextTag();
             newPullParser.require(2, null, "llsd");
             newPullParser.nextTag();
-            parseXMLNode(null, newPullParser, lLSDContentHandler);
+            parseXMLNode(null, newPullParser, lsdContentHandler);
             newPullParser.require(3, null, "llsd");
         } catch (LLSDValueTypeException e) {
             e.printStackTrace();
-            LLSDXMLException lLSDXMLException = new LLSDXMLException("Malformed XML");
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException("Malformed XML");
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         } catch (IOException e2) {
             throw new LLSDXMLException("Input stream error");
         } catch (InterruptedException e3) {
             e3.printStackTrace();
-            LLSDXMLException lLSDXMLException2 = new LLSDXMLException("Interrupted");
-            lLSDXMLException2.initCause(e3);
-            throw lLSDXMLException2;
+            LLSDXMLException llsdxmlException2 = new LLSDXMLException("Interrupted");
+            llsdxmlException2.initCause(e3);
+            throw llsdxmlException2;
         } catch (XmlPullParserException e4) {
             Debug.Log("XmlPullParserException: " + e4.getMessage());
             e4.printStackTrace();
-            LLSDXMLException lLSDXMLException3 = new LLSDXMLException("Malformed XML");
-            lLSDXMLException3.initCause(e4);
-            throw lLSDXMLException3;
+            LLSDXMLException llsdxmlException3 = new LLSDXMLException("Malformed XML");
+            llsdxmlException3.initCause(e4);
+            throw llsdxmlException3;
         }
     }
 
-    private static void parseXMLNode(String str, XmlPullParser xmlPullParser, LLSDContentHandler lLSDContentHandler) throws LLSDXMLException, XmlPullParserException, IOException, LLSDValueTypeException, InterruptedException {
+    private static void parseXMLNode(String str, XmlPullParser xmlPullParser, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, XmlPullParserException, IOException, LLSDValueTypeException, InterruptedException {
         String name = xmlPullParser.getName();
         LLSDNodeType byTag = LLSDNodeType.byTag(name);
         if (byTag == null) {
@@ -245,44 +245,44 @@ public class LLSDStreamingParser {
         }
         switch (byTag) {
             case llsdArray:
-                LLSDContentHandler onArrayBegin = lLSDContentHandler.onArrayBegin(str);
+                LLSDContentHandler onArrayBegin = lsdContentHandler.onArrayBegin(str);
                 xmlPullParser.nextTag();
                 if (onArrayBegin != null) {
-                    lLSDContentHandler = onArrayBegin;
+                    lsdContentHandler = onArrayBegin;
                 }
                 while (xmlPullParser.getEventType() != 3) {
-                    parseXMLNode(null, xmlPullParser, lLSDContentHandler);
+                    parseXMLNode(null, xmlPullParser, lsdContentHandler);
                 }
-                lLSDContentHandler.onArrayEnd(str);
+                lsdContentHandler.onArrayEnd(str);
                 xmlPullParser.nextTag();
                 return;
             case llsdBinary:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDBinary(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDBinary(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdBoolean:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDBoolean(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDBoolean(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdDate:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDDate(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDDate(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdDouble:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDDouble(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDDouble(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdInteger:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDInt(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDInt(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdKey:
                 throw new LLSDXMLException("Unexpected tag: " + name);
             case llsdMap:
-                LLSDContentHandler onMapBegin = lLSDContentHandler.onMapBegin(str);
+                LLSDContentHandler onMapBegin = lsdContentHandler.onMapBegin(str);
                 xmlPullParser.nextTag();
                 if (onMapBegin != null) {
-                    lLSDContentHandler = onMapBegin;
+                    lsdContentHandler = onMapBegin;
                 }
                 while (xmlPullParser.getEventType() != 3) {
                     String name2 = xmlPullParser.getName();
@@ -291,27 +291,27 @@ public class LLSDStreamingParser {
                     }
                     String nextText = xmlPullParser.nextText();
                     xmlPullParser.nextTag();
-                    parseXMLNode(nextText, xmlPullParser, lLSDContentHandler);
+                    parseXMLNode(nextText, xmlPullParser, lsdContentHandler);
                 }
-                lLSDContentHandler.onMapEnd(str);
+                lsdContentHandler.onMapEnd(str);
                 xmlPullParser.nextTag();
                 return;
             case llsdRoot:
                 throw new LLSDXMLException("Unexpected tag: " + name);
             case llsdString:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDString(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDString(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdURI:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDURI(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDURI(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdUUID:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDUUID(xmlPullParser.nextText()));
+                lsdContentHandler.onPrimitiveValue(str, new LLSDUUID(xmlPullParser.nextText()));
                 xmlPullParser.nextTag();
                 return;
             case llsdUndef:
-                lLSDContentHandler.onPrimitiveValue(str, new LLSDUndefined());
+                lsdContentHandler.onPrimitiveValue(str, new LLSDUndefined());
                 xmlPullParser.nextTag();
                 return;
             default:

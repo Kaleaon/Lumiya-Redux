@@ -30,8 +30,8 @@ public class NetTest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleNetTest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleNetTest(this);
     }
 
     @Override

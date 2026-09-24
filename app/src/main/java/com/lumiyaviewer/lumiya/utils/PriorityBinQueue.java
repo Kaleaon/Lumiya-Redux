@@ -21,33 +21,33 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     private final int numBins;
     private final Set<T>[] queues;
 
-    public PriorityBinQueue(int i) {
-        this.numBins = i;
-        this.queues = new Set[i];
-        for (int i2 = 0; i2 < i; i2++) {
-            this.queues[i2] = new HashSet();
+    public PriorityBinQueue(int numBins) {
+        this.numBins = numBins;
+        this.queues = new Set[numBins];
+        for (int j = 0; j < numBins; j++) {
+            this.queues[j] = new HashSet();
         }
     }
 
     @Override
     public boolean add(T t) {
-        int i;
+        int priority;
         this.lock.lock();
         try {
             if (t instanceof HasPriority) {
-                i = ((HasPriority) t).getPriority();
-                if (i < 0) {
-                    i = 0;
-                } else if (i > this.numBins - 1) {
-                    i = this.numBins - 1;
+                priority = ((HasPriority) t).getPriority();
+                if (priority < 0) {
+                    priority = 0;
+                } else if (priority > this.numBins - 1) {
+                    priority = this.numBins - 1;
                 }
             } else {
                 Debug.Printf("Thread %s added item %s without a priority", Thread.currentThread().getName(), t.toString());
-                i = 0;
+                priority = 0;
             }
-            boolean add = this.queues[i].add(t);
-            this.allItems.put(t, Integer.valueOf(i));
-            Debug.Printf("Thread %s added item to the queue, bin %d/%d", Thread.currentThread().getName(), Integer.valueOf(i), Integer.valueOf(this.numBins));
+            boolean add = this.queues[priority].add(t);
+            this.allItems.put(t, Integer.valueOf(priority));
+            Debug.Printf("Thread %s added item to the queue, bin %d/%d", Thread.currentThread().getName(), Integer.valueOf(priority), Integer.valueOf(this.numBins));
             this.notEmpty.signalAll();
             return add;
         } finally {
@@ -114,10 +114,10 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         this.lock.lock();
         try {
             int i = 0;
-            for (int i2 = 0; i2 < this.numBins; i2++) {
-                i += this.queues[i2].size();
-                collection.addAll(this.queues[i2]);
-                this.queues[i2].clear();
+            for (int j = 0; j < this.numBins; j++) {
+                i += this.queues[j].size();
+                collection.addAll(this.queues[j]);
+                this.queues[j].clear();
             }
             this.allItems.clear();
             return i;
@@ -298,7 +298,7 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] tArr) {
+    public <T> T[] toArray(T[] ts) {
         throw new UnsupportedOperationException();
     }
 

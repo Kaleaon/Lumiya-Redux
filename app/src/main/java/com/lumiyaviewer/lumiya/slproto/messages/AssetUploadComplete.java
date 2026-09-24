@@ -33,8 +33,8 @@ public class AssetUploadComplete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAssetUploadComplete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAssetUploadComplete(this);
     }
 
     @Override

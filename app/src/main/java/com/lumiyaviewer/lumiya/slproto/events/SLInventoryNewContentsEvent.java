@@ -9,20 +9,20 @@ public class SLInventoryNewContentsEvent {
     public String firstItemName = null;
     public boolean firstIsFolder = false;
 
-    public void AddItem(boolean z, UUID uuid, String str) {
-        if (z) {
+    public void AddItem(boolean firstIsFolder, UUID uuid, String firstItemName) {
+        if (firstIsFolder) {
             this.newFolderCount++;
         } else {
             this.newItemCount++;
         }
         if (this.firstParentUUID == null) {
-            this.firstIsFolder = z;
+            this.firstIsFolder = firstIsFolder;
             this.firstParentUUID = uuid;
-            this.firstItemName = str;
-        } else if (z && (!this.firstIsFolder)) {
-            this.firstIsFolder = z;
+            this.firstItemName = firstItemName;
+        } else if (firstIsFolder && (!this.firstIsFolder)) {
+            this.firstIsFolder = firstIsFolder;
             this.firstParentUUID = uuid;
-            this.firstItemName = str;
+            this.firstItemName = firstItemName;
         }
     }
 

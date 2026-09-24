@@ -39,8 +39,8 @@ public class DeclineCallingCard extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDeclineCallingCard(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDeclineCallingCard(this);
     }
 
     @Override

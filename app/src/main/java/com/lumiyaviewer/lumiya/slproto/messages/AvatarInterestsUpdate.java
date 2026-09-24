@@ -43,8 +43,8 @@ public class AvatarInterestsUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarInterestsUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarInterestsUpdate(this);
     }
 
     @Override

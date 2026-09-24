@@ -43,8 +43,8 @@ public class ChangeUserRights extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChangeUserRights(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChangeUserRights(this);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ChangeUserRights extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Rights rights = new Rights();
             rights.AgentRelated = unpackUUID(byteBuffer);
             rights.RelatedRights = unpackInt(byteBuffer);

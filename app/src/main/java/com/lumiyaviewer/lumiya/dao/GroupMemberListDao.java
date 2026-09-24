@@ -24,22 +24,22 @@ public class GroupMemberListDao extends AbstractDao<GroupMemberList, UUID> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'GroupMemberLists' ('GROUP_ID' TEXT PRIMARY KEY ,'REQUEST_ID' TEXT NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'GroupMemberLists' ('GROUP_ID' TEXT PRIMARY KEY ,'REQUEST_ID' TEXT NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupMemberLists'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupMemberLists'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, GroupMemberList groupMemberList) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, GroupMemberList groupMemberList) {
+        sqLiteStatement.clearBindings();
         UUID groupID = groupMemberList.getGroupID();
         if (groupID != null) {
-            sQLiteStatement.bindString(1, groupID.toString());
+            sqLiteStatement.bindString(1, groupID.toString());
         }
-        sQLiteStatement.bindString(2, groupMemberList.getRequestID().toString());
+        sqLiteStatement.bindString(2, groupMemberList.getRequestID().toString());
     }
 
     @Override

@@ -38,8 +38,8 @@ public class SetGroupContribution extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetGroupContribution(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetGroupContribution(this);
     }
 
     @Override

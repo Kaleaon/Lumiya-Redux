@@ -30,8 +30,8 @@ public class DetachAttachmentIntoInv extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDetachAttachmentIntoInv(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDetachAttachmentIntoInv(this);
     }
 
     @Override

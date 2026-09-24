@@ -43,8 +43,8 @@ public class DirClassifiedQueryBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirClassifiedQueryBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirClassifiedQueryBackend(this);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class SensorEventProviderFromRecordedData implements SensorEventProvider 
             return this.currentTimeNs;
         }
 
-        public void setTimeNs(long j) {
-            this.currentTimeNs = j;
+        public void setTimeNs(long currentTimeNs) {
+            this.currentTimeNs = currentTimeNs;
         }
     }
 

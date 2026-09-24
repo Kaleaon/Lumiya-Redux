@@ -33,8 +33,8 @@ public class GroupTitleUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupTitleUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupTitleUpdate(this);
     }
 
     @Override

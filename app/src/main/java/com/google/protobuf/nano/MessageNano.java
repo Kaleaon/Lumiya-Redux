@@ -6,13 +6,13 @@ import java.util.Arrays;
 public abstract class MessageNano {
     protected volatile int cachedSize = -1;
 
-    public static final <T extends MessageNano> T mergeFrom(T t, byte[] bArr) throws InvalidProtocolBufferNanoException {
-        return (T) mergeFrom(t, bArr, 0, bArr.length);
+    public static final <T extends MessageNano> T mergeFrom(T t, byte[] bytes) throws InvalidProtocolBufferNanoException {
+        return (T) mergeFrom(t, bytes, 0, bytes.length);
     }
 
-    public static final <T extends MessageNano> T mergeFrom(T t, byte[] bArr, int i, int i2) throws InvalidProtocolBufferNanoException {
+    public static final <T extends MessageNano> T mergeFrom(T t, byte[] bytes, int i, int i2) throws InvalidProtocolBufferNanoException {
         try {
-            CodedInputByteBufferNano newInstance = CodedInputByteBufferNano.newInstance(bArr, i, i2);
+            CodedInputByteBufferNano newInstance = CodedInputByteBufferNano.newInstance(bytes, i, i2);
             t.mergeFrom(newInstance);
             newInstance.checkLastTagWas(0);
             return t;
@@ -31,16 +31,16 @@ public abstract class MessageNano {
         if (messageNano == null || messageNano2 == null || messageNano.getClass() != messageNano2.getClass() || messageNano2.getSerializedSize() != (serializedSize = messageNano.getSerializedSize())) {
             return false;
         }
-        byte[] bArr = new byte[serializedSize];
-        byte[] bArr2 = new byte[serializedSize];
-        toByteArray(messageNano, bArr, 0, serializedSize);
-        toByteArray(messageNano2, bArr2, 0, serializedSize);
-        return Arrays.equals(bArr, bArr2);
+        byte[] bytes = new byte[serializedSize];
+        byte[] bytes2 = new byte[serializedSize];
+        toByteArray(messageNano, bytes, 0, serializedSize);
+        toByteArray(messageNano2, bytes2, 0, serializedSize);
+        return Arrays.equals(bytes, bytes2);
     }
 
-    public static final void toByteArray(MessageNano messageNano, byte[] bArr, int i, int i2) {
+    public static final void toByteArray(MessageNano messageNano, byte[] bytes, int i, int i2) {
         try {
-            CodedOutputByteBufferNano newInstance = CodedOutputByteBufferNano.newInstance(bArr, i, i2);
+            CodedOutputByteBufferNano newInstance = CodedOutputByteBufferNano.newInstance(bytes, i, i2);
             messageNano.writeTo(newInstance);
             newInstance.checkNoSpaceLeft();
         } catch (IOException e) {
@@ -49,9 +49,9 @@ public abstract class MessageNano {
     }
 
     public static final byte[] toByteArray(MessageNano messageNano) {
-        byte[] bArr = new byte[messageNano.getSerializedSize()];
-        toByteArray(messageNano, bArr, 0, bArr.length);
-        return bArr;
+        byte[] bytes = new byte[messageNano.getSerializedSize()];
+        toByteArray(messageNano, bytes, 0, bytes.length);
+        return bytes;
     }
 
     public MessageNano clone() throws CloneNotSupportedException {

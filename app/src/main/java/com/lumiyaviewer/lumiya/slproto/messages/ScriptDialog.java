@@ -52,17 +52,17 @@ public class ScriptDialog extends SLMessage {
         int length = this.Data_Field.FirstName.length + 17 + 1 + this.Data_Field.LastName.length + 1 + this.Data_Field.ObjectName.length + 2 + this.Data_Field.Message.length + 4 + 16 + 4 + 1;
         Iterator<?> it = this.Buttons_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i + 1 + (this.OwnerData_Fields.size() * 16);
+                return length2 + 1 + (this.OwnerData_Fields.size() * 16);
             }
-            length = ((Buttons) it.next()).ButtonLabel.length + 1 + i;
+            length = ((Buttons) it.next()).ButtonLabel.length + 1 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptDialog(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptDialog(this);
     }
 
     @Override
@@ -84,9 +84,9 @@ public class ScriptDialog extends SLMessage {
             packVariable(byteBuffer, ((Buttons) it.next()).ButtonLabel, 1);
         }
         byteBuffer.put((byte) this.OwnerData_Fields.size());
-        Iterator<?> it2 = this.OwnerData_Fields.iterator();
-        while (it2.hasNext()) {
-            packUUID(byteBuffer, ((OwnerData) it2.next()).OwnerID);
+        Iterator<?> iterator = this.OwnerData_Fields.iterator();
+        while (iterator.hasNext()) {
+            packUUID(byteBuffer, ((OwnerData) iterator.next()).OwnerID);
         }
     }
 
@@ -100,13 +100,13 @@ public class ScriptDialog extends SLMessage {
         this.Data_Field.ChatChannel = unpackInt(byteBuffer);
         this.Data_Field.ImageID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Buttons buttons = new Buttons();
             buttons.ButtonLabel = unpackVariable(byteBuffer, 1);
             this.Buttons_Fields.add(buttons);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             OwnerData ownerData = new OwnerData();
             ownerData.OwnerID = unpackUUID(byteBuffer);
             this.OwnerData_Fields.add(ownerData);

@@ -4,12 +4,12 @@ final class AutoValue_HoverText extends HoverText {
     private final int color;
     private final String text;
 
-    AutoValue_HoverText(String str, int i) {
-        if (str == null) {
+    AutoValue_HoverText(String text, int color) {
+        if (text == null) {
             throw new NullPointerException("Null text");
         }
-        this.text = str;
-        this.color = i;
+        this.text = text;
+        this.color = color;
     }
 
     @Override

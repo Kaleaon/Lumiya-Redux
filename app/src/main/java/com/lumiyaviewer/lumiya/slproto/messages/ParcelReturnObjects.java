@@ -54,8 +54,8 @@ public class ParcelReturnObjects extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelReturnObjects(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelReturnObjects(this);
     }
 
     @Override
@@ -74,9 +74,9 @@ public class ParcelReturnObjects extends SLMessage {
             packUUID(byteBuffer, ((TaskIDs) it.next()).TaskID);
         }
         byteBuffer.put((byte) this.OwnerIDs_Fields.size());
-        Iterator<?> it2 = this.OwnerIDs_Fields.iterator();
-        while (it2.hasNext()) {
-            packUUID(byteBuffer, ((OwnerIDs) it2.next()).OwnerID);
+        Iterator<?> iterator = this.OwnerIDs_Fields.iterator();
+        while (iterator.hasNext()) {
+            packUUID(byteBuffer, ((OwnerIDs) iterator.next()).OwnerID);
         }
     }
 
@@ -87,13 +87,13 @@ public class ParcelReturnObjects extends SLMessage {
         this.ParcelData_Field.LocalID = unpackInt(byteBuffer);
         this.ParcelData_Field.ReturnType = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             TaskIDs taskIDs = new TaskIDs();
             taskIDs.TaskID = unpackUUID(byteBuffer);
             this.TaskIDs_Fields.add(taskIDs);
         }
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             OwnerIDs ownerIDs = new OwnerIDs();
             ownerIDs.OwnerID = unpackUUID(byteBuffer);
             this.OwnerIDs_Fields.add(ownerIDs);

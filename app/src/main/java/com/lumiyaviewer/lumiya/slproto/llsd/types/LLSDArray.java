@@ -24,14 +24,14 @@ public class LLSDArray extends LLSDNode {
         }
     }
 
-    public LLSDArray(LLSDNode... lLSDNodeArr) {
-        for (LLSDNode lLSDNode : lLSDNodeArr) {
-            this.items.add(lLSDNode);
+    public LLSDArray(LLSDNode... lsdNodeArr) {
+        for (LLSDNode llsdNode : lsdNodeArr) {
+            this.items.add(llsdNode);
         }
     }
 
-    public void add(LLSDNode lLSDNode) {
-        this.items.add(lLSDNode);
+    public void add(LLSDNode lsdNode) {
+        this.items.add(lsdNode);
     }
 
     @Override

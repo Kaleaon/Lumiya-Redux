@@ -39,8 +39,8 @@ public class StartAuction extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStartAuction(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStartAuction(this);
     }
 
     @Override

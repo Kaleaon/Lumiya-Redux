@@ -29,12 +29,12 @@ public class NotificationChannels {
         @Nullable
         public final NotificationType notificationType;
 
-        Channel(String str, int i, @Nonnull int i2, NotificationType notificationType, int i3) {
-            this.channelId = str;
-            this.nameStringId = i;
-            this.descriptionStringId = i2;
+        Channel(String channelId, int nameStringId, @Nonnull int descriptionStringId, NotificationType notificationType, int notificationId) {
+            this.channelId = channelId;
+            this.nameStringId = nameStringId;
+            this.descriptionStringId = descriptionStringId;
             this.notificationType = notificationType;
-            this.notificationId = i3;
+            this.notificationId = notificationId;
         }
 
         /* renamed from: values, reason: to resolve conflict with enum method */

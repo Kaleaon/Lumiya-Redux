@@ -33,8 +33,8 @@ public class DerezContainer extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDerezContainer(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDerezContainer(this);
     }
 
     @Override

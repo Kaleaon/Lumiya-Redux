@@ -39,8 +39,8 @@ public class LoadURL extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLoadURL(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLoadURL(this);
     }
 
     @Override

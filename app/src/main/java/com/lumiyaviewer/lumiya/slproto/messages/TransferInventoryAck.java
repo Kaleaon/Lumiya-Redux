@@ -32,8 +32,8 @@ public class TransferInventoryAck extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferInventoryAck(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferInventoryAck(this);
     }
 
     @Override

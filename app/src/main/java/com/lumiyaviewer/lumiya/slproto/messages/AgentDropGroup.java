@@ -36,8 +36,8 @@ public class AgentDropGroup extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentDropGroup(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentDropGroup(this);
     }
 
     @Override

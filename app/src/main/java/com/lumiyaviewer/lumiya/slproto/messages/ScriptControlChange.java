@@ -33,8 +33,8 @@ public class ScriptControlChange extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleScriptControlChange(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleScriptControlChange(this);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ScriptControlChange extends SLMessage {
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.TakeControls = unpackBoolean(byteBuffer);
             data.Controls = unpackInt(byteBuffer);

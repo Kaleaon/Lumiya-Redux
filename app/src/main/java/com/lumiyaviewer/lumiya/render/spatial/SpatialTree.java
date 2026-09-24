@@ -15,9 +15,9 @@ class SpatialTree {
     private final float[] depthBuf = new float[1];
     private final MyAvatarTreeNode myAvatarTreeNode = new MyAvatarTreeNode(this);
 
-    SpatialTree(int i, float f, float f2, float f3, SpatialObjectIndex spatialObjectIndex) {
-        this.numBins = i;
-        this.bins = new SpatialTreeNode[i];
+    SpatialTree(int numBins, float f, float f2, float f3, SpatialObjectIndex spatialObjectIndex) {
+        this.numBins = numBins;
+        this.bins = new SpatialTreeNode[numBins];
         this.spatialObjectIndex = spatialObjectIndex;
         this.rootNode = new SpatialTreeNode(this, f, f2, f3);
     }
@@ -109,9 +109,9 @@ class SpatialTree {
         }
     }
 
-    void walkTree(FrustrumPlanes frustrumPlanes, float f) {
+    void walkTree(FrustrumPlanes frustrumPlanes, float drawDistance) {
         Debug.Printf("SpatialTree: walkTree: starting to walk.", new Object[0]);
-        this.drawDistance = f;
+        this.drawDistance = drawDistance;
         this.rootNode.walkTree(frustrumPlanes, 1, this.depthBuf);
         this.treeWalkNeeded = false;
     }

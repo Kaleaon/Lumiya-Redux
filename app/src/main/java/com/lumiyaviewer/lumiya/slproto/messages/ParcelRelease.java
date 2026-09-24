@@ -40,8 +40,8 @@ public class ParcelRelease extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelRelease(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelRelease(this);
     }
 
     @Override

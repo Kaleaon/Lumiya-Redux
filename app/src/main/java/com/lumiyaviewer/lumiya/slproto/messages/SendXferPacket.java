@@ -38,8 +38,8 @@ public class SendXferPacket extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSendXferPacket(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSendXferPacket(this);
     }
 
     @Override

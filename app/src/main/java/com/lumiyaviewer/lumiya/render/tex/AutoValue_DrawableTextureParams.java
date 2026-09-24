@@ -10,7 +10,7 @@ final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
     private final TextureClass textureClass;
     private final UUID uuid;
 
-    AutoValue_DrawableTextureParams(UUID uuid, TextureClass textureClass, @Nullable AvatarTextureFaceIndex avatarTextureFaceIndex, @Nullable UUID uuid2) {
+    AutoValue_DrawableTextureParams(UUID uuid, TextureClass textureClass, @Nullable AvatarTextureFaceIndex avatarTextureFaceIndex, @Nullable UUID avatarUUID) {
         if (uuid == null) {
             throw new NullPointerException("Null uuid");
         }
@@ -20,7 +20,7 @@ final class AutoValue_DrawableTextureParams extends DrawableTextureParams {
         }
         this.textureClass = textureClass;
         this.avatarFaceIndex = avatarTextureFaceIndex;
-        this.avatarUUID = uuid2;
+        this.avatarUUID = avatarUUID;
     }
 
     @Override

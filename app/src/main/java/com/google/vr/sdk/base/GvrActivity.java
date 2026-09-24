@@ -121,8 +121,8 @@ public class GvrActivity extends Activity {
         }
     }
 
-    public void setScreenAlwaysOn(boolean z) {
-        this.screenOnFlagHelper.setScreenAlwaysOn(z);
+    public void setScreenAlwaysOn(boolean screenAlwaysOn) {
+        this.screenOnFlagHelper.setScreenAlwaysOn(screenAlwaysOn);
     }
 
     protected void updateGvrViewerParams(GvrViewerParams gvrViewerParams) {

@@ -166,11 +166,11 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
                 if (textView != null) {
                     textView.setMaxWidth(textView.getMaxWidth() * 2);
                 }
-                View findViewById2 = findViewById(R.id.transition_icon);
-                if (findViewById2 != null) {
-                    RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) findViewById2.getLayoutParams();
+                View viewById = findViewById(R.id.transition_icon);
+                if (viewById != null) {
+                    RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) viewById.getLayoutParams();
                     layoutParams2.setMargins(layoutParams2.topMargin * (-1), 0, 0, 0);
-                    findViewById2.requestLayout();
+                    viewById.requestLayout();
                 }
             }
         }
@@ -184,14 +184,14 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         if (this.orientationEventListener == null) {
             this.orientationEventListener = new OrientationEventListener(getContext()) {
                 @Override
-                public void onOrientationChanged(int i) {
-                    TransitionView.this.orientation = i;
+                public void onOrientationChanged(int orientation) {
+                    TransitionView.this.orientation = orientation;
                     if (!TransitionView.this.rotationChecked) {
                         TransitionView.this.rotateViewIfNeeded();
-                    } else if (TransitionView.isLandscapeLeft(i)) {
+                    } else if (TransitionView.isLandscapeLeft(orientation)) {
                         TransitionView.this.fadeOutAndRemove(false);
                     } else {
-                        TransitionView.isLandscapeRight(i);
+                        TransitionView.isLandscapeRight(orientation);
                     }
                 }
             };
@@ -269,24 +269,24 @@ public class TransitionView extends FrameLayout implements View.OnTouchListener 
         this.transitionListener = transitionListener;
     }
 
-    public void setViewerName(String str) {
-        this.viewerName = str;
+    public void setViewerName(String viewerName) {
+        this.viewerName = viewerName;
         TextView textView = (TextView) findViewById(R.id.transition_text);
-        if (str == null) {
+        if (viewerName == null) {
             textView.setText(getContext().getString(R.string.place_your_phone_into_cardboard));
         } else {
-            textView.setText(getContext().getString(R.string.place_your_viewer_into_viewer_format, str));
+            textView.setText(getContext().getString(R.string.place_your_viewer_into_viewer_format, viewerName));
         }
     }
 
     @Override
-    public void setVisibility(int i) {
+    public void setVisibility(int visibility2) {
         int visibility = getVisibility();
-        super.setVisibility(i);
-        if (visibility == i) {
+        super.setVisibility(visibility2);
+        if (visibility == visibility2) {
             return;
         }
-        if (i != 0) {
+        if (visibility2 != 0) {
             stopOrientationMonitor();
         } else {
             startOrientationMonitor();

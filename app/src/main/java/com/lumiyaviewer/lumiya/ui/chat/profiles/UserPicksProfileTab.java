@@ -141,9 +141,9 @@ public class UserPicksProfileTab extends ChatterReloadableFragment implements Lo
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_UserPicksProfileTab_4543, reason: not valid java name */
-    /* synthetic */ void m532xd71354a5(SLAgentCircuit sLAgentCircuit, String str, ParcelData parcelData, int i, DialogInterface dialogInterface, int i2) {
+    /* synthetic */ void m532xd71354a5(SLAgentCircuit agentCircuit, String str, ParcelData parcelData, int i, DialogInterface dialogInterface, int i2) {
         UUID randomUUID = UUID.randomUUID();
-        sLAgentCircuit.getModules().userProfiles.UpdatePickInfo(randomUUID, this.userManager.getUserID(), UUIDPool.ZeroUUID, str, Strings.nullToEmpty(parcelData.getDescription()), (UUID) Optional.fromNullable(parcelData.getSnapshotUUID()).or(UUIDPool.ZeroUUID), sLAgentCircuit.getAgentGlobalPosition(), i, true);
+        agentCircuit.getModules().userProfiles.UpdatePickInfo(randomUUID, this.userManager.getUserID(), UUIDPool.ZeroUUID, str, Strings.nullToEmpty(parcelData.getDescription()), (UUID) Optional.fromNullable(parcelData.getSnapshotUUID()).or(UUIDPool.ZeroUUID), agentCircuit.getAgentGlobalPosition(), i, true);
         DetailsActivity.showEmbeddedDetails(getActivity(), UserPickFragment.class, UserPickFragment.makeSelection(this.chatterID.agentUUID, new AvatarPickKey(((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID(), randomUUID)));
         dialogInterface.dismiss();
     }

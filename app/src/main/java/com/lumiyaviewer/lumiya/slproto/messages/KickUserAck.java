@@ -31,8 +31,8 @@ public class KickUserAck extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleKickUserAck(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleKickUserAck(this);
     }
 
     @Override

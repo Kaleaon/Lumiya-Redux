@@ -42,8 +42,8 @@ public class DirClassifiedQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirClassifiedQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirClassifiedQuery(this);
     }
 
     @Override

@@ -40,8 +40,8 @@ public class ObjectExportSelected extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectExportSelected(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectExportSelected(this);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ObjectExportSelected extends SLMessage {
         this.AgentData_Field.RequestID = unpackUUID(byteBuffer);
         this.AgentData_Field.VolumeDetail = unpackShort(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ObjectData objectData = new ObjectData();
             objectData.ObjectID = unpackUUID(byteBuffer);
             this.ObjectData_Fields.add(objectData);

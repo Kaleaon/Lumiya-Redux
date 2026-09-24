@@ -16,18 +16,18 @@ final class AutoValue_SLTextureEntryFace extends SLTextureEntryFace {
     private final float rotation;
     private final UUID textureID;
 
-    AutoValue_SLTextureEntryFace(@Nullable UUID uuid, int i, float f, float f2, float f3, float f4, float f5, float f6, byte b, byte b2, int i2) {
+    AutoValue_SLTextureEntryFace(@Nullable UUID uuid, int rgba, float repeatU, float repeatV, float offsetU, float offsetV, float rotation, float glow, byte materialb, byte mediab, int hasAttribute) {
         this.textureID = uuid;
-        this.rgba = i;
-        this.repeatU = f;
-        this.repeatV = f2;
-        this.offsetU = f3;
-        this.offsetV = f4;
-        this.rotation = f5;
-        this.glow = f6;
-        this.materialb = b;
-        this.mediab = b2;
-        this.hasAttribute = i2;
+        this.rgba = rgba;
+        this.repeatU = repeatU;
+        this.repeatV = repeatV;
+        this.offsetU = offsetU;
+        this.offsetV = offsetV;
+        this.rotation = rotation;
+        this.glow = glow;
+        this.materialb = materialb;
+        this.mediab = mediab;
+        this.hasAttribute = hasAttribute;
     }
 
     public boolean equals(Object obj) {
@@ -37,10 +37,10 @@ final class AutoValue_SLTextureEntryFace extends SLTextureEntryFace {
         if (!(obj instanceof SLTextureEntryFace)) {
             return false;
         }
-        SLTextureEntryFace sLTextureEntryFace = (SLTextureEntryFace) obj;
-        if (this.textureID != null ? this.textureID.equals(sLTextureEntryFace.textureID()) : sLTextureEntryFace.textureID() == null) {
-            if (this.rgba == sLTextureEntryFace.rgba() && Float.floatToIntBits(this.repeatU) == Float.floatToIntBits(sLTextureEntryFace.repeatU()) && Float.floatToIntBits(this.repeatV) == Float.floatToIntBits(sLTextureEntryFace.repeatV()) && Float.floatToIntBits(this.offsetU) == Float.floatToIntBits(sLTextureEntryFace.offsetU()) && Float.floatToIntBits(this.offsetV) == Float.floatToIntBits(sLTextureEntryFace.offsetV()) && Float.floatToIntBits(this.rotation) == Float.floatToIntBits(sLTextureEntryFace.rotation()) && Float.floatToIntBits(this.glow) == Float.floatToIntBits(sLTextureEntryFace.glow()) && this.materialb == sLTextureEntryFace.materialb() && this.mediab == sLTextureEntryFace.mediab()) {
-                return this.hasAttribute == sLTextureEntryFace.hasAttribute();
+        SLTextureEntryFace textureEntryFace = (SLTextureEntryFace) obj;
+        if (this.textureID != null ? this.textureID.equals(textureEntryFace.textureID()) : textureEntryFace.textureID() == null) {
+            if (this.rgba == textureEntryFace.rgba() && Float.floatToIntBits(this.repeatU) == Float.floatToIntBits(textureEntryFace.repeatU()) && Float.floatToIntBits(this.repeatV) == Float.floatToIntBits(textureEntryFace.repeatV()) && Float.floatToIntBits(this.offsetU) == Float.floatToIntBits(textureEntryFace.offsetU()) && Float.floatToIntBits(this.offsetV) == Float.floatToIntBits(textureEntryFace.offsetV()) && Float.floatToIntBits(this.rotation) == Float.floatToIntBits(textureEntryFace.rotation()) && Float.floatToIntBits(this.glow) == Float.floatToIntBits(textureEntryFace.glow()) && this.materialb == textureEntryFace.materialb() && this.mediab == textureEntryFace.mediab()) {
+                return this.hasAttribute == textureEntryFace.hasAttribute();
             }
         }
         return false;

@@ -16,9 +16,9 @@ public class SerializableResponseCacher<Key, MessageType extends Serializable> e
     }
 
     @Override
-    public MessageType loadCached(byte[] bArr) {
+    public MessageType loadCached(byte[] bytes) {
         try {
-            return (MessageType) new ObjectInputStream(new ByteArrayInputStream(bArr)).readObject();
+            return (MessageType) new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject();
         } catch (IOException e) {
             return null;
         } catch (ClassCastException e2) {

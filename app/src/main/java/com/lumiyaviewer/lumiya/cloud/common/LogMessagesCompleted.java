@@ -12,9 +12,9 @@ public class LogMessagesCompleted implements Bundleable {
         this.lastWrittenMessageID = bundle.getLong("lastWrittenMessageID");
     }
 
-    public LogMessagesCompleted(UUID uuid, long j) {
+    public LogMessagesCompleted(UUID uuid, long lastWrittenMessageID) {
         this.agentUUID = uuid;
-        this.lastWrittenMessageID = j;
+        this.lastWrittenMessageID = lastWrittenMessageID;
     }
 
     @Override

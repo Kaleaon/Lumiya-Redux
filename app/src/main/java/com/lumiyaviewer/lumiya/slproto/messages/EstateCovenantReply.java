@@ -36,8 +36,8 @@ public class EstateCovenantReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEstateCovenantReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEstateCovenantReply(this);
     }
 
     @Override

@@ -41,14 +41,14 @@ public class NFCUtils {
         };
         IntentFilter createNfcIntentFilter = createNfcIntentFilter();
         createNfcIntentFilter.addDataScheme("cardboard");
-        IntentFilter createNfcIntentFilter2 = createNfcIntentFilter();
-        createNfcIntentFilter2.addDataScheme("http");
-        createNfcIntentFilter2.addDataAuthority("goo.gl", null);
-        IntentFilter createNfcIntentFilter3 = createNfcIntentFilter();
-        createNfcIntentFilter3.addDataScheme("http");
-        createNfcIntentFilter3.addDataAuthority("google.com", null);
-        createNfcIntentFilter3.addDataPath("/cardboard/cfg.*", 2);
-        this.nfcIntentFilters = new IntentFilter[]{createNfcIntentFilter, createNfcIntentFilter2, createNfcIntentFilter3};
+        IntentFilter nfcIntentFilter = createNfcIntentFilter();
+        nfcIntentFilter.addDataScheme("http");
+        nfcIntentFilter.addDataAuthority("goo.gl", null);
+        IntentFilter nfcIntentFilter2 = createNfcIntentFilter();
+        nfcIntentFilter2.addDataScheme("http");
+        nfcIntentFilter2.addDataAuthority("google.com", null);
+        nfcIntentFilter2.addDataPath("/cardboard/cfg.*", 2);
+        this.nfcIntentFilters = new IntentFilter[]{createNfcIntentFilter, nfcIntentFilter, nfcIntentFilter2};
     }
 
     protected void onNFCTagDetected(Tag tag) {

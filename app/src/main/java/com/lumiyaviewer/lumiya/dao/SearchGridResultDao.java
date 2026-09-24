@@ -29,31 +29,31 @@ public class SearchGridResultDao extends AbstractDao<SearchGridResult, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'SearchGridResults' ('_id' INTEGER PRIMARY KEY ,'SEARCH_UUID' TEXT NOT NULL ,'ITEM_TYPE' INTEGER NOT NULL ,'ITEM_UUID' TEXT NOT NULL ,'ITEM_NAME' TEXT NOT NULL ,'LEVENSTEIN_DISTANCE' INTEGER NOT NULL ,'MEMBER_COUNT' INTEGER);");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_SearchGridResults_SEARCH_UUID ON SearchGridResults (SEARCH_UUID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'SearchGridResults' ('_id' INTEGER PRIMARY KEY ,'SEARCH_UUID' TEXT NOT NULL ,'ITEM_TYPE' INTEGER NOT NULL ,'ITEM_UUID' TEXT NOT NULL ,'ITEM_NAME' TEXT NOT NULL ,'LEVENSTEIN_DISTANCE' INTEGER NOT NULL ,'MEMBER_COUNT' INTEGER);");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_SearchGridResults_SEARCH_UUID ON SearchGridResults (SEARCH_UUID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'SearchGridResults'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'SearchGridResults'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, SearchGridResult searchGridResult) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, SearchGridResult searchGridResult) {
+        sqLiteStatement.clearBindings();
         Long id = searchGridResult.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindString(2, searchGridResult.getSearchUUID().toString());
-        sQLiteStatement.bindLong(3, searchGridResult.getItemType());
-        sQLiteStatement.bindString(4, searchGridResult.getItemUUID().toString());
-        sQLiteStatement.bindString(5, searchGridResult.getItemName());
-        sQLiteStatement.bindLong(6, searchGridResult.getLevensteinDistance());
+        sqLiteStatement.bindString(2, searchGridResult.getSearchUUID().toString());
+        sqLiteStatement.bindLong(3, searchGridResult.getItemType());
+        sqLiteStatement.bindString(4, searchGridResult.getItemUUID().toString());
+        sqLiteStatement.bindString(5, searchGridResult.getItemName());
+        sqLiteStatement.bindLong(6, searchGridResult.getLevensteinDistance());
         Integer memberCount = searchGridResult.getMemberCount();
         if (memberCount != null) {
-            sQLiteStatement.bindLong(7, memberCount.intValue());
+            sqLiteStatement.bindLong(7, memberCount.intValue());
         }
     }
 

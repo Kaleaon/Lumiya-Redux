@@ -48,9 +48,9 @@ public abstract class LLSDNode {
                     throw new LLSDXMLException("Unknown content type");
             }
         } catch (IOException e) {
-            LLSDXMLException lLSDXMLException = new LLSDXMLException("I/O error");
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException("I/O error");
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         }
     }
 
@@ -73,19 +73,19 @@ public abstract class LLSDNode {
                         } while (dataInputStream.readByte() != 62);
                     case 91:
                         int readInt = dataInputStream.readInt();
-                        LLSDArray lLSDArray = new LLSDArray();
+                        LLSDArray llsdArray = new LLSDArray();
                         while (i < readInt) {
-                            lLSDArray.add(fromBinary(dataInputStream));
+                            llsdArray.add(fromBinary(dataInputStream));
                             i++;
                         }
                         if (dataInputStream.readByte() != 93) {
                             throw new LLSDXMLException("Array terminator expected");
                         }
-                        return lLSDArray;
+                        return llsdArray;
                     case 98:
-                        byte[] bArr = new byte[dataInputStream.readInt()];
-                        dataInputStream.readFully(bArr);
-                        return new LLSDBinary(bArr);
+                        byte[] bytes = new byte[dataInputStream.readInt()];
+                        dataInputStream.readFully(bytes);
+                        return new LLSDBinary(bytes);
                     case 100:
                         return new LLSDDate(new Date(Math.round(dataInputStream.readDouble() * 1000.0d)));
                     case 105:
@@ -95,9 +95,9 @@ public abstract class LLSDNode {
                         if (readInt2 == 0) {
                             return new LLSDURI("");
                         }
-                        byte[] bArr2 = new byte[readInt2];
-                        dataInputStream.readFully(bArr2);
-                        return new LLSDURI(SLMessage.stringFromVariableUTF(bArr2));
+                        byte[] bytes2 = new byte[readInt2];
+                        dataInputStream.readFully(bytes2);
+                        return new LLSDURI(SLMessage.stringFromVariableUTF(bytes2));
                     case 114:
                         return new LLSDDouble(dataInputStream.readDouble());
                     case 115:
@@ -105,9 +105,9 @@ public abstract class LLSDNode {
                         if (readInt3 == 0) {
                             return new LLSDString("");
                         }
-                        byte[] bArr3 = new byte[readInt3];
-                        dataInputStream.readFully(bArr3);
-                        return new LLSDString(SLMessage.stringFromVariableUTF(bArr3));
+                        byte[] bytes3 = new byte[readInt3];
+                        dataInputStream.readFully(bytes3);
+                        return new LLSDString(SLMessage.stringFromVariableUTF(bytes3));
                     case 117:
                         return new LLSDUUID(new UUID(dataInputStream.readLong(), dataInputStream.readLong()));
                     case Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_CHARACTERISTIC_NOT_FOUND /* 123 */:
@@ -117,23 +117,23 @@ public abstract class LLSDNode {
                             if (dataInputStream.readByte() != 107) {
                                 throw new LLSDXMLException("Map key expected");
                             }
-                            byte[] bArr4 = new byte[dataInputStream.readInt()];
-                            dataInputStream.readFully(bArr4);
-                            hashMap.put(SLMessage.stringFromVariableUTF(bArr4), fromBinary(dataInputStream));
+                            byte[] bytes4 = new byte[dataInputStream.readInt()];
+                            dataInputStream.readFully(bytes4);
+                            hashMap.put(SLMessage.stringFromVariableUTF(bytes4), fromBinary(dataInputStream));
                             i++;
                         }
-                        LLSDMap lLSDMap = new LLSDMap(hashMap);
+                        LLSDMap llsdMap = new LLSDMap(hashMap);
                         if (dataInputStream.readByte() != 125) {
                             throw new LLSDXMLException("Map terminator expected");
                         }
-                        return lLSDMap;
+                        return llsdMap;
                     default:
                         throw new LLSDXMLException("Unknown LLSD element 0x" + Integer.toHexString(readByte));
                 }
             } catch (IOException e) {
-                LLSDXMLException lLSDXMLException = new LLSDXMLException(e.getMessage());
-                lLSDXMLException.initCause(e);
-                throw lLSDXMLException;
+                LLSDXMLException llsdxmlException = new LLSDXMLException(e.getMessage());
+                llsdxmlException.initCause(e);
+                throw llsdxmlException;
             }
         }
     }
@@ -142,9 +142,9 @@ public abstract class LLSDNode {
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
             return fromBinary(dataInputStream);
         } catch (IOException e) {
-            LLSDXMLException lLSDXMLException = new LLSDXMLException(e.getMessage());
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException(e.getMessage());
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         }
     }
 
@@ -164,9 +164,9 @@ public abstract class LLSDNode {
         } catch (XmlPullParserException e) {
             Debug.Log("XmlPullParserException: " + e.getMessage());
             e.printStackTrace();
-            LLSDXMLException lLSDXMLException = new LLSDXMLException("Malformed XML");
-            lLSDXMLException.initCause(e);
-            throw lLSDXMLException;
+            LLSDXMLException llsdxmlException = new LLSDXMLException("Malformed XML");
+            llsdxmlException.initCause(e);
+            throw llsdxmlException;
         }
     }
 

@@ -25,8 +25,8 @@ public abstract class SubscriptionGenericDataPool<K, T> implements Subscribable<
     @Nonnull
     protected abstract SubscriptionList<K, T> getSubscriptions(@Nonnull K k);
 
-    public SubscriptionGenericDataPool<K, T> setCanContainNulls(boolean z) {
-        this.canContainNulls = z;
+    public SubscriptionGenericDataPool<K, T> setCanContainNulls(boolean canContainNulls) {
+        this.canContainNulls = canContainNulls;
         return this;
     }
 

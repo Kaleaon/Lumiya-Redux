@@ -88,9 +88,9 @@ public class ChatTextBoxViewHolder extends ChatEventViewHolder implements View.O
         return true;
     }
 
-    public void setTextBoxEvent(@Nullable SLChatTextBoxDialog sLChatTextBoxDialog) {
-        if (this.textBoxEvent != sLChatTextBoxDialog) {
-            this.textBoxEvent = sLChatTextBoxDialog;
+    public void setTextBoxEvent(@Nullable SLChatTextBoxDialog chatTextBoxDialog) {
+        if (this.textBoxEvent != chatTextBoxDialog) {
+            this.textBoxEvent = chatTextBoxDialog;
             if (this.textBox != null) {
                 this.textBox.clearFocus();
                 this.textBox.setVisibility(View.INVISIBLE);

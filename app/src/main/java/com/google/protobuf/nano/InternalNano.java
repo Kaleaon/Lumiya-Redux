@@ -94,16 +94,16 @@ public final class InternalNano {
         return (dArr == null || dArr.length == 0) ? dArr2 == null || dArr2.length == 0 : Arrays.equals(dArr, dArr2);
     }
 
-    public static boolean equals(float[] fArr, float[] fArr2) {
-        return (fArr == null || fArr.length == 0) ? fArr2 == null || fArr2.length == 0 : Arrays.equals(fArr, fArr2);
+    public static boolean equals(float[] floats, float[] floats2) {
+        return (floats == null || floats.length == 0) ? floats2 == null || floats2.length == 0 : Arrays.equals(floats, floats2);
     }
 
-    public static boolean equals(int[] iArr, int[] iArr2) {
-        return (iArr == null || iArr.length == 0) ? iArr2 == null || iArr2.length == 0 : Arrays.equals(iArr, iArr2);
+    public static boolean equals(int[] ints, int[] ints2) {
+        return (ints == null || ints.length == 0) ? ints2 == null || ints2.length == 0 : Arrays.equals(ints, ints2);
     }
 
-    public static boolean equals(long[] jArr, long[] jArr2) {
-        return (jArr == null || jArr.length == 0) ? jArr2 == null || jArr2.length == 0 : Arrays.equals(jArr, jArr2);
+    public static boolean equals(long[] longs, long[] longs2) {
+        return (longs == null || longs.length == 0) ? longs2 == null || longs2.length == 0 : Arrays.equals(longs, longs2);
     }
 
     public static boolean equals(Object[] objArr, Object[] objArr2) {
@@ -137,17 +137,17 @@ public final class InternalNano {
         return (zArr == null || zArr.length == 0) ? zArr2 == null || zArr2.length == 0 : Arrays.equals(zArr, zArr2);
     }
 
-    public static boolean equals(byte[][] bArr, byte[][] bArr2) {
-        int length = bArr != null ? bArr.length : 0;
-        int length2 = bArr2 != null ? bArr2.length : 0;
+    public static boolean equals(byte[][] bytesList, byte[][] bytesList2) {
+        int length = bytesList != null ? bytesList.length : 0;
+        int length2 = bytesList2 != null ? bytesList2.length : 0;
         int i = 0;
         int i2 = 0;
         while (true) {
-            if (i2 < length && bArr[i2] == null) {
+            if (i2 < length && bytesList[i2] == null) {
                 i2++;
             } else {
                 int i3 = i;
-                while (i3 < length2 && bArr2[i3] == null) {
+                while (i3 < length2 && bytesList2[i3] == null) {
                     i3++;
                 }
                 boolean z = i2 >= length;
@@ -155,7 +155,7 @@ public final class InternalNano {
                 if (z && z2) {
                     return true;
                 }
-                if (z != z2 || !Arrays.equals(bArr[i2], bArr2[i3])) {
+                if (z != z2 || !Arrays.equals(bytesList[i2], bytesList2[i3])) {
                     return false;
                 }
                 i = i3 + 1;
@@ -194,32 +194,32 @@ public final class InternalNano {
         return Arrays.hashCode(dArr);
     }
 
-    public static int hashCode(float[] fArr) {
-        if (fArr == null || fArr.length == 0) {
+    public static int hashCode(float[] floats) {
+        if (floats == null || floats.length == 0) {
             return 0;
         }
-        return Arrays.hashCode(fArr);
+        return Arrays.hashCode(floats);
     }
 
-    public static int hashCode(int[] iArr) {
-        if (iArr == null || iArr.length == 0) {
+    public static int hashCode(int[] ints) {
+        if (ints == null || ints.length == 0) {
             return 0;
         }
-        return Arrays.hashCode(iArr);
+        return Arrays.hashCode(ints);
     }
 
-    public static int hashCode(long[] jArr) {
-        if (jArr == null || jArr.length == 0) {
+    public static int hashCode(long[] longs) {
+        if (longs == null || longs.length == 0) {
             return 0;
         }
-        return Arrays.hashCode(jArr);
+        return Arrays.hashCode(longs);
     }
 
     public static int hashCode(Object[] objArr) {
         int i = 0;
         int length = objArr != null ? objArr.length : 0;
-        for (int i2 = 0; i2 < length; i2++) {
-            Object obj = objArr[i2];
+        for (int j = 0; j < length; j++) {
+            Object obj = objArr[j];
             if (obj != null) {
                 i = (i * 31) + obj.hashCode();
             }
@@ -234,13 +234,13 @@ public final class InternalNano {
         return Arrays.hashCode(zArr);
     }
 
-    public static int hashCode(byte[][] bArr) {
+    public static int hashCode(byte[][] bytesList) {
         int i = 0;
-        int length = bArr != null ? bArr.length : 0;
-        for (int i2 = 0; i2 < length; i2++) {
-            byte[] bArr2 = bArr[i2];
-            if (bArr2 != null) {
-                i = (i * 31) + Arrays.hashCode(bArr2);
+        int length = bytesList != null ? bytesList.length : 0;
+        for (int j = 0; j < length; j++) {
+            byte[] bytes = bytesList[j];
+            if (bytes != null) {
+                i = (i * 31) + Arrays.hashCode(bytes);
             }
         }
         return i;
@@ -255,7 +255,7 @@ public final class InternalNano {
         Map<K, V> forMap = mapFactory.forMap(map);
         int pushLimit = codedInputByteBufferNano.pushLimit(codedInputByteBufferNano.readRawVarint32());
         Object obj = null;
-        Object obj2 = v;
+        Object v2 = v;
         while (true) {
             int readTag = codedInputByteBufferNano.readTag();
             if (readTag == 0) {
@@ -268,9 +268,9 @@ public final class InternalNano {
                     break;
                 }
             } else if (i2 != 11) {
-                obj2 = codedInputByteBufferNano.readPrimitiveField(i2);
+                v2 = codedInputByteBufferNano.readPrimitiveField(i2);
             } else {
-                codedInputByteBufferNano.readMessage((MessageNano) obj2);
+                codedInputByteBufferNano.readMessage((MessageNano) v2);
             }
         }
         codedInputByteBufferNano.checkLastTagWas(0);
@@ -278,10 +278,10 @@ public final class InternalNano {
         if (obj == null) {
             obj = primitiveDefaultValue(i);
         }
-        if (obj2 == null) {
-            obj2 = primitiveDefaultValue(i2);
+        if (v2 == null) {
+            v2 = primitiveDefaultValue(i2);
         }
-        forMap.put((K) obj, (V) obj2);
+        forMap.put((K) obj, (V) v2);
         return forMap;
     }
 

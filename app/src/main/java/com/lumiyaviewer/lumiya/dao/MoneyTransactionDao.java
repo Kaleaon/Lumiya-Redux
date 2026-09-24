@@ -28,28 +28,28 @@ public class MoneyTransactionDao extends AbstractDao<MoneyTransaction, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MONEY_TRANSACTION' ('_id' INTEGER PRIMARY KEY ,'TIMESTAMP' INTEGER NOT NULL ,'AGENT_UUID' TEXT,'TRANSACTION_AMOUNT' INTEGER NOT NULL ,'NEW_BALANCE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'MONEY_TRANSACTION' ('_id' INTEGER PRIMARY KEY ,'TIMESTAMP' INTEGER NOT NULL ,'AGENT_UUID' TEXT,'TRANSACTION_AMOUNT' INTEGER NOT NULL ,'NEW_BALANCE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MONEY_TRANSACTION'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'MONEY_TRANSACTION'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, MoneyTransaction moneyTransaction) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, MoneyTransaction moneyTransaction) {
+        sqLiteStatement.clearBindings();
         Long id = moneyTransaction.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindLong(2, moneyTransaction.getTimestamp().getTime());
+        sqLiteStatement.bindLong(2, moneyTransaction.getTimestamp().getTime());
         UUID agentUUID = moneyTransaction.getAgentUUID();
         if (agentUUID != null) {
-            sQLiteStatement.bindString(3, agentUUID.toString());
+            sqLiteStatement.bindString(3, agentUUID.toString());
         }
-        sQLiteStatement.bindLong(4, moneyTransaction.getTransactionAmount());
-        sQLiteStatement.bindLong(5, moneyTransaction.getNewBalance());
+        sqLiteStatement.bindLong(4, moneyTransaction.getTransactionAmount());
+        sqLiteStatement.bindLong(5, moneyTransaction.getNewBalance());
     }
 
     @Override

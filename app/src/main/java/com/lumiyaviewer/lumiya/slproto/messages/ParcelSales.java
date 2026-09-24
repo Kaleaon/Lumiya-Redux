@@ -31,8 +31,8 @@ public class ParcelSales extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelSales(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelSales(this);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ParcelSales extends SLMessage {
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ParcelData parcelData = new ParcelData();
             parcelData.ParcelID = unpackUUID(byteBuffer);
             parcelData.BuyerID = unpackUUID(byteBuffer);

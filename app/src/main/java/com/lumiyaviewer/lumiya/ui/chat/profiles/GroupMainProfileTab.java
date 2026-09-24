@@ -84,7 +84,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
         }
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
         View view = getView();
         if (view != null) {
             for (int i : new int[]{R.id.show_in_profile_checkbox, R.id.active_group_checkbox, R.id.group_profile_contribution_button, R.id.group_join_button, R.id.group_leave_button, R.id.group_invite_button, R.id.group_change_role_button}) {

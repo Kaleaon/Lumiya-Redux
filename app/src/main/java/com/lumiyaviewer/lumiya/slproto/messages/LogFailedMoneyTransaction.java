@@ -42,8 +42,8 @@ public class LogFailedMoneyTransaction extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLogFailedMoneyTransaction(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLogFailedMoneyTransaction(this);
     }
 
     @Override

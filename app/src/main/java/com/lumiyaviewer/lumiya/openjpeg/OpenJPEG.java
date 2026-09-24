@@ -46,13 +46,13 @@ public class OpenJPEG implements GLTexture {
         System.loadLibrary("openjpeg");
     }
 
-    public OpenJPEG(int i, int i2, int i3, int i4, int i5, int i6) throws OutOfMemoryError {
-        this.width = i;
-        this.height = i2;
+    public OpenJPEG(int width, int height, int i3, int i4, int i5, int i6) throws OutOfMemoryError {
+        this.width = width;
+        this.height = height;
         this.num_components = i3;
         this.num_extra_components = i5;
         this.bytes_per_pixel = i4;
-        this.rawBuffer = allocateNew(i, i2, i3, i4, i5, i6);
+        this.rawBuffer = allocateNew(width, height, i3, i4, i5, i6);
         if (this.rawBuffer == null) {
             throw new OutOfMemoryError("allocateNew() returned NULL");
         }
@@ -99,9 +99,9 @@ public class OpenJPEG implements GLTexture {
         if (imageFormat != ImageFormat.TGA) {
             throw new IOException("Unsupported format for image stream.");
         }
-        byte[] bArr = new byte[inputStream.available()];
-        inputStream.read(bArr);
-        this.rawBuffer = decompressTGA(bArr, z, z2, f, f2, z3);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes);
+        this.rawBuffer = decompressTGA(bytes, z, z2, f, f2, z3);
         if (this.rawBuffer == null) {
             throw new IOException("Failed to decompress TGA texture.");
         }
@@ -112,46 +112,46 @@ public class OpenJPEG implements GLTexture {
 
     private native ByteBuffer allocateRaw(int i);
 
-    public static native void applyFlexibleMorph(ByteBuffer byteBuffer, ByteBuffer byteBuffer2, int i, float[] fArr);
+    public static native void applyFlexibleMorph(ByteBuffer byteBuffer, ByteBuffer byteBuffer2, int i, float[] floats);
 
     public static native void applyMeshMorph(float f, ByteBuffer byteBuffer, ByteBuffer byteBuffer2, int i, ByteBuffer byteBuffer3, ByteBuffer byteBuffer4, ByteBuffer byteBuffer5, int i2, int i3, int i4, ByteBuffer byteBuffer6);
 
-    public static native void applyMorphingTransform(int i, ByteBuffer byteBuffer, ByteBuffer byteBuffer2, ByteBuffer byteBuffer3, int[] iArr, float[] fArr);
+    public static native void applyMorphingTransform(int i, ByteBuffer byteBuffer, ByteBuffer byteBuffer2, ByteBuffer byteBuffer3, int[] ints, float[] floats);
 
-    public static native void applyRiggedMeshMorph(ByteBuffer byteBuffer, int i, float[] fArr, float[] fArr2, ByteBuffer byteBuffer2, ByteBuffer byteBuffer3, int i2);
+    public static native void applyRiggedMeshMorph(ByteBuffer byteBuffer, int i, float[] floats, float[] floats2, ByteBuffer byteBuffer2, ByteBuffer byteBuffer3, int i2);
 
-    public static OpenJPEG bakeTerrain(int i, int i2, OpenJPEG[] openJPEGArr, float[] fArr, int i3, int i4) {
+    public static OpenJPEG bakeTerrain(int i, int i2, OpenJPEG[] openJPEGArr, float[] floats, int i3, int i4) {
         OpenJPEG openJPEG = new OpenJPEG(i, i2, 3, 2, 0, 0);
         ByteBuffer[] byteBufferArr = new ByteBuffer[openJPEGArr.length];
-        int[] iArr = new int[openJPEGArr.length];
-        int[] iArr2 = new int[openJPEGArr.length];
-        int[] iArr3 = new int[openJPEGArr.length];
-        for (int i5 = 0; i5 < openJPEGArr.length; i5++) {
-            if (openJPEGArr[i5] != null) {
-                byteBufferArr[i5] = openJPEGArr[i5].rawBuffer;
-                iArr[i5] = openJPEGArr[i5].width;
-                iArr2[i5] = openJPEGArr[i5].height;
-                iArr3[i5] = openJPEGArr[i5].num_components;
+        int[] ints = new int[openJPEGArr.length];
+        int[] ints2 = new int[openJPEGArr.length];
+        int[] ints3 = new int[openJPEGArr.length];
+        for (int j = 0; j < openJPEGArr.length; j++) {
+            if (openJPEGArr[j] != null) {
+                byteBufferArr[j] = openJPEGArr[j].rawBuffer;
+                ints[j] = openJPEGArr[j].width;
+                ints2[j] = openJPEGArr[j].height;
+                ints3[j] = openJPEGArr[j].num_components;
             } else {
-                byteBufferArr[i5] = null;
-                iArr[i5] = 0;
-                iArr2[i5] = 0;
-                iArr3[i5] = 0;
+                byteBufferArr[j] = null;
+                ints[j] = 0;
+                ints2[j] = 0;
+                ints3[j] = 0;
             }
         }
-        openJPEG.bakeTerrainRaw(openJPEG.rawBuffer, i, i2, byteBufferArr, iArr, iArr2, iArr3, fArr, i3, i4);
+        openJPEG.bakeTerrainRaw(openJPEG.rawBuffer, i, i2, byteBufferArr, ints, ints2, ints3, floats, i3, i4);
         return openJPEG;
     }
 
-    private native void bakeTerrainRaw(ByteBuffer byteBuffer, int i, int i2, ByteBuffer[] byteBufferArr, int[] iArr, int[] iArr2, int[] iArr3, float[] fArr, int i3, int i4);
+    private native void bakeTerrainRaw(ByteBuffer byteBuffer, int i, int i2, ByteBuffer[] byteBufferArr, int[] ints, int[] ints2, int[] ints3, float[] floats, int i3, int i4);
 
-    public static native void calcFlexiSections(float[] fArr, int i, float[] fArr2, float[] fArr3, int i2, float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, boolean z);
+    public static native void calcFlexiSections(float[] floats, int i, float[] floats2, float[] floats3, int i2, float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, boolean z);
 
-    public static native int checkFrustrumOcclusion(float[] fArr, float[] fArr2, float f, float f2, float f3);
+    public static native int checkFrustrumOcclusion(float[] floats, float[] floats2, float f, float f2, float f3);
 
     private native ByteBuffer decompress(String str, int i, int i2, boolean z, int i3, int i4);
 
-    private native ByteBuffer decompressTGA(byte[] bArr, boolean z, boolean z2, float f, float f2, boolean z3);
+    private native ByteBuffer decompressTGA(byte[] bytes, boolean z, boolean z2, float f, float f2, boolean z3);
 
     private native void drawBuf(ByteBuffer byteBuffer, int i, int i2, int i3, ByteBuffer byteBuffer2, int i4, int i5, int i6, int i7, boolean z, boolean z2, boolean z3, boolean z4);
 
@@ -358,15 +358,15 @@ public class OpenJPEG implements GLTexture {
         if (createBitmap == null) {
             return null;
         }
-        for (int i2 = 0; i2 < this.height; i2++) {
-            for (int i3 = 0; i3 < this.width; i3++) {
+        for (int j = 0; j < this.height; j++) {
+            for (int k = 0; k < this.width; k++) {
                 if (this.num_components == 1) {
-                    int i4 = getByte(((this.width * i2) + i3) * this.num_components) & 0xFF;
+                    int i4 = getByte(((this.width * j) + k) * this.num_components) & 0xFF;
                     i = i4 | (i4 << 16) | 0xFF000000 | (i4 << 8);
                 } else {
-                    i = ((this.num_components >= 4 ? getByte((((this.width * i2) + i3) * this.num_components) + 3) & 0xFF : 255) << 24) | ((getByte((((this.width * i2) + i3) * this.num_components) + 0) & 0xFF) << 16) | ((getByte((((this.width * i2) + i3) * this.num_components) + 1) & 0xFF) << 8) | (getByte((((this.width * i2) + i3) * this.num_components) + 2) & 0xFF);
+                    i = ((this.num_components >= 4 ? getByte((((this.width * j) + k) * this.num_components) + 3) & 0xFF : 255) << 24) | ((getByte((((this.width * j) + k) * this.num_components) + 0) & 0xFF) << 16) | ((getByte((((this.width * j) + k) * this.num_components) + 1) & 0xFF) << 8) | (getByte((((this.width * j) + k) * this.num_components) + 2) & 0xFF);
                 }
-                createBitmap.setPixel(i3, (this.height - 1) - i2, i);
+                createBitmap.setPixel(k, (this.height - 1) - j, i);
             }
         }
         return createBitmap;
@@ -383,15 +383,15 @@ public class OpenJPEG implements GLTexture {
     public Bitmap getExtraAsBitmap() {
         int i;
         Bitmap createBitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
-        for (int i2 = 0; i2 < this.height; i2++) {
-            for (int i3 = 0; i3 < this.width; i3++) {
+        for (int j = 0; j < this.height; j++) {
+            for (int k = 0; k < this.width; k++) {
                 if (this.num_extra_components == 1) {
-                    int i4 = getByte((this.width * this.height * this.num_components) + (this.width * i2) + i3) & 0xFF;
+                    int i4 = getByte((this.width * this.height * this.num_components) + (this.width * j) + k) & 0xFF;
                     i = i4 | (i4 << 16) | 0xFF000000 | (i4 << 8);
                 } else {
                     i = 0;
                 }
-                createBitmap.setPixel(i3, (this.height - 1) - i2, i);
+                createBitmap.setPixel(k, (this.height - 1) - j, i);
             }
         }
         return createBitmap;
@@ -444,13 +444,13 @@ public class OpenJPEG implements GLTexture {
         return this.bytes_per_pixel != ETC1_BYTES_PER_PIXEL && (this.num_components >= 4 || this.num_components == 1);
     }
 
-    public void putPixelRow(int i, int[] iArr, int i2) {
+    public void putPixelRow(int i, int[] ints, int i2) {
         int i3 = 0;
         if (this.rawBuffer != null) {
             int i4 = this.width * this.num_components * i;
             if (this.num_components == 3) {
                 while (i3 < i2) {
-                    int i5 = iArr[i3];
+                    int i5 = ints[i3];
                     int i6 = i4 + 1;
                     this.rawBuffer.put(i4, (byte) (i5 >> 16));
                     int i7 = i6 + 1;
@@ -463,7 +463,7 @@ public class OpenJPEG implements GLTexture {
             }
             if (this.num_components == 4) {
                 while (i3 < i2) {
-                    int i8 = iArr[i3];
+                    int i8 = ints[i3];
                     int i9 = i4 + 1;
                     this.rawBuffer.put(i4, (byte) (i8 >> 16));
                     int i10 = i9 + 1;

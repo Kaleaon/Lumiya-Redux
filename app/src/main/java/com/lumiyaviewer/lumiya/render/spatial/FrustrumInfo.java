@@ -10,22 +10,22 @@ public class FrustrumInfo {
     public final float viewY;
     public final float viewZ;
 
-    public FrustrumInfo(float f, float f2, float f3, float f4, float[] fArr, int i) {
-        this.viewX = f;
-        this.viewY = f2;
-        this.viewZ = f3;
-        this.viewDistance = f4;
+    public FrustrumInfo(float viewX, float viewY, float viewZ, float viewDistance, float[] floats, int i) {
+        this.viewX = viewX;
+        this.viewY = viewY;
+        this.viewZ = viewZ;
+        this.viewDistance = viewDistance;
         this.mvpMatrix = new float[16];
-        System.arraycopy(fArr, i, this.mvpMatrix, 0, 16);
+        System.arraycopy(floats, i, this.mvpMatrix, 0, 16);
     }
 
-    public FrustrumInfo(float f, float f2, float f3, float f4, float[] fArr, int i, float[] fArr2, int i2) {
-        this.viewX = f;
-        this.viewY = f2;
-        this.viewZ = f3;
-        this.viewDistance = f4;
+    public FrustrumInfo(float viewX, float viewY, float viewZ, float viewDistance, float[] floats, int i, float[] floats2, int i2) {
+        this.viewX = viewX;
+        this.viewY = viewY;
+        this.viewZ = viewZ;
+        this.viewDistance = viewDistance;
         this.mvpMatrix = new float[16];
-        Matrix.multiplyMM(this.mvpMatrix, 0, fArr2, i2, fArr, i);
+        Matrix.multiplyMM(this.mvpMatrix, 0, floats2, i2, floats, i);
     }
 
     public boolean equals(Object obj) {

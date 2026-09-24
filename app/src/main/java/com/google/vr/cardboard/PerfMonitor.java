@@ -67,15 +67,15 @@ public class PerfMonitor implements AutoCloseable {
     }
 
     public float queryRelativeTemperature() throws VrCoreNotAvailableException {
-        IPerformanceService iPerformanceService;
+        IPerformanceService perfService;
         synchronized (this.lock) {
-            iPerformanceService = this.perfService;
+            perfService = this.perfService;
         }
-        if (iPerformanceService == null) {
+        if (perfService == null) {
             throw new VrCoreNotAvailableException(5);
         }
         try {
-            return iPerformanceService.getCurrentThrottlingRelativeTemperature();
+            return perfService.getCurrentThrottlingRelativeTemperature();
         } catch (RemoteException e) {
             throw new VrCoreNotAvailableException(8);
         } catch (SecurityException e2) {
@@ -86,15 +86,15 @@ public class PerfMonitor implements AutoCloseable {
     }
 
     public void reportFrameDrops(long j, long j2, int i) throws VrCoreNotAvailableException {
-        IPerformanceService iPerformanceService;
+        IPerformanceService perfService;
         synchronized (this.lock) {
-            iPerformanceService = this.perfService;
+            perfService = this.perfService;
         }
-        if (iPerformanceService == null) {
+        if (perfService == null) {
             throw new VrCoreNotAvailableException(5);
         }
         try {
-            iPerformanceService.reportFrameDrops(j, j2, i);
+            perfService.reportFrameDrops(j, j2, i);
         } catch (RemoteException e) {
             throw new VrCoreNotAvailableException(8);
         }

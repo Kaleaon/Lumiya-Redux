@@ -40,8 +40,8 @@ public class PickDelete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickDelete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickDelete(this);
     }
 
     @Override

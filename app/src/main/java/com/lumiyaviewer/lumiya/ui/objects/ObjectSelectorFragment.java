@@ -95,13 +95,13 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         return objectSelectorFragment;
     }
 
-    private void showObjectDetails(SLObjectDisplayInfo sLObjectDisplayInfo) {
+    private void showObjectDetails(SLObjectDisplayInfo objectDisplayInfo) {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments());
         if (activeAgentID != null) {
-            if (!(sLObjectDisplayInfo instanceof SLAvatarObjectDisplayInfo)) {
-                DetailsActivity.showDetails(getActivity(), ObjectListNewActivity.ObjectDetailsActivityFactory.getInstance(), ObjectDetailsFragment.makeSelection(activeAgentID, sLObjectDisplayInfo.localID));
+            if (!(objectDisplayInfo instanceof SLAvatarObjectDisplayInfo)) {
+                DetailsActivity.showDetails(getActivity(), ObjectListNewActivity.ObjectDetailsActivityFactory.getInstance(), ObjectDetailsFragment.makeSelection(activeAgentID, objectDisplayInfo.localID));
             } else {
-                DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, ((SLAvatarObjectDisplayInfo) sLObjectDisplayInfo).uuid)));
+                DetailsActivity.showEmbeddedDetails(getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, ((SLAvatarObjectDisplayInfo) objectDisplayInfo).uuid)));
             }
         }
     }
@@ -157,15 +157,15 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
             ExpandableListAdapter expandableListAdapter = expandableListView.getExpandableListAdapter();
             if (expandableListAdapter instanceof ObjectListAdapter) {
                 HashSet hashSet = new HashSet();
-                for (SLObjectDisplayInfo sLObjectDisplayInfo : ((ObjectListAdapter) expandableListAdapter).getData()) {
-                    if ((sLObjectDisplayInfo instanceof SLPrimObjectDisplayInfoWithChildren) && !((SLPrimObjectDisplayInfoWithChildren) sLObjectDisplayInfo).isImplicitlyAdded()) {
-                        hashSet.add(Integer.valueOf(sLObjectDisplayInfo.localID));
+                for (SLObjectDisplayInfo objectDisplayInfo : ((ObjectListAdapter) expandableListAdapter).getData()) {
+                    if ((objectDisplayInfo instanceof SLPrimObjectDisplayInfoWithChildren) && !((SLPrimObjectDisplayInfoWithChildren) objectDisplayInfo).isImplicitlyAdded()) {
+                        hashSet.add(Integer.valueOf(objectDisplayInfo.localID));
                     }
                 }
                 ArrayList arrayList = new ArrayList();
                 for (int i = 0; i < immutableList.size(); i++) {
-                    SLObjectDisplayInfo sLObjectDisplayInfo2 = immutableList.get(i);
-                    if ((sLObjectDisplayInfo2 instanceof SLPrimObjectDisplayInfoWithChildren) && ((SLPrimObjectDisplayInfoWithChildren) sLObjectDisplayInfo2).isImplicitlyAdded() && !hashSet.contains(Integer.valueOf(sLObjectDisplayInfo2.localID))) {
+                    SLObjectDisplayInfo objectDisplayInfo2 = immutableList.get(i);
+                    if ((objectDisplayInfo2 instanceof SLPrimObjectDisplayInfoWithChildren) && ((SLPrimObjectDisplayInfoWithChildren) objectDisplayInfo2).isImplicitlyAdded() && !hashSet.contains(Integer.valueOf(objectDisplayInfo2.localID))) {
                         arrayList.add(Integer.valueOf(i));
                     }
                 }

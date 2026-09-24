@@ -40,19 +40,19 @@ public interface CardboardViewApi {
 
     void resetHeadTracker();
 
-    boolean setAsyncReprojectionEnabled(boolean z);
+    boolean setAsyncReprojectionEnabled(boolean asyncReprojectionEnabled);
 
-    void setDepthStencilFormat(int i);
+    void setDepthStencilFormat(int depthStencilFormat);
 
-    void setDistortionCorrectionEnabled(boolean z);
+    void setDistortionCorrectionEnabled(boolean distortionCorrectionEnabled);
 
-    void setDistortionCorrectionScale(float f);
+    void setDistortionCorrectionScale(float distortionCorrectionScale);
 
-    void setMultisampling(int i);
+    void setMultisampling(int multisampling);
 
-    void setNeckModelEnabled(boolean z);
+    void setNeckModelEnabled(boolean neckModelEnabled);
 
-    void setNeckModelFactor(float f);
+    void setNeckModelFactor(float neckModelFactor);
 
     void setOnCardboardBackListener(Runnable runnable);
 
@@ -66,9 +66,9 @@ public interface CardboardViewApi {
 
     void setRenderer(GvrView.StereoRenderer stereoRenderer);
 
-    void setStereoModeEnabled(boolean z);
+    void setStereoModeEnabled(boolean stereoModeEnabled);
 
-    void setTransitionViewEnabled(boolean z);
+    void setTransitionViewEnabled(boolean transitionViewEnabled);
 
     void shutdown();
 

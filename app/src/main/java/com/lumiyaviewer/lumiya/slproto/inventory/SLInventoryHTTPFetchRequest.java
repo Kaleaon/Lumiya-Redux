@@ -45,8 +45,8 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             this.aborted = false;
         }
 
-            void addEntry(SLInventoryEntry sLInventoryEntry) throws InterruptedException {
-            this.commitEntryQueue.put(sLInventoryEntry);
+            void addEntry(SLInventoryEntry inventoryEntry) throws InterruptedException {
+            this.commitEntryQueue.put(inventoryEntry);
         }
 
         /**
@@ -170,12 +170,12 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
 
         @Override
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
-            Debug.Printf("InvFetch: FolderDataContentHandler: key '%s' value '%s'", str, lLSDNode);
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
+            Debug.Printf("InvFetch: FolderDataContentHandler: key '%s' value '%s'", str, lsdNode);
             if (str.equals("version")) {
-                this.gotVersion = lLSDNode.asInt();
+                this.gotVersion = lsdNode.asInt();
             } else if (str.equals("folder_id")) {
-                this.gotUUID = lLSDNode.asUUID();
+                this.gotUUID = lsdNode.asUUID();
             }
         }
     }
@@ -203,7 +203,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
 
         @Override
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
             FolderValueKey byTag = FolderValueKey.byTag(str);
             if (byTag == null) {
                 Debug.Printf("InvFetch: Folder unknown key '%s'", str);
@@ -211,19 +211,19 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             }
             switch (byTag) {
                 case agent_id:
-                    this.entry.agentUUID = lLSDNode.asUUID();
+                    this.entry.agentUUID = lsdNode.asUUID();
                     break;
                 case category_id:
-                    this.entry.uuid = lLSDNode.asUUID();
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
                 case folder_id:
-                    this.entry.uuid = lLSDNode.asUUID();
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
                 case name:
-                    this.entry.name = lLSDNode.asString();
+                    this.entry.name = lsdNode.asString();
                     break;
                 case parent_id:
-                    this.entry.parentUUID = lLSDNode.asUUID();
+                    this.entry.parentUUID = lsdNode.asUUID();
                     if (!this.entry.parentUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID)) {
                         SLInventoryEntry findEntry = SLInventoryHTTPFetchRequest.this.db.findEntry(this.entry.parentUUID);
                         if (findEntry == null) {
@@ -238,24 +238,24 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                         break;
                     }
                 case type:
-                    if (!lLSDNode.isInt()) {
-                        SLAssetType byString = SLAssetType.getByString(lLSDNode.asString());
+                    if (!lsdNode.isInt()) {
+                        SLAssetType byString = SLAssetType.getByString(lsdNode.asString());
                         if (byString == SLAssetType.AT_UNKNOWN) {
-                            this.entry.typeDefault = SLInventoryType.getByString(lLSDNode.asString()).getTypeCode();
+                            this.entry.typeDefault = SLInventoryType.getByString(lsdNode.asString()).getTypeCode();
                             break;
                         } else {
                             this.entry.typeDefault = byString.getInventoryType().getTypeCode();
                             break;
                         }
                     } else {
-                        this.entry.typeDefault = lLSDNode.asInt();
+                        this.entry.typeDefault = lsdNode.asInt();
                         break;
                     }
                 case type_default:
-                    this.entry.typeDefault = lLSDNode.asInt();
+                    this.entry.typeDefault = lsdNode.asInt();
                     break;
                 case version:
-                    this.entry.version = lLSDNode.asInt();
+                    this.entry.version = lsdNode.asInt();
                     break;
             }
         }
@@ -296,7 +296,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         private final LLSDStreamingParser.LLSDContentHandler permissionsHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
 
             @Override
-            public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+            public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
                 PermissionsValueKey byTag = PermissionsValueKey.byTag(str);
                 if (byTag == null) {
                     Debug.Printf("InvFetch: Permissions unknown key '%s'", str);
@@ -304,52 +304,52 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 }
                 switch (byTag) {
                     case base_mask:
-                        ItemEntryContentHandler.this.entry.baseMask = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.baseMask = lsdNode.asInt();
                         break;
                     case creator_id:
-                        ItemEntryContentHandler.this.entry.creatorUUID = lLSDNode.asUUID();
+                        ItemEntryContentHandler.this.entry.creatorUUID = lsdNode.asUUID();
                         break;
                     case everyone_mask:
-                        ItemEntryContentHandler.this.entry.everyoneMask = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.everyoneMask = lsdNode.asInt();
                         break;
                     case group_id:
-                        ItemEntryContentHandler.this.entry.groupUUID = lLSDNode.asUUID();
+                        ItemEntryContentHandler.this.entry.groupUUID = lsdNode.asUUID();
                         break;
                     case group_mask:
-                        ItemEntryContentHandler.this.entry.groupMask = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.groupMask = lsdNode.asInt();
                         break;
                     case is_owner_group:
-                        ItemEntryContentHandler.this.entry.isGroupOwned = lLSDNode.asBoolean();
+                        ItemEntryContentHandler.this.entry.isGroupOwned = lsdNode.asBoolean();
                         break;
                     case last_owner_id:
-                        ItemEntryContentHandler.this.entry.lastOwnerUUID = lLSDNode.asUUID();
+                        ItemEntryContentHandler.this.entry.lastOwnerUUID = lsdNode.asUUID();
                         break;
                     case next_owner_mask:
-                        ItemEntryContentHandler.this.entry.nextOwnerMask = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.nextOwnerMask = lsdNode.asInt();
                         break;
                     case owner_id:
-                        ItemEntryContentHandler.this.entry.ownerUUID = lLSDNode.asUUID();
+                        ItemEntryContentHandler.this.entry.ownerUUID = lsdNode.asUUID();
                         break;
                     case owner_mask:
-                        ItemEntryContentHandler.this.entry.ownerMask = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.ownerMask = lsdNode.asInt();
                         break;
                 }
             }
         };
         private final LLSDStreamingParser.LLSDContentHandler saleInfoHandler = new LLSDStreamingParser.LLSDDefaultContentHandler() {
             @Override
-            public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+            public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
                 if (str.equals("sale_type")) {
-                    if (lLSDNode.isString()) {
-                        ItemEntryContentHandler.this.entry.saleType = SLSaleType.getByString(lLSDNode.asString()).getTypeCode();
+                    if (lsdNode.isString()) {
+                        ItemEntryContentHandler.this.entry.saleType = SLSaleType.getByString(lsdNode.asString()).getTypeCode();
                         return;
                     } else {
-                        ItemEntryContentHandler.this.entry.saleType = lLSDNode.asInt();
+                        ItemEntryContentHandler.this.entry.saleType = lsdNode.asInt();
                         return;
                     }
                 }
                 if (str.equals("sale_price")) {
-                    ItemEntryContentHandler.this.entry.salePrice = lLSDNode.asInt();
+                    ItemEntryContentHandler.this.entry.salePrice = lsdNode.asInt();
                 } else {
                     Debug.Printf("InvFetch: Sale info unknown key '%s'", str);
                 }
@@ -380,7 +380,7 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
 
         @Override
-        public void onPrimitiveValue(String str, LLSDNode lLSDNode) throws LLSDXMLException, LLSDValueTypeException {
+        public void onPrimitiveValue(String str, LLSDNode lsdNode) throws LLSDXMLException, LLSDValueTypeException {
             ItemValueKey byTag = ItemValueKey.byTag(str);
             if (byTag == null) {
                 Debug.Printf("InvFetch: Item unknown key '%s'", str);
@@ -388,36 +388,36 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
             }
             switch (byTag) {
                 case agent_id:
-                    this.entry.agentUUID = lLSDNode.asUUID();
+                    this.entry.agentUUID = lsdNode.asUUID();
                     break;
                 case asset_id:
-                    this.entry.assetUUID = lLSDNode.asUUID();
+                    this.entry.assetUUID = lsdNode.asUUID();
                     break;
                 case created_at:
-                    this.entry.creationDate = lLSDNode.asInt();
+                    this.entry.creationDate = lsdNode.asInt();
                     break;
                 case desc:
-                    this.entry.description = lLSDNode.asString();
+                    this.entry.description = lsdNode.asString();
                     break;
                 case flags:
-                    this.entry.flags = lLSDNode.asInt();
+                    this.entry.flags = lsdNode.asInt();
                     break;
                 case inv_type:
-                    if (!lLSDNode.isInt()) {
-                        this.entry.invType = SLInventoryType.getByString(lLSDNode.asString()).getTypeCode();
+                    if (!lsdNode.isInt()) {
+                        this.entry.invType = SLInventoryType.getByString(lsdNode.asString()).getTypeCode();
                         break;
                     } else {
-                        this.entry.invType = lLSDNode.asInt();
+                        this.entry.invType = lsdNode.asInt();
                         break;
                     }
                 case item_id:
-                    this.entry.uuid = lLSDNode.asUUID();
+                    this.entry.uuid = lsdNode.asUUID();
                     break;
                 case name:
-                    this.entry.name = lLSDNode.asString();
+                    this.entry.name = lsdNode.asString();
                     break;
                 case parent_id:
-                    this.entry.parentUUID = lLSDNode.asUUID();
+                    this.entry.parentUUID = lsdNode.asUUID();
                     if (!this.entry.parentUUID.equals(SLInventoryHTTPFetchRequest.this.folderUUID)) {
                         SLInventoryEntry findEntry = SLInventoryHTTPFetchRequest.this.db.findEntry(this.entry.parentUUID);
                         if (findEntry == null) {
@@ -432,11 +432,11 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                         break;
                     }
                 case type:
-                    if (!lLSDNode.isInt()) {
-                        this.entry.assetType = SLAssetType.getByString(lLSDNode.asString()).getTypeCode();
+                    if (!lsdNode.isInt()) {
+                        this.entry.assetType = SLAssetType.getByString(lsdNode.asString()).getTypeCode();
                         break;
                     } else {
-                        this.entry.assetType = lLSDNode.asInt();
+                        this.entry.assetType = lsdNode.asInt();
                         break;
                     }
             }
@@ -526,8 +526,8 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
         }
     }
 
-    SLInventoryHTTPFetchRequest(SLInventory sLInventory, UUID uuid, String str) throws SLInventory.NoInventoryItemException {
-        super(sLInventory, uuid);
+    SLInventoryHTTPFetchRequest(SLInventory inventory, UUID uuid, String capURL) throws SLInventory.NoInventoryItemException {
+        super(inventory, uuid);
         this.futureRef = new AtomicReference<>(null);
         this.streamingXmlReqRef = new AtomicReference<>(null);
         this.isCancelled = new AtomicBoolean(false);
@@ -593,15 +593,15 @@ class SLInventoryHTTPFetchRequest extends SLInventoryFetchRequest {
                 SLInventoryHTTPFetchRequest.this.completeFetch(success, cancelled);
             }
         };
-        this.capURL = str;
+        this.capURL = capURL;
     }
 
     @Override
     public void cancel() {
         this.isCancelled.set(true);
-        LLSDStreamingXMLRequest lLSDStreamingXMLRequest = this.streamingXmlReqRef.get();
-        if (lLSDStreamingXMLRequest != null) {
-            lLSDStreamingXMLRequest.InterruptRequest();
+        LLSDStreamingXMLRequest lsdStreamingXMLRequest = this.streamingXmlReqRef.get();
+        if (lsdStreamingXMLRequest != null) {
+            lsdStreamingXMLRequest.InterruptRequest();
         }
         Future<?> andSet = this.futureRef.getAndSet(null);
         if (andSet != null) {

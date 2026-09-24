@@ -54,8 +54,8 @@ public class UpdateParcel extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateParcel(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateParcel(this);
     }
 
     @Override

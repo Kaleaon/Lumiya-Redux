@@ -25,9 +25,9 @@ public class BuildUtils {
         return isDebug == null ? computeIsDebugBuild(context) : isDebug.booleanValue();
     }
 
-    public static synchronized void setIsDebugBuild(boolean z) {
+    public static synchronized void setIsDebugBuild(boolean isDebugBuild) {
         synchronized (BuildUtils.class) {
-            isDebug = Boolean.valueOf(z);
+            isDebug = Boolean.valueOf(isDebugBuild);
         }
     }
 }

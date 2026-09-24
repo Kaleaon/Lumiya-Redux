@@ -24,8 +24,8 @@ class GLStateBackup {
         private int attributeId;
         private IntBuffer enabled = IntBuffer.allocate(1);
 
-        VertexAttributeState(int i) {
-            this.attributeId = i;
+        VertexAttributeState(int attributeId) {
+            this.attributeId = attributeId;
         }
 
         void readFromGL() {

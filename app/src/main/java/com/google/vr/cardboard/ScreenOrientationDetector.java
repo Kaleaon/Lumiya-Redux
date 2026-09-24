@@ -30,15 +30,15 @@ public class ScreenOrientationDetector extends OrientationEventListener {
         this(context, listener, 30, 10);
     }
 
-    public ScreenOrientationDetector(Context context, Listener listener, int i, int i2) {
+    public ScreenOrientationDetector(Context context, Listener listener, int portraitToleranceDegrees, int landscapeToleranceDegrees) {
         super(context);
         this.currentScreenOrientation = -1;
-        if (i + i2 > 90) {
+        if (portraitToleranceDegrees + landscapeToleranceDegrees > 90) {
             throw new IllegalArgumentException("Portrait and landscape detection thresholds must sum to to <= 90 degrees");
         }
         this.clientListener = listener;
-        this.portraitToleranceDegrees = i;
-        this.landscapeToleranceDegrees = i2;
+        this.portraitToleranceDegrees = portraitToleranceDegrees;
+        this.landscapeToleranceDegrees = landscapeToleranceDegrees;
     }
 
     private int determineScreenOrientation(int i) {

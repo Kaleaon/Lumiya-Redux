@@ -91,17 +91,17 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         showEntryInfo(data);
     }
 
-    private void attachObject(SLInventoryEntry sLInventoryEntry) {
+    private void attachObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.AttachInventoryItem(sLInventoryEntry, 0, false);
+            this.agentCircuit.get().getModules().avatarAppearance.AttachInventoryItem(inventoryEntry, 0, false);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
     }
 
-    private void detachObject(SLInventoryEntry sLInventoryEntry) {
+    private void detachObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.DetachInventoryItem(sLInventoryEntry);
+            this.agentCircuit.get().getModules().avatarAppearance.DetachInventoryItem(inventoryEntry);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -126,10 +126,10 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         return bundle;
     }
 
-    private void playAnimation(SLInventoryEntry sLInventoryEntry, boolean z) {
+    private void playAnimation(SLInventoryEntry inventoryEntry, boolean z) {
         SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {
-            data.getModules().avatarControl.playAnimation(sLInventoryEntry.assetUUID, z);
+            data.getModules().avatarControl.playAnimation(inventoryEntry.assetUUID, z);
         }
     }
 
@@ -205,52 +205,52 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    private void showEntryInfo(@Nonnull SLInventoryEntry sLInventoryEntry) {
+    private void showEntryInfo(@Nonnull SLInventoryEntry inventoryEntry) {
         View view = getView();
         if (view != null) {
-            ((TextView) view.findViewById(R.id.asset_info_name)).setText(sLInventoryEntry.name);
-            ((TextView) view.findViewById(R.id.asset_info_description)).setText(!Strings.isNullOrEmpty(sLInventoryEntry.description) ? sLInventoryEntry.description : getResources().getString(R.string.asset_no_description));
-            ((TextView) view.findViewById(R.id.asset_info_type)).setText(sLInventoryEntry.getTypeDescriptionResId());
-            int drawableResource = sLInventoryEntry.getDrawableResource();
+            ((TextView) view.findViewById(R.id.asset_info_name)).setText(inventoryEntry.name);
+            ((TextView) view.findViewById(R.id.asset_info_description)).setText(!Strings.isNullOrEmpty(inventoryEntry.description) ? inventoryEntry.description : getResources().getString(R.string.asset_no_description));
+            ((TextView) view.findViewById(R.id.asset_info_type)).setText(inventoryEntry.getTypeDescriptionResId());
+            int drawableResource = inventoryEntry.getDrawableResource();
             if (drawableResource >= 0) {
                 ((ImageView) view.findViewById(R.id.asset_info_icon)).setImageResource(drawableResource);
             } else {
                 ((ImageView) view.findViewById(R.id.asset_info_icon)).setImageBitmap(null);
             }
-            int actionDescriptionResId = sLInventoryEntry.getActionDescriptionResId();
+            int actionDescriptionResId = inventoryEntry.getActionDescriptionResId();
             if (actionDescriptionResId >= 0) {
                 ((Button) view.findViewById(R.id.asset_action_button)).setText(actionDescriptionResId);
                 view.findViewById(R.id.asset_action_button).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.asset_action_button).setEnabled(this.inventoryFragmentHelper.isActionAllowed(sLInventoryEntry, actionDescriptionResId));
+                view.findViewById(R.id.asset_action_button).setEnabled(this.inventoryFragmentHelper.isActionAllowed(inventoryEntry, actionDescriptionResId));
             } else {
                 view.findViewById(R.id.asset_action_button).setVisibility(View.GONE);
             }
-            view.findViewById(R.id.edit_permissions_button).setVisibility((sLInventoryEntry.ownerMask & 16384) != 0 ? View.VISIBLE : View.GONE);
-            showPermissions(sLInventoryEntry.ownerMask, R.id.asset_permission_owner_copy, R.id.asset_permission_owner_modify, R.id.asset_permission_owner_transfer);
-            showPermissions(sLInventoryEntry.groupMask, R.id.asset_permission_group_copy, R.id.asset_permission_group_modify, R.id.asset_permission_group_transfer);
-            showPermissions(sLInventoryEntry.everyoneMask, R.id.asset_permission_everyone_copy, R.id.asset_permission_everyone_modify, R.id.asset_permission_everyone_transfer);
-            showPermissions(sLInventoryEntry.nextOwnerMask, R.id.asset_permission_next_owner_copy, R.id.asset_permission_next_owner_modify, R.id.asset_permission_next_owner_transfer);
+            view.findViewById(R.id.edit_permissions_button).setVisibility((inventoryEntry.ownerMask & 16384) != 0 ? View.VISIBLE : View.GONE);
+            showPermissions(inventoryEntry.ownerMask, R.id.asset_permission_owner_copy, R.id.asset_permission_owner_modify, R.id.asset_permission_owner_transfer);
+            showPermissions(inventoryEntry.groupMask, R.id.asset_permission_group_copy, R.id.asset_permission_group_modify, R.id.asset_permission_group_transfer);
+            showPermissions(inventoryEntry.everyoneMask, R.id.asset_permission_everyone_copy, R.id.asset_permission_everyone_modify, R.id.asset_permission_everyone_transfer);
+            showPermissions(inventoryEntry.nextOwnerMask, R.id.asset_permission_next_owner_copy, R.id.asset_permission_next_owner_modify, R.id.asset_permission_next_owner_transfer);
             SLAgentCircuit data = this.agentCircuit.getData();
             boolean z = data != null;
-            if (z && (sLInventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (sLInventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode() && sLInventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
-                boolean z2 = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false) != null;
-                boolean canDetachItem = z2 ? data.getModules().avatarAppearance.canDetachItem(sLInventoryEntry) : false;
+            if (z && (inventoryEntry.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (inventoryEntry.assetType == SLAssetType.AT_LINK.getTypeCode() && inventoryEntry.invType == SLInventoryType.IT_OBJECT.getTypeCode()))) {
+                boolean z2 = inventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false) != null;
+                boolean canDetachItem = z2 ? data.getModules().avatarAppearance.canDetachItem(inventoryEntry) : false;
                 view.findViewById(R.id.asset_attach_button).setVisibility(z2 ? View.GONE : View.VISIBLE);
                 view.findViewById(R.id.asset_detach_button).setVisibility(canDetachItem ? View.VISIBLE : View.GONE);
             } else {
                 view.findViewById(R.id.asset_attach_button).setVisibility(View.GONE);
                 view.findViewById(R.id.asset_detach_button).setVisibility(View.GONE);
             }
-            if (z && sLInventoryEntry.isAnimation()) {
-                ImmutableSet<UUID> data2 = this.runningAnimations.getData();
-                view.findViewById(R.id.asset_play_anim_button).setVisibility((data2 == null || !(data2.contains(sLInventoryEntry.assetUUID) ^ true)) ? 8 : 0);
-                view.findViewById(R.id.asset_stop_anim_button).setVisibility((data2 == null || !data2.contains(sLInventoryEntry.assetUUID)) ? View.GONE : View.VISIBLE);
+            if (z && inventoryEntry.isAnimation()) {
+                ImmutableSet<UUID> uuids = this.runningAnimations.getData();
+                view.findViewById(R.id.asset_play_anim_button).setVisibility((uuids == null || !(uuids.contains(inventoryEntry.assetUUID) ^ true)) ? 8 : 0);
+                view.findViewById(R.id.asset_stop_anim_button).setVisibility((uuids == null || !uuids.contains(inventoryEntry.assetUUID)) ? View.GONE : View.VISIBLE);
             } else {
                 view.findViewById(R.id.asset_play_anim_button).setVisibility(View.GONE);
                 view.findViewById(R.id.asset_stop_anim_button).setVisibility(View.GONE);
             }
-            if (z && sLInventoryEntry.isWearable()) {
-                Object whatIsItemWornOn = sLInventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false);
+            if (z && inventoryEntry.isWearable()) {
+                Object whatIsItemWornOn = inventoryEntry.whatIsItemWornOn(this.wornAttachments.getData(), this.wornWearables.getData(), false);
                 if (whatIsItemWornOn instanceof SLWearableType) {
                     view.findViewById(R.id.asset_wear_button).setVisibility(View.GONE);
                     if (((SLWearableType) whatIsItemWornOn).isBodyPart()) {
@@ -261,7 +261,7 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
                     view.findViewById(R.id.asset_worn_text).setVisibility(view.findViewById(R.id.asset_take_off_button).getVisibility() != 0 ? View.VISIBLE : View.GONE);
                 } else {
                     view.findViewById(R.id.asset_take_off_button).setVisibility(View.GONE);
-                    view.findViewById(R.id.asset_wear_button).setVisibility(data.getModules().avatarAppearance.canWearItem(sLInventoryEntry) ? View.VISIBLE : View.GONE);
+                    view.findViewById(R.id.asset_wear_button).setVisibility(data.getModules().avatarAppearance.canWearItem(inventoryEntry) ? View.VISIBLE : View.GONE);
                     view.findViewById(R.id.asset_worn_text).setVisibility(View.GONE);
                 }
             } else {
@@ -277,22 +277,22 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         View view = getView();
         if (view != null) {
             TextView textView = (TextView) view.findViewById(i2);
-            TextView textView2 = (TextView) view.findViewById(i3);
-            TextView textView3 = (TextView) view.findViewById(i4);
+            TextView viewById = (TextView) view.findViewById(i3);
+            TextView viewById2 = (TextView) view.findViewById(i4);
             if ((32768 & i) != 0) {
                 textView.setPaintFlags(textView.getPaintFlags() & (-17));
             } else {
                 textView.setPaintFlags(textView.getPaintFlags() | 16);
             }
             if ((i & 16384) != 0) {
-                textView2.setPaintFlags(textView2.getPaintFlags() & (-17));
+                viewById.setPaintFlags(viewById.getPaintFlags() & (-17));
             } else {
-                textView2.setPaintFlags(textView2.getPaintFlags() | 16);
+                viewById.setPaintFlags(viewById.getPaintFlags() | 16);
             }
             if ((i & 8192) != 0) {
-                textView3.setPaintFlags(textView3.getPaintFlags() & (-17));
+                viewById2.setPaintFlags(viewById2.getPaintFlags() & (-17));
             } else {
-                textView3.setPaintFlags(textView3.getPaintFlags() | 16);
+                viewById2.setPaintFlags(viewById2.getPaintFlags() | 16);
             }
         }
     }
@@ -319,9 +319,9 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    private void takeOffObject(SLInventoryEntry sLInventoryEntry) {
+    private void takeOffObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.TakeItemOff(sLInventoryEntry);
+            this.agentCircuit.get().getModules().avatarAppearance.TakeItemOff(inventoryEntry);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -333,10 +333,10 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
         try {
             this.agentCircuit.assertHasData();
-            SLInventoryEntry sLInventoryEntry = this.entrySubscription.get();
+            SLInventoryEntry inventoryEntry = this.entrySubscription.get();
             this.menuItemDelete.setVisible(true);
-            this.menuItemRename.setVisible(((sLInventoryEntry.baseMask & sLInventoryEntry.ownerMask) & 16384) != 0);
-            this.menuItemShare.setVisible(((sLInventoryEntry.ownerMask & sLInventoryEntry.baseMask) & 8192) != 0);
+            this.menuItemRename.setVisible(((inventoryEntry.baseMask & inventoryEntry.ownerMask) & 16384) != 0);
+            this.menuItemShare.setVisible(((inventoryEntry.ownerMask & inventoryEntry.baseMask) & 8192) != 0);
             this.menuItemCut.setVisible(true);
             this.menuItemCopy.setVisible(true);
         } catch (SubscriptionData.DataNotReadyException e) {
@@ -348,9 +348,9 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         }
     }
 
-    private void wearObject(SLInventoryEntry sLInventoryEntry) {
+    private void wearObject(SLInventoryEntry inventoryEntry) {
         try {
-            this.agentCircuit.get().getModules().avatarAppearance.WearItem(sLInventoryEntry, false);
+            this.agentCircuit.get().getModules().avatarAppearance.WearItem(inventoryEntry, false);
         } catch (SubscriptionData.DataNotReadyException e) {
             Debug.Warning(e);
         }
@@ -485,10 +485,10 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
         if (userManager != null) {
             try {
-                SLInventoryEntry sLInventoryEntry = this.entrySubscription.get();
+                SLInventoryEntry inventoryEntry = this.entrySubscription.get();
                 switch (menuItem.getItemId()) {
                     case R.id.inventory_item_delete_item:
-                        this.inventoryFragmentHelper.DeleteInventoryEntry(sLInventoryEntry, new Runnable() {
+                        this.inventoryFragmentHelper.DeleteInventoryEntry(inventoryEntry, new Runnable() {
                             private final /* synthetic */ void $m$0() {
                                 AssetInfoFragment.this.m594xc73583d8();
                             }
@@ -500,17 +500,17 @@ public class AssetInfoFragment extends FragmentWithTitle implements ReloadableFr
                         });
                         return true;
                     case R.id.inventory_item_rename_item:
-                        this.inventoryFragmentHelper.RenameInventoryEntry(sLInventoryEntry);
+                        this.inventoryFragmentHelper.RenameInventoryEntry(inventoryEntry);
                         return true;
                     case R.id.inventory_item_share_item:
-                        this.inventoryFragmentHelper.ShareInventoryEntry(sLInventoryEntry);
+                        this.inventoryFragmentHelper.ShareInventoryEntry(inventoryEntry);
                         return true;
                     case R.id.inventory_item_cut_item:
-                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(true, sLInventoryEntry));
+                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(true, inventoryEntry));
                         Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                         return true;
                     case R.id.inventory_item_copy_item:
-                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(false, sLInventoryEntry));
+                        userManager.getInventoryManager().copyToClipboard(new InventoryManager.InventoryClipboardEntry(false, inventoryEntry));
                         Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
                         return true;
                 }

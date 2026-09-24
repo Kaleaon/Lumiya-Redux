@@ -32,21 +32,21 @@ public class UiUtils {
         ArrayList arrayList = new ArrayList();
         Integer num = null;
         for (ResolveInfo resolveInfo : queryIntentActivities) {
-            String str = resolveInfo.activityInfo.packageName;
-            if (PackageUtils.isGooglePackage(str)) {
-                int i = resolveInfo.priority;
-                if (PackageUtils.isSystemPackage(context, str)) {
-                    i++;
+            String packageName = resolveInfo.activityInfo.packageName;
+            if (PackageUtils.isGooglePackage(packageName)) {
+                int priority = resolveInfo.priority;
+                if (PackageUtils.isSystemPackage(context, packageName)) {
+                    priority++;
                 }
                 if (num == null) {
-                    num = Integer.valueOf(i);
-                } else if (i > num.intValue()) {
-                    num = Integer.valueOf(i);
+                    num = Integer.valueOf(priority);
+                } else if (priority > num.intValue()) {
+                    num = Integer.valueOf(priority);
                     arrayList.clear();
-                } else if (i >= num.intValue()) {
+                } else if (priority >= num.intValue()) {
                 }
                 Intent intent2 = new Intent(intent);
-                intent2.setClassName(str, resolveInfo.activityInfo.name);
+                intent2.setClassName(packageName, resolveInfo.activityInfo.name);
                 arrayList.add(intent2);
             }
         }

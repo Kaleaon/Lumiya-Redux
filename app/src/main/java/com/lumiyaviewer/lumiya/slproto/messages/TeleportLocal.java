@@ -38,8 +38,8 @@ public class TeleportLocal extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportLocal(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportLocal(this);
     }
 
     @Override

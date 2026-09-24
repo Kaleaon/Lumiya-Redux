@@ -8,8 +8,8 @@ public enum LEDAction {
 
     private String preferenceValue;
 
-    LEDAction(String str) {
-        this.preferenceValue = str;
+    LEDAction(String preferenceValue) {
+        this.preferenceValue = preferenceValue;
     }
 
     public static LEDAction getByPreferenceString(String str) {

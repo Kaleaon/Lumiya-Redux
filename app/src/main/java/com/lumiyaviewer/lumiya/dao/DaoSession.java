@@ -39,8 +39,8 @@ public class DaoSession extends AbstractDaoSession {
     private final UserPicDao userPicDao;
     private final DaoConfig userPicDaoConfig;
 
-    public DaoSession(SQLiteDatabase sQLiteDatabase, IdentityScopeType identityScopeType, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig> map) {
-        super(sQLiteDatabase);
+    public DaoSession(SQLiteDatabase sqLiteDatabase, IdentityScopeType identityScopeType, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig> map) {
+        super(sqLiteDatabase);
         this.cachedResponseDaoConfig = map.get(CachedResponseDao.class).clone();
         this.cachedResponseDaoConfig.initIdentityScope(identityScopeType);
         this.cachedAssetDaoConfig = map.get(CachedAssetDao.class).clone();

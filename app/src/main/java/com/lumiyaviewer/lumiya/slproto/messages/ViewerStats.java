@@ -85,8 +85,8 @@ public class ViewerStats extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleViewerStats(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleViewerStats(this);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ViewerStats extends SLMessage {
         this.FailStats_Field.OffCircuit = unpackInt(byteBuffer);
         this.FailStats_Field.Invalid = unpackInt(byteBuffer);
         int i2 = byteBuffer.get() & 0xFF;
-        for (int i3 = 0; i3 < i2; i3++) {
+        for (int j = 0; j < i2; j++) {
             MiscStats miscStats = new MiscStats();
             miscStats.Type = unpackInt(byteBuffer);
             miscStats.Value = unpackDouble(byteBuffer);

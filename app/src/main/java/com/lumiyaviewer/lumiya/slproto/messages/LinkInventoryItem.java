@@ -44,8 +44,8 @@ public class LinkInventoryItem extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLinkInventoryItem(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLinkInventoryItem(this);
     }
 
     @Override

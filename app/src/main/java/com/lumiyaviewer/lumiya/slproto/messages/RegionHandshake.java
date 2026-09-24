@@ -84,8 +84,8 @@ public class RegionHandshake extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRegionHandshake(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRegionHandshake(this);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class RegionHandshake extends SLMessage {
         this.RegionInfo3_Field.ProductSKU = unpackVariable(byteBuffer, 1);
         this.RegionInfo3_Field.ProductName = unpackVariable(byteBuffer, 1);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             RegionInfo4 regionInfo4 = new RegionInfo4();
             regionInfo4.RegionFlagsExtended = unpackLong(byteBuffer);
             regionInfo4.RegionProtocols = unpackLong(byteBuffer);

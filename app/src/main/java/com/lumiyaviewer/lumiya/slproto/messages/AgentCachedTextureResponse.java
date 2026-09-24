@@ -52,8 +52,8 @@ public class AgentCachedTextureResponse extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentCachedTextureResponse(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentCachedTextureResponse(this);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AgentCachedTextureResponse extends SLMessage {
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         this.AgentData_Field.SerialNum = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             WearableData wearableData = new WearableData();
             wearableData.TextureID = unpackUUID(byteBuffer);
             wearableData.TextureIndex = unpackByte(byteBuffer) & 0xFF;

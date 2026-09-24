@@ -29,7 +29,7 @@ public class SLConnection implements Runnable {
         this.timer = null;
     }
 
-    public void AddCircuit(SLCircuit sLCircuit) {
+    public void AddCircuit(SLCircuit circuit) {
         synchronized (this) {
             if (this.workingThread == null) {
                 this.workingThread = new Thread(this, "SLConnection");
@@ -55,26 +55,26 @@ public class SLConnection implements Runnable {
 
     @Override
     public void run() {
-        int i;
+        int idleInterval;
         Debug.Log("working thread started");
         while (!this.selector.keys().isEmpty()) {
             int i2 = 1000;
             try {
                 for (SelectionKey selectionKey : this.selector.keys()) {
                     try {
-                        SLCircuit sLCircuit = (SLCircuit) selectionKey.attachment();
-                        if (sLCircuit != null) {
+                        SLCircuit circuit = (SLCircuit) selectionKey.attachment();
+                        if (circuit != null) {
                             if (selectionKey.isValid()) {
-                                sLCircuit.ProcessWakeup();
-                                i = sLCircuit.getIdleInterval();
-                                if (i < i2) {
+                                circuit.ProcessWakeup();
+                                idleInterval = circuit.getIdleInterval();
+                                if (idleInterval < i2) {
                                 }
                             }
-                            i = i2;
+                            idleInterval = i2;
                         } else {
-                            i = i2;
+                            idleInterval = i2;
                         }
-                        i2 = i;
+                        i2 = idleInterval;
                     } catch (ConcurrentModificationException e) {
                     } catch (NoSuchElementException e2) {
                     }
@@ -84,17 +84,17 @@ public class SLConnection implements Runnable {
                     try {
                         SelectionKey next = it.next();
                         it.remove();
-                        SLCircuit sLCircuit2 = (SLCircuit) next.attachment();
-                        if (sLCircuit2 != null) {
+                        SLCircuit circuit2 = (SLCircuit) next.attachment();
+                        if (circuit2 != null) {
                             if (next.isValid() && next.isReadable()) {
-                                sLCircuit2.ProcessReceive();
+                                circuit2.ProcessReceive();
                             }
                             if (next.isValid() && next.isWritable()) {
-                                sLCircuit2.ProcessTransmit();
+                                circuit2.ProcessTransmit();
                             }
                             if (next.isValid()) {
-                                sLCircuit2.UpdateSelectorOps();
-                                sLCircuit2.TryProcessIdle();
+                                circuit2.UpdateSelectorOps();
+                                circuit2.TryProcessIdle();
                             }
                         }
                     } catch (CancelledKeyException e3) {
@@ -108,9 +108,9 @@ public class SLConnection implements Runnable {
                 e7.printStackTrace();
                 for (SelectionKey selectionKey2 : this.selector.keys()) {
                     try {
-                        SLCircuit sLCircuit3 = (SLCircuit) selectionKey2.attachment();
-                        if (sLCircuit3 != null && selectionKey2.isValid()) {
-                            sLCircuit3.ProcessNetworkError();
+                        SLCircuit circuit3 = (SLCircuit) selectionKey2.attachment();
+                        if (circuit3 != null && selectionKey2.isValid()) {
+                            circuit3.ProcessNetworkError();
                         }
                     } catch (CancelledKeyException e8) {
                     } catch (ClosedSelectorException e9) {

@@ -40,8 +40,8 @@ public class ParcelDeedToGroup extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelDeedToGroup(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelDeedToGroup(this);
     }
 
     @Override

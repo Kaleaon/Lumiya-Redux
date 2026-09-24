@@ -46,8 +46,8 @@ public class GroupVoteHistoryRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupVoteHistoryRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupVoteHistoryRequest(this);
     }
 
     @Override

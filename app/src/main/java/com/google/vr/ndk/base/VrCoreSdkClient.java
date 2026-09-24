@@ -299,11 +299,11 @@ class VrCoreSdkClient {
     }
 
     public static void resumeTracking(GvrApi gvrApi, HeadTrackingState headTrackingState) {
-        byte[] bArr = null;
+        byte[] bytes = null;
         if (headTrackingState != null && !headTrackingState.isEmpty()) {
-            bArr = headTrackingState.getData();
+            bytes = headTrackingState.getData();
         }
-        gvrApi.resumeTrackingSetState(bArr);
+        gvrApi.resumeTrackingSetState(bytes);
     }
 
     public void resumeTracking(HeadTrackingState headTrackingState) {
@@ -363,10 +363,10 @@ class VrCoreSdkClient {
         return false;
     }
 
-    public void setEnabled(boolean z) {
-        if (this.isEnabled != z) {
-            this.isEnabled = z;
-            this.gvrApi.setIgnoreManualTrackerPauseResume(z);
+    public void setEnabled(boolean isEnabled) {
+        if (this.isEnabled != isEnabled) {
+            this.isEnabled = isEnabled;
+            this.gvrApi.setIgnoreManualTrackerPauseResume(isEnabled);
             if (this.isResumed) {
                 if (this.isEnabled) {
                     doBind();

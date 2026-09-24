@@ -33,8 +33,8 @@ public class RpcChannelReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRpcChannelReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRpcChannelReply(this);
     }
 
     @Override

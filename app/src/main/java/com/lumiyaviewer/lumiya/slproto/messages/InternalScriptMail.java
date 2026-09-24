@@ -32,8 +32,8 @@ public class InternalScriptMail extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInternalScriptMail(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInternalScriptMail(this);
     }
 
     @Override

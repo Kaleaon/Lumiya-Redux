@@ -34,8 +34,8 @@ public class AvatarPropertiesRequestBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarPropertiesRequestBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarPropertiesRequestBackend(this);
     }
 
     @Override

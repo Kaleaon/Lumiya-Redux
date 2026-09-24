@@ -41,8 +41,8 @@ public class TeleportFinish extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportFinish(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportFinish(this);
     }
 
     @Override

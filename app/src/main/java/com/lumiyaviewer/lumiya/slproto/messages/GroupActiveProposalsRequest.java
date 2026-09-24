@@ -46,8 +46,8 @@ public class GroupActiveProposalsRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupActiveProposalsRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupActiveProposalsRequest(this);
     }
 
     @Override

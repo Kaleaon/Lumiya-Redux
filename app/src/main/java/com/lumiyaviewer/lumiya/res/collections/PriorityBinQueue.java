@@ -258,11 +258,11 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
         try {
             Iterator<Queue<T>> it = this.queues.values().iterator();
             while (it.hasNext()) {
-                Iterator it2 = it.next().iterator();
-                while (it2.hasNext()) {
-                    T t = (T) it2.next();
+                Iterator iterator = it.next().iterator();
+                while (iterator.hasNext()) {
+                    T t = (T) iterator.next();
                     if (t != null) {
-                        it2.remove();
+                        iterator.remove();
                         return t;
                     }
                 }
@@ -404,9 +404,9 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
                 i2 = length;
             }
             Object[] objArr = new Object[i2];
-            for (Object[] objArr2 : arrayList) {
-                System.arraycopy(objArr2, 0, objArr, i, objArr2.length);
-                i = objArr2.length + i;
+            for (Object[] array2 : arrayList) {
+                System.arraycopy(array2, 0, objArr, i, array2.length);
+                i = array2.length + i;
             }
             arrayList.clear();
             return objArr;
@@ -434,9 +434,9 @@ public class PriorityBinQueue<T> implements BlockingQueue<T> {
             } else {
                 t1Arr = (T1[]) new Object[i2];
             }
-            for (Object[] objArr : arrayList) {
-                System.arraycopy(objArr, 0, t1Arr, i, objArr.length);
-                i = objArr.length + i;
+            for (Object[] array2 : arrayList) {
+                System.arraycopy(array2, 0, t1Arr, i, array2.length);
+                i = array2.length + i;
             }
             arrayList.clear();
             return t1Arr;

@@ -14,8 +14,8 @@ class SLInventoryUDPFetchRequest extends SLInventoryFetchRequest {
     private final Set<UUID> existingChildren;
     private int receivedCount;
 
-    SLInventoryUDPFetchRequest(SLInventory sLInventory, UUID uuid) throws SLInventory.NoInventoryItemException {
-        super(sLInventory, uuid);
+    SLInventoryUDPFetchRequest(SLInventory inventory, UUID uuid) throws SLInventory.NoInventoryItemException {
+        super(inventory, uuid);
         this.receivedCount = 0;
         this.existingChildren = new HashSet();
     }
@@ -33,21 +33,21 @@ class SLInventoryUDPFetchRequest extends SLInventoryFetchRequest {
             for (InventoryDescendents.FolderData folderData : inventoryDescendents.FolderData_Fields) {
                 if (folderData.ParentID.equals(this.folderEntry.uuid) && (folderData.FolderID.getLeastSignificantBits() != 0 || folderData.FolderID.getMostSignificantBits() != 0)) {
                     try {
-                        SLInventoryEntry sLInventoryEntry = new SLInventoryEntry();
-                        sLInventoryEntry.uuid = folderData.FolderID;
-                        sLInventoryEntry.parent_id = this.folderEntry.getId();
-                        sLInventoryEntry.name = SLMessage.stringFromVariableOEM(folderData.Name);
-                        sLInventoryEntry.typeDefault = folderData.Type;
-                        sLInventoryEntry.parentUUID = folderData.ParentID;
-                        sLInventoryEntry.agentUUID = inventoryDescendents.AgentData_Field.AgentID;
-                        sLInventoryEntry.isFolder = true;
-                        sLInventoryEntry.updateOrInsert(this.db.getDatabase());
+                        SLInventoryEntry inventoryEntry = new SLInventoryEntry();
+                        inventoryEntry.uuid = folderData.FolderID;
+                        inventoryEntry.parent_id = this.folderEntry.getId();
+                        inventoryEntry.name = SLMessage.stringFromVariableOEM(folderData.Name);
+                        inventoryEntry.typeDefault = folderData.Type;
+                        inventoryEntry.parentUUID = folderData.ParentID;
+                        inventoryEntry.agentUUID = inventoryDescendents.AgentData_Field.AgentID;
+                        inventoryEntry.isFolder = true;
+                        inventoryEntry.updateOrInsert(this.db.getDatabase());
                         i2++;
                         if (i2 > 16) {
                             this.db.yieldIfContendedSafely();
                             i2 = 0;
                         }
-                        this.existingChildren.add(sLInventoryEntry.uuid);
+                        this.existingChildren.add(inventoryEntry.uuid);
                     } catch (DBObject.DatabaseBindingException e) {
                         Debug.Warning(e);
                     }
@@ -57,49 +57,49 @@ class SLInventoryUDPFetchRequest extends SLInventoryFetchRequest {
             for (InventoryDescendents.ItemData itemData : inventoryDescendents.ItemData_Fields) {
                 if (itemData.ItemID.getLeastSignificantBits() != 0 || itemData.ItemID.getMostSignificantBits() != 0) {
                     try {
-                        SLInventoryEntry sLInventoryEntry2 = new SLInventoryEntry();
-                        sLInventoryEntry2.uuid = itemData.ItemID;
-                        sLInventoryEntry2.name = SLMessage.stringFromVariableOEM(itemData.Name);
-                        sLInventoryEntry2.description = SLMessage.stringFromVariableUTF(itemData.Description);
+                        SLInventoryEntry inventoryEntry2 = new SLInventoryEntry();
+                        inventoryEntry2.uuid = itemData.ItemID;
+                        inventoryEntry2.name = SLMessage.stringFromVariableOEM(itemData.Name);
+                        inventoryEntry2.description = SLMessage.stringFromVariableUTF(itemData.Description);
                         if (itemData.FolderID.equals(this.folderEntry.uuid)) {
-                            sLInventoryEntry2.parent_id = this.folderEntry.getId();
-                            sLInventoryEntry2.parentUUID = itemData.FolderID;
+                            inventoryEntry2.parent_id = this.folderEntry.getId();
+                            inventoryEntry2.parentUUID = itemData.FolderID;
                         } else {
                             SLInventoryEntry findEntry = this.db.findEntry(itemData.FolderID);
                             if (findEntry != null) {
-                                sLInventoryEntry2.parent_id = findEntry.getId();
+                                inventoryEntry2.parent_id = findEntry.getId();
                             } else {
-                                sLInventoryEntry2.parent_id = 0L;
+                                inventoryEntry2.parent_id = 0L;
                             }
-                            sLInventoryEntry2.parentUUID = itemData.FolderID;
+                            inventoryEntry2.parentUUID = itemData.FolderID;
                         }
-                        sLInventoryEntry2.agentUUID = inventoryDescendents.AgentData_Field.AgentID;
-                        sLInventoryEntry2.isFolder = false;
-                        sLInventoryEntry2.assetType = itemData.Type;
-                        sLInventoryEntry2.assetUUID = itemData.AssetID;
-                        sLInventoryEntry2.invType = itemData.InvType;
-                        sLInventoryEntry2.flags = itemData.Flags;
-                        sLInventoryEntry2.creationDate = itemData.CreationDate;
-                        sLInventoryEntry2.creatorUUID = itemData.CreatorID;
-                        sLInventoryEntry2.groupUUID = itemData.GroupID;
-                        sLInventoryEntry2.lastOwnerUUID = new UUID(0L, 0L);
-                        sLInventoryEntry2.ownerUUID = itemData.OwnerID;
-                        sLInventoryEntry2.isGroupOwned = itemData.GroupOwned;
-                        sLInventoryEntry2.baseMask = itemData.BaseMask;
-                        sLInventoryEntry2.ownerMask = itemData.OwnerMask;
-                        sLInventoryEntry2.groupMask = itemData.GroupMask;
-                        sLInventoryEntry2.everyoneMask = itemData.EveryoneMask;
-                        sLInventoryEntry2.nextOwnerMask = itemData.NextOwnerMask;
-                        sLInventoryEntry2.salePrice = itemData.SalePrice;
-                        sLInventoryEntry2.saleType = itemData.SaleType;
-                        sLInventoryEntry2.updateOrInsert(this.db.getDatabase());
+                        inventoryEntry2.agentUUID = inventoryDescendents.AgentData_Field.AgentID;
+                        inventoryEntry2.isFolder = false;
+                        inventoryEntry2.assetType = itemData.Type;
+                        inventoryEntry2.assetUUID = itemData.AssetID;
+                        inventoryEntry2.invType = itemData.InvType;
+                        inventoryEntry2.flags = itemData.Flags;
+                        inventoryEntry2.creationDate = itemData.CreationDate;
+                        inventoryEntry2.creatorUUID = itemData.CreatorID;
+                        inventoryEntry2.groupUUID = itemData.GroupID;
+                        inventoryEntry2.lastOwnerUUID = new UUID(0L, 0L);
+                        inventoryEntry2.ownerUUID = itemData.OwnerID;
+                        inventoryEntry2.isGroupOwned = itemData.GroupOwned;
+                        inventoryEntry2.baseMask = itemData.BaseMask;
+                        inventoryEntry2.ownerMask = itemData.OwnerMask;
+                        inventoryEntry2.groupMask = itemData.GroupMask;
+                        inventoryEntry2.everyoneMask = itemData.EveryoneMask;
+                        inventoryEntry2.nextOwnerMask = itemData.NextOwnerMask;
+                        inventoryEntry2.salePrice = itemData.SalePrice;
+                        inventoryEntry2.saleType = itemData.SaleType;
+                        inventoryEntry2.updateOrInsert(this.db.getDatabase());
                         i2++;
                         if (i2 > 16) {
                             this.db.yieldIfContendedSafely();
                             i2 = 0;
                         }
-                        if (sLInventoryEntry2.parent_id == this.folderEntry.getId()) {
-                            this.existingChildren.add(sLInventoryEntry2.uuid);
+                        if (inventoryEntry2.parent_id == this.folderEntry.getId()) {
+                            this.existingChildren.add(inventoryEntry2.uuid);
                         }
                     } catch (DBObject.DatabaseBindingException e2) {
                         Debug.Warning(e2);

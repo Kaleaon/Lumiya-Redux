@@ -14,12 +14,12 @@ public class DrawableTerrainPatch implements ResourceConsumer {
     private final float[] objWorldMatrix = new float[16];
     private volatile GLLoadedTexture texture;
 
-    public DrawableTerrainPatch(TerrainGeometryCache terrainGeometryCache, GLTerrainTextureCache gLTerrainTextureCache, TerrainPatchInfo terrainPatchInfo, int i, int i2) {
+    public DrawableTerrainPatch(TerrainGeometryCache terrainGeometryCache, GLTerrainTextureCache glTerrainTextureCache, TerrainPatchInfo terrainPatchInfo, int i, int i2) {
         Matrix.setIdentityM(this.objWorldMatrix, 0);
         Matrix.translateM(this.objWorldMatrix, 0, i * 16, i2 * 16, 0.0f);
         terrainGeometryCache.RequestResource(terrainPatchInfo.getHeightMap(), this);
-        if (gLTerrainTextureCache != null) {
-            gLTerrainTextureCache.RequestResource(terrainPatchInfo, this);
+        if (glTerrainTextureCache != null) {
+            glTerrainTextureCache.RequestResource(terrainPatchInfo, this);
         }
     }
 

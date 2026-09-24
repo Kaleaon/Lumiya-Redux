@@ -39,8 +39,8 @@ public class AgentRequestSit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentRequestSit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentRequestSit(this);
     }
 
     @Override

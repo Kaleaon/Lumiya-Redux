@@ -8,14 +8,14 @@ public class CachedResponse {
     public CachedResponse() {
     }
 
-    public CachedResponse(String str) {
-        this.key = str;
+    public CachedResponse(String key) {
+        this.key = key;
     }
 
-    public CachedResponse(String str, byte[] bArr, boolean z) {
-        this.key = str;
-        this.data = bArr;
-        this.mustRevalidate = z;
+    public CachedResponse(String key, byte[] bytes, boolean mustRevalidate) {
+        this.key = key;
+        this.data = bytes;
+        this.mustRevalidate = mustRevalidate;
     }
 
     public byte[] getData() {
@@ -30,15 +30,15 @@ public class CachedResponse {
         return this.mustRevalidate;
     }
 
-    public void setData(byte[] bArr) {
-        this.data = bArr;
+    public void setData(byte[] bytes) {
+        this.data = bytes;
     }
 
-    public void setKey(String str) {
-        this.key = str;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setMustRevalidate(boolean z) {
-        this.mustRevalidate = z;
+    public void setMustRevalidate(boolean mustRevalidate) {
+        this.mustRevalidate = mustRevalidate;
     }
 }

@@ -10,9 +10,9 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool;
 
 public class TeleportHomeDialog {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956, reason: not valid java name */
-    static /* synthetic */ void m555lambda$com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956(Activity activity, UserManager userManager, SLAgentCircuit sLAgentCircuit, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void m555lambda$com_lumiyaviewer_lumiya_ui_common_TeleportHomeDialog_956(Activity activity, UserManager userManager, SLAgentCircuit agentCircuit, DialogInterface dialogInterface, int i) {
         new TeleportProgressDialog(activity, userManager, R.string.teleporting_progress_message).show();
-        sLAgentCircuit.TeleportToLandmarkAsset(UUIDPool.ZeroUUID);
+        agentCircuit.TeleportToLandmarkAsset(UUIDPool.ZeroUUID);
         dialogInterface.dismiss();
     }
 

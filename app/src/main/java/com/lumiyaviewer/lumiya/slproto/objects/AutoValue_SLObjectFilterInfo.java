@@ -7,15 +7,15 @@ final class AutoValue_SLObjectFilterInfo extends SLObjectFilterInfo {
     private final boolean showNonDescriptive;
     private final boolean showNonTouchable;
 
-    AutoValue_SLObjectFilterInfo(String str, boolean z, boolean z2, boolean z3, float f) {
-        if (str == null) {
+    AutoValue_SLObjectFilterInfo(String filterText, boolean showAttachments, boolean showNonDescriptive, boolean showNonTouchable, float range) {
+        if (filterText == null) {
             throw new NullPointerException("Null filterText");
         }
-        this.filterText = str;
-        this.showAttachments = z;
-        this.showNonDescriptive = z2;
-        this.showNonTouchable = z3;
-        this.range = f;
+        this.filterText = filterText;
+        this.showAttachments = showAttachments;
+        this.showNonDescriptive = showNonDescriptive;
+        this.showNonTouchable = showNonTouchable;
+        this.range = range;
     }
 
     public boolean equals(Object obj) {
@@ -25,9 +25,9 @@ final class AutoValue_SLObjectFilterInfo extends SLObjectFilterInfo {
         if (!(obj instanceof SLObjectFilterInfo)) {
             return false;
         }
-        SLObjectFilterInfo sLObjectFilterInfo = (SLObjectFilterInfo) obj;
-        if (this.filterText.equals(sLObjectFilterInfo.filterText()) && this.showAttachments == sLObjectFilterInfo.showAttachments() && this.showNonDescriptive == sLObjectFilterInfo.showNonDescriptive() && this.showNonTouchable == sLObjectFilterInfo.showNonTouchable()) {
-            return Float.floatToIntBits(this.range) == Float.floatToIntBits(sLObjectFilterInfo.range());
+        SLObjectFilterInfo objectFilterInfo = (SLObjectFilterInfo) obj;
+        if (this.filterText.equals(objectFilterInfo.filterText()) && this.showAttachments == objectFilterInfo.showAttachments() && this.showNonDescriptive == objectFilterInfo.showNonDescriptive() && this.showNonTouchable == objectFilterInfo.showNonTouchable()) {
+            return Float.floatToIntBits(this.range) == Float.floatToIntBits(objectFilterInfo.range());
         }
         return false;
     }

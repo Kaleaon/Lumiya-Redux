@@ -58,8 +58,8 @@ public class LandStatReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLandStatReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLandStatReply(this);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class LandStatReply extends SLMessage {
         this.RequestData_Field.RequestFlags = unpackInt(byteBuffer);
         this.RequestData_Field.TotalObjectCount = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ReportData reportData = new ReportData();
             reportData.TaskLocalID = unpackInt(byteBuffer);
             reportData.TaskID = unpackUUID(byteBuffer);

@@ -72,8 +72,8 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
     private final AtomicReference<AvatarSkeleton> updatedSkeleton;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
-    public DrawableAvatar(DrawableStore drawableStore, UUID uuid, SLObjectAvatarInfo sLObjectAvatarInfo, UUID uuid2, Map<UUID, AnimationSequenceInfo> map) {
-        super(drawableStore, uuid, sLObjectAvatarInfo);
+    public DrawableAvatar(DrawableStore drawableStore, UUID uuid, SLObjectAvatarInfo objectAvatarInfo, UUID uuid2, Map<UUID, AnimationSequenceInfo> map) {
+        super(drawableStore, uuid, objectAvatarInfo);
         this.updatedSkeleton = new AtomicReference<>(null);
         this.parts = new EnumMap(MeshIndex.class);
         this.animationLock = new Object();
@@ -94,9 +94,9 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         this.jointMatrixUpdated = false;
         this.updateAttachmentsRunnable = this::processUpdateAttachments;
         this.shapeParamsUpdate = this::m63x3d2f5f87;
-        SLBaseAvatar sLBaseAvatar = SLBaseAvatar.getInstance();
+        SLBaseAvatar baseAvatar = SLBaseAvatar.getInstance();
         for (MeshIndex meshIndex : MeshIndex.VALUES) {
-            this.parts.put(meshIndex, new DrawableAvatarPart(uuid2, sLBaseAvatar.getMeshEntry(meshIndex).textureFaceIndex, sLBaseAvatar.getMeshEntry(meshIndex).polyMesh, drawableStore.hasGL20));
+            this.parts.put(meshIndex, new DrawableAvatarPart(uuid2, baseAvatar.getMeshEntry(meshIndex).textureFaceIndex, baseAvatar.getMeshEntry(meshIndex).polyMesh, drawableStore.hasGL20));
         }
         synchronized (this.animationLock) {
             if (map != null) {
@@ -127,18 +127,18 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         for (int i = 0; i < length; i++) {
             MeshIndex meshIndex = meshIndexArr[i];
             DrawableAvatarPart drawableAvatarPart = this.parts.get(meshIndex);
-            SLSkeletonBone sLSkeletonBone = meshIndex == MeshIndex.MESH_ID_EYEBALL_LEFT ? avatarSkeleton.bones.get(SLSkeletonBoneID.mEyeLeft) : meshIndex == MeshIndex.MESH_ID_EYEBALL_RIGHT ? avatarSkeleton.bones.get(SLSkeletonBoneID.mEyeRight) : null;
-            if (sLSkeletonBone != null) {
-                renderContext.glObjWorldPushAndMultMatrixf(sLSkeletonBone.getGlobalMatrix(), 0);
+            SLSkeletonBone skeletonBone = meshIndex == MeshIndex.MESH_ID_EYEBALL_LEFT ? avatarSkeleton.bones.get(SLSkeletonBoneID.mEyeLeft) : meshIndex == MeshIndex.MESH_ID_EYEBALL_RIGHT ? avatarSkeleton.bones.get(SLSkeletonBoneID.mEyeRight) : null;
+            if (skeletonBone != null) {
+                renderContext.glObjWorldPushAndMultMatrixf(skeletonBone.getGlobalMatrix(), 0);
             }
             drawableAvatarPart.GLDraw(renderContext, avatarSkeleton.jointMatrix, this.jointMatrixUpdated);
-            if (sLSkeletonBone != null) {
+            if (skeletonBone != null) {
                 renderContext.glObjWorldPopMatrix();
             }
         }
-        SLSkeletonBone sLSkeletonBone2 = avatarSkeleton.bones.get(SLSkeletonBoneID.mHead);
-        if (sLSkeletonBone2 != null) {
-            renderContext.glObjWorldPushAndMultMatrixf(sLSkeletonBone2.getGlobalMatrix(), 0);
+        SLSkeletonBone skeletonBone2 = avatarSkeleton.bones.get(SLSkeletonBoneID.mHead);
+        if (skeletonBone2 != null) {
+            renderContext.glObjWorldPushAndMultMatrixf(skeletonBone2.getGlobalMatrix(), 0);
             float[] matrixData = renderContext.objWorldMatrix.getMatrixData();
             int matrixDataOffset = renderContext.objWorldMatrix.getMatrixDataOffset();
             float f = matrixData[matrixDataOffset + 12];
@@ -157,7 +157,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         this.jointMatrixUpdated = false;
     }
 
-    private void GLPrepare(RenderContext renderContext, float[] fArr) {
+    private void GLPrepare(RenderContext renderContext, float[] floats) {
         if (!renderContext.hasGL20) {
             GLES11.glMatrixMode(5890);
             GLES11.glLoadMatrixf(IdentityMatrix.getMatrix(), 0);
@@ -168,7 +168,7 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
             GLES20.glUniform4f(renderContext.avatarProgram.uObjCoordScale, 1.0f, 1.0f, 1.0f, 1.0f);
             renderContext.glModelApplyMatrix(renderContext.avatarProgram.uMVPMatrix);
             renderContext.avatarProgram.SetupLighting(renderContext, renderContext.windlightPreset);
-            GLES20.glUniformMatrix4fv(renderContext.avatarProgram.uJointMatrix, 133, false, fArr, 0);
+            GLES20.glUniformMatrix4fv(renderContext.avatarProgram.uJointMatrix, 133, false, floats, 0);
         }
     }
 
@@ -269,13 +269,13 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         }
     }
 
-    private void updateAttachmentParts(SLObjectInfo sLObjectInfo, Multimap<Integer, DrawableObject> multimap, int i) {
-        DrawListObjectEntry drawListEntry = sLObjectInfo.getDrawListEntry();
+    private void updateAttachmentParts(SLObjectInfo objectInfo, Multimap<Integer, DrawableObject> multimap, int i) {
+        DrawListObjectEntry drawListEntry = objectInfo.getDrawListEntry();
         this.drawableAttachments.addEntry(drawListEntry);
         if (drawListEntry instanceof DrawListPrimEntry) {
             multimap.put(Integer.valueOf(i), ((DrawListPrimEntry) drawListEntry).getDrawableAttachment(this.drawableStore, this));
         }
-        for (LinkedTreeNode<SLObjectInfo> firstChild = sLObjectInfo.treeNode.getFirstChild(); firstChild != null; firstChild = firstChild.getNextChild()) {
+        for (LinkedTreeNode<SLObjectInfo> firstChild = objectInfo.treeNode.getFirstChild(); firstChild != null; firstChild = firstChild.getNextChild()) {
             SLObjectInfo dataObject = firstChild.getDataObject();
             if (dataObject != null) {
                 updateAttachmentParts(dataObject, multimap, i);
@@ -327,9 +327,9 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
     public void DrawNameTag(RenderContext renderContext) {
         DrawableHoverText drawableHoverText = this.drawableNameTag;
         if (drawableHoverText != null) {
-            LLVector3 lLVector3 = this.headPosition;
-            if (lLVector3 != null) {
-                drawableHoverText.DrawAtWorld(renderContext, lLVector3.x, lLVector3.y, lLVector3.z, 0.5f, renderContext.projectionMatrix, false, 0);
+            LLVector3 headPosition = this.headPosition;
+            if (headPosition != null) {
+                drawableHoverText.DrawAtWorld(renderContext, headPosition.x, headPosition.y, headPosition.z, 0.5f, renderContext.projectionMatrix, false, 0);
             } else {
                 super.DrawNameTag(renderContext);
             }
@@ -353,10 +353,10 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         if (worldMatrix == null || avatarSkeleton == null) {
             return null;
         }
-        int[] iArr = renderContext.viewportRect;
-        float[] fArr = new float[32];
-        float[] fArr2 = new float[6];
-        float f4 = iArr[3] - f2;
+        int[] viewportRect = renderContext.viewportRect;
+        float[] floats = new float[32];
+        float[] floats2 = new float[6];
+        float f4 = viewportRect[3] - f2;
         renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0);
         renderContext.glObjWorldTranslatef(this.pelvisTranslateX, this.pelvisTranslateY, this.pelvisTranslateZ);
         Iterator<SLSkeletonBone> it = avatarSkeleton.bones.values().iterator();
@@ -365,28 +365,28 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
                 objectIntersectInfo = null;
                 break;
             }
-            SLSkeletonBone sLSkeletonBone = (SLSkeletonBone) it.next();
-            if (!sLSkeletonBone.boneID.isJoint) {
-                renderContext.glObjWorldPushAndMultMatrixf(avatarSkeleton.jointWorldMatrix, sLSkeletonBone.boneID.ordinal() * 16);
+            SLSkeletonBone skeletonBone = (SLSkeletonBone) it.next();
+            if (!skeletonBone.boneID.isJoint) {
+                renderContext.glObjWorldPushAndMultMatrixf(avatarSkeleton.jointWorldMatrix, skeletonBone.boneID.ordinal() * 16);
                 if (renderContext.hasGL20) {
-                    Matrix.scaleM(fArr, 0, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), 1.0f, 1.0f, 1.0f);
-                    RenderContext.gluUnProject(f, f4, 0.0f, fArr, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), iArr, 0, fArr2, 0);
-                    RenderContext.gluUnProject(f, f4, 1.0f, fArr, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), iArr, 0, fArr2, 3);
+                    Matrix.scaleM(floats, 0, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), 1.0f, 1.0f, 1.0f);
+                    RenderContext.gluUnProject(f, f4, 0.0f, floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 0);
+                    RenderContext.gluUnProject(f, f4, 1.0f, floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 3);
                 } else {
-                    Matrix.scaleM(fArr, 16, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), 1.0f, 1.0f, 1.0f);
-                    Matrix.multiplyMM(fArr, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), fArr, 16);
-                    RenderContext.gluUnProject(f, f4, 0.0f, fArr, 0, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), iArr, 0, fArr2, 0);
-                    RenderContext.gluUnProject(f, f4, 1.0f, fArr, 0, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), iArr, 0, fArr2, 3);
+                    Matrix.scaleM(floats, 16, renderContext.objWorldMatrix.getMatrixData(), renderContext.objWorldMatrix.getMatrixDataOffset(), 1.0f, 1.0f, 1.0f);
+                    Matrix.multiplyMM(floats, 0, renderContext.modelViewMatrix.getMatrixData(), renderContext.modelViewMatrix.getMatrixDataOffset(), floats, 16);
+                    RenderContext.gluUnProject(f, f4, 0.0f, floats, 0, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 0);
+                    RenderContext.gluUnProject(f, f4, 1.0f, floats, 0, renderContext.projectionMatrix.getMatrixData(), renderContext.projectionMatrix.getMatrixDataOffset(), viewportRect, 0, floats2, 3);
                 }
                 renderContext.glObjWorldPopMatrix();
-                LLVector3 lLVector3 = new LLVector3(fArr2[0], fArr2[1], fArr2[2]);
-                LLVector3 lLVector32 = new LLVector3(fArr2[3], fArr2[4], fArr2[5]);
-                LLVector3[] lLVector3Arr = CollisionBox.getInstance().vertices;
+                LLVector3 vector3 = new LLVector3(floats2[0], floats2[1], floats2[2]);
+                LLVector3 vector33 = new LLVector3(floats2[3], floats2[4], floats2[5]);
+                LLVector3[] vertices = CollisionBox.getInstance().vertices;
                 GLRayTrace.RayIntersectInfo rayIntersectInfo = null;
-                for (int i = 0; i < 12 && (rayIntersectInfo = GLRayTrace.intersect_RayTriangle(lLVector3, lLVector32, lLVector3Arr, i * 3)) == null; i++) {
+                for (int i = 0; i < 12 && (rayIntersectInfo = GLRayTrace.intersect_RayTriangle(vector3, vector33, vertices, i * 3)) == null; i++) {
                 }
                 if (rayIntersectInfo != null) {
-                    float intersectionDepth = GLRayTrace.getIntersectionDepth(renderContext, rayIntersectInfo.intersectPoint, fArr);
+                    float intersectionDepth = GLRayTrace.getIntersectionDepth(renderContext, rayIntersectInfo.intersectPoint, floats);
                     if (intersectionDepth >= f3) {
                         objectIntersectInfo = new ObjectIntersectInfo(new IntersectInfo(rayIntersectInfo.intersectPoint), this.avatarObject, intersectionDepth);
                         break;
@@ -450,9 +450,9 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
             }
             AvatarSkeleton avatarSkeleton = new AvatarSkeleton(avatarShapeParams, meshJointTranslations, z);
             this.updatedSkeleton.set(avatarSkeleton);
-            Iterator<Map.Entry<MeshIndex, DrawableAvatarPart>> it2 = this.parts.entrySet().iterator();
-            while (it2.hasNext()) {
-                Map.Entry entry = (Map.Entry) it2.next();
+            Iterator<Map.Entry<MeshIndex, DrawableAvatarPart>> iterator = this.parts.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
                 ((DrawableAvatarPart) entry.getValue()).setPartMorphParams(avatarSkeleton.getMorphParams((MeshIndex) entry.getKey()));
             }
         }
@@ -472,8 +472,8 @@ public class DrawableAvatar extends DrawableAvatarStub implements IntersectPicka
         }
     }
 
-    public void setDisplayedHUDid(int i) {
-        if (this.displayedHUDid.getAndSet(i) != i) {
+    public void setDisplayedHUDid(int displayedHUDid) {
+        if (this.displayedHUDid.getAndSet(displayedHUDid) != displayedHUDid) {
             updateAttachments();
         }
     }

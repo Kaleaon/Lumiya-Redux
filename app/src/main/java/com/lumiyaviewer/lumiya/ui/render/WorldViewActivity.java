@@ -355,7 +355,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             boolean z;
-            boolean z2 = WorldViewActivity.this.isInteracting;
+            boolean isInteracting = WorldViewActivity.this.isInteracting;
             switch (motionEvent.getActionMasked()) {
                 case 0:
                     WorldViewActivity.this.isInteracting = true;
@@ -369,12 +369,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     z = false;
                     break;
             }
-            if (WorldViewActivity.this.isInteracting && (!z2)) {
+            if (WorldViewActivity.this.isInteracting && (!isInteracting)) {
                 WorldViewActivity.this.mGLView.setIsInteracting(true);
             }
             WorldViewActivity.this.wasInScaling = WorldViewActivity.this.isInScaling;
             boolean onTouchEvent = z | WorldViewActivity.this.scaleGestureDetector.onTouchEvent(motionEvent) | WorldViewActivity.this.gestureDetector.onTouchEvent(motionEvent);
-            if (z2 && (!WorldViewActivity.this.isInteracting)) {
+            if (isInteracting && (!WorldViewActivity.this.isInteracting)) {
                 WorldViewActivity.this.mGLView.setIsInteracting(false);
             }
             return onTouchEvent;
@@ -522,9 +522,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         private String attachmentName;
         private int localID;
 
-        public SelectableAttachment(int i, String str) {
-            this.localID = i;
-            this.attachmentName = str;
+        public SelectableAttachment(int localID, String attachmentName) {
+            this.localID = localID;
+            this.attachmentName = attachmentName;
         }
 
         public int getLocalID() {
@@ -565,11 +565,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         updateObjectPanel();
     }
 
-    private void chatWithObject(SLObjectInfo sLObjectInfo) {
-        if (!(sLObjectInfo instanceof SLObjectAvatarInfo) || ((SLObjectAvatarInfo) sLObjectInfo).isMyAvatar() || sLObjectInfo.getId() == null) {
+    private void chatWithObject(SLObjectInfo objectInfo) {
+        if (!(objectInfo instanceof SLObjectAvatarInfo) || ((SLObjectAvatarInfo) objectInfo).isMyAvatar() || objectInfo.getId() == null) {
             return;
         }
-        DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, ChatFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), sLObjectInfo.getId())));
+        DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, ChatFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), objectInfo.getId())));
     }
 
     public boolean detailsVisible() {
@@ -578,10 +578,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         return (supportFragmentManager == null || (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) == null || !findFragmentById.isVisible()) ? false : true;
     }
 
-    private void displayHUD(int i) {
-        Debug.Printf("Displaying HUD with ID %d", Integer.valueOf(i));
-        this.displayedHUDid = i;
-        this.mGLView.setDisplayedHUDid(i);
+    private void displayHUD(int displayedHUDid) {
+        Debug.Printf("Displaying HUD with ID %d", Integer.valueOf(displayedHUDid));
+        this.displayedHUDid = displayedHUDid;
+        this.mGLView.setDisplayedHUDid(displayedHUDid);
         if (this.displayedHUDid != this.prevDisplayedHUDid) {
             this.hudScaleFactor = 1.0f;
             this.hudOffsetX = 0.0f;
@@ -597,14 +597,14 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     public void dragSelectorSetRawPosition(int i, int i2) {
-        int[] iArr = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(iArr);
+        int[] ints = new int[2];
+        this.dragPointerLayout.getLocationOnScreen(ints);
         int width = i - (this.dragPointer.getWidth() / 2);
         int height = i2 - (this.dragPointer.getHeight() / 2);
         AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) this.dragPointer.getLayoutParams();
         if (layoutParams != null) {
-            layoutParams.x = Math.max(Math.min(width - iArr[0], this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()), 0);
-            layoutParams.y = Math.max(Math.min(height - iArr[1], this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()), 0);
+            layoutParams.x = Math.max(Math.min(width - ints[0], this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()), 0);
+            layoutParams.y = Math.max(Math.min(height - ints[1], this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()), 0);
             this.dragPointer.setLayoutParams(layoutParams);
             selectByDragPointer(layoutParams.x, layoutParams.y);
         }
@@ -657,10 +657,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    public void onAgentCircuit(SLAgentCircuit sLAgentCircuit) {
-        if (sLAgentCircuit != null) {
-            this.avatarControl = sLAgentCircuit.getModules().avatarControl;
-            this.drawDistance = sLAgentCircuit.getModules().drawDistance;
+    public void onAgentCircuit(SLAgentCircuit agentCircuit) {
+        if (agentCircuit != null) {
+            this.avatarControl = agentCircuit.getModules().avatarControl;
+            this.drawDistance = agentCircuit.getModules().drawDistance;
             if (this.localDrawingEnabled) {
                 this.drawDistance.Enable3DView(this.prefDrawDistance);
             }
@@ -697,13 +697,13 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    public void onSelectedObjectProfile(SLObjectProfileData sLObjectProfileData) {
-        Debug.Printf("got selected object profile: %s", sLObjectProfileData);
+    public void onSelectedObjectProfile(SLObjectProfileData objectProfileData) {
+        Debug.Printf("got selected object profile: %s", objectProfileData);
         updateObjectPanel();
-        if (sLObjectProfileData != null) {
+        if (objectProfileData != null) {
             SLAgentCircuit data = this.agentCircuit.getData();
-            if (sLObjectProfileData.isPayable() && sLObjectProfileData.payInfo() == null && data != null) {
-                data.DoRequestPayPrice(sLObjectProfileData.objectUUID());
+            if (objectProfileData.isPayable() && objectProfileData.payInfo() == null && data != null) {
+                data.DoRequestPayPrice(objectProfileData.objectUUID());
             }
         }
     }
@@ -723,27 +723,27 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     public void selectByDragPointer(int i, int i2) {
-        int[] iArr = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(iArr);
-        int width = iArr[0] + (this.dragPointer.getWidth() / 2) + i;
-        int height = iArr[1] + (this.dragPointer.getHeight() / 2) + i2;
+        int[] ints = new int[2];
+        this.dragPointerLayout.getLocationOnScreen(ints);
+        int width = ints[0] + (this.dragPointer.getWidth() / 2) + i;
+        int height = ints[1] + (this.dragPointer.getHeight() / 2) + i2;
         int[] worldLocation = new int[2];
         this.worldViewHolder.getLocationOnScreen(worldLocation);
         this.mGLView.pickObjectHover(width - worldLocation[0], height - worldLocation[1]);
     }
 
     private void selectHUDtoDisplay() {
-        int i;
-        SLAttachmentPoint sLAttachmentPoint;
+        int attachmentID;
+        SLAttachmentPoint attachmentPoint;
         final ArrayList arrayList = new ArrayList();
         SLAgentCircuit data = this.agentCircuit.getData();
         if (data != null) {
             SLObjectAvatarInfo agentAvatar = data.getGridConnection().parcelInfo.getAgentAvatar();
             if (agentAvatar != null) {
                 try {
-                    for (SLObjectInfo sLObjectInfo : agentAvatar.treeNode) {
-                        if (!Strings.nullToEmpty(sLObjectInfo.getName()).startsWith("#") && (i = sLObjectInfo.attachmentID) >= 0 && i < 56 && (sLAttachmentPoint = SLAttachmentPoint.attachmentPoints[i]) != null && sLAttachmentPoint.isHUD) {
-                            arrayList.add(new SelectableAttachment(sLObjectInfo.localID, sLObjectInfo.name));
+                    for (SLObjectInfo objectInfo : agentAvatar.treeNode) {
+                        if (!Strings.nullToEmpty(objectInfo.getName()).startsWith("#") && (attachmentID = objectInfo.attachmentID) >= 0 && attachmentID < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[attachmentID]) != null && attachmentPoint.isHUD) {
+                            arrayList.add(new SelectableAttachment(objectInfo.localID, objectInfo.name));
                         }
                     }
                 } catch (NoSuchElementException e) {
@@ -774,14 +774,14 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
     }
 
-    private void showObjectInfo(SLObjectInfo sLObjectInfo) {
-        if (sLObjectInfo.getId() == null || this.userManager == null) {
+    private void showObjectInfo(SLObjectInfo objectInfo) {
+        if (objectInfo.getId() == null || this.userManager == null) {
             return;
         }
-        if (!sLObjectInfo.isAvatar()) {
-            DetailsActivity.showEmbeddedDetails(this, ObjectDetailsFragment.class, ObjectDetailsFragment.makeSelection(this.userManager.getUserID(), sLObjectInfo.localID));
-        } else if (sLObjectInfo instanceof SLObjectAvatarInfo) {
-            DetailsActivity.showEmbeddedDetails(this, UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), sLObjectInfo.getId())));
+        if (!objectInfo.isAvatar()) {
+            DetailsActivity.showEmbeddedDetails(this, ObjectDetailsFragment.class, ObjectDetailsFragment.makeSelection(this.userManager.getUserID(), objectInfo.localID));
+        } else if (objectInfo instanceof SLObjectAvatarInfo) {
+            DetailsActivity.showEmbeddedDetails(this, UserProfileFragment.class, UserProfileFragment.makeSelection(ChatterID.getUserChatterID(this.userManager.getUserID(), objectInfo.getId())));
         }
     }
 
@@ -826,22 +826,22 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.mGLView.takeScreenshot();
     }
 
-    private void touchObject(SLObjectInfo sLObjectInfo, ObjectIntersectInfo objectIntersectInfo) {
+    private void touchObject(SLObjectInfo objectInfo, ObjectIntersectInfo objectIntersectInfo) {
         SLAgentCircuit data = this.agentCircuit.getData();
-        if (data == null || sLObjectInfo == null) {
+        if (data == null || objectInfo == null) {
             return;
         }
-        if (sLObjectInfo.isAvatar()) {
-            if (sLObjectInfo.hasTouchableChildren()) {
-                DetailsActivity.showEmbeddedDetails(this, TouchableObjectsFragment.class, TouchableObjectsFragment.makeSelection(this.userManager.getUserID(), sLObjectInfo.getId()));
+        if (objectInfo.isAvatar()) {
+            if (objectInfo.hasTouchableChildren()) {
+                DetailsActivity.showEmbeddedDetails(this, TouchableObjectsFragment.class, TouchableObjectsFragment.makeSelection(this.userManager.getUserID(), objectInfo.getId()));
             }
         } else {
-            this.lastTouchUUID = sLObjectInfo.getId();
+            this.lastTouchUUID = objectInfo.getId();
             if (!(objectIntersectInfo != null ? objectIntersectInfo.intersectInfo.faceKnown : false)) {
-                data.TouchObject(sLObjectInfo.localID);
+                data.TouchObject(objectInfo.localID);
             } else {
-                LLVector3 absolutePosition = sLObjectInfo.getAbsolutePosition();
-                data.TouchObjectFace(sLObjectInfo, objectIntersectInfo.intersectInfo.faceID, absolutePosition.x, absolutePosition.y, absolutePosition.z, objectIntersectInfo.intersectInfo.u, objectIntersectInfo.intersectInfo.v, objectIntersectInfo.intersectInfo.s, objectIntersectInfo.intersectInfo.t);
+                LLVector3 absolutePosition = objectInfo.getAbsolutePosition();
+                data.TouchObjectFace(objectInfo, objectIntersectInfo.intersectInfo.faceID, absolutePosition.x, absolutePosition.y, absolutePosition.z, objectIntersectInfo.intersectInfo.u, objectIntersectInfo.intersectInfo.v, objectIntersectInfo.intersectInfo.s, objectIntersectInfo.intersectInfo.t);
             }
         }
     }
@@ -870,20 +870,20 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         int i;
         int i2;
         int i3;
-        String strOrNull;
+        String orNull;
         MyAvatarState data = this.myAvatarState.getData();
-        SLAgentCircuit data2 = this.agentCircuit.getData();
-        boolean z = data2 != null;
-        boolean zIsSitting = data != null ? data.isSitting() : false;
-        boolean zHasHUDs = data != null ? data.hasHUDs() : false;
-        boolean zIsFlying = data != null ? data.isFlying() : false;
-        boolean zCanStandUp = data2 != null ? data2.getModules().rlvController.canStandUp() : false;
-        boolean zCanSit = data2 != null ? data2.getModules().rlvController.canSit() : false;
+        SLAgentCircuit agentCircuit = this.agentCircuit.getData();
+        boolean z = agentCircuit != null;
+        boolean isSitting = data != null ? data.isSitting() : false;
+        boolean hasHUDs = data != null ? data.hasHUDs() : false;
+        boolean isFlying = data != null ? data.isFlying() : false;
+        boolean canStandUp = agentCircuit != null ? agentCircuit.getModules().rlvController.canStandUp() : false;
+        boolean canSit = agentCircuit != null ? agentCircuit.getModules().rlvController.canSit() : false;
         boolean z2 = this.pickedObject != null;
-        Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(zIsSitting), Boolean.valueOf(zIsFlying), Boolean.valueOf(zHasHUDs), Boolean.valueOf(this.isDragging));
+        Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(isSitting), Boolean.valueOf(isFlying), Boolean.valueOf(hasHUDs), Boolean.valueOf(this.isDragging));
         this.dragPointerLayout.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
         this.dragPointer.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
-        boolean movementControlsVisible = z && !zIsSitting
+        boolean movementControlsVisible = z && !isSitting
                 && !(this.camButtonEnabled && this.manualCamMode)
                 && !this.isDragging && !z2;
         LinearLayout linearLayout = this.flyButtonsLayout;
@@ -892,11 +892,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         View view = this.moveButtonsLayout;
         i2 = movementControlsVisible ? 0 : 4;
         view.setVisibility(i2);
-        this.buttonStandUp.setVisibility((zCanStandUp && zIsSitting && (this.isDragging ^ true)) ? View.VISIBLE : View.GONE);
-        this.buttonHUD.setVisibility((zHasHUDs && (this.isDragging ^ true) && z) ? View.VISIBLE : View.GONE);
-        this.buttonFlyDownward.setVisibility(((zIsFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? View.VISIBLE : View.GONE);
+        this.buttonStandUp.setVisibility((canStandUp && isSitting && (this.isDragging ^ true)) ? View.VISIBLE : View.GONE);
+        this.buttonHUD.setVisibility((hasHUDs && (this.isDragging ^ true) && z) ? View.VISIBLE : View.GONE);
+        this.buttonFlyDownward.setVisibility(((isFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? View.VISIBLE : View.GONE);
         ImageButton imageButton = this.buttonStopFlying;
-        i3 = zIsFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
+        i3 = isFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
         imageButton.setVisibility(i3);
         this.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
         this.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
@@ -905,35 +905,35 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             return;
         }
         this.objectControlsPanel.setVisibility(View.VISIBLE);
-        boolean zIsTouchable = this.pickedObject.isTouchable();
+        boolean isTouchable = this.pickedObject.isTouchable();
         if (this.pickedObject.isAvatar()) {
-            zIsTouchable |= this.pickedObject.hasTouchableChildren();
+            isTouchable |= this.pickedObject.hasTouchableChildren();
         }
-        this.objectTouchButton.setVisibility(zIsTouchable ? View.VISIBLE : View.GONE);
-        boolean zIsAvatar = this.pickedObject.isAvatar();
-        boolean z3 = zIsSitting && this.pickedObject.localID == data.sittingOn();
-        boolean z4 = !zIsAvatar ? !z3 : false;
-        if (zIsAvatar) {
+        this.objectTouchButton.setVisibility(isTouchable ? View.VISIBLE : View.GONE);
+        boolean isAvatar = this.pickedObject.isAvatar();
+        boolean z3 = isSitting && this.pickedObject.localID == data.sittingOn();
+        boolean z4 = !isAvatar ? !z3 : false;
+        if (isAvatar) {
             z3 = false;
         }
-        this.objectSitButton.setVisibility((z4 && zCanSit) ? View.VISIBLE : View.GONE);
-        this.objectStandButton.setVisibility((z3 && zCanStandUp) ? View.VISIBLE : View.GONE);
-        this.objectChatButton.setVisibility(zIsAvatar ? View.VISIBLE : View.GONE);
-        this.avatarIconView.setVisibility(zIsAvatar ? View.VISIBLE : View.GONE);
+        this.objectSitButton.setVisibility((z4 && canSit) ? View.VISIBLE : View.GONE);
+        this.objectStandButton.setVisibility((z3 && canStandUp) ? View.VISIBLE : View.GONE);
+        this.objectChatButton.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
+        this.avatarIconView.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
         this.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? View.VISIBLE : View.GONE);
         if (this.pickedObject.isAvatar()) {
-            strOrNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
+            orNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
         } else {
-            SLObjectProfileData data3 = this.selectedObjectProfile.getData();
-            strOrNull = (data3 == null || !Objects.equal(data3.objectUUID(), this.pickedObject.getId())) ? null : data3.name().orNull();
-            if (strOrNull == null) {
-                strOrNull = this.pickedObject.name;
+            SLObjectProfileData objectProfileData = this.selectedObjectProfile.getData();
+            orNull = (objectProfileData == null || !Objects.equal(objectProfileData.objectUUID(), this.pickedObject.getId())) ? null : objectProfileData.name().orNull();
+            if (orNull == null) {
+                orNull = this.pickedObject.name;
             }
         }
-        if (strOrNull == null) {
-            strOrNull = getString(R.string.object_name_loading);
+        if (orNull == null) {
+            orNull = getString(R.string.object_name_loading);
         }
-        this.objectNameTextView.setText(strOrNull);
+        this.objectNameTextView.setText(orNull);
     }
 
     private void updateSimTimeOverride() {
@@ -1052,8 +1052,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     @EventHandler
-    public void handleBakingProgressEvent(SLBakingProgressEvent sLBakingProgressEvent) {
-        if (sLBakingProgressEvent.first) {
+    public void handleBakingProgressEvent(SLBakingProgressEvent bakingProgressEvent) {
+        if (bakingProgressEvent.first) {
             Toast.makeText(this, "Updating avatar appearance...", Toast.LENGTH_SHORT).show();
         }
     }
@@ -1287,9 +1287,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         beginCountingButtonsFade();
         beginCountingObjectDeselect();
         if (intent.hasExtra(FROM_NOTIFICATION_TAG)) {
-            Bundle bundleExtra = intent.hasExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) ? intent.getBundleExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) : null;
-            if (bundleExtra != null) {
-                DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, bundleExtra);
+            Bundle bundle = intent.hasExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) ? intent.getBundleExtra(MasterDetailsActivity.INTENT_SELECTION_KEY) : null;
+            if (bundle != null) {
+                DetailsActivity.showEmbeddedDetails(this, ChatFragment.class, bundle);
             } else if (this.userManager != null) {
                 DetailsActivity.showEmbeddedDetails(this, ContactsFragment.class, ActivityUtils.makeFragmentArguments(this.userManager.getUserID(), null));
             }
@@ -1440,7 +1440,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     @Override
-    public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] iArr) {
+    public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] ints) {
         Debug.Printf("Cardboard: onRequestPermissionResult, code %d", Integer.valueOf(i));
         if (i == 100) {
             startVrActivity(VrIntentContract.VR_RUNTIME_CARDBOARD);
@@ -1630,9 +1630,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.lastTouchUUID = uuid;
     }
 
-    public void setTouchedObject(SLObjectInfo sLObjectInfo) {
-        if (sLObjectInfo != null) {
-            this.lastTouchUUID = sLObjectInfo.getId();
+    public void setTouchedObject(SLObjectInfo objectInfo) {
+        if (objectInfo != null) {
+            this.lastTouchUUID = objectInfo.getId();
             if (this.lastTouchUUID != null) {
                 Debug.Log("Touch: Last touched object set to " + this.lastTouchUUID);
             }

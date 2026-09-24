@@ -51,8 +51,8 @@ public class EventGodDelete extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventGodDelete(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventGodDelete(this);
     }
 
     @Override

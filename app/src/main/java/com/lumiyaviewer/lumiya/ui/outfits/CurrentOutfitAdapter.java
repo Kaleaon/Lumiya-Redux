@@ -106,8 +106,8 @@ class CurrentOutfitAdapter extends BaseAdapter implements DismissableAdapter {
         }
     }
 
-    public void setAvatarAppearance(@Nullable SLAvatarAppearance sLAvatarAppearance) {
-        this.avatarAppearance = sLAvatarAppearance;
+    public void setAvatarAppearance(@Nullable SLAvatarAppearance avatarAppearance) {
+        this.avatarAppearance = avatarAppearance;
     }
 
     public void setData(ImmutableList<SLAvatarAppearance.WornItem> immutableList) {

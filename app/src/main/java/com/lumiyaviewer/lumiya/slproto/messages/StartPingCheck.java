@@ -34,8 +34,8 @@ public class StartPingCheck extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleStartPingCheck(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleStartPingCheck(this);
     }
 
     @Override

@@ -58,8 +58,8 @@ public class ChatLayoutManager extends LinearLayoutManager {
         };
     }
 
-    public void setScrollMode(boolean z) {
-        this.isFast = z;
+    public void setScrollMode(boolean isFast) {
+        this.isFast = isFast;
     }
 
     @Override

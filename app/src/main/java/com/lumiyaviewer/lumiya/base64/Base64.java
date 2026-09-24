@@ -21,27 +21,27 @@ public class Base64 {
             return new byte[0];
         }
         int i = 0;
-        for (int i2 = 0; i2 < length; i2++) {
-            if (IA[str.charAt(i2)] < 0) {
+        for (int j = 0; j < length; j++) {
+            if (IA[str.charAt(j)] < 0) {
                 i++;
             }
         }
         if ((length - i) % 4 != 0) {
             return null;
         }
-        int i3 = length;
+        int length2 = length;
         int i4 = 0;
-        while (i3 > 1) {
-            i3--;
-            if (IA[str.charAt(i3)] > 0) {
+        while (length2 > 1) {
+            length2--;
+            if (IA[str.charAt(length2)] > 0) {
                 break;
             }
-            if (str.charAt(i3) == '=') {
+            if (str.charAt(length2) == '=') {
                 i4++;
             }
         }
         int i5 = (((length - i) * 6) >> 3) - i4;
-        byte[] bArr = new byte[i5];
+        byte[] bytes = new byte[i5];
         int i6 = 0;
         int i7 = 0;
         while (i6 < i5) {
@@ -60,27 +60,27 @@ public class Base64 {
                 i9 = i11;
             }
             int i13 = i6 + 1;
-            bArr[i6] = (byte) (i8 >> 16);
+            bytes[i6] = (byte) (i8 >> 16);
             if (i13 < i5) {
                 int i14 = i13 + 1;
-                bArr[i13] = (byte) (i8 >> 8);
+                bytes[i13] = (byte) (i8 >> 8);
                 if (i14 >= i5) {
                     i13 = i14;
                 } else {
                     i13 = i14 + 1;
-                    bArr[i14] = (byte) i8;
+                    bytes[i14] = (byte) i8;
                 }
             }
             i6 = i13;
             i7 = i9;
         }
-        return bArr;
+        return bytes;
     }
 
-    public static final byte[] decode(byte[] bArr) {
-        int length = bArr.length;
+    public static final byte[] decode(byte[] bytes2) {
+        int length = bytes2.length;
         int i = 0;
-        for (byte b : bArr) {
+        for (byte b : bytes2) {
             if (IA[b & 0xFF] < 0) {
                 i++;
             }
@@ -88,19 +88,19 @@ public class Base64 {
         if ((length - i) % 4 != 0) {
             return null;
         }
-        int i2 = length;
+        int length2 = length;
         int i3 = 0;
-        while (i2 > 1) {
-            i2--;
-            if (IA[bArr[i2] & 0xFF] > 0) {
+        while (length2 > 1) {
+            length2--;
+            if (IA[bytes2[length2] & 0xFF] > 0) {
                 break;
             }
-            if (bArr[i2] == 61) {
+            if (bytes2[length2] == 61) {
                 i3++;
             }
         }
         int i4 = (((length - i) * 6) >> 3) - i3;
-        byte[] bArr2 = new byte[i4];
+        byte[] bytes = new byte[i4];
         int i5 = 0;
         int i6 = 0;
         while (i5 < i4) {
@@ -109,7 +109,7 @@ public class Base64 {
             int i9 = 0;
             while (i9 < 4) {
                 int i10 = i8 + 1;
-                int i11 = IA[bArr[i8] & 0xFF];
+                int i11 = IA[bytes2[i8] & 0xFF];
                 if (i11 < 0) {
                     i9--;
                 } else {
@@ -119,50 +119,50 @@ public class Base64 {
                 i8 = i10;
             }
             int i12 = i5 + 1;
-            bArr2[i5] = (byte) (i7 >> 16);
+            bytes[i5] = (byte) (i7 >> 16);
             if (i12 < i4) {
                 int i13 = i12 + 1;
-                bArr2[i12] = (byte) (i7 >> 8);
+                bytes[i12] = (byte) (i7 >> 8);
                 if (i13 >= i4) {
                     i12 = i13;
                 } else {
                     i12 = i13 + 1;
-                    bArr2[i13] = (byte) i7;
+                    bytes[i13] = (byte) i7;
                 }
             }
             i5 = i12;
             i6 = i8;
         }
-        return bArr2;
+        return bytes;
     }
 
-    public static final byte[] decode(char[] cArr) {
-        int length = cArr == null ? 0 : cArr.length;
+    public static final byte[] decode(char[] chars) {
+        int length = chars == null ? 0 : chars.length;
         if (length == 0) {
             return new byte[0];
         }
         int i = 0;
-        for (int i2 = 0; i2 < length; i2++) {
-            if (IA[cArr[i2]] < 0) {
+        for (int j = 0; j < length; j++) {
+            if (IA[chars[j]] < 0) {
                 i++;
             }
         }
         if ((length - i) % 4 != 0) {
             return null;
         }
-        int i3 = length;
+        int length2 = length;
         int i4 = 0;
-        while (i3 > 1) {
-            i3--;
-            if (IA[cArr[i3]] > 0) {
+        while (length2 > 1) {
+            length2--;
+            if (IA[chars[length2]] > 0) {
                 break;
             }
-            if (cArr[i3] == '=') {
+            if (chars[length2] == '=') {
                 i4++;
             }
         }
         int i5 = (((length - i) * 6) >> 3) - i4;
-        byte[] bArr = new byte[i5];
+        byte[] bytes = new byte[i5];
         int i6 = 0;
         int i7 = 0;
         while (i6 < i5) {
@@ -171,7 +171,7 @@ public class Base64 {
             int i10 = 0;
             while (i10 < 4) {
                 int i11 = i9 + 1;
-                int i12 = IA[cArr[i9]];
+                int i12 = IA[chars[i9]];
                 if (i12 < 0) {
                     i10--;
                 } else {
@@ -181,21 +181,21 @@ public class Base64 {
                 i9 = i11;
             }
             int i13 = i6 + 1;
-            bArr[i6] = (byte) (i8 >> 16);
+            bytes[i6] = (byte) (i8 >> 16);
             if (i13 < i5) {
                 int i14 = i13 + 1;
-                bArr[i13] = (byte) (i8 >> 8);
+                bytes[i13] = (byte) (i8 >> 8);
                 if (i14 >= i5) {
                     i13 = i14;
                 } else {
                     i13 = i14 + 1;
-                    bArr[i14] = (byte) i8;
+                    bytes[i14] = (byte) i8;
                 }
             }
             i6 = i13;
             i7 = i9;
         }
-        return bArr;
+        return bytes;
     }
 
     public static final byte[] decodeFast(String str) {
@@ -217,7 +217,7 @@ public class Base64 {
         int i6 = (i4 - i3) + 1;
         int i7 = length <= 76 ? 0 : (str.charAt(76) != '\r' ? 0 : i6 / 78) << 1;
         int i8 = (((i6 - i7) * 6) >> 3) - i5;
-        byte[] bArr = new byte[i8];
+        byte[] bytes = new byte[i8];
         int i9 = (i8 / 3) * 3;
         int i10 = 0;
         int i11 = 0;
@@ -230,11 +230,11 @@ public class Base64 {
             i3 = i15 + 1;
             int i17 = i16 | IA[str.charAt(i15)];
             int i18 = i11 + 1;
-            bArr[i11] = (byte) (i17 >> 16);
+            bytes[i11] = (byte) (i17 >> 16);
             int i19 = i18 + 1;
-            bArr[i18] = (byte) (i17 >> 8);
+            bytes[i18] = (byte) (i17 >> 8);
             i11 = i19 + 1;
-            bArr[i19] = (byte) i17;
+            bytes[i19] = (byte) i17;
             if (i7 > 0 && (i10 = i10 + 1) == 19) {
                 i3 += 2;
                 i10 = 0;
@@ -253,51 +253,51 @@ public class Base64 {
                 i20 = i22;
             }
             int i23 = 16;
-            for (int i24 = i11; i24 < i8; i24++) {
-                bArr[i24] = (byte) (i20 >> i23);
+            for (int j = i11; j < i8; j++) {
+                bytes[j] = (byte) (i20 >> i23);
                 i23 -= 8;
             }
         }
-        return bArr;
+        return bytes;
     }
 
-    public static final byte[] decodeFast(byte[] bArr) {
+    public static final byte[] decodeFast(byte[] bytes2) {
         int i = 0;
-        int length = bArr.length;
+        int length = bytes2.length;
         if (length == 0) {
             return new byte[0];
         }
         int i2 = length - 1;
         int i3 = 0;
-        while (i3 < i2 && IA[bArr[i3] & 0xFF] < 0) {
+        while (i3 < i2 && IA[bytes2[i3] & 0xFF] < 0) {
             i3++;
         }
         int i4 = i2;
-        while (i4 > 0 && IA[bArr[i4] & 0xFF] < 0) {
+        while (i4 > 0 && IA[bytes2[i4] & 0xFF] < 0) {
             i4--;
         }
-        int i5 = bArr[i4] != 61 ? 0 : bArr[i4 + (-1)] != 61 ? 1 : 2;
+        int i5 = bytes2[i4] != 61 ? 0 : bytes2[i4 + (-1)] != 61 ? 1 : 2;
         int i6 = (i4 - i3) + 1;
-        int i7 = length <= 76 ? 0 : (bArr[76] != 13 ? 0 : i6 / 78) << 1;
+        int i7 = length <= 76 ? 0 : (bytes2[76] != 13 ? 0 : i6 / 78) << 1;
         int i8 = (((i6 - i7) * 6) >> 3) - i5;
-        byte[] bArr2 = new byte[i8];
+        byte[] bytes = new byte[i8];
         int i9 = (i8 / 3) * 3;
         int i10 = 0;
         int i11 = 0;
         while (i11 < i9) {
             int i12 = i3 + 1;
             int i13 = i12 + 1;
-            int i14 = (IA[bArr[i3]] << 18) | (IA[bArr[i12]] << 12);
+            int i14 = (IA[bytes2[i3]] << 18) | (IA[bytes2[i12]] << 12);
             int i15 = i13 + 1;
-            int i16 = (IA[bArr[i13]] << 6) | i14;
+            int i16 = (IA[bytes2[i13]] << 6) | i14;
             i3 = i15 + 1;
-            int i17 = i16 | IA[bArr[i15]];
+            int i17 = i16 | IA[bytes2[i15]];
             int i18 = i11 + 1;
-            bArr2[i11] = (byte) (i17 >> 16);
+            bytes[i11] = (byte) (i17 >> 16);
             int i19 = i18 + 1;
-            bArr2[i18] = (byte) (i17 >> 8);
+            bytes[i18] = (byte) (i17 >> 8);
             i11 = i19 + 1;
-            bArr2[i19] = (byte) i17;
+            bytes[i19] = (byte) i17;
             if (i7 > 0 && (i10 = i10 + 1) == 19) {
                 i3 += 2;
                 i10 = 0;
@@ -311,56 +311,56 @@ public class Base64 {
                     break;
                 }
                 i3 = i21 + 1;
-                int i22 = (IA[bArr[i21]] << (18 - (i * 6))) | i20;
+                int i22 = (IA[bytes2[i21]] << (18 - (i * 6))) | i20;
                 i++;
                 i20 = i22;
             }
             int i23 = 16;
-            for (int i24 = i11; i24 < i8; i24++) {
-                bArr2[i24] = (byte) (i20 >> i23);
+            for (int j = i11; j < i8; j++) {
+                bytes[j] = (byte) (i20 >> i23);
                 i23 -= 8;
             }
         }
-        return bArr2;
+        return bytes;
     }
 
-    public static final byte[] decodeFast(char[] cArr) {
+    public static final byte[] decodeFast(char[] chars) {
         int i = 0;
-        int length = cArr.length;
+        int length = chars.length;
         if (length == 0) {
             return new byte[0];
         }
         int i2 = length - 1;
         int i3 = 0;
-        while (i3 < i2 && IA[cArr[i3]] < 0) {
+        while (i3 < i2 && IA[chars[i3]] < 0) {
             i3++;
         }
         int i4 = i2;
-        while (i4 > 0 && IA[cArr[i4]] < 0) {
+        while (i4 > 0 && IA[chars[i4]] < 0) {
             i4--;
         }
-        int i5 = cArr[i4] != '=' ? 0 : cArr[i4 + (-1)] != '=' ? 1 : 2;
+        int i5 = chars[i4] != '=' ? 0 : chars[i4 + (-1)] != '=' ? 1 : 2;
         int i6 = (i4 - i3) + 1;
-        int i7 = length <= 76 ? 0 : (cArr[76] != '\r' ? 0 : i6 / 78) << 1;
+        int i7 = length <= 76 ? 0 : (chars[76] != '\r' ? 0 : i6 / 78) << 1;
         int i8 = (((i6 - i7) * 6) >> 3) - i5;
-        byte[] bArr = new byte[i8];
+        byte[] bytes = new byte[i8];
         int i9 = (i8 / 3) * 3;
         int i10 = 0;
         int i11 = 0;
         while (i11 < i9) {
             int i12 = i3 + 1;
             int i13 = i12 + 1;
-            int i14 = (IA[cArr[i3]] << 18) | (IA[cArr[i12]] << 12);
+            int i14 = (IA[chars[i3]] << 18) | (IA[chars[i12]] << 12);
             int i15 = i13 + 1;
-            int i16 = (IA[cArr[i13]] << 6) | i14;
+            int i16 = (IA[chars[i13]] << 6) | i14;
             i3 = i15 + 1;
-            int i17 = i16 | IA[cArr[i15]];
+            int i17 = i16 | IA[chars[i15]];
             int i18 = i11 + 1;
-            bArr[i11] = (byte) (i17 >> 16);
+            bytes[i11] = (byte) (i17 >> 16);
             int i19 = i18 + 1;
-            bArr[i18] = (byte) (i17 >> 8);
+            bytes[i18] = (byte) (i17 >> 8);
             i11 = i19 + 1;
-            bArr[i19] = (byte) i17;
+            bytes[i19] = (byte) i17;
             if (i7 > 0 && (i10 = i10 + 1) == 19) {
                 i3 += 2;
                 i10 = 0;
@@ -374,110 +374,110 @@ public class Base64 {
                     break;
                 }
                 i3 = i21 + 1;
-                int i22 = (IA[cArr[i21]] << (18 - (i * 6))) | i20;
+                int i22 = (IA[chars[i21]] << (18 - (i * 6))) | i20;
                 i++;
                 i20 = i22;
             }
             int i23 = 16;
-            for (int i24 = i11; i24 < i8; i24++) {
-                bArr[i24] = (byte) (i20 >> i23);
+            for (int j = i11; j < i8; j++) {
+                bytes[j] = (byte) (i20 >> i23);
                 i23 -= 8;
             }
         }
-        return bArr;
+        return bytes;
     }
 
-    public static final byte[] encodeToByte(byte[] bArr, boolean z) {
-        int length = bArr == null ? 0 : bArr.length;
+    public static final byte[] encodeToByte(byte[] bytes2, boolean z) {
+        int length = bytes2 == null ? 0 : bytes2.length;
         if (length == 0) {
             return new byte[0];
         }
         int i = (length / 3) * 3;
         int i2 = (((length - 1) / 3) + 1) << 2;
         int i3 = i2 + (!z ? 0 : ((i2 - 1) / 76) << 1);
-        byte[] bArr2 = new byte[i3];
+        byte[] bytes = new byte[i3];
         int i4 = 0;
         int i5 = 0;
         int i6 = 0;
         while (i6 < i) {
             int i7 = i6 + 1;
             int i8 = i7 + 1;
-            int i9 = ((bArr[i7] & 0xFF) << 8) | ((bArr[i6] & 0xFF) << 16);
+            int i9 = ((bytes2[i7] & 0xFF) << 8) | ((bytes2[i6] & 0xFF) << 16);
             i6 = i8 + 1;
-            int i10 = i9 | (bArr[i8] & 0xFF);
+            int i10 = i9 | (bytes2[i8] & 0xFF);
             int i11 = i5 + 1;
-            bArr2[i5] = (byte) CA[(i10 >>> 18) & 63];
+            bytes[i5] = (byte) CA[(i10 >>> 18) & 63];
             int i12 = i11 + 1;
-            bArr2[i11] = (byte) CA[(i10 >>> 12) & 63];
+            bytes[i11] = (byte) CA[(i10 >>> 12) & 63];
             int i13 = i12 + 1;
-            bArr2[i12] = (byte) CA[(i10 >>> 6) & 63];
+            bytes[i12] = (byte) CA[(i10 >>> 6) & 63];
             i5 = i13 + 1;
-            bArr2[i13] = (byte) CA[i10 & 63];
+            bytes[i13] = (byte) CA[i10 & 63];
             if (z && (i4 = i4 + 1) == 19 && i5 < i3 - 2) {
                 int i14 = i5 + 1;
-                bArr2[i5] = (byte) '\r';
-                bArr2[i14] = 10;
+                bytes[i5] = (byte) '\r';
+                bytes[i14] = 10;
                 i5 = i14 + 1;
                 i4 = 0;
             }
         }
         int i15 = length - i;
         if (i15 > 0) {
-            int i16 = ((bArr[i] & 0xFF) << 10) | (i15 == 2 ? (bArr[length - 1] & 0xFF) << 2 : 0);
-            bArr2[i3 - 4] = (byte) CA[i16 >> 12];
-            bArr2[i3 - 3] = (byte) CA[(i16 >>> 6) & 63];
-            bArr2[i3 - 2] = i15 != 2 ? (byte) 61 : (byte) CA[i16 & 63];
-            bArr2[i3 - 1] = 61;
+            int i16 = ((bytes2[i] & 0xFF) << 10) | (i15 == 2 ? (bytes2[length - 1] & 0xFF) << 2 : 0);
+            bytes[i3 - 4] = (byte) CA[i16 >> 12];
+            bytes[i3 - 3] = (byte) CA[(i16 >>> 6) & 63];
+            bytes[i3 - 2] = i15 != 2 ? (byte) 61 : (byte) CA[i16 & 63];
+            bytes[i3 - 1] = 61;
         }
-        return bArr2;
+        return bytes;
     }
 
-    public static final char[] encodeToChar(byte[] bArr, boolean z) {
-        int length = bArr == null ? 0 : bArr.length;
+    public static final char[] encodeToChar(byte[] bytes, boolean z) {
+        int length = bytes == null ? 0 : bytes.length;
         if (length == 0) {
             return new char[0];
         }
         int i = (length / 3) * 3;
         int i2 = (((length - 1) / 3) + 1) << 2;
         int i3 = i2 + (!z ? 0 : ((i2 - 1) / 76) << 1);
-        char[] cArr = new char[i3];
+        char[] chars = new char[i3];
         int i4 = 0;
         int i5 = 0;
         int i6 = 0;
         while (i6 < i) {
             int i7 = i6 + 1;
             int i8 = i7 + 1;
-            int i9 = ((bArr[i7] & 0xFF) << 8) | ((bArr[i6] & 0xFF) << 16);
+            int i9 = ((bytes[i7] & 0xFF) << 8) | ((bytes[i6] & 0xFF) << 16);
             i6 = i8 + 1;
-            int i10 = i9 | (bArr[i8] & 0xFF);
+            int i10 = i9 | (bytes[i8] & 0xFF);
             int i11 = i5 + 1;
-            cArr[i5] = CA[(i10 >>> 18) & 63];
+            chars[i5] = CA[(i10 >>> 18) & 63];
             int i12 = i11 + 1;
-            cArr[i11] = CA[(i10 >>> 12) & 63];
+            chars[i11] = CA[(i10 >>> 12) & 63];
             int i13 = i12 + 1;
-            cArr[i12] = CA[(i10 >>> 6) & 63];
+            chars[i12] = CA[(i10 >>> 6) & 63];
             i5 = i13 + 1;
-            cArr[i13] = CA[i10 & 63];
+            chars[i13] = CA[i10 & 63];
             if (z && (i4 = i4 + 1) == 19 && i5 < i3 - 2) {
                 int i14 = i5 + 1;
-                cArr[i5] = '\r';
-                cArr[i14] = '\n';
+                chars[i5] = '\r';
+                chars[i14] = '\n';
                 i5 = i14 + 1;
                 i4 = 0;
             }
         }
         int i15 = length - i;
         if (i15 > 0) {
-            int i16 = ((bArr[i] & 0xFF) << 10) | (i15 == 2 ? (bArr[length - 1] & 0xFF) << 2 : 0);
-            cArr[i3 - 4] = CA[i16 >> 12];
-            cArr[i3 - 3] = CA[(i16 >>> 6) & 63];
-            cArr[i3 - 2] = i15 != 2 ? '=' : CA[i16 & 63];
-            cArr[i3 - 1] = '=';
+            int i16 = ((bytes[i] & 0xFF) << 10) | (i15 == 2 ? (bytes[length - 1] & 0xFF) << 2 : 0);
+            chars[i3 - 4] = CA[i16 >> 12];
+            chars[i3 - 3] = CA[(i16 >>> 6) & 63];
+            chars[i3 - 2] = i15 != 2 ? '=' : CA[i16 & 63];
+            chars[i3 - 1] = '=';
         }
-        return cArr;
+        return chars;
     }
 
-    public static final String encodeToString(byte[] bArr, boolean z) {
-        return new String(encodeToChar(bArr, z));
+    public static final String encodeToString(byte[] bytes, boolean z) {
+        return new String(encodeToChar(bytes, z));
     }
 }

@@ -11,8 +11,8 @@ public class AvatarShapeParams {
     @Nonnull
     private final int[] visualParamValues;
 
-    private AvatarShapeParams(@Nonnull int[] iArr) {
-        this.visualParamValues = iArr;
+    private AvatarShapeParams(@Nonnull int[] ints) {
+        this.visualParamValues = ints;
     }
 
     @Nonnull
@@ -21,30 +21,30 @@ public class AvatarShapeParams {
         for (int i = 0; i < avatarAppearance.AppearanceData_Fields.size(); i++) {
             Debug.Printf("appData[%d]: appVer %d, cofVer %d, flags 0x%x", Integer.valueOf(i), Integer.valueOf(avatarAppearance.AppearanceData_Fields.get(i).AppearanceVersion), Integer.valueOf(avatarAppearance.AppearanceData_Fields.get(i).CofVersion), Integer.valueOf(avatarAppearance.AppearanceData_Fields.get(i).Flags));
         }
-        int[] iArr = new int[218];
-        for (int i2 = 0; i2 < 218; i2++) {
-            if (i2 < avatarAppearance.VisualParam_Fields.size()) {
-                iArr[i2] = avatarAppearance.VisualParam_Fields.get(i2).ParamValue;
+        int[] ints = new int[218];
+        for (int j = 0; j < 218; j++) {
+            if (j < avatarAppearance.VisualParam_Fields.size()) {
+                ints[j] = avatarAppearance.VisualParam_Fields.get(j).ParamValue;
             } else {
-                iArr[i2] = avatarShapeParams != null ? avatarShapeParams.visualParamValues[i2] : 0;
+                ints[j] = avatarShapeParams != null ? avatarShapeParams.visualParamValues[j] : 0;
             }
         }
-        return new AvatarShapeParams(iArr);
+        return new AvatarShapeParams(ints);
     }
 
     @Nonnull
-    public static AvatarShapeParams create(@Nullable AvatarShapeParams avatarShapeParams, int[] iArr) {
-        if (iArr.length != 218) {
-            int[] iArr2 = new int[218];
-            System.arraycopy(iArr, 0, iArr2, 0, Math.min(iArr.length, 218));
-            if (iArr.length >= 218 || avatarShapeParams == null) {
-                iArr = iArr2;
+    public static AvatarShapeParams create(@Nullable AvatarShapeParams avatarShapeParams, int[] ints2) {
+        if (ints2.length != 218) {
+            int[] ints = new int[218];
+            System.arraycopy(ints2, 0, ints, 0, Math.min(ints2.length, 218));
+            if (ints2.length >= 218 || avatarShapeParams == null) {
+                ints2 = ints;
             } else {
-                System.arraycopy(avatarShapeParams.visualParamValues, iArr.length, iArr2, iArr.length, 218 - iArr.length);
-                iArr = iArr2;
+                System.arraycopy(avatarShapeParams.visualParamValues, ints2.length, ints, ints2.length, 218 - ints2.length);
+                ints2 = ints;
             }
         }
-        return new AvatarShapeParams(iArr);
+        return new AvatarShapeParams(ints2);
     }
 
     public boolean equals(Object obj) {

@@ -8,14 +8,14 @@ public class MuteListCachedData {
     public MuteListCachedData() {
     }
 
-    public MuteListCachedData(Long l) {
-        this.id = l;
+    public MuteListCachedData(Long id) {
+        this.id = id;
     }
 
-    public MuteListCachedData(Long l, int i, byte[] bArr) {
-        this.id = l;
+    public MuteListCachedData(Long id, int i, byte[] bytes) {
+        this.id = id;
         this.CRC = i;
-        this.data = bArr;
+        this.data = bytes;
     }
 
     public int getCRC() {
@@ -30,15 +30,15 @@ public class MuteListCachedData {
         return this.id;
     }
 
-    public void setCRC(int i) {
-        this.CRC = i;
+    public void setCRC(int crc) {
+        this.CRC = crc;
     }
 
-    public void setData(byte[] bArr) {
-        this.data = bArr;
+    public void setData(byte[] bytes) {
+        this.data = bytes;
     }
 
-    public void setId(Long l) {
-        this.id = l;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

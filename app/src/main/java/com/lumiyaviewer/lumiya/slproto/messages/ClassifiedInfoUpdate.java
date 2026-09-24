@@ -51,8 +51,8 @@ public class ClassifiedInfoUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleClassifiedInfoUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleClassifiedInfoUpdate(this);
     }
 
     @Override

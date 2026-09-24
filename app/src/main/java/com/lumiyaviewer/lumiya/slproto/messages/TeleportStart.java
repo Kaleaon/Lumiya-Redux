@@ -31,8 +31,8 @@ public class TeleportStart extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTeleportStart(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTeleportStart(this);
     }
 
     @Override

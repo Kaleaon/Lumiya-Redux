@@ -71,10 +71,10 @@ public class Vector3d {
         this.z *= d;
     }
 
-    public void set(double d, double d2, double d3) {
-        this.x = d;
-        this.y = d2;
-        this.z = d3;
+    public void set(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public void set(Vector3d vector3d) {

@@ -35,8 +35,8 @@ public class TransferPacket extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferPacket(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferPacket(this);
     }
 
     @Override

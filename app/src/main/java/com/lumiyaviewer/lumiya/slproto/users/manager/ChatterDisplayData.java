@@ -21,14 +21,14 @@ public class ChatterDisplayData implements ChatterDisplayInfo, Comparable<Chatte
     private final int unreadCount;
     private final boolean voiceActive;
 
-    ChatterDisplayData(ChatterID chatterID, String str, boolean z, int i, @Nullable SLChatEvent sLChatEvent, float f, boolean z2) {
+    ChatterDisplayData(ChatterID chatterID, String displayName, boolean isOnline, int unreadCount, @Nullable SLChatEvent chatEvent, float distanceToUser, boolean voiceActive) {
         this.chatterID = chatterID;
-        this.displayName = str;
-        this.isOnline = z;
-        this.unreadCount = i;
-        this.lastMessage = sLChatEvent;
-        this.distanceToUser = f;
-        this.voiceActive = z2;
+        this.displayName = displayName;
+        this.isOnline = isOnline;
+        this.unreadCount = unreadCount;
+        this.lastMessage = chatEvent;
+        this.distanceToUser = distanceToUser;
+        this.voiceActive = voiceActive;
     }
 
     @Override

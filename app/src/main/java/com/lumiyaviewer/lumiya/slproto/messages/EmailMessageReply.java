@@ -36,8 +36,8 @@ public class EmailMessageReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEmailMessageReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEmailMessageReply(this);
     }
 
     @Override

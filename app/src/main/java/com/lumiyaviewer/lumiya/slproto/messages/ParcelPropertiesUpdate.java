@@ -58,8 +58,8 @@ public class ParcelPropertiesUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelPropertiesUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelPropertiesUpdate(this);
     }
 
     @Override

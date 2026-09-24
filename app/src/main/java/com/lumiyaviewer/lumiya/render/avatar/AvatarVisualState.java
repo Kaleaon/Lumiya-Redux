@@ -45,10 +45,10 @@ public class AvatarVisualState {
     private final AvatarTextures textures = new AvatarTextures();
     private final Map<UUID, AnimationSequenceInfo> animations = new ConcurrentHashMap();
 
-    public AvatarVisualState(UUID uuid, SLObjectAvatarInfo sLObjectAvatarInfo, UUID uuid2) {
+    public AvatarVisualState(UUID uuid, SLObjectAvatarInfo objectAvatarInfo, UUID avatarUUID) {
         this.agentUUID = uuid;
-        this.avatarObject = sLObjectAvatarInfo;
-        this.avatarUUID = uuid2;
+        this.avatarObject = objectAvatarInfo;
+        this.avatarUUID = avatarUUID;
     }
 
     private void startAnimation(UUID uuid, int i, long j, DrawableAvatar drawableAvatar) {
@@ -160,15 +160,15 @@ public class AvatarVisualState {
         }
     }
 
-    public synchronized void ApplyTextures(SLTextureEntry sLTextureEntry, boolean z) {
-        if (this.textures.ApplyTextures(sLTextureEntry, z)) {
+    public synchronized void ApplyTextures(SLTextureEntry textureEntry, boolean z) {
+        if (this.textures.ApplyTextures(textureEntry, z)) {
             updateTextures();
         }
     }
 
-    public synchronized void ApplyVisualParams(int[] iArr) {
+    public synchronized void ApplyVisualParams(int[] ints) {
         AvatarShapeParams avatarShapeParams = this.avatarShapeParams;
-        this.avatarShapeParams = AvatarShapeParams.create(avatarShapeParams, iArr);
+        this.avatarShapeParams = AvatarShapeParams.create(avatarShapeParams, ints);
         if (!this.avatarShapeParams.equals(avatarShapeParams)) {
             updateAvatarShape();
         }

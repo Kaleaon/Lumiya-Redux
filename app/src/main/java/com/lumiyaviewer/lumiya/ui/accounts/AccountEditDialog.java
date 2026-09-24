@@ -95,34 +95,34 @@ class AccountEditDialog extends AppCompatDialog implements View.OnClickListener,
         switch (view.getId()) {
             case R.id.okButton:
                 String charSequence = ((TextView) findViewById(R.id.loginNameText)).getText().toString();
-                String charSequence2 = ((TextView) findViewById(R.id.loginPasswordText)).getText().toString();
+                String text = ((TextView) findViewById(R.id.loginPasswordText)).getText().toString();
                 String str = "";
                 Object selectedItem = ((Spinner) findViewById(R.id.spinnerGrid)).getSelectedItem();
                 UUID gridUUID = selectedItem instanceof GridList.GridInfo ? ((GridList.GridInfo) selectedItem).getGridUUID() : null;
                 if (!charSequence.equals("")) {
-                    if (charSequence2.equals("(Saved password)")) {
+                    if (text.equals("(Saved password)")) {
                         z = true;
-                    } else if (charSequence2.equals("")) {
+                    } else if (text.equals("")) {
                         str = "";
                         z = false;
                     } else {
-                        str = SLAuth.getPasswordHash(charSequence2);
+                        str = SLAuth.getPasswordHash(text);
                         z = false;
                     }
                     dismiss();
                     if (this.onAccountEditResultListener != null) {
-                        AccountList.AccountInfo accountInfo2 = this.editAccount;
-                        if (accountInfo2 == null) {
+                        AccountList.AccountInfo editAccount = this.editAccount;
+                        if (editAccount == null) {
                             z2 = true;
                             accountInfo = new AccountList.AccountInfo(charSequence, str, gridUUID);
                         } else {
-                            accountInfo2.setLoginName(charSequence);
-                            accountInfo2.setGridUUID(gridUUID);
+                            editAccount.setLoginName(charSequence);
+                            editAccount.setGridUUID(gridUUID);
                             if (z) {
-                                accountInfo = accountInfo2;
+                                accountInfo = editAccount;
                             } else {
-                                accountInfo2.setPasswordHash(str);
-                                accountInfo = accountInfo2;
+                                editAccount.setPasswordHash(str);
+                                accountInfo = editAccount;
                             }
                         }
                         this.onAccountEditResultListener.onAccountEdited(accountInfo, z2);

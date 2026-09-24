@@ -13,9 +13,9 @@ public class GLVertexArrayObject implements GLGenericResource {
     private static class GLVertexArrayObjectReference extends GLResourceManager.GLGenericResourceReference {
         private final int[] vaoIndices;
 
-        GLVertexArrayObjectReference(GLGenericResource gLGenericResource, GLResourceManager gLResourceManager, int[] iArr) {
-            super(gLGenericResource, gLResourceManager);
-            this.vaoIndices = iArr;
+        GLVertexArrayObjectReference(GLGenericResource glGenericResource, GLResourceManager glResourceManager, int[] ints) {
+            super(glGenericResource, glResourceManager);
+            this.vaoIndices = ints;
         }
 
         @Override
@@ -25,11 +25,11 @@ public class GLVertexArrayObject implements GLGenericResource {
     }
 
     @TargetApi(18)
-    public GLVertexArrayObject(GLResourceManager gLResourceManager, int i) {
-        this.size = i;
-        this.vaoIndices = new int[i];
-        GLES30.glGenVertexArrays(i, this.vaoIndices, 0);
-        new GLVertexArrayObjectReference(this, gLResourceManager, this.vaoIndices);
+    public GLVertexArrayObject(GLResourceManager glResourceManager, int size) {
+        this.size = size;
+        this.vaoIndices = new int[size];
+        GLES30.glGenVertexArrays(size, this.vaoIndices, 0);
+        new GLVertexArrayObjectReference(this, glResourceManager, this.vaoIndices);
     }
 
     public void Bind(int i) {

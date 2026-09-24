@@ -35,10 +35,10 @@ public class SLChatSessionMarkEvent extends SLChatEvent {
         this.description = chatMessage.getMessageText();
     }
 
-    public SLChatSessionMarkEvent(ChatMessageSource chatMessageSource, @Nonnull UUID uuid, @Nonnull SessionMarkType sessionMarkType, @Nullable String str) {
+    public SLChatSessionMarkEvent(ChatMessageSource chatMessageSource, @Nonnull UUID uuid, @Nonnull SessionMarkType sessionMarkType, @Nullable String description) {
         super(chatMessageSource, uuid);
         this.sessionMarkType = sessionMarkType;
-        this.description = str;
+        this.description = description;
     }
 
     @Override

@@ -36,8 +36,8 @@ public class LayerData extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLayerData(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLayerData(this);
     }
 
     @Override

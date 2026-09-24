@@ -40,8 +40,8 @@ public class CreateInventoryFolder extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCreateInventoryFolder(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCreateInventoryFolder(this);
     }
 
     @Override

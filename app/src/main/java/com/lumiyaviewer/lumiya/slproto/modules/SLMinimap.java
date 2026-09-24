@@ -76,17 +76,17 @@ public class SLMinimap extends SLModule {
         private final int bitmapWidth;
         final int[] colors;
 
-        MinimapBitmap(int i, int i2) {
-            this.bitmapWidth = i;
-            this.bitmapHeight = i2;
-            this.colors = new int[i * i2];
+        MinimapBitmap(int bitmapWidth, int bitmapHeight) {
+            this.bitmapWidth = bitmapWidth;
+            this.bitmapHeight = bitmapHeight;
+            this.colors = new int[bitmapWidth * bitmapHeight];
         }
 
-        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, int[] iArr) {
+        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, int[] ints) {
             this.bitmapWidth = minimapBitmap.bitmapWidth;
             this.bitmapHeight = minimapBitmap.bitmapHeight;
             this.colors = Arrays.copyOf(minimapBitmap.colors, minimapBitmap.colors.length);
-            System.arraycopy(iArr, 0, this.colors, (this.bitmapHeight * i2) + i, iArr.length);
+            System.arraycopy(ints, 0, this.colors, (this.bitmapHeight * i2) + i, ints.length);
         }
 
         public Bitmap makeBitmap() {
@@ -120,15 +120,15 @@ public class SLMinimap extends SLModule {
         public final ImmutableVector myAvatarPosition;
         public final Map<UUID, UserLocation> userPositions;
 
-        UserLocations(@Nullable ImmutableVector immutableVector, float f, Map<UUID, UserLocation> map) {
+        UserLocations(@Nullable ImmutableVector immutableVector, float myAvatarHeading, Map<UUID, UserLocation> map) {
             this.myAvatarPosition = immutableVector;
-            this.myAvatarHeading = f;
+            this.myAvatarHeading = myAvatarHeading;
             this.userPositions = map;
         }
     }
 
-    SLMinimap(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    SLMinimap(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.minimapBitmap = new MinimapBitmap(256, 256);
         this.parcelIDs = new int[4096];
         this.parcels = new ConcurrentHashMap();
@@ -152,7 +152,7 @@ public class SLMinimap extends SLModule {
         } else {
             this.userLocationsResultHandler = null;
         }
-        this.afterTeleport = sLAgentCircuit.getAuthReply().fromTeleport ? !sLAgentCircuit.getAuthReply().isTemporary : false;
+        this.afterTeleport = agentCircuit.getAuthReply().fromTeleport ? !agentCircuit.getAuthReply().isTemporary : false;
     }
 
     public float getMyAvatarHeading() {
@@ -176,11 +176,11 @@ public class SLMinimap extends SLModule {
             this.afterTeleport = false;
             this.userManager.getChatterList().getActiveChattersManager().notifyTeleportComplete(parcelData.getName());
         }
-        SLVoice sLVoice = this.agentCircuit.getModules().voice;
+        SLVoice voice = this.agentCircuit.getModules().voice;
         if (parcelData != null) {
-            sLVoice.setCurrentParcel(parcelData.getParcelID());
+            voice.setCurrentParcel(parcelData.getParcelID());
         }
-        this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, sLVoice.getCurrentParcelVoiceChannel()));
+        this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, voice.getCurrentParcelVoiceChannel()));
     }
 
     @Override
@@ -269,9 +269,9 @@ public class SLMinimap extends SLModule {
             }
             z = true;
         } else if (hashSet2 != null) {
-            Iterator it2 = hashSet2.iterator();
-            while (it2.hasNext()) {
-                UserLocation userLocation3 = this.userPositions.get((UUID) it2.next());
+            Iterator iterator = hashSet2.iterator();
+            while (iterator.hasNext()) {
+                UserLocation userLocation3 = this.userPositions.get((UUID) iterator.next());
                 if (userLocation3 != null) {
                     userLocation3.distance = this.myAvatarPosition.distanceTo(userLocation3.location);
                 }
@@ -279,10 +279,10 @@ public class SLMinimap extends SLModule {
             z = true;
         }
         if (z || z5) {
-            Iterator<UserLocation> it3 = this.userPositions.values().iterator();
+            Iterator<UserLocation> iterator2 = this.userPositions.values().iterator();
             int i2 = 0;
-            while (it3.hasNext()) {
-                i2 = ((UserLocation) it3.next()).distance <= 20.0f ? i2 + 1 : i2;
+            while (iterator2.hasNext()) {
+                i2 = ((UserLocation) iterator2.next()).distance <= 20.0f ? i2 + 1 : i2;
             }
             if (i2 != this.chatRangeUsersCount) {
                 this.chatRangeUsersCount = i2;
@@ -302,9 +302,9 @@ public class SLMinimap extends SLModule {
         if (z4) {
             this.userManager.getChatterList().updateDistanceToAllUsers();
         } else if (hashSet2 != null) {
-            Iterator it4 = hashSet2.iterator();
-            while (it4.hasNext()) {
-                this.userManager.getChatterList().updateDistanceToUser((UUID) it4.next());
+            Iterator iterator3 = hashSet2.iterator();
+            while (iterator3.hasNext()) {
+                this.userManager.getChatterList().updateDistanceToUser((UUID) iterator3.next());
             }
         }
         if (z4 || hashSet2 != null) {
@@ -318,11 +318,11 @@ public class SLMinimap extends SLModule {
         Debug.Log("ParcelOverlay: SequenceID = " + parcelOverlay.ParcelData_Field.SequenceID);
         byte[] bArr = parcelOverlay.ParcelData_Field.Data;
         int length = bArr.length / 64;
-        int[] iArr = new int[length * 4 * 64 * 4];
+        int[] ints = new int[length * 4 * 64 * 4];
         int i2 = 0;
-        for (int i3 = 0; i3 < length; i3++) {
-            int i4 = i3 + (parcelOverlay.ParcelData_Field.SequenceID * 16);
-            for (int i6 = 0; i6 < 64; i6++) {
+        for (int j = 0; j < length; j++) {
+            int i4 = j + (parcelOverlay.ParcelData_Field.SequenceID * 16);
+            for (int k = 0; k < 64; k++) {
                     i = i2;
                     int i7 = 0;
                     switch ((byte) (bArr[i] & 15)) {
@@ -365,15 +365,15 @@ public class SLMinimap extends SLModule {
                         i7 = Color.rgb(i8, green, blue);
                     }
                     for (int pixelY = 0; pixelY < 4; pixelY++) {
-                        int rowOffset = ((((length * 4) - 1) - ((i3 * 4) + pixelY)) * 256) + (i6 * 4);
+                        int rowOffset = ((((length * 4) - 1) - ((j * 4) + pixelY)) * 256) + (k * 4);
                         for (int pixelX = 0; pixelX < 4; pixelX++) {
-                            iArr[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || i6 == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
+                            ints[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || k == 0 || (bArr[i] & 64) == 0)) ? i7 : -1;
                         }
                     }
                     i2 = i + 1;
             }
         }
-        this.minimapBitmap = new MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, iArr);
+        this.minimapBitmap = new MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, ints);
         if (this.userManager != null) {
             this.userManager.getMinimapBitmapPool().setData(SubscriptionSingleKey.Value, this.minimapBitmap);
         }

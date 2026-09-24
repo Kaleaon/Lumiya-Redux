@@ -40,8 +40,8 @@ public class EventNotificationRemoveRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventNotificationRemoveRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventNotificationRemoveRequest(this);
     }
 
     @Override

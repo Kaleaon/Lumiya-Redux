@@ -26,23 +26,23 @@ public class GroupRoleMemberDao extends AbstractDao<GroupRoleMember, Void> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'GroupRoleMembers' ('GROUP_ID' TEXT NOT NULL ,'REQUEST_ID' TEXT NOT NULL ,'ROLE_ID' TEXT NOT NULL ,'USER_ID' TEXT NOT NULL );");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_GroupRoleMembers_GROUP_ID_ROLE_ID_REQUEST_ID ON GroupRoleMembers (GROUP_ID,ROLE_ID,REQUEST_ID);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'GroupRoleMembers' ('GROUP_ID' TEXT NOT NULL ,'REQUEST_ID' TEXT NOT NULL ,'ROLE_ID' TEXT NOT NULL ,'USER_ID' TEXT NOT NULL );");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_GroupRoleMembers_GROUP_ID_ROLE_ID_REQUEST_ID ON GroupRoleMembers (GROUP_ID,ROLE_ID,REQUEST_ID);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupRoleMembers'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'GroupRoleMembers'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, GroupRoleMember groupRoleMember) {
-        sQLiteStatement.clearBindings();
-        sQLiteStatement.bindString(1, groupRoleMember.getGroupID().toString());
-        sQLiteStatement.bindString(2, groupRoleMember.getRequestID().toString());
-        sQLiteStatement.bindString(3, groupRoleMember.getRoleID().toString());
-        sQLiteStatement.bindString(4, groupRoleMember.getUserID().toString());
+    public void bindValues(SQLiteStatement sqLiteStatement, GroupRoleMember groupRoleMember) {
+        sqLiteStatement.clearBindings();
+        sqLiteStatement.bindString(1, groupRoleMember.getGroupID().toString());
+        sqLiteStatement.bindString(2, groupRoleMember.getRequestID().toString());
+        sqLiteStatement.bindString(3, groupRoleMember.getRoleID().toString());
+        sqLiteStatement.bindString(4, groupRoleMember.getUserID().toString());
     }
 
     @Override

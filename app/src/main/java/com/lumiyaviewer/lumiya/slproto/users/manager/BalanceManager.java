@@ -23,13 +23,13 @@ public class BalanceManager {
     private final SimpleRequestHandler<SubscriptionSingleKey> balanceRequestHandler = new SimpleRequestHandler<SubscriptionSingleKey>() {
         @Override
         public void onRequest(@Nonnull SubscriptionSingleKey subscriptionSingleKey) {
-            SLFinancialInfo sLFinancialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
-            if (sLFinancialInfo == null) {
+            SLFinancialInfo financialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
+            if (financialInfo == null) {
                 BalanceManager.this.balancePool.onResultError(SubscriptionSingleKey.Value, new SLGridConnection.NotConnectedException());
                 return;
             }
-            if (sLFinancialInfo.getBalanceKnown()) {
-                BalanceManager.this.balancePool.onResultData(SubscriptionSingleKey.Value, Integer.valueOf(sLFinancialInfo.getBalance()));
+            if (financialInfo.getBalanceKnown()) {
+                BalanceManager.this.balancePool.onResultData(SubscriptionSingleKey.Value, Integer.valueOf(financialInfo.getBalance()));
                 return;
             }
             SLAgentCircuit activeAgentCircuit = BalanceManager.this.userManager.getActiveAgentCircuit();
@@ -43,9 +43,9 @@ public class BalanceManager {
     private final Runnable requestBalanceRunnable = new Runnable() {
         @Override
         public void run() {
-            SLFinancialInfo sLFinancialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
-            if (sLFinancialInfo != null) {
-                sLFinancialInfo.AskForMoneyBalance();
+            SLFinancialInfo financialInfo = (SLFinancialInfo) BalanceManager.this.financialInfo.get();
+            if (financialInfo != null) {
+                financialInfo.AskForMoneyBalance();
             } else {
                 BalanceManager.this.balancePool.onResultError(SubscriptionSingleKey.Value, new SLGridConnection.NotConnectedException());
             }
@@ -83,8 +83,8 @@ public class BalanceManager {
         lazyList.close();
     }
 
-    public void clearFinancialInfo(SLFinancialInfo sLFinancialInfo) {
-        this.financialInfo.compareAndSet(sLFinancialInfo, null);
+    public void clearFinancialInfo(SLFinancialInfo financialInfo) {
+        this.financialInfo.compareAndSet(financialInfo, null);
     }
 
     public void clearMoneyTransactions() {
@@ -114,8 +114,8 @@ public class BalanceManager {
         return this.moneyTransactionPool;
     }
 
-    public void setFinancialInfo(SLFinancialInfo sLFinancialInfo) {
-        this.financialInfo.set(sLFinancialInfo);
+    public void setFinancialInfo(SLFinancialInfo financialInfo) {
+        this.financialInfo.set(financialInfo);
     }
 
     public void updateBalance(int i) {

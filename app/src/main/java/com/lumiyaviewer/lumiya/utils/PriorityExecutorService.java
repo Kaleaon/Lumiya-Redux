@@ -71,12 +71,12 @@ public class PriorityExecutorService {
         return this.exe.isShutdown();
     }
 
-    public void setNumThreads(int i) {
-        if (i == this.exe.getCorePoolSize() || i <= 0) {
+    public void setNumThreads(int numThreads) {
+        if (numThreads == this.exe.getCorePoolSize() || numThreads <= 0) {
             return;
         }
-        this.exe.setCorePoolSize(i);
-        this.exe.setMaximumPoolSize(i);
+        this.exe.setCorePoolSize(numThreads);
+        this.exe.setMaximumPoolSize(numThreads);
     }
 
     public void shutdownNow() {

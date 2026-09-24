@@ -50,8 +50,8 @@ public class MoneyBalanceReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMoneyBalanceReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMoneyBalanceReply(this);
     }
 
     @Override

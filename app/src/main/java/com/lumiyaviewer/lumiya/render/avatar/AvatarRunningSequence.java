@@ -14,12 +14,12 @@ class AvatarRunningSequence extends AnimationTiming {
     final int sequenceID;
     private final long stoppingSince;
 
-    AvatarRunningSequence(@Nonnull AnimationData animationData, int i, long j, long j2, boolean z) {
+    AvatarRunningSequence(@Nonnull AnimationData animationData, int sequenceID, long runningSince, long stoppingSince, boolean dontEaseIn) {
         this.animationData = animationData;
-        this.sequenceID = i;
-        this.runningSince = j;
-        this.stoppingSince = j2;
-        this.dontEaseIn = z;
+        this.sequenceID = sequenceID;
+        this.runningSince = runningSince;
+        this.stoppingSince = stoppingSince;
+        this.dontEaseIn = dontEaseIn;
         this.runningAnimations = animationData.createRunningAnimations(this);
     }
 

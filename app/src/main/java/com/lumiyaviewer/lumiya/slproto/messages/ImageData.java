@@ -38,8 +38,8 @@ public class ImageData extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleImageData(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleImageData(this);
     }
 
     @Override

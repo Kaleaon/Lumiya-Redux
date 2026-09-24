@@ -27,8 +27,8 @@ public class SubscriptionDataPool<K, T> extends SubscriptionGenericDataPool<K, T
     }
 
     @Override
-    public SubscriptionDataPool<K, T> setCanContainNulls(boolean z) {
-        super.setCanContainNulls(z);
+    public SubscriptionDataPool<K, T> setCanContainNulls(boolean canContainNulls) {
+        super.setCanContainNulls(canContainNulls);
         return this;
     }
 }

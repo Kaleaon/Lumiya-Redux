@@ -31,8 +31,8 @@ public class LiveHelpGroupRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLiveHelpGroupRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLiveHelpGroupRequest(this);
     }
 
     @Override

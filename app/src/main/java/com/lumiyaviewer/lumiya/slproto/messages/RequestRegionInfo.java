@@ -31,8 +31,8 @@ public class RequestRegionInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestRegionInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestRegionInfo(this);
     }
 
     @Override

@@ -21,13 +21,13 @@ public class PhoneParams {
         int xPpi;
         int yPpi;
 
-        PpiOverride(String str, String str2, String str3, String str4, int i, int i2) {
-            this.manufacturer = str;
-            this.device = str2;
-            this.model = str3;
-            this.hardware = str4;
-            this.xPpi = i;
-            this.yPpi = i2;
+        PpiOverride(String manufacturer, String device, String model, String hardware, int xPpi, int yPpi) {
+            this.manufacturer = manufacturer;
+            this.device = device;
+            this.model = model;
+            this.hardware = hardware;
+            this.xPpi = xPpi;
+            this.yPpi = yPpi;
         }
 
         boolean isMatching(String str, String str2, String str3, String str4) {

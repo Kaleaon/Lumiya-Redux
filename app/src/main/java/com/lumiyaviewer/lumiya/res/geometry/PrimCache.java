@@ -19,9 +19,9 @@ public class PrimCache extends ResourceMemoryCache<PrimDrawParams, DrawablePrim>
         private final GeometryCache geometryCache;
         private final GLTextureCache glTextureCache;
 
-        public PrimRequest(GLTextureCache gLTextureCache, GeometryCache geometryCache, PrimDrawParams primDrawParams, ResourceManager<PrimDrawParams, DrawablePrim> resourceManager) {
+        public PrimRequest(GLTextureCache glTextureCache, GeometryCache geometryCache, PrimDrawParams primDrawParams, ResourceManager<PrimDrawParams, DrawablePrim> resourceManager) {
             super(primDrawParams, resourceManager);
-            this.glTextureCache = gLTextureCache;
+            this.glTextureCache = glTextureCache;
             this.geometryCache = geometryCache;
         }
 
@@ -57,8 +57,8 @@ public class PrimCache extends ResourceMemoryCache<PrimDrawParams, DrawablePrim>
         }
     }
 
-    public PrimCache(GLTextureCache gLTextureCache, GeometryCache geometryCache) {
-        this.textureCache = gLTextureCache;
+    public PrimCache(GLTextureCache glTextureCache, GeometryCache geometryCache) {
+        this.textureCache = glTextureCache;
         this.geometryCache = geometryCache;
     }
 

@@ -30,23 +30,23 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
         this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() {
             @Override
             public SLInventoryEntry load(@Nonnull Integer num) {
-                SLInventoryEntry sLInventoryEntry;
+                SLInventoryEntry inventoryEntry;
                 if (InventoryEntryList.this.cursor == null) {
-                    sLInventoryEntry = null;
+                    inventoryEntry = null;
                 } else if (!InventoryEntryList.this.cursor.isClosed()) {
                     synchronized (InventoryEntryList.this.lock) {
                         try {
                             InventoryEntryList.this.cursor.moveToPosition(num.intValue());
-                            sLInventoryEntry = new SLInventoryEntry(InventoryEntryList.this.cursor);
+                            inventoryEntry = new SLInventoryEntry(InventoryEntryList.this.cursor);
                         } catch (Exception e) {
                             Debug.Warning(e);
-                            sLInventoryEntry = null;
+                            inventoryEntry = null;
                         }
                     }
                 } else {
-                    sLInventoryEntry = null;
+                    inventoryEntry = null;
                 }
-                return sLInventoryEntry == null ? new SLInventoryEntry() : sLInventoryEntry;
+                return inventoryEntry == null ? new SLInventoryEntry() : inventoryEntry;
             }
         });
         this.title = null;
@@ -55,32 +55,32 @@ public class InventoryEntryList extends AbstractList<SLInventoryEntry> {
         this.size = 0;
     }
 
-    InventoryEntryList(@Nullable String str, @Nullable SLInventoryEntry sLInventoryEntry, @Nullable Cursor cursor) {
+    InventoryEntryList(@Nullable String title, @Nullable SLInventoryEntry folder, @Nullable Cursor cursor) {
         this.lock = new Object();
         this.entryCache = CacheBuilder.newBuilder().maximumSize(1000L).weakValues().build(new CacheLoader<Integer, SLInventoryEntry>() {
             @Override
             public SLInventoryEntry load(@Nonnull Integer num) {
-                SLInventoryEntry sLInventoryEntry2;
+                SLInventoryEntry inventoryEntry;
                 if (InventoryEntryList.this.cursor == null) {
-                    sLInventoryEntry2 = null;
+                    inventoryEntry = null;
                 } else if (!InventoryEntryList.this.cursor.isClosed()) {
                     synchronized (InventoryEntryList.this.lock) {
                         try {
                             InventoryEntryList.this.cursor.moveToPosition(num.intValue());
-                            sLInventoryEntry2 = new SLInventoryEntry(InventoryEntryList.this.cursor);
+                            inventoryEntry = new SLInventoryEntry(InventoryEntryList.this.cursor);
                         } catch (Exception e) {
                             Debug.Warning(e);
-                            sLInventoryEntry2 = null;
+                            inventoryEntry = null;
                         }
                     }
                 } else {
-                    sLInventoryEntry2 = null;
+                    inventoryEntry = null;
                 }
-                return sLInventoryEntry2 == null ? new SLInventoryEntry() : sLInventoryEntry2;
+                return inventoryEntry == null ? new SLInventoryEntry() : inventoryEntry;
             }
         });
-        this.title = str;
-        this.folder = sLInventoryEntry;
+        this.title = title;
+        this.folder = folder;
         this.cursor = cursor;
         this.size = cursor != null ? cursor.getCount() : 0;
     }

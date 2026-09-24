@@ -24,26 +24,26 @@ public class CachedResponseDao extends AbstractDao<CachedResponse, String> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedResponses' ('KEY' TEXT PRIMARY KEY NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedResponses' ('KEY' TEXT PRIMARY KEY NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedResponses'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedResponses'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, CachedResponse cachedResponse) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, CachedResponse cachedResponse) {
+        sqLiteStatement.clearBindings();
         String key = cachedResponse.getKey();
         if (key != null) {
-            sQLiteStatement.bindString(1, key);
+            sqLiteStatement.bindString(1, key);
         }
         byte[] data = cachedResponse.getData();
         if (data != null) {
-            sQLiteStatement.bindBlob(2, data);
+            sqLiteStatement.bindBlob(2, data);
         }
-        sQLiteStatement.bindLong(3, cachedResponse.getMustRevalidate() ? 1L : 0L);
+        sqLiteStatement.bindLong(3, cachedResponse.getMustRevalidate() ? 1L : 0L);
     }
 
     @Override

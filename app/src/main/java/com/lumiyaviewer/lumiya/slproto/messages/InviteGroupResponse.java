@@ -35,8 +35,8 @@ public class InviteGroupResponse extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleInviteGroupResponse(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleInviteGroupResponse(this);
     }
 
     @Override

@@ -57,9 +57,9 @@ public class HeadTracker implements SensorEventListener {
         return new Matrix3x3d(this.tracker.getRotationMatrix());
     }
 
-    public void getLastHeadView(float[] fArr, int i) {
+    public void getLastHeadView(float[] floats, int i) {
         float f;
-        if (i + 16 > fArr.length) {
+        if (i + 16 > floats.length) {
             throw new IllegalArgumentException("Not enough space to write the result");
         }
         switch (this.display.getRotation()) {
@@ -87,25 +87,25 @@ public class HeadTracker implements SensorEventListener {
         synchronized (this.tracker) {
             if (this.tracker.isReady()) {
                 double[] predictedGLMatrix = this.tracker.getPredictedGLMatrix(TimeUnit.NANOSECONDS.toSeconds(this.clock.nanoTime() - this.latestGyroEventClockTimeNs) + 0.057999998331069946d);
-                for (int i2 = 0; i2 < fArr.length; i2++) {
-                    this.tmpHeadView[i2] = (float) predictedGLMatrix[i2];
+                for (int j = 0; j < floats.length; j++) {
+                    this.tmpHeadView[j] = (float) predictedGLMatrix[j];
                 }
                 Matrix.multiplyMM(this.tmpHeadView2, 0, this.sensorToDisplay, 0, this.tmpHeadView, 0);
-                Matrix.multiplyMM(fArr, i, this.tmpHeadView2, 0, this.ekfToHeadTracker, 0);
+                Matrix.multiplyMM(floats, i, this.tmpHeadView2, 0, this.ekfToHeadTracker, 0);
                 Matrix.setIdentityM(this.neckModelTranslation, 0);
                 Matrix.translateM(this.neckModelTranslation, 0, 0.0f, (-this.neckModelFactor) * DEFAULT_NECK_VERTICAL_OFFSET, this.neckModelFactor * DEFAULT_NECK_HORIZONTAL_OFFSET);
-                Matrix.multiplyMM(this.tmpHeadView, 0, this.neckModelTranslation, 0, fArr, i);
-                Matrix.translateM(fArr, i, this.tmpHeadView, 0, 0.0f, this.neckModelFactor * DEFAULT_NECK_VERTICAL_OFFSET, 0.0f);
+                Matrix.multiplyMM(this.tmpHeadView, 0, this.neckModelTranslation, 0, floats, i);
+                Matrix.translateM(floats, i, this.tmpHeadView, 0, 0.0f, this.neckModelFactor * DEFAULT_NECK_VERTICAL_OFFSET, 0.0f);
             }
         }
     }
 
     public float getNeckModelFactor() {
-        float f;
+        float neckModelFactor;
         synchronized (this.neckModelFactorMutex) {
-            f = this.neckModelFactor;
+            neckModelFactor = this.neckModelFactor;
         }
-        return f;
+        return neckModelFactor;
     }
 
     @Override
@@ -158,20 +158,20 @@ public class HeadTracker implements SensorEventListener {
         }
     }
 
-    public void setNeckModelEnabled(boolean z) {
-        if (z) {
+    public void setNeckModelEnabled(boolean neckModelEnabled) {
+        if (neckModelEnabled) {
             setNeckModelFactor(1.0f);
         } else {
             setNeckModelFactor(0.0f);
         }
     }
 
-    public void setNeckModelFactor(float f) {
+    public void setNeckModelFactor(float neckModelFactor) {
         synchronized (this.neckModelFactorMutex) {
-            if ((f < 0.0f) || f > 1.0f) {
+            if ((neckModelFactor < 0.0f) || neckModelFactor > 1.0f) {
                 throw new IllegalArgumentException("factor should be within [0.0, 1.0]");
             }
-            this.neckModelFactor = f;
+            this.neckModelFactor = neckModelFactor;
         }
     }
 

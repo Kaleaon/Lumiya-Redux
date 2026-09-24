@@ -7,9 +7,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class SLObjectProfileData {
-    public static SLObjectProfileData create(@Nonnull SLObjectInfo sLObjectInfo) {
-        HoverText hoverText = sLObjectInfo.getHoverText();
-        return new AutoValue_SLObjectProfileData(sLObjectInfo.getId(), sLObjectInfo.nameKnown ? Optional.of(Strings.nullToEmpty(sLObjectInfo.name)) : Optional.absent(), Optional.fromNullable(sLObjectInfo.getDescription()), sLObjectInfo.getOwnerUUID(), sLObjectInfo.isTouchable(), sLObjectInfo.getTouchName(), sLObjectInfo.isPayable(), sLObjectInfo.saleType, sLObjectInfo.salePrice, (sLObjectInfo.UpdateFlags & 8) != 0, sLObjectInfo.isDead, Optional.fromNullable(hoverText != null ? Strings.emptyToNull(hoverText.text()) : null), sLObjectInfo.getPayInfo(), (sLObjectInfo.UpdateFlags & 4) != 0);
+    public static SLObjectProfileData create(@Nonnull SLObjectInfo objectInfo) {
+        HoverText hoverText = objectInfo.getHoverText();
+        return new AutoValue_SLObjectProfileData(objectInfo.getId(), objectInfo.nameKnown ? Optional.of(Strings.nullToEmpty(objectInfo.name)) : Optional.absent(), Optional.fromNullable(objectInfo.getDescription()), objectInfo.getOwnerUUID(), objectInfo.isTouchable(), objectInfo.getTouchName(), objectInfo.isPayable(), objectInfo.saleType, objectInfo.salePrice, (objectInfo.UpdateFlags & 8) != 0, objectInfo.isDead, Optional.fromNullable(hoverText != null ? Strings.emptyToNull(hoverText.text()) : null), objectInfo.getPayInfo(), (objectInfo.UpdateFlags & 4) != 0);
     }
 
     public abstract Optional<String> description();

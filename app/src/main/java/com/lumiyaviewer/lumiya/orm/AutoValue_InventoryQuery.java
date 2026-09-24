@@ -12,14 +12,14 @@ final class AutoValue_InventoryQuery extends InventoryQuery {
     private final boolean includeItems;
     private final boolean newestFirst;
 
-    AutoValue_InventoryQuery(@Nullable UUID uuid, @Nullable String str, boolean z, boolean z2, boolean z3, int i, int i2) {
+    AutoValue_InventoryQuery(@Nullable UUID uuid, @Nullable String containsString, boolean includeFolders, boolean includeItems, boolean newestFirst, int folderType, int assetType) {
         this.folderId = uuid;
-        this.containsString = str;
-        this.includeFolders = z;
-        this.includeItems = z2;
-        this.newestFirst = z3;
-        this.folderType = i;
-        this.assetType = i2;
+        this.containsString = containsString;
+        this.includeFolders = includeFolders;
+        this.includeItems = includeItems;
+        this.newestFirst = newestFirst;
+        this.folderType = folderType;
+        this.assetType = assetType;
     }
 
     @Override

@@ -65,8 +65,8 @@ public class GroupMembersReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupMembersReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupMembersReply(this);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GroupMembersReply extends SLMessage {
         this.GroupData_Field.RequestID = unpackUUID(byteBuffer);
         this.GroupData_Field.MemberCount = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             MemberData memberData = new MemberData();
             memberData.AgentID = unpackUUID(byteBuffer);
             memberData.Contribution = unpackInt(byteBuffer);

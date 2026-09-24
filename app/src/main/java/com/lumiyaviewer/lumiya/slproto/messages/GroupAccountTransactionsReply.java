@@ -53,18 +53,18 @@ public class GroupAccountTransactionsReply extends SLMessage {
         int length = this.MoneyData_Field.StartDate.length + 25 + 36 + 1;
         Iterator<?> it = this.HistoryData_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
             HistoryData historyData = (HistoryData) it.next();
-            length = historyData.Item.length + historyData.Time.length + 1 + 1 + historyData.User.length + 4 + 1 + 4 + i;
+            length = historyData.Item.length + historyData.Time.length + 1 + 1 + historyData.User.length + 4 + 1 + 4 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupAccountTransactionsReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupAccountTransactionsReply(this);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class GroupAccountTransactionsReply extends SLMessage {
         this.MoneyData_Field.CurrentInterval = unpackInt(byteBuffer);
         this.MoneyData_Field.StartDate = unpackVariable(byteBuffer, 1);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             HistoryData historyData = new HistoryData();
             historyData.Time = unpackVariable(byteBuffer, 1);
             historyData.User = unpackVariable(byteBuffer, 1);

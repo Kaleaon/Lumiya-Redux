@@ -32,8 +32,8 @@ public class NearestLandingRegionRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleNearestLandingRegionRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleNearestLandingRegionRequest(this);
     }
 
     @Override

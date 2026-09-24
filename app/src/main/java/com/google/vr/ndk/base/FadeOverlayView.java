@@ -115,10 +115,10 @@ class FadeOverlayView extends View {
     }
 
     @Override
-    public void setEnabled(boolean z) {
-        if (isEnabled() != z) {
-            super.setEnabled(z);
-            if (z) {
+    public void setEnabled(boolean enabled) {
+        if (isEnabled() != enabled) {
+            super.setEnabled(enabled);
+            if (enabled) {
                 return;
             }
             removeFadeCallbacks();
@@ -127,8 +127,8 @@ class FadeOverlayView extends View {
         }
     }
 
-    public void startFade(int i, long j) {
-        Log.d(TAG, new StringBuilder(23).append(".startFade: ").append(i).toString());
+    public void startFade(int fadeType, long fadeDurationMillis) {
+        Log.d(TAG, new StringBuilder(23).append(".startFade: ").append(fadeType).toString());
         if (!isEnabled()) {
             Log.w(TAG, "Ignoring fade request while disabled.");
             return;
@@ -138,8 +138,8 @@ class FadeOverlayView extends View {
             return;
         }
         removeFadeCallbacks();
-        this.fadeType = i;
-        this.fadeDurationMillis = j;
+        this.fadeType = fadeType;
+        this.fadeDurationMillis = fadeDurationMillis;
         this.fadeStartTimeMillis = AnimationUtils.currentAnimationTimeMillis();
         updateFade();
     }

@@ -76,8 +76,8 @@ public class RegionInfo extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRegionInfo(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRegionInfo(this);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class RegionInfo extends SLMessage {
         this.RegionInfo2_Field.HardMaxAgents = unpackInt(byteBuffer);
         this.RegionInfo2_Field.HardMaxObjects = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             RegionInfo3 regionInfo3 = new RegionInfo3();
             regionInfo3.RegionFlagsExtended = unpackLong(byteBuffer);
             this.RegionInfo3_Fields.add(regionInfo3);

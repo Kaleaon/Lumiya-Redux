@@ -44,8 +44,8 @@ public class DirLandQuery extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDirLandQuery(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDirLandQuery(this);
     }
 
     @Override

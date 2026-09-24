@@ -54,8 +54,8 @@ public class ParcelInfoReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelInfoReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelInfoReply(this);
     }
 
     @Override

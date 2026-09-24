@@ -21,8 +21,8 @@ public class EconomyDataRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEconomyDataRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEconomyDataRequest(this);
     }
 
     @Override

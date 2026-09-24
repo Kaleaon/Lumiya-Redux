@@ -39,8 +39,8 @@ public class SetSimStatusInDatabase extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetSimStatusInDatabase(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetSimStatusInDatabase(this);
     }
 
     @Override

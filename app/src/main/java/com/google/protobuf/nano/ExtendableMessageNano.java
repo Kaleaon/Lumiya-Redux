@@ -19,8 +19,8 @@ public abstract class ExtendableMessageNano<M extends ExtendableMessageNano<M>> 
             return 0;
         }
         int i = 0;
-        for (int i2 = 0; i2 < this.unknownFieldData.size(); i2++) {
-            i += this.unknownFieldData.dataAt(i2).computeSerializedSize();
+        for (int j = 0; j < this.unknownFieldData.size(); j++) {
+            i += this.unknownFieldData.dataAt(j).computeSerializedSize();
         }
         return i;
     }

@@ -31,24 +31,24 @@ public class DrawList {
     @Nonnull
     public final ArrayList<DrawableTerrainPatch> terrain;
 
-    private DrawList(@Nonnull DrawableStore drawableStore, int i) {
+    private DrawList(@Nonnull DrawableStore drawableStore, int avatarCountLimit) {
         this.drawableStore = drawableStore;
         this.myAvatar = null;
         this.objects = new ArrayList<>();
         this.avatars = new ArrayList<>();
         this.avatarStubs = new ArrayList<>();
         this.terrain = new ArrayList<>();
-        this.avatarCountLimit = i;
+        this.avatarCountLimit = avatarCountLimit;
     }
 
-    private DrawList(@Nonnull DrawableStore drawableStore, int i, int i2, int i3, int i4, int i5) {
+    private DrawList(@Nonnull DrawableStore drawableStore, int i, int i2, int i3, int i4, int avatarCountLimit) {
         this.drawableStore = drawableStore;
         this.myAvatar = null;
         this.objects = new ArrayList<>(i);
         this.avatars = new ArrayList<>(i2);
         this.avatarStubs = new ArrayList<>(i3);
         this.terrain = new ArrayList<>(i4);
-        this.avatarCountLimit = i5;
+        this.avatarCountLimit = avatarCountLimit;
     }
 
     public static DrawList create(@Nonnull DrawableStore drawableStore, @Nullable DrawList drawList, int i) {

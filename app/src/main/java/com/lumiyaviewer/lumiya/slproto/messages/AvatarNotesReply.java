@@ -42,8 +42,8 @@ public class AvatarNotesReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarNotesReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarNotesReply(this);
     }
 
     @Override

@@ -45,13 +45,13 @@ public class ManageAccountsActivity extends ThemedActivity implements AccountEdi
                 view = layoutInflater.inflate(R.layout.account_list_item, viewGroup, false);
             }
             TextView textView = (TextView) view.findViewById(R.id.accountNameTextView);
-            TextView textView2 = (TextView) view.findViewById(R.id.gridNameTextView);
+            TextView viewById = (TextView) view.findViewById(R.id.gridNameTextView);
             AccountList.AccountInfo item = getItem(i);
             if (item != null) {
                 AccountList.AccountInfo accountInfo = item;
                 GridList.GridInfo gridByUUID = this.gridList.getGridByUUID(accountInfo.getGridUUID());
                 textView.setText(accountInfo.getLoginName());
-                textView2.setText(gridByUUID != null ? gridByUUID.getGridName() : "");
+                viewById.setText(gridByUUID != null ? gridByUUID.getGridName() : "");
             }
             return view;
         }

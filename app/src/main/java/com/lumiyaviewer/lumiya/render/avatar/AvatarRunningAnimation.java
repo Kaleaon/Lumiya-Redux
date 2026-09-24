@@ -18,8 +18,8 @@ class AvatarRunningAnimation implements Comparable<AvatarRunningAnimation> {
         this.jointSet = animationJointSet;
     }
 
-    void animate(AvatarSkeleton avatarSkeleton, float[] fArr, float[] fArr2, LLQuaternion[] lLQuaternionArr, LLVector3[] lLVector3Arr) {
-        this.jointSet.animate(avatarSkeleton, this.sequence, fArr, fArr2, lLQuaternionArr, lLVector3Arr);
+    void animate(AvatarSkeleton avatarSkeleton, float[] floats, float[] floats2, LLQuaternion[] quaternions, LLVector3[] vector3s) {
+        this.jointSet.animate(avatarSkeleton, this.sequence, floats, floats2, quaternions, vector3s);
     }
 
     @Override

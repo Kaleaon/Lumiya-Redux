@@ -54,8 +54,8 @@ public class PickInfoReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandlePickInfoReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandlePickInfoReply(this);
     }
 
     @Override

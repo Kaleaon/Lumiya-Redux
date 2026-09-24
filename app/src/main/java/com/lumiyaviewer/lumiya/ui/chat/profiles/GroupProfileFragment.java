@@ -122,8 +122,8 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         private final int tabCaption;
         private final Class<? extends Fragment> tabClass;
 
-        ProfileTab(int i, Class cls) {
-            this.tabCaption = i;
+        ProfileTab(int tabCaption, Class cls) {
+            this.tabCaption = tabCaption;
             this.tabClass = cls;
         }
 

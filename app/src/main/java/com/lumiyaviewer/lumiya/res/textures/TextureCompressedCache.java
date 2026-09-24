@@ -43,30 +43,30 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
         private volatile Future<?> fetchTask;
         private final SLTextureFetcher fetcher;
 
-        public TextureFetchRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, File> resourceManager, File file, SLTextureFetcher sLTextureFetcher) {
+        public TextureFetchRequest(DrawableTextureParams drawableTextureParams, ResourceManager<DrawableTextureParams, File> resourceManager, File file, SLTextureFetcher textureFetcher) {
             super(drawableTextureParams, resourceManager);
             this.compressedFile = file;
-            this.fetcher = sLTextureFetcher;
+            this.fetcher = textureFetcher;
         }
 
         @Override
-        public void OnTextureFetchComplete(SLTextureFetchRequest sLTextureFetchRequest) {
-            completeRequest(sLTextureFetchRequest.outputFile);
+        public void OnTextureFetchComplete(SLTextureFetchRequest textureFetchRequest) {
+            completeRequest(textureFetchRequest.outputFile);
         }
 
         @Override
         public void cancelRequest() {
-            SLTextureFetchRequest sLTextureFetchRequest;
-            SLTextureFetcher sLTextureFetcher;
+            SLTextureFetchRequest fetchRequest;
+            SLTextureFetcher fetcher;
             Future<?> future;
             Debug.Printf("TextureFetchRequest: cancelled (%s)", getParams().uuid().toString());
             synchronized (this) {
-                sLTextureFetchRequest = this.fetchRequest;
-                sLTextureFetcher = this.fetcher;
+                fetchRequest = this.fetchRequest;
+                fetcher = this.fetcher;
                 future = this.fetchTask;
             }
-            if (sLTextureFetcher != null && sLTextureFetchRequest != null) {
-                sLTextureFetcher.CancelFetch(sLTextureFetchRequest);
+            if (fetcher != null && fetchRequest != null) {
+                fetcher.CancelFetch(fetchRequest);
             }
             if (future != null) {
                 future.cancel(true);
@@ -189,19 +189,19 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
 
         @Override
         public void start() {
-            SLTextureFetchRequest sLTextureFetchRequest;
-            SLTextureFetcher sLTextureFetcher = this.fetcher;
-            if (sLTextureFetcher == null) {
+            SLTextureFetchRequest textureFetchRequest;
+            SLTextureFetcher fetcher = this.fetcher;
+            if (fetcher == null) {
                 completeRequest((File) null);
                 return;
             }
             DrawableTextureParams params = getParams();
             synchronized (this) {
-                sLTextureFetchRequest = new SLTextureFetchRequest(params.uuid(), 0, params.textureClass(), params.avatarFaceIndex(), params.avatarUUID(), this.compressedFile);
-                sLTextureFetchRequest.setOnFetchComplete(this);
-                this.fetchRequest = sLTextureFetchRequest;
+                textureFetchRequest = new SLTextureFetchRequest(params.uuid(), 0, params.textureClass(), params.avatarFaceIndex(), params.avatarUUID(), this.compressedFile);
+                textureFetchRequest.setOnFetchComplete(this);
+                this.fetchRequest = textureFetchRequest;
             }
-            sLTextureFetcher.BeginFetch(sLTextureFetchRequest);
+            fetcher.BeginFetch(textureFetchRequest);
         }
     }
 
@@ -226,15 +226,15 @@ public class TextureCompressedCache extends ResourceManager<DrawableTextureParam
         }
     }
 
-    public void setFetcher(SLTextureFetcher sLTextureFetcher) {
-        this.fetcher = sLTextureFetcher;
+    public void setFetcher(SLTextureFetcher textureFetcher) {
+        this.fetcher = textureFetcher;
     }
 
-    public void setMaxTextureDownloads(int i) {
-        if (i > 0) {
-            this.downloadExecutor.setMaxConcurrentTasks(i);
-            HTTPFetchExecutor.getInstance().setCorePoolSize(i);
-            HTTPFetchExecutor.getInstance().setMaximumPoolSize(i);
+    public void setMaxTextureDownloads(int maxTextureDownloads) {
+        if (maxTextureDownloads > 0) {
+            this.downloadExecutor.setMaxConcurrentTasks(maxTextureDownloads);
+            HTTPFetchExecutor.getInstance().setCorePoolSize(maxTextureDownloads);
+            HTTPFetchExecutor.getInstance().setMaximumPoolSize(maxTextureDownloads);
         }
     }
 }

@@ -45,8 +45,8 @@ public class SetGroupAcceptNotices extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetGroupAcceptNotices(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetGroupAcceptNotices(this);
     }
 
     @Override

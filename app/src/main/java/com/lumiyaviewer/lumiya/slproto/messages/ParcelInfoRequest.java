@@ -39,8 +39,8 @@ public class ParcelInfoRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelInfoRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelInfoRequest(this);
     }
 
     @Override

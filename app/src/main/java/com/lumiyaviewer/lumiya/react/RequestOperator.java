@@ -28,18 +28,18 @@ public abstract class RequestOperator<K, T> implements RequestHandler<K> {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestOperator_1579, reason: not valid java name */
-    /* synthetic */ void m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(K obj) {
-        this.toHandler.onRequestCancelled(obj);
+    /* synthetic */ void m41lambda$com_lumiyaviewer_lumiya_react_RequestOperator_1579(K k) {
+        this.toHandler.onRequestCancelled(k);
     }
 
     /* JADX WARN: Multi-variable type inference failed */
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_react_RequestOperator_996, reason: not valid java name */
-    /* synthetic */ void m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(K obj) {
-        T processRequest = processRequest(obj);
+    /* synthetic */ void m42lambda$com_lumiyaviewer_lumiya_react_RequestOperator_996(K k) {
+        T processRequest = processRequest(k);
         if (processRequest != null) {
-            this.resultHandler.onResultData(obj, processRequest);
+            this.resultHandler.onResultData(k, processRequest);
         } else {
-            this.toHandler.onRequest(obj);
+            this.toHandler.onRequest(k);
         }
     }
 

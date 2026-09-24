@@ -10,10 +10,10 @@ public class Voice3DVector {
     public final float y;
     public final float z;
 
-    public Voice3DVector(float f, float f2, float f3) {
-        this.x = f;
-        this.y = f2;
-        this.z = f3;
+    public Voice3DVector(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public Voice3DVector(Bundle bundle) {

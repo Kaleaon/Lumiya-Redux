@@ -39,8 +39,8 @@ public class ObjectSpinUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleObjectSpinUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleObjectSpinUpdate(this);
     }
 
     @Override

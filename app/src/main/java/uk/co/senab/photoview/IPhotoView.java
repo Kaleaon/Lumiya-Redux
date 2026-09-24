@@ -34,15 +34,15 @@ public interface IPhotoView {
 
     Bitmap getVisibleRectangleBitmap();
 
-    void setAllowParentInterceptOnEdge(boolean z);
+    void setAllowParentInterceptOnEdge(boolean allowParentInterceptOnEdge);
 
     boolean setDisplayMatrix(Matrix matrix);
 
-    void setMaximumScale(float f);
+    void setMaximumScale(float maximumScale);
 
-    void setMediumScale(float f);
+    void setMediumScale(float mediumScale);
 
-    void setMinimumScale(float f);
+    void setMinimumScale(float minimumScale);
 
     void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener onDoubleTapListener);
 
@@ -58,11 +58,11 @@ public interface IPhotoView {
 
     void setOnViewTapListener(PhotoViewAttacher.OnViewTapListener onViewTapListener);
 
-    void setRotationBy(float f);
+    void setRotationBy(float rotationBy);
 
-    void setRotationTo(float f);
+    void setRotationTo(float rotationTo);
 
-    void setScale(float f);
+    void setScale(float scale);
 
     void setScale(float f, float f2, float f3, boolean z);
 
@@ -72,7 +72,7 @@ public interface IPhotoView {
 
     void setScaleType(ImageView.ScaleType scaleType);
 
-    void setZoomTransitionDuration(int i);
+    void setZoomTransitionDuration(int zoomTransitionDuration);
 
-    void setZoomable(boolean z);
+    void setZoomable(boolean zoomable);
 }

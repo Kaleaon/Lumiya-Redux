@@ -52,8 +52,8 @@ public class CoarseLocationUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCoarseLocationUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCoarseLocationUpdate(this);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CoarseLocationUpdate extends SLMessage {
     @Override
     public void UnpackPayload(ByteBuffer byteBuffer) {
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Location location = new Location();
             location.X = unpackByte(byteBuffer) & 0xFF;
             location.Y = unpackByte(byteBuffer) & 0xFF;
@@ -89,7 +89,7 @@ public class CoarseLocationUpdate extends SLMessage {
         this.Index_Field.You = unpackShort(byteBuffer);
         this.Index_Field.Prey = unpackShort(byteBuffer);
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             AgentData agentData = new AgentData();
             agentData.AgentID = unpackUUID(byteBuffer);
             this.AgentData_Fields.add(agentData);

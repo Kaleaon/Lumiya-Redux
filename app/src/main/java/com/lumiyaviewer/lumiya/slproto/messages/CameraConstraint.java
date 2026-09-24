@@ -31,8 +31,8 @@ public class CameraConstraint extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleCameraConstraint(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleCameraConstraint(this);
     }
 
     @Override

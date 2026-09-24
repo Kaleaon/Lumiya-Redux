@@ -49,7 +49,7 @@ public class SLHTTPSConnection {
     private static TrustManager[] trustAllCerts = {trustEverythingManager};
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder().proxy(Proxy.NO_PROXY).dns(new SLDNS()).connectionPool(new ConnectionPool(8, 5, TimeUnit.MINUTES)).connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).hostnameVerifier(new HostnameVerifier() {
         @Override
-        public boolean verify(String str, SSLSession sSLSession) {
+        public boolean verify(String str, SSLSession sslSession) {
             return true;
         }
     }).addNetworkInterceptor(new CharsetStripInterceptor()).sslSocketFactory(getSocketFactory(), trustEverythingManager).build();
@@ -195,9 +195,9 @@ public class SLHTTPSConnection {
 
     private static SSLSocketFactory getSocketFactory() {
         try {
-            SSLContext sSLContext = SSLContext.getInstance("TLS");
-            sSLContext.init(null, trustAllCerts, new SecureRandom());
-            return sSLContext.getSocketFactory();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new SecureRandom());
+            return sslContext.getSocketFactory();
         } catch (Exception e) {
             return null;
         }

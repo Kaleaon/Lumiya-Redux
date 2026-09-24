@@ -37,8 +37,8 @@ public class ParcelReclaim extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelReclaim(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelReclaim(this);
     }
 
     @Override

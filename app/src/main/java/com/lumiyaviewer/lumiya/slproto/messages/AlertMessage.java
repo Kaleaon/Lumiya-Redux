@@ -42,18 +42,18 @@ public class AlertMessage extends SLMessage {
         int length = this.AlertData_Field.Message.length + 1 + 4 + 1;
         Iterator<?> it = this.AlertInfo_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
             AlertInfo alertInfo = (AlertInfo) it.next();
-            length = alertInfo.ExtraParams.length + alertInfo.Message.length + 1 + 1 + i;
+            length = alertInfo.ExtraParams.length + alertInfo.Message.length + 1 + 1 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAlertMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAlertMessage(this);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AlertMessage extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.AlertData_Field.Message = unpackVariable(byteBuffer, 1);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             AlertInfo alertInfo = new AlertInfo();
             alertInfo.Message = unpackVariable(byteBuffer, 1);
             alertInfo.ExtraParams = unpackVariable(byteBuffer, 1);

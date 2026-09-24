@@ -39,8 +39,8 @@ public class SetFollowCamProperties extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetFollowCamProperties(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetFollowCamProperties(this);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SetFollowCamProperties extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.ObjectData_Field.ObjectID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             CameraProperty cameraProperty = new CameraProperty();
             cameraProperty.Type = unpackInt(byteBuffer);
             cameraProperty.Value = unpackFloat(byteBuffer);

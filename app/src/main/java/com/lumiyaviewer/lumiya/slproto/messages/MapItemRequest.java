@@ -45,8 +45,8 @@ public class MapItemRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMapItemRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMapItemRequest(this);
     }
 
     @Override

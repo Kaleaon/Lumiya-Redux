@@ -29,8 +29,8 @@ public class UseCachedMuteList extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUseCachedMuteList(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUseCachedMuteList(this);
     }
 
     @Override

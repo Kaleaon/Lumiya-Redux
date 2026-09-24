@@ -10,8 +10,8 @@ enum MyAvatarDetailsPages {
 
     private final int titleResource;
 
-    MyAvatarDetailsPages(int i) {
-        this.titleResource = i;
+    MyAvatarDetailsPages(int titleResource) {
+        this.titleResource = titleResource;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

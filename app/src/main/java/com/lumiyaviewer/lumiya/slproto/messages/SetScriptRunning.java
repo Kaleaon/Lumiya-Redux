@@ -40,8 +40,8 @@ public class SetScriptRunning extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetScriptRunning(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetScriptRunning(this);
     }
 
     @Override

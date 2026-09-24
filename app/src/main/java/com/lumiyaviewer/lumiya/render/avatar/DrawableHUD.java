@@ -29,22 +29,22 @@ public class DrawableHUD {
     private final LLVector3 maxPos = new LLVector3();
     private final Set<DrawableObject> hudObjects = Collections.newSetFromMap(new IdentityHashMap());
 
-    public DrawableHUD(SLAttachmentPoint sLAttachmentPoint, DrawEntryList drawEntryList, SLObjectInfo sLObjectInfo, DrawableStore drawableStore, DrawableAvatar drawableAvatar) {
-        this.attachmentPoint = sLAttachmentPoint;
+    public DrawableHUD(SLAttachmentPoint attachmentPoint, DrawEntryList drawEntryList, SLObjectInfo objectInfo, DrawableStore drawableStore, DrawableAvatar drawableAvatar) {
+        this.attachmentPoint = attachmentPoint;
         this.drawableStore = drawableStore;
         this.attachedTo = drawableAvatar;
-        addObject(drawEntryList, sLObjectInfo, new MatrixStack(), true);
+        addObject(drawEntryList, objectInfo, new MatrixStack(), true);
     }
 
-    private void addObject(DrawEntryList drawEntryList, SLObjectInfo sLObjectInfo, MatrixStack matrixStack, boolean z) {
+    private void addObject(DrawEntryList drawEntryList, SLObjectInfo objectInfo, MatrixStack matrixStack, boolean z) {
         matrixStack.glPushMatrix();
-        processObjectExtents(sLObjectInfo, matrixStack, z);
-        DrawListObjectEntry drawListEntry = sLObjectInfo.getDrawListEntry();
+        processObjectExtents(objectInfo, matrixStack, z);
+        DrawListObjectEntry drawListEntry = objectInfo.getDrawListEntry();
         drawEntryList.addEntry(drawListEntry);
         if (drawListEntry instanceof DrawListPrimEntry) {
             this.hudObjects.add(((DrawListPrimEntry) drawListEntry).getDrawableAttachment(this.drawableStore, this.attachedTo));
         }
-        for (LinkedTreeNode<SLObjectInfo> firstChild = sLObjectInfo.treeNode.getFirstChild(); firstChild != null; firstChild = firstChild.getNextChild()) {
+        for (LinkedTreeNode<SLObjectInfo> firstChild = objectInfo.treeNode.getFirstChild(); firstChild != null; firstChild = firstChild.getNextChild()) {
             SLObjectInfo dataObject = firstChild.getDataObject();
             if (dataObject != null) {
                 addObject(drawEntryList, dataObject, matrixStack, false);
@@ -53,41 +53,41 @@ public class DrawableHUD {
         matrixStack.glPopMatrix();
     }
 
-    private void processObjectExtents(SLObjectInfo sLObjectInfo, MatrixStack matrixStack, boolean z) {
-        Vector3Array objectCoords = sLObjectInfo.getObjectCoords();
+    private void processObjectExtents(SLObjectInfo objectInfo, MatrixStack matrixStack, boolean z) {
+        Vector3Array objectCoords = objectInfo.getObjectCoords();
         int elementOffset = objectCoords.getElementOffset(0);
         int elementOffset2 = objectCoords.getElementOffset(1);
         float[] data = objectCoords.getData();
         matrixStack.glTranslatef(data[elementOffset + 0], data[elementOffset + 1], data[elementOffset + 2]);
-        matrixStack.glMultMatrixf(sLObjectInfo.getRotation().getInverseMatrix(), 0);
-        float[] fArr = {(-data[elementOffset2 + 0]) / 2.0f, (-data[elementOffset2 + 1]) / 2.0f, (-data[elementOffset2 + 2]) / 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-        Matrix.multiplyMV(fArr, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), fArr, 0);
+        matrixStack.glMultMatrixf(objectInfo.getRotation().getInverseMatrix(), 0);
+        float[] floats = {(-data[elementOffset2 + 0]) / 2.0f, (-data[elementOffset2 + 1]) / 2.0f, (-data[elementOffset2 + 2]) / 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+        Matrix.multiplyMV(floats, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), floats, 0);
         if (z) {
-            this.minPos.x = fArr[4];
-            this.minPos.y = fArr[5];
-            this.minPos.z = fArr[6];
-            this.maxPos.x = fArr[4];
-            this.maxPos.y = fArr[5];
-            this.maxPos.z = fArr[6];
+            this.minPos.x = floats[4];
+            this.minPos.y = floats[5];
+            this.minPos.z = floats[6];
+            this.maxPos.x = floats[4];
+            this.maxPos.y = floats[5];
+            this.maxPos.z = floats[6];
         } else {
-            this.minPos.x = Math.min(this.minPos.x, fArr[4]);
-            this.minPos.y = Math.min(this.minPos.y, fArr[5]);
-            this.minPos.z = Math.min(this.minPos.z, fArr[6]);
-            this.maxPos.x = Math.max(this.maxPos.x, fArr[4]);
-            this.maxPos.y = Math.max(this.maxPos.y, fArr[5]);
-            this.maxPos.z = Math.max(this.maxPos.z, fArr[6]);
+            this.minPos.x = Math.min(this.minPos.x, floats[4]);
+            this.minPos.y = Math.min(this.minPos.y, floats[5]);
+            this.minPos.z = Math.min(this.minPos.z, floats[6]);
+            this.maxPos.x = Math.max(this.maxPos.x, floats[4]);
+            this.maxPos.y = Math.max(this.maxPos.y, floats[5]);
+            this.maxPos.z = Math.max(this.maxPos.z, floats[6]);
         }
-        fArr[0] = data[elementOffset2 + 0] / 2.0f;
-        fArr[1] = data[elementOffset2 + 1] / 2.0f;
-        fArr[2] = data[elementOffset2 + 2] / 2.0f;
-        fArr[3] = 1.0f;
-        Matrix.multiplyMV(fArr, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), fArr, 0);
-        this.minPos.x = Math.min(this.minPos.x, fArr[4]);
-        this.minPos.y = Math.min(this.minPos.y, fArr[5]);
-        this.minPos.z = Math.min(this.minPos.z, fArr[6]);
-        this.maxPos.x = Math.max(this.maxPos.x, fArr[4]);
-        this.maxPos.y = Math.max(this.maxPos.y, fArr[5]);
-        this.maxPos.z = Math.max(this.maxPos.z, fArr[6]);
+        floats[0] = data[elementOffset2 + 0] / 2.0f;
+        floats[1] = data[elementOffset2 + 1] / 2.0f;
+        floats[2] = data[elementOffset2 + 2] / 2.0f;
+        floats[3] = 1.0f;
+        Matrix.multiplyMV(floats, 4, matrixStack.getMatrixData(), matrixStack.getMatrixDataOffset(), floats, 0);
+        this.minPos.x = Math.min(this.minPos.x, floats[4]);
+        this.minPos.y = Math.min(this.minPos.y, floats[5]);
+        this.minPos.z = Math.min(this.minPos.z, floats[6]);
+        this.maxPos.x = Math.max(this.maxPos.x, floats[4]);
+        this.maxPos.y = Math.max(this.maxPos.y, floats[5]);
+        this.maxPos.z = Math.max(this.maxPos.z, floats[6]);
     }
 
     public ObjectIntersectInfo Draw(RenderContext renderContext, float f, float f2, float f3, TouchHUDEvent touchHUDEvent, boolean z) {

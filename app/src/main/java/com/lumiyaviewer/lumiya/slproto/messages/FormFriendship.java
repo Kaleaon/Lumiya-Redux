@@ -30,8 +30,8 @@ public class FormFriendship extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleFormFriendship(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleFormFriendship(this);
     }
 
     @Override

@@ -27,11 +27,11 @@ public abstract class SLObjectFilterInfo {
         return (str.equals("Object") || str.equals("(loading)") || str.equals("")) ? false : true;
     }
 
-    public boolean objectMatches(SLObjectInfo sLObjectInfo, float f, boolean z) {
+    public boolean objectMatches(SLObjectInfo objectInfo, float f, boolean z) {
         if (z && (!showAttachments())) {
             return false;
         }
-        if (!showNonTouchable() && !sLObjectInfo.isTouchable()) {
+        if (!showNonTouchable() && !objectInfo.isTouchable()) {
             return false;
         }
         if (range() > 0.0f) {

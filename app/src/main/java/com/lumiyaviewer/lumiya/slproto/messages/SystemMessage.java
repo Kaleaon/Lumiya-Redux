@@ -39,17 +39,17 @@ public class SystemMessage extends SLMessage {
         int length = this.MethodData_Field.Method.length + 1 + 16 + 32 + 4 + 1;
         Iterator<?> it = this.ParamList_Fields.iterator();
         while (true) {
-            int i = length;
+            int length2 = length;
             if (!it.hasNext()) {
-                return i;
+                return length2;
             }
-            length = ((ParamList) it.next()).Parameter.length + 1 + i;
+            length = ((ParamList) it.next()).Parameter.length + 1 + length2;
         }
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSystemMessage(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSystemMessage(this);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SystemMessage extends SLMessage {
         this.MethodData_Field.Invoice = unpackUUID(byteBuffer);
         this.MethodData_Field.Digest = unpackFixed(byteBuffer, 32);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ParamList paramList = new ParamList();
             paramList.Parameter = unpackVariable(byteBuffer, 1);
             this.ParamList_Fields.add(paramList);

@@ -36,8 +36,8 @@ public class EventLocationRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventLocationRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventLocationRequest(this);
     }
 
     @Override

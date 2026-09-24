@@ -39,8 +39,8 @@ public class LeaveGroupRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleLeaveGroupRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleLeaveGroupRequest(this);
     }
 
     @Override

@@ -36,8 +36,8 @@ public enum RLVRestrictionType {
         }
     }
 
-    RLVRestrictionType(RLVRuleMatchType rLVRuleMatchType) {
-        this.ruleMatchType = rLVRuleMatchType;
+    RLVRestrictionType(RLVRuleMatchType rlvRuleMatchType) {
+        this.ruleMatchType = rlvRuleMatchType;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

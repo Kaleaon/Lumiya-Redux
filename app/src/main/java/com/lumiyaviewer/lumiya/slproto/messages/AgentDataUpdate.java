@@ -41,8 +41,8 @@ public class AgentDataUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentDataUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentDataUpdate(this);
     }
 
     @Override

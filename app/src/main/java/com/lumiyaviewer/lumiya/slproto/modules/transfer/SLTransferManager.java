@@ -31,8 +31,8 @@ public class SLTransferManager extends SLModule {
     private final ResultHandler<AssetKey, AssetData> assetResultHandler;
     private final UserManager userManager;
 
-    public SLTransferManager(SLAgentCircuit sLAgentCircuit) {
-        super(sLAgentCircuit);
+    public SLTransferManager(SLAgentCircuit agentCircuit) {
+        super(agentCircuit);
         this.activeTransfers = Collections.synchronizedMap(new HashMap());
         this.activeTransferIds = Maps.synchronizedBiMap(HashBiMap.create());
         this.assetRequestHandler = new AsyncRequestHandler(this.agentCircuit, new RequestHandler<AssetKey>() {
@@ -62,29 +62,29 @@ public class SLTransferManager extends SLModule {
         this.assetResultHandler = this.userManager != null ? this.userManager.getAssetResponseCacher().getRequestSource().attachRequestHandler(this.assetRequestHandler) : null;
     }
 
-    public void BeginTransfer(SLTransfer sLTransfer) {
-        Debug.Printf("Transfer: Starting transfer: assetUUID %s, assetType %d", sLTransfer.getAssetUUID().toString(), Integer.valueOf(sLTransfer.getAssetType()));
-        this.activeTransfers.put(sLTransfer.getTransferUUID(), sLTransfer);
-        this.agentCircuit.SendMessage(sLTransfer.makeTransferRequest());
+    public void BeginTransfer(SLTransfer transfer) {
+        Debug.Printf("Transfer: Starting transfer: assetUUID %s, assetType %d", transfer.getAssetUUID().toString(), Integer.valueOf(transfer.getAssetType()));
+        this.activeTransfers.put(transfer.getTransferUUID(), transfer);
+        this.agentCircuit.SendMessage(transfer.makeTransferRequest());
     }
 
-    public void CancelTransfer(SLTransfer sLTransfer) {
-        this.activeTransfers.remove(sLTransfer.getTransferUUID());
+    public void CancelTransfer(SLTransfer transfer) {
+        this.activeTransfers.remove(transfer.getTransferUUID());
         TransferAbort transferAbort = new TransferAbort();
-        transferAbort.TransferInfo_Field.TransferID = sLTransfer.getTransferUUID();
-        transferAbort.TransferInfo_Field.ChannelType = sLTransfer.getChannelType();
+        transferAbort.TransferInfo_Field.TransferID = transfer.getTransferUUID();
+        transferAbort.TransferInfo_Field.ChannelType = transfer.getChannelType();
         transferAbort.isReliable = true;
         this.agentCircuit.SendMessage(transferAbort);
     }
 
-    void EndTransfer(SLTransfer sLTransfer) {
+    void EndTransfer(SLTransfer transfer) {
         int status;
-        this.activeTransfers.remove(sLTransfer.getTransferUUID());
-        AssetKey remove = this.activeTransferIds.inverse().remove(sLTransfer.getTransferUUID());
-        if (remove == null || this.assetResultHandler == null || (status = sLTransfer.getStatus()) == 3 || status == 0) {
+        this.activeTransfers.remove(transfer.getTransferUUID());
+        AssetKey remove = this.activeTransferIds.inverse().remove(transfer.getTransferUUID());
+        if (remove == null || this.assetResultHandler == null || (status = transfer.getStatus()) == 3 || status == 0) {
             return;
         }
-        this.assetResultHandler.onResultData(remove, new AssetData(status, sLTransfer.getData()));
+        this.assetResultHandler.onResultData(remove, new AssetData(status, transfer.getData()));
     }
 
     @Override
@@ -98,19 +98,19 @@ public class SLTransferManager extends SLModule {
 
     @SLMessageHandler
     public void HandleTransferInfo(TransferInfo transferInfo) {
-        SLTransfer sLTransfer = this.activeTransfers.get(transferInfo.TransferInfoData_Field.TransferID);
-        if (sLTransfer != null) {
+        SLTransfer transfer = this.activeTransfers.get(transferInfo.TransferInfoData_Field.TransferID);
+        if (transfer != null) {
             Debug.Log(String.format("Transfer: Info recd, status %d, size %d", Integer.valueOf(transferInfo.TransferInfoData_Field.Status), Integer.valueOf(transferInfo.TransferInfoData_Field.Size)));
-            sLTransfer.HandleTransferInfo(this, transferInfo);
+            transfer.HandleTransferInfo(this, transferInfo);
         }
     }
 
     @SLMessageHandler
     public void HandleTransferPacket(TransferPacket transferPacket) {
-        SLTransfer sLTransfer = this.activeTransfers.get(transferPacket.TransferData_Field.TransferID);
-        if (sLTransfer != null) {
+        SLTransfer transfer = this.activeTransfers.get(transferPacket.TransferData_Field.TransferID);
+        if (transfer != null) {
             Debug.Log(String.format("Transfer: data recd, packet %d, status %d, size %d.", Integer.valueOf(transferPacket.TransferData_Field.Packet), Integer.valueOf(transferPacket.TransferData_Field.Status), Integer.valueOf(transferPacket.TransferData_Field.Data.length)));
-            sLTransfer.HandleTransferPacket(this, transferPacket);
+            transfer.HandleTransferPacket(this, transferPacket);
         }
     }
 }

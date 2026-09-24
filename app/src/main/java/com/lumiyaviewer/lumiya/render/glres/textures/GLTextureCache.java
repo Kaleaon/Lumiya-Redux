@@ -9,8 +9,8 @@ import com.lumiyaviewer.lumiya.res.ResourceConsumer;
 import com.lumiyaviewer.lumiya.res.textures.TextureCache;
 
 public class GLTextureCache extends GLResourceCache<DrawableTextureParams, OpenJPEG, GLLoadedTexture> {
-    public GLTextureCache(GLLoadQueue gLLoadQueue) {
-        super(gLLoadQueue);
+    public GLTextureCache(GLLoadQueue glLoadQueue) {
+        super(glLoadQueue);
     }
 
     @Override

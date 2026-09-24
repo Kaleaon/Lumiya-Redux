@@ -17,25 +17,25 @@ public class ParcelData implements Serializable {
     private final int parcelID;
     private final UUID snapshotUUID;
 
-    public ParcelData(LLSDNode lLSDNode) throws LLSDException {
-        this.parcelID = lLSDNode.byKey("LocalID").asInt();
-        this.name = lLSDNode.byKey("Name").asString();
-        this.description = lLSDNode.byKey("Desc").asString();
-        this.mediaURL = lLSDNode.byKey("MusicURL").asString();
-        UUID asUUID = lLSDNode.byKey("SnapshotID").asUUID();
+    public ParcelData(LLSDNode lsdNode) throws LLSDException {
+        this.parcelID = lsdNode.byKey("LocalID").asInt();
+        this.name = lsdNode.byKey("Name").asString();
+        this.description = lsdNode.byKey("Desc").asString();
+        this.mediaURL = lsdNode.byKey("MusicURL").asString();
+        UUID asUUID = lsdNode.byKey("SnapshotID").asUUID();
         if (asUUID != null && asUUID.equals(UUIDPool.ZeroUUID)) {
             asUUID = null;
         }
         this.snapshotUUID = asUUID;
-        this.ownerID = lLSDNode.keyExists("OwnerID") ? lLSDNode.byKey("OwnerID").asUUID() : null;
-        this.isGroupOwned = lLSDNode.keyExists("IsGroupOwned") ? lLSDNode.byKey("IsGroupOwned").asBoolean() : false;
-        this.area = lLSDNode.keyExists("Area") ? lLSDNode.byKey("Area").asInt() : 0;
-        byte[] asBinary = lLSDNode.byKey("Bitmap").asBinary();
+        this.ownerID = lsdNode.keyExists("OwnerID") ? lsdNode.byKey("OwnerID").asUUID() : null;
+        this.isGroupOwned = lsdNode.keyExists("IsGroupOwned") ? lsdNode.byKey("IsGroupOwned").asBoolean() : false;
+        this.area = lsdNode.keyExists("Area") ? lsdNode.byKey("Area").asInt() : 0;
+        byte[] asBinary = lsdNode.byKey("Bitmap").asBinary();
         for (int i = 0; i < asBinary.length && i < 512; i++) {
             byte b = asBinary[i];
-            for (int i2 = 0; i2 < 8; i2++) {
+            for (int j = 0; j < 8; j++) {
                 if ((b & 1) != 0) {
-                    this.parcelBitmap[(i * 8) + i2] = true;
+                    this.parcelBitmap[(i * 8) + j] = true;
                 }
                 b = (byte) (b >> 1);
             }

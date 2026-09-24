@@ -43,8 +43,8 @@ public class TerminateFriendship extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTerminateFriendship(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTerminateFriendship(this);
     }
 
     @Override

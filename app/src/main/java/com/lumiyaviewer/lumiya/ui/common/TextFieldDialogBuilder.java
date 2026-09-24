@@ -42,8 +42,8 @@ public class TextFieldDialogBuilder {
         }
     }
 
-    public TextFieldDialogBuilder setDefaultText(String str) {
-        this.defaultText = str;
+    public TextFieldDialogBuilder setDefaultText(String defaultText) {
+        this.defaultText = defaultText;
         return this;
     }
 
@@ -57,8 +57,8 @@ public class TextFieldDialogBuilder {
         return this;
     }
 
-    public TextFieldDialogBuilder setTitle(String str) {
-        this.title = str;
+    public TextFieldDialogBuilder setTitle(String title) {
+        this.title = title;
         return this;
     }
 

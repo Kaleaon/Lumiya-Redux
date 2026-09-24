@@ -57,11 +57,11 @@ public class ObjectPopupsActionProvider extends ActionProvider implements View.O
         return true;
     }
 
-    public void setObjectPopupCount(int i) {
-        if (this.objectPopupCount != i) {
-            this.objectPopupCount = i;
+    public void setObjectPopupCount(int objectPopupCount) {
+        if (this.objectPopupCount != objectPopupCount) {
+            this.objectPopupCount = objectPopupCount;
             if (this.popupCountTextView != null) {
-                this.popupCountTextView.setText(Integer.toString(i));
+                this.popupCountTextView.setText(Integer.toString(objectPopupCount));
             }
             refreshVisibility();
         }

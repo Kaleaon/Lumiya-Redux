@@ -33,8 +33,8 @@ public class EnableSimulator extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEnableSimulator(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEnableSimulator(this);
     }
 
     @Override

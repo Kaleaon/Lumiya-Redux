@@ -54,116 +54,116 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
         String str = z ? "IF NOT EXISTS " : "";
-        sQLiteDatabase.execSQL("CREATE TABLE " + str + "'CHAT_MESSAGE' ('_id' INTEGER PRIMARY KEY ,'CHATTER_ID' INTEGER NOT NULL ,'TIMESTAMP' INTEGER NOT NULL ,'VIEW_TYPE' INTEGER NOT NULL ,'ORIG_TIMESTAMP' INTEGER,'IS_OFFLINE' INTEGER,'SENDER_UUID' TEXT,'SENDER_TYPE' INTEGER,'SENDER_NAME' TEXT,'SENDER_LEGACY_NAME' TEXT,'MESSAGE_TEXT' TEXT,'MESSAGE_TYPE' INTEGER NOT NULL ,'EVENT_STATE' INTEGER,'ORIG_IMTYPE' INTEGER,'SESSION_ID' TEXT,'ITEM_ID' TEXT,'ITEM_NAME' TEXT,'ASSET_TYPE' INTEGER,'TRANSACTION_AMOUNT' INTEGER,'NEW_BALANCE' INTEGER,'CHAT_CHANNEL' INTEGER,'DIALOG_IGNORED' INTEGER,'ACCEPTED' INTEGER,'USER_ID' TEXT,'OBJECT_NAME' TEXT,'QUESTION_MASK' INTEGER,'DIALOG_BUTTONS' BLOB,'DIALOG_SELECTED_OPTION' TEXT,'TEXT_BOX_BUTTON_INDEX' INTEGER,'SYNCED_TO_GOOGLE_DRIVE' INTEGER NOT NULL );");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHAT_MESSAGE_CHATTER_ID ON CHAT_MESSAGE (CHATTER_ID);");
-        sQLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHAT_MESSAGE__id_SYNCED_TO_GOOGLE_DRIVE ON CHAT_MESSAGE (_id,SYNCED_TO_GOOGLE_DRIVE);");
+        sqLiteDatabase.execSQL("CREATE TABLE " + str + "'CHAT_MESSAGE' ('_id' INTEGER PRIMARY KEY ,'CHATTER_ID' INTEGER NOT NULL ,'TIMESTAMP' INTEGER NOT NULL ,'VIEW_TYPE' INTEGER NOT NULL ,'ORIG_TIMESTAMP' INTEGER,'IS_OFFLINE' INTEGER,'SENDER_UUID' TEXT,'SENDER_TYPE' INTEGER,'SENDER_NAME' TEXT,'SENDER_LEGACY_NAME' TEXT,'MESSAGE_TEXT' TEXT,'MESSAGE_TYPE' INTEGER NOT NULL ,'EVENT_STATE' INTEGER,'ORIG_IMTYPE' INTEGER,'SESSION_ID' TEXT,'ITEM_ID' TEXT,'ITEM_NAME' TEXT,'ASSET_TYPE' INTEGER,'TRANSACTION_AMOUNT' INTEGER,'NEW_BALANCE' INTEGER,'CHAT_CHANNEL' INTEGER,'DIALOG_IGNORED' INTEGER,'ACCEPTED' INTEGER,'USER_ID' TEXT,'OBJECT_NAME' TEXT,'QUESTION_MASK' INTEGER,'DIALOG_BUTTONS' BLOB,'DIALOG_SELECTED_OPTION' TEXT,'TEXT_BOX_BUTTON_INDEX' INTEGER,'SYNCED_TO_GOOGLE_DRIVE' INTEGER NOT NULL );");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHAT_MESSAGE_CHATTER_ID ON CHAT_MESSAGE (CHATTER_ID);");
+        sqLiteDatabase.execSQL("CREATE INDEX " + str + "IDX_CHAT_MESSAGE__id_SYNCED_TO_GOOGLE_DRIVE ON CHAT_MESSAGE (_id,SYNCED_TO_GOOGLE_DRIVE);");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHAT_MESSAGE'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CHAT_MESSAGE'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, ChatMessage chatMessage) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, ChatMessage chatMessage) {
+        sqLiteStatement.clearBindings();
         Long id = chatMessage.getId();
         if (id != null) {
-            sQLiteStatement.bindLong(1, id.longValue());
+            sqLiteStatement.bindLong(1, id.longValue());
         }
-        sQLiteStatement.bindLong(2, chatMessage.getChatterID());
-        sQLiteStatement.bindLong(3, chatMessage.getTimestamp().getTime());
-        sQLiteStatement.bindLong(4, chatMessage.getViewType());
+        sqLiteStatement.bindLong(2, chatMessage.getChatterID());
+        sqLiteStatement.bindLong(3, chatMessage.getTimestamp().getTime());
+        sqLiteStatement.bindLong(4, chatMessage.getViewType());
         Date origTimestamp = chatMessage.getOrigTimestamp();
         if (origTimestamp != null) {
-            sQLiteStatement.bindLong(5, origTimestamp.getTime());
+            sqLiteStatement.bindLong(5, origTimestamp.getTime());
         }
         Boolean isOffline = chatMessage.getIsOffline();
         if (isOffline != null) {
-            sQLiteStatement.bindLong(6, isOffline.booleanValue() ? 1L : 0L);
+            sqLiteStatement.bindLong(6, isOffline.booleanValue() ? 1L : 0L);
         }
         UUID senderUUID = chatMessage.getSenderUUID();
         if (senderUUID != null) {
-            sQLiteStatement.bindString(7, senderUUID.toString());
+            sqLiteStatement.bindString(7, senderUUID.toString());
         }
         if (chatMessage.getSenderType() != null) {
-            sQLiteStatement.bindLong(8, chatMessage.getSenderType().intValue());
+            sqLiteStatement.bindLong(8, chatMessage.getSenderType().intValue());
         }
         String senderName = chatMessage.getSenderName();
         if (senderName != null) {
-            sQLiteStatement.bindString(9, senderName);
+            sqLiteStatement.bindString(9, senderName);
         }
         String senderLegacyName = chatMessage.getSenderLegacyName();
         if (senderLegacyName != null) {
-            sQLiteStatement.bindString(10, senderLegacyName);
+            sqLiteStatement.bindString(10, senderLegacyName);
         }
         String messageText = chatMessage.getMessageText();
         if (messageText != null) {
-            sQLiteStatement.bindString(11, messageText);
+            sqLiteStatement.bindString(11, messageText);
         }
-        sQLiteStatement.bindLong(12, chatMessage.getMessageType());
+        sqLiteStatement.bindLong(12, chatMessage.getMessageType());
         if (chatMessage.getEventState() != null) {
-            sQLiteStatement.bindLong(13, chatMessage.getEventState().intValue());
+            sqLiteStatement.bindLong(13, chatMessage.getEventState().intValue());
         }
         if (chatMessage.getOrigIMType() != null) {
-            sQLiteStatement.bindLong(14, chatMessage.getOrigIMType().intValue());
+            sqLiteStatement.bindLong(14, chatMessage.getOrigIMType().intValue());
         }
         UUID sessionID = chatMessage.getSessionID();
         if (sessionID != null) {
-            sQLiteStatement.bindString(15, sessionID.toString());
+            sqLiteStatement.bindString(15, sessionID.toString());
         }
         UUID itemID = chatMessage.getItemID();
         if (itemID != null) {
-            sQLiteStatement.bindString(16, itemID.toString());
+            sqLiteStatement.bindString(16, itemID.toString());
         }
         String itemName = chatMessage.getItemName();
         if (itemName != null) {
-            sQLiteStatement.bindString(17, itemName);
+            sqLiteStatement.bindString(17, itemName);
         }
         if (chatMessage.getAssetType() != null) {
-            sQLiteStatement.bindLong(18, chatMessage.getAssetType().intValue());
+            sqLiteStatement.bindLong(18, chatMessage.getAssetType().intValue());
         }
         if (chatMessage.getTransactionAmount() != null) {
-            sQLiteStatement.bindLong(19, chatMessage.getTransactionAmount().intValue());
+            sqLiteStatement.bindLong(19, chatMessage.getTransactionAmount().intValue());
         }
         if (chatMessage.getNewBalance() != null) {
-            sQLiteStatement.bindLong(20, chatMessage.getNewBalance().intValue());
+            sqLiteStatement.bindLong(20, chatMessage.getNewBalance().intValue());
         }
         if (chatMessage.getChatChannel() != null) {
-            sQLiteStatement.bindLong(21, chatMessage.getChatChannel().intValue());
+            sqLiteStatement.bindLong(21, chatMessage.getChatChannel().intValue());
         }
         Boolean dialogIgnored = chatMessage.getDialogIgnored();
         if (dialogIgnored != null) {
-            sQLiteStatement.bindLong(22, dialogIgnored.booleanValue() ? 1L : 0L);
+            sqLiteStatement.bindLong(22, dialogIgnored.booleanValue() ? 1L : 0L);
         }
         Boolean accepted = chatMessage.getAccepted();
         if (accepted != null) {
-            sQLiteStatement.bindLong(23, accepted.booleanValue() ? 1L : 0L);
+            sqLiteStatement.bindLong(23, accepted.booleanValue() ? 1L : 0L);
         }
         UUID userID = chatMessage.getUserID();
         if (userID != null) {
-            sQLiteStatement.bindString(24, userID.toString());
+            sqLiteStatement.bindString(24, userID.toString());
         }
         String objectName = chatMessage.getObjectName();
         if (objectName != null) {
-            sQLiteStatement.bindString(25, objectName);
+            sqLiteStatement.bindString(25, objectName);
         }
         if (chatMessage.getQuestionMask() != null) {
-            sQLiteStatement.bindLong(26, chatMessage.getQuestionMask().intValue());
+            sqLiteStatement.bindLong(26, chatMessage.getQuestionMask().intValue());
         }
         byte[] dialogButtons = chatMessage.getDialogButtons();
         if (dialogButtons != null) {
-            sQLiteStatement.bindBlob(27, dialogButtons);
+            sqLiteStatement.bindBlob(27, dialogButtons);
         }
         String dialogSelectedOption = chatMessage.getDialogSelectedOption();
         if (dialogSelectedOption != null) {
-            sQLiteStatement.bindString(28, dialogSelectedOption);
+            sqLiteStatement.bindString(28, dialogSelectedOption);
         }
         if (chatMessage.getTextBoxButtonIndex() != null) {
-            sQLiteStatement.bindLong(29, chatMessage.getTextBoxButtonIndex().intValue());
+            sqLiteStatement.bindLong(29, chatMessage.getTextBoxButtonIndex().intValue());
         }
-        sQLiteStatement.bindLong(30, chatMessage.getSyncedToGoogleDrive() ? 1L : 0L);
+        sqLiteStatement.bindLong(30, chatMessage.getSyncedToGoogleDrive() ? 1L : 0L);
     }
 
     @Override
@@ -203,8 +203,8 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         int i3 = cursor.getInt(i + 11);
         Integer valueOf6 = cursor.isNull(i + 12) ? null : Integer.valueOf(cursor.getInt(i + 12));
         Integer valueOf7 = cursor.isNull(i + 13) ? null : Integer.valueOf(cursor.getInt(i + 13));
-        UUID fromString2 = cursor.isNull(i + 14) ? null : UUID.fromString(cursor.getString(i + 14));
-        UUID fromString3 = cursor.isNull(i + 15) ? null : UUID.fromString(cursor.getString(i + 15));
+        UUID uuid = cursor.isNull(i + 14) ? null : UUID.fromString(cursor.getString(i + 14));
+        UUID uuid2 = cursor.isNull(i + 15) ? null : UUID.fromString(cursor.getString(i + 15));
         String string4 = cursor.isNull(i + 16) ? null : cursor.getString(i + 16);
         Integer valueOf8 = cursor.isNull(i + 17) ? null : Integer.valueOf(cursor.getInt(i + 17));
         Integer valueOf9 = cursor.isNull(i + 18) ? null : Integer.valueOf(cursor.getInt(i + 18));
@@ -220,7 +220,7 @@ public class ChatMessageDao extends AbstractDao<ChatMessage, Long> {
         } else {
             valueOf3 = Boolean.valueOf(cursor.getShort(i + 22) != 0);
         }
-        return new ChatMessage(valueOf4, j, date, i2, date2, valueOf, fromString, valueOf5, string, string2, string3, i3, valueOf6, valueOf7, fromString2, fromString3, string4, valueOf8, valueOf9, valueOf10, valueOf11, valueOf2, valueOf3, cursor.isNull(i + 23) ? null : UUID.fromString(cursor.getString(i + 23)), cursor.isNull(i + 24) ? null : cursor.getString(i + 24), cursor.isNull(i + 25) ? null : Integer.valueOf(cursor.getInt(i + 25)), cursor.isNull(i + 26) ? null : cursor.getBlob(i + 26), cursor.isNull(i + 27) ? null : cursor.getString(i + 27), cursor.isNull(i + 28) ? null : Integer.valueOf(cursor.getInt(i + 28)), cursor.getShort(i + 29) != 0);
+        return new ChatMessage(valueOf4, j, date, i2, date2, valueOf, fromString, valueOf5, string, string2, string3, i3, valueOf6, valueOf7, uuid, uuid2, string4, valueOf8, valueOf9, valueOf10, valueOf11, valueOf2, valueOf3, cursor.isNull(i + 23) ? null : UUID.fromString(cursor.getString(i + 23)), cursor.isNull(i + 24) ? null : cursor.getString(i + 24), cursor.isNull(i + 25) ? null : Integer.valueOf(cursor.getInt(i + 25)), cursor.isNull(i + 26) ? null : cursor.getBlob(i + 26), cursor.isNull(i + 27) ? null : cursor.getString(i + 27), cursor.isNull(i + 28) ? null : Integer.valueOf(cursor.getInt(i + 28)), cursor.getShort(i + 29) != 0);
     }
 
     @Override

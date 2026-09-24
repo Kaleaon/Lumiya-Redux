@@ -11,23 +11,23 @@ public class VertexData {
     public static VertexData LerpPlanarVertex(VertexData vertexData, VertexData vertexData2, VertexData vertexData3, float f, float f2) {
         LLVector4 sub = LLVector4.sub(vertexData2.Position, vertexData.Position);
         sub.mul(f);
-        LLVector4 sub2 = LLVector4.sub(vertexData3.Position, vertexData.Position);
-        sub2.mul(f2);
-        sub2.add(sub);
-        sub2.add(vertexData.Position);
+        LLVector4 vector4 = LLVector4.sub(vertexData3.Position, vertexData.Position);
+        vector4.mul(f2);
+        vector4.add(sub);
+        vector4.add(vertexData.Position);
         VertexData vertexData4 = new VertexData();
-        vertexData4.Position = sub2;
+        vertexData4.Position = vector4;
         if (vertexData.Normal != null) {
             vertexData4.Normal = new LLVector4(vertexData.Normal);
         }
-        LLVector2 sub3 = LLVector2.sub(vertexData2.TexCoord, vertexData.TexCoord);
-        sub3.mul(f);
-        LLVector2 sub4 = LLVector2.sub(vertexData3.TexCoord, vertexData.TexCoord);
-        sub4.mul(f2);
-        LLVector2 lLVector2 = new LLVector2(vertexData.TexCoord);
-        lLVector2.add(sub3);
-        lLVector2.add(sub4);
-        vertexData4.TexCoord = lLVector2;
+        LLVector2 vector2 = LLVector2.sub(vertexData2.TexCoord, vertexData.TexCoord);
+        vector2.mul(f);
+        LLVector2 vector24 = LLVector2.sub(vertexData3.TexCoord, vertexData.TexCoord);
+        vector24.mul(f2);
+        LLVector2 vector25 = new LLVector2(vertexData.TexCoord);
+        vector25.add(vector2);
+        vector25.add(vector24);
+        vertexData4.TexCoord = vector25;
         return vertexData4;
     }
 }

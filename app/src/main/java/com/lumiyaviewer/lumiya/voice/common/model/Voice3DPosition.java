@@ -30,12 +30,12 @@ public class Voice3DPosition {
         this.leftOrientation = new Voice3DVector(bundle.getBundle("leftOrientation"));
     }
 
-    public Voice3DPosition(@Nonnull Voice3DVector voice3DVector, @Nonnull Voice3DVector voice3DVector2, @Nonnull Voice3DVector voice3DVector3, @Nonnull Voice3DVector voice3DVector4, @Nonnull Voice3DVector voice3DVector5) {
+    public Voice3DPosition(@Nonnull Voice3DVector voice3DVector, @Nonnull Voice3DVector velocity, @Nonnull Voice3DVector atOrientation, @Nonnull Voice3DVector upOrientation, @Nonnull Voice3DVector leftOrientation) {
         this.position = voice3DVector;
-        this.velocity = voice3DVector2;
-        this.atOrientation = voice3DVector3;
-        this.upOrientation = voice3DVector4;
-        this.leftOrientation = voice3DVector5;
+        this.velocity = velocity;
+        this.atOrientation = atOrientation;
+        this.upOrientation = upOrientation;
+        this.leftOrientation = leftOrientation;
     }
 
     public Bundle toBundle() {

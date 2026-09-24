@@ -54,8 +54,8 @@ public class EventInfoReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEventInfoReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEventInfoReply(this);
     }
 
     @Override

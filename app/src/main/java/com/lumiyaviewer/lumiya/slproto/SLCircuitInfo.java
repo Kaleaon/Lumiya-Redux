@@ -11,10 +11,10 @@ public class SLCircuitInfo {
     public final UUID sessionID;
     final SocketAddress socketAddress;
 
-    SLCircuitInfo(SLAuthReply sLAuthReply) {
-        this.socketAddress = new InetSocketAddress(sLAuthReply.simAddress, sLAuthReply.simPort);
-        this.sessionID = sLAuthReply.sessionID;
-        this.agentID = sLAuthReply.agentID;
-        this.circuitCode = sLAuthReply.circuitCode;
+    SLCircuitInfo(SLAuthReply authReply) {
+        this.socketAddress = new InetSocketAddress(authReply.simAddress, authReply.simPort);
+        this.sessionID = authReply.sessionID;
+        this.agentID = authReply.agentID;
+        this.circuitCode = authReply.circuitCode;
     }
 }

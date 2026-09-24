@@ -36,8 +36,8 @@ public class DenyTrustedCircuit extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleDenyTrustedCircuit(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleDenyTrustedCircuit(this);
     }
 
     @Override

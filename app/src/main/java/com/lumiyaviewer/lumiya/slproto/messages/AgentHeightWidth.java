@@ -41,8 +41,8 @@ public class AgentHeightWidth extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAgentHeightWidth(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAgentHeightWidth(this);
     }
 
     @Override

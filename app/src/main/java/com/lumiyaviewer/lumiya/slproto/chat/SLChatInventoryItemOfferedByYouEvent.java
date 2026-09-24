@@ -17,9 +17,9 @@ public final class SLChatInventoryItemOfferedByYouEvent extends SLChatEvent {
         this.itemName = chatMessage.getItemName();
     }
 
-    public SLChatInventoryItemOfferedByYouEvent(@Nonnull UUID uuid, String str) {
+    public SLChatInventoryItemOfferedByYouEvent(@Nonnull UUID uuid, String itemName) {
         super(ChatMessageSourceUnknown.getInstance(), uuid);
-        this.itemName = str;
+        this.itemName = itemName;
     }
 
     @Override

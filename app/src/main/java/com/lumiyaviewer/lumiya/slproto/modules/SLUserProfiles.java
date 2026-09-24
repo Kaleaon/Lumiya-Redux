@@ -68,8 +68,8 @@ public class SLUserProfiles extends SLModule {
     private final String setHomeLocationCap;
     private final UserManager userManager;
 
-    SLUserProfiles(SLAgentCircuit sLAgentCircuit, SLCaps sLCaps) {
-        super(sLAgentCircuit);
+    SLUserProfiles(SLAgentCircuit agentCircuit, SLCaps caps) {
+        super(agentCircuit);
         this.requestedNewGroupData = false;
         this.avatarPropertiesRequestHandler = new AsyncLimitsRequestHandler(this.agentCircuit, new SimpleRequestHandler<UUID>() {
             @Override
@@ -110,8 +110,8 @@ public class SLUserProfiles extends SLModule {
                 SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", new String[]{avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()});
             }
         }, false, 3, 15000L);
-        this.userManager = UserManager.getUserManager(sLAgentCircuit.circuitInfo.agentID);
-        this.setHomeLocationCap = sLCaps.getCapability(SLCaps.SLCapability.HomeLocation);
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID);
+        this.setHomeLocationCap = caps.getCapability(SLCaps.SLCapability.HomeLocation);
     }
 
     public void DeletePick(UUID uuid) {
@@ -122,8 +122,8 @@ public class SLUserProfiles extends SLModule {
         pickDelete.isReliable = true;
         pickDelete.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
             @Override
-            public void onMessageAcknowledged(SLMessage sLMessage) {
-                super.onMessageAcknowledged(sLMessage);
+            public void onMessageAcknowledged(SLMessage message) {
+                super.onMessageAcknowledged(message);
                 if (SLUserProfiles.this.userManager != null) {
                     SLUserProfiles.this.userManager.getAvatarPicks().requestUpdate(SLUserProfiles.this.userManager.getUserID());
                 }
@@ -140,9 +140,9 @@ public class SLUserProfiles extends SLModule {
     }
 
     @SLEventQueueMessageHandler(eventName = SLCapEventQueue.CapsEventType.AgentGroupDataUpdate)
-    public void HandleAgentGroupDataUpdate(LLSDNode lLSDNode) {
+    public void HandleAgentGroupDataUpdate(LLSDNode lsdNode) {
         try {
-            AgentGroupDataInfo agentGroupDataInfo = (AgentGroupDataInfo) lLSDNode.toObject(AgentGroupDataInfo.class);
+            AgentGroupDataInfo agentGroupDataInfo = (AgentGroupDataInfo) lsdNode.toObject(AgentGroupDataInfo.class);
             if (this.avatarGroupListsResultHandler != null) {
                 AvatarGroupList avatarGroupList = new AvatarGroupList(agentGroupDataInfo);
                 this.avatarGroupListsResultHandler.onResultData(avatarGroupList.avatarID, avatarGroupList);
@@ -166,9 +166,9 @@ public class SLUserProfiles extends SLModule {
     }
 
     @SLEventQueueMessageHandler(eventName = SLCapEventQueue.CapsEventType.AvatarGroupsReply)
-    public void HandleAvatarGroupsReply(LLSDNode lLSDNode) {
+    public void HandleAvatarGroupsReply(LLSDNode lsdNode) {
         try {
-            AgentGroupDataInfo agentGroupDataInfo = (AgentGroupDataInfo) lLSDNode.toObject(AgentGroupDataInfo.class);
+            AgentGroupDataInfo agentGroupDataInfo = (AgentGroupDataInfo) lsdNode.toObject(AgentGroupDataInfo.class);
             if (this.avatarGroupListsResultHandler != null) {
                 AvatarGroupList avatarGroupList = new AvatarGroupList(agentGroupDataInfo);
                 if (Objects.equal(avatarGroupList.avatarID, this.circuitInfo.agentID)) {
@@ -292,8 +292,8 @@ public class SLUserProfiles extends SLModule {
         avatarPropertiesUpdate.isReliable = true;
         avatarPropertiesUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
             @Override
-            public void onMessageAcknowledged(SLMessage sLMessage) {
-                super.onMessageAcknowledged(sLMessage);
+            public void onMessageAcknowledged(SLMessage message) {
+                super.onMessageAcknowledged(message);
                 if (SLUserProfiles.this.userManager != null) {
                     SLUserProfiles.this.userManager.getAvatarProperties().requestUpdate(SLUserProfiles.this.userManager.getUserID());
                 }
@@ -302,7 +302,7 @@ public class SLUserProfiles extends SLModule {
         SendMessage(avatarPropertiesUpdate);
     }
 
-    public void UpdatePickInfo(final UUID uuid, UUID uuid2, UUID uuid3, String str, String str2, UUID uuid4, LLVector3d lLVector3d, int i, boolean z) {
+    public void UpdatePickInfo(final UUID uuid, UUID uuid2, UUID uuid3, String str, String str2, UUID uuid4, LLVector3d vector3d, int i, boolean z) {
         PickInfoUpdate pickInfoUpdate = new PickInfoUpdate();
         pickInfoUpdate.AgentData_Field.AgentID = this.circuitInfo.agentID;
         pickInfoUpdate.AgentData_Field.SessionID = this.circuitInfo.sessionID;
@@ -313,14 +313,14 @@ public class SLUserProfiles extends SLModule {
         pickInfoUpdate.Data_Field.Name = SLMessage.stringToVariableOEM(str);
         pickInfoUpdate.Data_Field.Desc = SLMessage.stringToVariableUTF(str2);
         pickInfoUpdate.Data_Field.SnapshotID = uuid4;
-        pickInfoUpdate.Data_Field.PosGlobal = lLVector3d;
+        pickInfoUpdate.Data_Field.PosGlobal = vector3d;
         pickInfoUpdate.Data_Field.SortOrder = i;
         pickInfoUpdate.Data_Field.Enabled = z;
         pickInfoUpdate.isReliable = true;
         pickInfoUpdate.setEventListener(new SLMessageEventListener.SLMessageBaseEventListener() {
             @Override
-            public void onMessageAcknowledged(SLMessage sLMessage) {
-                super.onMessageAcknowledged(sLMessage);
+            public void onMessageAcknowledged(SLMessage message) {
+                super.onMessageAcknowledged(message);
                 if (SLUserProfiles.this.userManager != null) {
                     SLUserProfiles.this.userManager.getAvatarPickInfos().requestUpdate(new AvatarPickKey(SLUserProfiles.this.userManager.getUserID(), uuid));
                     SLUserProfiles.this.userManager.getAvatarPicks().requestUpdate(SLUserProfiles.this.userManager.getUserID());

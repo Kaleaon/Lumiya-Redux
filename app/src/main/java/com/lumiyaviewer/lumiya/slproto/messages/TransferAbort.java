@@ -32,8 +32,8 @@ public class TransferAbort extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTransferAbort(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTransferAbort(this);
     }
 
     @Override

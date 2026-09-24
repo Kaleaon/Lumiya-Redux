@@ -33,8 +33,8 @@ public class UpdateSimulator extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleUpdateSimulator(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleUpdateSimulator(this);
     }
 
     @Override

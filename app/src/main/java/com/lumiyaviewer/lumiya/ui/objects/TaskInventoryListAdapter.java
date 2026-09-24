@@ -72,8 +72,8 @@ public class TaskInventoryListAdapter extends BaseAdapter {
         return false;
     }
 
-    public void setData(SLTaskInventory sLTaskInventory) {
-        this.taskInventory = sLTaskInventory;
+    public void setData(SLTaskInventory taskInventory) {
+        this.taskInventory = taskInventory;
         notifyDataSetChanged();
     }
 }

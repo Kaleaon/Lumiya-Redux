@@ -26,27 +26,27 @@ public class CachedAssetDao extends AbstractDao<CachedAsset, String> {
         super(daoConfig, daoSession);
     }
 
-    public static void createTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedAssets' ('KEY' TEXT PRIMARY KEY NOT NULL ,'STATUS' INTEGER NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
+    public static void createTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("CREATE TABLE " + (z ? "IF NOT EXISTS " : "") + "'CachedAssets' ('KEY' TEXT PRIMARY KEY NOT NULL ,'STATUS' INTEGER NOT NULL ,'DATA' BLOB,'MUST_REVALIDATE' INTEGER NOT NULL );");
     }
 
-    public static void dropTable(SQLiteDatabase sQLiteDatabase, boolean z) {
-        sQLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedAssets'");
+    public static void dropTable(SQLiteDatabase sqLiteDatabase, boolean z) {
+        sqLiteDatabase.execSQL("DROP TABLE " + (z ? "IF EXISTS " : "") + "'CachedAssets'");
     }
 
     @Override
-    public void bindValues(SQLiteStatement sQLiteStatement, CachedAsset cachedAsset) {
-        sQLiteStatement.clearBindings();
+    public void bindValues(SQLiteStatement sqLiteStatement, CachedAsset cachedAsset) {
+        sqLiteStatement.clearBindings();
         String key = cachedAsset.getKey();
         if (key != null) {
-            sQLiteStatement.bindString(1, key);
+            sqLiteStatement.bindString(1, key);
         }
-        sQLiteStatement.bindLong(2, cachedAsset.getStatus());
+        sqLiteStatement.bindLong(2, cachedAsset.getStatus());
         byte[] data = cachedAsset.getData();
         if (data != null) {
-            sQLiteStatement.bindBlob(3, data);
+            sqLiteStatement.bindBlob(3, data);
         }
-        sQLiteStatement.bindLong(4, cachedAsset.getMustRevalidate() ? 1L : 0L);
+        sqLiteStatement.bindLong(4, cachedAsset.getMustRevalidate() ? 1L : 0L);
     }
 
     @Override

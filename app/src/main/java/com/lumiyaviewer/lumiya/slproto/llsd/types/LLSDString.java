@@ -10,8 +10,8 @@ import org.xmlpull.v1.XmlSerializer;
 public class LLSDString extends LLSDNode {
     private String value;
 
-    public LLSDString(String str) {
-        this.value = str;
+    public LLSDString(String value) {
+        this.value = value;
     }
 
     @Override

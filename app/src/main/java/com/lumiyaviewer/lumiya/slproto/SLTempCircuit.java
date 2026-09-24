@@ -9,14 +9,14 @@ import java.util.List;
 public class SLTempCircuit extends SLCircuit {
     private List<SLMessage> pendingMessages;
 
-    public SLTempCircuit(SLGridConnection sLGridConnection, SLCircuitInfo sLCircuitInfo, SLAuthReply sLAuthReply) throws IOException {
-        super(sLGridConnection, sLCircuitInfo, sLAuthReply, null);
+    public SLTempCircuit(SLGridConnection gridConnection, SLCircuitInfo circuitInfo, SLAuthReply authReply) throws IOException {
+        super(gridConnection, circuitInfo, authReply, null);
         this.pendingMessages = new LinkedList();
     }
 
     @Override
-    public void DefaultMessageHandler(SLMessage sLMessage) {
-        this.pendingMessages.add(sLMessage);
+    public void DefaultMessageHandler(SLMessage message) {
+        this.pendingMessages.add(message);
     }
 
     @Override

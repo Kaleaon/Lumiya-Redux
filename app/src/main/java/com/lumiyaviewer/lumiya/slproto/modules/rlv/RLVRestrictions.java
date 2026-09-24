@@ -23,7 +23,7 @@ public class RLVRestrictions {
             this.restMap = new HashMap();
         }
 
-        /* synthetic */ RLVRestrictionList(RLVRestrictionList rLVRestrictionList) {
+        /* synthetic */ RLVRestrictionList(RLVRestrictionList rlvRestrictionList) {
             this();
         }
 
@@ -133,9 +133,9 @@ public class RLVRestrictions {
                     hashSet.add((String) entry.getKey());
                 }
             }
-            Iterator it2 = hashSet.iterator();
-            while (it2.hasNext()) {
-                this.restMap.remove((String) it2.next());
+            Iterator iterator = hashSet.iterator();
+            while (iterator.hasNext()) {
+                this.restMap.remove((String) iterator.next());
             }
         }
 
@@ -150,17 +150,17 @@ public class RLVRestrictions {
         }
     }
 
-    public synchronized void addRestriction(RLVRestrictionType rLVRestrictionType, UUID uuid, String str) {
+    public synchronized void addRestriction(RLVRestrictionType rlvRestrictionType, UUID uuid, String str) {
         if (str == null) {
             str = "";
         }
-        Debug.Printf("RLV: adding restriction '%s' for object %s, target '%s'", rLVRestrictionType.toString(), uuid, str);
-        RLVRestrictionList rLVRestrictionList = this.restrictions.get(rLVRestrictionType);
-        if (rLVRestrictionList == null) {
-            rLVRestrictionList = new RLVRestrictionList(null);
-            this.restrictions.put(rLVRestrictionType, rLVRestrictionList);
+        Debug.Printf("RLV: adding restriction '%s' for object %s, target '%s'", rlvRestrictionType.toString(), uuid, str);
+        RLVRestrictionList rlvRestrictionList = this.restrictions.get(rlvRestrictionType);
+        if (rlvRestrictionList == null) {
+            rlvRestrictionList = new RLVRestrictionList(null);
+            this.restrictions.put(rlvRestrictionType, rlvRestrictionList);
         }
-        rLVRestrictionList.addRestriction(uuid, str.toLowerCase());
+        rlvRestrictionList.addRestriction(uuid, str.toLowerCase());
     }
 
     public synchronized List<RLVRestrictionType> getRestrictionsByObject(UUID uuid) {
@@ -176,51 +176,51 @@ public class RLVRestrictions {
         return linkedList;
     }
 
-    public synchronized Set<String> getTargetsForRestriction(RLVRestrictionType rLVRestrictionType) {
-        RLVRestrictionList rLVRestrictionList = this.restrictions.get(rLVRestrictionType);
-        if (rLVRestrictionList == null) {
+    public synchronized Set<String> getTargetsForRestriction(RLVRestrictionType rlvRestrictionType) {
+        RLVRestrictionList rlvRestrictionList = this.restrictions.get(rlvRestrictionType);
+        if (rlvRestrictionList == null) {
             return null;
         }
-        return rLVRestrictionList.getTargets();
+        return rlvRestrictionList.getTargets();
     }
 
-    public synchronized boolean isAllowed(RLVRestrictionType rLVRestrictionType, String str, UUID uuid) {
-        return isAllowed(rLVRestrictionType, str, uuid, null);
+    public synchronized boolean isAllowed(RLVRestrictionType rlvRestrictionType, String str, UUID uuid) {
+        return isAllowed(rlvRestrictionType, str, uuid, null);
     }
 
-    public synchronized boolean isAllowed(RLVRestrictionType rLVRestrictionType, String str, UUID uuid, UUID uuid2) {
+    public synchronized boolean isAllowed(RLVRestrictionType rlvRestrictionType, String str, UUID uuid, UUID uuid2) {
         if (str == null) {
             str = "";
         }
-        RLVRestrictionList rLVRestrictionList = this.restrictions.get(rLVRestrictionType);
-        if (rLVRestrictionList != null) {
-            return rLVRestrictionList.isAllowed(rLVRestrictionType.getRuleMatchType(), str.toLowerCase(), uuid, uuid2);
+        RLVRestrictionList rlvRestrictionList = this.restrictions.get(rlvRestrictionType);
+        if (rlvRestrictionList != null) {
+            return rlvRestrictionList.isAllowed(rlvRestrictionType.getRuleMatchType(), str.toLowerCase(), uuid, uuid2);
         }
-        return rLVRestrictionType.getRuleMatchType() != RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance;
+        return rlvRestrictionType.getRuleMatchType() != RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance;
     }
 
-    public synchronized void removeRestriction(RLVRestrictionType rLVRestrictionType, UUID uuid, String str) {
+    public synchronized void removeRestriction(RLVRestrictionType rlvRestrictionType, UUID uuid, String str) {
         if (str == null) {
             str = "";
         }
-        Debug.Printf("RLV: removing restriction '%s' for object %s, target '%s'", rLVRestrictionType.toString(), uuid, str);
-        RLVRestrictionList rLVRestrictionList = this.restrictions.get(rLVRestrictionType);
-        if (rLVRestrictionList != null) {
-            rLVRestrictionList.removeRestriction(uuid, str.toLowerCase());
-            if (rLVRestrictionList.isEmpty()) {
-                this.restrictions.remove(rLVRestrictionType);
+        Debug.Printf("RLV: removing restriction '%s' for object %s, target '%s'", rlvRestrictionType.toString(), uuid, str);
+        RLVRestrictionList rlvRestrictionList = this.restrictions.get(rlvRestrictionType);
+        if (rlvRestrictionList != null) {
+            rlvRestrictionList.removeRestriction(uuid, str.toLowerCase());
+            if (rlvRestrictionList.isEmpty()) {
+                this.restrictions.remove(rlvRestrictionType);
             }
         }
     }
 
     public synchronized void removeRestrictions(UUID uuid, Set<RLVRestrictionType> set) {
         Debug.Printf("RLV: removing %d restrictions for object %s", Integer.valueOf(set.size()), uuid);
-        for (RLVRestrictionType rLVRestrictionType : set) {
-            RLVRestrictionList rLVRestrictionList = this.restrictions.get(rLVRestrictionType);
-            if (rLVRestrictionList != null) {
-                rLVRestrictionList.removeAllForObject(uuid);
-                if (rLVRestrictionList.isEmpty()) {
-                    this.restrictions.remove(rLVRestrictionType);
+        for (RLVRestrictionType rlvRestrictionType : set) {
+            RLVRestrictionList rlvRestrictionList = this.restrictions.get(rlvRestrictionType);
+            if (rlvRestrictionList != null) {
+                rlvRestrictionList.removeAllForObject(uuid);
+                if (rlvRestrictionList.isEmpty()) {
+                    this.restrictions.remove(rlvRestrictionType);
                 }
             }
         }

@@ -39,8 +39,8 @@ public class SimCrashed extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimCrashed(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimCrashed(this);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SimCrashed extends SLMessage {
         this.Data_Field.RegionX = unpackInt(byteBuffer);
         this.Data_Field.RegionY = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Users users = new Users();
             users.AgentID = unpackUUID(byteBuffer);
             this.Users_Fields.add(users);

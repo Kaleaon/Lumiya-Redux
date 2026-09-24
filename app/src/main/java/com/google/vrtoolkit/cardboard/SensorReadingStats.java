@@ -8,12 +8,12 @@ class SensorReadingStats {
    private int samplesAdded;
    private int writePos;
 
-   SensorReadingStats(int var1, int var2) {
-      this.sampleBufSize = var1;
-      this.numAxes = var2;
-      if (var1 > 0) {
-         if (var2 > 0) {
-            this.sampleBuf = new float[var1][var2];
+   SensorReadingStats(int sampleBufSize, int numAxes) {
+      this.sampleBufSize = sampleBufSize;
+      this.numAxes = numAxes;
+      if (sampleBufSize > 0) {
+         if (numAxes > 0) {
+            this.sampleBuf = new float[sampleBufSize][numAxes];
          } else {
             throw new IllegalArgumentException("numAxes is invalid.");
          }
@@ -22,14 +22,14 @@ class SensorReadingStats {
       }
    }
 
-   void addSample(float[] var1) {
-      if (var1.length < this.numAxes) {
+   void addSample(float[] floats) {
+      if (floats.length < this.numAxes) {
          throw new IllegalArgumentException("values.length is less than # of axes.");
       } else {
          this.writePos = (this.writePos + 1) % this.sampleBufSize;
 
          for (int var2 = 0; var2 < this.numAxes; var2++) {
-            this.sampleBuf[this.writePos][var2] = var1[var2];
+            this.sampleBuf[this.writePos][var2] = floats[var2];
          }
 
          this.samplesAdded++;
@@ -66,11 +66,11 @@ class SensorReadingStats {
    float getMaxAbsoluteDeviation(int var1) {
       int var4 = 0;
       if (var1 >= 0 && var1 < this.numAxes) {
-         float var3 = this.getAverage(var1);
+         float average = this.getAverage(var1);
 
          float var2;
          for (var2 = 0.0F; var4 < this.sampleBufSize; var4++) {
-            var2 = Math.max(Math.abs(this.sampleBuf[var4][var1] - var3), var2);
+            var2 = Math.max(Math.abs(this.sampleBuf[var4][var1] - average), var2);
          }
 
          return var2;

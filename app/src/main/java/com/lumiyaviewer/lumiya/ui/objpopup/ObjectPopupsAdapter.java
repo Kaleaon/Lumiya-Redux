@@ -23,9 +23,9 @@ public class ObjectPopupsAdapter extends RecyclerSubscribableListAdapter<SLChatE
     }
 
     @Override
-    public void bindObjectViewHolder(RecyclerView.ViewHolder viewHolder, SLChatEvent sLChatEvent) {
+    public void bindObjectViewHolder(RecyclerView.ViewHolder viewHolder, SLChatEvent chatEvent) {
         if (viewHolder instanceof ChatEventViewHolder) {
-            sLChatEvent.bindViewHolder((ChatEventViewHolder) viewHolder, this.userManager, null);
+            chatEvent.bindViewHolder((ChatEventViewHolder) viewHolder, this.userManager, null);
         }
     }
 
@@ -35,7 +35,7 @@ public class ObjectPopupsAdapter extends RecyclerSubscribableListAdapter<SLChatE
     }
 
     @Override
-    public int getObjectViewType(SLChatEvent sLChatEvent) {
-        return sLChatEvent.getViewType().ordinal();
+    public int getObjectViewType(SLChatEvent chatEvent) {
+        return chatEvent.getViewType().ordinal();
     }
 }

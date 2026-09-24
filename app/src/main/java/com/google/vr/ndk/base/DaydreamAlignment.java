@@ -124,10 +124,10 @@ class DaydreamAlignment {
         finishInitilizationTask.execute(new Void[0]);
     }
 
-    DaydreamAlignment(VrParamsProvider vrParamsProvider, DisplayMetrics displayMetrics, Phone.PhoneParams phoneParams, boolean z) {
+    DaydreamAlignment(VrParamsProvider vrParamsProvider, DisplayMetrics displayMetrics, Phone.PhoneParams phoneParams, boolean isDaydreamImageAlignmentEnabled) {
         this.pixelTranslation = new float[2];
         this.enabled = true;
-        this.isDaydreamImageAlignmentEnabled = z;
+        this.isDaydreamImageAlignmentEnabled = isDaydreamImageAlignmentEnabled;
         this.vrParamsProvider = vrParamsProvider;
         init(displayMetrics, phoneParams);
     }
@@ -148,22 +148,22 @@ class DaydreamAlignment {
         this.mostTouchesSeen = 0;
     }
 
-    void getTranslationInPixels(float[] fArr) {
-        if (fArr.length < 2) {
+    void getTranslationInPixels(float[] floats) {
+        if (floats.length < 2) {
             throw new IllegalArgumentException("Translation array too small");
         }
-        fArr[0] = this.pixelTranslation[0];
-        fArr[1] = this.pixelTranslation[1];
+        floats[0] = this.pixelTranslation[0];
+        floats[1] = this.pixelTranslation[1];
     }
 
-    public void getTranslationInScreenSpace(float[] fArr) {
-        if (fArr.length < 2) {
+    public void getTranslationInScreenSpace(float[] floats) {
+        if (floats.length < 2) {
             throw new IllegalArgumentException("Translation array too small");
         }
-        fArr[0] = this.pixelTranslation[0] / this.displayMetrics.widthPixels;
-        fArr[1] = this.pixelTranslation[1] / this.displayMetrics.heightPixels;
-        fArr[0] = fArr[0] * 4.0f;
-        fArr[1] = fArr[1] * (-2.0f);
+        floats[0] = this.pixelTranslation[0] / this.displayMetrics.widthPixels;
+        floats[1] = this.pixelTranslation[1] / this.displayMetrics.heightPixels;
+        floats[0] = floats[0] * 4.0f;
+        floats[1] = floats[1] * (-2.0f);
     }
 
     boolean isDaydreamImageAlignmentEnabled() {
@@ -187,34 +187,34 @@ class DaydreamAlignment {
             this.markerBestTouch[i] = -1;
             this.currentMarkerBestDists[i] = 2.25E-4d;
         }
-        for (int i2 = 0; i2 < pointerCount; i2++) {
+        for (int j = 0; j < pointerCount; j++) {
             double d = MAX_TOUCH_DISTANCE_SQUARED_METERS;
-            this.touchBestMarker[i2] = -1;
-            for (int i3 = 0; i3 < this.markersInPixels.length; i3++) {
-                float x = (this.markersInPixels[i3][0] - motionEvent.getX(i2)) * this.xMetersPerPixel;
-                float y = (this.markersInPixels[i3][1] - motionEvent.getY(i2)) * this.yMetersPerPixel;
+            this.touchBestMarker[j] = -1;
+            for (int k = 0; k < this.markersInPixels.length; k++) {
+                float x = (this.markersInPixels[k][0] - motionEvent.getX(j)) * this.xMetersPerPixel;
+                float y = (this.markersInPixels[k][1] - motionEvent.getY(j)) * this.yMetersPerPixel;
                 double d2 = (x * x) + (y * y);
                 if (d2 < d) {
-                    this.touchBestMarker[i2] = i3;
+                    this.touchBestMarker[j] = k;
                     d = d2;
                 }
-                if (d2 < this.currentMarkerBestDists[i3]) {
-                    this.currentMarkerBestDists[i3] = d2;
-                    this.markerBestTouch[i3] = i2;
+                if (d2 < this.currentMarkerBestDists[k]) {
+                    this.currentMarkerBestDists[k] = d2;
+                    this.markerBestTouch[k] = j;
                 }
             }
         }
         float f = 0.0f;
         float f2 = 0.0f;
         int i4 = 0;
-        for (int i5 = 0; i5 < this.markerBestTouch.length; i5++) {
-            if (this.markerBestTouch[i5] != -1) {
-                if (this.touchBestMarker[this.markerBestTouch[i5]] == i5) {
+        for (int m = 0; m < this.markerBestTouch.length; m++) {
+            if (this.markerBestTouch[m] != -1) {
+                if (this.touchBestMarker[this.markerBestTouch[m]] == m) {
                     i4++;
-                    f += motionEvent.getX(this.markerBestTouch[i5]) - this.markersInPixels[i5][0];
-                    f2 += motionEvent.getY(this.markerBestTouch[i5]) - this.markersInPixels[i5][1];
+                    f += motionEvent.getX(this.markerBestTouch[m]) - this.markersInPixels[m][0];
+                    f2 += motionEvent.getY(this.markerBestTouch[m]) - this.markersInPixels[m][1];
                 } else {
-                    this.markerBestTouch[i5] = -1;
+                    this.markerBestTouch[m] = -1;
                 }
             }
         }
@@ -232,9 +232,9 @@ class DaydreamAlignment {
         new RefreshViewerProfileTask().execute(new Void[0]);
     }
 
-    public void setEnabled(boolean z) {
-        this.enabled = z;
-        if (z) {
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (enabled) {
             return;
         }
         resetTrackingState();

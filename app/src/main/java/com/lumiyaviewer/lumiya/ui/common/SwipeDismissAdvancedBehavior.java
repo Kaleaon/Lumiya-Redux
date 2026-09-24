@@ -127,8 +127,8 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
 
         @Override
         public void onViewReleased(View view, float f, float f2) {
-            int i;
-            int i2;
+            int left2;
+            int top2;
             boolean z;
             int width = view.getWidth();
             int height = view.getHeight();
@@ -145,15 +145,15 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
                 } else if (f2 > scaledMinimumFlingVelocity && (SwipeDismissAdvancedBehavior.this.mSwipeDirection & 8) != 0) {
                     top = this.mOriginalCapturedViewTop + height;
                 }
-                i = left;
-                i2 = top;
+                left2 = left;
+                top2 = top;
                 z = true;
             } else {
-                i = this.mOriginalCapturedViewLeft;
-                i2 = this.mOriginalCapturedViewTop;
+                left2 = this.mOriginalCapturedViewLeft;
+                top2 = this.mOriginalCapturedViewTop;
                 z = false;
             }
-            if (SwipeDismissAdvancedBehavior.this.mViewDragHelper.settleCapturedViewAt(i, i2)) {
+            if (SwipeDismissAdvancedBehavior.this.mViewDragHelper.settleCapturedViewAt(left2, top2)) {
                 ViewCompat.postOnAnimation(view, new SettleRunnable(view, z));
             } else {
                 if (!z || SwipeDismissAdvancedBehavior.this.mListener == null) {
@@ -179,9 +179,9 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
         private final boolean mDismiss;
         private final View mView;
 
-        SettleRunnable(View view, boolean z) {
+        SettleRunnable(View view, boolean mDismiss) {
             this.mView = view;
-            this.mDismiss = z;
+            this.mDismiss = mDismiss;
         }
 
         @Override
@@ -261,28 +261,28 @@ public class SwipeDismissAdvancedBehavior<V extends View> extends CoordinatorLay
         return true;
     }
 
-    public void setDragDismissDistance(float f) {
-        this.mDragDismissThreshold = clamp(0.0f, f, 1.0f);
+    public void setDragDismissDistance(float dragDismissDistance) {
+        this.mDragDismissThreshold = clamp(0.0f, dragDismissDistance, 1.0f);
     }
 
-    public void setEndAlphaSwipeDistance(float f) {
-        this.mAlphaEndSwipeDistance = clamp(0.0f, f, 1.0f);
+    public void setEndAlphaSwipeDistance(float endAlphaSwipeDistance) {
+        this.mAlphaEndSwipeDistance = clamp(0.0f, endAlphaSwipeDistance, 1.0f);
     }
 
     public void setListener(OnDismissListener onDismissListener) {
         this.mListener = onDismissListener;
     }
 
-    public void setSensitivity(float f) {
-        this.mSensitivity = f;
+    public void setSensitivity(float mSensitivity) {
+        this.mSensitivity = mSensitivity;
         this.mSensitivitySet = true;
     }
 
-    public void setStartAlphaSwipeDistance(float f) {
-        this.mAlphaStartSwipeDistance = clamp(0.0f, f, 1.0f);
+    public void setStartAlphaSwipeDistance(float startAlphaSwipeDistance) {
+        this.mAlphaStartSwipeDistance = clamp(0.0f, startAlphaSwipeDistance, 1.0f);
     }
 
-    public void setSwipeDirection(int i) {
-        this.mSwipeDirection = i;
+    public void setSwipeDirection(int mSwipeDirection) {
+        this.mSwipeDirection = mSwipeDirection;
     }
 }

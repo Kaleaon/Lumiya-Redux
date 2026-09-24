@@ -12,14 +12,14 @@ public class DBOpenHelper extends DaoMaster.DevOpenHelper {
         super(context, str, cursorFactory);
     }
 
-    private boolean tryUpgradeTo71(SQLiteDatabase sQLiteDatabase, int i) {
+    private boolean tryUpgradeTo71(SQLiteDatabase sqLiteDatabase, int i) {
         if (i != 70) {
             return false;
         }
         try {
             Debug.Printf("Upgrading to database version 71 from %d", Integer.valueOf(i));
-            sQLiteDatabase.execSQL("ALTER TABLE CHAT_MESSAGE ADD COLUMN " + ChatMessageDao.Properties.SyncedToGoogleDrive.columnName + " INTEGER DEFAULT 0 NOT NULL;");
-            sQLiteDatabase.execSQL("CREATE INDEX IDX_CHAT_MESSAGE__id_SYNCED_TO_GOOGLE_DRIVE ON CHAT_MESSAGE (_id,SYNCED_TO_GOOGLE_DRIVE);");
+            sqLiteDatabase.execSQL("ALTER TABLE CHAT_MESSAGE ADD COLUMN " + ChatMessageDao.Properties.SyncedToGoogleDrive.columnName + " INTEGER DEFAULT 0 NOT NULL;");
+            sqLiteDatabase.execSQL("CREATE INDEX IDX_CHAT_MESSAGE__id_SYNCED_TO_GOOGLE_DRIVE ON CHAT_MESSAGE (_id,SYNCED_TO_GOOGLE_DRIVE);");
             return true;
         } catch (SQLiteException e) {
             Debug.Warning(e);
@@ -28,17 +28,17 @@ public class DBOpenHelper extends DaoMaster.DevOpenHelper {
     }
 
     @Override
-    public void onDowngrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
-        super.onUpgrade(sQLiteDatabase, i, i2);
+    public void onDowngrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+        super.onUpgrade(sqLiteDatabase, i, i2);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
-        if (i2 == 71 ? tryUpgradeTo71(sQLiteDatabase, i) : false) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+        if (i2 == 71 ? tryUpgradeTo71(sqLiteDatabase, i) : false) {
             Debug.Printf("Database upgrade success.", new Object[0]);
         } else {
             Debug.Printf("Database upgrade failed, recreating.", new Object[0]);
-            super.onUpgrade(sQLiteDatabase, i, i2);
+            super.onUpgrade(sqLiteDatabase, i, i2);
         }
     }
 }

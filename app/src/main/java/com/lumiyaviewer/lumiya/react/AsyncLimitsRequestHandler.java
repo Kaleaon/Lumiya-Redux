@@ -8,11 +8,11 @@ public class AsyncLimitsRequestHandler<K> extends AsyncRequestHandler<K> impleme
     private final int maxRequests;
     private final long requestTimeout;
 
-    public AsyncLimitsRequestHandler(@Nonnull Executor executor, @Nonnull RequestHandler<K> requestHandler, boolean z, int i, long j) {
+    public AsyncLimitsRequestHandler(@Nonnull Executor executor, @Nonnull RequestHandler<K> requestHandler, boolean isCancellable, int maxRequests, long requestTimeout) {
         super(executor, requestHandler);
-        this.isCancellable = z;
-        this.maxRequests = i;
-        this.requestTimeout = j;
+        this.isCancellable = isCancellable;
+        this.maxRequests = maxRequests;
+        this.requestTimeout = requestTimeout;
     }
 
     @Override

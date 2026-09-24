@@ -43,8 +43,8 @@ public class MoneyTransferBackend extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleMoneyTransferBackend(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleMoneyTransferBackend(this);
     }
 
     @Override

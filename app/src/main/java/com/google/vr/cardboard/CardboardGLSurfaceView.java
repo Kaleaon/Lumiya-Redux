@@ -96,9 +96,9 @@ public class CardboardGLSurfaceView extends GvrSurfaceView {
     }
 
     @Override
-    public void setEGLContextClientVersion(int i) {
-        super.setEGLContextClientVersion(i);
-        this.eglFactory.setEGLContextClientVersion(i);
+    public void setEGLContextClientVersion(int eglContextClientVersion) {
+        super.setEGLContextClientVersion(eglContextClientVersion);
+        this.eglFactory.setEGLContextClientVersion(eglContextClientVersion);
     }
 
     @Override

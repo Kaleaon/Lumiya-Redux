@@ -91,10 +91,10 @@ public final class SLChatScriptDialog extends SLChatDialogEvent {
         this.buttons = strArr;
     }
 
-    public SLChatScriptDialog(ScriptDialog scriptDialog, @Nonnull UUID uuid, String[] strArr) {
+    public SLChatScriptDialog(ScriptDialog scriptDialog, @Nonnull UUID uuid, String[] buttons) {
         super(scriptDialog, uuid);
         this.selectedOption = null;
-        this.buttons = strArr;
+        this.buttons = buttons;
     }
 
     @Override

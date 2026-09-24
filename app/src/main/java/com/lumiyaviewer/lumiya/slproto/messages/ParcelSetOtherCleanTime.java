@@ -40,8 +40,8 @@ public class ParcelSetOtherCleanTime extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleParcelSetOtherCleanTime(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleParcelSetOtherCleanTime(this);
     }
 
     @Override

@@ -10,8 +10,8 @@ public class BitBuffer {
     private int bytePos = 0;
     private int bitPos = 0;
 
-    public BitBuffer(byte[] bArr) {
-        this.buf = ByteBuffer.wrap(bArr);
+    public BitBuffer(byte[] bytes) {
+        this.buf = ByteBuffer.wrap(bytes);
     }
 
     public int getBits(int i) {
@@ -28,11 +28,11 @@ public class BitBuffer {
                 i2 = 0;
             }
             while (i5 > 0) {
-                byte[] bArr = this.output;
-                bArr[i4] = (byte) (bArr[i4] << 1);
+                byte[] output = this.output;
+                output[i4] = (byte) (output[i4] << 1);
                 if ((this.buf.get(this.bytePos) & (128 >> this.bitPos)) != 0) {
-                    byte[] bArr2 = this.output;
-                    bArr2[i4] = (byte) (bArr2[i4] | 1);
+                    byte[] output2 = this.output;
+                    output2[i4] = (byte) (output2[i4] | 1);
                 }
                 this.bitPos++;
                 i5--;

@@ -32,8 +32,8 @@ public class AttachedSoundGainChange extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAttachedSoundGainChange(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAttachedSoundGainChange(this);
     }
 
     @Override

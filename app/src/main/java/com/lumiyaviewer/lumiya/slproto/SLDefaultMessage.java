@@ -10,8 +10,8 @@ public class SLDefaultMessage extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.DefaultMessageHandler(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.DefaultMessageHandler(this);
     }
 
     @Override

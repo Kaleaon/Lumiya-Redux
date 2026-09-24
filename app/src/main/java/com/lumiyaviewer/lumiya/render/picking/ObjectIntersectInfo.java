@@ -7,9 +7,9 @@ public class ObjectIntersectInfo {
     public final SLObjectInfo objInfo;
     public final float pickDepth;
 
-    public ObjectIntersectInfo(IntersectInfo intersectInfo, SLObjectInfo sLObjectInfo, float f) {
+    public ObjectIntersectInfo(IntersectInfo intersectInfo, SLObjectInfo objectInfo, float pickDepth) {
         this.intersectInfo = intersectInfo;
-        this.objInfo = sLObjectInfo;
-        this.pickDepth = f;
+        this.objInfo = objectInfo;
+        this.pickDepth = pickDepth;
     }
 }

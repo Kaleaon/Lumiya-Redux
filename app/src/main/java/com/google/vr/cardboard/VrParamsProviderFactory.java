@@ -19,9 +19,9 @@ public final class VrParamsProviderFactory {
         public final String authority;
         public final ContentProviderClient client;
 
-        ContentProviderClientHandle(ContentProviderClient contentProviderClient, String str) {
+        ContentProviderClientHandle(ContentProviderClient contentProviderClient, String authority) {
             this.client = contentProviderClient;
-            this.authority = str;
+            this.authority = authority;
         }
     }
 
@@ -64,10 +64,10 @@ public final class VrParamsProviderFactory {
     public static ContentProviderClientHandle tryToGetContentProviderClientHandle(Context context) {
         List<String> validContentProviderAuthorities = getValidContentProviderAuthorities(context);
         if (validContentProviderAuthorities != null) {
-            for (String str : validContentProviderAuthorities) {
-                ContentProviderClient acquireContentProviderClient = context.getContentResolver().acquireContentProviderClient(str);
+            for (String validContentProviderAuthority : validContentProviderAuthorities) {
+                ContentProviderClient acquireContentProviderClient = context.getContentResolver().acquireContentProviderClient(validContentProviderAuthority);
                 if (acquireContentProviderClient != null) {
-                    return new ContentProviderClientHandle(acquireContentProviderClient, str);
+                    return new ContentProviderClientHandle(acquireContentProviderClient, validContentProviderAuthority);
                 }
             }
         }

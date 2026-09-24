@@ -45,8 +45,8 @@ public class AvatarSitResponse extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarSitResponse(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarSitResponse(this);
     }
 
     @Override

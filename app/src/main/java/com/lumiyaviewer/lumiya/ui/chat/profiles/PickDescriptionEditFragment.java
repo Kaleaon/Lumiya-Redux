@@ -64,12 +64,12 @@ public class PickDescriptionEditFragment extends TextFieldEditFragment {
     }
 
     @Override
-    protected void saveEditedText(SLAgentCircuit sLAgentCircuit, ChatterID chatterID, String str) {
+    protected void saveEditedText(SLAgentCircuit agentCircuit, ChatterID chatterID, String str) {
         AvatarPickKey pickKey = getPickKey();
         PickInfoReply data = this.pickInfo.getData();
-        if (sLAgentCircuit == null || pickKey == null || data == null) {
+        if (agentCircuit == null || pickKey == null || data == null) {
             return;
         }
-        sLAgentCircuit.getModules().userProfiles.UpdatePickInfo(pickKey.pickID, data.Data_Field.CreatorID, data.Data_Field.ParcelID, SLMessage.stringFromVariableOEM(data.Data_Field.Name), str, data.Data_Field.SnapshotID, data.Data_Field.PosGlobal, data.Data_Field.SortOrder, data.Data_Field.Enabled);
+        agentCircuit.getModules().userProfiles.UpdatePickInfo(pickKey.pickID, data.Data_Field.CreatorID, data.Data_Field.ParcelID, SLMessage.stringFromVariableOEM(data.Data_Field.Name), str, data.Data_Field.SnapshotID, data.Data_Field.PosGlobal, data.Data_Field.SortOrder, data.Data_Field.Enabled);
     }
 }

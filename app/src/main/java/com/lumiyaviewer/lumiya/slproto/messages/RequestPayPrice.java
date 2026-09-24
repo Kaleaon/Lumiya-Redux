@@ -30,8 +30,8 @@ public class RequestPayPrice extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestPayPrice(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestPayPrice(this);
     }
 
     @Override

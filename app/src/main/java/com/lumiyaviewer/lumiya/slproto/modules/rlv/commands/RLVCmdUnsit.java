@@ -10,7 +10,7 @@ public class RLVCmdUnsit extends RLVCmdGenericRestriction {
     }
 
     @Override
-    protected void HandleForce(RLVController rLVController, UUID uuid, String str) {
-        rLVController.getModules().avatarControl.ForceStand();
+    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
+        rlvController.getModules().avatarControl.ForceStand();
     }
 }

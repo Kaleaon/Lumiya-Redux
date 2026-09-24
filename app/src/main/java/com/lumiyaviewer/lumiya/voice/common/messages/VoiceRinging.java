@@ -32,8 +32,8 @@ public class VoiceRinging implements VoicePluginMessage {
         this.agentUUID = string != null ? UUID.fromString(string) : null;
     }
 
-    public VoiceRinging(@Nonnull String str, VoiceChannelInfo voiceChannelInfo, @Nullable UUID uuid) {
-        this.sessionHandle = str;
+    public VoiceRinging(@Nonnull String sessionHandle, VoiceChannelInfo voiceChannelInfo, @Nullable UUID uuid) {
+        this.sessionHandle = sessionHandle;
         this.voiceChannelInfo = voiceChannelInfo;
         this.agentUUID = uuid;
     }

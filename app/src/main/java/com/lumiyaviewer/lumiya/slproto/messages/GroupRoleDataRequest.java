@@ -39,8 +39,8 @@ public class GroupRoleDataRequest extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupRoleDataRequest(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupRoleDataRequest(this);
     }
 
     @Override

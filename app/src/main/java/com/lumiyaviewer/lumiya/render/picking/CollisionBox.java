@@ -28,13 +28,13 @@ public class CollisionBox {
 
     private void addCollisionFace(int i, float f, float f2, float f3, float f4, float f5, int i2) {
         int i3 = i * 2 * 3;
-        LLVector3[] lLVector3Arr = {getCollisionVertex(f, f2, f5, i2), getCollisionVertex(f3, f2, f5, i2), getCollisionVertex(f3, f4, f5, i2), getCollisionVertex(f, f4, f5, i2)};
-        this.vertices[i3 + 0] = lLVector3Arr[0];
-        this.vertices[i3 + 1] = lLVector3Arr[1];
-        this.vertices[i3 + 2] = lLVector3Arr[3];
-        this.vertices[i3 + 3] = lLVector3Arr[1];
-        this.vertices[i3 + 4] = lLVector3Arr[2];
-        this.vertices[i3 + 5] = lLVector3Arr[3];
+        LLVector3[] vector3s = {getCollisionVertex(f, f2, f5, i2), getCollisionVertex(f3, f2, f5, i2), getCollisionVertex(f3, f4, f5, i2), getCollisionVertex(f, f4, f5, i2)};
+        this.vertices[i3 + 0] = vector3s[0];
+        this.vertices[i3 + 1] = vector3s[1];
+        this.vertices[i3 + 2] = vector3s[3];
+        this.vertices[i3 + 3] = vector3s[1];
+        this.vertices[i3 + 4] = vector3s[2];
+        this.vertices[i3 + 5] = vector3s[3];
     }
 
     private LLVector3 getCollisionVertex(float f, float f2, float f3, int i) {

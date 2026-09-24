@@ -39,8 +39,8 @@ public class SetSimPresenceInDatabase extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSetSimPresenceInDatabase(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSetSimPresenceInDatabase(this);
     }
 
     @Override

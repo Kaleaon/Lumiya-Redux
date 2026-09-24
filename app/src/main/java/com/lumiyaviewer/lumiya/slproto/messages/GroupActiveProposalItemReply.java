@@ -66,8 +66,8 @@ public class GroupActiveProposalItemReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleGroupActiveProposalItemReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleGroupActiveProposalItemReply(this);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class GroupActiveProposalItemReply extends SLMessage {
         this.TransactionData_Field.TransactionID = unpackUUID(byteBuffer);
         this.TransactionData_Field.TotalNumItems = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             ProposalData proposalData = new ProposalData();
             proposalData.VoteID = unpackUUID(byteBuffer);
             proposalData.VoteInitiator = unpackUUID(byteBuffer);

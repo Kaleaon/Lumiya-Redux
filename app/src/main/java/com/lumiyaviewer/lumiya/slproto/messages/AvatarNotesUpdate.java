@@ -40,8 +40,8 @@ public class AvatarNotesUpdate extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleAvatarNotesUpdate(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleAvatarNotesUpdate(this);
     }
 
     @Override

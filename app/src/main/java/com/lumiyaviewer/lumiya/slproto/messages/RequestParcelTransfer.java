@@ -51,8 +51,8 @@ public class RequestParcelTransfer extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestParcelTransfer(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestParcelTransfer(this);
     }
 
     @Override

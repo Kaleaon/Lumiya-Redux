@@ -13,22 +13,22 @@ public class VertexArray {
         this.texCoords = new Vector2Array(i);
     }
 
-    public void LerpPlanarVertex(int i, VertexArray vertexArray, int i2, VertexArray vertexArray2, int i3, VertexArray vertexArray3, int i4, float f, float f2, LLVector3 lLVector3, LLVector3 lLVector32, LLVector2 lLVector2, LLVector2 lLVector22) {
-        vertexArray2.vertices.getSub(i3, vertexArray.vertices, i2, lLVector3);
-        lLVector3.mul(f);
-        vertexArray3.vertices.getSub(i4, vertexArray.vertices, i2, lLVector32);
-        lLVector32.mul(f2);
-        lLVector32.add(lLVector3);
-        vertexArray.vertices.addToVector(i2, lLVector32);
-        this.vertices.set(i, lLVector32);
+    public void LerpPlanarVertex(int i, VertexArray vertexArray, int i2, VertexArray vertexArray2, int i3, VertexArray vertexArray3, int i4, float f, float f2, LLVector3 vector3, LLVector3 vector33, LLVector2 vector2, LLVector2 vector23) {
+        vertexArray2.vertices.getSub(i3, vertexArray.vertices, i2, vector3);
+        vector3.mul(f);
+        vertexArray3.vertices.getSub(i4, vertexArray.vertices, i2, vector33);
+        vector33.mul(f2);
+        vector33.add(vector3);
+        vertexArray.vertices.addToVector(i2, vector33);
+        this.vertices.set(i, vector33);
         this.normals.set(i, vertexArray.normals, i2);
-        vertexArray2.texCoords.getSub(i3, vertexArray.texCoords, i2, lLVector2);
-        lLVector2.mul(f);
-        vertexArray3.texCoords.getSub(i4, vertexArray.texCoords, i2, lLVector22);
-        lLVector22.mul(f2);
-        lLVector22.add(lLVector2);
-        vertexArray.texCoords.addToVector(i2, lLVector22);
-        this.texCoords.set(i, lLVector22.x, lLVector22.y);
+        vertexArray2.texCoords.getSub(i3, vertexArray.texCoords, i2, vector2);
+        vector2.mul(f);
+        vertexArray3.texCoords.getSub(i4, vertexArray.texCoords, i2, vector23);
+        vector23.mul(f2);
+        vector23.add(vector2);
+        vertexArray.texCoords.addToVector(i2, vector23);
+        this.texCoords.set(i, vector23.x, vector23.y);
     }
 
     public float[] getData() {

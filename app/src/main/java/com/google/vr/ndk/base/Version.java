@@ -12,10 +12,10 @@ public final class Version {
     public static final String TAG = BuildConstants.class.getSimpleName();
     public static final Version CURRENT = parse("1.10.0");
 
-    public Version(int i, int i2, int i3) {
-        this.majorVersion = i;
-        this.minorVersion = i2;
-        this.patchVersion = i3;
+    public Version(int majorVersion, int minorVersion, int patchVersion) {
+        this.majorVersion = majorVersion;
+        this.minorVersion = minorVersion;
+        this.patchVersion = patchVersion;
     }
 
     public static Version parse(String str) {

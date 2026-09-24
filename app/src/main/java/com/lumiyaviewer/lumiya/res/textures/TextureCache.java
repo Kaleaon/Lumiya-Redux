@@ -277,17 +277,17 @@ public class TextureCache extends ResourceMemoryCache<DrawableTextureParams, Ope
         }
     }
 
-    public void setFetcher(SLTextureFetcher sLTextureFetcher) {
-        this.textureCompressedCache.setFetcher(sLTextureFetcher);
+    public void setFetcher(SLTextureFetcher textureFetcher) {
+        this.textureCompressedCache.setFetcher(textureFetcher);
     }
 
-    public void setMaxTextureDownloads(int i) {
-        this.textureCompressedCache.setMaxTextureDownloads(i);
+    public void setMaxTextureDownloads(int maxTextureDownloads) {
+        this.textureCompressedCache.setMaxTextureDownloads(maxTextureDownloads);
     }
 
-    public void setTextureMemoryState(boolean z) {
-        if (this.isLowMemory.getAndSet(z) != z) {
-            if (z) {
+    public void setTextureMemoryState(boolean textureMemoryState) {
+        if (this.isLowMemory.getAndSet(textureMemoryState) != textureMemoryState) {
+            if (textureMemoryState) {
                 this.memoryAwareExecutor.pause();
             } else {
                 this.memoryAwareExecutor.unpause();

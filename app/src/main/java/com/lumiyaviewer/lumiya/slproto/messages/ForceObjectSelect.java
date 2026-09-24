@@ -40,8 +40,8 @@ public class ForceObjectSelect extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleForceObjectSelect(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleForceObjectSelect(this);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ForceObjectSelect extends SLMessage {
     public void UnpackPayload(ByteBuffer byteBuffer) {
         this.Header_Field.ResetList = unpackBoolean(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Data data = new Data();
             data.LocalID = unpackInt(byteBuffer);
             this.Data_Fields.add(data);

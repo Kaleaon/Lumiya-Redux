@@ -39,8 +39,8 @@ public class SoundTrigger extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSoundTrigger(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSoundTrigger(this);
     }
 
     @Override

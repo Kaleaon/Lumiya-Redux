@@ -14,51 +14,51 @@ public class MutableEglConfigChooser implements GLSurfaceView.EGLConfigChooser {
         this.forceMutableBuffer = true;
     }
 
-    public MutableEglConfigChooser(boolean z) {
+    public MutableEglConfigChooser(boolean forceMutableBuffer) {
         this.forceMutableBuffer = true;
-        this.forceMutableBuffer = z;
+        this.forceMutableBuffer = forceMutableBuffer;
     }
 
-    private static EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig[] eGLConfigArr, boolean z) {
-        for (EGLConfig eGLConfig : eGLConfigArr) {
-            int findConfigAttrib = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12325, 0);
-            int findConfigAttrib2 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12326, 0);
-            int findConfigAttrib3 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12324, 0);
-            int findConfigAttrib4 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12323, 0);
-            int findConfigAttrib5 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12322, 0);
-            int findConfigAttrib6 = findConfigAttrib(egl10, eGLDisplay, eGLConfig, 12339, 0);
-            if (findConfigAttrib3 == 8 && findConfigAttrib4 == 8 && findConfigAttrib5 == 8 && findConfigAttrib == 0 && findConfigAttrib2 == 0 && !(z && (findConfigAttrib6 & 4096) == 0)) {
-                return eGLConfig;
+    private static EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig[] eglConfigs, boolean z) {
+        for (EGLConfig eglConfig : eglConfigs) {
+            int findConfigAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12325, 0);
+            int configAttrib = findConfigAttrib(egL10, eglDisplay, eglConfig, 12326, 0);
+            int configAttrib2 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12324, 0);
+            int configAttrib3 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12323, 0);
+            int configAttrib4 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12322, 0);
+            int configAttrib5 = findConfigAttrib(egL10, eglDisplay, eglConfig, 12339, 0);
+            if (configAttrib2 == 8 && configAttrib3 == 8 && configAttrib4 == 8 && findConfigAttrib == 0 && configAttrib == 0 && !(z && (configAttrib5 & 4096) == 0)) {
+                return eglConfig;
             }
         }
         return null;
     }
 
-    private static int findConfigAttrib(EGL10 egl10, EGLDisplay eGLDisplay, EGLConfig eGLConfig, int i, int i2) {
-        int[] iArr = new int[1];
-        return !egl10.eglGetConfigAttrib(eGLDisplay, eGLConfig, i, iArr) ? i2 : iArr[0];
+    private static int findConfigAttrib(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig, int i, int i2) {
+        int[] ints = new int[1];
+        return !egL10.eglGetConfigAttrib(eglDisplay, eglConfig, i, ints) ? i2 : ints[0];
     }
 
     @Override
-    public EGLConfig chooseConfig(EGL10 egl10, EGLDisplay eGLDisplay) {
-        int[] iArr = {12324, 8, 12323, 8, 12322, 8, 12321, 0, 12325, 0, 12326, 0, 12352, 64, 12339, 4100, 12344};
-        int[] iArr2 = new int[1];
-        if (!egl10.eglChooseConfig(eGLDisplay, iArr, null, 0, iArr2) && this.forceMutableBuffer) {
+    public EGLConfig chooseConfig(EGL10 egL10, EGLDisplay eglDisplay) {
+        int[] ints = {12324, 8, 12323, 8, 12322, 8, 12321, 0, 12325, 0, 12326, 0, 12352, 64, 12339, 4100, 12344};
+        int[] ints2 = new int[1];
+        if (!egL10.eglChooseConfig(eglDisplay, ints, null, 0, ints2) && this.forceMutableBuffer) {
             throw new IllegalArgumentException("eglChooseConfig failed");
         }
-        iArr[15] = 4;
-        if (!egl10.eglChooseConfig(eGLDisplay, iArr, null, 0, iArr2)) {
+        ints[15] = 4;
+        if (!egL10.eglChooseConfig(eglDisplay, ints, null, 0, ints2)) {
             throw new IllegalArgumentException("eglChooseConfig failed");
         }
-        int i = iArr2[0];
+        int i = ints2[0];
         if (i <= 0) {
             throw new IllegalArgumentException("No configs match configSpec");
         }
-        EGLConfig[] eGLConfigArr = new EGLConfig[i];
-        if (!egl10.eglChooseConfig(eGLDisplay, iArr, eGLConfigArr, i, iArr2)) {
+        EGLConfig[] eglConfigs = new EGLConfig[i];
+        if (!egL10.eglChooseConfig(eglDisplay, ints, eglConfigs, i, ints2)) {
             throw new IllegalArgumentException("eglChooseConfig#2 failed");
         }
-        EGLConfig chooseConfig = chooseConfig(egl10, eGLDisplay, eGLConfigArr, this.forceMutableBuffer);
+        EGLConfig chooseConfig = chooseConfig(egL10, eglDisplay, eglConfigs, this.forceMutableBuffer);
         if (chooseConfig != null) {
             return chooseConfig;
         }

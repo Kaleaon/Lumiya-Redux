@@ -30,8 +30,8 @@ public class EdgeDataPacket extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEdgeDataPacket(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEdgeDataPacket(this);
     }
 
     @Override

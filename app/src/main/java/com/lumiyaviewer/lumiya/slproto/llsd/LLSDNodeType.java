@@ -27,8 +27,8 @@ public enum LLSDNodeType {
         }
     }
 
-    LLSDNodeType(String str) {
-        this.tagName = str;
+    LLSDNodeType(String tagName) {
+        this.tagName = tagName;
     }
 
     public static LLSDNodeType byTag(String str) {

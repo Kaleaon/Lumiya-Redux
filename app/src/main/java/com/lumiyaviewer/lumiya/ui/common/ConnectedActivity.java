@@ -159,15 +159,15 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
     }
 
     @EventHandler
-    public void handleConnectionStateChangedEvent(SLConnectionStateChangedEvent sLConnectionStateChangedEvent) {
+    public void handleConnectionStateChangedEvent(SLConnectionStateChangedEvent connectionStateChangedEvent) {
         updateConnectionStatus();
     }
 
     @EventHandler
-    public void handleDisconnectEvent(SLDisconnectEvent sLDisconnectEvent) {
+    public void handleDisconnectEvent(SLDisconnectEvent disconnectEvent) {
         if (handleConnectionEvents()) {
-            Debug.Printf("ConnectedActivity: disconnect event, normalDisconnect %b", Boolean.valueOf(sLDisconnectEvent.normalDisconnect));
-            if (!sLDisconnectEvent.normalDisconnect) {
+            Debug.Printf("ConnectedActivity: disconnect event, normalDisconnect %b", Boolean.valueOf(disconnectEvent.normalDisconnect));
+            if (!disconnectEvent.normalDisconnect) {
                 updateConnectionStatus();
                 return;
             }
@@ -260,7 +260,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
     }
 
     @Override
-    public void onNewObjectPopup(SLChatEvent sLChatEvent) {
+    public void onNewObjectPopup(SLChatEvent chatEvent) {
         UUID activeAgentID;
         if (findViewById(R.id.object_popups_container) == null || (activeAgentID = ActivityUtils.getActiveAgentID(getIntent())) == null) {
             return;
@@ -269,10 +269,10 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
         if (this.objectPopupsDisplayed) {
             UserManager userManager = UserManager.getUserManager(activeAgentID);
             if (userManager != null) {
-                userManager.getObjectPopupsManager().dismissDisplayedObjectPopup(sLChatEvent);
+                userManager.getObjectPopupsManager().dismissDisplayedObjectPopup(chatEvent);
                 return;
             }
-        } else if (this.singleObjectPopupsDisplayed && sLChatEvent == null) {
+        } else if (this.singleObjectPopupsDisplayed && chatEvent == null) {
             this.singleObjectPopupsDisplayed = false;
             Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.object_popups_container);
             if (findFragmentById != null) {
@@ -282,7 +282,7 @@ public class ConnectedActivity extends ThemedActivity implements ObjectPopupsAct
                 beginTransaction.commit();
             }
         }
-        if (sLChatEvent != null) {
+        if (chatEvent != null) {
             this.singleObjectPopupsDisplayed = true;
             this.objectPopupsDisplayed = false;
             FragmentTransaction beginTransaction2 = supportFragmentManager.beginTransaction();

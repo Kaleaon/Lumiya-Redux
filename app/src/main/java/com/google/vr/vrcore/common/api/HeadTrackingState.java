@@ -29,9 +29,9 @@ public class HeadTrackingState implements Parcelable {
         readFromParcel(parcel);
     }
 
-    public HeadTrackingState(byte[] bArr) {
+    public HeadTrackingState(byte[] bytes) {
         this.data = new byte[0];
-        this.data = bArr;
+        this.data = bytes;
     }
 
     public void clear() {
@@ -78,8 +78,8 @@ public class HeadTrackingState implements Parcelable {
         parcel.readByteArray(this.data);
     }
 
-    public void setData(byte[] bArr) {
-        this.data = bArr;
+    public void setData(byte[] bytes) {
+        this.data = bytes;
     }
 
     public String toString() {

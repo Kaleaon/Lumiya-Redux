@@ -9,8 +9,8 @@ public enum MuteType {
 
     private int viewOrder;
 
-    MuteType(int i) {
-        this.viewOrder = i;
+    MuteType(int viewOrder) {
+        this.viewOrder = viewOrder;
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

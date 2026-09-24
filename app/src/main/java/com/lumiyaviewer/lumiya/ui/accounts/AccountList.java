@@ -85,12 +85,12 @@ public class AccountList {
             this.GridUUID = uuid;
         }
 
-        public void setLoginName(String str) {
-            this.LoginName = str;
+        public void setLoginName(String loginName) {
+            this.LoginName = loginName;
         }
 
-        public void setPasswordHash(String str) {
-            this.PasswordHash = str;
+        public void setPasswordHash(String passwordHash) {
+            this.PasswordHash = passwordHash;
         }
 
         @Override
@@ -155,8 +155,8 @@ public class AccountList {
         this.accounts.clear();
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context.getApplicationContext());
         int i = defaultSharedPreferences.getInt("accounts_count", 0);
-        for (int i2 = 0; i2 < i; i2++) {
-            this.accounts.add(new AccountInfo(defaultSharedPreferences, "account_" + i2));
+        for (int j = 0; j < i; j++) {
+            this.accounts.add(new AccountInfo(defaultSharedPreferences, "account_" + j));
         }
     }
 

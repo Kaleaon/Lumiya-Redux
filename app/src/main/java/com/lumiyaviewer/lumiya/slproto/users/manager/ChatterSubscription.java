@@ -69,9 +69,9 @@ class ChatterSubscription {
     }
 
     void setChatterDisplayData(@Nonnull ChatterDisplayData chatterDisplayData) {
-        ChatterDisplayData chatterDisplayData2 = this.displayData;
+        ChatterDisplayData displayData = this.displayData;
         this.displayData = chatterDisplayData;
-        this.chatterList.replaceChatter(chatterDisplayData2, this.displayData);
+        this.chatterList.replaceChatter(displayData, this.displayData);
     }
 
     public void unsubscribe() {

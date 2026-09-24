@@ -47,8 +47,8 @@ public class EjectGroupMemberReply extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleEjectGroupMemberReply(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleEjectGroupMemberReply(this);
     }
 
     @Override

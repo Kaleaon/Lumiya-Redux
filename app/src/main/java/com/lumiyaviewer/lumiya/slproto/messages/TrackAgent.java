@@ -39,8 +39,8 @@ public class TrackAgent extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleTrackAgent(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleTrackAgent(this);
     }
 
     @Override

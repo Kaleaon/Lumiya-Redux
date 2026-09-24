@@ -44,8 +44,8 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         void onLoadableDataChanged();
     }
 
-    public LoadableMonitor(Loadable... loadableArr) {
-        Collections.addAll(this.loadables, loadableArr);
+    public LoadableMonitor(Loadable... loadable) {
+        Collections.addAll(this.loadables, loadable);
         Iterator<Loadable> it = this.loadables.iterator();
         while (it.hasNext()) {
             ((Loadable) it.next()).addLoadableStatusListener(this);
@@ -117,29 +117,29 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         }
     }
 
-    public void setButteryProgressBar(boolean z) {
+    public void setButteryProgressBar(boolean butteryProgressBar) {
         if (this.loadingLayout != null) {
-            this.loadingLayout.setButteryProgressBar(z);
+            this.loadingLayout.setButteryProgressBar(butteryProgressBar);
         }
     }
 
-    public void setEmptyMessage(boolean z, @Nullable String str) {
+    public void setEmptyMessage(boolean z, @Nullable String emptyMessage) {
         if (!z) {
-            str = null;
+            emptyMessage = null;
         }
-        this.emptyMessage = str;
+        this.emptyMessage = emptyMessage;
         updateLoadingIndicator();
     }
 
-    public void setExtraLoading(boolean z) {
-        this.isExtraLoading = z;
+    public void setExtraLoading(boolean isExtraLoading) {
+        this.isExtraLoading = isExtraLoading;
         onLoadableStatusChange(null, null);
     }
 
-    public void setLoadingLayout(@Nullable LoadingLayout loadingLayout, @Nullable String str, @Nullable String str2) {
+    public void setLoadingLayout(@Nullable LoadingLayout loadingLayout, @Nullable String loadingIdleMessage, @Nullable String loadingErrorMessage) {
         this.loadingLayout = loadingLayout;
-        this.loadingIdleMessage = str;
-        this.loadingErrorMessage = str2;
+        this.loadingIdleMessage = loadingIdleMessage;
+        this.loadingErrorMessage = loadingErrorMessage;
         updateLoadingIndicator();
     }
 
@@ -168,9 +168,9 @@ public class LoadableMonitor implements Loadable.LoadableStatusListener, SwipeRe
         return this;
     }
 
-    public LoadableMonitor withOptionalLoadables(Loadable... loadableArr) {
-        Collections.addAll(this.optionalLoadables, loadableArr);
-        for (Loadable loadable : loadableArr) {
+    public LoadableMonitor withOptionalLoadables(Loadable... loadable2) {
+        Collections.addAll(this.optionalLoadables, loadable2);
+        for (Loadable loadable : loadable2) {
             loadable.addLoadableStatusListener(this);
         }
         return this;

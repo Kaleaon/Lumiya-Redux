@@ -55,8 +55,8 @@ public class SimStats extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleSimStats(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleSimStats(this);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class SimStats extends SLMessage {
         this.Region_Field.RegionFlags = unpackInt(byteBuffer);
         this.Region_Field.ObjectCapacity = unpackInt(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             Stat stat = new Stat();
             stat.StatID = unpackInt(byteBuffer);
             stat.StatValue = unpackFloat(byteBuffer);
@@ -97,7 +97,7 @@ public class SimStats extends SLMessage {
         }
         this.PidStat_Field.PID = unpackInt(byteBuffer);
         int i3 = byteBuffer.get() & 0xFF;
-        for (int i4 = 0; i4 < i3; i4++) {
+        for (int k = 0; k < i3; k++) {
             RegionInfo regionInfo = new RegionInfo();
             regionInfo.RegionFlagsExtended = unpackLong(byteBuffer);
             this.RegionInfo_Fields.add(regionInfo);

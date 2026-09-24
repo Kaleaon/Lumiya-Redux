@@ -41,8 +41,8 @@ public class RequestGodlikePowers extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRequestGodlikePowers(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRequestGodlikePowers(this);
     }
 
     @Override

@@ -33,8 +33,8 @@ public class ChildAgentAlive extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleChildAgentAlive(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleChildAgentAlive(this);
     }
 
     @Override

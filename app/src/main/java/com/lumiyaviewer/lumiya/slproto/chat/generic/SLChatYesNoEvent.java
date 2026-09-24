@@ -58,13 +58,13 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
             chatYesNoEventViewHolder.setEvent(this);
             TextView textView = chatYesNoEventViewHolder.questionMsg;
             Button button = chatYesNoEventViewHolder.yesButton;
-            Button button2 = chatYesNoEventViewHolder.noButton;
+            Button noButton = chatYesNoEventViewHolder.noButton;
             CardView cardView = chatYesNoEventViewHolder.cardView;
             switch (this.eventState) {
                 case EventAccepted:
                     textView.setText(getYesMessage(textView.getContext()));
                     button.setVisibility(View.GONE);
-                    button2.setVisibility(View.GONE);
+                    noButton.setVisibility(View.GONE);
                     if (getYesMessage(textView.getContext()).equals("")) {
                         textView.setVisibility(View.GONE);
                     } else {
@@ -75,7 +75,7 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
                 case EventCancelled:
                     textView.setText(getNoMessage(textView.getContext()));
                     button.setVisibility(View.GONE);
-                    button2.setVisibility(View.GONE);
+                    noButton.setVisibility(View.GONE);
                     if (getNoMessage(textView.getContext()).equals("")) {
                         textView.setVisibility(View.GONE);
                     } else {
@@ -87,9 +87,9 @@ public abstract class SLChatYesNoEvent extends SLChatTextEvent {
                     textView.setText(getQuestion(textView.getContext()));
                     textView.setVisibility(View.VISIBLE);
                     button.setVisibility(View.VISIBLE);
-                    button2.setVisibility(View.VISIBLE);
+                    noButton.setVisibility(View.VISIBLE);
                     button.setText(getYesButton(button.getContext()));
-                    button2.setText(getNoButton(button2.getContext()));
+                    noButton.setText(getNoButton(noButton.getContext()));
                     chatYesNoEventViewHolder.makeCardViewEnabled();
                     break;
             }

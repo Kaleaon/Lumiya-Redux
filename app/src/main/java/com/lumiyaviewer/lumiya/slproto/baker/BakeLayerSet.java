@@ -10,12 +10,12 @@ public class BakeLayerSet {
     public BakeLayer[] maskLayers;
     public int width;
 
-    public BakeLayerSet(BakedTextureIndex bakedTextureIndex, int i, int i2, boolean z, BakeLayer[] bakeLayerArr, BakeLayer[] bakeLayerArr2) {
+    public BakeLayerSet(BakedTextureIndex bakedTextureIndex, int width, int height, boolean z, BakeLayer[] bakeLayerArr, BakeLayer[] bakeLayers) {
         this.bakedTextureIndex = bakedTextureIndex;
-        this.width = i;
-        this.height = i2;
+        this.width = width;
+        this.height = height;
         this.clear_alpha = z;
         this.layers = bakeLayerArr;
-        this.maskLayers = bakeLayerArr2;
+        this.maskLayers = bakeLayers;
     }
 }

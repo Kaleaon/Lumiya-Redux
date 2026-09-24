@@ -19,9 +19,9 @@ public class ChatMessageSourceObject extends ChatMessageSource {
         this.name = chatMessage.getSenderName();
     }
 
-    public ChatMessageSourceObject(@Nonnull UUID uuid, String str) {
+    public ChatMessageSourceObject(@Nonnull UUID uuid, String name) {
         this.uuid = uuid;
-        this.name = str;
+        this.name = name;
     }
 
     @Override

@@ -40,8 +40,8 @@ public class RemoveInventoryItem extends SLMessage {
     }
 
     @Override
-    public void Handle(SLMessageHandler sLMessageHandler) {
-        sLMessageHandler.HandleRemoveInventoryItem(this);
+    public void Handle(SLMessageHandler messageHandler) {
+        messageHandler.HandleRemoveInventoryItem(this);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class RemoveInventoryItem extends SLMessage {
         this.AgentData_Field.AgentID = unpackUUID(byteBuffer);
         this.AgentData_Field.SessionID = unpackUUID(byteBuffer);
         int i = byteBuffer.get() & 0xFF;
-        for (int i2 = 0; i2 < i; i2++) {
+        for (int j = 0; j < i; j++) {
             InventoryData inventoryData = new InventoryData();
             inventoryData.ItemID = unpackUUID(byteBuffer);
             this.InventoryData_Fields.add(inventoryData);
