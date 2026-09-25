@@ -297,10 +297,11 @@ public class NotecardEditActivity extends ThemedActivity implements SLNotecard.O
 
     @Override
     protected void onActivityResult(int i, int i2, Intent intent) {
+        super.onActivityResult(i, i2, intent);
         SLInventoryEntry sLInventoryEntry;
         switch (i) {
             case 1:
-                if (i2 == -1 && this.editMode && (sLInventoryEntry = (SLInventoryEntry) intent.getParcelableExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)) != null) {
+                if (i2 == RESULT_OK && intent != null && this.editMode && (sLInventoryEntry = (SLInventoryEntry) intent.getParcelableExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)) != null) {
                     Spanned createSingleEditableAttachment = SLNotecard.createSingleEditableAttachment(sLInventoryEntry);
                     EditText editText = (EditText) findViewById(R.id.notecardEditContents);
                     int selectionStart = editText.getSelectionStart();

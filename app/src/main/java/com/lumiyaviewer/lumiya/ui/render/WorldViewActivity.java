@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -1397,8 +1398,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     @Override
     public void onRequestPermissionsResult(int i, @Nonnull String[] strArr, @Nonnull int[] ints) {
+        super.onRequestPermissionsResult(i, strArr, ints);
         Debug.Printf("Cardboard: onRequestPermissionResult, code %d", Integer.valueOf(i));
-        if (i == 100) {
+        if (i == 100 && ints.length > 0 && ints[0] == PackageManager.PERMISSION_GRANTED) {
             startVrActivity(VrIntentContract.VR_RUNTIME_CARDBOARD);
         }
     }
