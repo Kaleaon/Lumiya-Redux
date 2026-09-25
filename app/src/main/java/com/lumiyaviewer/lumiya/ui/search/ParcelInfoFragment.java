@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.databinding.ParcelInfoBinding;
 import com.google.common.base.Strings;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
@@ -39,20 +39,7 @@ import java.util.UUID;
 public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableFragment, LoadableMonitor.OnLoadableDataChangedListener, ChatterNameRetriever.OnChatterNameUpdated {
     private static final String PARCEL_UUID_KEY = "parcelUUID";
 
-    TextView parcelDetailsDescription;
-
-    TextView parcelDetailsName;
-
-    ImageAssetView parcelImageView;
-
-    TextView parcelLocation;
-
-    TextView parcelOwnerName;
-
-    ChatterPicView parcelOwnerPic;
-
-    TextView parcelSimName;
-    private Unbinder unbinder;
+    private ParcelInfoBinding binding;
     private final SubscriptionData<UUID, ParcelInfoReply> parcelInfoReply = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.parcelInfoReply).withDataChangedListener(this);
     private ChatterNameRetriever ownerNameRetriever = null;
@@ -86,34 +73,32 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
 
     @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
-        if ((chatterNameRetriever != this.ownerNameRetriever && chatterNameRetriever != this.ownerGroupNameRetriever) || this.unbinder == null || this.ownerGroupNameRetriever == null || this.ownerNameRetriever == null) {
+        if ((chatterNameRetriever != this.ownerNameRetriever && chatterNameRetriever != this.ownerGroupNameRetriever) || this.binding == null || this.ownerGroupNameRetriever == null || this.ownerNameRetriever == null) {
             return;
         }
         ChatterNameRetriever chatterNameRetriever2 = this.ownerGroupNameRetriever.getResolvedName() != null ? this.ownerGroupNameRetriever : this.ownerNameRetriever;
         String resolvedName = chatterNameRetriever2.getResolvedName();
-        this.parcelOwnerName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
-        this.parcelOwnerPic.setVisibility(View.VISIBLE);
-        this.parcelOwnerPic.setChatterID(chatterNameRetriever2.chatterID, resolvedName);
+        this.binding.parcelOwnerName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
+        this.binding.parcelOwnerPic.setVisibility(View.VISIBLE);
+        this.binding.parcelOwnerPic.setChatterID(chatterNameRetriever2.chatterID, resolvedName);
     }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(R.layout.parcel_info, viewGroup, false);
-        this.unbinder = new ParcelInfoFragment_ViewBinding(this, inflate);
-        this.loadableMonitor.setLoadingLayout((LoadingLayout) inflate.findViewById(R.id.loading_layout), getString(R.string.no_parcel_selected), getString(R.string.failed_to_load_parcel_data));
-        this.loadableMonitor.setSwipeRefreshLayout((SwipeRefreshLayout) inflate.findViewById(R.id.swipe_refresh_layout));
-        this.parcelImageView.setAlignTop(true);
-        this.parcelImageView.setVerticalFit(true);
-        return inflate;
+        this.binding = ParcelInfoBinding.inflate(layoutInflater, viewGroup, false);
+        this.loadableMonitor.setLoadingLayout((LoadingLayout) this.binding.getRoot().findViewById(R.id.loading_layout), getString(R.string.no_parcel_selected), getString(R.string.failed_to_load_parcel_data));
+        this.loadableMonitor.setSwipeRefreshLayout((SwipeRefreshLayout) this.binding.getRoot().findViewById(R.id.swipe_refresh_layout));
+        this.binding.parcelImageView.setAlignTop(true);
+        this.binding.parcelImageView.setVerticalFit(true);
+        this.binding.parcelOwnerProfileButton.setOnClickListener(v -> onParcelOwnerProfileClick());
+        this.binding.parcelTeleportButton.setOnClickListener(v -> onParcelTeleportButton());
+        return this.binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        this.binding = null;
         super.onDestroyView();
     }
 
@@ -122,7 +107,7 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         ParcelInfoReply data = this.parcelInfoReply.getData();
         Debug.Printf("ParcelInfo: loadable data %s", data);
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments());
-        if (this.unbinder == null || data == null || activeAgentID == null) {
+        if (this.binding == null || data == null || activeAgentID == null) {
             return;
         }
         if (this.ownerNameRetriever != null) {
@@ -135,24 +120,24 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
         }
         String stringFromVariableOEM = SLMessage.stringFromVariableOEM(data.Data_Field.Name);
         setTitle(stringFromVariableOEM, null);
-        this.parcelDetailsName.setText(stringFromVariableOEM);
+        this.binding.parcelDetailsName.setText(stringFromVariableOEM);
         String trim = SLMessage.stringFromVariableOEM(data.Data_Field.Desc).trim();
-        TextView textView = this.parcelDetailsDescription;
+        TextView textView = this.binding.parcelDetailsDesc;
         if (Strings.isNullOrEmpty(trim)) {
             trim = getString(R.string.asset_no_description);
         }
         textView.setText(trim);
         Debug.Printf("ParcelInfo: ownerID = %s", data.Data_Field.OwnerID);
         if (UUIDPool.ZeroUUID.equals(data.Data_Field.OwnerID)) {
-            this.parcelOwnerName.setText(R.string.group_owned);
-            this.parcelOwnerPic.setVisibility(View.GONE);
+            this.binding.parcelOwnerName.setText(R.string.group_owned);
+            this.binding.parcelOwnerPic.setVisibility(View.GONE);
         } else {
             this.ownerNameRetriever = new ChatterNameRetriever(ChatterID.getUserChatterID(activeAgentID, data.Data_Field.OwnerID), this, UIThreadExecutor.getSerialInstance());
             this.ownerGroupNameRetriever = new ChatterNameRetriever(ChatterID.getGroupChatterID(activeAgentID, data.Data_Field.OwnerID), this, UIThreadExecutor.getSerialInstance());
         }
-        this.parcelImageView.setAssetID(data.Data_Field.SnapshotID);
-        this.parcelSimName.setText(SLMessage.stringFromVariableOEM(data.Data_Field.SimName));
-        this.parcelLocation.setText(getString(R.string.parcel_location_format, Float.valueOf(data.Data_Field.GlobalX % 256.0f), Float.valueOf(data.Data_Field.GlobalY % 256.0f), Float.valueOf(data.Data_Field.GlobalZ)));
+        this.binding.parcelImageView.setAssetID(data.Data_Field.SnapshotID);
+        this.binding.parcelSimName.setText(SLMessage.stringFromVariableOEM(data.Data_Field.SimName));
+        this.binding.parcelLocation.setText(getString(R.string.parcel_location_format, Float.valueOf(data.Data_Field.GlobalX % 256.0f), Float.valueOf(data.Data_Field.GlobalY % 256.0f), Float.valueOf(data.Data_Field.GlobalZ)));
     }
 
     public void onParcelOwnerProfileClick() {
@@ -217,9 +202,9 @@ public class ParcelInfoFragment extends FragmentWithTitle implements ReloadableF
             this.ownerGroupNameRetriever.dispose();
             this.ownerGroupNameRetriever = null;
         }
-        if (this.unbinder != null) {
-            this.parcelOwnerPic.setChatterID(null, null);
-            this.parcelImageView.setAssetID(null);
+        if (this.binding != null) {
+            this.binding.parcelOwnerPic.setChatterID(null, null);
+            this.binding.parcelImageView.setAssetID(null);
         }
         super.onStop();
     }

@@ -13,8 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.TransactionLogBinding;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -33,11 +33,7 @@ import java.util.UUID;
 
 public class TransactionLogFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, TransactionLogAdapter.OnTransactionClickListener {
     private TransactionLogAdapter adapter;
-
-    LoadingLayout loadingLayout;
-
-    RecyclerView transactionLogView;
-    private Unbinder unbinder;
+    private TransactionLogBinding binding;
     private final SubscriptionData<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactions = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.moneyTransactions).withDataChangedListener(this);
     private boolean scrollToBottomRunnablePosted = false;
@@ -47,8 +43,8 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
         public void run() {
             int itemCount;
             TransactionLogFragment.this.scrollToBottomRunnablePosted = false;
-            if (TransactionLogFragment.this.unbinder != null) {
-                RecyclerView recyclerView = TransactionLogFragment.this.transactionLogView;
+            if (TransactionLogFragment.this.binding != null) {
+                RecyclerView recyclerView = TransactionLogFragment.this.binding.transactionLogView;
                 if (recyclerView.hasPendingAdapterUpdates()) {
                     TransactionLogFragment.this.scrollToBottomRunnablePosted = true;
                     TransactionLogFragment.this.mHandler.post(TransactionLogFragment.this.scrollToBottomRunnable);
@@ -128,20 +124,16 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(R.layout.transaction_log, viewGroup, false);
-        this.unbinder = new TransactionLogFragment_ViewBinding(this, inflate);
+        binding = TransactionLogBinding.inflate(layoutInflater, viewGroup, false);
         this.adapter = new TransactionLogAdapter(getContext(), ActivityUtils.getActiveAgentID(getArguments()), this);
-        this.transactionLogView.setAdapter(this.adapter);
-        this.loadableMonitor.setLoadingLayout(this.loadingLayout, null, getString(R.string.cannot_load_transaction_list));
-        return inflate;
+        binding.transactionLogView.setAdapter(this.adapter);
+        this.loadableMonitor.setLoadingLayout(binding.loadingLayout, null, getString(R.string.cannot_load_transaction_list));
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        binding = null;
         super.onDestroyView();
     }
 

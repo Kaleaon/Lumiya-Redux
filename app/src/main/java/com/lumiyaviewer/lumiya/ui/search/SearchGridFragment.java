@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.databinding.SearchFragmentBinding;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -30,24 +30,18 @@ import java.util.UUID;
 public class SearchGridFragment extends FragmentWithTitle implements LoadableMonitor.OnLoadableDataChangedListener, SearchGridAdapter.OnSearchResultClickListener {
 
     private SearchGridAdapter adapter;
-
-    RadioGroup radioGroupSearchType;
-
-    RecyclerView searchResultsList;
-
-    EditText searchString;
-    private Unbinder unbinder;
+    private SearchFragmentBinding binding;
     private final SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.searchResults).withDataChangedListener(this);
 
     private void beginSearch() {
         SearchGridQuery.SearchType searchType;
         UserManager userManager = ActivityUtils.getUserManager(getArguments());
-        String trim = this.searchString.getText().toString().trim();
+        String trim = this.binding.searchString.getText().toString().trim();
         if (trim.isEmpty() || userManager == null) {
             return;
         }
-        switch (this.radioGroupSearchType.getCheckedRadioButtonId()) {
+        switch (this.binding.radiogroupSearchType.getCheckedRadioButtonId()) {
             case R.id.radio_people:
                 searchType = SearchGridQuery.SearchType.People;
                 break;
@@ -75,18 +69,19 @@ public class SearchGridFragment extends FragmentWithTitle implements LoadableMon
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(R.layout.search_fragment, viewGroup, false);
-        this.unbinder = new SearchGridFragment_ViewBinding(this, inflate);
+        this.binding = SearchFragmentBinding.inflate(layoutInflater, viewGroup, false);
         this.adapter = new SearchGridAdapter(layoutInflater.getContext(), ActivityUtils.getActiveAgentID(getArguments()), this);
-        this.searchResultsList.setAdapter(this.adapter);
+        this.binding.searchResultsList.setAdapter(this.adapter);
         setTitle(getString(R.string.search), null);
-        this.loadableMonitor.setLoadingLayout((LoadingLayout) inflate.findViewById(R.id.loading_layout), getString(R.string.enter_text_to_search), getString(R.string.search_fail));
-        return inflate;
+        this.binding.searchString.setOnEditorActionListener((textView, actionId, keyEvent) -> onSearchTextAction(actionId, keyEvent));
+        this.binding.startSearchButton.setOnClickListener(v -> onSearchButtonClicked());
+        this.loadableMonitor.setLoadingLayout((LoadingLayout) this.binding.getRoot().findViewById(R.id.loading_layout), getString(R.string.enter_text_to_search), getString(R.string.search_fail));
+        return this.binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        this.unbinder.unbind();
+        this.binding = null;
         super.onDestroyView();
     }
 

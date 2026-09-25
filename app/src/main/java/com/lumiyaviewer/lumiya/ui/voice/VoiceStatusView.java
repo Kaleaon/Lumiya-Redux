@@ -23,6 +23,7 @@ import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GridConnectionService;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.VoiceStatusBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -46,6 +47,7 @@ public class VoiceStatusView extends FrameLayout {
 
     @Nullable
     private ChatterNameRetriever activeChatterNameRetriever;
+    private VoiceStatusBinding binding;
     private boolean canConnect;
 
     @Nullable
@@ -59,34 +61,8 @@ public class VoiceStatusView extends FrameLayout {
     @Nullable
     private ChatterNameRetriever speakerNameRetriever;
     private boolean updatingAudioVolume;
-
-    ImageButton voiceAnswerButton;
     private final SubscriptionData<SubscriptionSingleKey, VoiceAudioProperties> voiceAudioProperties;
-
-    Button voiceBluetoothButton;
     private final SubscriptionData<ChatterID, VoiceChatInfo> voiceChatInfo;
-
-    Button voiceLoudspeakerButton;
-
-    ImageButton voiceMicOffButton;
-
-    ImageButton voiceMicOnButton;
-
-    ImageView voiceSpeakIndicatorLeft;
-
-    ImageView voiceSpeakIndicatorRight;
-
-    SeekBar voiceSpeakerVolumeControl;
-
-    CardView voiceStatusCardView;
-
-    ViewGroup voiceStatusControls;
-
-    TextView voiceStatusSmallText;
-
-    TextView voiceStatusText;
-
-    ImageButton voiceTerminateButton;
     private final SeekBar.OnSeekBarChangeListener volumeChangeListener;
 
     public VoiceStatusView(Context context) {
@@ -358,9 +334,16 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     private void initializeControls() {
-        new VoiceStatusView_ViewBinding(this);
+        binding = VoiceStatusBinding.bind(this);
+        binding.voiceAnswerButton.setOnClickListener(v -> onVoiceAnswerButton());
+        binding.voiceBluetoothButton.setOnClickListener(v -> onVoiceBluetoothButton());
+        binding.voiceLoudspeakerButton.setOnClickListener(v -> onLoudspeakerButton());
+        binding.voiceMicOffButton.setOnClickListener(v -> onVoiceMicOffButton());
+        binding.voiceMicOnButton.setOnClickListener(v -> onVoiceMicOnButton());
+        binding.voiceStatusCardView.setOnClickListener(v -> onVoiceStatusCardClick());
+        binding.voiceTerminateButton.setOnClickListener(v -> onVoiceTerminateButton());
         updateVoiceState();
-        this.voiceSpeakerVolumeControl.setOnSeekBarChangeListener(this.volumeChangeListener);
+        binding.voiceSpeakerVolumeControl.setOnSeekBarChangeListener(this.volumeChangeListener);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_6407, reason: not valid java name */
@@ -398,42 +381,42 @@ public class VoiceStatusView extends FrameLayout {
         VoiceChatInfo data = this.voiceChatInfo.getData();
         Debug.Printf("VoiceStatusView: voice state %s", data);
         if (data == null || !(!data.state.equals(VoiceChatInfo.VoiceChatState.None))) {
-            this.voiceStatusControls.setVisibility(View.GONE);
+            binding.voiceStatusControls.setVisibility(View.GONE);
             if (this.showWhenInactive) {
                 setVisibility(View.VISIBLE);
-                this.voiceStatusText.setText(R.string.voice_not_connected);
+                binding.voiceStatusText.setText(R.string.voice_not_connected);
                 if (this.canConnect) {
-                    this.voiceStatusSmallText.setText(R.string.voice_tap_to_connect);
-                    this.voiceStatusSmallText.setVisibility(View.VISIBLE);
+                    binding.voiceStatusSmallText.setText(R.string.voice_tap_to_connect);
+                    binding.voiceStatusSmallText.setVisibility(View.VISIBLE);
                 } else {
-                    this.voiceStatusSmallText.setVisibility(View.GONE);
+                    binding.voiceStatusSmallText.setVisibility(View.GONE);
                 }
-                this.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
-                this.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
-                this.voiceTerminateButton.setVisibility(View.INVISIBLE);
-                this.voiceMicOnButton.setVisibility(View.INVISIBLE);
-                this.voiceMicOffButton.setVisibility(View.INVISIBLE);
-                this.voiceAnswerButton.setVisibility(this.canConnect ? View.VISIBLE : View.INVISIBLE);
+                binding.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
+                binding.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
+                binding.voiceTerminateButton.setVisibility(View.INVISIBLE);
+                binding.voiceMicOnButton.setVisibility(View.INVISIBLE);
+                binding.voiceMicOffButton.setVisibility(View.INVISIBLE);
+                binding.voiceAnswerButton.setVisibility(this.canConnect ? View.VISIBLE : View.INVISIBLE);
             } else {
                 setVisibility(View.GONE);
             }
             chatterIDUser = null;
         } else {
             setVisibility(View.VISIBLE);
-            this.voiceTerminateButton.setVisibility(View.VISIBLE);
+            binding.voiceTerminateButton.setVisibility(View.VISIBLE);
             boolean z = data.state == VoiceChatInfo.VoiceChatState.Active;
-            this.voiceMicOnButton.setVisibility((z && data.localMicActive) ? View.VISIBLE : View.INVISIBLE);
-            this.voiceMicOffButton.setVisibility((z && (data.localMicActive ^ true)) ? View.VISIBLE : View.INVISIBLE);
-            this.voiceAnswerButton.setVisibility(data.state == VoiceChatInfo.VoiceChatState.Ringing ? View.VISIBLE : View.INVISIBLE);
+            binding.voiceMicOnButton.setVisibility((z && data.localMicActive) ? View.VISIBLE : View.INVISIBLE);
+            binding.voiceMicOffButton.setVisibility((z && (data.localMicActive ^ true)) ? View.VISIBLE : View.INVISIBLE);
+            binding.voiceAnswerButton.setVisibility(data.state == VoiceChatInfo.VoiceChatState.Ringing ? View.VISIBLE : View.INVISIBLE);
             if (data.state == VoiceChatInfo.VoiceChatState.Active && data.numActiveSpeakers != 0) {
-                if (this.voiceSpeakIndicatorLeft.getVisibility() != 0 || this.voiceSpeakIndicatorRight.getVisibility() != 0) {
-                    this.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
-                    this.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
-                    Drawable drawable = this.voiceSpeakIndicatorLeft.getDrawable();
+                if (binding.voiceSpeakIndicatorLeft.getVisibility() != 0 || binding.voiceSpeakIndicatorRight.getVisibility() != 0) {
+                    binding.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
+                    binding.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
+                    Drawable drawable = binding.voiceSpeakIndicatorLeft.getDrawable();
                     if (drawable instanceof AnimationDrawable) {
                         ((AnimationDrawable) drawable).start();
                     }
-                    Drawable drawable2 = this.voiceSpeakIndicatorRight.getDrawable();
+                    Drawable drawable2 = binding.voiceSpeakIndicatorRight.getDrawable();
                     if (drawable2 instanceof AnimationDrawable) {
                         ((AnimationDrawable) drawable2).start();
                     }
@@ -454,13 +437,13 @@ public class VoiceStatusView extends FrameLayout {
                     str = data.numActiveSpeakers != 1 ? getContext().getString(R.string.speakers_speaking, Integer.valueOf(data.numActiveSpeakers)) : null;
                 }
             } else if (data.state == VoiceChatInfo.VoiceChatState.Ringing) {
-                this.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
-                this.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
+                binding.voiceSpeakIndicatorLeft.setVisibility(View.VISIBLE);
+                binding.voiceSpeakIndicatorRight.setVisibility(View.VISIBLE);
                 str = null;
                 chatterIDUser2 = null;
             } else {
-                this.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
-                this.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
+                binding.voiceSpeakIndicatorLeft.setVisibility(View.INVISIBLE);
+                binding.voiceSpeakIndicatorRight.setVisibility(View.INVISIBLE);
                 str = null;
                 chatterIDUser2 = null;
             }
@@ -484,19 +467,19 @@ public class VoiceStatusView extends FrameLayout {
             }
             String resolvedName = this.showActiveChatterName ? this.activeChatterNameRetriever != null ? this.activeChatterNameRetriever.getResolvedName() : null : null;
             if (resolvedName != null) {
-                this.voiceStatusSmallText.setVisibility(View.VISIBLE);
-                this.voiceStatusText.setText(resolvedName);
-                this.voiceStatusSmallText.setText(str);
+                binding.voiceStatusSmallText.setVisibility(View.VISIBLE);
+                binding.voiceStatusText.setText(resolvedName);
+                binding.voiceStatusSmallText.setText(str);
                 chatterIDUser = chatterIDUser2;
             } else {
-                this.voiceStatusSmallText.setText((CharSequence) null);
-                this.voiceStatusText.setText(str);
-                this.voiceStatusSmallText.setVisibility(View.GONE);
+                binding.voiceStatusSmallText.setText((CharSequence) null);
+                binding.voiceStatusText.setText(str);
+                binding.voiceStatusSmallText.setVisibility(View.GONE);
                 if (data.state != VoiceChatInfo.VoiceChatState.Active) {
                     chatterIDUser = chatterIDUser2;
                 } else if (data.localMicActive) {
-                    this.voiceStatusSmallText.setText(R.string.tap_for_audio_controls);
-                    this.voiceStatusSmallText.setVisibility(View.VISIBLE);
+                    binding.voiceStatusSmallText.setText(R.string.tap_for_audio_controls);
+                    binding.voiceStatusSmallText.setVisibility(View.VISIBLE);
                     chatterIDUser = chatterIDUser2;
                 } else {
                     chatterIDUser = chatterIDUser2;
@@ -521,7 +504,7 @@ public class VoiceStatusView extends FrameLayout {
         }
         VoiceAudioProperties voiceAudioProperties = this.voiceAudioProperties.getData();
         if (voiceAudioProperties != null) {
-            Drawable[] compoundDrawables = this.voiceBluetoothButton.getCompoundDrawables();
+            Drawable[] compoundDrawables = binding.voiceBluetoothButton.getCompoundDrawables();
             switch (voiceAudioProperties.bluetoothState) {
                 case Active:
                     i = R.drawable.active_button_underline;
@@ -533,10 +516,10 @@ public class VoiceStatusView extends FrameLayout {
                     i = R.drawable.inactive_button_underline;
                     break;
             }
-            this.voiceBluetoothButton.setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), i));
-            this.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(this.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), voiceAudioProperties.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
+            binding.voiceBluetoothButton.setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), i));
+            binding.voiceLoudspeakerButton.setCompoundDrawablesWithIntrinsicBounds(binding.voiceLoudspeakerButton.getCompoundDrawables()[0], (Drawable) null, (Drawable) null, ContextCompat.getDrawable(getContext(), voiceAudioProperties.speakerphoneOn ? R.drawable.active_button_underline : R.drawable.inactive_button_underline));
             this.updatingAudioVolume = true;
-            this.voiceSpeakerVolumeControl.setProgress(Math.round(voiceAudioProperties.speakerVolume * this.voiceSpeakerVolumeControl.getMax()));
+            binding.voiceSpeakerVolumeControl.setProgress(Math.round(voiceAudioProperties.speakerVolume * binding.voiceSpeakerVolumeControl.getMax()));
             this.updatingAudioVolume = false;
         }
     }
@@ -564,9 +547,9 @@ public class VoiceStatusView extends FrameLayout {
         };
         int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14.0f, getResources().getDisplayMetrics());
         TypedArray obtainStyledAttributes = getContext().obtainStyledAttributes(new int[]{R.attr.buttonShapeMoveControl});
-        for (ImageButton imageButton : new ImageButton[]{this.voiceAnswerButton, this.voiceTerminateButton, this.voiceMicOnButton, this.voiceMicOffButton}) {
+        for (ImageButton imageButton : new ImageButton[]{binding.voiceAnswerButton, binding.voiceTerminateButton, binding.voiceMicOnButton, binding.voiceMicOffButton}) {
             imageButton.setOnHoverListener(onHoverListener);
-            if (imageButton == this.voiceMicOnButton) {
+            if (imageButton == binding.voiceMicOnButton) {
                 imageButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.fab_shape_move_control_green));
             } else {
                 imageButton.setBackground(obtainStyledAttributes.getDrawable(0));
@@ -578,8 +561,8 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     public void hideBackground() {
-        this.voiceStatusCardView.setCardBackgroundColor(0);
-        this.voiceStatusCardView.setCardElevation(0.0f);
+        binding.voiceStatusCardView.setCardBackgroundColor(0);
+        binding.voiceStatusCardView.setCardElevation(0.0f);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_voice_VoiceStatusView_24065, reason: not valid java name */
@@ -602,7 +585,7 @@ public class VoiceStatusView extends FrameLayout {
         GridConnectionService serviceInstance;
         VoiceChatInfo data = this.voiceChatInfo.getData();
         if (this.onCallButtonListener != null && (this.chatterID == null || data == null || data.state == VoiceChatInfo.VoiceChatState.None)) {
-            this.onCallButtonListener.onClick(this.voiceAnswerButton);
+            this.onCallButtonListener.onClick(binding.voiceAnswerButton);
         }
         if (this.chatterID == null || (serviceInstance = GridConnectionService.getServiceInstance()) == null) {
             return;
@@ -635,13 +618,13 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     public void onVoiceStatusCardClick() {
-        if (this.voiceStatusControls != null) {
-            if (this.voiceStatusControls.getVisibility() == 0) {
-                this.voiceStatusControls.setVisibility(View.GONE);
+        if (binding.voiceStatusControls != null) {
+            if (binding.voiceStatusControls.getVisibility() == 0) {
+                binding.voiceStatusControls.setVisibility(View.GONE);
                 return;
             }
-            this.voiceStatusControls.setVisibility(View.VISIBLE);
-            this.voiceStatusControls.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.expand_vertically));
+            binding.voiceStatusControls.setVisibility(View.VISIBLE);
+            binding.voiceStatusControls.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.expand_vertically));
         }
     }
 
@@ -694,12 +677,12 @@ public class VoiceStatusView extends FrameLayout {
     }
 
     public void setLightTheme() {
-        this.voiceStatusText.setTextColor(-1);
-        this.voiceStatusSmallText.setTextColor(-1);
-        this.voiceAnswerButton.setImageResource(R.drawable.icon_material_voice_call);
-        this.voiceMicOnButton.setImageResource(R.drawable.icon_material_mic);
-        this.voiceMicOffButton.setImageResource(R.drawable.icon_material_mic_off);
-        this.voiceTerminateButton.setImageResource(R.drawable.menu_close_light);
+        binding.voiceStatusText.setTextColor(-1);
+        binding.voiceStatusSmallText.setTextColor(-1);
+        binding.voiceAnswerButton.setImageResource(R.drawable.icon_material_voice_call);
+        binding.voiceMicOnButton.setImageResource(R.drawable.icon_material_mic);
+        binding.voiceMicOffButton.setImageResource(R.drawable.icon_material_mic_off);
+        binding.voiceTerminateButton.setImageResource(R.drawable.menu_close_light);
     }
 
     public void setOnCallButtonListener(View.OnClickListener onClickListener) {

@@ -11,12 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.UserPickBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
@@ -32,7 +30,6 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
-import com.lumiyaviewer.lumiya.ui.common.ImageAssetView;
 import com.lumiyaviewer.lumiya.ui.common.TeleportProgressDialog;
 import com.lumiyaviewer.lumiya.ui.common.TextFieldDialogBuilder;
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity;
@@ -41,16 +38,8 @@ import java.util.UUID;
 public class UserPickFragment extends FragmentWithTitle {
     private static final String PICK_ID_KEY = "pickID";
 
-    Button changePicButton;
+    private UserPickBinding binding;
 
-    TextView pickDescription;
-
-    Button setLocationButton;
-    private Unbinder unbinder;
-
-    Button userPickDescEditButton;
-
-    ImageAssetView userPickImageView;
     private final SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             UserPickFragment.this.onPickInfo((PickInfoReply) obj);
@@ -126,8 +115,8 @@ public class UserPickFragment extends FragmentWithTitle {
         if (getView() == null || pickInfoReply == null) {
             return;
         }
-        this.pickDescription.setText(SLMessage.stringFromVariableUTF(pickInfoReply.Data_Field.Desc));
-        this.userPickImageView.setAssetID(pickInfoReply.Data_Field.SnapshotID);
+        binding.pickDescription.setText(SLMessage.stringFromVariableUTF(pickInfoReply.Data_Field.Desc));
+        binding.userPickImageView.setAssetID(pickInfoReply.Data_Field.SnapshotID);
     }
 
     private void renamePick() {
@@ -233,11 +222,14 @@ public class UserPickFragment extends FragmentWithTitle {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(R.layout.user_pick, viewGroup, false);
-        this.unbinder = new UserPickFragment_ViewBinding(this, inflate);
-        this.userPickImageView.setAlignTop(true);
-        this.userPickImageView.setVerticalFit(true);
-        return inflate;
+        binding = UserPickBinding.inflate(layoutInflater, viewGroup, false);
+        binding.changePicButton.setOnClickListener(v -> onChangePic(v));
+        binding.userPickSetLocationButton.setOnClickListener(v -> onSetLocation(v));
+        binding.userPickDescEditButton.setOnClickListener(v -> onDescEdit(v));
+        binding.userPickTeleportButton.setOnClickListener(v -> onTeleportToPickClick(v));
+        binding.userPickImageView.setAlignTop(true);
+        binding.userPickImageView.setVerticalFit(true);
+        return binding.getRoot();
     }
 
     protected void onDescEdit(View view) {
@@ -251,10 +243,7 @@ public class UserPickFragment extends FragmentWithTitle {
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        binding = null;
         super.onDestroyView();
     }
 
@@ -312,9 +301,9 @@ public class UserPickFragment extends FragmentWithTitle {
         }
         AvatarPickKey pickKey = getPickKey();
         boolean equals = userManager.getUserID().equals(pickKey.avatarID);
-        this.userPickDescEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
-        this.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
-        this.setLocationButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+        binding.userPickDescEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+        binding.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+        binding.userPickSetLocationButton.setVisibility(equals ? View.VISIBLE : View.GONE);
         this.pickInfo.subscribe(userManager.getAvatarPickInfos().getPool(), pickKey);
     }
 

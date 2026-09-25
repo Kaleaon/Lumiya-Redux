@@ -8,18 +8,15 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.base.Strings;
 import com.google.common.logging.nano.Vr;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.StreamingMediaService;
+import com.lumiyaviewer.lumiya.databinding.ParcelPropertiesFragmentBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -28,12 +25,10 @@ import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
-import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils;
 import com.lumiyaviewer.lumiya.ui.common.ChatterNameDisplayer;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
 import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
-import com.lumiyaviewer.lumiya.ui.common.ImageAssetView;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -44,28 +39,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ParcelPropertiesFragment extends FragmentWithTitle {
     public static final String PARCEL_DATA_KEY = "parcelData";
 
-    Button mediaPlayButton;
+    private ParcelPropertiesFragmentBinding binding;
 
-    Button mediaStopButton;
-
-    TextView parcelArea;
-
-    TextView parcelDescription;
-
-    ImageAssetView parcelImageView;
-
-    CardView parcelMediaCardView;
-
-    TextView parcelMediaURL;
-
-    TextView parcelName;
-
-    TextView parcelOwnerName;
-
-    ChatterPicView parcelOwnerPic;
-
-    CardView simRestartCardView;
-    private Unbinder unbinder = null;
     private ParcelData parcelData = null;
     private UserManager userManager = null;
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
@@ -115,18 +90,18 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     }
 
     private void updatePlayingStatus() {
-        if (this.unbinder != null) {
+        if (binding != null) {
             Boolean data = this.isPlayingMedia.getData();
             boolean booleanValue = data != null ? data.booleanValue() : false;
-            this.mediaPlayButton.setVisibility(booleanValue ? View.GONE : View.VISIBLE);
-            this.mediaStopButton.setVisibility(booleanValue ? View.VISIBLE : View.GONE);
+            binding.parcelMediaPlayButton.setVisibility(booleanValue ? View.GONE : View.VISIBLE);
+            binding.parcelMediaStopButton.setVisibility(booleanValue ? View.VISIBLE : View.GONE);
         }
     }
 
     private void updateSimOptions() {
-        if (this.unbinder != null) {
+        if (binding != null) {
             SLAgentCircuit data = this.agentCircuit.getData();
-            this.simRestartCardView.setVisibility(data != null && data.getIsEstateManager() ? View.VISIBLE : View.GONE);
+            binding.simRestartCardView.setVisibility(data != null && data.getIsEstateManager() ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -189,21 +164,24 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
-        View inflate = layoutInflater.inflate(R.layout.parcel_properties_fragment, viewGroup, false);
-        this.unbinder = new ParcelPropertiesFragment_ViewBinding(this, inflate);
-        this.ownerNameDisplayer.bindViews(this.parcelOwnerName, this.parcelOwnerPic);
-        this.parcelImageView.setVerticalFit(true);
-        this.parcelImageView.setAlignTop(true);
-        return inflate;
+        binding = ParcelPropertiesFragmentBinding.inflate(layoutInflater, viewGroup, false);
+        binding.parcelMediaPlayButton.setOnClickListener(v -> onParcelMediaPlay());
+        binding.parcelMediaStopButton.setOnClickListener(v -> onParcelMediaStop());
+        binding.parcelOwnerProfileButton.setOnClickListener(v -> onOwnerProfileButton());
+        binding.parcelSetHomeButton.setOnClickListener(v -> onSetHomeButton());
+        binding.simRestartButton.setOnClickListener(v -> onSimRestartButton());
+        this.ownerNameDisplayer.bindViews(binding.parcelOwnerName, binding.parcelOwnerPic);
+        binding.parcelImageView.setVerticalFit(true);
+        binding.parcelImageView.setAlignTop(true);
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         cancelSetHomeLocation();
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
+        if (binding != null) {
             this.ownerNameDisplayer.unbindViews();
-            this.unbinder = null;
+            binding = null;
         }
         super.onDestroyView();
     }
@@ -301,16 +279,16 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         if (this.userManager != null) {
             this.agentCircuit.subscribe(UserManager.agentCircuits(), this.userManager.getUserID());
         }
-        if (this.parcelData == null || this.userManager == null || this.unbinder == null) {
+        if (this.parcelData == null || this.userManager == null || binding == null) {
             return;
         }
         this.ownerNameDisplayer.setChatterID(this.parcelData.isGroupOwned() ? ChatterID.getGroupChatterID(this.userManager.getUserID(), this.parcelData.getOwnerID()) : ChatterID.getUserChatterID(this.userManager.getUserID(), this.parcelData.getOwnerID()));
-        this.parcelImageView.setAssetID(this.parcelData.getSnapshotUUID());
-        this.parcelName.setText(this.parcelData.getName());
-        this.parcelArea.setText(getString(R.string.parcel_area_format, Integer.valueOf(this.parcelData.getArea())));
-        this.parcelDescription.setText(Strings.isNullOrEmpty(this.parcelData.getDescription()) ? getString(R.string.asset_no_description) : this.parcelData.getDescription());
-        this.parcelMediaCardView.setVisibility(Strings.isNullOrEmpty(this.parcelData.getMediaURL()) ? View.GONE : View.VISIBLE);
-        this.parcelMediaURL.setText(this.parcelData.getMediaURL());
+        binding.parcelImageView.setAssetID(this.parcelData.getSnapshotUUID());
+        binding.parcelName.setText(this.parcelData.getName());
+        binding.parcelArea.setText(getString(R.string.parcel_area_format, Integer.valueOf(this.parcelData.getArea())));
+        binding.parcelDetailsDesc.setText(Strings.isNullOrEmpty(this.parcelData.getDescription()) ? getString(R.string.asset_no_description) : this.parcelData.getDescription());
+        binding.parcelMediaCardView.setVisibility(Strings.isNullOrEmpty(this.parcelData.getMediaURL()) ? View.GONE : View.VISIBLE);
+        binding.parcelMediaUrl.setText(this.parcelData.getMediaURL());
         updatePlayingStatus();
         updateSimOptions();
     }
@@ -320,7 +298,7 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
         this.userManager = null;
         this.parcelData = null;
         this.ownerNameDisplayer.setChatterID(null);
-        this.parcelImageView.setAssetID(null);
+        binding.parcelImageView.setAssetID(null);
         this.isPlayingMedia.unsubscribe();
         this.agentCircuit.unsubscribe();
         super.onStop();

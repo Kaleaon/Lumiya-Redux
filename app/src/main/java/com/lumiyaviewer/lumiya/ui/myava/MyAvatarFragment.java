@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.MyAvatarBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -28,12 +28,7 @@ import java.util.UUID;
 
 public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.OnItemClickListener, ChatterNameRetriever.OnChatterNameUpdated {
 
-    TextView myAvatarName;
-
-    ListView myAvatarOptionsList;
-
-    ChatterPicView myAvatarPic;
-    private Unbinder unbinder;
+    private MyAvatarBinding binding;
     private ChatterNameRetriever myAvatarNameRetriever = null;
     private final SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
@@ -88,8 +83,8 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     }
 
     public void onMyBalance(Integer num) {
-        if (this.unbinder != null) {
-            ListAdapter adapter = this.myAvatarOptionsList.getAdapter();
+        if (this.binding != null) {
+            ListAdapter adapter = binding.myAvaOptionsList.getAdapter();
             if (adapter instanceof MyAvatarPagesAdapter) {
                 ((MyAvatarPagesAdapter) adapter).notifyDataSetChanged();
             }
@@ -99,9 +94,9 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     @Override
     public void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName();
-        if (this.unbinder != null) {
-            this.myAvatarName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
-            this.myAvatarPic.setChatterID(chatterNameRetriever.chatterID, resolvedName);
+        if (this.binding != null) {
+            binding.myAvatarName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title));
+            binding.myAvatarPic.setChatterID(chatterNameRetriever.chatterID, resolvedName);
         }
         setTitle(resolvedName, null);
     }
@@ -109,19 +104,15 @@ public class MyAvatarFragment extends FragmentWithTitle implements AdapterView.O
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(R.layout.my_avatar, viewGroup, false);
-        this.unbinder = new MyAvatarFragment_ViewBinding(this, inflate);
-        this.myAvatarOptionsList.setAdapter((ListAdapter) new MyAvatarPagesAdapter(viewGroup.getContext()));
-        this.myAvatarOptionsList.setOnItemClickListener(this);
-        return inflate;
+        binding = MyAvatarBinding.inflate(layoutInflater, viewGroup, false);
+        binding.myAvaOptionsList.setAdapter((ListAdapter) new MyAvatarPagesAdapter(viewGroup.getContext()));
+        binding.myAvaOptionsList.setOnItemClickListener(this);
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        binding = null;
         super.onDestroyView();
     }
 
