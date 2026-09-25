@@ -1,21 +1,16 @@
 package com.lumiyaviewer.lumiya.ui.chat.profiles;
 
 import android.content.ClipData;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.text.ClipboardManager;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
 import com.google.common.base.Objects;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.UserProfileTabMainBinding;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLMessage;
@@ -24,11 +19,8 @@ import com.lumiyaviewer.lumiya.slproto.messages.AvatarNotesReply;
 import com.lumiyaviewer.lumiya.slproto.messages.AvatarPropertiesReply;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever;
-import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
 import com.lumiyaviewer.lumiya.ui.common.ChatterReloadableFragment;
 import com.lumiyaviewer.lumiya.ui.common.DetailsActivity;
-import com.lumiyaviewer.lumiya.ui.common.ImageAssetView;
-import com.lumiyaviewer.lumiya.ui.common.LoadingLayout;
 import com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor;
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
@@ -40,42 +32,8 @@ import javax.annotation.Nullable;
 
 public class UserMainProfileTab extends ChatterReloadableFragment implements LoadableMonitor.OnLoadableDataChangedListener {
 
-    Button aboutEditButton;
+    private UserProfileTabMainBinding binding;
 
-    Button changePicButton;
-
-    LoadingLayout loadingLayout;
-
-    SwipeRefreshLayout swipeRefreshLayout;
-
-    TextView textProfileAge;
-
-    TextView textProfileAgentKey;
-
-    TextView textProfileNotesText;
-
-    TextView textProfileOnline;
-
-    TextView textProfilePrimaryName;
-
-    TextView textProfileSecondaryName;
-    private Unbinder unbinder;
-
-    View userPartnerCardView;
-
-    ImageAssetView userPicView;
-
-    TextView userProfileAboutText;
-
-    View userProfileNotesCaption;
-
-    TextView userProfilePartnerName;
-
-    ChatterPicView userProfilePartnerPic;
-
-    View userWebProfileCardView;
-
-    TextView userWebProfileLink;
     private final SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, AvatarNotesReply> avatarNotes = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final SubscriptionData<UUID, Boolean> onlineStatus = new SubscriptionData<>(UIThreadExecutor.getInstance());
@@ -108,8 +66,8 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_UserMainProfileTab_9585, reason: not valid java name */
     /* synthetic */ void m519x9d89034f(ChatterNameRetriever chatterNameRetriever) {
         if (getView() != null) {
-            this.userProfilePartnerName.setText(chatterNameRetriever.getResolvedName());
-            this.userProfilePartnerPic.setChatterID(chatterNameRetriever.chatterID, chatterNameRetriever.getResolvedName());
+            binding.userProfilePartnerName.setText(chatterNameRetriever.getResolvedName());
+            binding.userProfilePartnerPic.setChatterID(chatterNameRetriever.chatterID, chatterNameRetriever.getResolvedName());
         }
     }
 
@@ -136,18 +94,14 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         if (this.chatterID == null || !Objects.equal(chatterNameRetriever.chatterID, this.chatterID) || view == null) {
             return;
         }
-        this.textProfilePrimaryName.setText(chatterNameRetriever.getResolvedName());
-        this.textProfileSecondaryName.setText(chatterNameRetriever.getResolvedSecondaryName());
+        binding.textProfilePrimaryName.setText(chatterNameRetriever.getResolvedName());
+        binding.textProfileSecondaryName.setText(chatterNameRetriever.getResolvedSecondaryName());
     }
 
     protected void onCopyAgentKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
             String uuid = ((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID().toString();
-            if (Build.VERSION.SDK_INT < 11) {
-                ((ClipboardManager) getActivity().getSystemService("clipboard")).setText(uuid);
-            } else {
-                ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Agent key", uuid));
-            }
+            ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Agent key", uuid));
             Toast.makeText(getActivity(), "Agent key copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }
@@ -155,22 +109,23 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     @Override
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
-        View inflate = layoutInflater.inflate(R.layout.user_profile_tab_main, viewGroup, false);
-        this.unbinder = new UserMainProfileTab_ViewBinding(this, inflate);
-        this.userPicView.setAlignTop(true);
-        this.userPicView.setVerticalFit(true);
-        this.loadingLayout.setSwipeRefreshLayout(this.swipeRefreshLayout);
-        this.loadableMonitor.setLoadingLayout(this.loadingLayout, getString(R.string.no_user_selected), getString(R.string.user_profile_fail));
-        this.loadableMonitor.setSwipeRefreshLayout(this.swipeRefreshLayout);
-        return inflate;
+        binding = UserProfileTabMainBinding.inflate(layoutInflater, viewGroup, false);
+        binding.aboutEditButton.setOnClickListener(v -> onAboutEditClicked(v));
+        binding.changePicButton.setOnClickListener(v -> onChangePicClicked(v));
+        binding.buttonCopyAgentKey.setOnClickListener(v -> onCopyAgentKeyClicked(v));
+        binding.buttonEditNotes.setOnClickListener(v -> onEditNotesClicked(v));
+        binding.userProfileViewPartnerButton.setOnClickListener(v -> onViewProfileClicked(v));
+        binding.userPicView.setAlignTop(true);
+        binding.userPicView.setVerticalFit(true);
+        binding.loadingLayout.setSwipeRefreshLayout(binding.swipeRefreshLayout);
+        this.loadableMonitor.setLoadingLayout(binding.loadingLayout, getString(R.string.no_user_selected), getString(R.string.user_profile_fail));
+        this.loadableMonitor.setSwipeRefreshLayout(binding.swipeRefreshLayout);
+        return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        binding = null;
         super.onDestroyView();
     }
 
@@ -185,41 +140,41 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         if (getView() != null) {
             try {
                 AvatarPropertiesReply avatarPropertiesReply = this.avatarProperties.get();
-                this.userPicView.setAssetID(avatarPropertiesReply.PropertiesData_Field.ImageID);
-                this.userProfileAboutText.setText(SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText));
-                this.textProfileAge.setText(getAge(avatarPropertiesReply));
+                binding.userPicView.setAssetID(avatarPropertiesReply.PropertiesData_Field.ImageID);
+                binding.userProfileAboutText.setText(SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText));
+                binding.textProfileAge.setText(getAge(avatarPropertiesReply));
                 if (this.partnerNameRetriever != null) {
                     this.partnerNameRetriever.dispose();
                     this.partnerNameRetriever = null;
                 }
                 UUID uuid = avatarPropertiesReply.PropertiesData_Field.PartnerID;
                 if (uuid == null || !(!uuid.equals(UUIDPool.ZeroUUID)) || this.chatterID == null) {
-                    this.userPartnerCardView.setVisibility(View.GONE);
-                    this.userProfilePartnerPic.setChatterID(null, null);
+                    binding.userPartnerCardView.setVisibility(View.GONE);
+                    binding.userProfilePartnerPic.setChatterID(null, null);
                 } else {
                     ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(this.chatterID.agentUUID, uuid);
-                    this.userPartnerCardView.setVisibility(View.VISIBLE);
+                    binding.userPartnerCardView.setVisibility(View.VISIBLE);
                     this.partnerNameRetriever = new ChatterNameRetriever(userChatterID, this.onPartnerNameReady, UIThreadExecutor.getInstance());
                 }
                 String trim = SLMessage.stringFromVariableOEM(avatarPropertiesReply.PropertiesData_Field.ProfileURL).trim();
                 if (trim.isEmpty()) {
-                    this.userWebProfileCardView.setVisibility(View.GONE);
+                    binding.userWebProfileCardView.setVisibility(View.GONE);
                 } else {
-                    this.userWebProfileLink.setText(trim);
-                    Linkify.addLinks(this.userWebProfileLink, 15);
-                    this.userWebProfileCardView.setVisibility(View.VISIBLE);
+                    binding.userWebProfileLink.setText(trim);
+                    Linkify.addLinks(binding.userWebProfileLink, 15);
+                    binding.userWebProfileCardView.setVisibility(View.VISIBLE);
                 }
                 String trimmed = SLMessage.stringFromVariableUTF(this.avatarNotes.get().Data_Field.Notes).trim();
                 if (trimmed.isEmpty()) {
-                    this.textProfileNotesText.setText(R.string.user_notes_no_notes);
-                    this.textProfileNotesText.setTypeface(null, 2);
-                    this.userProfileNotesCaption.setVisibility(View.GONE);
+                    binding.textProfileNotesText.setText(R.string.user_notes_no_notes);
+                    binding.textProfileNotesText.setTypeface(null, 2);
+                    binding.userProfileNotesCaption.setVisibility(View.GONE);
                 } else {
-                    this.textProfileNotesText.setText(trimmed);
-                    this.textProfileNotesText.setTypeface(null, 0);
-                    this.userProfileNotesCaption.setVisibility(View.VISIBLE);
+                    binding.textProfileNotesText.setText(trimmed);
+                    binding.textProfileNotesText.setTypeface(null, 0);
+                    binding.userProfileNotesCaption.setVisibility(View.VISIBLE);
                 }
-                this.textProfileOnline.setText(getString(this.onlineStatus.get().booleanValue() ? R.string.profile_user_online : R.string.profile_user_offline));
+                binding.textProfileOnline.setText(getString(this.onlineStatus.get().booleanValue() ? R.string.profile_user_online : R.string.profile_user_offline));
             } catch (SubscriptionData.DataNotReadyException e) {
                 Debug.Warning(e);
             }
@@ -236,9 +191,9 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         }
         if (this.userManager == null || !(chatterID instanceof ChatterID.ChatterIDUser)) {
             if (view != null) {
-                this.textProfileAgentKey.setText("");
-                this.aboutEditButton.setVisibility(View.GONE);
-                this.changePicButton.setVisibility(View.GONE);
+                binding.textProfileAgentKey.setText("");
+                binding.aboutEditButton.setVisibility(View.GONE);
+                binding.changePicButton.setVisibility(View.GONE);
                 return;
             }
             return;
@@ -248,10 +203,10 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
         this.onlineStatus.subscribe(this.userManager.getChatterList().getFriendManager().getOnlineStatus(), chatterUUID);
         this.avatarNotes.subscribe(this.userManager.getAvatarNotes().getPool(), chatterUUID);
         if (view != null) {
-            this.textProfileAgentKey.setText(chatterUUID.toString());
+            binding.textProfileAgentKey.setText(chatterUUID.toString());
             boolean equals = chatterUUID.equals(this.userManager.getUserID());
-            this.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
-            this.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+            binding.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE);
+            binding.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE);
         }
     }
 

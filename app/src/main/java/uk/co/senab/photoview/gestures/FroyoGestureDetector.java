@@ -1,11 +1,9 @@
 package uk.co.senab.photoview.gestures;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-@TargetApi(8)
 public class FroyoGestureDetector extends EclairGestureDetector {
     protected final ScaleGestureDetector mDetector;
 

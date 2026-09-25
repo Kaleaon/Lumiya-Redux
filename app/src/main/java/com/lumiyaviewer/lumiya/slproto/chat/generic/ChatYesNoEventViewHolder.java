@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.chat.generic;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.os.Build;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
@@ -57,7 +56,7 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
     }
 
     private void fadeCardView() {
-        if (this.cardViewFaded || Build.VERSION.SDK_INT < 11) {
+        if (this.cardViewFaded) {
             return;
         }
         if (this.fadeAnimatorSet == null) {
@@ -86,7 +85,7 @@ class ChatYesNoEventViewHolder extends ChatEventViewHolder implements View.OnCli
     public void makeCardViewEnabled() {
         if (this.cardViewFaded) {
             this.cardViewFaded = false;
-            if (this.fadeAnimatorSet != null && Build.VERSION.SDK_INT >= 11) {
+            if (this.fadeAnimatorSet != null) {
                 this.fadeAnimatorSet.cancel();
             }
         }

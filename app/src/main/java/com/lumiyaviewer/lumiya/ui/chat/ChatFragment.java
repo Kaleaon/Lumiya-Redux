@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -114,7 +115,7 @@ public class ChatFragment extends UserFunctionsFragment implements View.OnClickL
         }
     };
     private boolean updateRunnablePosted = false;
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable updateVisibleRangeRunnable = new Runnable() {
         @Override
         public void run() {

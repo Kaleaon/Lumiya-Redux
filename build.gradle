@@ -12,10 +12,10 @@ tasks.register('clean', Delete) {
 subprojects {
     plugins.withId('org.jetbrains.kotlin.android') {
         kotlin {
-            // Compile with whatever JDK Gradle is running on (JDK 17 in CI/dev
-            // images), while still emitting Java 8 bytecode via module-level
-            // kotlinOptions.jvmTarget = "1.8".
-            jvmToolchain(17)
+            // Compile with whatever JDK Gradle is running on, while still
+            // emitting Java 8 bytecode via module-level jvmTarget = "1.8".
+            // JDK 17 is the minimum; JDK 21+ works too.
+            jvmToolchain(Math.max(17, Integer.parseInt(System.getProperty('java.specification.version'))))
         }
     }
 }

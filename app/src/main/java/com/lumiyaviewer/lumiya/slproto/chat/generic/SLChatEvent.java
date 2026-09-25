@@ -4,10 +4,8 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
-import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
 import android.util.TypedValue;
@@ -555,11 +553,7 @@ public abstract class SLChatEvent implements View.OnLongClickListener {
                 UserManager userManager = UserManager.getUserManager(this.agentUUID);
                 if (userManager != null) {
                     CharSequence plainTextMessage = getPlainTextMessage(context, userManager, true);
-                    if (Build.VERSION.SDK_INT < 11) {
-                        ((ClipboardManager) context.getSystemService("clipboard")).setText(plainTextMessage);
-                    } else {
-                        ((android.content.ClipboardManager) context.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Message", plainTextMessage));
-                    }
+                    ((android.content.ClipboardManager) context.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Message", plainTextMessage));
                     Toast.makeText(context, "Message copied to clipboard", Toast.LENGTH_SHORT).show();
                 }
                 return true;

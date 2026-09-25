@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 public class NotificationChannels {
 
     public static final String MESSAGE_NOTIFICATION_GROUP = "messageNotifications";
-    private final NotificationChannelManager channelManager;
+    private final OreoNotificationChannelManager channelManager;
 
     public enum Channel {
         OnlineStatus("onlineStatus", R.string.notify_online_status_name, R.string.notify_online_status_desc, null, R.id.online_notify_id),

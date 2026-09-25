@@ -1,10 +1,8 @@
 package uk.co.senab.photoview.scrollerproxy;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.widget.OverScroller;
 
-@TargetApi(9)
 public class GingerScroller extends ScrollerProxy {
     protected final OverScroller mScroller;
 

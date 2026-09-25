@@ -15,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.ManageGridsBinding;
 import com.lumiyaviewer.lumiya.ui.common.ThemedActivity;
 import com.lumiyaviewer.lumiya.ui.grids.GridEditDialog;
 import com.lumiyaviewer.lumiya.ui.grids.GridList;
@@ -23,8 +24,8 @@ import java.util.List;
 
 public class ManageGridsActivity extends ThemedActivity implements GridEditDialog.OnGridEditResultListener, AdapterView.OnItemClickListener {
     private GridListAdapter adapter;
+    private ManageGridsBinding binding;
 
-    ListView gridListView;
     private GridList gridList = null;
     private List<GridList.GridInfo> displayList = new ArrayList();
 
@@ -116,14 +117,15 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.manage_grids);
-        new ManageGridsActivity_ViewBinding(this);
+        binding = ManageGridsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.addNewGridButton.setOnClickListener(v -> onAddNewGridButton());
         this.gridList = new GridList(this);
         this.gridList.getGridList(this.displayList);
         this.adapter = new GridListAdapter(this, this.displayList);
-        this.gridListView.setAdapter((ListAdapter) this.adapter);
-        this.gridListView.setOnItemClickListener(this);
-        registerForContextMenu(this.gridListView);
+        binding.gridList.setAdapter((ListAdapter) this.adapter);
+        binding.gridList.setOnItemClickListener(this);
+        registerForContextMenu(binding.gridList);
     }
 
     @Override
@@ -145,9 +147,8 @@ public class ManageGridsActivity extends ThemedActivity implements GridEditDialo
         }
         this.gridList.getGridList(this.displayList);
         this.adapter.updateList();
-        ListView listView = (ListView) findViewById(R.id.gridList);
-        if (listView.getAdapter().getCount() > 0) {
-            listView.setSelection(listView.getAdapter().getCount() - 1);
+        if (binding.gridList.getAdapter().getCount() > 0) {
+            binding.gridList.setSelection(binding.gridList.getAdapter().getCount() - 1);
         }
     }
 

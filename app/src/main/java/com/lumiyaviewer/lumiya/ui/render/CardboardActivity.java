@@ -6,7 +6,6 @@ import com.google.vr.cardboard.FullscreenMode;
 import com.google.vr.sdk.base.AndroidCompat;
 import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -15,6 +14,7 @@ import android.graphics.Rect;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import androidx.preference.PreferenceManager;
@@ -45,6 +45,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.CardboardControlsBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -96,7 +97,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.microedition.khronos.egl.EGLConfig;
 
-@TargetApi(16)
 public class CardboardActivity extends DetailsActivity implements ObjectPopupsManager.ObjectPopupListener {
 
     private static final int DEFAULT_FONT_SIZE_SP = 16;
@@ -111,43 +111,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private static final float crosshairSize = 0.1f;
     private static final int[] dialogButtonIds = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12};
 
-    ImageButton buttonChat;
-
-    ImageButton buttonMoveBackward;
-
-    ImageButton buttonMoveForward;
-
-    ImageButton buttonObjectChat;
-
-    ImageButton buttonSit;
-
-    ImageButton buttonSpeak;
-
-    ImageButton buttonSpeechSend;
-
-    ImageButton buttonStandUp;
-
-    ImageButton buttonTouch;
-
-    ImageButton buttonTouchObject;
-
-    ImageButton buttonTurnLeft;
-
-    ImageButton buttonTurnRight;
-
-    ViewGroup cardboardAimControls;
-
-    ViewGroup cardboardDetailsPage;
-
-    ViewGroup cardboardObjectControls;
-
-    ViewGroup cardboardPrimaryControls;
-
-    ViewGroup cardboardScriptDialog;
-
-    ViewGroup cardboardSpeakControls;
-
-    LinearLayout chatsOverlayLayout;
+    private CardboardControlsBinding binding;
     private VrSession vrSession;
     // Window behaviour 3.4.2 applied in VR mode regardless of runtime:
     // keep the screen on, immersive fullscreen (restored after the VR
@@ -155,33 +119,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private final ScreenOnFlagHelper screenOnFlagHelper = new ScreenOnFlagHelper(this);
     private FullscreenMode fullscreenMode;
     private VrRuntime vrRuntime;
-
-    TextView dialogQuestionText;
-
-    ViewGroup moveButtonsLayout;
-
-    ImageButton noButton;
-
-    TextView objectNameView;
     private ViewGroup onScreenControlsLayout;
     private RenderSettings renderSettings;
     private WorldViewRenderer renderer;
-
-    ProgressBar speakLevelIndicator;
-
-    TextView speakNowText;
-
-    TextView speechRecognitionResults;
     private SpeechRecognizer speechRecognizer;
     private Handler stateHandler;
     private UserManager userManager;
-
-    VoiceStatusView voiceStatusView;
     private int voiceViewHeightAllowance;
-
-    ImageButton yesButton;
-
-    TextView yesNoText;
     private final VrSession.Renderer stereoRenderer = new WorldStereoRenderer();
     private boolean isResumed = false;
     private final AtomicBoolean viewDrawPosted = new AtomicBoolean(false);
@@ -378,8 +322,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         @Override
         public void onEndOfSpeech() {
             Debug.Printf("Cardboard: end of speech", new Object[0]);
-            CardboardActivity.this.speakLevelIndicator.setVisibility(View.INVISIBLE);
-            CardboardActivity.this.speakNowText.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.speakNowText.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -430,16 +374,16 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             }
             String str = stringArrayList.get(0);
             CardboardActivity.this.lastSpeechRecognitionResults = str;
-            CardboardActivity.this.speechRecognitionResults.setText(str);
+            CardboardActivity.this.binding.speechRecognitionResults.setText(str);
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.this.buttonSpeechSend.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onReadyForSpeech(Bundle bundle) {
-            CardboardActivity.this.speakNowText.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakNowText.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -450,13 +394,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 return;
             }
             String str = stringArrayList.get(0);
-            CardboardActivity.this.speechRecognitionResults.setText(str);
+            CardboardActivity.this.binding.speechRecognitionResults.setText(str);
             CardboardActivity.this.lastSpeechRecognitionResults = str;
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.this.buttonSpeechSend.setVisibility(View.VISIBLE);
-            CardboardActivity.this.speakLevelIndicator.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
             CardboardActivity.this.isSpeechFinished = true;
         }
 
@@ -483,8 +427,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 round = 100;
             }
             Debug.Printf("Cardboard: speech recognition: RMS %f", Float.valueOf(f));
-            CardboardActivity.this.speakLevelIndicator.setVisibility(View.VISIBLE);
-            CardboardActivity.this.speakLevelIndicator.setProgress(round);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setProgress(round);
         }
     };
     private volatile boolean insideControls = false;
@@ -496,7 +440,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private Point scrollableViewPoint = new Point();
 
     @SuppressLint({"HandlerLeak"})
-    private final Handler handler = new Handler() {
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
@@ -1022,7 +966,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         draw2DUI();
     }
 
-    @TargetApi(19)
     private View findMatchingView(ViewGroup viewGroup, int i, int i2, int i3, int i4, Predicate<View> predicate, Point point) {
         View findMatchingView;
         for (int i5 = 0; i5 < viewGroup.getChildCount(); i5++) {
@@ -1229,7 +1172,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @TargetApi(14)
     private void onExternalTexturePointer(int i, int i2) {
         View findMatchingView;
         this.hitPointValid = true;
@@ -1257,7 +1199,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             MotionEvent obtain3 = MotionEvent.obtain(this.insideSince, SystemClock.uptimeMillis(), 7, i, i2, 0);
             obtain3.setSource(2);
             this.onScreenControlsLayout.dispatchGenericMotionEvent(obtain3);
-            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.cardboardDetailsPage, i, i2, 0, 0, new Predicate() {
+            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.binding.cardboardDetailsPage, i, i2, 0, 0, new Predicate() {
                 private final /* synthetic */ boolean $m$0(Object obj) {
                     return CardboardActivity.this.isViewScrollable((View) obj);
                 }
@@ -1297,8 +1239,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     public void onMyAvatarState(MyAvatarState myAvatarState) {
         SLAvatarControl sLAvatarControl;
         if (myAvatarState.isSitting()) {
-            this.moveButtonsLayout.setVisibility(View.VISIBLE);
-            this.buttonStandUp.setVisibility(View.VISIBLE);
+            binding.moveButtonsLayout.setVisibility(View.VISIBLE);
+            binding.buttonStandUp.setVisibility(View.VISIBLE);
             this.ownAvatarVisible = true;
             return;
         }
@@ -1306,8 +1248,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             sLAvatarControl.setCameraManualControl(false);
             sLAvatarControl.setAgentHeading(this.neutralAgentHeading);
         }
-        this.moveButtonsLayout.setVisibility(View.GONE);
-        this.buttonStandUp.setVisibility(View.GONE);
+        binding.moveButtonsLayout.setVisibility(View.GONE);
+        binding.buttonStandUp.setVisibility(View.GONE);
         this.ownAvatarVisible = false;
     }
 
@@ -1317,11 +1259,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     public void onPickedAvatarNameUpdated(ChatterNameRetriever chatterNameRetriever) {
-        this.objectNameView.setText(chatterNameRetriever.getResolvedName());
+        this.binding.cardboardObjectName.setText(chatterNameRetriever.getResolvedName());
     }
 
     public void onSelectedObjectProfile(SLObjectProfileData sLObjectProfileData) {
-        this.objectNameView.setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
+        this.binding.cardboardObjectName.setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
     }
 
     public void onViewsInvalidated() {
@@ -1342,8 +1284,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     public void onVoiceActiveChatter(ChatterID chatterID) {
-        if (this.voiceStatusView != null) {
-            this.voiceStatusView.setChatterID(chatterID);
+        if (this.binding.cardboardVoiceStatusView != null) {
+            this.binding.cardboardVoiceStatusView.setChatterID(chatterID);
         }
         if (this.userManager == null || chatterID == null) {
             this.voiceChatInfo.unsubscribe();
@@ -1415,10 +1357,10 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     public void showSpeechRecognitionError(String str) {
-        this.speakNowText.setVisibility(View.INVISIBLE);
-        this.speakLevelIndicator.setVisibility(View.INVISIBLE);
-        this.buttonSpeechSend.setVisibility(View.INVISIBLE);
-        this.speechRecognitionResults.setText(str);
+        binding.speakNowText.setVisibility(View.INVISIBLE);
+        binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
+        binding.buttonSpeechSend.setVisibility(View.INVISIBLE);
+        binding.speechRecognitionResults.setText(str);
         this.isSpeechFinished = true;
     }
 
@@ -1472,26 +1414,26 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             return;
         }
         if (sLObjectInfo.isAvatar()) {
-            this.buttonSit.setVisibility(View.GONE);
-            this.buttonTouchObject.setVisibility(View.GONE);
-            this.buttonObjectChat.setVisibility(View.VISIBLE);
+            binding.objectSitButton.setVisibility(View.GONE);
+            binding.objectTouchButton.setVisibility(View.GONE);
+            binding.objectChatButton.setVisibility(View.VISIBLE);
         } else {
-            this.buttonSit.setVisibility(View.VISIBLE);
-            this.buttonTouchObject.setVisibility(sLObjectInfo.isTouchable() ? View.VISIBLE : View.GONE);
-            this.buttonObjectChat.setVisibility(View.GONE);
+            binding.objectSitButton.setVisibility(View.VISIBLE);
+            binding.objectTouchButton.setVisibility(sLObjectInfo.isTouchable() ? View.VISIBLE : View.GONE);
+            binding.objectChatButton.setVisibility(View.GONE);
         }
     }
 
     private void updateVoiceIndication() {
         boolean isVoiceLoggedIn = isVoiceLoggedIn();
         CurrentLocationInfo data = this.currentLocationInfo.getData();
-        this.voiceStatusView.setCanConnect((!isVoiceLoggedIn || data == null || data.parcelVoiceChannel() == null) ? false : true);
+        this.binding.cardboardVoiceStatusView.setCanConnect((!isVoiceLoggedIn || data == null || data.parcelVoiceChannel() == null) ? false : true);
         ChatterID data2 = this.voiceActiveChatter.getData();
         VoiceChatInfo data3 = this.voiceChatInfo.getData();
         if (data2 == null || data3 == null || data3.state == VoiceChatInfo.VoiceChatState.None) {
-            this.buttonSpeak.setVisibility(View.VISIBLE);
+            binding.buttonSpeak.setVisibility(View.VISIBLE);
         } else {
-            this.buttonSpeak.setVisibility(View.INVISIBLE);
+            binding.buttonSpeak.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -1564,19 +1506,19 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_CardboardActivity_16797, reason: not valid java name */
     /* synthetic */ void m782xd3478a38() {
-        int height = this.speechRecognitionResults.getHeight() / this.speechRecognitionResults.getLineHeight();
+        int height = binding.speechRecognitionResults.getHeight() / binding.speechRecognitionResults.getLineHeight();
         Debug.Printf("Cardboard: setting max lines = %d", Integer.valueOf(height));
         int i = height >= 1 ? height : 1;
-        if (this.speechRecognitionResults.getMaxLines() != i) {
-            this.speechRecognitionResults.setMaxLines(i);
-            this.speechRecognitionResults.setEllipsize(TextUtils.TruncateAt.END);
+        if (binding.speechRecognitionResults.getMaxLines() != i) {
+            binding.speechRecognitionResults.setMaxLines(i);
+            binding.speechRecognitionResults.setEllipsize(TextUtils.TruncateAt.END);
         }
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_CardboardActivity_17418, reason: not valid java name */
     /* synthetic */ void m783xd347f25d() {
-        this.primaryButtonsViewBottom = this.buttonTouch.getTop() + this.buttonTouch.getHeight();
-        this.moveButtonsTop = this.moveButtonsLayout.getTop();
+        this.primaryButtonsViewBottom = binding.buttonTouch.getTop() + binding.buttonTouch.getHeight();
+        this.moveButtonsTop = binding.moveButtonsLayout.getTop();
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_CardboardActivity_28338, reason: not valid java name */
@@ -1673,7 +1615,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         AndroidCompat.trySetVrModeEnabled(this, true);
         AndroidCompat.setSustainedPerformanceMode(this, true);
         this.renderSettings = new RenderSettings(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
-        this.stateHandler = new Handler();
+        this.stateHandler = new Handler(Looper.getMainLooper());
         Debug.Printf("Cardboard: creating VR view", new Object[0]);
         GlobalOptions globalOptions = GlobalOptions.getInstance();
         CardboardControlsPlaceholder cardboardControlsPlaceholder = (CardboardControlsPlaceholder) findViewById(R.id.controls_placeholder);
@@ -1710,22 +1652,41 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 $m$0();
             }
         });
-        new CardboardActivity_ViewBinding(this, this.onScreenControlsLayout);
-        for (View view : new View[]{this.buttonTouch, this.buttonSpeak, this.buttonChat, this.buttonSpeechSend, this.buttonSit, this.buttonTouchObject, this.buttonObjectChat, this.buttonMoveForward, this.buttonMoveBackward, this.buttonTurnLeft, this.buttonTurnRight, this.buttonStandUp, this.yesButton, this.noButton}) {
+        binding = CardboardControlsBinding.bind(this.onScreenControlsLayout);
+        binding.buttonChat.setOnClickListener(v -> onChatButton());
+        binding.buttonMoveBackward.setOnTouchListener((v, e) -> onCamButtonTouch(v, e));
+        binding.buttonMoveForward.setOnTouchListener((v, e) -> onCamButtonTouch(v, e));
+        binding.objectChatButton.setOnClickListener(v -> onObjectChat());
+        binding.objectSitButton.setOnClickListener(v -> onObjectSit());
+        binding.buttonSpeak.setOnClickListener(v -> onSpeakButton());
+        binding.buttonSpeechSend.setOnClickListener(v -> onSpeechSendButton());
+        binding.buttonStandUp.setOnClickListener(v -> onStandUpButton());
+        binding.buttonTouch.setOnClickListener(v -> onTouchButton());
+        binding.objectTouchButton.setOnClickListener(v -> onObjectTouch());
+        binding.buttonTurnLeft.setOnTouchListener((v, e) -> onCamButtonTouch(v, e));
+        binding.buttonTurnRight.setOnTouchListener((v, e) -> onCamButtonTouch(v, e));
+        binding.cardboardAimControls.setOnTouchListener((v, e) -> onAimControlsTouch(v, e));
+        binding.cardboardObjectControls.setOnTouchListener((v, e) -> onObjectControlsTouch(v, e));
+        binding.cardboardScriptDialog.setOnTouchListener((v, e) -> onScriptDialogOutsideTouch(v, e));
+        binding.cardboardSpeakControls.setOnTouchListener((v, e) -> onSpeakControlsTouch(v, e));
+        binding.cardboardNoButton.setOnClickListener(v -> onNoButton());
+        binding.cardboardYesButton.setOnClickListener(v -> onYesButton());
+        binding.cardboardYesnoDialog.setOnTouchListener((v, e) -> onYesNoOutsideTouch(v, e));
+        for (View view : new View[]{binding.buttonTouch, binding.buttonSpeak, binding.buttonChat, binding.buttonSpeechSend, binding.objectSitButton, binding.objectTouchButton, binding.objectChatButton, binding.buttonMoveForward, binding.buttonMoveBackward, binding.buttonTurnLeft, binding.buttonTurnRight, binding.buttonStandUp, binding.cardboardYesButton, binding.cardboardNoButton}) {
             view.setAlpha(0.5f);
             view.setOnHoverListener(this.onHoverListener);
         }
-        this.touchActivatedButtons.add(this.buttonMoveForward);
-        this.touchActivatedButtons.add(this.buttonMoveBackward);
-        this.touchActivatedButtons.add(this.buttonTurnLeft);
-        this.touchActivatedButtons.add(this.buttonTurnRight);
-        this.buttonStandUp.setVisibility(View.GONE);
-        this.moveButtonsLayout.setVisibility(View.GONE);
-        this.voiceStatusView.setShowActiveChatterName(true);
-        this.voiceStatusView.hideBackground();
-        this.voiceStatusView.setLightTheme();
-        this.voiceStatusView.enableHover(this.hoverListener);
-        this.voiceStatusView.setOnCallButtonListener(this.onVoiceCallButtonListener);
+        this.touchActivatedButtons.add(binding.buttonMoveForward);
+        this.touchActivatedButtons.add(binding.buttonMoveBackward);
+        this.touchActivatedButtons.add(binding.buttonTurnLeft);
+        this.touchActivatedButtons.add(binding.buttonTurnRight);
+        binding.buttonStandUp.setVisibility(View.GONE);
+        binding.moveButtonsLayout.setVisibility(View.GONE);
+        binding.cardboardVoiceStatusView.setShowActiveChatterName(true);
+        binding.cardboardVoiceStatusView.hideBackground();
+        binding.cardboardVoiceStatusView.setLightTheme();
+        binding.cardboardVoiceStatusView.enableHover(this.hoverListener);
+        binding.cardboardVoiceStatusView.setOnCallButtonListener(this.onVoiceCallButtonListener);
         int applyDimension2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.0f, getResources().getDisplayMetrics());
         for (int i : dialogButtonIds) {
             Button button = (Button) findViewById(i);
@@ -1735,10 +1696,10 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             button.setPadding(applyDimension2, applyDimension2, applyDimension2, applyDimension2);
             button.setCompoundDrawablePadding(applyDimension2);
         }
-        this.dialogQuestionText.setTextColor(-1);
-        this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, this.chatsOverlayLayout, -1, 0);
+        ((android.widget.TextView) findViewById(R.id.dialogQuestionText)).setTextColor(-1);
+        this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, binding.cardboardIms, -1, 0);
         setControlsPage(ControlsPage.pageDefault);
-        this.speechRecognitionResults.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        binding.speechRecognitionResults.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             private final /* synthetic */ void $m$0() {
                 CardboardActivity.this.m782xd3478a38();
             }
@@ -1748,7 +1709,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 $m$0();
             }
         });
-        this.cardboardPrimaryControls.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        binding.cardboardPrimaryControls.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             private final /* synthetic */ void $m$0() {
                 CardboardActivity.this.m783xd347f25d();
             }
@@ -1791,7 +1752,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (!(sLChatEvent instanceof SLChatScriptDialog)) {
             if (sLChatEvent instanceof SLChatPermissionRequestEvent) {
                 this.activeYesNoEvent = (SLChatYesNoEvent) sLChatEvent;
-                this.yesNoText.setText(((SLChatPermissionRequestEvent) sLChatEvent).getQuestion(this));
+                this.binding.cardboardYesnoText.setText(((SLChatPermissionRequestEvent) sLChatEvent).getQuestion(this));
                 setControlsPage(ControlsPage.pageYesNo);
                 return;
             }
@@ -1811,7 +1772,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                     button.setVisibility(View.GONE);
                 }
             }
-            this.dialogQuestionText.setText(sLChatScriptDialog.getRawText());
+            ((android.widget.TextView) findViewById(R.id.dialogQuestionText)).setText(sLChatScriptDialog.getRawText());
         }
     }
 
@@ -1989,9 +1950,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             this.currentLocationInfo.subscribe(this.userManager.getCurrentLocationInfo(), SubscriptionSingleKey.Value);
         }
         if (this.voiceEnabled) {
-            this.voiceStatusView.setShowWhenInactive(true);
+            this.binding.cardboardVoiceStatusView.setShowWhenInactive(true);
         } else {
-            this.voiceStatusView.setShowWhenInactive(false);
+            this.binding.cardboardVoiceStatusView.setShowWhenInactive(false);
         }
     }
 
@@ -2001,7 +1962,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.voiceLoggedIn.unsubscribe();
         this.currentLocationInfo.unsubscribe();
         this.agentCircuit.unsubscribe();
-        this.voiceStatusView.setChatterID(null);
+        this.binding.cardboardVoiceStatusView.setChatterID(null);
         this.keypadActive.set(false);
         if (this.vrSession != null) {
             this.vrSession.onStop();
@@ -2044,10 +2005,10 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     public void startDictation(ChatterID chatterID) {
         setControlsPage(ControlsPage.pageSpeech);
         this.dictationChatterID = chatterID;
-        this.speakNowText.setVisibility(View.INVISIBLE);
-        this.speakLevelIndicator.setVisibility(View.INVISIBLE);
-        this.buttonSpeechSend.setVisibility(View.INVISIBLE);
-        this.speechRecognitionResults.setText("");
+        binding.speakNowText.setVisibility(View.INVISIBLE);
+        binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
+        binding.buttonSpeechSend.setVisibility(View.INVISIBLE);
+        binding.speechRecognitionResults.setText("");
         if (this.speechRecognizer == null) {
             showSpeechRecognitionError(getString(R.string.speech_recognition_not_available));
             return;

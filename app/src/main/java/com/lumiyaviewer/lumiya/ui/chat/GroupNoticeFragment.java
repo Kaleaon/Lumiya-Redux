@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.databinding.GroupNoticeBinding;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
@@ -25,25 +25,18 @@ public class GroupNoticeFragment extends ChatterFragment {
     private static final String ATTACHED_ENTRY_KEY = "attachedEntry";
     private static final int ITEM_FOR_ATTACH_REQUEST = 1;
 
-    Button groupNoticeAttachmentButton;
-
-    TextView groupNoticeAttachmentText;
-
-    EditText groupNoticeEditText;
-
-    EditText groupNoticeSubject;
+    private GroupNoticeBinding binding;
     private SLInventoryEntry attachedEntry = null;
-    private Unbinder unbinder = null;
 
     private void updateAttachedEntry() {
         Debug.Printf("GroupNotice: current attached entry %s", this.attachedEntry);
-        if (this.unbinder != null) {
+        if (this.binding != null) {
             if (this.attachedEntry == null) {
-                this.groupNoticeAttachmentText.setText(R.string.group_notice_no_attachment);
-                this.groupNoticeAttachmentButton.setText(R.string.group_notice_attach);
+                this.binding.groupNoticeAttachmentText.setText(R.string.group_notice_no_attachment);
+                this.binding.groupNoticeAttachmentButton.setText(R.string.group_notice_attach);
             } else {
-                this.groupNoticeAttachmentText.setText(this.attachedEntry.name);
-                this.groupNoticeAttachmentButton.setText(R.string.group_notice_remove_attachment);
+                this.binding.groupNoticeAttachmentText.setText(this.attachedEntry.name);
+                this.binding.groupNoticeAttachmentButton.setText(R.string.group_notice_remove_attachment);
             }
         }
     }
@@ -72,8 +65,7 @@ public class GroupNoticeFragment extends ChatterFragment {
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
-        View inflate = layoutInflater.inflate(R.layout.group_notice, viewGroup, false);
-        this.unbinder = new GroupNoticeFragment_ViewBinding(this, inflate);
+        this.binding = GroupNoticeBinding.inflate(layoutInflater, viewGroup, false);
         if (bundle != null) {
             if (bundle.containsKey(ATTACHED_ENTRY_KEY)) {
                 this.attachedEntry = (SLInventoryEntry) bundle.getParcelable(ATTACHED_ENTRY_KEY);
@@ -82,16 +74,15 @@ public class GroupNoticeFragment extends ChatterFragment {
                 Debug.Printf("GroupNotice: restored state no entry", new Object[0]);
             }
         }
+        this.binding.groupNoticeAttachmentButton.setOnClickListener(v -> onGroupNoticeAttachmentButton());
+        this.binding.groupNoticeSendButton.setOnClickListener(v -> onGroupNoticeSendButton());
         updateAttachedEntry();
-        return inflate;
+        return this.binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        this.binding = null;
         super.onDestroyView();
     }
 
@@ -110,7 +101,7 @@ public class GroupNoticeFragment extends ChatterFragment {
         if (this.userManager == null || !(this.chatterID instanceof ChatterID.ChatterIDGroup) || (activeAgentCircuit = this.userManager.getActiveAgentCircuit()) == null) {
             return;
         }
-        activeAgentCircuit.getModules().groupManager.SendGroupNotice(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.groupNoticeSubject.getText().toString(), this.groupNoticeEditText.getText().toString(), this.attachedEntry);
+        activeAgentCircuit.getModules().groupManager.SendGroupNotice(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.binding.groupNoticeSubject.getText().toString(), this.binding.groupNoticeEditText.getText().toString(), this.attachedEntry);
         FragmentActivity activity = getActivity();
         if (activity instanceof DetailsActivity) {
             ((DetailsActivity) activity).closeDetailsFragment(this);

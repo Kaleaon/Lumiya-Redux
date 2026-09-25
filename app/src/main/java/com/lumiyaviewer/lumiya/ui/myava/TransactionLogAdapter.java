@@ -2,16 +2,12 @@ package com.lumiyaviewer.lumiya.ui.myava;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.CallSuper;
-import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
-import com.lumiyaviewer.lumiya.ui.common.binding.Utils;
 import com.lumiyaviewer.lumiya.dao.MoneyTransaction;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView;
@@ -47,7 +43,11 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
         TransactionViewHolder(View view) {
             super(view);
             this.chatterNameDisplayer = new ChatterNameDisplayer();
-            new TransactionViewHolder_ViewBinding(this, view);
+            this.userName = view.findViewById(com.lumiyaviewer.lumiya.R.id.user_name);
+            this.userPicView = view.findViewById(com.lumiyaviewer.lumiya.R.id.userPicView);
+            this.timestampTextView = view.findViewById(com.lumiyaviewer.lumiya.R.id.timeStampTextView);
+            this.amountTextView = view.findViewById(com.lumiyaviewer.lumiya.R.id.amountTextView);
+            this.finalBalanceTextView = view.findViewById(com.lumiyaviewer.lumiya.R.id.finalBalanceTextView);
             this.chatterNameDisplayer.bindViews(this.userName, this.userPicView);
             view.setOnClickListener(this);
             this.calendar = Calendar.getInstance();
@@ -74,39 +74,6 @@ public class TransactionLogAdapter extends RecyclerView.Adapter<TransactionLogAd
         void onRecycled() {
             this.chatterNameDisplayer.setChatterID(null);
             this.moneyTransaction = null;
-        }
-    }
-
-    /**
-     * ButterKnife binding generated for 3.4.2, kept as source; the holder
-     * constructs it directly (see ui/common/binding).
-     */
-    public static class TransactionViewHolder_ViewBinding implements Unbinder {
-        private TransactionViewHolder target;
-
-        @UiThread
-        public TransactionViewHolder_ViewBinding(TransactionViewHolder transactionViewHolder, View view) {
-            this.target = transactionViewHolder;
-            transactionViewHolder.userName = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.user_name, "field 'userName'", TextView.class);
-            transactionViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
-            transactionViewHolder.timestampTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.timeStampTextView, "field 'timestampTextView'", TextView.class);
-            transactionViewHolder.amountTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.amountTextView, "field 'amountTextView'", TextView.class);
-            transactionViewHolder.finalBalanceTextView = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.finalBalanceTextView, "field 'finalBalanceTextView'", TextView.class);
-        }
-
-        @Override
-        @CallSuper
-        public void unbind() {
-            TransactionViewHolder transactionViewHolder = this.target;
-            if (transactionViewHolder == null) {
-                throw new IllegalStateException("Bindings already cleared.");
-            }
-            this.target = null;
-            transactionViewHolder.userName = null;
-            transactionViewHolder.userPicView = null;
-            transactionViewHolder.timestampTextView = null;
-            transactionViewHolder.amountTextView = null;
-            transactionViewHolder.finalBalanceTextView = null;
         }
     }
 

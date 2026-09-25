@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
+import com.lumiyaviewer.lumiya.databinding.PayUserBinding;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -37,24 +37,15 @@ public class PayUserFragment extends ChatterFragment {
         }
     });
 
-    EditText payAmount;
-
-    EditText payMessage;
-
-    TextView paymentDetailsBalance;
-
-    TextView receivingUserName;
-
-    ChatterPicView receivingUserPic;
-    private Unbinder unbinder;
+    private PayUserBinding binding;
 
     public void onMyBalance(Integer num) {
-        if (this.unbinder != null) {
+        if (this.binding != null) {
             if (num == null) {
-                this.paymentDetailsBalance.setVisibility(View.GONE);
+                this.binding.paymentDetailsBalance.setVisibility(View.GONE);
             } else {
-                this.paymentDetailsBalance.setText(getString(R.string.object_balance_format, num));
-                this.paymentDetailsBalance.setVisibility(View.VISIBLE);
+                this.binding.paymentDetailsBalance.setText(getString(R.string.object_balance_format, num));
+                this.binding.paymentDetailsBalance.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -108,19 +99,17 @@ public class PayUserFragment extends ChatterFragment {
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View inflate = layoutInflater.inflate(R.layout.pay_user, viewGroup, false);
-        this.unbinder = new PayUserFragment_ViewBinding(this, inflate);
-        this.chatterNameDisplayer.bindViews(this.receivingUserName, this.receivingUserPic);
-        return inflate;
+        this.binding = PayUserBinding.inflate(layoutInflater, viewGroup, false);
+        this.chatterNameDisplayer.bindViews(this.binding.receivingUserName, this.binding.receivingUserPic);
+        this.binding.receivingUserProfileButton.setOnClickListener(v -> onReceivingUserViewProfileClick());
+        this.binding.userPayButton.setOnClickListener(v -> onUserPayButton());
+        return this.binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         this.chatterNameDisplayer.unbindViews();
-        if (this.unbinder != null) {
-            this.unbinder.unbind();
-            this.unbinder = null;
-        }
+        this.binding = null;
         super.onDestroyView();
     }
 
@@ -145,7 +134,7 @@ public class PayUserFragment extends ChatterFragment {
 
     public void onUserPayButton() {
         try {
-            payUser(Integer.parseInt(this.payAmount.getText().toString()), this.payMessage.getText().toString());
+            payUser(Integer.parseInt(this.binding.payAmount.getText().toString()), this.binding.userPayMessage.getText().toString());
         } catch (Exception e) {
         }
     }

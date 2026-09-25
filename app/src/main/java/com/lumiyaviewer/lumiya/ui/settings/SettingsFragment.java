@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import androidx.fragment.app.FragmentActivity;
@@ -127,7 +126,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         while (i2 < availableCacheDirs.size()) {
             int i3 = Objects.equal(availableCacheDirs.get(i2), baseCacheDir) ? i2 : i;
             StatFs statFs = new StatFs(availableCacheDirs.get(i2).getAbsolutePath());
-            strArr[i2] = String.format("%s (%.1f Gb free)", CacheLocationPreference.makeDisplayableCacheLocation(availableCacheDirs.get(i2).getAbsolutePath()), Float.valueOf((Build.VERSION.SDK_INT >= 18 ? statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong() : statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1.0737418E9f));
+            strArr[i2] = String.format("%s (%.1f Gb free)", CacheLocationPreference.makeDisplayableCacheLocation(availableCacheDirs.get(i2).getAbsolutePath()), Float.valueOf(statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong() / 1.0737418E9f));
             i2++;
             i = i3;
         }
@@ -237,7 +236,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         File file2 = new File(((File) immutableList.get(i)).toString());
         SharedPreferences.Editor edit = cacheLocationPreference.getSharedPreferences().edit();
         edit.putString(cacheLocationPreference.getKey(), ((File) immutableList.get(i)).toString());
-        edit.commit();
+        edit.apply();
         dialogInterface.dismiss();
         updatePreferencesDisplay();
         if (Objects.equal(file, file2) || !GlobalOptions.getInstance().isCacheDirUsed()) {
@@ -268,7 +267,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Fragme
         String uri2 = uri != null ? uri.toString() : "";
         SharedPreferences.Editor edit = this.requestedRingtonePreference.getSharedPreferences().edit();
         edit.putString(this.requestedRingtonePreference.getKey(), uri2);
-        edit.commit();
+        edit.apply();
         updatePreferencesDisplay();
     }
 

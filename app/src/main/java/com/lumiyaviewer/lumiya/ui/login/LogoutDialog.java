@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.eventbus.EventBus;
@@ -26,7 +27,7 @@ public class LogoutDialog extends ProgressDialog {
 
     public LogoutDialog(Context context) {
         super(context);
-        this.handler = new Handler();
+        this.handler = new Handler(Looper.getMainLooper());
         this.eventBus = EventBus.getInstance();
         this.onDisconnectTimeout = new Runnable() {
             private final /* synthetic */ void $m$0() {
@@ -42,7 +43,7 @@ public class LogoutDialog extends ProgressDialog {
 
     public LogoutDialog(Context context, int i) {
         super(context, i);
-        this.handler = new Handler();
+        this.handler = new Handler(Looper.getMainLooper());
         this.eventBus = EventBus.getInstance();
         this.onDisconnectTimeout = new Runnable() {
             private final /* synthetic */ void $m$0() {

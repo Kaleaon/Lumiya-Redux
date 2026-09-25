@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.TypedValue;
 import com.lumiyaviewer.lumiya.Debug;
@@ -28,7 +29,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     WorldSurfaceView(WorldViewActivity worldViewActivity, UserManager userManager) {
         super(worldViewActivity);
         this.ownAvatarHidden = false;
-        this.mHandler = new Handler() {
+        this.mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message message) {
                 switch (message.what) {

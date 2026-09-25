@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Display;
@@ -263,11 +262,7 @@ public class MinimapView extends View {
     @Override
     protected void onMeasure(int i, int i2) {
         Display defaultDisplay = ((WindowManager) getContext().getSystemService("window")).getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= 13) {
-            defaultDisplay.getSize(this.displaySize);
-        } else {
-            this.displaySize.set(defaultDisplay.getWidth(), defaultDisplay.getHeight());
-        }
+        defaultDisplay.getSize(this.displaySize);
         int min = Math.min(this.displaySize.x, this.displaySize.y);
         if (View.MeasureSpec.getMode(i) != 0) {
             min = Math.min(min, View.MeasureSpec.getSize(i));

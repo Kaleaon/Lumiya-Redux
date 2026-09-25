@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.chat;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -50,7 +49,6 @@ public class OnlineIndicatorView extends View {
         applyAttributes(context, attributeSet, i, 0);
     }
 
-    @TargetApi(21)
     public OnlineIndicatorView(Context context, @Nullable AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.onlineIndicatorColor = -16711936;

@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.users.manager;
 
 import android.database.Cursor;
-import android.os.Environment;
 import androidx.preference.PreferenceManager;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -169,7 +168,7 @@ public class UserManager {
         @Override
         public boolean isRequestComplete(@Nonnull UUID uuid, UserName userName) {
             if (userName != null) {
-                if (userName.getIsBadUUID()) {
+                if (userName.isBadUUID) {
                     return true;
                 }
                 if (userName.getDisplayName() != null && userName.getUserName() != null) {
@@ -265,7 +264,7 @@ public class UserManager {
 
     private static File getInventoryDatabasePath(String str) {
         if (PreferenceManager.getDefaultSharedPreferences(LumiyaApp.getContext()).getString("db_location", "internal").equals("sd")) {
-            File file = new File(Environment.getExternalStorageDirectory(), "/Android/data/com.lumiyaviewer.lumiya/cache/database");
+            File file = new File(LumiyaApp.getContext().getExternalFilesDir(null), "cache/database");
             file.mkdirs();
             return new File(file, str);
         }

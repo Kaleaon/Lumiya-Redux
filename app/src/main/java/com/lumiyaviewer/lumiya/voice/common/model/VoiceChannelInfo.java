@@ -3,11 +3,6 @@ package com.lumiyaviewer.lumiya.voice.common.model;
 import android.net.Uri;
 import android.os.Bundle;
 import com.google.common.base.Objects;
-import com.google.common.base.Strings;
-import com.google.common.primitives.Bytes;
-import com.google.common.primitives.Longs;
-import com.lumiyaviewer.lumiya.base64.Base64;
-import java.util.Arrays;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,31 +30,29 @@ public class VoiceChannelInfo {
         this.isConference = isConference;
     }
 
-    public VoiceChannelInfo(@Nonnull UUID uuid, @Nonnull String str) {
-        this.voiceChannelURI = "sip:" + ("x" + Base64.encodeToString(Bytes.concat(Longs.toByteArray(uuid.getMostSignificantBits()), Longs.toByteArray(uuid.getLeastSignificantBits())), false).replace('+', '-').replace('/', '_')) + "@" + str;
-        this.isSpatial = false;
-        this.isConference = false;
+    /** Spatial parcel channel: "{regionUUID}-{parcelLocalId}" */
+    public static VoiceChannelInfo forParcel(@Nonnull UUID regionUUID, int parcelLocalId) {
+        return new VoiceChannelInfo(regionUUID.toString() + "-" + parcelLocalId, true, true);
+    }
+
+    /** Non-spatial P2P call: "{agentUUID}" */
+    public static VoiceChannelInfo forUser(@Nonnull UUID agentUUID) {
+        return new VoiceChannelInfo(agentUUID.toString(), false, false);
+    }
+
+    /** Estate-wide spatial channel */
+    public static VoiceChannelInfo forEstate() {
+        return new VoiceChannelInfo("Estate", true, true);
     }
 
     @Nullable
-    public static UUID agentUUIDFromURI(String str) {
-        String nullToEmpty = Strings.nullToEmpty(str);
-        int indexOf = nullToEmpty.indexOf(58);
-        if (indexOf != -1) {
-            nullToEmpty = nullToEmpty.substring(indexOf + 1);
+    public UUID getAgentUUID() {
+        if (voiceChannelURI == null || isSpatial) return null;
+        try {
+            return UUID.fromString(voiceChannelURI);
+        } catch (IllegalArgumentException e) {
+            return null;
         }
-        int index = nullToEmpty.indexOf(64);
-        if (index != -1) {
-            nullToEmpty = nullToEmpty.substring(0, index);
-        }
-        if (nullToEmpty.startsWith("x")) {
-            nullToEmpty = nullToEmpty.substring(1);
-        }
-        byte[] decode = Base64.decode(nullToEmpty.replace("-", "+").replace("_", "/"));
-        if (decode != null && decode.length == 16) {
-            return new UUID(Longs.fromByteArray(Arrays.copyOfRange(decode, 0, 8)), Longs.fromByteArray(Arrays.copyOfRange(decode, 8, 16)));
-        }
-        return null;
     }
 
     public void appendToUri(Uri.Builder builder) {
@@ -69,22 +62,11 @@ public class VoiceChannelInfo {
     }
 
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        VoiceChannelInfo voiceChannelInfo = (VoiceChannelInfo) obj;
-        if (this.isSpatial == voiceChannelInfo.isSpatial && this.isConference == voiceChannelInfo.isConference) {
-            return this.voiceChannelURI == null ? voiceChannelInfo.voiceChannelURI == null : this.voiceChannelURI.equals(voiceChannelInfo.voiceChannelURI);
-        }
-        return false;
-    }
-
-    @Nullable
-    public UUID getAgentUUID() {
-        return agentUUIDFromURI(this.voiceChannelURI);
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        VoiceChannelInfo other = (VoiceChannelInfo) obj;
+        if (this.isSpatial != other.isSpatial || this.isConference != other.isConference) return false;
+        return this.voiceChannelURI == null ? other.voiceChannelURI == null : this.voiceChannelURI.equals(other.voiceChannelURI);
     }
 
     public int hashCode() {

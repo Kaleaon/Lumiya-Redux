@@ -1,12 +1,10 @@
 package com.lumiyaviewer.lumiya.openjpeg;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.opengl.ETC1;
 import android.opengl.GLES10;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
-import android.os.Build;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.GLTexture;
 import com.lumiyaviewer.lumiya.render.TextureMemoryTracker;
@@ -172,7 +170,7 @@ public class OpenJPEG implements GLTexture {
     private native void writeRaw(ByteBuffer byteBuffer, String str);
 
     public boolean CompressETC1() throws IOException {
-        if (Build.VERSION.SDK_INT < 8 || this.rawBuffer == null || this.num_components != 3 || this.num_extra_components != 0 || (this.bytes_per_pixel != 2 && this.bytes_per_pixel != 3)) {
+        if (this.rawBuffer == null || this.num_components != 3 || this.num_extra_components != 0 || (this.bytes_per_pixel != 2 && this.bytes_per_pixel != 3)) {
             return false;
         }
         int encodedDataSize = ETC1.getEncodedDataSize(this.width, this.height);
@@ -211,7 +209,6 @@ public class OpenJPEG implements GLTexture {
         }
     }
 
-    @TargetApi(18)
     public int SetAsImmutableTexture() {
         int i;
         int i2;

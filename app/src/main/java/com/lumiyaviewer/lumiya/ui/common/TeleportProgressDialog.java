@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.R;
 import com.lumiyaviewer.lumiya.eventbus.EventHandler;
@@ -21,7 +22,7 @@ public class TeleportProgressDialog extends ProgressDialog implements DialogInte
 
     public TeleportProgressDialog(Context context, UserManager userManager, int i) {
         super(context);
-        this.mHandler = new Handler();
+        this.mHandler = new Handler(Looper.getMainLooper());
         this.userManager = userManager;
         setMessage(context.getString(i));
         setCancelable(true);

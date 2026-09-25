@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.objects;
 
-import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.core.view.MenuItemCompat;
@@ -258,11 +257,9 @@ public class ObjectSelectorFragment extends Fragment implements SeekBar.OnSeekBa
         ((CheckBox) inflate.findViewById(R.id.includeAttachments)).setOnCheckedChangeListener(this);
         ((CheckBox) inflate.findViewById(R.id.includeStubs)).setOnCheckedChangeListener(this);
         ((CheckBox) inflate.findViewById(R.id.includeNonTouchable)).setOnCheckedChangeListener(this);
-        if (Build.VERSION.SDK_INT >= 14) {
-            ButteryProgressBar butteryProgressBar = new ButteryProgressBar(layoutInflater.getContext());
-            butteryProgressBar.setId(R.id.object_progress_bar);
-            ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, new FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())));
-        }
+        ButteryProgressBar butteryProgressBar = new ButteryProgressBar(layoutInflater.getContext());
+        butteryProgressBar.setId(R.id.object_progress_bar);
+        ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, new FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())));
         return inflate;
     }
 

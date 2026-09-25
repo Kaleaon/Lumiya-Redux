@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.settings;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import androidx.preference.Preference;
@@ -36,7 +35,6 @@ public class PreferenceSubPage extends Preference {
         applyAttributes(context, attributeSet, i, 0);
     }
 
-    @TargetApi(21)
     public PreferenceSubPage(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.pageResource = 0;

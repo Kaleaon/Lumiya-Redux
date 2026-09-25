@@ -3,8 +3,8 @@ package com.lumiyaviewer.lumiya.ui.render;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -25,7 +25,7 @@ public class FadingTextViewLog {
     private final int logBackgroundColor;
     private final int logTextColor;
     private final UserManager userManager;
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Map<Long, ChatEventOverlay> chatEventOverlays = new LinkedHashMap();
     private boolean removeStaleChatsPosted = false;
     private final Runnable RemoveStaleChatsTask = new Runnable() {
@@ -42,16 +42,12 @@ public class FadingTextViewLog {
                             break;
                         }
                         final TextView textView = ((ChatEventOverlay) entry.getValue()).textView;
-                        if (Build.VERSION.SDK_INT >= 14) {
-                            textView.animate().alpha(0.0f).setDuration(1000L).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    FadingTextViewLog.this.chatsOverlayLayout.removeView(textView);
-                                }
-                            }).start();
-                        } else {
-                            FadingTextViewLog.this.chatsOverlayLayout.removeView(textView);
-                        }
+                        textView.animate().alpha(0.0f).setDuration(1000L).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                FadingTextViewLog.this.chatsOverlayLayout.removeView(textView);
+                            }
+                        }).start();
                         it.remove();
                     }
                 }

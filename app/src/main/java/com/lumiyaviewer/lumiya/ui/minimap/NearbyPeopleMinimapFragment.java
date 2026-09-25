@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.minimap;
 
-import android.R;
 import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.MinimapUsersBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
@@ -36,9 +37,8 @@ import javax.annotation.Nullable;
 
 public class NearbyPeopleMinimapFragment extends Fragment {
 
-    View emptyView;
+    private MinimapUsersBinding binding;
 
-    RecyclerView userListView;
     private final SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             NearbyPeopleMinimapFragment.this.onChatterList((ImmutableList) obj);
@@ -98,7 +98,7 @@ public class NearbyPeopleMinimapFragment extends Fragment {
 
         @Override
         public NearbyUserViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return NearbyPeopleMinimapFragment.this.new NearbyUserViewHolder(this.layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.minimap_user_item, viewGroup, false));
+            return NearbyPeopleMinimapFragment.this.new NearbyUserViewHolder(this.layoutInflater.inflate(R.layout.minimap_user_item, viewGroup, false));
         }
 
         public void setChatters(@Nullable ImmutableList<ChatterDisplayData> immutableList) {
@@ -171,12 +171,12 @@ public class NearbyPeopleMinimapFragment extends Fragment {
             super(view);
             this.viewBuilder = new ChatterItemViewBuilder();
             this.chatterDisplayData = null;
-            this.userItemViewHolder = (FrameLayout) view.findViewById(com.lumiyaviewer.lumiya.R.id.user_item_view_holder);
-            this.cardView = (CardView) view.findViewById(com.lumiyaviewer.lumiya.R.id.user_card_view);
+            this.userItemViewHolder = (FrameLayout) view.findViewById(R.id.user_item_view_holder);
+            this.cardView = (CardView) view.findViewById(R.id.user_card_view);
             this.cardSelectedElevation = this.cardView.getCardElevation();
-            this.selectedLayout = view.findViewById(com.lumiyaviewer.lumiya.R.id.user_item_selected_layout);
+            this.selectedLayout = view.findViewById(R.id.user_item_selected_layout);
             this.userItemViewHolder.setOnClickListener(this);
-            view.findViewById(com.lumiyaviewer.lumiya.R.id.user_item_chat_button).setOnClickListener(this);
+            view.findViewById(R.id.user_item_chat_button).setOnClickListener(this);
         }
 
         public void bindToData(Context context, LayoutInflater layoutInflater, UserManager userManager, ChatterDisplayData chatterDisplayData, boolean z) {
@@ -205,17 +205,17 @@ public class NearbyPeopleMinimapFragment extends Fragment {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case com.lumiyaviewer.lumiya.R.id.user_item_view_holder:
+                case R.id.user_item_view_holder:
                     FragmentManager fragmentManager = NearbyPeopleMinimapFragment.this.getFragmentManager();
                     if (fragmentManager != null) {
-                        ComponentCallbacks findFragmentById = fragmentManager.findFragmentById(com.lumiyaviewer.lumiya.R.id.selector);
+                        ComponentCallbacks findFragmentById = fragmentManager.findFragmentById(R.id.selector);
                         if (findFragmentById instanceof MinimapView.OnUserClickListener) {
                             ((MinimapView.OnUserClickListener) findFragmentById).onUserClick(this.chatterDisplayData.chatterID.getOptionalChatterUUID());
                             break;
                         }
                     }
                     break;
-                case com.lumiyaviewer.lumiya.R.id.user_item_chat_button:
+                case R.id.user_item_chat_button:
                     if (this.chatterDisplayData != null) {
                         DetailsActivity.showDetails(NearbyPeopleMinimapFragment.this.getActivity(), ChatFragmentActivityFactory.getInstance(), ChatFragment.makeSelection(this.chatterDisplayData.chatterID));
                         break;
@@ -237,8 +237,8 @@ public class NearbyPeopleMinimapFragment extends Fragment {
         }
         if (getView() != null) {
             boolean isEmpty = immutableList.isEmpty();
-            this.emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-            this.userListView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+            binding.empty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            binding.minimapUsersList.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -246,14 +246,19 @@ public class NearbyPeopleMinimapFragment extends Fragment {
     @Nullable
     public View onCreateView(LayoutInflater layoutInflater, @Nullable ViewGroup viewGroup, @Nullable Bundle bundle) {
         super.onCreateView(layoutInflater, viewGroup, bundle);
-        View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.minimap_users, viewGroup, false);
-        new NearbyPeopleMinimapFragment_ViewBinding(this, inflate);
+        binding = MinimapUsersBinding.inflate(layoutInflater, viewGroup, false);
         TypedValue typedValue = new TypedValue();
-        layoutInflater.getContext().getTheme().resolveAttribute(com.lumiyaviewer.lumiya.R.attr.CardViewDetailsBackground, typedValue, true);
+        layoutInflater.getContext().getTheme().resolveAttribute(R.attr.CardViewDetailsBackground, typedValue, true);
         this.cardSelectedColor = typedValue.data;
         this.adapter = new NearbyUserRecyclerAdapter(getContext(), ActivityUtils.getUserManager(getArguments()));
-        this.userListView.setAdapter(this.adapter);
-        return inflate;
+        binding.minimapUsersList.setAdapter(this.adapter);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 
     @Override

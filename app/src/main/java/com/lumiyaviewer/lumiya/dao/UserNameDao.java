@@ -49,7 +49,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         if (displayName != null) {
             sqLiteStatement.bindString(3, displayName);
         }
-        sqLiteStatement.bindLong(4, userName.getIsBadUUID() ? 1L : 0L);
+        sqLiteStatement.bindLong(4, userName.isBadUUID ? 1L : 0L);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class UserNameDao extends AbstractDao<UserName, UUID> {
         userName.setUuid(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)));
         userName.setUserName(cursor.isNull(i + 1) ? null : cursor.getString(i + 1));
         userName.setDisplayName(cursor.isNull(i + 2) ? null : cursor.getString(i + 2));
-        userName.setIsBadUUID(cursor.getShort(i + 3) != 0);
+        userName.isBadUUID = cursor.getShort(i + 3) != 0;
     }
 
     @Override

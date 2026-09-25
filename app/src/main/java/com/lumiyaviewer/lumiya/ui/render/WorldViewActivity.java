@@ -10,9 +10,9 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import androidx.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
@@ -34,12 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -48,6 +42,7 @@ import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.LumiyaApp;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.WorldViewBinding;
 import com.lumiyaviewer.lumiya.eventbus.EventHandler;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
@@ -87,7 +82,6 @@ import com.lumiyaviewer.lumiya.ui.objects.ObjectPayDialog;
 import com.lumiyaviewer.lumiya.ui.objects.TouchableObjectsFragment;
 import com.lumiyaviewer.lumiya.ui.outfits.OutfitsFragment;
 import com.lumiyaviewer.lumiya.ui.render.WorldViewActivity;
-import com.lumiyaviewer.lumiya.ui.voice.VoiceStatusView;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -110,83 +104,20 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     @Nullable
     private SLAvatarControl avatarControl;
-
-    ImageView avatarIconView;
-
-    ImageButton buttonCamOff;
-
-    ImageButton buttonCamOn;
-
-    ImageButton buttonFlyDownward;
-
-    ImageButton buttonFlyUpward;
-
-    Button buttonHUD;
-
-    ImageButton buttonMoveBackward;
-
-    ImageButton buttonMoveForward;
-
-    ImageButton buttonStandUp;
-
-    ImageButton buttonStopFlying;
-
-    ImageButton buttonTurnLeft;
-
-    ImageButton buttonTurnRight;
-
-    LinearLayout chatsOverlayLayout;
-
-    View detailsContainer;
-
-    View dragPointer;
-
-    ViewGroup dragPointerLayout;
+    private WorldViewBinding binding;
 
     @Nullable
     private SLDrawDistance drawDistance;
     private FadingTextViewLog fadingTextViewLog;
-
-    LinearLayout flyButtonsLayout;
     private GestureDetectorCompat gestureDetector;
-
-    FrameLayout insetsBackground;
     private boolean isSplitScreen;
     private WorldSurfaceView mGLView;
-
-    View moveButtonsLayout;
-
-    ImageButton objectChatButton;
-
-    View objectControlsPanel;
-
-    ImageButton objectMoreButton;
-
-    TextView objectNameTextView;
-
-    ImageButton objectPayButton;
-
-    View objectPopupLeftSpacer;
-
-    ImageButton objectSitButton;
-
-    ImageButton objectStandButton;
-
-    ImageButton objectTouchButton;
     private ScaleGestureDetector scaleGestureDetector;
     private UserManager userManager;
-
-    VoiceStatusView voiceStatusView;
-
-    ViewGroup worldOverlaysContainer;
-
-    FrameLayout worldViewHolder;
-
-    View worldViewTouchReceiver;
     private SLObjectInfo pickedObject = null;
     private ObjectIntersectInfo pickedIntersectInfo = null;
     private ChatterNameRetriever pickedAvatarNameRetriever = null;
-    private Handler mHandler = new Handler();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     private int prefDrawDistance = 20;
     private boolean chatOver3D = false;
     private UUID lastTouchUUID = null;
@@ -314,7 +245,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             if (WorldViewActivity.this.buttonsFadeAnimator != null) {
                 WorldViewActivity.this.buttonsFadeAnimator.cancel();
             }
-            WorldViewActivity.this.insetsBackground.setAlpha(1.0f);
+            WorldViewActivity.this.binding.insetsBackground.setAlpha(1.0f);
         }
     };
     private final View.OnTouchListener worldViewTouchListener = new View.OnTouchListener() {
@@ -352,8 +283,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
             if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling) || !(!WorldViewActivity.this.isDragging)) {
                 return false;
             }
-            float height = (f * 60.0f) / WorldViewActivity.this.worldViewHolder.getHeight();
-            float height2 = ((-f2) * 60.0f) / WorldViewActivity.this.worldViewHolder.getHeight();
+            float height = (f * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight();
+            float height2 = ((-f2) * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight();
             if (WorldViewActivity.this.avatarControl == null) {
                 return true;
             }
@@ -372,7 +303,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                     return;
                 }
                 int[] location = new int[2];
-                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(location);
+                WorldViewActivity.this.binding.worldViewHolder.getLocationOnScreen(location);
                 WorldViewActivity.this.mGLView.pickObjectHover(rawX - location[0], rawY - location[1]);
             }
         }
@@ -380,11 +311,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         @Override
         public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
             if (WorldViewActivity.this.isDragging) {
-                AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) WorldViewActivity.this.dragPointer.getLayoutParams();
+                AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) WorldViewActivity.this.binding.dragPointerView.getLayoutParams();
                 if (layoutParams != null) {
-                    layoutParams.x = Math.max(Math.min((int) (layoutParams.x - f), WorldViewActivity.this.dragPointerLayout.getWidth() - WorldViewActivity.this.dragPointer.getWidth()), 0);
-                    layoutParams.y = Math.max(Math.min((int) (layoutParams.y - f2), WorldViewActivity.this.dragPointerLayout.getHeight() - WorldViewActivity.this.dragPointer.getHeight()), 0);
-                    WorldViewActivity.this.dragPointer.setLayoutParams(layoutParams);
+                    layoutParams.x = Math.max(Math.min((int) (layoutParams.x - f), WorldViewActivity.this.binding.dragPointerLayout.getWidth() - WorldViewActivity.this.binding.dragPointerView.getWidth()), 0);
+                    layoutParams.y = Math.max(Math.min((int) (layoutParams.y - f2), WorldViewActivity.this.binding.dragPointerLayout.getHeight() - WorldViewActivity.this.binding.dragPointerView.getHeight()), 0);
+                    WorldViewActivity.this.binding.dragPointerView.setLayoutParams(layoutParams);
                     WorldViewActivity.this.selectByDragPointer(layoutParams.x, layoutParams.y);
                 }
                 return true;
@@ -393,12 +324,12 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 return false;
             }
             if (WorldViewActivity.this.displayedHUDid != 0) {
-                WorldViewActivity.this.hudOffsetX += (f / WorldViewActivity.this.worldViewHolder.getHeight()) / 2.0f;
-                WorldViewActivity.this.hudOffsetY += (f2 / WorldViewActivity.this.worldViewHolder.getHeight()) / 2.0f;
+                WorldViewActivity.this.hudOffsetX += (f / WorldViewActivity.this.binding.worldViewHolder.getHeight()) / 2.0f;
+                WorldViewActivity.this.hudOffsetY += (f2 / WorldViewActivity.this.binding.worldViewHolder.getHeight()) / 2.0f;
                 WorldViewActivity.this.mGLView.setHUDOffset(WorldViewActivity.this.hudOffsetX, WorldViewActivity.this.hudOffsetY);
             } else {
-                float height = ((-f) * 60.0f) / WorldViewActivity.this.worldViewHolder.getHeight();
-                float height2 = (f2 * 60.0f) / WorldViewActivity.this.worldViewHolder.getHeight();
+                float height = ((-f) * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight();
+                float height2 = (f2 * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight();
                 if (WorldViewActivity.this.avatarControl != null) {
                     WorldViewActivity.this.avatarControl.processCameraRotate(height, height2);
                 }
@@ -412,7 +343,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 WorldViewActivity.this.dragSelectorSetRawPosition((int) motionEvent.getRawX(), (int) motionEvent.getRawY());
             } else if (WorldViewActivity.this.displayedHUDid != 0) {
                 int[] location = new int[2];
-                WorldViewActivity.this.worldViewHolder.getLocationOnScreen(location);
+                WorldViewActivity.this.binding.worldViewHolder.getLocationOnScreen(location);
                 WorldViewActivity.this.mGLView.touchHUD(motionEvent.getRawX() - location[0], motionEvent.getRawY() - location[1]);
             } else {
                 WorldViewActivity.this.handlePickedObject(null);
@@ -428,8 +359,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
                 WorldViewActivity.this.hudScaleFactor = Math.max(0.1f, Math.min(WorldViewActivity.this.hudScaleFactor * scaleGestureDetector.getScaleFactor(), 10.0f));
                 WorldViewActivity.this.mGLView.setHUDScaleFactor(WorldViewActivity.this.hudScaleFactor);
             } else {
-                float width = WorldViewActivity.this.worldViewTouchReceiver.getWidth();
-                float height = WorldViewActivity.this.worldViewTouchReceiver.getHeight();
+                float width = WorldViewActivity.this.binding.worldViewTouchReceiver.getWidth();
+                float height = WorldViewActivity.this.binding.worldViewTouchReceiver.getHeight();
                 float focusX = scaleGestureDetector.getFocusX();
                 float focusY = scaleGestureDetector.getFocusY();
                 float f = ((focusX / width) - 0.5f) * (height / width);
@@ -522,10 +453,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private void beginDragSelection() {
         this.isDragging = true;
         removeAllDetails();
-        AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) this.dragPointer.getLayoutParams();
-        layoutParams.x = (this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()) / 2;
-        layoutParams.y = (this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()) / 2;
-        this.dragPointer.setLayoutParams(layoutParams);
+        AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) binding.dragPointerView.getLayoutParams();
+        layoutParams.x = (binding.dragPointerLayout.getWidth() - binding.dragPointerView.getWidth()) / 2;
+        layoutParams.y = (binding.dragPointerLayout.getHeight() - binding.dragPointerView.getHeight()) / 2;
+        binding.dragPointerView.setLayoutParams(layoutParams);
         selectByDragPointer(layoutParams.x, layoutParams.y);
         this.mGLView.setOwnAvatarHidden(true);
         updateObjectPanel();
@@ -564,14 +495,14 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     public void dragSelectorSetRawPosition(int i, int i2) {
         int[] ints = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(ints);
-        int width = i - (this.dragPointer.getWidth() / 2);
-        int height = i2 - (this.dragPointer.getHeight() / 2);
-        AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) this.dragPointer.getLayoutParams();
+        binding.dragPointerLayout.getLocationOnScreen(ints);
+        int width = i - (binding.dragPointerView.getWidth() / 2);
+        int height = i2 - (binding.dragPointerView.getHeight() / 2);
+        AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) binding.dragPointerView.getLayoutParams();
         if (layoutParams != null) {
-            layoutParams.x = Math.max(Math.min(width - ints[0], this.dragPointerLayout.getWidth() - this.dragPointer.getWidth()), 0);
-            layoutParams.y = Math.max(Math.min(height - ints[1], this.dragPointerLayout.getHeight() - this.dragPointer.getHeight()), 0);
-            this.dragPointer.setLayoutParams(layoutParams);
+            layoutParams.x = Math.max(Math.min(width - ints[0], binding.dragPointerLayout.getWidth() - binding.dragPointerView.getWidth()), 0);
+            layoutParams.y = Math.max(Math.min(height - ints[1], binding.dragPointerLayout.getHeight() - binding.dragPointerView.getHeight()), 0);
+            binding.dragPointerView.setLayoutParams(layoutParams);
             selectByDragPointer(layoutParams.x, layoutParams.y);
         }
     }
@@ -595,26 +526,38 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     private void initContentView() {
-        setContentView(R.layout.world_view);
-        new WorldViewActivity_ViewBinding(this);
+        binding = WorldViewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        // Click listeners (migrated from WorldViewActivity_ViewBinding)
+        binding.buttonCamOff.setOnClickListener(v -> onCamOffButton());
+        binding.buttonCamOn.setOnClickListener(v -> onCamOnButton());
+        binding.buttonHud.setOnClickListener(v -> onHUDButton());
+        binding.buttonStandUp.setOnClickListener(v -> onObjectStandButton());
+        binding.buttonStopFlying.setOnClickListener(v -> onStopFlyingButton());
+        binding.objectChatButton.setOnClickListener(v -> onObjectChatButton());
+        binding.objectMoreButton.setOnClickListener(v -> onObjectMoreButton());
+        binding.objectPayButton.setOnClickListener(v -> onObjectPayButton());
+        binding.objectSitButton.setOnClickListener(v -> onObjectSitButton());
+        binding.objectStandButton.setOnClickListener(v -> onObjectStandButton());
+        binding.objectTouchButton.setOnClickListener(v -> onObjectTouchButton());
         this.mGLView = new WorldSurfaceView(this, this.userManager);
-        this.worldViewHolder.addView(this.mGLView);
-        this.buttonMoveForward.setOnTouchListener(this);
-        this.buttonMoveBackward.setOnTouchListener(this);
-        this.buttonTurnLeft.setOnTouchListener(this);
-        this.buttonTurnRight.setOnTouchListener(this);
-        this.buttonMoveForward.setFocusable(false);
-        this.buttonMoveBackward.setFocusable(false);
-        this.buttonTurnLeft.setFocusable(false);
-        this.buttonTurnRight.setFocusable(false);
-        this.buttonFlyUpward.setOnTouchListener(this);
-        this.buttonFlyDownward.setOnTouchListener(this);
-        this.buttonFlyUpward.setFocusable(false);
-        this.buttonFlyDownward.setFocusable(false);
-        this.voiceStatusView.setShowActiveChatterName(true);
-        this.worldViewTouchReceiver.setOnTouchListener(this.worldViewTouchListener);
-        this.objectControlsPanel.setVisibility(View.GONE);
+        binding.worldViewHolder.addView(this.mGLView);
+        binding.buttonMoveForward.setOnTouchListener(this);
+        binding.buttonMoveBackward.setOnTouchListener(this);
+        binding.buttonTurnLeft.setOnTouchListener(this);
+        binding.buttonTurnRight.setOnTouchListener(this);
+        binding.buttonMoveForward.setFocusable(false);
+        binding.buttonMoveBackward.setFocusable(false);
+        binding.buttonTurnLeft.setFocusable(false);
+        binding.buttonTurnRight.setFocusable(false);
+        binding.buttonFlyUpward.setOnTouchListener(this);
+        binding.buttonFlyDownward.setOnTouchListener(this);
+        binding.buttonFlyUpward.setFocusable(false);
+        binding.buttonFlyDownward.setFocusable(false);
+        binding.voiceStatusView3d.setShowActiveChatterName(true);
+        binding.worldViewTouchReceiver.setOnTouchListener(this.worldViewTouchListener);
+        binding.objectControlsPanel.setVisibility(View.GONE);
         View findViewById = findViewById(R.id.offline_notify_status_layout);
         if (findViewById != null) {
             findViewById.setBackgroundColor(Color.argb(128, 0, 0, 0));
@@ -675,8 +618,8 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     public void onVoiceActiveChatter(ChatterID chatterID) {
-        if (this.voiceStatusView != null) {
-            this.voiceStatusView.setChatterID(chatterID);
+        if (binding.voiceStatusView3d != null) {
+            binding.voiceStatusView3d.setChatterID(chatterID);
         }
         if (chatterID == null || this.userManager == null) {
             this.voiceChatInfo.unsubscribe();
@@ -690,11 +633,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     public void selectByDragPointer(int i, int i2) {
         int[] ints = new int[2];
-        this.dragPointerLayout.getLocationOnScreen(ints);
-        int width = ints[0] + (this.dragPointer.getWidth() / 2) + i;
-        int height = ints[1] + (this.dragPointer.getHeight() / 2) + i2;
+        binding.dragPointerLayout.getLocationOnScreen(ints);
+        int width = ints[0] + (binding.dragPointerView.getWidth() / 2) + i;
+        int height = ints[1] + (binding.dragPointerView.getHeight() / 2) + i2;
         int[] worldLocation = new int[2];
-        this.worldViewHolder.getLocationOnScreen(worldLocation);
+        binding.worldViewHolder.getLocationOnScreen(worldLocation);
         this.mGLView.pickObjectHover(width - worldLocation[0], height - worldLocation[1]);
     }
 
@@ -847,46 +790,40 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         boolean canSit = agentCircuit != null ? agentCircuit.getModules().rlvController.canSit() : false;
         boolean z2 = this.pickedObject != null;
         Debug.Printf("isSitting %b, isFlying %b, hasHUDs %b, isDragging %b", Boolean.valueOf(isSitting), Boolean.valueOf(isFlying), Boolean.valueOf(hasHUDs), Boolean.valueOf(this.isDragging));
-        this.dragPointerLayout.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
-        this.dragPointer.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
+        binding.dragPointerLayout.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
+        binding.dragPointerView.setVisibility(this.isDragging ? View.VISIBLE : View.INVISIBLE);
         boolean movementControlsVisible = z && !isSitting
                 && !(this.camButtonEnabled && this.manualCamMode)
                 && !this.isDragging && !z2;
-        LinearLayout linearLayout = this.flyButtonsLayout;
-        i = movementControlsVisible ? 0 : 8;
-        linearLayout.setVisibility(i);
-        View view = this.moveButtonsLayout;
-        i2 = movementControlsVisible ? 0 : 4;
-        view.setVisibility(i2);
-        this.buttonStandUp.setVisibility((canStandUp && isSitting && (this.isDragging ^ true)) ? View.VISIBLE : View.GONE);
-        this.buttonHUD.setVisibility((hasHUDs && (this.isDragging ^ true) && z) ? View.VISIBLE : View.GONE);
-        this.buttonFlyDownward.setVisibility(((isFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? View.VISIBLE : View.GONE);
-        ImageButton imageButton = this.buttonStopFlying;
-        i3 = isFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? 0 : 8;
-        imageButton.setVisibility(i3);
-        this.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
-        this.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
+        binding.flyButtonsLayout.setVisibility(movementControlsVisible ? View.VISIBLE : View.GONE);
+        binding.moveButtonsLayout.setVisibility(movementControlsVisible ? View.VISIBLE : View.INVISIBLE);
+        binding.buttonStandUp.setVisibility((canStandUp && isSitting && (this.isDragging ^ true)) ? View.VISIBLE : View.GONE);
+        binding.buttonHud.setVisibility((hasHUDs && (this.isDragging ^ true) && z) ? View.VISIBLE : View.GONE);
+        binding.buttonFlyDownward.setVisibility(((isFlying && z) || (this.camButtonEnabled && this.manualCamMode)) ? View.VISIBLE : View.GONE);
+        binding.buttonStopFlying.setVisibility(isFlying && z && !(this.camButtonEnabled && this.manualCamMode) ? View.VISIBLE : View.GONE);
+        binding.buttonCamOn.setVisibility((this.camButtonEnabled && (this.manualCamMode ^ true) && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
+        binding.buttonCamOff.setVisibility((this.camButtonEnabled && this.manualCamMode && (this.isDragging ^ true) && (z2 ^ true)) ? View.VISIBLE : View.GONE);
         if (this.pickedObject == null || (!z)) {
-            this.objectControlsPanel.setVisibility(View.GONE);
+            binding.objectControlsPanel.setVisibility(View.GONE);
             return;
         }
-        this.objectControlsPanel.setVisibility(View.VISIBLE);
+        binding.objectControlsPanel.setVisibility(View.VISIBLE);
         boolean isTouchable = this.pickedObject.isTouchable();
         if (this.pickedObject.isAvatar()) {
             isTouchable |= this.pickedObject.hasTouchableChildren();
         }
-        this.objectTouchButton.setVisibility(isTouchable ? View.VISIBLE : View.GONE);
+        binding.objectTouchButton.setVisibility(isTouchable ? View.VISIBLE : View.GONE);
         boolean isAvatar = this.pickedObject.isAvatar();
         boolean z3 = isSitting && this.pickedObject.localID == data.sittingOn();
         boolean z4 = !isAvatar ? !z3 : false;
         if (isAvatar) {
             z3 = false;
         }
-        this.objectSitButton.setVisibility((z4 && canSit) ? View.VISIBLE : View.GONE);
-        this.objectStandButton.setVisibility((z3 && canStandUp) ? View.VISIBLE : View.GONE);
-        this.objectChatButton.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
-        this.avatarIconView.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
-        this.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? View.VISIBLE : View.GONE);
+        binding.objectSitButton.setVisibility((z4 && canSit) ? View.VISIBLE : View.GONE);
+        binding.objectStandButton.setVisibility((z3 && canStandUp) ? View.VISIBLE : View.GONE);
+        binding.objectChatButton.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
+        binding.avatarIconView.setVisibility(isAvatar ? View.VISIBLE : View.GONE);
+        binding.objectPayButton.setVisibility((this.pickedObject.isPayable() || this.pickedObject.saleType != 0) ? View.VISIBLE : View.GONE);
         if (this.pickedObject.isAvatar()) {
             orNull = this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.getResolvedName() : null;
         } else {
@@ -899,7 +836,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         if (orNull == null) {
             orNull = getString(R.string.object_name_loading);
         }
-        this.objectNameTextView.setText(orNull);
+        binding.objectNameTextView.setText(orNull);
     }
 
     private void updateSimTimeOverride() {
@@ -917,17 +854,17 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         objArr[2] = Boolean.valueOf(findFragmentById != null ? findFragmentById.isDetached() : false);
         Debug.Printf("updateSplitScreenLayout: isSplitScreen now %b details has %b detached %b", objArr);
         if (findFragmentById == null || !(!findFragmentById.isDetached())) {
-            this.worldOverlaysContainer.setVisibility(View.VISIBLE);
+            binding.worldOverlaysContainer.setVisibility(View.VISIBLE);
         } else {
-            this.detailsContainer.setVisibility(View.VISIBLE);
-            this.worldOverlaysContainer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
+            binding.details.setVisibility(View.VISIBLE);
+            binding.worldOverlaysContainer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
         }
-        this.objectPopupLeftSpacer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
+        binding.objectPopupLeftSpacer.setVisibility(this.isSplitScreen ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent keyEvent) {
-        if (this.detailsContainer.getVisibility() == 0) {
+        if (binding.details.getVisibility() == 0) {
             return super.dispatchKeyEvent(keyEvent);
         }
         switch (keyEvent.getKeyCode()) {
@@ -1025,7 +962,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     public void handleChatEvent(ActiveChattersManager.ChatMessageEvent chatMessageEvent) {
-        if (!this.chatOver3D || detailsVisible() || this.userManager == null || this.chatsOverlayLayout == null || this.fadingTextViewLog == null) {
+        if (!this.chatOver3D || detailsVisible() || this.userManager == null || binding.chatsOverlayLayout == null || this.fadingTextViewLog == null) {
             return;
         }
         this.fadingTextViewLog.handleChatEvent(chatMessageEvent);
@@ -1077,7 +1014,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_WorldViewActivity_10269, reason: not valid java name */
     /* synthetic */ void m853x5cc8da9f(ValueAnimator valueAnimator) {
-        this.insetsBackground.setAlpha(1.0f - valueAnimator.getAnimatedFraction());
+        binding.insetsBackground.setAlpha(1.0f - valueAnimator.getAnimatedFraction());
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_WorldViewActivity_43183, reason: not valid java name */
@@ -1171,26 +1108,22 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
         this.isSplitScreen = LumiyaApp.isSplitScreenNeeded(this);
         this.scaleGestureDetector = new ScaleGestureDetector(this, this.scaleGestureListener);
-        if (Build.VERSION.SDK_INT >= 19) {
-            this.scaleGestureDetector.setQuickScaleEnabled(true);
-        }
+        this.scaleGestureDetector.setQuickScaleEnabled(true);
         this.gestureDetector = new GestureDetectorCompat(this, this.gestureListener);
         initContentView();
-        this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, this.chatsOverlayLayout, Color.rgb(192, 192, 192), Color.argb(160, 0, 0, 0));
-        if (Build.VERSION.SDK_INT >= 12) {
-            this.buttonsFadeAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
-            this.buttonsFadeAnimator.setDuration(1000L);
-            this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
-                    WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
-                }
+        this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, binding.chatsOverlayLayout, Color.rgb(192, 192, 192), Color.argb(160, 0, 0, 0));
+        this.buttonsFadeAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+        this.buttonsFadeAnimator.setDuration(1000L);
+        this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
+                WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
+            }
 
-                @Override
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    $m$0(valueAnimator);
-                }
-            });
-        }
+            @Override
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                $m$0(valueAnimator);
+            }
+        });
         updateSplitScreenLayout();
         startFadingButtonsTimer();
     }
@@ -1207,9 +1140,9 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         if (super.onDetailsStackEmpty()) {
             return true;
         }
-        this.detailsContainer.setVisibility(View.GONE);
+        binding.details.setVisibility(View.GONE);
         if (!this.isSplitScreen) {
-            this.worldOverlaysContainer.setVisibility(View.VISIBLE);
+            binding.worldOverlaysContainer.setVisibility(View.VISIBLE);
         }
         beginCountingButtonsFade();
         beginCountingObjectDeselect();
@@ -1452,7 +1385,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         this.agentCircuit.unsubscribe();
         this.voiceActiveChatter.unsubscribe();
         this.voiceChatInfo.unsubscribe();
-        this.voiceStatusView.setChatterID(null);
+        binding.voiceStatusView3d.setChatterID(null);
         super.onStop();
     }
 
@@ -1571,7 +1504,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         Toast.makeText(this, "Advanced rendering is not available on your hardware. Falling back to basic rendering.", Toast.LENGTH_LONG).show();
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
         edit.putBoolean("advanced_rendering", false);
-        edit.commit();
+        edit.apply();
         finish();
         startActivity(new Intent(this, (Class<?>) getClass()));
     }
@@ -1599,10 +1532,10 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     @Override
     @Nullable
     public Fragment showDetailsFragment(Class<? extends Fragment> cls, Intent intent, Bundle bundle) {
-        this.detailsContainer.setVisibility(View.VISIBLE);
+        binding.details.setVisibility(View.VISIBLE);
         if (!this.isSplitScreen) {
-            this.worldOverlaysContainer.setVisibility(View.GONE);
-            this.voiceStatusView.disableMic();
+            binding.worldOverlaysContainer.setVisibility(View.GONE);
+            binding.voiceStatusView3d.disableMic();
         }
         if (this.fadingTextViewLog != null) {
             this.fadingTextViewLog.clearChatEvents();

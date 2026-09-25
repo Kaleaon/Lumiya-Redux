@@ -2,15 +2,11 @@ package com.lumiyaviewer.lumiya.ui.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.CallSuper;
-import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.lumiyaviewer.lumiya.ui.common.binding.Unbinder;
-import com.lumiyaviewer.lumiya.ui.common.binding.Utils;
 import com.lumiyaviewer.lumiya.dao.SearchGridResult;
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery;
@@ -44,7 +40,9 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
         SearchViewHolder(View view) {
             super(view);
             this.chatterNameRetriever = null;
-            new SearchViewHolder_ViewBinding(this, view);
+            this.resultItemName = view.findViewById(com.lumiyaviewer.lumiya.R.id.result_item_name);
+            this.userPicView = view.findViewById(com.lumiyaviewer.lumiya.R.id.userPicView);
+            this.resultMemberCount = view.findViewById(com.lumiyaviewer.lumiya.R.id.result_member_count);
             view.setOnClickListener(this);
         }
 
@@ -103,35 +101,6 @@ class SearchGridAdapter extends RecyclerView.Adapter<SearchGridAdapter.SearchVie
                 this.chatterNameRetriever = null;
             }
             this.searchGridResult = null;
-        }
-    }
-
-    /**
-     * ButterKnife binding generated for 3.4.2, kept as source; the holder
-     * constructs it directly (see ui/common/binding).
-     */
-    public static class SearchViewHolder_ViewBinding implements Unbinder {
-        private SearchViewHolder target;
-
-        @UiThread
-        public SearchViewHolder_ViewBinding(SearchViewHolder searchViewHolder, View view) {
-            this.target = searchViewHolder;
-            searchViewHolder.resultItemName = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.result_item_name, "field 'resultItemName'", TextView.class);
-            searchViewHolder.userPicView = (ChatterPicView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.userPicView, "field 'userPicView'", ChatterPicView.class);
-            searchViewHolder.resultMemberCount = (TextView) Utils.findRequiredViewAsType(view, com.lumiyaviewer.lumiya.R.id.result_member_count, "field 'resultMemberCount'", TextView.class);
-        }
-
-        @Override
-        @CallSuper
-        public void unbind() {
-            SearchViewHolder searchViewHolder = this.target;
-            if (searchViewHolder == null) {
-                throw new IllegalStateException("Bindings already cleared.");
-            }
-            this.target = null;
-            searchViewHolder.resultItemName = null;
-            searchViewHolder.userPicView = null;
-            searchViewHolder.resultMemberCount = null;
         }
     }
 

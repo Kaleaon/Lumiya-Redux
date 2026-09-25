@@ -77,7 +77,7 @@ android {
         viewBinding true
     }
 
-    lintOptions {
+    lint {
         abortOnError false
         checkReleaseBuilds false
         // AGP 8.7's UnsafeIntentLaunch and UnsafeImplicitIntentLaunch
@@ -85,7 +85,7 @@ android {
         // keep the rest of lint enabled.
         disable 'UnsafeIntentLaunch', 'UnsafeImplicitIntentLaunch', 'UnspecifiedRegisterReceiverFlag'
     }
-    packagingOptions {
+    packaging {
         resources.excludes += [
             'META-INF/DEPENDENCIES',
             'META-INF/LICENSE*',
@@ -388,6 +388,13 @@ dependencies {
     // Long-term migration target: the open-source Google Cardboard SDK
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
+
+    // ── WebRTC (Phase 6 voice modernization) ──
+    // Pre-built WebRTC for Android from Stream; provides the standard
+    // org.webrtc.* API with echo cancellation, noise suppression, and
+    // automatic gain control built in.  Replaces the legacy external
+    // Vivox voice plugin with an in-app WebRTC client.
+    implementation 'io.getstream:stream-webrtc-android:1.2.2'
 
     // ── Filament (stage F0: debug-only world view, see above) ──
     debugImplementation "com.google.android.filament:filament-android:${filamentVersion}"

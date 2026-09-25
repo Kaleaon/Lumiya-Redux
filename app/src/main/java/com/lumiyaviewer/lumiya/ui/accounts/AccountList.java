@@ -167,7 +167,7 @@ public class AccountList {
         while (true) {
             int i2 = i;
             if (i2 >= this.accounts.size()) {
-                edit.commit();
+                edit.apply();
                 return;
             } else {
                 this.accounts.get(i2).saveToPreferences(edit, "account_" + i2);

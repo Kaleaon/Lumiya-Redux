@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.common;
 
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,9 +9,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
+import androidx.core.content.ContextCompat;
 import com.lumiyaviewer.lumiya.R;
 
-@TargetApi(14)
 public class ButteryProgressBar extends View {
     private static final int BASE_DURATION_MS = 500;
     private static final int BASE_SEGMENT_COUNT = 5;
@@ -52,7 +51,7 @@ public class ButteryProgressBar extends View {
         this.mDensity = context.getResources().getDisplayMetrics().density;
         TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.ButteryProgressBar);
         try {
-            this.mBarColor = obtainStyledAttributes.getColor(0, context.getResources().getColor(android.R.color.holo_blue_light));
+            this.mBarColor = obtainStyledAttributes.getColor(0, ContextCompat.getColor(context, android.R.color.holo_blue_light));
             this.mSolidBarHeight = obtainStyledAttributes.getDimensionPixelSize(1, Math.round(this.mDensity * 4.0f));
             this.mSolidBarDetentWidth = obtainStyledAttributes.getDimensionPixelSize(2, Math.round(this.mDensity * 3.0f));
             obtainStyledAttributes.recycle();

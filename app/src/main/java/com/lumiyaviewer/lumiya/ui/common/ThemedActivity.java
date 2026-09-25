@@ -1,8 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.common;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,12 +54,6 @@ public class ThemedActivity extends AppCompatActivity {
     @EventHandler
     public void onThemeChangedEvent(ThemeChangedEvent themeChangedEvent) {
         Debug.Printf("Theme: old theme id 0x%x, new theme id 0x%x", Integer.valueOf(this.selectedThemeId), Integer.valueOf(themeChangedEvent.themeResourceId));
-        if (Build.VERSION.SDK_INT >= 11) {
-            recreate();
-            return;
-        }
-        Intent intent = new Intent(getIntent());
-        finish();
-        startActivity(intent);
+        recreate();
     }
 }

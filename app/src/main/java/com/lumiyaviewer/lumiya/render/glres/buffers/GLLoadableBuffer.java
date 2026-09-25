@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.glres.buffers;
 
-import android.annotation.TargetApi;
 import android.opengl.GLES10;
 import android.opengl.GLES11;
 import android.opengl.GLES20;
@@ -74,7 +73,6 @@ public class GLLoadableBuffer implements GLCleanable {
         GLES20.glVertexAttribPointer(i, i2, i3, false, i4, i5);
     }
 
-    @TargetApi(18)
     public final void Bind30Integer(RenderContext renderContext, int i, int i2, int i3, int i4, int i5) {
         if (this.glBuffer == null) {
             renderContext.KeepBuffer(this.rawBuffer);
@@ -115,7 +113,6 @@ public class GLLoadableBuffer implements GLCleanable {
         renderContext.glResourceManager.addCleanable(this);
     }
 
-    @TargetApi(18)
     public final void BindUniform(RenderContext renderContext, int i) {
         boolean z = false;
         if (this.glBuffer == null) {
@@ -129,7 +126,6 @@ public class GLLoadableBuffer implements GLCleanable {
         }
     }
 
-    @TargetApi(18)
     public final void BindUniformDynamic(RenderContext renderContext, int i, boolean z) {
         boolean z2;
         if ((this.glBuffer == null || z) && this.glBuffer == null) {

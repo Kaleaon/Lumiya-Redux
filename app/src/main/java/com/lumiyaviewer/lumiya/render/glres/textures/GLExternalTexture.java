@@ -1,12 +1,10 @@
 package com.lumiyaviewer.lumiya.render.glres.textures;
 
-import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES11;
 import android.view.Surface;
 
-@TargetApi(15)
 public class GLExternalTexture {
     private final int handle;
     private final int height;
@@ -19,7 +17,6 @@ public class GLExternalTexture {
     private final SurfaceTexture surfaceTexture;
     private final int width;
 
-    @TargetApi(15)
     public GLExternalTexture(int width, int height) {
         this.width = width;
         this.height = height;
@@ -36,7 +33,6 @@ public class GLExternalTexture {
         this.surface = new Surface(this.surfaceTexture);
     }
 
-    @TargetApi(15)
     public void bind() {
         GLES11.glBindTexture(36197, this.handle);
     }
@@ -57,14 +53,12 @@ public class GLExternalTexture {
         this.surface.unlockCanvasAndPost(canvas);
     }
 
-    @TargetApi(15)
     public void release() {
         this.surface.release();
         this.surfaceTexture.release();
         GLES11.glDeleteTextures(1, new int[]{this.handle}, 0);
     }
 
-    @TargetApi(11)
     public void update(float[] floats) {
         this.surfaceTexture.updateTexImage();
         this.surfaceTexture.getTransformMatrix(floats);

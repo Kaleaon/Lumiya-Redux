@@ -1,68 +1,50 @@
 package com.lumiyaviewer.lumiya.voice.common.model;
 
-import android.os.Bundle;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class VoiceLoginInfo {
 
     @Nonnull
     public final UUID agentUUID;
-    public final String password;
-    public final String userName;
-    public final String voiceAccountServerName;
-    public final String voiceSipUriHostname;
 
-    public VoiceLoginInfo(Bundle bundle) {
-        this.voiceSipUriHostname = bundle.getString("voiceSipUriHostname");
-        this.voiceAccountServerName = bundle.getString("voiceAccountServerName");
-        this.agentUUID = UUID.fromString(bundle.getString("agentUUID"));
-        this.userName = bundle.getString("userName");
-        this.password = bundle.getString("password");
+    @Nullable
+    public final String voiceServerType;
+
+    @Nullable
+    public final String provisionCapURL;
+
+    @Nullable
+    public final String signalingCapURL;
+
+    public VoiceLoginInfo(@Nonnull UUID agentUUID, @Nullable String voiceServerType,
+                          @Nullable String provisionCapURL, @Nullable String signalingCapURL) {
+        this.agentUUID = agentUUID;
+        this.voiceServerType = voiceServerType;
+        this.provisionCapURL = provisionCapURL;
+        this.signalingCapURL = signalingCapURL;
     }
 
-    public VoiceLoginInfo(String voiceSipUriHostname, String voiceAccountServerName, @Nonnull UUID uuid, String userName, String password) {
-        this.voiceSipUriHostname = voiceSipUriHostname;
-        this.voiceAccountServerName = voiceAccountServerName;
-        this.agentUUID = uuid;
-        this.userName = userName;
-        this.password = password;
+    public boolean isWebRTC() {
+        return "webrtc".equals(voiceServerType);
     }
 
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        VoiceLoginInfo voiceLoginInfo = (VoiceLoginInfo) obj;
-        if (this.voiceSipUriHostname != null ? !this.voiceSipUriHostname.equals(voiceLoginInfo.voiceSipUriHostname) : voiceLoginInfo.voiceSipUriHostname != null) {
-            return false;
-        }
-        if (this.voiceAccountServerName != null ? !this.voiceAccountServerName.equals(voiceLoginInfo.voiceAccountServerName) : voiceLoginInfo.voiceAccountServerName != null) {
-            return false;
-        }
-        if (!this.agentUUID.equals(voiceLoginInfo.agentUUID)) {
-            return false;
-        }
-        if (this.userName != null ? this.userName.equals(voiceLoginInfo.userName) : voiceLoginInfo.userName == null) {
-            return this.password == null ? voiceLoginInfo.password == null : this.password.equals(voiceLoginInfo.password);
-        }
-        return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        VoiceLoginInfo other = (VoiceLoginInfo) obj;
+        if (!agentUUID.equals(other.agentUUID)) return false;
+        if (voiceServerType != null ? !voiceServerType.equals(other.voiceServerType) : other.voiceServerType != null) return false;
+        if (provisionCapURL != null ? !provisionCapURL.equals(other.provisionCapURL) : other.provisionCapURL != null) return false;
+        return signalingCapURL != null ? signalingCapURL.equals(other.signalingCapURL) : other.signalingCapURL == null;
     }
 
     public int hashCode() {
-        return (((this.userName == null ? 0 : this.userName.hashCode()) + (((((this.voiceAccountServerName == null ? 0 : this.voiceAccountServerName.hashCode()) + ((this.voiceSipUriHostname == null ? 0 : this.voiceSipUriHostname.hashCode()) * 31)) * 31) + this.agentUUID.hashCode()) * 31)) * 31) + (this.password != null ? this.password.hashCode() : 0);
-    }
-
-    public Bundle toBundle() {
-        Bundle bundle = new Bundle();
-        bundle.putString("voiceSipUriHostname", this.voiceSipUriHostname);
-        bundle.putString("voiceAccountServerName", this.voiceAccountServerName);
-        bundle.putString("agentUUID", this.agentUUID.toString());
-        bundle.putString("userName", this.userName);
-        bundle.putString("password", this.password);
-        return bundle;
+        int result = agentUUID.hashCode();
+        result = 31 * result + (voiceServerType != null ? voiceServerType.hashCode() : 0);
+        result = 31 * result + (provisionCapURL != null ? provisionCapURL.hashCode() : 0);
+        result = 31 * result + (signalingCapURL != null ? signalingCapURL.hashCode() : 0);
+        return result;
     }
 }

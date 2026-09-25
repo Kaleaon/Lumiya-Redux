@@ -16,7 +16,6 @@ import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.caps.SLCaps;
 import com.lumiyaviewer.lumiya.slproto.chat.SLChatSystemMessageEvent;
-import com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDException;
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap;
@@ -29,17 +28,14 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3d;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSourceUnknown;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
-import com.lumiyaviewer.lumiya.voice.common.VoicePluginMessageType;
+import com.lumiyaviewer.lumiya.slproto.https.LLSDXMLAsyncRequest;
 import com.lumiyaviewer.lumiya.voice.common.messages.VoiceChannelStatus;
-import com.lumiyaviewer.lumiya.voice.common.messages.VoiceConnectChannel;
-import com.lumiyaviewer.lumiya.voice.common.messages.VoiceLoginStatus;
-import com.lumiyaviewer.lumiya.voice.common.messages.VoiceSet3DPosition;
 import com.lumiyaviewer.lumiya.voice.common.model.Voice3DPosition;
 import com.lumiyaviewer.lumiya.voice.common.model.Voice3DVector;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceLoginInfo;
-import com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection;
+import com.lumiyaviewer.lumiya.voice.webrtc.WebRTCVoiceClient;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,21 +44,18 @@ import javax.annotation.Nullable;
 
 public class SLVoice extends SLModule {
     private static final int INVALID_PARCEL_ID = -1;
-    private static final int LOGIN_DELAY = 5;
-    private static final int MAX_LOGIN_ATTEMPTS = 3;
     private final String capURL;
+    private final String signalingCapURL;
     private final String chatSessionRequestURL;
     private volatile VoiceChannelInfo connectedVoiceChannel;
     private int currentParcelID;
     private VoiceChannelInfo currentParcelVoiceChannel;
-    private int loginAttempts;
     private final String parcelVoiceCapURL;
     private final Object parcelVoiceChannelLock;
     private final Set<UUID> requestedGroupChats;
     private int requestedParcelID;
     private volatile boolean shutdown;
     private final UserManager userManager;
-    private boolean voiceCredentialsRequested;
     private volatile boolean voiceEnabled;
     private volatile boolean voiceLoggedIn;
     private final SubscriptionData<SubscriptionSingleKey, Boolean> voiceLoggedInSubscription;
@@ -71,37 +64,32 @@ public class SLVoice extends SLModule {
     private volatile VoiceLoginInfo voiceLoginInfo;
 
     @Nullable
-    private volatile VoicePluginServiceConnection voicePluginServiceConnection;
+    private volatile WebRTCVoiceClient webRTCVoiceClient;
 
     public SLVoice(SLAgentCircuit agentCircuit, SLCaps caps) {
         super(agentCircuit);
         this.requestedGroupChats = Collections.synchronizedSet(new HashSet());
         this.voiceLoggedInSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
-            private final /* synthetic */ void $m$0(Object obj) {
-                SLVoice.this.onVoiceLoginStatusChanged((Boolean) obj);
-            }
-
             @Override
             public final void onData(Object obj) {
-                $m$0(obj);
+                SLVoice.this.onVoiceLoginStatusChanged((Boolean) obj);
             }
         });
         this.voiceLoggedIn = false;
         this.voiceEnabled = false;
-        this.voiceCredentialsRequested = false;
-        this.voicePluginServiceConnection = null;
         this.connectedVoiceChannel = null;
         this.shutdown = false;
-        this.loginAttempts = 0;
         this.parcelVoiceChannelLock = new Object();
         this.requestedParcelID = -1;
         this.currentParcelID = -1;
         this.currentParcelVoiceChannel = null;
         this.voiceLoginInfo = null;
+        this.webRTCVoiceClient = null;
         this.userManager = UserManager.getUserManager(this.agentCircuit.getAgentUUID());
         this.capURL = caps.getCapability(SLCaps.SLCapability.ProvisionVoiceAccountRequest);
         this.parcelVoiceCapURL = caps.getCapability(SLCaps.SLCapability.ParcelVoiceInfoRequest);
         this.chatSessionRequestURL = caps.getCapability(SLCaps.SLCapability.ChatSessionRequest);
+        this.signalingCapURL = caps.getCapability(SLCaps.SLCapability.VoiceSignalingRequest);
         if (this.userManager != null) {
             this.voiceLoggedInSubscription.subscribe(this.userManager.getVoiceLoggedIn(), SubscriptionSingleKey.Value);
         }
@@ -109,6 +97,9 @@ public class SLVoice extends SLModule {
             Debug.Printf("Voice cap: '%s'", this.capURL);
         } else {
             Debug.Printf("Voice cap not supported", new Object[0]);
+        }
+        if (this.signalingCapURL != null) {
+            Debug.Printf("Voice signaling cap: '%s'", this.signalingCapURL);
         }
         EventBus.getInstance().subscribe(this);
         updateVoiceEnabledStatus();
@@ -124,44 +115,6 @@ public class SLVoice extends SLModule {
         }
     }
 
-    public void onProvisionVoiceAccountResult(LLSDNode lsdNode) {
-        if (lsdNode != null) {
-            try {
-                Debug.Printf("SLVoice: result '%s'", lsdNode.serializeToXML());
-                this.voiceLoginInfo = new VoiceLoginInfo(lsdNode.byKey("voice_sip_uri_hostname").asString(), lsdNode.byKey("voice_account_server_name").asString(), this.agentCircuit.getAgentUUID(), lsdNode.byKey("username").asString(), lsdNode.byKey("password").asString());
-                updateVoiceEnabledStatus();
-                return;
-            } catch (Exception e) {
-                Debug.Warning(e);
-                return;
-            }
-        }
-        Debug.Printf("SLVoice: null result", new Object[0]);
-        if (this.shutdown || this.loginAttempts >= 3 || !this.voiceEnabled) {
-            Debug.Printf("SLVoice: giving up", new Object[0]);
-            return;
-        }
-        this.loginAttempts++;
-        try {
-            Thread.sleep(5000L);
-            if (this.shutdown || !this.voiceEnabled) {
-                return;
-            }
-            new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
-                private final /* synthetic */ void $m$0(LLSDNode lLSDNode2) {
-                    SLVoice.this.onProvisionVoiceAccountResult(lLSDNode2);
-                }
-
-                @Override
-                public final void onLLSDXMLResult(LLSDNode lLSDNode2) {
-                    $m$0(lLSDNode2);
-                }
-            });
-        } catch (InterruptedException e2) {
-            Debug.Warning(e2);
-        }
-    }
-
     public void onVoiceLoginStatusChanged(Boolean bool) {
         this.voiceLoggedIn = bool != null ? bool.booleanValue() : false;
     }
@@ -170,6 +123,10 @@ public class SLVoice extends SLModule {
     public void HandleCloseCircuit() {
         this.shutdown = true;
         this.voiceLoggedInSubscription.unsubscribe();
+        WebRTCVoiceClient client = this.webRTCVoiceClient;
+        if (client != null) {
+            client.logout();
+        }
         super.HandleCloseCircuit();
     }
 
@@ -195,47 +152,114 @@ public class SLVoice extends SLModule {
         return true;
     }
 
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_12525, reason: not valid java name */
-    /* synthetic */ void m264x4b46af5c(int i, LLSDNode lsdNode) {
-        boolean z;
+    private void onParcelVoiceResult(int parcelId, LLSDNode lsdNode) {
+        boolean changed;
         VoiceChannelInfo voiceChannelInfo;
-        this.currentParcelID = i;
+        this.currentParcelID = parcelId;
         if (lsdNode != null) {
             synchronized (this.parcelVoiceChannelLock) {
                 try {
-                    voiceChannelInfo = new VoiceChannelInfo(lsdNode.byKey("voice_credentials").byKey("channel_uri").asString(), true, true);
+                    String channelUri = lsdNode.byKey("voice_credentials").byKey("channel_uri").asString();
+                    voiceChannelInfo = new VoiceChannelInfo(channelUri, true, true);
                 } catch (LLSDException e) {
-                    Debug.Printf("Voice: error retrieving parcel voice info for %d (%s)", Integer.valueOf(i), e.getMessage());
+                    Debug.Printf("Voice: error retrieving parcel voice info for %d (%s)", Integer.valueOf(parcelId), e.getMessage());
                     voiceChannelInfo = null;
                 }
                 if (Objects.equal(this.currentParcelVoiceChannel, voiceChannelInfo)) {
-                    z = false;
+                    changed = false;
                 } else {
                     this.currentParcelVoiceChannel = voiceChannelInfo;
-                    z = true;
+                    changed = true;
                 }
             }
         } else {
-            Debug.Printf("Voice: error retrieving parcel voice info for %d", Integer.valueOf(i));
-            z = false;
+            Debug.Printf("Voice: error retrieving parcel voice info for %d", Integer.valueOf(parcelId));
+            changed = false;
         }
-        if (z) {
+        if (changed) {
             this.agentCircuit.getModules().minimap.requestUpdateAvatarParcelData();
         }
     }
 
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_14030, reason: not valid java name */
-    /* synthetic */ void m265x4b47856f(VoiceLoginStatus voiceLoginStatus, VoicePluginServiceConnection voicePluginServiceConnection) {
-        if (voiceLoginStatus.loggedIn) {
-            this.voicePluginServiceConnection = voicePluginServiceConnection;
-        } else {
-            this.voicePluginServiceConnection = null;
-            this.connectedVoiceChannel = null;
+    private void onVoiceEnabled() {
+        GridConnectionService serviceInstance;
+        this.voiceEnabled = GlobalOptions.getInstance().getVoiceEnabled();
+        if (!this.voiceEnabled) {
+            GridConnectionService serviceInstance2 = GridConnectionService.getServiceInstance();
+            if (serviceInstance2 != null) {
+                serviceInstance2.stopVoice();
+            }
+            return;
+        }
+        if (this.voiceLoginInfo != null) {
+            return;
+        }
+        if (this.capURL != null) {
+            VoiceLoginInfo loginInfo = new VoiceLoginInfo(
+                this.agentCircuit.getAgentUUID(),
+                "webrtc",
+                this.capURL,
+                this.signalingCapURL
+            );
+            this.voiceLoginInfo = loginInfo;
+            serviceInstance = GridConnectionService.getServiceInstance();
+            if (serviceInstance != null) {
+                serviceInstance.startVoice(loginInfo, UserManager.getUserManager(this.agentCircuit.getAgentUUID()));
+            }
         }
     }
 
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_14408, reason: not valid java name */
-    /* synthetic */ void m266x4b47941e(VoiceChannelStatus voiceChannelStatus) {
+    public void nearbyVoiceChatRequest(VoiceChannelInfo voiceChannelInfo) {
+        WebRTCVoiceClient client = this.webRTCVoiceClient;
+        if (this.voiceEnabled && this.voiceLoggedIn && client != null) {
+            client.addChannel(ChatterID.getLocalChatterID(this.userManager.getUserID()), voiceChannelInfo);
+            client.connectChannel(voiceChannelInfo, null);
+        }
+    }
+
+    @EventHandler
+    public void onGlobalOptionsChanged(GlobalOptions.GlobalOptionsChangedEvent globalOptionsChangedEvent) {
+        updateVoiceEnabledStatus();
+    }
+
+    public void onGroupSessionReady(final UUID uuid) {
+        if (!this.requestedGroupChats.remove(uuid) || this.chatSessionRequestURL == null) {
+            return;
+        }
+        new LLSDXMLAsyncRequest(this.chatSessionRequestURL, new LLSDMap(new LLSDMap.LLSDMapEntry("method", new LLSDString(NotificationCompat.CATEGORY_CALL)), new LLSDMap.LLSDMapEntry("session-id", new LLSDUUID(uuid))), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
+            @Override
+            public void onLLSDXMLResult(LLSDNode lsdNode) {
+                ChatterID groupChatterID = ChatterID.getGroupChatterID(SLVoice.this.userManager.getUserID(), uuid);
+                try {
+                    if (lsdNode == null) {
+                        throw new LLSDException("Null result");
+                    }
+                    String channelUri = lsdNode.byKey("voice_credentials").byKey("channel_uri").asString();
+                    String channelCredentials = lsdNode.byKey("voice_credentials").byKey("channel_credentials").asString();
+                    WebRTCVoiceClient client = SLVoice.this.webRTCVoiceClient;
+                    if (SLVoice.this.voiceEnabled && SLVoice.this.voiceLoggedIn && client != null) {
+                        VoiceChannelInfo voiceChannelInfo = new VoiceChannelInfo(channelUri, false, true);
+                        client.addChannel(groupChatterID, voiceChannelInfo);
+                        client.connectChannel(voiceChannelInfo, channelCredentials);
+                    }
+                } catch (LLSDException e) {
+                    SLVoice.this.agentCircuit.HandleChatEvent(groupChatterID, new SLChatSystemMessageEvent(ChatMessageSourceUnknown.getInstance(), SLVoice.this.userManager.getUserID(), LumiyaApp.getContext().getString(R.string.failed_to_connect_group_voice)), false);
+                    Debug.Warning(e);
+                }
+            }
+        });
+    }
+
+    public void onVoiceChannelStatus(final VoiceChannelStatus voiceChannelStatus) {
+        this.agentCircuit.execute(new Runnable() {
+            @Override
+            public final void run() {
+                handleVoiceChannelStatus(voiceChannelStatus);
+            }
+        });
+    }
+
+    private void handleVoiceChannelStatus(VoiceChannelStatus voiceChannelStatus) {
         if (voiceChannelStatus.errorMessage != null) {
             if (this.connectedVoiceChannel == null || !Objects.equal(this.connectedVoiceChannel.voiceChannelURI, voiceChannelStatus.channelInfo.voiceChannelURI)) {
                 return;
@@ -258,104 +282,16 @@ public class SLVoice extends SLModule {
         }
     }
 
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_modules_voice_SLVoice_4388, reason: not valid java name */
-    /* synthetic */ void m267xd924b13a() {
-        GridConnectionService serviceInstance;
-        this.voiceEnabled = GlobalOptions.getInstance().getVoiceEnabled();
-        if (!this.voiceEnabled) {
-            GridConnectionService serviceInstance2 = GridConnectionService.getServiceInstance();
-            if (serviceInstance2 != null) {
-                serviceInstance2.stopVoice();
-                return;
-            }
-            return;
-        }
-        if (!this.voiceCredentialsRequested) {
-            this.voiceCredentialsRequested = true;
-            if (this.capURL != null) {
-                new LLSDXMLAsyncRequest(this.capURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
-                    private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                        SLVoice.this.onProvisionVoiceAccountResult(lLSDNode);
-                    }
-
-                    @Override
-                    public final void onLLSDXMLResult(LLSDNode lLSDNode) {
-                        $m$0(lLSDNode);
-                    }
-                });
-                return;
-            }
-            return;
-        }
-        if (this.voiceLoginInfo == null || !(!this.voiceLoggedIn) || (serviceInstance = GridConnectionService.getServiceInstance()) == null) {
-            return;
-        }
-        serviceInstance.startVoice(this.voiceLoginInfo, UserManager.getUserManager(this.agentCircuit.getAgentUUID()));
-    }
-
-    public void nearbyVoiceChatRequest(VoiceChannelInfo voiceChannelInfo) {
-        VoicePluginServiceConnection voicePluginServiceConnection = this.voicePluginServiceConnection;
-        if (this.voiceEnabled && this.voiceLoggedIn && voicePluginServiceConnection != null) {
-            voicePluginServiceConnection.addChannel(ChatterID.getLocalChatterID(this.userManager.getUserID()), voiceChannelInfo);
-            voicePluginServiceConnection.sendMessage(VoicePluginMessageType.VoiceConnectChannel, new VoiceConnectChannel(voiceChannelInfo, null));
-        }
-    }
-
-    @EventHandler
-    public void onGlobalOptionsChanged(GlobalOptions.GlobalOptionsChangedEvent globalOptionsChangedEvent) {
-        updateVoiceEnabledStatus();
-    }
-
-    public void onGroupSessionReady(final UUID uuid) {
-        if (!this.requestedGroupChats.remove(uuid) || this.chatSessionRequestURL == null) {
-            return;
-        }
-        new LLSDXMLAsyncRequest(this.chatSessionRequestURL, new LLSDMap(new LLSDMap.LLSDMapEntry("method", new LLSDString(NotificationCompat.CATEGORY_CALL)), new LLSDMap.LLSDMapEntry("session-id", new LLSDUUID(uuid))), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
+    public void onVoiceLoggedIn(WebRTCVoiceClient client, boolean loggedIn) {
+        this.agentCircuit.execute(new Runnable() {
             @Override
-            public void onLLSDXMLResult(LLSDNode lsdNode) {
-                ChatterID groupChatterID = ChatterID.getGroupChatterID(SLVoice.this.userManager.getUserID(), uuid);
-                try {
-                    if (lsdNode == null) {
-                        throw new LLSDException("Null result");
-                    }
-                    String asString = lsdNode.byKey("voice_credentials").byKey("channel_uri").asString();
-                    String asString2 = lsdNode.byKey("voice_credentials").byKey("channel_credentials").asString();
-                    VoicePluginServiceConnection voicePluginServiceConnection = SLVoice.this.voicePluginServiceConnection;
-                    if (SLVoice.this.voiceEnabled && SLVoice.this.voiceLoggedIn && voicePluginServiceConnection != null) {
-                        VoiceChannelInfo voiceChannelInfo = new VoiceChannelInfo(asString, false, true);
-                        voicePluginServiceConnection.addChannel(groupChatterID, voiceChannelInfo);
-                        voicePluginServiceConnection.sendMessage(VoicePluginMessageType.VoiceConnectChannel, new VoiceConnectChannel(voiceChannelInfo, asString2));
-                    }
-                } catch (LLSDException e) {
-                    SLVoice.this.agentCircuit.HandleChatEvent(groupChatterID, new SLChatSystemMessageEvent(ChatMessageSourceUnknown.getInstance(), SLVoice.this.userManager.getUserID(), LumiyaApp.getContext().getString(R.string.failed_to_connect_group_voice)), false);
-                    Debug.Warning(e);
+            public final void run() {
+                if (loggedIn) {
+                    SLVoice.this.webRTCVoiceClient = client;
+                } else {
+                    SLVoice.this.webRTCVoiceClient = null;
+                    SLVoice.this.connectedVoiceChannel = null;
                 }
-            }
-        });
-    }
-
-    public void onVoiceChannelStatus(final VoiceChannelStatus voiceChannelStatus) {
-        this.agentCircuit.execute(new Runnable() {
-            private final /* synthetic */ void $m$0() {
-                SLVoice.this.m266x4b47941e((VoiceChannelStatus) voiceChannelStatus);
-            }
-
-            @Override
-            public final void run() {
-                $m$0();
-            }
-        });
-    }
-
-    public void onVoiceLoginStatus(final VoicePluginServiceConnection voicePluginServiceConnection, final VoiceLoginStatus voiceLoginStatus) {
-        this.agentCircuit.execute(new Runnable() {
-            private final /* synthetic */ void $m$0() {
-                SLVoice.this.m265x4b47856f((VoiceLoginStatus) voiceLoginStatus, (VoicePluginServiceConnection) voicePluginServiceConnection);
-            }
-
-            @Override
-            public final void run() {
-                $m$0();
             }
         });
     }
@@ -365,13 +301,9 @@ public class SLVoice extends SLModule {
             return false;
         }
         new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
-            private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                SLVoice.this.onParcelVoiceInfoResult(lLSDNode);
-            }
-
             @Override
             public final void onLLSDXMLResult(LLSDNode lLSDNode) {
-                $m$0(lLSDNode);
+                SLVoice.this.onParcelVoiceInfoResult(lLSDNode);
             }
         });
         return true;
@@ -387,22 +319,18 @@ public class SLVoice extends SLModule {
         }
         if (z) {
             new LLSDXMLAsyncRequest(this.parcelVoiceCapURL, new LLSDUndefined(), new LLSDXMLAsyncRequest.LLSDXMLResultListener() {
-                private final /* synthetic */ void $m$0(LLSDNode lLSDNode) {
-                    SLVoice.this.m264x4b46af5c(i, lLSDNode);
-                }
-
                 @Override
                 public final void onLLSDXMLResult(LLSDNode lLSDNode) {
-                    $m$0(lLSDNode);
+                    SLVoice.this.onParcelVoiceResult(i, lLSDNode);
                 }
             });
         }
     }
 
     public void updateSpatialVoicePosition() {
-        VoicePluginServiceConnection voicePluginServiceConnection = this.voicePluginServiceConnection;
+        WebRTCVoiceClient client = this.webRTCVoiceClient;
         VoiceChannelInfo voiceChannelInfo = this.connectedVoiceChannel;
-        if (voicePluginServiceConnection == null || voiceChannelInfo == null || !voiceChannelInfo.isSpatial) {
+        if (client == null || voiceChannelInfo == null || !voiceChannelInfo.isSpatial) {
             return;
         }
         LLVector3d agentGlobalPosition = this.agentCircuit.getAgentGlobalPosition();
@@ -413,32 +341,34 @@ public class SLVoice extends SLModule {
         float agentHeading = modules.avatarControl.getAgentHeading() * 0.017453292f;
         float cos = (float) Math.cos(agentHeading);
         float sin = (float) Math.sin(agentHeading);
-        Voice3DPosition voice3DPosition = new Voice3DPosition(Voice3DVector.fromLLCoords((float) agentGlobalPosition.x, (float) agentGlobalPosition.y, (float) agentGlobalPosition.z), new Voice3DVector(0.0f, 0.0f, 0.0f), Voice3DVector.fromLLCoords(cos, sin, 0.0f), Voice3DVector.fromLLCoords(0.0f, 0.0f, 1.0f), Voice3DVector.fromLLCoords(-sin, cos, 0.0f));
-        voicePluginServiceConnection.sendMessage(VoicePluginMessageType.VoiceSet3DPosition, new VoiceSet3DPosition(voiceChannelInfo, voice3DPosition, voice3DPosition));
+        Voice3DPosition voice3DPosition = new Voice3DPosition(
+            Voice3DVector.fromLLCoords((float) agentGlobalPosition.x, (float) agentGlobalPosition.y, (float) agentGlobalPosition.z),
+            new Voice3DVector(0.0f, 0.0f, 0.0f),
+            Voice3DVector.fromLLCoords(cos, sin, 0.0f),
+            Voice3DVector.fromLLCoords(0.0f, 0.0f, 1.0f),
+            Voice3DVector.fromLLCoords(-sin, cos, 0.0f)
+        );
+        client.updateSpatialPosition(voiceChannelInfo, voice3DPosition);
     }
 
     public void updateVoiceEnabledStatus() {
         UIThreadExecutor.getInstance().execute(new Runnable() {
-            private final /* synthetic */ void $m$0() {
-                SLVoice.this.m267xd924b13a();
-            }
-
             @Override
             public final void run() {
-                $m$0();
+                SLVoice.this.onVoiceEnabled();
             }
         });
     }
 
     public boolean userVoiceChatRequest(UUID uuid) {
-        VoicePluginServiceConnection voicePluginServiceConnection = this.voicePluginServiceConnection;
-        VoiceLoginInfo voiceLoginInfo = this.voiceLoginInfo;
-        if (!this.voiceEnabled || !this.voiceLoggedIn || uuid == null || voicePluginServiceConnection == null || voiceLoginInfo == null || this.userManager == null) {
+        WebRTCVoiceClient client = this.webRTCVoiceClient;
+        VoiceLoginInfo loginInfo = this.voiceLoginInfo;
+        if (!this.voiceEnabled || !this.voiceLoggedIn || uuid == null || client == null || loginInfo == null || this.userManager == null) {
             return false;
         }
-        VoiceChannelInfo voiceChannelInfo = new VoiceChannelInfo(uuid, voiceLoginInfo.voiceSipUriHostname);
-        voicePluginServiceConnection.addChannel(ChatterID.getUserChatterID(this.userManager.getUserID(), uuid), voiceChannelInfo);
-        voicePluginServiceConnection.sendMessage(VoicePluginMessageType.VoiceConnectChannel, new VoiceConnectChannel(voiceChannelInfo, null));
+        VoiceChannelInfo voiceChannelInfo = VoiceChannelInfo.forUser(uuid);
+        client.addChannel(ChatterID.getUserChatterID(this.userManager.getUserID(), uuid), voiceChannelInfo);
+        client.connectChannel(voiceChannelInfo, null);
         return true;
     }
 }

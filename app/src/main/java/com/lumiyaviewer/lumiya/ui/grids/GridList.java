@@ -61,9 +61,9 @@ public class GridList {
             return this.GridUUID.equals(UUID.fromString("f14c5be7-0849-402c-946a-c80a52e9eccf"));
         }
 
-        /** Predefined grids, including Second Life, always verify certificates. */
+        /** Linden grids (Second Life) always verify certificates. */
         public boolean getAllowUntrustedCertificates() {
-            return this.allowUntrustedCertificates && !this.predefinedGrid;
+            return this.allowUntrustedCertificates && !isLindenGrid();
         }
 
         public void setAllowUntrustedCertificates(boolean allowUntrustedCertificates) {
@@ -199,7 +199,7 @@ public class GridList {
         while (true) {
             int i2 = i;
             if (i2 >= this.customGrids.size()) {
-                edit.commit();
+                edit.apply();
                 return;
             } else {
                 this.customGrids.get(i2).saveToPreferences(edit, "custom_grid_1_" + i2);
