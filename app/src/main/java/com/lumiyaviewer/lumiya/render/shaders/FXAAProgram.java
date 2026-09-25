@@ -4,11 +4,15 @@ import android.opengl.GLES20;
 
 public class FXAAProgram extends ShaderProgram {
     public int noAAtextureSampler;
+    public int exposure;
+    public int gamma;
+    public int sharpenStrength;
     public int texcoordOffset;
     public int textureSampler;
     public int uMVPMatrix;
     public int vPosition;
     public int vTexCoord;
+    public int vignetteStrength;
 
     public FXAAProgram() {
         super(Shader.FXAAVertexShader, Shader.FXAAFragmentShader);
@@ -27,6 +31,10 @@ public class FXAAProgram extends ShaderProgram {
         this.noAAtextureSampler = GLES20.glGetUniformLocation(this.handle, "noAAtextureSampler");
         this.uMVPMatrix = GLES20.glGetUniformLocation(this.handle, "uMVPMatrix");
         this.texcoordOffset = GLES20.glGetUniformLocation(this.handle, "texcoordOffset");
+        this.exposure = GLES20.glGetUniformLocation(this.handle, "exposure");
+        this.gamma = GLES20.glGetUniformLocation(this.handle, "gamma");
+        this.sharpenStrength = GLES20.glGetUniformLocation(this.handle, "sharpenStrength");
+        this.vignetteStrength = GLES20.glGetUniformLocation(this.handle, "vignetteStrength");
     }
 
     @Override

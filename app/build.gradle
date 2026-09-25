@@ -194,7 +194,13 @@ androidComponents {
 def kotlinPreferredPackageRoots = [
     'com/lumiyaviewer/lumiya/vr/runtime',
     'com/lumiyaviewer/lumiya/repository',
-    'com/lumiyaviewer/lumiya/data'
+    'com/lumiyaviewer/lumiya/data',
+    'com/lumiyaviewer/lumiya/render/backend',
+    'com/lumiyaviewer/lumiya/render/picking',
+    'com/lumiyaviewer/lumiya/render/scene',
+    'com/lumiyaviewer/lumiya/render/terrain',
+    'com/lumiyaviewer/lumiya/render/tex',
+    'com/lumiyaviewer/lumiya/utils'
 ]
 
 tasks.register('enforceKotlinFirstPackages') {
@@ -219,6 +225,8 @@ tasks.register('enforceKotlinFirstPackages') {
             .toSet()
 
         def newJavaFilesInKotlinRoots = kotlinPreferredJavaFiles.files.findAll { file ->
+            // Gradle executes the git command from this module, so ls-tree and
+            // project.relativePath() both produce paths beginning with `src/`.
             def repoRelativePath = project.relativePath(file)
             !trackedJavaPathSet.contains(repoRelativePath)
         }

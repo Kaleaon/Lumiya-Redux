@@ -285,24 +285,14 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
     @Override
     public EGLContext createContext(EGL10 egL10, EGLDisplay eglDisplay, EGLConfig eglConfig) {
         Debug.Printf("EGL: createContext called.", new Object[0]);
-        if (GpuCapabilities.shouldAttemptEs3Context(this.requestGL20)) {
-            Debug.Printf("EGL: trying to create 3.0 context.", new Object[0]);
-            EGLContext eglCreateContext = egL10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
-            if (eglCreateContext != null && eglCreateContext != EGL10.EGL_NO_CONTEXT) {
-                Debug.Printf("EGL: 3.0 context apparently created.", new Object[0]);
-                this.createdGL30 = true;
-                return eglCreateContext;
-            }
-            Debug.Printf("EGL: Failed to create 3.0 context.", new Object[0]);
+        Debug.Printf("EGL: creating required 3.0 context.", new Object[0]);
+        EGLContext eglCreateContext = egL10.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{EGL_CONTEXT_CLIENT_VERSION, 3, 12344});
+        if (eglCreateContext != null && eglCreateContext != EGL10.EGL_NO_CONTEXT) {
+            this.createdGL30 = true;
+            return eglCreateContext;
         }
-        Debug.Printf("EGL: Creating regular context.", new Object[0]);
         this.createdGL30 = false;
-        int[] ints = {EGL_CONTEXT_CLIENT_VERSION, 2, 12344};
-        EGLContext eglContext = EGL10.EGL_NO_CONTEXT;
-        if (!this.requestGL20) {
-            ints = null;
-        }
-        return egL10.eglCreateContext(eglDisplay, eglConfig, eglContext, ints);
+        throw new IllegalStateException("OpenGL ES 3.0 context creation failed (EGL error " + egL10.eglGetError() + ")");
     }
 
     @Override
@@ -810,6 +800,10 @@ public class WorldViewRenderer implements GLSurfaceView.Renderer, GLSurfaceView.
                 GLES20.glUniform1i(renderContext.fxaaProgram.textureSampler, 0);
                 GLES20.glUniform1i(renderContext.fxaaProgram.noAAtextureSampler, 1);
                 GLES20.glUniform2f(renderContext.fxaaProgram.texcoordOffset, 1.0f / i, 1.0f / i2);
+                GLES20.glUniform1f(renderContext.fxaaProgram.exposure, 1.08f);
+                GLES20.glUniform1f(renderContext.fxaaProgram.gamma, 2.2f);
+                GLES20.glUniform1f(renderContext.fxaaProgram.sharpenStrength, 0.12f);
+                GLES20.glUniform1f(renderContext.fxaaProgram.vignetteStrength, 0.16f);
                 float[] floats = new float[16];
                 android.opengl.Matrix.setIdentityM(floats, 0);
                 android.opengl.Matrix.scaleM(floats, 0, 2.0f, 2.0f, 1.0f);
