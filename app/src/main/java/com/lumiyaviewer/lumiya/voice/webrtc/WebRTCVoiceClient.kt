@@ -1,6 +1,9 @@
 package com.lumiyaviewer.lumiya.voice.webrtc
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.AudioManager
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
@@ -17,9 +20,6 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
-import org.webrtc.DefaultVideoDecoderFactory
-import org.webrtc.DefaultVideoEncoderFactory
-import org.webrtc.EglBase
 import org.webrtc.MediaConstraints
 import org.webrtc.PeerConnectionFactory
 import java.util.UUID
@@ -43,6 +43,25 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
     private val userManager = AtomicReference<UserManager>(null)
     private var listener: WebRTCVoiceClientListener? = null
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+    @Volatile
+    private var bluetoothState = VoiceBluetoothState.Disconnected
+    private var scoReceiverRegistered = false
+
+    private val scoReceiver = object : BroadcastReceiver() {
+        override fun onReceive(ctx: Context?, intent: Intent?) {
+            val state = intent?.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -1) ?: return
+            bluetoothState = when (state) {
+                AudioManager.SCO_AUDIO_STATE_CONNECTED -> VoiceBluetoothState.Active
+                AudioManager.SCO_AUDIO_STATE_CONNECTING -> VoiceBluetoothState.Connecting
+                AudioManager.SCO_AUDIO_STATE_DISCONNECTED -> VoiceBluetoothState.Disconnected
+                AudioManager.SCO_AUDIO_STATE_ERROR -> VoiceBluetoothState.Error
+                else -> VoiceBluetoothState.Disconnected
+            }
+            Debug.Printf("WebRTCVoice: Bluetooth SCO state changed to %s", bluetoothState)
+            notifyAudioPropertiesChanged()
+        }
+    }
 
     @Volatile
     var provisionCapURL: String? = null
@@ -79,6 +98,12 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
         audioSource = peerConnectionFactory?.createAudioSource(audioConstraints)
         localAudioTrack = peerConnectionFactory?.createAudioTrack("lumiya-mic", audioSource)
         localAudioTrack?.setEnabled(false)
+
+        if (!scoReceiverRegistered) {
+            context.registerReceiver(scoReceiver,
+                IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED))
+            scoReceiverRegistered = true
+        }
 
         Debug.Printf("WebRTCVoice: initialized PeerConnectionFactory")
     }
@@ -186,6 +211,8 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
     fun setAudioDevice(device: VoiceAudioDevice) {
         when (device) {
             VoiceAudioDevice.Loudspeaker -> {
+                audioManager.stopBluetoothSco()
+                audioManager.isBluetoothScoOn = false
                 audioManager.isSpeakerphoneOn = true
                 audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             }
@@ -230,6 +257,14 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
 
     fun dispose() {
         disconnectAll()
+        if (scoReceiverRegistered) {
+            context.unregisterReceiver(scoReceiver)
+            scoReceiverRegistered = false
+        }
+        audioManager.stopBluetoothSco()
+        audioManager.isBluetoothScoOn = false
+        audioManager.isSpeakerphoneOn = false
+        audioManager.mode = AudioManager.MODE_NORMAL
         localAudioTrack?.dispose()
         localAudioTrack = null
         audioSource?.dispose()
@@ -241,16 +276,12 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
 
     private fun notifyAudioPropertiesChanged() {
         val um = userManager.get() ?: return
-        val btState = when {
-            audioManager.isBluetoothScoOn -> VoiceBluetoothState.Active
-            else -> VoiceBluetoothState.Inactive
-        }
         val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL).toFloat()
         val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL).toFloat()
         val volume = if (maxVolume > 0) currentVolume / maxVolume else 0.5f
 
         um.setVoiceAudioProperties(
-            VoiceAudioProperties(volume, audioManager.isSpeakerphoneOn, btState)
+            VoiceAudioProperties(volume, audioManager.isSpeakerphoneOn, bluetoothState)
         )
     }
 
