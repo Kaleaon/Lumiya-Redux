@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.media.AudioDeviceInfo
+import android.os.Build
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.Maps
@@ -209,27 +211,62 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
     }
 
     fun setAudioDevice(device: VoiceAudioDevice) {
+        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            setModernAudioDevice(device)
+        } else {
+            setLegacyAudioDevice(device)
+        }
+        notifyAudioPropertiesChanged()
+    }
+
+    private fun setModernAudioDevice(device: VoiceAudioDevice) {
+        val preferredTypes = when (device) {
+            VoiceAudioDevice.Loudspeaker -> setOf(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER)
+            VoiceAudioDevice.Bluetooth -> setOf(
+                AudioDeviceInfo.TYPE_BLUETOOTH_SCO,
+                AudioDeviceInfo.TYPE_BLE_HEADSET,
+                AudioDeviceInfo.TYPE_BLE_SPEAKER
+            )
+            else -> setOf(
+                AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
+                AudioDeviceInfo.TYPE_WIRED_HEADSET,
+                AudioDeviceInfo.TYPE_WIRED_HEADPHONES,
+                AudioDeviceInfo.TYPE_USB_HEADSET
+            )
+        }
+        val route = audioManager.availableCommunicationDevices.firstOrNull { it.type in preferredTypes }
+        if (route != null) {
+            audioManager.setCommunicationDevice(route)
+        } else {
+            audioManager.clearCommunicationDevice()
+        }
+        bluetoothState = if (route?.type in BLUETOOTH_DEVICE_TYPES) {
+            VoiceBluetoothState.Active
+        } else {
+            VoiceBluetoothState.Disconnected
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun setLegacyAudioDevice(device: VoiceAudioDevice) {
         when (device) {
             VoiceAudioDevice.Loudspeaker -> {
                 audioManager.stopBluetoothSco()
                 audioManager.isBluetoothScoOn = false
                 audioManager.isSpeakerphoneOn = true
-                audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             }
             VoiceAudioDevice.Bluetooth -> {
                 audioManager.isSpeakerphoneOn = false
                 audioManager.startBluetoothSco()
                 audioManager.isBluetoothScoOn = true
-                audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             }
             else -> {
                 audioManager.isSpeakerphoneOn = false
                 audioManager.stopBluetoothSco()
                 audioManager.isBluetoothScoOn = false
-                audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             }
         }
-        notifyAudioPropertiesChanged()
     }
 
     fun setSpeakerVolume(volume: Float) {
@@ -261,9 +298,7 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
             context.unregisterReceiver(scoReceiver)
             scoReceiverRegistered = false
         }
-        audioManager.stopBluetoothSco()
-        audioManager.isBluetoothScoOn = false
-        audioManager.isSpeakerphoneOn = false
+        resetAudioRouting()
         audioManager.mode = AudioManager.MODE_NORMAL
         localAudioTrack?.dispose()
         localAudioTrack = null
@@ -280,9 +315,29 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
         val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL).toFloat()
         val volume = if (maxVolume > 0) currentVolume / maxVolume else 0.5f
 
-        um.setVoiceAudioProperties(
-            VoiceAudioProperties(volume, audioManager.isSpeakerphoneOn, bluetoothState)
-        )
+        um.setVoiceAudioProperties(VoiceAudioProperties(volume, isSpeakerphoneActive(), bluetoothState))
+    }
+
+    private fun isSpeakerphoneActive(): Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        audioManager.communicationDevice?.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
+    } else {
+        @Suppress("DEPRECATION")
+        audioManager.isSpeakerphoneOn
+    }
+
+    private fun resetAudioRouting() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            audioManager.clearCommunicationDevice()
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.stopBluetoothSco()
+            @Suppress("DEPRECATION")
+            run {
+                audioManager.isBluetoothScoOn = false
+                audioManager.isSpeakerphoneOn = false
+            }
+        }
+        bluetoothState = VoiceBluetoothState.Disconnected
     }
 
     private fun extractParcelId(channelURI: String?): Int? {
@@ -358,6 +413,12 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
     }
 
     companion object {
+        private val BLUETOOTH_DEVICE_TYPES = setOf(
+            AudioDeviceInfo.TYPE_BLUETOOTH_SCO,
+            AudioDeviceInfo.TYPE_BLE_HEADSET,
+            AudioDeviceInfo.TYPE_BLE_SPEAKER
+        )
+
         @JvmStatic
         fun isSupported(): Boolean = true
     }
