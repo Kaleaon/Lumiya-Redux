@@ -61,9 +61,9 @@ public class GridList {
             return this.GridUUID.equals(UUID.fromString("f14c5be7-0849-402c-946a-c80a52e9eccf"));
         }
 
-        /** Predefined grids, including Second Life, always verify certificates. */
+        /** Linden grids (Second Life) always verify certificates. */
         public boolean getAllowUntrustedCertificates() {
-            return this.allowUntrustedCertificates && !this.predefinedGrid;
+            return this.allowUntrustedCertificates && !isLindenGrid();
         }
 
         public void setAllowUntrustedCertificates(boolean allowUntrustedCertificates) {
