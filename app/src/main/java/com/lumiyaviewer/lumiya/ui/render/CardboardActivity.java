@@ -322,8 +322,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         @Override
         public void onEndOfSpeech() {
             Debug.Printf("Cardboard: end of speech", new Object[0]);
-            CardboardActivity.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
-            CardboardActivity.binding.speakNowText.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.speakNowText.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -374,16 +374,16 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             }
             String str = stringArrayList.get(0);
             CardboardActivity.this.lastSpeechRecognitionResults = str;
-            CardboardActivity.binding.speechRecognitionResults.setText(str);
+            CardboardActivity.this.binding.speechRecognitionResults.setText(str);
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onReadyForSpeech(Bundle bundle) {
-            CardboardActivity.binding.speakNowText.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakNowText.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -394,13 +394,13 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 return;
             }
             String str = stringArrayList.get(0);
-            CardboardActivity.binding.speechRecognitionResults.setText(str);
+            CardboardActivity.this.binding.speechRecognitionResults.setText(str);
             CardboardActivity.this.lastSpeechRecognitionResults = str;
             if (Strings.isNullOrEmpty(str)) {
                 return;
             }
-            CardboardActivity.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
-            CardboardActivity.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
+            CardboardActivity.this.binding.buttonSpeechSend.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.INVISIBLE);
             CardboardActivity.this.isSpeechFinished = true;
         }
 
@@ -427,8 +427,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                 round = 100;
             }
             Debug.Printf("Cardboard: speech recognition: RMS %f", Float.valueOf(f));
-            CardboardActivity.binding.speakLevelIndicator.setVisibility(View.VISIBLE);
-            CardboardActivity.binding.speakLevelIndicator.setProgress(round);
+            CardboardActivity.this.binding.speakLevelIndicator.setVisibility(View.VISIBLE);
+            CardboardActivity.this.binding.speakLevelIndicator.setProgress(round);
         }
     };
     private volatile boolean insideControls = false;
@@ -1199,7 +1199,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             MotionEvent obtain3 = MotionEvent.obtain(this.insideSince, SystemClock.uptimeMillis(), 7, i, i2, 0);
             obtain3.setSource(2);
             this.onScreenControlsLayout.dispatchGenericMotionEvent(obtain3);
-            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.cardboardDetailsPage, i, i2, 0, 0, new Predicate() {
+            if (this.currentControlsPage != ControlsPage.pageDetails || (findMatchingView = findMatchingView(this.binding.cardboardDetailsPage, i, i2, 0, 0, new Predicate() {
                 private final /* synthetic */ boolean $m$0(Object obj) {
                     return CardboardActivity.this.isViewScrollable((View) obj);
                 }
@@ -1259,11 +1259,11 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     public void onPickedAvatarNameUpdated(ChatterNameRetriever chatterNameRetriever) {
-        this.objectNameView.setText(chatterNameRetriever.getResolvedName());
+        this.binding.cardboardObjectName.setText(chatterNameRetriever.getResolvedName());
     }
 
     public void onSelectedObjectProfile(SLObjectProfileData sLObjectProfileData) {
-        this.objectNameView.setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
+        this.binding.cardboardObjectName.setText(sLObjectProfileData.name().or(getString(R.string.object_name_loading)));
     }
 
     public void onViewsInvalidated() {
@@ -1284,8 +1284,8 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     }
 
     public void onVoiceActiveChatter(ChatterID chatterID) {
-        if (this.voiceStatusView != null) {
-            this.voiceStatusView.setChatterID(chatterID);
+        if (this.binding.cardboardVoiceStatusView != null) {
+            this.binding.cardboardVoiceStatusView.setChatterID(chatterID);
         }
         if (this.userManager == null || chatterID == null) {
             this.voiceChatInfo.unsubscribe();
@@ -1414,20 +1414,20 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             return;
         }
         if (sLObjectInfo.isAvatar()) {
-            this.buttonSit.setVisibility(View.GONE);
-            binding.buttonTouchObject.setVisibility(View.GONE);
-            this.buttonObjectChat.setVisibility(View.VISIBLE);
+            binding.objectSitButton.setVisibility(View.GONE);
+            binding.objectTouchButton.setVisibility(View.GONE);
+            binding.objectChatButton.setVisibility(View.VISIBLE);
         } else {
-            this.buttonSit.setVisibility(View.VISIBLE);
-            binding.buttonTouchObject.setVisibility(sLObjectInfo.isTouchable() ? View.VISIBLE : View.GONE);
-            this.buttonObjectChat.setVisibility(View.GONE);
+            binding.objectSitButton.setVisibility(View.VISIBLE);
+            binding.objectTouchButton.setVisibility(sLObjectInfo.isTouchable() ? View.VISIBLE : View.GONE);
+            binding.objectChatButton.setVisibility(View.GONE);
         }
     }
 
     private void updateVoiceIndication() {
         boolean isVoiceLoggedIn = isVoiceLoggedIn();
         CurrentLocationInfo data = this.currentLocationInfo.getData();
-        this.voiceStatusView.setCanConnect((!isVoiceLoggedIn || data == null || data.parcelVoiceChannel() == null) ? false : true);
+        this.binding.cardboardVoiceStatusView.setCanConnect((!isVoiceLoggedIn || data == null || data.parcelVoiceChannel() == null) ? false : true);
         ChatterID data2 = this.voiceActiveChatter.getData();
         VoiceChatInfo data3 = this.voiceChatInfo.getData();
         if (data2 == null || data3 == null || data3.state == VoiceChatInfo.VoiceChatState.None) {
@@ -1752,7 +1752,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         if (!(sLChatEvent instanceof SLChatScriptDialog)) {
             if (sLChatEvent instanceof SLChatPermissionRequestEvent) {
                 this.activeYesNoEvent = (SLChatYesNoEvent) sLChatEvent;
-                this.yesNoText.setText(((SLChatPermissionRequestEvent) sLChatEvent).getQuestion(this));
+                this.binding.cardboardYesnoText.setText(((SLChatPermissionRequestEvent) sLChatEvent).getQuestion(this));
                 setControlsPage(ControlsPage.pageYesNo);
                 return;
             }
@@ -1772,7 +1772,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                     button.setVisibility(View.GONE);
                 }
             }
-            this.dialogQuestionText.setText(sLChatScriptDialog.getRawText());
+            this.binding.dialogQuestionText.setText(sLChatScriptDialog.getRawText());
         }
     }
 
@@ -1950,9 +1950,9 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             this.currentLocationInfo.subscribe(this.userManager.getCurrentLocationInfo(), SubscriptionSingleKey.Value);
         }
         if (this.voiceEnabled) {
-            this.voiceStatusView.setShowWhenInactive(true);
+            this.binding.cardboardVoiceStatusView.setShowWhenInactive(true);
         } else {
-            this.voiceStatusView.setShowWhenInactive(false);
+            this.binding.cardboardVoiceStatusView.setShowWhenInactive(false);
         }
     }
 
@@ -1962,7 +1962,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         this.voiceLoggedIn.unsubscribe();
         this.currentLocationInfo.unsubscribe();
         this.agentCircuit.unsubscribe();
-        this.voiceStatusView.setChatterID(null);
+        this.binding.cardboardVoiceStatusView.setChatterID(null);
         this.keypadActive.set(false);
         if (this.vrSession != null) {
             this.vrSession.onStop();

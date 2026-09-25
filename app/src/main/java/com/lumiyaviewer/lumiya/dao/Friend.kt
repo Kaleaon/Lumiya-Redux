@@ -6,7 +6,7 @@ class Friend @JvmOverloads constructor(
     var uuid: UUID? = null,
     var rightsGiven: Int = 0,
     var rightsHas: Int = 0,
-    var isOnline: Boolean = false
+    @JvmField var isOnline: Boolean = false
 ) {
     companion object {
         const val GRANT_ONLINE_STATUS = 1

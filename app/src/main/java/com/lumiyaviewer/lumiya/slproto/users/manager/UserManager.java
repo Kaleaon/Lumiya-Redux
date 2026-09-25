@@ -168,7 +168,7 @@ public class UserManager {
         @Override
         public boolean isRequestComplete(@Nonnull UUID uuid, UserName userName) {
             if (userName != null) {
-                if (userName.getIsBadUUID()) {
+                if (userName.isBadUUID) {
                     return true;
                 }
                 if (userName.getDisplayName() != null && userName.getUserName() != null) {

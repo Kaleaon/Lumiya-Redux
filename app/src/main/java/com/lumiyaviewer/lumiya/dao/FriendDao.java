@@ -43,7 +43,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         }
         sqLiteStatement.bindLong(2, friend.getRightsGiven());
         sqLiteStatement.bindLong(3, friend.getRightsHas());
-        sqLiteStatement.bindLong(4, friend.getIsOnline() ? 1L : 0L);
+        sqLiteStatement.bindLong(4, friend.isOnline ? 1L : 0L);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FriendDao extends AbstractDao<Friend, UUID> {
         friend.setUuid(cursor.isNull(i + 0) ? null : UUID.fromString(cursor.getString(i + 0)));
         friend.setRightsGiven(cursor.getInt(i + 1));
         friend.setRightsHas(cursor.getInt(i + 2));
-        friend.setIsOnline(cursor.getShort(i + 3) != 0);
+        friend.isOnline = cursor.getShort(i + 3) != 0;
     }
 
     @Override

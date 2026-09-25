@@ -1,3 +1,3 @@
 package com.lumiyaviewer.lumiya.slproto.events
 
-data class SLDisconnectEvent(val normalDisconnect: Boolean, val message: String)
+data class SLDisconnectEvent(@JvmField val normalDisconnect: Boolean, @JvmField val message: String)

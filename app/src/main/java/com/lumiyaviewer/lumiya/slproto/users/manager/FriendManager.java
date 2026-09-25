@@ -48,7 +48,7 @@ public class FriendManager {
             public Boolean processRequest(@Nonnull UUID uuid) {
                 Friend load = FriendManager.this.friendDao.load(uuid);
                 if (load != null) {
-                    return Boolean.valueOf(load.getIsOnline());
+                    return Boolean.valueOf(load.isOnline);
                 }
                 return false;
             }
@@ -92,7 +92,7 @@ public class FriendManager {
         for (UUID uuid : list) {
             Friend load = this.friendDao.load(uuid);
             if (load != null) {
-                load.setIsOnline(z);
+                load.isOnline = z;
                 this.friendDao.update(load);
             }
             this.onlineStatus.requestUpdate(uuid);
@@ -107,10 +107,10 @@ public class FriendManager {
             Friend load = this.friendDao.load(uuid);
             if (load == null) {
                 this.friendDao.insertOrReplace(new Friend(uuid, friend.rightsGiven, friend.rightsHas, false));
-            } else if (load.getRightsGiven() != friend.rightsGiven || load.getRightsHas() != friend.rightsHas || load.getIsOnline()) {
+            } else if (load.getRightsGiven() != friend.rightsGiven || load.getRightsHas() != friend.rightsHas || load.isOnline) {
                 load.setRightsGiven(friend.rightsGiven);
                 load.setRightsHas(friend.rightsHas);
-                load.setIsOnline(false);
+                load.isOnline = false;
                 this.friendDao.update(load);
             }
             hashSet.add(uuid);

@@ -8,7 +8,7 @@ class UserName @JvmOverloads constructor(
     var uuid: UUID? = null,
     var userName: String? = null,
     var displayName: String? = null,
-    var isBadUUID: Boolean = false
+    @JvmField var isBadUUID: Boolean = false
 ) {
     fun isComplete(): Boolean {
         if (isBadUUID) return true
