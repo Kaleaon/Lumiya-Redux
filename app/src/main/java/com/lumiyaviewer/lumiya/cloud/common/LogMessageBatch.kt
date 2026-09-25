@@ -1,6 +1,7 @@
 package com.lumiyaviewer.lumiya.cloud.common
 
 import android.os.Bundle
+import androidx.core.os.BundleCompat
 import com.google.common.collect.ImmutableList
 import java.util.UUID
 
@@ -14,7 +15,7 @@ class LogMessageBatch : Bundleable {
         this.agentUUID = UUID.fromString(bundle.getString("agentUUID"))
         this.agentName = bundle.getString("agentName")!!
         this.lastMessageID = bundle.getLong("lastMessageID")
-        val parcelableArray = bundle.getParcelableArray("messages")
+        val parcelableArray = BundleCompat.getParcelableArray(bundle, "messages", Bundle::class.java)
         val builder = ImmutableList.builder<LogChatMessage>()
         parcelableArray?.forEach { parcelable ->
             if (parcelable is Bundle) {

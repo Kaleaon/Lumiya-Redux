@@ -44,6 +44,11 @@ Rationale: new Room-backed entities/DAOs and adapters should start Kotlin-first 
 Kotlin-first package root:
 - `com.lumiyaviewer.lumiya.data`
 
+The Room migration coordinator and the three greenDAO-to-Room repository
+adapters are now Kotlin. Their Java-callable class names, constructors, and
+methods remain unchanged, while cursor/resource handling uses Kotlin `use`
+blocks and entity mapping uses scoped extension functions.
+
 ### 4) Tested modernization seams (opportunistic)
 
 Rationale: renderer seams and shared utilities are safe incremental candidates
@@ -86,3 +91,14 @@ A Java file is ready to convert only when all of the following are true:
    source policy pass.
 5. JNI/reflection/serialization entry points are checked explicitly before
    conversion; these should remain Java when signature parity is uncertain.
+
+## Deprecated Android API policy
+
+- Prefer typed AndroidX compatibility helpers, such as `BundleCompat`, over
+  deprecated untyped framework accessors.
+- Use the API 31 communication-device routing APIs for voice on current
+  Android releases. The SCO/speakerphone APIs are retained only in an
+  explicitly isolated API 26-30 fallback so the application's supported
+  minimum SDK continues to work.
+- A deprecation suppression must be attached to the smallest compatibility
+  function possible; file-wide suppression is not allowed.
