@@ -2,7 +2,7 @@ package com.lumiyaviewer.lumiya.data.migration;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.LumiyaApp;

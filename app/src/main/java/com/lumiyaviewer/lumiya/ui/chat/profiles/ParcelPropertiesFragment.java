@@ -3,8 +3,9 @@ package com.lumiyaviewer.lumiya.ui.chat.profiles;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -35,6 +36,10 @@ import com.lumiyaviewer.lumiya.ui.common.FragmentWithTitle;
 import com.lumiyaviewer.lumiya.ui.common.ImageAssetView;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParcelPropertiesFragment extends FragmentWithTitle {
     public static final String PARCEL_DATA_KEY = "parcelData";
@@ -64,6 +69,15 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     private ParcelData parcelData = null;
     private UserManager userManager = null;
     private final ChatterNameDisplayer ownerNameDisplayer = new ChatterNameDisplayer();
+    private final ExecutorService homeLocationExecutor = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "SetHomeLocation");
+        thread.setDaemon(true);
+        return thread;
+    });
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private Future<?> setHomeFuture;
+    private ProgressDialog setHomeProgressDialog;
+    private final AtomicInteger setHomeGeneration = new AtomicInteger();
     private final SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             ParcelPropertiesFragment.this.onIsPlayingMedia((Boolean) obj);
@@ -84,38 +98,6 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
             $m$0(obj);
         }
     });
-
-    private class SetHomeLocationAsyncTask extends AsyncTask<Void, Void, Boolean> {
-        private ProgressDialog progressDialog;
-
-        private SetHomeLocationAsyncTask() {
-        }
-
-        /* synthetic */ SetHomeLocationAsyncTask(ParcelPropertiesFragment parcelPropertiesFragment, SetHomeLocationAsyncTask setHomeLocationAsyncTask) {
-            this();
-        }
-
-        @Override
-        public Boolean doInBackground(Void... voidArr) {
-            SLAgentCircuit agentCircuit = (SLAgentCircuit) ParcelPropertiesFragment.this.agentCircuit.getData();
-            return Boolean.valueOf(agentCircuit != null ? agentCircuit.getModules().userProfiles.SetHomeLocation() : false);
-        }
-
-        @Override
-        public void onPostExecute(Boolean bool) {
-            this.progressDialog.dismiss();
-            if (bool == null || (!bool.booleanValue())) {
-                new AlertDialog.Builder(ParcelPropertiesFragment.this.getContext()).setMessage(R.string.set_home_failed).setCancelable(true).create().show();
-            } else {
-                new AlertDialog.Builder(ParcelPropertiesFragment.this.getContext()).setMessage(R.string.set_home_success).setCancelable(true).create().show();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog = ProgressDialog.show(ParcelPropertiesFragment.this.getContext(), null, ParcelPropertiesFragment.this.getString(R.string.setting_home_location), true);
-        }
-    }
 
     public static Bundle makeSelection(UUID uuid, ParcelData parcelData) {
         Bundle bundle = new Bundle();
@@ -158,7 +140,50 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_chat_profiles_ParcelPropertiesFragment_9097, reason: not valid java name */
     /* synthetic */ void m515x74bdcccf(DialogInterface dialogInterface, int i) {
         dialogInterface.dismiss();
-        new SetHomeLocationAsyncTask(this, null).execute(new Void[0]);
+        setHomeLocation();
+    }
+
+    private void setHomeLocation() {
+        cancelSetHomeLocation();
+        setHomeProgressDialog = ProgressDialog.show(getContext(), null, getString(R.string.setting_home_location), true);
+        final SLAgentCircuit circuit = this.agentCircuit.getData();
+        final int generation = setHomeGeneration.get();
+        setHomeFuture = homeLocationExecutor.submit(() -> {
+            final boolean succeeded = circuit != null && circuit.getModules().userProfiles.SetHomeLocation();
+            mainHandler.post(() -> showSetHomeLocationResult(generation, succeeded));
+        });
+    }
+
+    private void showSetHomeLocationResult(int generation, boolean succeeded) {
+        if (generation != setHomeGeneration.get()) {
+            return;
+        }
+        setHomeFuture = null;
+        if (setHomeProgressDialog != null) {
+            setHomeProgressDialog.dismiss();
+            setHomeProgressDialog = null;
+        }
+        if (!isAdded() || getView() == null) {
+            return;
+        }
+        new AlertDialog.Builder(requireContext())
+                .setMessage(succeeded ? R.string.set_home_success : R.string.set_home_failed)
+                .setCancelable(true)
+                .create()
+                .show();
+    }
+
+    private void cancelSetHomeLocation() {
+        setHomeGeneration.incrementAndGet();
+        if (setHomeFuture != null) {
+            setHomeFuture.cancel(true);
+            setHomeFuture = null;
+        }
+        mainHandler.removeCallbacksAndMessages(null);
+        if (setHomeProgressDialog != null) {
+            setHomeProgressDialog.dismiss();
+            setHomeProgressDialog = null;
+        }
     }
 
     @Override
@@ -174,12 +199,19 @@ public class ParcelPropertiesFragment extends FragmentWithTitle {
 
     @Override
     public void onDestroyView() {
+        cancelSetHomeLocation();
         if (this.unbinder != null) {
             this.unbinder.unbind();
             this.ownerNameDisplayer.unbindViews();
             this.unbinder = null;
         }
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        homeLocationExecutor.shutdownNow();
+        super.onDestroy();
     }
 
     public void onOwnerProfileButton() {

@@ -103,9 +103,19 @@ dismiss helper, whose API 11/12 fallbacks were unreachable with the app's API
 
 ## Next slices
 
-1. Add a dependency report/check that proves which artifacts still require
-   Jetifier.
-2. Convert the smallest `*_ViewBinding`-backed activity to View Binding and add
-   a focused lifecycle test.
-3. Convert one contained `AsyncTask` flow after characterizing cancellation
-   and configuration-change behavior.
+1. ~~Add a dependency report/check that proves which artifacts still require
+   Jetifier.~~ Done: `verifyNoLegacySupportDependencies` resolves both runtime
+   graphs, rejects `com.android.support` modules, and is part of `check`.
+2. ~~Convert the smallest `*_ViewBinding`-backed activity to View Binding.~~
+   Done for `MinimapActivity`; its binding is released from `onDestroy` and the
+   recovered ButterKnife binding source has been removed.
+3. ~~Convert one contained `AsyncTask` flow after characterizing cancellation
+   and configuration-change behavior.~~ Done for parcel “set home”: work runs
+   on an owned executor, returns through the main looper, and view teardown
+   cancels the future, callbacks, and progress dialog.
+
+## Next slices after the completed batch
+
+1. Migrate the remaining five `AsyncTask` call sites one flow at a time.
+2. Convert another activity binding and add lifecycle coverage with each screen.
+3. ~~Replace framework `PreferenceManager` imports.~~ Done: all default-preference callers now use AndroidX `PreferenceManager`; migrate any future preference UI to `PreferenceFragmentCompat`.

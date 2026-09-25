@@ -22,6 +22,9 @@ public class PrimVolumeParams {
     public static final short PARAMS_LIGHT = 32;
     public static final short PARAMS_LIGHT_IMAGE = 64;
     public static final short PARAMS_MESH = 96;
+    /** Extended-mesh flags, including the simulator's Animesh opt-in. */
+    public static final short PARAMS_EXTENDED_MESH = 112;
+    public static final int EXTENDED_MESH_ANIMATED = 1;
     public static final short PARAMS_RESERVED = 80;
     public static final short PARAMS_SCULPT = 48;
     public PrimFlexibleParams FlexiParams;
@@ -29,6 +32,8 @@ public class PrimVolumeParams {
     public PrimProfileParams ProfileParams;
     public UUID SculptID;
     public byte SculptType;
+    /** Raw flags from the 0x70 extended-mesh extra parameter. */
+    public int ExtendedMeshFlags;
 
     public static PrimVolumeParams createFromObjectUpdate(ObjectUpdate.ObjectData objectData) {
         PrimVolumeParams primVolumeParams = new PrimVolumeParams();
@@ -53,6 +58,9 @@ public class PrimVolumeParams {
         }
         PrimVolumeParams primVolumeParams = (PrimVolumeParams) obj;
         if (this.SculptType != primVolumeParams.SculptType) {
+            return false;
+        }
+        if (this.ExtendedMeshFlags != primVolumeParams.ExtendedMeshFlags) {
             return false;
         }
         if ((this.SculptID == null) != (primVolumeParams.SculptID == null)) {
@@ -80,7 +88,7 @@ public class PrimVolumeParams {
     }
 
     public int hashCode() {
-        int i = (this.SculptType * 17) + 0;
+        int i = (this.SculptType * 17) + (this.ExtendedMeshFlags * 31);
         if (this.SculptID != null) {
             i += this.SculptID.hashCode() * 3;
         }
@@ -96,6 +104,11 @@ public class PrimVolumeParams {
         return this.SculptID != null && (this.SculptType & 7) == 5;
     }
 
+    /** True when this mesh object owns an Animesh skeleton and animations. */
+    public boolean isAnimatedMesh() {
+        return isMesh() && (this.ExtendedMeshFlags & EXTENDED_MESH_ANIMATED) != 0;
+    }
+
     public boolean isSculpt() {
         return this.SculptID != null;
     }
@@ -106,10 +119,14 @@ public class PrimVolumeParams {
 
     public void unpackExtraParams(ByteBuffer byteBuffer) {
         try {
-            byte b = byteBuffer.get();
-            for (int i = 0; i < b; i++) {
+            int count = Byte.toUnsignedInt(byteBuffer.get());
+            for (int i = 0; i < count; i++) {
                 short s = byteBuffer.getShort();
-                int i2 = byteBuffer.getInt() + byteBuffer.position();
+                int length = byteBuffer.getInt();
+                if (length < 0 || length > byteBuffer.remaining()) {
+                    throw new BufferUnderflowException();
+                }
+                int i2 = byteBuffer.position() + length;
                 switch (s) {
                     case 16:
                         this.FlexiParams = new PrimFlexibleParams(byteBuffer, i2);
@@ -120,6 +137,14 @@ public class PrimVolumeParams {
                         this.SculptID = UUIDPool.getUUID(new UUID(byteBuffer.getLong(), byteBuffer.getLong()));
                         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
                         this.SculptType = byteBuffer.get();
+                        break;
+                    case PARAMS_EXTENDED_MESH:
+                        // LLExtendedMeshParams is currently a single U32 bitfield.
+                        // Keep unknown bits so a later renderer can make its own
+                        // compatibility decision as the protocol evolves.
+                        if (length >= Integer.BYTES) {
+                            this.ExtendedMeshFlags = byteBuffer.getInt();
+                        }
                         break;
                 }
                 byteBuffer.position(i2);

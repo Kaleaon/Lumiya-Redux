@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import com.lumiyaviewer.lumiya.R;
+import com.lumiyaviewer.lumiya.databinding.SplitTwoPanelsBinding;
 import com.lumiyaviewer.lumiya.react.Subscription;
 import com.lumiyaviewer.lumiya.react.SubscriptionData;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
@@ -41,6 +42,8 @@ public class MinimapActivity extends ConnectedActivity {
 
     View splitObjectPopupsLeftSpacer;
 
+    private SplitTwoPanelsBinding binding;
+
     public void onCurrentLocationInfo(CurrentLocationInfo currentLocationInfo) {
         if (currentLocationInfo != null) {
             ParcelData parcelData = currentLocationInfo.parcelData();
@@ -64,8 +67,12 @@ public class MinimapActivity extends ConnectedActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.split_two_panels);
-        new MinimapActivity_ViewBinding(this);
+        this.binding = SplitTwoPanelsBinding.inflate(getLayoutInflater());
+        setContentView(this.binding.getRoot());
+        this.detailsLayout = this.binding.detailsWithOnlineStatus;
+        this.selectorLayout = this.binding.selector;
+        this.splitMainLayout = this.binding.splitMainLayout;
+        this.splitObjectPopupsLeftSpacer = this.binding.splitObjectPopupsLeftSpacer;
         if (getResources().getConfiguration().orientation == 2) {
             this.splitMainLayout.setOrientation(0);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) this.selectorLayout.getLayoutParams();
@@ -123,5 +130,15 @@ public class MinimapActivity extends ConnectedActivity {
     protected void onStop() {
         this.currentLocationInfo.unsubscribe();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        this.binding = null;
+        this.detailsLayout = null;
+        this.selectorLayout = null;
+        this.splitMainLayout = null;
+        this.splitObjectPopupsLeftSpacer = null;
+        super.onDestroy();
     }
 }

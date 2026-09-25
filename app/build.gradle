@@ -71,6 +71,12 @@ android {
         unitTests.includeAndroidResources = true
     }
 
+    buildFeatures {
+        // New and touched screens use generated, null-safe bindings. Recovered
+        // *_ViewBinding sources remain only for screens not migrated yet.
+        viewBinding true
+    }
+
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
@@ -258,9 +264,30 @@ tasks.register('rejectUndecompiledMethods') {
     }
 }
 
+tasks.register('verifyNoLegacySupportDependencies') {
+    group = 'verification'
+    description = 'Fails if a runtime graph regresses to android.support artifacts that require Jetifier.'
+
+    doLast {
+        def offenders = [configurations.debugRuntimeClasspath, configurations.releaseRuntimeClasspath]
+            .collectMany { configuration ->
+                configuration.resolvedConfiguration.resolvedArtifacts.findAll { artifact ->
+                    artifact.moduleVersion.id.group == 'com.android.support'
+                }.collect { artifact -> "${configuration.name}: ${artifact.moduleVersion.id}" }
+            }.unique().sort()
+        if (!offenders.isEmpty()) {
+            throw new GradleException(
+                "Legacy Android support artifacts require Jetifier and are forbidden:\n  " +
+                    offenders.join('\n  ')
+            )
+        }
+    }
+}
+
 tasks.named('check').configure {
     dependsOn(tasks.named('enforceKotlinFirstPackages'))
     dependsOn(tasks.named('rejectUndecompiledMethods'))
+    dependsOn(tasks.named('verifyNoLegacySupportDependencies'))
 }
 
 tasks.named('lint').configure {
@@ -280,8 +307,9 @@ tasks.withType(JavaCompile).configureEach {
 //  since deleted from app/src/main/java).
 //
 //  Where the original package name is preserved upstream we pin to that
-//  package's own coordinate; where upstream has renamed, Jetifier handles
-//  the remap (android.support → androidx).
+//  package's own coordinate. AndroidX migrations are source-level; the
+//  verification task above prevents dependencies from reintroducing a need
+//  for Jetifier.
 // -------------------------------------------------------------------------
 dependencies {
     if (!originalBytecodeClasses.isEmpty()) {
