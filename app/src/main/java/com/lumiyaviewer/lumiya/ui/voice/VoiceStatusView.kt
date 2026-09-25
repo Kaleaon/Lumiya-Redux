@@ -78,7 +78,7 @@ class VoiceStatusView @JvmOverloads constructor(
     }
 
     private fun initializeControls() {
-        binding = VoiceStatusBinding.bind(this)
+        binding = VoiceStatusBinding.bind(getChildAt(0))
         binding.voiceAnswerButton.setOnClickListener { onVoiceAnswerButton() }
         binding.voiceBluetoothButton.setOnClickListener { onVoiceBluetoothButton() }
         binding.voiceLoudspeakerButton.setOnClickListener { onLoudspeakerButton() }
