@@ -18,11 +18,11 @@
         <item name="android:background">?editTextBackground</item>
     </style>
     <style name="Base.TextAppearance.AppCompat.Button" parent="@android:style/TextAppearance.Material.Button" />
-    <style name="Theme.Lumiya" parent="@style/Theme.Lumiya.Base">
+    <style name="Theme.Lumiya" parent="@style/Theme.LumiyaBase">
         <item name="android:colorButtonNormal">@color/primary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
-    <style name="Theme.Lumiya.Light" parent="@style/Theme.Lumiya.Base.Light">
+    <style name="Theme.Lumiya.Light" parent="@style/Theme.LumiyaBase.Light">
         <item name="android:colorButtonNormal">@color/primary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
@@ -42,7 +42,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Lumiya.Pink" parent="@style/Theme.Lumiya.Base.Pink">
+    <style name="Theme.Lumiya.Pink" parent="@style/Theme.LumiyaBase.Pink">
         <item name="android:colorButtonNormal">@color/primary_pink</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
@@ -194,7 +194,7 @@
         <item name="android:translationZ">1.0dip</item>
         <item name="android:elevation">1.0dip</item>
     </style>
-    <style name="Theme.Lumiya.Base" parent="@style/Theme.Lumiya.Icons.Dark">
+    <style name="Theme.LumiyaBase" parent="@style/Theme.Lumiya.Icons.Dark">
         <item name="android:windowBackground">@color/window_bg_dark</item>
         <item name="android:colorButtonNormal">@color/primary</item>
         <item name="CardViewDefaultBackground">#fffafafa</item>
@@ -223,7 +223,7 @@
         <item name="colorAccent">@color/accent</item>
         <item name="colorButtonNormal">@color/primary</item>
     </style>
-    <style name="Theme.Lumiya.Base.Light" parent="@style/Theme.Lumiya.Icons.Light">
+    <style name="Theme.LumiyaBase.Light" parent="@style/Theme.Lumiya.Icons.Light">
         <item name="android:windowBackground">@color/window_bg_light</item>
         <item name="android:textAppearanceButton">@style/TextAppearance.Lumiya.Widget.Button.Light</item>
         <item name="android:colorButtonNormal">@color/primary_light</item>
@@ -255,7 +255,7 @@
         <item name="colorAccent">@color/accent</item>
         <item name="colorButtonNormal">@color/primary_light</item>
     </style>
-    <style name="Theme.Lumiya.Base.Pink" parent="@style/Theme.Lumiya.Base.Light">
+    <style name="Theme.LumiyaBase.Pink" parent="@style/Theme.LumiyaBase.Light">
         <item name="android:colorButtonNormal">@color/primary_pink</item>
         <item name="buttonShapeMoveControl">@drawable/fab_shape_move_control_pink</item>
         <item name="chatBubbleBackground">@color/chat_bubble_background_pink</item>

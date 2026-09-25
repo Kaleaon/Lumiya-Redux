@@ -7,11 +7,11 @@
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textAllCaps">true</item>
     </style>
-    <style name="Theme.Lumiya" parent="@style/Theme.Lumiya.Base">
+    <style name="Theme.Lumiya" parent="@style/Theme.LumiyaBase">
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
-    <style name="Theme.Lumiya.Light" parent="@style/Theme.Lumiya.Base.Light">
+    <style name="Theme.Lumiya.Light" parent="@style/Theme.LumiyaBase.Light">
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
@@ -27,7 +27,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Lumiya.Pink" parent="@style/Theme.Lumiya.Base.Pink">
+    <style name="Theme.Lumiya.Pink" parent="@style/Theme.LumiyaBase.Pink">
         <item name="android:buttonStyle">@style/PrimaryButton</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>

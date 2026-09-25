@@ -379,6 +379,7 @@ public class LoginActivity extends ThemedActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int i, int i2, Intent intent) {
+        super.onActivityResult(i, i2, intent);
         AccountList.AccountInfo accountInfo;
         Debug.Log("LoginActivity: onActivityResult: requestCode = " + i + ", resultCode = " + i2);
         if (intent != null) {
