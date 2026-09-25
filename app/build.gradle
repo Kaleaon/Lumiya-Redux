@@ -389,6 +389,13 @@ dependencies {
     // (https://github.com/googlevr/cardboard) — but that's a native-first
     // rewrite of the VR activities, so it's a separate project.
 
+    // ── WebRTC (Phase 6 voice modernization) ──
+    // Pre-built WebRTC for Android from Stream; provides the standard
+    // org.webrtc.* API with echo cancellation, noise suppression, and
+    // automatic gain control built in.  Replaces the legacy external
+    // Vivox voice plugin with an in-app WebRTC client.
+    implementation 'io.getstream:stream-webrtc-android:1.2.2'
+
     // ── Filament (stage F0: debug-only world view, see above) ──
     debugImplementation "com.google.android.filament:filament-android:${filamentVersion}"
     matc "com.google.android.filament:matc:${filamentVersion}:${matcClassifier}@exe"

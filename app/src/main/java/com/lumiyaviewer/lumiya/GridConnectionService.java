@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -36,7 +35,6 @@ import com.lumiyaviewer.lumiya.react.UIThreadExecutor;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
 import com.lumiyaviewer.lumiya.slproto.SLGridConnection;
 import com.lumiyaviewer.lumiya.slproto.auth.SLAuthParams;
-import com.lumiyaviewer.lumiya.slproto.chat.SLVoiceUpgradeEvent;
 import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent;
 import com.lumiyaviewer.lumiya.slproto.events.SLConnectionStateChangedEvent;
 import com.lumiyaviewer.lumiya.slproto.events.SLDisconnectEvent;
@@ -60,9 +58,8 @@ import com.lumiyaviewer.lumiya.ui.notify.OnlineNotificationInfo;
 import com.lumiyaviewer.lumiya.ui.settings.NotificationSettings;
 import com.lumiyaviewer.lumiya.ui.settings.NotificationType;
 import com.lumiyaviewer.lumiya.utils.LEDAction;
-import com.lumiyaviewer.lumiya.voice.common.messages.VoiceRinging;
 import com.lumiyaviewer.lumiya.voice.common.model.VoiceLoginInfo;
-import com.lumiyaviewer.lumiya.voiceintf.VoicePluginServiceConnection;
+import com.lumiyaviewer.lumiya.voice.webrtc.WebRTCVoiceClient;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
@@ -95,7 +92,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
     @Nullable
     private UserManager cloudSyncUserManager = null;
     private boolean cloudPluginReceiverRegistered = false;
-    private boolean voicePluginReceiverRegistered = false;
     private final SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
         private final /* synthetic */ void $m$0(Object obj) {
             GridConnectionService.this.onCurrentLocationInfo((CurrentLocationInfo) obj);
@@ -149,21 +145,8 @@ public class GridConnectionService extends Service implements SharedPreferences.
             GridConnectionService.this.startCloudSync(userManager);
         }
     };
-    private final BroadcastReceiver voicePluginInstalledReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UUID activeAgentUUID;
-            UserManager userManager;
-            SLAgentCircuit activeAgentCircuit;
-            SLModules modules;
-            if (!Strings.nullToEmpty(intent.getData().getSchemeSpecificPart()).equals("com.lumiyaviewer.lumiya.voice") || GridConnectionService.gridConnection == null || GridConnectionService.gridConnection.getConnectionState() != SLGridConnection.ConnectionState.Connected || (activeAgentUUID = GridConnectionService.gridConnection.getActiveAgentUUID()) == null || (userManager = UserManager.getUserManager(activeAgentUUID)) == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || (modules = activeAgentCircuit.getModules()) == null) {
-                return;
-            }
-            modules.voice.updateVoiceEnabledStatus();
-        }
-    };
     private CloudSyncServiceConnection cloudSyncServiceConnection = null;
-    private VoicePluginServiceConnection voicePluginServiceConnection = null;
+    private WebRTCVoiceClient webRTCVoiceClient = null;
     private final ChatterNameRetriever.OnChatterNameUpdated onActiveAgentNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
         private final /* synthetic */ void $m$0(ChatterNameRetriever chatterNameRetriever) {
             GridConnectionService.this.m19lambda$com_lumiyaviewer_lumiya_GridConnectionService_20777(chatterNameRetriever);
@@ -193,35 +176,19 @@ public class GridConnectionService extends Service implements SharedPreferences.
         this.eventBus.subscribe(this, null, this.mHandler);
     }
 
-    private void connectToVoicePlugin(VoiceLoginInfo voiceLoginInfo, UserManager userManager) {
-        boolean bindService;
-        if (this.voicePluginServiceConnection == null) {
-            this.voicePluginServiceConnection = new VoicePluginServiceConnection(this);
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName("com.lumiyaviewer.lumiya.voice", "com.lumiyaviewer.lumiya.voice.VoiceService"));
-            try {
-                bindService = bindService(intent, this.voicePluginServiceConnection, 1);
-            } catch (SecurityException e) {
-                Debug.Warning(e);
-                bindService = false;
-            }
-            Debug.Printf("LumiyaVoice: bindService = %b", Boolean.valueOf(bindService));
-            if (!bindService) {
-                this.voicePluginServiceConnection = null;
-                IntentFilter intentFilter = new IntentFilter();
-                intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
-                intentFilter.addDataScheme("package");
-                intentFilter.addDataSchemeSpecificPart("com.lumiyaviewer.lumiya.voice", 0);
-                registerReceiver(this.voicePluginInstalledReceiver, intentFilter);
-                this.voicePluginReceiverRegistered = true;
-                if (userManager != null && VoicePluginServiceConnection.shouldDisplayInstallOffer()) {
-                    userManager.getChatterList().getActiveChattersManager().HandleChatEvent(ChatterID.getLocalChatterID(userManager.getUserID()), new SLVoiceUpgradeEvent(userManager.getUserID(), LumiyaApp.getContext().getString(R.string.plugin_install_for_voice_needed), true, LicenseChecker.VOICE_PLUGIN_URL), false);
-                }
-            }
+    private void connectToWebRTC(VoiceLoginInfo voiceLoginInfo, UserManager userManager) {
+        if (this.webRTCVoiceClient == null) {
+            this.webRTCVoiceClient = new WebRTCVoiceClient(this);
         }
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.setVoiceLoginInfo(voiceLoginInfo, userManager);
+        if (voiceLoginInfo.provisionCapURL != null) {
+            this.webRTCVoiceClient.setCredentials(
+                voiceLoginInfo.provisionCapURL,
+                voiceLoginInfo.signalingCapURL,
+                voiceLoginInfo.agentUUID
+            );
         }
+        this.webRTCVoiceClient.setUserManager(userManager);
+        this.webRTCVoiceClient.login();
     }
 
     public static SLGridConnection getGridConnection() {
@@ -248,17 +215,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
             String nullToEmpty = Strings.nullToEmpty(intent.getAction());
             if (nullToEmpty.equals(LOGIN_ACTION)) {
                 new LicenseChecker(getApplicationContext(), this.licenseCheckHandler, new SLAuthParams(intent));
-                return;
-            }
-            if (nullToEmpty.equals(VoicePluginServiceConnection.ACTION_VOICE_REJECT)) {
-                if (this.voicePluginServiceConnection != null) {
-                    this.voicePluginServiceConnection.rejectCall(intent);
-                }
-            } else {
-                if (!nullToEmpty.equals(VoicePluginServiceConnection.ACTION_VOICE_ACCEPT) || this.voicePluginServiceConnection == null) {
-                    return;
-                }
-                this.voicePluginServiceConnection.acceptCall(intent);
             }
         }
     }
@@ -694,26 +650,18 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     public void acceptVoiceCall(ChatterID chatterID) {
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.acceptVoiceCall(chatterID);
-        }
-    }
-
-    public void acceptVoiceCall(VoiceRinging voiceRinging) {
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.acceptVoiceCall(voiceRinging);
-        }
+        // WebRTC voice calls are accepted by connecting to the channel directly
     }
 
     public void enableVoiceMic(boolean z) {
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.enableVoiceMic(z);
+        if (this.webRTCVoiceClient != null) {
+            this.webRTCVoiceClient.enableMic(z);
         }
     }
 
     @javax.annotation.Nullable
-    public VoicePluginServiceConnection getVoicePluginServiceConnection() {
-        return this.voicePluginServiceConnection;
+    public WebRTCVoiceClient getWebRTCVoiceClient() {
+        return this.webRTCVoiceClient;
     }
 
     @EventHandler
@@ -733,7 +681,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
             this.currentLocationInfo.subscribe(userManager.getCurrentLocationInfo(), SubscriptionSingleKey.Value);
         }
         updateOnlineNotification();
-        VoicePluginServiceConnection.setInstallOfferDisplayed(false);
         if (loginResultEvent.success) {
             startCloudSync(userManager);
             return;
@@ -756,7 +703,6 @@ public class GridConnectionService extends Service implements SharedPreferences.
         stopVoice();
         stopSelf();
         this.currentLocationInfo.unsubscribe();
-        VoicePluginServiceConnection.setInstallOfferDisplayed(false);
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_GridConnectionService_20777, reason: not valid java name */
@@ -838,19 +784,20 @@ public class GridConnectionService extends Service implements SharedPreferences.
     }
 
     public void startVoice(VoiceLoginInfo voiceLoginInfo, UserManager userManager) {
-        connectToVoicePlugin(voiceLoginInfo, userManager);
+        connectToWebRTC(voiceLoginInfo, userManager);
     }
 
     public void stopVoice() {
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.disconnect();
-            this.voicePluginServiceConnection = null;
+        if (this.webRTCVoiceClient != null) {
+            this.webRTCVoiceClient.logout();
+            this.webRTCVoiceClient.dispose();
+            this.webRTCVoiceClient = null;
         }
     }
 
     public void terminateVoiceCall(ChatterID chatterID) {
-        if (this.voicePluginServiceConnection != null) {
-            this.voicePluginServiceConnection.terminateVoiceCall(chatterID);
+        if (this.webRTCVoiceClient != null) {
+            this.webRTCVoiceClient.terminateCall(chatterID);
         }
     }
 }
