@@ -4,17 +4,10 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 object HashUtils {
-    @Volatile
-    private var md5Instance: MessageDigest? = null
-
     @JvmStatic
     fun MD5_Hash(str: String): String {
         return try {
-            var digest = md5Instance
-            if (digest == null) {
-                digest = MessageDigest.getInstance("MD5")
-                md5Instance = digest
-            }
+            val digest = MessageDigest.getInstance("MD5")
             digest.update(str.toByteArray())
             val bytes = digest.digest()
             val sb = StringBuilder()
