@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.voice;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
@@ -291,7 +290,6 @@ public class VoiceStatusView extends FrameLayout {
         initializeControls();
     }
 
-    @TargetApi(21)
     public VoiceStatusView(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.voiceAudioProperties = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
@@ -569,7 +567,7 @@ public class VoiceStatusView extends FrameLayout {
         for (ImageButton imageButton : new ImageButton[]{this.voiceAnswerButton, this.voiceTerminateButton, this.voiceMicOnButton, this.voiceMicOffButton}) {
             imageButton.setOnHoverListener(onHoverListener);
             if (imageButton == this.voiceMicOnButton) {
-                imageButton.setBackground(getContext().getDrawable(R.drawable.fab_shape_move_control_green));
+                imageButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.fab_shape_move_control_green));
             } else {
                 imageButton.setBackground(obtainStyledAttributes.getDrawable(0));
             }

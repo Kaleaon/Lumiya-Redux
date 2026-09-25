@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -38,7 +37,6 @@ public class CardboardControlsPlaceholder extends ViewGroup {
         this.onViewInvalidateListener = null;
     }
 
-    @TargetApi(21)
     public CardboardControlsPlaceholder(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.fixedWidth = 0;

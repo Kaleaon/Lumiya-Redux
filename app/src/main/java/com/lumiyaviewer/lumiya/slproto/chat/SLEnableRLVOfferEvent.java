@@ -75,7 +75,7 @@ public final class SLEnableRLVOfferEvent extends SLChatYesNoEvent {
         super.onYesAction(context, userManager);
         SharedPreferences.Editor edit = LumiyaApp.getDefaultSharedPreferences().edit();
         edit.putBoolean("rlv_enabled", true);
-        edit.commit();
+        edit.apply();
         userManager.getObjectPopupsManager().cancelObjectPopup(this);
     }
 

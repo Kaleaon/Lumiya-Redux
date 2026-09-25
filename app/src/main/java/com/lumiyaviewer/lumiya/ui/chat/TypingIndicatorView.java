@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.chat;
 
 import android.view.View;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
@@ -39,7 +38,6 @@ public class TypingIndicatorView extends ImageView {
         this.subscription = null;
     }
 
-    @TargetApi(21)
     public TypingIndicatorView(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.chatterID = null;

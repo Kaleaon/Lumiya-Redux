@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.drawable;
 
-import android.annotation.TargetApi;
 import android.opengl.GLES10;
 import android.opengl.GLES11;
 import android.opengl.GLES20;
@@ -296,7 +295,6 @@ public class DrawablePrim {
         }
     }
 
-    @TargetApi(18)
     public final int DrawRigged30(RenderContext renderContext, int i) {
         DrawableGeometry drawableGeometry = this.volumeGeometry;
         boolean z = false;

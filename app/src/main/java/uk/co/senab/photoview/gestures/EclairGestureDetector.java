@@ -1,11 +1,9 @@
 package uk.co.senab.photoview.gestures;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.view.MotionEvent;
 import uk.co.senab.photoview.Compat;
 
-@TargetApi(5)
 public class EclairGestureDetector extends CupcakeGestureDetector {
     private static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId;

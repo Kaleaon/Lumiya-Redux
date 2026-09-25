@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.opengl.GLES10;
 import android.opengl.GLES11;
@@ -404,7 +403,6 @@ public class RenderContext {
         this.boundFaceTexture = null;
     }
 
-    @TargetApi(18)
     public void clearRiggedMeshProgram() {
         this.currentRiggedMeshProgram = null;
         this.curPrimProgram = null;
@@ -644,7 +642,6 @@ public class RenderContext {
         this.drawableStore.setMeshCapURL(meshCapURL);
     }
 
-    @TargetApi(18)
     public void setupRiggedMeshProgram(boolean z) {
         this.currentRiggedMeshProgram = z ? this.riggedMeshProgramOpaque30 : this.riggedMeshProgram30;
         clearRiggingMeshData();

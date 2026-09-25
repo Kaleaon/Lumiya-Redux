@@ -15,9 +15,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import androidx.preference.PreferenceManager;
 import androidx.annotation.Nullable;
@@ -87,7 +87,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private static SLGridConnection gridConnection = null;
     private static Set<Activity> visibleActivities = Collections.synchronizedSet(new HashSet());
     private final EventBus eventBus = EventBus.getInstance();
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private SharedPreferences prefs = null;
     private boolean cloudSyncEnabled = false;
     private boolean startingNotificationVisible = false;
@@ -111,7 +111,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
     private OnlineNotificationInfo onlineNotificationInfo = new OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, this.connectedAgentNameRetriever, null);
     private WifiManager.WifiLock wifiLock = null;
     private final IBinder mBinder = new GridServiceBinder();
-    private Handler licenseCheckHandler = new Handler() {
+    private Handler licenseCheckHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
@@ -211,9 +211,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
                 intentFilter.addDataScheme("package");
-                if (Build.VERSION.SDK_INT >= 19) {
-                    intentFilter.addDataSchemeSpecificPart("com.lumiyaviewer.lumiya.voice", 0);
-                }
+                intentFilter.addDataSchemeSpecificPart("com.lumiyaviewer.lumiya.voice", 0);
                 registerReceiver(this.voicePluginInstalledReceiver, intentFilter);
                 this.voicePluginReceiverRegistered = true;
                 if (userManager != null && VoicePluginServiceConnection.shouldDisplayInstallOffer()) {
@@ -646,9 +644,7 @@ public class GridConnectionService extends Service implements SharedPreferences.
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
             intentFilter.addDataScheme("package");
-            if (Build.VERSION.SDK_INT >= 19) {
-                intentFilter.addDataSchemeSpecificPart("com.lumiyaviewer.lumiya.cloud", 0);
-            }
+            intentFilter.addDataSchemeSpecificPart("com.lumiyaviewer.lumiya.cloud", 0);
             registerReceiver(this.cloudPluginInstalledReceiver, intentFilter);
             this.cloudPluginReceiverRegistered = true;
         }

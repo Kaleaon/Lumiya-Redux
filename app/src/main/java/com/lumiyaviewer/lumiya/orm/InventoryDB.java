@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.orm;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.os.Build;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.orm.DBObject;
 import com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry;
@@ -23,11 +22,7 @@ public class InventoryDB {
     }
 
     public void beginTransaction() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            this.db.beginTransactionNonExclusive();
-        } else {
-            this.db.beginTransaction();
-        }
+        this.db.beginTransactionNonExclusive();
     }
 
     public void deleteEntry(@Nonnull SLInventoryEntry inventoryEntry) throws DBObject.DatabaseBindingException {

@@ -1,9 +1,7 @@
 package com.lumiyaviewer.lumiya.ui.common;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.View;
@@ -60,7 +58,6 @@ public class LoadingLayout extends FrameLayout {
         prepareViews(context);
     }
 
-    @TargetApi(21)
     public LoadingLayout(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.withButteryProgressBar = false;
@@ -83,7 +80,7 @@ public class LoadingLayout extends FrameLayout {
     }
 
     private void prepareViews(Context context) {
-        if (this.withButteryProgressBar && Build.VERSION.SDK_INT >= 14) {
+        if (this.withButteryProgressBar) {
             this.butteryProgressBar = new ButteryProgressBar(context);
             this.butteryProgressBar.setId(R.id.loading_layout_buttery_progress_bar_id);
             this.butteryProgressBar.setVisibility(View.GONE);

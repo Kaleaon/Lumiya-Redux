@@ -1,11 +1,9 @@
 package com.lumiyaviewer.lumiya.render.glres.buffers;
 
-import android.annotation.TargetApi;
 import android.opengl.GLES30;
 import com.lumiyaviewer.lumiya.render.glres.GLGenericResource;
 import com.lumiyaviewer.lumiya.render.glres.GLResourceManager;
 
-@TargetApi(18)
 public class GLVertexArrayObject implements GLGenericResource {
     public final int size;
     private final int[] vaoIndices;
@@ -24,7 +22,6 @@ public class GLVertexArrayObject implements GLGenericResource {
         }
     }
 
-    @TargetApi(18)
     public GLVertexArrayObject(GLResourceManager glResourceManager, int size) {
         this.size = size;
         this.vaoIndices = new int[size];

@@ -10,9 +10,9 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import androidx.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
@@ -186,7 +186,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     private SLObjectInfo pickedObject = null;
     private ObjectIntersectInfo pickedIntersectInfo = null;
     private ChatterNameRetriever pickedAvatarNameRetriever = null;
-    private Handler mHandler = new Handler();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     private int prefDrawDistance = 20;
     private boolean chatOver3D = false;
     private UUID lastTouchUUID = null;
@@ -1171,26 +1171,22 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         }
         this.isSplitScreen = LumiyaApp.isSplitScreenNeeded(this);
         this.scaleGestureDetector = new ScaleGestureDetector(this, this.scaleGestureListener);
-        if (Build.VERSION.SDK_INT >= 19) {
-            this.scaleGestureDetector.setQuickScaleEnabled(true);
-        }
+        this.scaleGestureDetector.setQuickScaleEnabled(true);
         this.gestureDetector = new GestureDetectorCompat(this, this.gestureListener);
         initContentView();
         this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, this.chatsOverlayLayout, Color.rgb(192, 192, 192), Color.argb(160, 0, 0, 0));
-        if (Build.VERSION.SDK_INT >= 12) {
-            this.buttonsFadeAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
-            this.buttonsFadeAnimator.setDuration(1000L);
-            this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
-                    WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
-                }
+        this.buttonsFadeAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+        this.buttonsFadeAnimator.setDuration(1000L);
+        this.buttonsFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            private final /* synthetic */ void $m$0(ValueAnimator valueAnimator) {
+                WorldViewActivity.this.m853x5cc8da9f(valueAnimator);
+            }
 
-                @Override
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    $m$0(valueAnimator);
-                }
-            });
-        }
+            @Override
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                $m$0(valueAnimator);
+            }
+        });
         updateSplitScreenLayout();
         startFadingButtonsTimer();
     }
@@ -1571,7 +1567,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
         Toast.makeText(this, "Advanced rendering is not available on your hardware. Falling back to basic rendering.", Toast.LENGTH_LONG).show();
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
         edit.putBoolean("advanced_rendering", false);
-        edit.commit();
+        edit.apply();
         finish();
         startActivity(new Intent(this, (Class<?>) getClass()));
     }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public class TransactionLogFragment extends FragmentWithTitle implements Loadabl
     private final SubscriptionData<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactions = new SubscriptionData<>(UIThreadExecutor.getInstance());
     private final LoadableMonitor loadableMonitor = new LoadableMonitor(this.moneyTransactions).withDataChangedListener(this);
     private boolean scrollToBottomRunnablePosted = false;
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Runnable scrollToBottomRunnable = new Runnable() {
         @Override
         public void run() {

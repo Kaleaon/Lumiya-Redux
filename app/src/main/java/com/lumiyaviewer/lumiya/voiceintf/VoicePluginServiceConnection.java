@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
@@ -86,7 +87,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
     @Nullable
     private Messenger toPluginMessenger;
     private final AtomicReference<UserManager> userManager = new AtomicReference<>(null);
-    private final Handler mainThreadHandler = new Handler();
+    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final AtomicBoolean voiceInitialized = new AtomicBoolean(false);
     private final AtomicReference<VoiceLoginInfo> voiceLoginInfo = new AtomicReference<>(null);
     private final BiMap<ChatterID, VoiceChannelInfo> voiceChannels = Maps.synchronizedBiMap(HashBiMap.create());
@@ -94,7 +95,7 @@ public class VoicePluginServiceConnection implements ServiceConnection {
 
     @Nullable
     private ChatterNameRetriever ringingChatterNameRetriever = null;
-    private final Handler fromPluginHandler = new Handler() {
+    private final Handler fromPluginHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message message) {

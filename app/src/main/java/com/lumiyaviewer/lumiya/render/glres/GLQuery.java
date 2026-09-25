@@ -1,13 +1,11 @@
 package com.lumiyaviewer.lumiya.render.glres;
 
-import android.annotation.TargetApi;
 import android.opengl.GLES30;
 import com.lumiyaviewer.lumiya.Debug;
 import com.lumiyaviewer.lumiya.render.RenderContext;
 import com.lumiyaviewer.lumiya.render.glres.GLResourceManager;
 import javax.annotation.Nonnull;
 
-@TargetApi(18)
 public class GLQuery extends GLResource {
     private static final int MIN_OCCLUSION_QUERY_FRAMES = 0;
     private static ThreadLocal<int[]> idQuery = new ThreadLocal<int[]>() {

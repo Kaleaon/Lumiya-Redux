@@ -1,11 +1,10 @@
 package uk.co.senab.photoview.scrollerproxy;
 
 import android.content.Context;
-import android.os.Build;
 
 public abstract class ScrollerProxy {
     public static ScrollerProxy getScroller(Context context) {
-        return Build.VERSION.SDK_INT >= 9 ? Build.VERSION.SDK_INT >= 14 ? new IcsScroller(context) : new GingerScroller(context) : new PreGingerScroller(context);
+        return new GingerScroller(context);
     }
 
     public abstract boolean computeScrollOffset();

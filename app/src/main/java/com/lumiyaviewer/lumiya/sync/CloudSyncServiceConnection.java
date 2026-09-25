@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import androidx.core.app.NotificationCompat;
@@ -40,9 +41,9 @@ public class CloudSyncServiceConnection implements ServiceConnection {
     @Nullable
     private Messenger toPluginMessenger;
     private final UserManager userManager;
-    private final Handler mainThreadHandler = new Handler();
+    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final AtomicBoolean syncingStarted = new AtomicBoolean(false);
-    private final Handler fromPluginHandler = new Handler() {
+    private final Handler fromPluginHandler = new Handler(Looper.getMainLooper()) {
 
         @Override
         public void handleMessage(Message message) {

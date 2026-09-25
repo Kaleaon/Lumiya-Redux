@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.render.shaders;
 
-import android.annotation.TargetApi;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
@@ -23,7 +22,6 @@ public class RiggedMeshProgram30 extends PrimProgram {
     }
 
     @Override
-    @TargetApi(18)
     protected void bindVariables() {
         super.bindVariables();
         this.vWeight = GLES20.glGetAttribLocation(this.handle, "vWeight");

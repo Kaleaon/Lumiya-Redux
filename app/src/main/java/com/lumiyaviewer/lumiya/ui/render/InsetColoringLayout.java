@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -53,7 +52,6 @@ public class InsetColoringLayout extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    @TargetApi(21)
     public InsetColoringLayout(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.backgroundColor = 0;

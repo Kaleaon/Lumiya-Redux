@@ -6,7 +6,6 @@ import com.google.vr.cardboard.FullscreenMode;
 import com.google.vr.sdk.base.AndroidCompat;
 import com.google.vrtoolkit.cardboard.ScreenOnFlagHelper;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -15,6 +14,7 @@ import android.graphics.Rect;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import androidx.preference.PreferenceManager;
@@ -96,7 +96,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.microedition.khronos.egl.EGLConfig;
 
-@TargetApi(16)
 public class CardboardActivity extends DetailsActivity implements ObjectPopupsManager.ObjectPopupListener {
 
     private static final int DEFAULT_FONT_SIZE_SP = 16;
@@ -496,7 +495,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
     private Point scrollableViewPoint = new Point();
 
     @SuppressLint({"HandlerLeak"})
-    private final Handler handler = new Handler() {
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
@@ -1022,7 +1021,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         draw2DUI();
     }
 
-    @TargetApi(19)
     private View findMatchingView(ViewGroup viewGroup, int i, int i2, int i3, int i4, Predicate<View> predicate, Point point) {
         View findMatchingView;
         for (int i5 = 0; i5 < viewGroup.getChildCount(); i5++) {
@@ -1229,7 +1227,6 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         }
     }
 
-    @TargetApi(14)
     private void onExternalTexturePointer(int i, int i2) {
         View findMatchingView;
         this.hitPointValid = true;
@@ -1673,7 +1670,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
         AndroidCompat.trySetVrModeEnabled(this, true);
         AndroidCompat.setSustainedPerformanceMode(this, true);
         this.renderSettings = new RenderSettings(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
-        this.stateHandler = new Handler();
+        this.stateHandler = new Handler(Looper.getMainLooper());
         Debug.Printf("Cardboard: creating VR view", new Object[0]);
         GlobalOptions globalOptions = GlobalOptions.getInstance();
         CardboardControlsPlaceholder cardboardControlsPlaceholder = (CardboardControlsPlaceholder) findViewById(R.id.controls_placeholder);

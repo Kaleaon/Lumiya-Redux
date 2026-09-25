@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.objects;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,13 +101,8 @@ class ObjectListAdapter extends BaseExpandableListAdapter {
                     if (view3.getVisibility() == 0) {
                         switch (view3.getId()) {
                             case R.id.groupIndicatorCollapsed:
-                                if (Build.VERSION.SDK_INT < 14) {
-                                    expandableListView.expandGroup(i);
-                                    break;
-                                } else {
-                                    expandableListView.expandGroup(i, true);
-                                    break;
-                                }
+                                expandableListView.expandGroup(i, true);
+                                break;
                             case R.id.groupIndicatorExpanded:
                                 expandableListView.collapseGroup(i);
                                 break;

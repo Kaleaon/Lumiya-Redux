@@ -2,11 +2,9 @@ package com.lumiyaviewer.lumiya.ui.chat.profiles;
 
 import android.content.ClipData;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
-import android.text.ClipboardManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,11 +161,7 @@ public class GroupMainProfileTab extends ChatterReloadableFragment implements Lo
     public void onCopyGroupKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDGroup) {
             String uuid = ((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID().toString();
-            if (Build.VERSION.SDK_INT < 11) {
-                ((ClipboardManager) getActivity().getSystemService("clipboard")).setText(uuid);
-            } else {
-                ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Group key", uuid));
-            }
+            ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Group key", uuid));
             Toast.makeText(getActivity(), "Group key copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }

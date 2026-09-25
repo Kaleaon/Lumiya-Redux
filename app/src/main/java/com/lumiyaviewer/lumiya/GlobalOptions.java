@@ -365,7 +365,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             }
             edit.putString("max_texture_downloads", Integer.toString(i2));
             edit.putBoolean("system_defaults_set", true);
-            edit.commit();
+            edit.apply();
         }
         int themeResourceId = this.themeResourceId;
         String nullToEmpty = Strings.nullToEmpty(sharedPreferences.getString("theme", "light"));

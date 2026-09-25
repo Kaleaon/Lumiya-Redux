@@ -5,6 +5,7 @@ import android.view.Window;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.lumiyaviewer.lumiya.Debug;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class CardboardTransitionActivity extends AppCompatActivity {
     private static final int MAX_WAIT_ATTEMPTS = 15;
     private static final long WAIT_INTERVAL = 250;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
     private int waitAttempts = 0;
 
     public void tryToStartCardboard() {

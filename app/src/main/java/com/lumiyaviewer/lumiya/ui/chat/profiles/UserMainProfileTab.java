@@ -1,10 +1,8 @@
 package com.lumiyaviewer.lumiya.ui.chat.profiles;
 
 import android.content.ClipData;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.text.ClipboardManager;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,11 +141,7 @@ public class UserMainProfileTab extends ChatterReloadableFragment implements Loa
     protected void onCopyAgentKeyClicked(View view) {
         if (this.chatterID instanceof ChatterID.ChatterIDUser) {
             String uuid = ((ChatterID.ChatterIDUser) this.chatterID).getChatterUUID().toString();
-            if (Build.VERSION.SDK_INT < 11) {
-                ((ClipboardManager) getActivity().getSystemService("clipboard")).setText(uuid);
-            } else {
-                ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Agent key", uuid));
-            }
+            ((android.content.ClipboardManager) getActivity().getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("Agent key", uuid));
             Toast.makeText(getActivity(), "Agent key copied to clipboard", Toast.LENGTH_SHORT).show();
         }
     }

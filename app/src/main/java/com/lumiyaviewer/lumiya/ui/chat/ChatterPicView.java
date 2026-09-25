@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.ui.chat;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -84,7 +83,6 @@ public class ChatterPicView extends View {
         this.bitmapDestRect = new Rect();
     }
 
-    @TargetApi(21)
     public ChatterPicView(Context context, AttributeSet attributeSet, int i, int i2) {
         super(context, attributeSet, i, i2);
         this.thumbnailData = null;

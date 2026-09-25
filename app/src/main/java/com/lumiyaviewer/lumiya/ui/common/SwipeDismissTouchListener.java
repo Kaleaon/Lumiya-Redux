@@ -4,7 +4,6 @@ import android.R;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import com.lumiyaviewer.lumiya.Debug;
 
-@TargetApi(12)
 public class SwipeDismissTouchListener implements OnInterceptTouchEventListener {
     private final boolean canSwipeDown;
     private final boolean canSwipeLeft;

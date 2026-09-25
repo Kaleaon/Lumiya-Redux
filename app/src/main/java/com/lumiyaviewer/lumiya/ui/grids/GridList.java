@@ -199,7 +199,7 @@ public class GridList {
         while (true) {
             int i2 = i;
             if (i2 >= this.customGrids.size()) {
-                edit.commit();
+                edit.apply();
                 return;
             } else {
                 this.customGrids.get(i2).saveToPreferences(edit, "custom_grid_1_" + i2);

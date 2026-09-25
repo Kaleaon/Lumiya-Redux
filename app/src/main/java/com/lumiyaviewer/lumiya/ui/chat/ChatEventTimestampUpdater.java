@@ -2,6 +2,7 @@ package com.lumiyaviewer.lumiya.ui.chat;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import com.lumiyaviewer.lumiya.slproto.chat.generic.ChatEventViewHolder;
 import java.util.Collections;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.WeakHashMap;
 public class ChatEventTimestampUpdater {
     private static final long TIMESTAMP_UPDATE_INTERVAL = 60000;
     private final Context context;
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private boolean updateRunnablePosted = false;
     private final Set<ChatEventViewHolder> viewHolders = Collections.newSetFromMap(new WeakHashMap());
     private final Runnable updateRunnable = new Runnable() {
