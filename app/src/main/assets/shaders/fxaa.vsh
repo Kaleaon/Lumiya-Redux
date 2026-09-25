@@ -1,8 +1,9 @@
-attribute vec4 vPosition;
+#version 300 es
+in vec4 vPosition;
 uniform mat4 uMVPMatrix;
 
-attribute vec2 vTexCoord;
-varying mediump vec2 vTexCoordOut;
+in vec2 vTexCoord;
+out mediump vec2 vTexCoordOut;
 
 void main() {
     gl_Position = uMVPMatrix * vPosition;

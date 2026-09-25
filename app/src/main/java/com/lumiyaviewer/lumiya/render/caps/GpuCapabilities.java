@@ -16,7 +16,9 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class GpuCapabilities {
-    private static final String PREF_RENDER_TIER_PREFIX = "gpu_tier.";
+    // Version the preference: GLES2-era persisted Tier C values must not
+    // silently disable the required GLES3 pipeline after the renderer upgrade.
+    private static final String PREF_RENDER_TIER_PREFIX = "gpu_tier.gles3.";
     private static final String[] REQUIRED_EXTENSIONS = {"GL_OES_EGL_image_external"};
 
     public enum CompatibilityTier {
@@ -99,7 +101,7 @@ public class GpuCapabilities {
     }
 
     public static boolean shouldAttemptEs3Context(boolean requestGl20) {
-        return requestGl20 && Build.VERSION.SDK_INT >= 18;
+        return requestGl20;
     }
 
     @Nonnull

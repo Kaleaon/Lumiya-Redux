@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.NFC" />
     <!-- Required on Android 13+ (API 33) to display IM / friend / teleport-offer notifications. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- The world renderer now requires the GLES 3.0 programmable pipeline. -->
+    <uses-feature android:glEsVersion="0x00030000" android:required="true" />
     <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
     <!-- Keep VR-related features optional so OpenXR/Cardboard-capable devices are not filtered out. -->
     <uses-feature android:name="android.software.vr.mode" android:required="false" />

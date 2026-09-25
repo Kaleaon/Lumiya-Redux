@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.ui.render;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.TypedValue;
 import com.lumiyaviewer.lumiya.Debug;
-import com.lumiyaviewer.lumiya.GlobalOptions;
 import com.lumiyaviewer.lumiya.render.WorldViewRenderer;
 import com.lumiyaviewer.lumiya.render.picking.ObjectIntersectInfo;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectAvatarInfo;
@@ -25,7 +23,6 @@ public class WorldSurfaceView extends GLSurfaceView {
     private final Handler mHandler;
     private boolean ownAvatarHidden;
     private final WorldViewRenderer renderer;
-    private final boolean supportsGL20;
     private boolean wantGL20;
 
     WorldSurfaceView(WorldViewActivity worldViewActivity, UserManager userManager) {
@@ -68,7 +65,6 @@ public class WorldSurfaceView extends GLSurfaceView {
         };
         this.activity = worldViewActivity;
         int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16.0f, getResources().getDisplayMetrics());
-        this.supportsGL20 = ((ActivityManager) getContext().getSystemService("activity")).getDeviceConfigurationInfo().reqGlEsVersion >= 131072;
         if (Debug.isDebugBuild()) {
             setDebugFlags(3);
         }
@@ -77,9 +73,7 @@ public class WorldSurfaceView extends GLSurfaceView {
         objArr[0] = Integer.valueOf(Build.VERSION.SDK_INT);
         objArr[1] = this.wantGL20 ? "yes" : "no";
         Debug.Printf("WorldSurfaceView: API level %d, wantGL20 %s", objArr);
-        if (this.wantGL20) {
-            setEGLContextClientVersion(2);
-        }
+        setEGLContextClientVersion(3);
         if (this.wantGL20) {
             setPreserveEGLContextOnPause(true);
         }
@@ -89,10 +83,7 @@ public class WorldSurfaceView extends GLSurfaceView {
     }
 
     private boolean getWantGL20() {
-        if (GlobalOptions.getInstance().getAdvancedRendering()) {
-            return this.supportsGL20;
-        }
-        return false;
+        return true;
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_ui_render_WorldSurfaceView_5461, reason: not valid java name */

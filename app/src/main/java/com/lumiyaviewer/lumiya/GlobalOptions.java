@@ -44,7 +44,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
     private boolean hoverTextEnableHUDs = true;
     private boolean hoverTextEnableObjects = false;
     private boolean advancedRendering = true;
-    private boolean useFXAA = false;
+    private boolean useFXAA = true;
     private boolean renderClouds = true;
     private boolean forceDaylightTime = false;
     private float forceDaylightHour = 0.5f;
@@ -425,7 +425,7 @@ public class GlobalOptions implements SharedPreferences.OnSharedPreferenceChange
             this.hoverTextEnableObjects = false;
         }
         this.advancedRendering = sharedPreferences.getBoolean("advanced_rendering", true);
-        this.useFXAA = sharedPreferences.getBoolean("fxaa_enable", false);
+        this.useFXAA = sharedPreferences.getBoolean("fxaa_enable", true);
         this.renderClouds = sharedPreferences.getBoolean("clouds_enable", true);
         String string2 = sharedPreferences.getString("render_time_of_day", "sim");
         if (string2.equalsIgnoreCase("sim")) {
