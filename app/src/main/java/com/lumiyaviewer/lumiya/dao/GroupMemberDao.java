@@ -50,7 +50,7 @@ public class GroupMemberDao extends AbstractDao<GroupMember, Void> {
         sqLiteStatement.bindString(5, groupMember.getOnlineStatus());
         sqLiteStatement.bindLong(6, groupMember.getAgentPowers());
         sqLiteStatement.bindString(7, groupMember.getTitle());
-        sqLiteStatement.bindLong(8, groupMember.getIsOwner() ? 1L : 0L);
+        sqLiteStatement.bindLong(8, groupMember.isOwner ? 1L : 0L);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class GroupMemberDao extends AbstractDao<GroupMember, Void> {
         groupMember.setOnlineStatus(cursor.getString(i + 4));
         groupMember.setAgentPowers(cursor.getLong(i + 5));
         groupMember.setTitle(cursor.getString(i + 6));
-        groupMember.setIsOwner(cursor.getShort(i + 7) != 0);
+        groupMember.isOwner = cursor.getShort(i + 7) != 0;
     }
 
     @Override

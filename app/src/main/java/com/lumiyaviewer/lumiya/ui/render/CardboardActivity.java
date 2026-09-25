@@ -1696,7 +1696,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
             button.setPadding(applyDimension2, applyDimension2, applyDimension2, applyDimension2);
             button.setCompoundDrawablePadding(applyDimension2);
         }
-        binding.dialogQuestionText.setTextColor(-1);
+        ((android.widget.TextView) findViewById(R.id.dialogQuestionText)).setTextColor(-1);
         this.fadingTextViewLog = new FadingTextViewLog(this.userManager, this, binding.cardboardIms, -1, 0);
         setControlsPage(ControlsPage.pageDefault);
         binding.speechRecognitionResults.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -1772,7 +1772,7 @@ public class CardboardActivity extends DetailsActivity implements ObjectPopupsMa
                     button.setVisibility(View.GONE);
                 }
             }
-            this.binding.dialogQuestionText.setText(sLChatScriptDialog.getRawText());
+            ((android.widget.TextView) findViewById(R.id.dialogQuestionText)).setText(sLChatScriptDialog.getRawText());
         }
     }
 

@@ -1,7 +1,7 @@
 package com.lumiyaviewer.lumiya.slproto.events
 
 data class SLBalanceChangedEvent(
-    val oldBalanceValid: Boolean,
-    val oldBalance: Int,
-    val newBalance: Int
+    @JvmField val oldBalanceValid: Boolean,
+    @JvmField val oldBalance: Int,
+    @JvmField val newBalance: Int
 )

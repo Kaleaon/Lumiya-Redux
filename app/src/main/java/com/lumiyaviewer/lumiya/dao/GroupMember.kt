@@ -10,5 +10,5 @@ class GroupMember @JvmOverloads constructor(
     var onlineStatus: String? = null,
     var agentPowers: Long = 0,
     var title: String? = null,
-    var isOwner: Boolean = false
+    @JvmField var isOwner: Boolean = false
 )
