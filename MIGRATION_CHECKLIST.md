@@ -32,6 +32,7 @@
   - [ ] Remove greenDAO runtime/dependencies and generated DAO surface (`de.greenrobot:greendao`, `dao/`, remaining `orm/` artifacts tied to greenDAO only) once Room is authoritative.
 - [ ] **UI cleanup sequencing**
   - [x] Remove ButterKnife: generated `*_ViewBinding` classes kept as source with the `ui/common/binding` runtime (verifier: 0 damaged).
+  - [x] Establish the incremental Android View Binding path with `MinimapActivity` and lifecycle cleanup.
   - [ ] Convert screens to Android View Binding opportunistically when they are touched.
   - [ ] Keep replacement incremental per-screen to reduce regression surface; avoid mass rewrites without functional changes.
 - [ ] **Documentation and build comments**

@@ -3,7 +3,7 @@ package com.lumiyaviewer.lumiya.ui.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
