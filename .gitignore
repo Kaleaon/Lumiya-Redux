@@ -19,3 +19,6 @@ rust-mirror/target/
 
 /tmp/
 __pycache__/
+
+# Isolated worktrees used by background migration agents
+.claude/worktrees/
