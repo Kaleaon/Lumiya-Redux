@@ -17,6 +17,8 @@ shipped `lumiya3.4.2.apk` and rebuilds from there.
 | `docs/recovery/` | [How the recovery is verified](docs/recovery/verified_recovery.md) and the [coding standard](docs/recovery/coding_standard.md) for recovered code. |
 | `ARCHITECTURE.md` | Package-by-package tour of the codebase with links to `github.com/secondlife` reference repos. |
 | `docs/protocol_migration_conformance.md` | Required migration safety mappings for message templates, LLSD/inventory semantics, and protocol-derived schema annotations. |
+| `docs/modernization/kotlin-rust-roadmap.md` | Repository-wide Kotlin review queue, staged migration gates, and Rust behavior-mirror policy. |
+| `rust-mirror/` | Independently tested Rust counterparts for reviewed, platform-neutral contracts. |
 | `BUILD_STATUS.md` | What compiles, what doesn't, and the pattern-level description of every remaining error. |
 
 ## Verified against the original APK
