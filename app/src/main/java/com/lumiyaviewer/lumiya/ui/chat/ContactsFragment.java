@@ -56,7 +56,7 @@ public class ContactsFragment extends Fragment {
     private class ContactsPagerAdapter extends FragmentStatePagerAdapter {
 
         ContactsPagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
+            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override

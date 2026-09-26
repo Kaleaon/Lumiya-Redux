@@ -7,8 +7,8 @@ import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.ui.common.ThemedActivity
 
 class WhatsNewActivity : ThemedActivity() {
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.whats_new)
         findViewById<TextView>(R.id.whatsnewCaption).text =
             String.format(getString(R.string.whatsnew_caption), LumiyaApp.getAppVersion())

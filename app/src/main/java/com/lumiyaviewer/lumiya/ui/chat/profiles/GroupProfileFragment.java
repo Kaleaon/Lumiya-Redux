@@ -52,7 +52,7 @@ public class GroupProfileFragment extends ChatterReloadableFragment implements L
         private ImmutableList<ProfileTab> tabs;
 
         ProfilePagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
+            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override

@@ -7,7 +7,6 @@ import com.lumiyaviewer.lumiya.render.RenderContext
 class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManager) {
     private var isQueryRunningState = false
     private var queryResultState: OcclusionQueryResult = OcclusionQueryResult.NotReady
-    private var queryStartedFrameCount = 0
 
     enum class OcclusionQueryResult {
         NotReady,
@@ -22,7 +21,7 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
     ) : GLResourceManager.GLResourceReference(glResource, handle, glResourceManager) {
         @Suppress("FunctionName")
         override fun GLFree() {
-            val ints = idQuery.get()
+            val ints = queryScratch()
             ints[0] = handle
             Debug.Printf("GLBuffer: deleted buffer %d", ints[0])
             GLES30.glDeleteQueries(1, ints, 0)
@@ -35,7 +34,7 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
 
     @Suppress("FunctionName")
     override fun Allocate(manager: GLResourceManager): Int {
-        val ints = idQuery.get()!!
+        val ints = queryScratch()
         GLES30.glGenQueries(1, ints, 0)
         return ints[0]
     }
@@ -45,7 +44,6 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
         GLES30.glBeginQuery(GL_ANY_SAMPLES_PASSED, handle)
         isQueryRunningState = true
         queryResultState = OcclusionQueryResult.NotReady
-        queryStartedFrameCount = renderContext.frameCount
         renderContext.enqueueOcclusionQuery(this)
     }
 
@@ -59,7 +57,7 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
             queryResultState = OcclusionQueryResult.NotReady
             return true
         }
-        val ints = idQuery.get()!!
+        val ints = queryScratch()
         GLES30.glGetQueryObjectuiv(handle, GLES30.GL_QUERY_RESULT_AVAILABLE, ints, 0)
         if (ints[0] == 0) {
             return false
@@ -75,10 +73,11 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
     fun isQueryRunning(): Boolean = isQueryRunningState
 
     companion object {
-        private const val MIN_OCCLUSION_QUERY_FRAMES = 0
         private const val GL_ANY_SAMPLES_PASSED = 35887
         private val idQuery = object : ThreadLocal<IntArray>() {
             override fun initialValue(): IntArray = IntArray(1)
         }
+
+        private fun queryScratch(): IntArray = requireNotNull(idQuery.get())
     }
 }

@@ -54,7 +54,7 @@ class GLResourceManager {
     fun Flush() {
         synchronized(glCleanableLock) {
             for (glCleanable in glCleanables) {
-                glCleanable?.GLCleanup()
+                glCleanable.GLCleanup()
             }
             glCleanables.clear()
         }

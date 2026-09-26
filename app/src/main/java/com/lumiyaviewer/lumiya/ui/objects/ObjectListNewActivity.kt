@@ -34,8 +34,8 @@ class ObjectListNewActivity : MasterDetailsActivity() {
         return if (cls != UserProfileFragment::class.java) super.isRootDetailsFragment(cls) else true
     }
 
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setDefaultTitle(getString(R.string.objects_activity_caption), null)
     }
 

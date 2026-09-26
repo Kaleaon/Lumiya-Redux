@@ -16,7 +16,7 @@ class InventoryListAdapter(
     private val avatarAppearance: SLAvatarAppearance?,
     context: Context,
     cursor: Cursor
-) : CursorAdapter(context, cursor) {
+) : CursorAdapter(context, cursor, 0) {
 
     override fun bindView(view: View, context: Context, cursor: Cursor) {
         val inventoryEntry = SLInventoryEntry(cursor)

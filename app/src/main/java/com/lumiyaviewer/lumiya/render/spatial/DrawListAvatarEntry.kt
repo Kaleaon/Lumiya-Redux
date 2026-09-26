@@ -11,19 +11,17 @@ class DrawListAvatarEntry(private val objectAvatarInfo: SLObjectAvatarInfo) : Dr
 
     override fun addToDrawList(drawList: DrawList) {
         if (drawList.avatars.size >= drawList.avatarCountLimit && !objectAvatarInfo.isMyAvatar) {
-            var drawableAvatarStub = this.drawableAvatarStub?.get()
-            if (drawableAvatarStub == null) {
-                drawableAvatarStub = drawList.drawableStore.drawableAvatarStubCache.getUnchecked(objectAvatarInfo)!!
-                this.drawableAvatarStub = WeakReference(drawableAvatarStub)
-            }
+            val drawableAvatarStub = this.drawableAvatarStub?.get()
+                ?: drawList.drawableStore.drawableAvatarStubCache.getUnchecked(objectAvatarInfo).also {
+                    this.drawableAvatarStub = WeakReference(it)
+                }
             drawList.avatarStubs.add(drawableAvatarStub)
             return
         }
-        var drawableAvatar = this.drawableAvatar?.get()
-        if (drawableAvatar == null) {
-            drawableAvatar = drawList.drawableStore.drawableAvatarCache.getUnchecked(objectAvatarInfo)!!
-            this.drawableAvatar = WeakReference(drawableAvatar)
-        }
+        val drawableAvatar = this.drawableAvatar?.get()
+            ?: drawList.drawableStore.drawableAvatarCache.getUnchecked(objectAvatarInfo).also {
+                this.drawableAvatar = WeakReference(it)
+            }
         drawList.avatars.add(drawableAvatar)
         if (objectAvatarInfo.isMyAvatar) {
             drawList.myAvatar = drawableAvatar

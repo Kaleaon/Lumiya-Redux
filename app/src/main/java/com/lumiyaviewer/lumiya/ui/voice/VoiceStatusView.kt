@@ -97,11 +97,10 @@ class VoiceStatusView @JvmOverloads constructor(
     }
 
     fun onVoiceChatInfo(info: VoiceChatInfo) {
-        updateVoiceState()
+        updateVoiceState(info)
     }
 
-    private fun updateVoiceState() {
-        val data = voiceChatInfo.data
+    private fun updateVoiceState(data: VoiceChatInfo? = voiceChatInfo.data) {
         Debug.Printf("VoiceStatusView: voice state %s", data)
 
         var newActiveChatterID: ChatterID.ChatterIDUser? = null
