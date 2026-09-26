@@ -672,3 +672,5 @@ com/lumiyaviewer/lumiya/render/spatial/SpatialIndex.kt,src/migration_batch3_smal
 com/lumiyaviewer/lumiya/ui/objpopup/ObjectPopupsActionProvider.kt,src/migration_batch3_small2.rs,boundary
 com/lumiyaviewer/lumiya/utils/BitBuffer.kt,src/migration_batch3_small3.rs,behavior
 com/lumiyaviewer/lumiya/utils/StringUtils.kt,src/migration_batch3_small3.rs,behavior
+com/lumiyaviewer/lumiya/slproto/modules/mutelist/MuteType.kt,src/migration_batch3_small4.rs,behavior
+com/lumiyaviewer/lumiya/slproto/types/EDeRezDestination.kt,src/migration_batch3_small4.rs,behavior

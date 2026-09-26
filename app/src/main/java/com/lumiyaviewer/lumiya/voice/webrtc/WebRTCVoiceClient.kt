@@ -158,6 +158,7 @@ class WebRTCVoiceClient(private val context: Context) : VoiceConnectionListener 
             localAudioTrack = localAudioTrack,
             provisionCapURL = capURL,
             signalingCapURL = signalingCapURL,
+            channelCredentials = credentials,
             channelType = channelType,
             parcelLocalId = parcelLocalId,
             isSpatial = channelInfo.isSpatial,

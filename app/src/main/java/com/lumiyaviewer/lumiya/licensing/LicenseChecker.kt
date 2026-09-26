@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Handler
 import com.lumiyaviewer.lumiya.R
 
-open class LicenseChecker(context: Context, handler: Handler, payload: Any) {
+open class LicenseChecker(@Suppress("UNUSED_PARAMETER") context: Context, handler: Handler, payload: Any) {
     init { handler.obtainMessage(R.id.msg_licensing_allow, payload).sendToTarget() }
     companion object {
         const val APP_STORE_NAME = "Google Play"

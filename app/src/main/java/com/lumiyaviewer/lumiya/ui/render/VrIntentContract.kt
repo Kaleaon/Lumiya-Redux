@@ -11,5 +11,5 @@ object VrIntentContract {
 
     @JvmStatic
     fun sanitizeRuntime(value: String?): String =
-        if (VR_RUNTIME_OPENXR == value || VR_RUNTIME_CARDBOARD == value) value!! else VR_RUNTIME_AUTO
+        if (value == VR_RUNTIME_OPENXR || value == VR_RUNTIME_CARDBOARD) value else VR_RUNTIME_AUTO
 }

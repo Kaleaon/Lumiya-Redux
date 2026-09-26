@@ -25,8 +25,8 @@ class TOSActivity : ThemedActivity(), View.OnClickListener {
         }
     }
 
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.tos)
         findViewById<View>(R.id.tos_accept_button).setOnClickListener(this)
         findViewById<View>(R.id.tos_decline_button).setOnClickListener(this)

@@ -47,6 +47,7 @@ class WebRTCVoiceConnection(
     private val localAudioTrack: AudioTrack?,
     private val provisionCapURL: String,
     private val signalingCapURL: String?,
+    private val channelCredentials: String?,
     val channelType: String,
     val parcelLocalId: Int?,
     val isSpatial: Boolean,
@@ -172,6 +173,12 @@ class WebRTCVoiceConnection(
             LLSDMap.LLSDMapEntry("voice_server_type", LLSDString("webrtc")),
             LLSDMap.LLSDMapEntry("channel_type", LLSDString(channelType))
         )
+
+        if (!channelCredentials.isNullOrEmpty()) {
+            bodyEntries.add(
+                LLSDMap.LLSDMapEntry("channel_credentials", LLSDString(channelCredentials))
+            )
+        }
 
         if (parcelLocalId != null) {
             bodyEntries.add(LLSDMap.LLSDMapEntry("parcel_local_id", LLSDInt(parcelLocalId)))
@@ -363,7 +370,7 @@ class WebRTCVoiceConnection(
                         val info = participants.getJSONObject(key)
                         val isMuted = info.optBoolean("m", false)
                         val energy = info.optDouble("e", 0.0).toFloat()
-                        listener.onParticipantSpeaking(this, uuid, energy > 0.01f, energy)
+                        listener.onParticipantSpeaking(this, uuid, !isMuted && energy > 0.01f, energy)
                     } catch (e: Exception) {
                         Debug.Printf("WebRTCVoice: error parsing participant %s", key)
                     }

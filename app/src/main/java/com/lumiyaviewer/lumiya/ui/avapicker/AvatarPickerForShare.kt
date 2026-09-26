@@ -1,6 +1,7 @@
 package com.lumiyaviewer.lumiya.ui.avapicker
 
 import android.os.Bundle
+import androidx.core.os.BundleCompat
 import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
@@ -19,7 +20,7 @@ class AvatarPickerForShare : AvatarPickerFragment() {
             return
         }
         inventoryFragmentHelper.ConfirmShareInventoryEntry(
-            args.getParcelable<SLInventoryEntry>(INVENTORY_ENTRY_KEY),
+            BundleCompat.getParcelable(args, INVENTORY_ENTRY_KEY, SLInventoryEntry::class.java),
             chatterID,
             message
         ) {

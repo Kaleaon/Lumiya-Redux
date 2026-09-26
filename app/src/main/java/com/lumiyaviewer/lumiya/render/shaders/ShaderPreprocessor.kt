@@ -31,7 +31,6 @@ class ShaderPreprocessor(definedMacros: Map<String, String>) {
                     substituted = substituted.replace(key, value)
                 }
                 out.append(substituted).append("\r\n")
-                last = substituted
             }
             last = trimmed
         }

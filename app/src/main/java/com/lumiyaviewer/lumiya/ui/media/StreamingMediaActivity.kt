@@ -3,6 +3,7 @@ package com.lumiyaviewer.lumiya.ui.media
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
 import android.view.View
 import android.widget.TextView
 import com.lumiyaviewer.lumiya.R
@@ -22,12 +23,12 @@ class StreamingMediaActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.streaming_media)
         val intent = intent
         if (intent.hasExtra("parcelData")) {
-            val parcelData = intent.getSerializableExtra("parcelData") as? ParcelData
+            val parcelData = IntentCompat.getSerializableExtra(intent, "parcelData", ParcelData::class.java)
             if (parcelData != null) {
                 findViewById<TextView>(R.id.locationNameView).text = parcelData.name
             }

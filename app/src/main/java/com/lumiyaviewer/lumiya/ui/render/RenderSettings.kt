@@ -18,11 +18,6 @@ class RenderSettings(sharedPreferences: SharedPreferences) {
          * independent of Android's SharedPreferences storage.
          */
         @JvmStatic
-        fun parseIntSetting(value: String?, default: Int): Int =
-            try {
-                Integer.parseInt(value)
-            } catch (e: Exception) {
-                default
-            }
+        fun parseIntSetting(value: String?, default: Int): Int = value?.toIntOrNull() ?: default
     }
 }

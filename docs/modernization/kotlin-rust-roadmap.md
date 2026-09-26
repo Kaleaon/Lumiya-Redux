@@ -23,6 +23,14 @@ python3 tools/modernization/inventory.py --fail-if-empty --check
 python3 tools/modernization/inventory.py --csv > /tmp/lumiya-modernization.csv
 ```
 
+The checked-in `remaining-java.txt` snapshot lists every production Java source
+still awaiting migration. Regenerate it after each conversion; `--check`
+rejects stale snapshots:
+
+```bash
+python3 tools/modernization/inventory.py --remaining-java > docs/modernization/remaining-java.txt
+```
+
 The summary separates Kotlin from Java awaiting review. Rust counterparts must
 be registered in `rust-mirror/mapping.csv`, which makes one shared Rust module
 able to represent several related JVM contracts without inventing fake files.

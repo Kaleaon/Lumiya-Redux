@@ -38,7 +38,7 @@ class Quad {
         }
     }
 
-    fun EndDrawQuads(renderContext: RenderContext) {
+    fun EndDrawQuads(@Suppress("UNUSED_PARAMETER") renderContext: RenderContext) {
     }
 
     fun PrepareDrawQuads(renderContext: RenderContext) {

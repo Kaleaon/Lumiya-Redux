@@ -34,8 +34,8 @@ class SettingsActivity : MasterDetailsActivity() {
 
     override fun isRootDetailsFragment(cls: Class<out Fragment>): Boolean = cls == SettingsFragment::class.java
 
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setDefaultTitle(getString(R.string.settings_title), null)
     }
 
