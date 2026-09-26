@@ -14,7 +14,7 @@ class AvatarTextures {
 
     @Synchronized
     fun ApplyAvatarAppearance(avatarAppearance: AvatarAppearance): Boolean {
-        val textureEntry = avatarAppearance.ObjectData_Field.TextureEntry
+        val textureEntry = avatarAppearance.ObjectData_Field.TextureEntry!!
         return ApplyTextures(SLTextureEntry.create(ByteBuffer.wrap(textureEntry), textureEntry.size), false)
     }
 

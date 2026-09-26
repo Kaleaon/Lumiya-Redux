@@ -39,7 +39,7 @@ class RingtonePreference : Preference {
     fun getDefaultRawResource(): Int = defaultRawResource
 
     override fun getSummary(): CharSequence? {
-        val value = sharedPreferences.getString(key, null) ?: return "Default"
+        val value = sharedPreferences?.getString(key, null) ?: return "Default"
         val parsed = Uri.parse(value)
         if (Objects.equal(NotificationSounds.getResourceUri(defaultRawResource), parsed)) {
             return "Default"

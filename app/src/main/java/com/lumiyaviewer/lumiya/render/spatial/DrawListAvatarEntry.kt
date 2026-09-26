@@ -13,7 +13,7 @@ class DrawListAvatarEntry(private val objectAvatarInfo: SLObjectAvatarInfo) : Dr
         if (drawList.avatars.size >= drawList.avatarCountLimit && !objectAvatarInfo.isMyAvatar) {
             var drawableAvatarStub = this.drawableAvatarStub?.get()
             if (drawableAvatarStub == null) {
-                drawableAvatarStub = drawList.drawableStore.drawableAvatarStubCache.getUnchecked(objectAvatarInfo)
+                drawableAvatarStub = drawList.drawableStore.drawableAvatarStubCache.getUnchecked(objectAvatarInfo)!!
                 this.drawableAvatarStub = WeakReference(drawableAvatarStub)
             }
             drawList.avatarStubs.add(drawableAvatarStub)
@@ -21,7 +21,7 @@ class DrawListAvatarEntry(private val objectAvatarInfo: SLObjectAvatarInfo) : Dr
         }
         var drawableAvatar = this.drawableAvatar?.get()
         if (drawableAvatar == null) {
-            drawableAvatar = drawList.drawableStore.drawableAvatarCache.getUnchecked(objectAvatarInfo)
+            drawableAvatar = drawList.drawableStore.drawableAvatarCache.getUnchecked(objectAvatarInfo)!!
             this.drawableAvatar = WeakReference(drawableAvatar)
         }
         drawList.avatars.add(drawableAvatar)

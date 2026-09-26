@@ -2,13 +2,13 @@ package com.lumiyaviewer.lumiya.render.spatial
 
 import com.lumiyaviewer.lumiya.utils.InlineList
 
-class MyAvatarTreeNode(private val spatialTree: SpatialTree) : InlineList<DrawListEntry>() {
+class MyAvatarTreeNode internal constructor(private val spatialTree: SpatialTree) : InlineList<DrawListEntry>() {
 
     fun addDrawables(drawList: DrawList) {
         var entry = first
         while (entry != null) {
             entry.addToDrawList(drawList)
-            entry = entry.next
+            entry = entry.getNext()
         }
     }
 

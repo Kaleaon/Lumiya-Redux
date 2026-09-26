@@ -19,7 +19,7 @@ class GLQuery(glResourceManager: GLResourceManager) : GLResource(glResourceManag
         glResource: GLResource,
         handle: Int,
         glResourceManager: GLResourceManager
-    ) : GLResourceReference(glResource, handle, glResourceManager) {
+    ) : GLResourceManager.GLResourceReference(glResource, handle, glResourceManager) {
         @Suppress("FunctionName")
         override fun GLFree() {
             val ints = idQuery.get()

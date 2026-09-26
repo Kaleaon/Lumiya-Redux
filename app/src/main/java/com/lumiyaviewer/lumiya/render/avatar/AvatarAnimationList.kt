@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList
 import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3
 
-internal class AvatarAnimationList(states: Collection<AvatarAnimationState>) {
+class AvatarAnimationList(states: Collection<AvatarAnimationState>) {
     private val animations: ImmutableList<AvatarRunningAnimation>
     private val sequences: ImmutableList<AvatarRunningSequence>
 

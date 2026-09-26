@@ -11,14 +11,18 @@ class ChatEventTimestampUpdater(private val context: Context) {
     private val mHandler = Handler(Looper.getMainLooper())
     private var updateRunnablePosted = false
     private val viewHolders: MutableSet<ChatEventViewHolder> = Collections.newSetFromMap(WeakHashMap())
-    private val updateRunnable: Runnable = Runnable {
-        updateRunnablePosted = false
-        for (chatEventViewHolder in viewHolders) {
-            chatEventViewHolder.updateTimestamp(context)
-        }
-        if (viewHolders.isNotEmpty()) {
-            updateRunnablePosted = true
-            mHandler.postDelayed(updateRunnable, TIMESTAMP_UPDATE_INTERVAL)
+    private lateinit var updateRunnable: Runnable
+
+    init {
+        updateRunnable = Runnable {
+            updateRunnablePosted = false
+            for (chatEventViewHolder in viewHolders) {
+                chatEventViewHolder.updateTimestamp(context)
+            }
+            if (viewHolders.isNotEmpty()) {
+                updateRunnablePosted = true
+                mHandler.postDelayed(updateRunnable, TIMESTAMP_UPDATE_INTERVAL)
+            }
         }
     }
 

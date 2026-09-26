@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
+import com.lumiyaviewer.lumiya.ui.chat.profiles.UserProfileFragment
 import com.lumiyaviewer.lumiya.ui.common.ActivityUtils
 import com.lumiyaviewer.lumiya.ui.common.FragmentActivityFactory
 import com.lumiyaviewer.lumiya.ui.common.MasterDetailsActivity
@@ -28,7 +29,7 @@ class MyAvatarActivity : MasterDetailsActivity() {
         if (bundle == null) {
             val activeAgentID = ActivityUtils.getActiveAgentID(intent)
             if (activeAgentID != null) {
-                return MyProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, activeAgentID))
+                return UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, activeAgentID))
             }
         }
         return super.getNewDetailsFragmentArguments(bundle, bundle2)

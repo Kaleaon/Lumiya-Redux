@@ -26,7 +26,7 @@ internal open class ChatterListSimpleAdapter(context: Context, userManager: User
 
     override fun hasStableIds(): Boolean = false
 
-    override fun isEmpty(): Boolean = data?.isEmpty ?: true
+    override fun isEmpty(): Boolean = data?.isEmpty() ?: true
 
     override fun isEnabled(position: Int): Boolean = true
 
