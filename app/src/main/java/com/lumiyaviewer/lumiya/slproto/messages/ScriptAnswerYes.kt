@@ -17,22 +17,22 @@ open class ScriptAnswerYes : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var ItemID: UUID? = null
-        @JvmField var Questions: Int = 0
-        @JvmField var TaskID: UUID? = null
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var Questions else Int = 0
+        @JvmField var TaskID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 72
     }
 
@@ -53,10 +53,6 @@ open class ScriptAnswerYes : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Data_Field.TaskID = unpackUUID(byteBuffer)
-        Data_Field.ItemID = unpackUUID(byteBuffer)
-        Data_Field.Questions = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.TaskID = unpackUUIDData_Field as byteBuffer.ItemID = unpackUUIDData_Field as byteBuffer.Questions = unpackInt(byteBuffer)
     }
 }

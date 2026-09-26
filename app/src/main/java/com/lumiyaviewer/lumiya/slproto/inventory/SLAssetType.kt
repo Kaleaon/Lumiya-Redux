@@ -1,0 +1,105 @@
+package com.lumiyaviewer.lumiya.slproto.inventory
+
+import androidx.core.os.EnvironmentCompat
+import com.google.common.collect.ImmutableMap
+import com.lumiyaviewer.lumiya.R
+
+enum class SLAssetType {
+    AT_TEXTURE(0, "texture", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture, R.string.asset_action_view),
+    AT_SOUND(1, "sound", SLInventoryType.IT_SOUND, 1, R.drawable.inv_sound, R.string.asset_type_sound, -1),
+    AT_CALLINGCARD(2, "callcard", SLInventoryType.IT_CALLINGCARD, 2, R.drawable.inv_vcard, R.string.asset_type_calling_card, -1),
+    AT_LANDMARK(3, "landmark", SLInventoryType.IT_LANDMARK, 3, R.drawable.inv_landmark, R.string.asset_type_landmark, R.string.asset_action_teleport),
+    AT_SCRIPT(4, "script", SLInventoryType.IT_LSL, 10, R.drawable.inv_script, R.string.asset_type_script, R.string.asset_action_edit),
+    AT_CLOTHING(5, "clothing", SLInventoryType.IT_WEARABLE, 5, R.drawable.inv_clothes, R.string.asset_type_clothing, -1),
+    AT_OBJECT(6, "object", SLInventoryType.IT_OBJECT, 6, R.drawable.inv_object, R.string.asset_type_object, R.string.asset_action_rez),
+    AT_NOTECARD(7, "notecard", SLInventoryType.IT_NOTECARD, 7, R.drawable.inv_notecard, R.string.asset_type_notecard, R.string.asset_action_edit),
+    AT_CATEGORY(8, "category", SLInventoryType.IT_CATEGORY, -1, R.drawable.inv_folder, R.string.asset_type_folder, -1),
+    AT_LSL_TEXT(10, "lsltext", SLInventoryType.IT_LSL, 10, R.drawable.inv_script, R.string.asset_type_lsl, R.string.asset_action_edit),
+    AT_LSL_BYTECODE(11, "lslbyte", SLInventoryType.IT_LSL, 10, R.drawable.inv_script, R.string.asset_type_lsl_bytecode, -1),
+    AT_TEXTURE_TGA(12, "txtr_tga", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture_tga, -1),
+    AT_BODYPART(13, "bodypart", SLInventoryType.IT_WEARABLE, 13, R.drawable.inv_human, R.string.asset_type_bodypart, -1),
+    AT_SOUND_WAV(17, "snd_wav", SLInventoryType.IT_SOUND, 1, R.drawable.inv_sound, R.string.asset_type_sound, -1),
+    AT_IMAGE_TGA(18, "img_tga", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture_tga, -1),
+    AT_IMAGE_JPEG(19, "jpeg", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture, -1),
+    AT_ANIMATION(20, "animatn", SLInventoryType.IT_ANIMATION, 20, R.drawable.inv_animation, R.string.asset_type_animation, -1),
+    AT_GESTURE(21, "gesture", SLInventoryType.IT_GESTURE, 21, R.drawable.inv_smile, R.string.asset_type_gesture, -1),
+    AT_SIMSTATE(22, "simstate", SLInventoryType.IT_UNKNOWN, 6, R.drawable.inv_script, R.string.asset_type_sim_state, -1),
+    AT_LINK(24, "link", SLInventoryType.IT_UNKNOWN, 6, R.drawable.inv_link, R.string.asset_type_link, -1),
+    AT_LINK_FOLDER(25, "link_f", SLInventoryType.IT_UNKNOWN, 6, R.drawable.inv_link, R.string.asset_type_link, -1),
+    AT_MESH(49, "mesh", SLInventoryType.IT_MESH, 6, R.drawable.inv_object, R.string.asset_type_object, -1),
+    AT_WIDGET(40, "widget", SLInventoryType.IT_WIDGET, 6, R.drawable.inv_object, R.string.asset_type_object, -1),
+    AT_UNKNOWN(-1, EnvironmentCompat.MEDIA_UNKNOWN, SLInventoryType.IT_UNKNOWN, -1, -1, -1, -1)
+
+    @JvmStatic private var tagMap: ImmutableMap<String, SLAssetType> = null
+    private var actionDescription: Int = 0
+    private var drawableResource: Int = 0
+    private var invType: SLInventoryType = null
+    private var specialFolderType: Int = 0
+    private var stringCode: String = ""
+    private var typeCode: Int = 0
+    private var typeDescription: Int = 0
+    init {
+        var builder: ImmutableMap.Builder = ImmutableMap.builder()
+        for (sLAssetType in valuesCustom()) {
+            builder.put(sLAssetType.stringCode, sLAssetType)
+        }
+        tagMap = builder.build()
+    }
+
+    constructor(typeCode: Int, stringCode: String, inventoryType: SLInventoryType, specialFolderType: Int, drawableResource: Int, typeDescription: Int, actionDescription: Int) {
+        this.typeCode = typeCode
+        this.stringCode = stringCode
+        this.invType = inventoryType
+        this.specialFolderType = specialFolderType
+        this.drawableResource = drawableResource
+        this.typeDescription = typeDescription
+        this.actionDescription = actionDescription
+    }
+
+    fun getByString(str: String): SLAssetType {
+        var assetType: SLAssetType = tagMap.get(str)
+        var assetType: return = = if (null) AT_UNKNOWN else assetType
+    }
+
+    fun getByType(i: Int): SLAssetType {
+        for (assetType in valuesCustom()) {
+            if (assetType.typeCode == i) {
+        return assetType
+            }
+        }
+        return AT_UNKNOWN
+    }
+
+    /* renamed from: values, reason: to resolve conflict with enum method */
+    fun valuesCustom(): Array<SLAssetType> {
+        return values()
+    }
+
+    fun getActionDescription(): Int {
+        return this.actionDescription
+    }
+
+    fun getDrawableResource(): Int {
+        return this.drawableResource
+    }
+
+    fun getInventoryType(): SLInventoryType {
+        return this.invType
+    }
+
+    fun getSpecialFolderType(): Int {
+        return this.specialFolderType
+    }
+
+    fun getStringCode(): String {
+        return this.stringCode
+    }
+
+    fun getTypeCode(): Int {
+        return this.typeCode
+    }
+
+    fun getTypeDescription(): Int {
+        return this.typeDescription
+    }
+}

@@ -20,8 +20,8 @@ open class ModifyLand : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ModifyBlock, Single. */
@@ -84,27 +84,18 @@ open class ModifyLand : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ModifyBlock_Field.Action = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDModifyBlock_Field as byteBuffer.Action = unpackByte(byteBuffer).toInt() and 0xFF
         ModifyBlock_Field.BrushSize = unpackByte(byteBuffer).toInt() and 0xFF
-        ModifyBlock_Field.Seconds = unpackFloat(byteBuffer)
-        ModifyBlock_Field.Height = unpackFloat(byteBuffer)
+        ModifyBlock_Field.Seconds = unpackFloatModifyBlock_Field as byteBuffer.Height = unpackFloat(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.LocalID = unpackInt(byteBuffer)
-            parcelData.West = unpackFloat(byteBuffer)
-            parcelData.South = unpackFloat(byteBuffer)
-            parcelData.East = unpackFloat(byteBuffer)
-            parcelData.North = unpackFloat(byteBuffer)
-            ParcelData_Fields.add(parcelData)
+            parcelData.LocalID = unpackIntparcelData as byteBuffer.West = unpackFloatparcelData as byteBuffer.South = unpackFloatparcelData as byteBuffer.East = unpackFloatparcelData as byteBuffer.North = unpackFloatParcelData_Fields as byteBuffer.add(parcelData)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val modifyBlockExtended = ModifyBlockExtended()
-            modifyBlockExtended.BrushSize = unpackFloat(byteBuffer)
-            ModifyBlockExtended_Fields.add(modifyBlockExtended)
+            modifyBlockExtended.BrushSize = unpackFloatModifyBlockExtended_Fields as byteBuffer.add(modifyBlockExtended)
         }
     }
 }

@@ -19,15 +19,15 @@ open class LogFailedMoneyTransaction : SLMessage() {
     /** Block TransactionData, Single. */
     open class TransactionData {
         @JvmField var Amount: Int = 0
-        @JvmField var DestID: UUID? = null
-        @JvmField var FailureType: Int = 0
+        @JvmField var DestID: if (UUID) = null
+        @JvmField var FailureType else Int = 0
         @JvmField var Flags: Int = 0
         @JvmField var GridX: Int = 0
         @JvmField var GridY: Int = 0
-        @JvmField var SimulatorIP: Inet4Address? = null
-        @JvmField var SourceID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
-        @JvmField var TransactionTime: Int = 0
+        @JvmField var SimulatorIP: if (Inet4Address) = null
+        @JvmField var SourceID else UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var TransactionTime else Int = 0
         @JvmField var TransactionType: Int = 0
     }
 
@@ -62,16 +62,7 @@ open class LogFailedMoneyTransaction : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
-        TransactionData_Field.TransactionTime = unpackInt(byteBuffer)
-        TransactionData_Field.TransactionType = unpackInt(byteBuffer)
-        TransactionData_Field.SourceID = unpackUUID(byteBuffer)
-        TransactionData_Field.DestID = unpackUUID(byteBuffer)
-        TransactionData_Field.Flags = unpackByte(byteBuffer).toInt() and 0xFF
-        TransactionData_Field.Amount = unpackInt(byteBuffer)
-        TransactionData_Field.SimulatorIP = unpackIPAddress(byteBuffer)
-        TransactionData_Field.GridX = unpackInt(byteBuffer)
-        TransactionData_Field.GridY = unpackInt(byteBuffer)
-        TransactionData_Field.FailureType = unpackByte(byteBuffer).toInt() and 0xFF
+        TransactionData_Field.TransactionID = unpackUUIDTransactionData_Field as byteBuffer.TransactionTime = unpackIntTransactionData_Field as byteBuffer.TransactionType = unpackIntTransactionData_Field as byteBuffer.SourceID = unpackUUIDTransactionData_Field as byteBuffer.DestID = unpackUUIDTransactionData_Field as byteBuffer.Flags = unpackByte(byteBuffer).toInt() and 0xFF
+        TransactionData_Field.Amount = unpackIntTransactionData_Field as byteBuffer.SimulatorIP = unpackIPAddressTransactionData_Field as byteBuffer.GridX = unpackIntTransactionData_Field as byteBuffer.GridY = unpackIntTransactionData_Field as byteBuffer.FailureType = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

@@ -58,14 +58,11 @@ open class SimulatorLoad : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SimulatorLoadData_Field.TimeDilation = unpackFloat(byteBuffer)
-        SimulatorLoadData_Field.AgentCount = unpackInt(byteBuffer)
-        SimulatorLoadData_Field.CanAcceptAgents = unpackBoolean(byteBuffer)
+        SimulatorLoadData_Field.TimeDilation = unpackFloatSimulatorLoadData_Field as byteBuffer.AgentCount = unpackIntSimulatorLoadData_Field as byteBuffer.CanAcceptAgents = unpackBoolean(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val agentList = AgentList()
-            agentList.CircuitCode = unpackInt(byteBuffer)
-            agentList.X = unpackByte(byteBuffer).toInt() and 0xFF
+            agentList.CircuitCode = unpackIntagentList as byteBuffer.X = unpackByte(byteBuffer).toInt() and 0xFF
             agentList.Y = unpackByte(byteBuffer).toInt() and 0xFF
             AgentList_Fields.add(agentList)
         }

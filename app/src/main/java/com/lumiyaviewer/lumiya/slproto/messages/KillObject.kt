@@ -45,8 +45,7 @@ open class KillObject : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ID = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.ID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

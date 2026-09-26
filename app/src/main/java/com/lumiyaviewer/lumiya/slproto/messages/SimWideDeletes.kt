@@ -16,21 +16,21 @@ open class SimWideDeletes : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block DataBlock, Single. */
     open class DataBlock {
         @JvmField var Flags: Int = 0
-        @JvmField var TargetID: UUID? = null
+        @JvmField var TargetID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 56
     }
 
@@ -50,9 +50,6 @@ open class SimWideDeletes : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        DataBlock_Field.TargetID = unpackUUID(byteBuffer)
-        DataBlock_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDDataBlock_Field as byteBuffer.TargetID = unpackUUIDDataBlock_Field as byteBuffer.Flags = unpackInt(byteBuffer)
     }
 }

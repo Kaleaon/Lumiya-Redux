@@ -17,16 +17,16 @@ open class ReplyTaskInventory : SLMessage() {
 
     /** Block InventoryData, Single. */
     open class InventoryData {
-        @JvmField var Filename: ByteArray? = null
-        @JvmField var Serial: Int = 0
-        @JvmField var TaskID: UUID? = null
+        @JvmField var Filename: if (ByteArray) = null
+        @JvmField var Serial else Int = 0
+        @JvmField var TaskID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return InventoryData_Field.Filename!!.size + 19 + 4
     }
 
@@ -45,8 +45,7 @@ open class ReplyTaskInventory : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        InventoryData_Field.TaskID = unpackUUID(byteBuffer)
-        InventoryData_Field.Serial = unpackShort(byteBuffer).toInt()
+        InventoryData_Field.TaskID = unpackUUIDInventoryData_Field as byteBuffer.Serial = unpackShort(byteBuffer).toInt()
         InventoryData_Field.Filename = unpackVariable(byteBuffer, 1)
     }
 }

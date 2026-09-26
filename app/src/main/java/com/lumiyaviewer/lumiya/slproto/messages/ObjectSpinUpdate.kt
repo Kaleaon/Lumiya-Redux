@@ -17,14 +17,14 @@ open class ObjectSpinUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var ObjectID: UUID? = null
-        @JvmField var Rotation: LLQuaternion? = null
+        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var Rotation else LLQuaternion? = null
     }
 
     init {
@@ -51,9 +51,6 @@ open class ObjectSpinUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ObjectData_Field.ObjectID = unpackUUID(byteBuffer)
-        ObjectData_Field.Rotation = unpackLLQuaternion(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDObjectData_Field as byteBuffer.ObjectID = unpackUUIDObjectData_Field as byteBuffer.Rotation = unpackLLQuaternion(byteBuffer)
     }
 }

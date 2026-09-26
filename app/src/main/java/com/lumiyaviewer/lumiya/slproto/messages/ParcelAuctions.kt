@@ -17,8 +17,8 @@ open class ParcelAuctions : SLMessage() {
 
     /** Block ParcelData, Variable. */
     open class ParcelData {
-        @JvmField var ParcelID: UUID? = null
-        @JvmField var WinnerID: UUID? = null
+        @JvmField var ParcelID: if (UUID) = null
+        @JvmField var WinnerID else UUID? = null
     }
 
     init {
@@ -49,9 +49,7 @@ open class ParcelAuctions : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.ParcelID = unpackUUID(byteBuffer)
-            parcelData.WinnerID = unpackUUID(byteBuffer)
-            ParcelData_Fields.add(parcelData)
+            parcelData.ParcelID = unpackUUIDparcelData as byteBuffer.WinnerID = unpackUUIDParcelData_Fields as byteBuffer.add(parcelData)
         }
     }
 }

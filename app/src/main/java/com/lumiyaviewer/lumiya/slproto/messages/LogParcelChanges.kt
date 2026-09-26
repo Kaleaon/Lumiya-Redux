@@ -18,22 +18,22 @@ open class LogParcelChanges : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block ParcelData, Variable. */
     open class ParcelData {
-        @JvmField var Action: Int = 0
+        @JvmField var Action else Int = 0
         @JvmField var ActualArea: Int = 0
         @JvmField var IsOwnerGroup: Boolean = false
-        @JvmField var OwnerID: UUID? = null
-        @JvmField var ParcelID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var OwnerID: if (UUID) = null
+        @JvmField var ParcelID else UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     /** Block RegionData, Single. */
     open class RegionData {
-        @JvmField var RegionHandle: Long = 0L
+        @JvmField var RegionHandle else Long = 0L
     }
 
     init {
@@ -67,18 +67,12 @@ open class LogParcelChanges : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        RegionData_Field.RegionHandle = unpackLong(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDRegionData_Field as byteBuffer.RegionHandle = unpackLong(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.ParcelID = unpackUUID(byteBuffer)
-            parcelData.OwnerID = unpackUUID(byteBuffer)
-            parcelData.IsOwnerGroup = unpackBoolean(byteBuffer)
-            parcelData.ActualArea = unpackInt(byteBuffer)
-            parcelData.Action = unpackByte(byteBuffer).toInt()
-            parcelData.TransactionID = unpackUUID(byteBuffer)
-            ParcelData_Fields.add(parcelData)
+            parcelData.ParcelID = unpackUUIDparcelData as byteBuffer.OwnerID = unpackUUIDparcelData as byteBuffer.IsOwnerGroup = unpackBooleanparcelData as byteBuffer.ActualArea = unpackIntparcelData as byteBuffer.Action = unpackByte(byteBuffer).toInt()
+            parcelData.TransactionID = unpackUUIDParcelData_Fields as byteBuffer.add(parcelData)
         }
     }
 }

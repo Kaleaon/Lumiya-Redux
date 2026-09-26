@@ -17,8 +17,8 @@ open class ObjectDetach : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
@@ -52,13 +52,11 @@ open class ObjectDetach : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.ObjectLocalID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

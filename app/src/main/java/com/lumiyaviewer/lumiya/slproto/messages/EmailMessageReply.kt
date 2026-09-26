@@ -16,12 +16,12 @@ open class EmailMessageReply : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var Data: ByteArray? = null
-        @JvmField var FromAddress: ByteArray? = null
-        @JvmField var MailFilter: ByteArray? = null
-        @JvmField var More: Int = 0
-        @JvmField var ObjectID: UUID? = null
-        @JvmField var Subject: ByteArray? = null
+        @JvmField var Data: if (ByteArray) = null
+        @JvmField var FromAddress else ByteArray? = null
+        @JvmField var MailFilter: if (ByteArray) = null
+        @JvmField var More else Int = 0
+        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var Subject else ByteArray? = null
         @JvmField var Time: Int = 0
     }
 
@@ -52,10 +52,7 @@ open class EmailMessageReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.ObjectID = unpackUUID(byteBuffer)
-        DataBlock_Field.More = unpackInt(byteBuffer)
-        DataBlock_Field.Time = unpackInt(byteBuffer)
-        DataBlock_Field.FromAddress = unpackVariable(byteBuffer, 1)
+        DataBlock_Field.ObjectID = unpackUUIDDataBlock_Field as byteBuffer.More = unpackIntDataBlock_Field as byteBuffer.Time = unpackIntDataBlock_Field as byteBuffer.FromAddress = unpackVariable(byteBuffer, 1)
         DataBlock_Field.Subject = unpackVariable(byteBuffer, 1)
         DataBlock_Field.Data = unpackVariable(byteBuffer, 2)
         DataBlock_Field.MailFilter = unpackVariable(byteBuffer, 1)

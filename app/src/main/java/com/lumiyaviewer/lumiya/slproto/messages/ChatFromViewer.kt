@@ -19,15 +19,15 @@ open class ChatFromViewer : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ChatData, Single. */
     open class ChatData {
         @JvmField var Channel: Int = 0
-        @JvmField var Message: ByteArray? = null
-        @JvmField var Type: Int = 0
+        @JvmField var Message: if (ByteArray) = null
+        @JvmField var Type else Int = 0
     }
 
     init {
@@ -55,9 +55,7 @@ open class ChatFromViewer : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ChatData_Field.Message = unpackVariable(byteBuffer, 2)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDChatData_Field as byteBuffer.Message = unpackVariable(byteBuffer, 2)
         ChatData_Field.Type = unpackByte(byteBuffer).toInt() and 0xFF
         ChatData_Field.Channel = unpackInt(byteBuffer)
     }

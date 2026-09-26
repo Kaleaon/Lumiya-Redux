@@ -18,14 +18,14 @@ open class OfflineNotification : SLMessage() {
 
     /** Block AgentBlock, Variable. */
     open class AgentBlock {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (AgentBlock_Fields.size * 16) + 5
     }
 
@@ -48,8 +48,7 @@ open class OfflineNotification : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val agentBlock = AgentBlock()
-            agentBlock.AgentID = unpackUUID(byteBuffer)
-            AgentBlock_Fields.add(agentBlock)
+            agentBlock.AgentID = unpackUUIDAgentBlock_Fields as byteBuffer.add(agentBlock)
         }
     }
 }

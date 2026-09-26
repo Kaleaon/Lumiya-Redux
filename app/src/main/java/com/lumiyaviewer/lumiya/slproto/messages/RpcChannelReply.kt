@@ -17,16 +17,16 @@ open class RpcChannelReply : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var ChannelID: UUID? = null
-        @JvmField var ItemID: UUID? = null
-        @JvmField var TaskID: UUID? = null
+        @JvmField var ChannelID: if (UUID) = null
+        @JvmField var ItemID else UUID? = null
+        @JvmField var TaskID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 52
     }
 
@@ -45,8 +45,6 @@ open class RpcChannelReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.TaskID = unpackUUID(byteBuffer)
-        DataBlock_Field.ItemID = unpackUUID(byteBuffer)
-        DataBlock_Field.ChannelID = unpackUUID(byteBuffer)
+        DataBlock_Field.TaskID = unpackUUIDDataBlock_Field as byteBuffer.ItemID = unpackUUIDDataBlock_Field as byteBuffer.ChannelID = unpackUUID(byteBuffer)
     }
 }

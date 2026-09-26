@@ -17,14 +17,14 @@ open class ObjectDescription : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var Description: ByteArray? = null
-        @JvmField var LocalID: Int = 0
+        @JvmField var Description: if (ByteArray) = null
+        @JvmField var LocalID else Int = 0
     }
 
     init {
@@ -62,13 +62,11 @@ open class ObjectDescription : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.LocalID = unpackInt(byteBuffer)
-            objectData.Description = unpackVariable(byteBuffer, 1)
+            objectData.LocalID = unpackIntobjectData as byteBuffer.Description = unpackVariable(byteBuffer, 1)
             ObjectData_Fields.add(objectData)
         }
     }

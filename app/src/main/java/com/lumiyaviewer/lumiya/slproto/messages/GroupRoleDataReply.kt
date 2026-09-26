@@ -22,24 +22,24 @@ open class GroupRoleDataReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: UUID? = null
-        @JvmField var RequestID: UUID? = null
-        @JvmField var RoleCount: Int = 0
+        @JvmField var GroupID else UUID? = null
+        @JvmField var RequestID: if (UUID) = null
+        @JvmField var RoleCount else Int = 0
     }
 
     /** Block RoleData, Variable. */
     open class RoleData {
-        @JvmField var Description: ByteArray? = null
-        @JvmField var Members: Int = 0
-        @JvmField var Name: ByteArray? = null
-        @JvmField var Powers: Long = 0L
-        @JvmField var RoleID: UUID? = null
-        @JvmField var Title: ByteArray? = null
+        @JvmField var Description: if (ByteArray) = null
+        @JvmField var Members else Int = 0
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var Powers else Long = 0L
+        @JvmField var RoleID: if (UUID) = null
+        @JvmField var Title else ByteArray? = null
     }
 
     init {
@@ -84,20 +84,14 @@ open class GroupRoleDataReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        GroupData_Field.GroupID = unpackUUID(byteBuffer)
-        GroupData_Field.RequestID = unpackUUID(byteBuffer)
-        GroupData_Field.RoleCount = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.RequestID = unpackUUIDGroupData_Field as byteBuffer.RoleCount = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val roleData = RoleData()
-            roleData.RoleID = unpackUUID(byteBuffer)
-            roleData.Name = unpackVariable(byteBuffer, 1)
+            roleData.RoleID = unpackUUIDroleData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             roleData.Title = unpackVariable(byteBuffer, 1)
             roleData.Description = unpackVariable(byteBuffer, 1)
-            roleData.Powers = unpackLong(byteBuffer)
-            roleData.Members = unpackInt(byteBuffer)
-            RoleData_Fields.add(roleData)
+            roleData.Powers = unpackLongroleData as byteBuffer.Members = unpackIntRoleData_Fields as byteBuffer.add(roleData)
         }
     }
 }

@@ -45,8 +45,7 @@ open class CheckParcelAuctions : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val regionData = RegionData()
-            regionData.RegionHandle = unpackLong(byteBuffer)
-            RegionData_Fields.add(regionData)
+            regionData.RegionHandle = unpackLongRegionData_Fields as byteBuffer.add(regionData)
         }
     }
 }

@@ -16,16 +16,16 @@ open class EmailMessageRequest : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var FromAddress: ByteArray? = null
-        @JvmField var ObjectID: UUID? = null
-        @JvmField var Subject: ByteArray? = null
+        @JvmField var FromAddress: if (ByteArray) = null
+        @JvmField var ObjectID else UUID? = null
+        @JvmField var Subject: if (ByteArray) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return DataBlock_Field.FromAddress!!.size + 17 + 1 + DataBlock_Field.Subject!!.size + 4
     }
 
@@ -44,8 +44,7 @@ open class EmailMessageRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.ObjectID = unpackUUID(byteBuffer)
-        DataBlock_Field.FromAddress = unpackVariable(byteBuffer, 1)
+        DataBlock_Field.ObjectID = unpackUUIDDataBlock_Field as byteBuffer.FromAddress = unpackVariable(byteBuffer, 1)
         DataBlock_Field.Subject = unpackVariable(byteBuffer, 1)
     }
 }

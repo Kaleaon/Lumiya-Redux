@@ -21,13 +21,13 @@ open class AgentDataUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var ActiveGroupID: UUID? = null
-        @JvmField var AgentID: UUID? = null
-        @JvmField var FirstName: ByteArray? = null
-        @JvmField var GroupName: ByteArray? = null
+        @JvmField var ActiveGroupID: if (UUID) = null
+        @JvmField var AgentID else UUID? = null
+        @JvmField var FirstName: if (ByteArray) = null
+        @JvmField var GroupName else ByteArray? = null
         @JvmField var GroupPowers: Long = 0L
-        @JvmField var GroupTitle: ByteArray? = null
-        @JvmField var LastName: ByteArray? = null
+        @JvmField var GroupTitle: if (ByteArray) = null
+        @JvmField var LastName else ByteArray? = null
     }
 
     init {
@@ -57,12 +57,9 @@ open class AgentDataUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.FirstName = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.FirstName = unpackVariable(byteBuffer, 1)
         AgentData_Field.LastName = unpackVariable(byteBuffer, 1)
         AgentData_Field.GroupTitle = unpackVariable(byteBuffer, 1)
-        AgentData_Field.ActiveGroupID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupPowers = unpackLong(byteBuffer)
-        AgentData_Field.GroupName = unpackVariable(byteBuffer, 1)
+        AgentData_Field.ActiveGroupID = unpackUUIDAgentData_Field as byteBuffer.GroupPowers = unpackLongAgentData_Field as byteBuffer.GroupName = unpackVariable(byteBuffer, 1)
     }
 }

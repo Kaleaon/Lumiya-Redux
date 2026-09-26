@@ -20,10 +20,10 @@ open class TeleportLocal : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var LocationID: Int = 0
-        @JvmField var LookAt: LLVector3? = null
-        @JvmField var Position: LLVector3? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var LocationID else Int = 0
+        @JvmField var LookAt: if (LLVector3) = null
+        @JvmField var Position else LLVector3? = null
         @JvmField var TeleportFlags: Int = 0
     }
 
@@ -52,10 +52,6 @@ open class TeleportLocal : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.LocationID = unpackInt(byteBuffer)
-        Info_Field.Position = unpackLLVector3(byteBuffer)
-        Info_Field.LookAt = unpackLLVector3(byteBuffer)
-        Info_Field.TeleportFlags = unpackInt(byteBuffer)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.LocationID = unpackIntInfo_Field as byteBuffer.Position = unpackLLVector3Info_Field as byteBuffer.LookAt = unpackLLVector3Info_Field as byteBuffer.TeleportFlags = unpackInt(byteBuffer)
     }
 }

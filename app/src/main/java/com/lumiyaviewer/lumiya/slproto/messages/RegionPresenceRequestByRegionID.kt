@@ -17,14 +17,14 @@ open class RegionPresenceRequestByRegionID : SLMessage() {
 
     /** Block RegionData, Variable. */
     open class RegionData {
-        @JvmField var RegionID: UUID? = null
+        @JvmField var RegionID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (RegionData_Fields.size * 16) + 5
     }
 
@@ -47,8 +47,7 @@ open class RegionPresenceRequestByRegionID : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val regionData = RegionData()
-            regionData.RegionID = unpackUUID(byteBuffer)
-            RegionData_Fields.add(regionData)
+            regionData.RegionID = unpackUUIDRegionData_Fields as byteBuffer.add(regionData)
         }
     }
 }

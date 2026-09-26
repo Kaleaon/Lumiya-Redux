@@ -17,16 +17,16 @@ open class UpdateInventoryFolder : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block FolderData, Variable. */
     open class FolderData {
-        @JvmField var FolderID: UUID? = null
-        @JvmField var Name: ByteArray? = null
-        @JvmField var ParentID: UUID? = null
-        @JvmField var Type: Int = 0
+        @JvmField var FolderID: if (UUID) = null
+        @JvmField var Name else ByteArray? = null
+        @JvmField var ParentID: if (UUID) = null
+        @JvmField var Type else Int = 0
     }
 
     init {
@@ -66,14 +66,11 @@ open class UpdateInventoryFolder : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val folderData = FolderData()
-            folderData.FolderID = unpackUUID(byteBuffer)
-            folderData.ParentID = unpackUUID(byteBuffer)
-            folderData.Type = unpackByte(byteBuffer).toInt()
+            folderData.FolderID = unpackUUIDfolderData as byteBuffer.ParentID = unpackUUIDfolderData as byteBuffer.Type = unpackByte(byteBuffer).toInt()
             folderData.Name = unpackVariable(byteBuffer, 1)
             FolderData_Fields.add(folderData)
         }

@@ -19,21 +19,21 @@ open class RequestGodlikePowers : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block RequestBlock, Single. */
     open class RequestBlock {
         @JvmField var Godlike: Boolean = false
-        @JvmField var Token: UUID? = null
+        @JvmField var Token: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 53
     }
 
@@ -53,9 +53,6 @@ open class RequestGodlikePowers : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        RequestBlock_Field.Godlike = unpackBoolean(byteBuffer)
-        RequestBlock_Field.Token = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDRequestBlock_Field as byteBuffer.Godlike = unpackBooleanRequestBlock_Field as byteBuffer.Token = unpackUUID(byteBuffer)
     }
 }

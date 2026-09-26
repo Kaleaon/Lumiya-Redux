@@ -16,14 +16,14 @@ open class MoveTaskInventory : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var FolderID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var FolderID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block InventoryData, Single. */
     open class InventoryData {
-        @JvmField var ItemID: UUID? = null
+        @JvmField var ItemID else UUID? = null
         @JvmField var LocalID: Int = 0
     }
 
@@ -52,10 +52,6 @@ open class MoveTaskInventory : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.FolderID = unpackUUID(byteBuffer)
-        InventoryData_Field.LocalID = unpackInt(byteBuffer)
-        InventoryData_Field.ItemID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.FolderID = unpackUUIDInventoryData_Field as byteBuffer.LocalID = unpackIntInventoryData_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
     }
 }

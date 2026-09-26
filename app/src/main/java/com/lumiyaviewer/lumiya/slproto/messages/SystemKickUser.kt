@@ -17,14 +17,14 @@ open class SystemKickUser : SLMessage() {
 
     /** Block AgentInfo, Variable. */
     open class AgentInfo {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (AgentInfo_Fields.size * 16) + 5
     }
 
@@ -47,8 +47,7 @@ open class SystemKickUser : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val agentInfo = AgentInfo()
-            agentInfo.AgentID = unpackUUID(byteBuffer)
-            AgentInfo_Fields.add(agentInfo)
+            agentInfo.AgentID = unpackUUIDAgentInfo_Fields as byteBuffer.add(agentInfo)
         }
     }
 }

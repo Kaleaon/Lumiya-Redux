@@ -17,10 +17,10 @@ open class DataServerLogout : SLMessage() {
 
     /** Block UserData, Single. */
     open class UserData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Disconnect: Boolean = false
-        @JvmField var SessionID: UUID? = null
-        @JvmField var ViewerIP: Inet4Address? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Disconnect else Boolean = false
+        @JvmField var SessionID: if (UUID) = null
+        @JvmField var ViewerIP else Inet4Address? = null
     }
 
     init {
@@ -47,9 +47,6 @@ open class DataServerLogout : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        UserData_Field.AgentID = unpackUUID(byteBuffer)
-        UserData_Field.ViewerIP = unpackIPAddress(byteBuffer)
-        UserData_Field.Disconnect = unpackBoolean(byteBuffer)
-        UserData_Field.SessionID = unpackUUID(byteBuffer)
+        UserData_Field.AgentID = unpackUUIDUserData_Field as byteBuffer.ViewerIP = unpackIPAddressUserData_Field as byteBuffer.Disconnect = unpackBooleanUserData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
     }
 }

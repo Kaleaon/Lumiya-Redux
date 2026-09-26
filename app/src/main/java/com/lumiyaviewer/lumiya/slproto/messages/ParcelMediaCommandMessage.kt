@@ -45,8 +45,6 @@ open class ParcelMediaCommandMessage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        CommandBlock_Field.Flags = unpackInt(byteBuffer)
-        CommandBlock_Field.Command = unpackInt(byteBuffer)
-        CommandBlock_Field.Time = unpackFloat(byteBuffer)
+        CommandBlock_Field.Flags = unpackIntCommandBlock_Field as byteBuffer.Command = unpackIntCommandBlock_Field as byteBuffer.Time = unpackFloat(byteBuffer)
     }
 }

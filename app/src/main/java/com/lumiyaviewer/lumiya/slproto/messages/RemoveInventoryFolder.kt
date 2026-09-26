@@ -19,20 +19,20 @@ open class RemoveInventoryFolder : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block FolderData, Variable. */
     open class FolderData {
-        @JvmField var FolderID: UUID? = null
+        @JvmField var FolderID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (FolderData_Fields.size * 16) + 37
     }
 
@@ -54,13 +54,11 @@ open class RemoveInventoryFolder : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val folderData = FolderData()
-            folderData.FolderID = unpackUUID(byteBuffer)
-            FolderData_Fields.add(folderData)
+            folderData.FolderID = unpackUUIDFolderData_Fields as byteBuffer.add(folderData)
         }
     }
 }

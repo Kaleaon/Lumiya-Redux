@@ -16,20 +16,20 @@ open class LinkInventoryItem : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block InventoryBlock, Single. */
     open class InventoryBlock {
         @JvmField var CallbackID: Int = 0
-        @JvmField var Description: ByteArray? = null
-        @JvmField var FolderID: UUID? = null
+        @JvmField var Description: if (ByteArray) = null
+        @JvmField var FolderID else UUID? = null
         @JvmField var InvType: Int = 0
-        @JvmField var Name: ByteArray? = null
-        @JvmField var OldItemID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
-        @JvmField var Type: Int = 0
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var OldItemID else UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var Type else Int = 0
     }
 
     init {
@@ -62,13 +62,7 @@ open class LinkInventoryItem : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        InventoryBlock_Field.CallbackID = unpackInt(byteBuffer)
-        InventoryBlock_Field.FolderID = unpackUUID(byteBuffer)
-        InventoryBlock_Field.TransactionID = unpackUUID(byteBuffer)
-        InventoryBlock_Field.OldItemID = unpackUUID(byteBuffer)
-        InventoryBlock_Field.Type = unpackByte(byteBuffer).toInt()
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInventoryBlock_Field as byteBuffer.CallbackID = unpackIntInventoryBlock_Field as byteBuffer.FolderID = unpackUUIDInventoryBlock_Field as byteBuffer.TransactionID = unpackUUIDInventoryBlock_Field as byteBuffer.OldItemID = unpackUUIDInventoryBlock_Field as byteBuffer.Type = unpackByte(byteBuffer).toInt()
         InventoryBlock_Field.InvType = unpackByte(byteBuffer).toInt()
         InventoryBlock_Field.Name = unpackVariable(byteBuffer, 1)
         InventoryBlock_Field.Description = unpackVariable(byteBuffer, 1)

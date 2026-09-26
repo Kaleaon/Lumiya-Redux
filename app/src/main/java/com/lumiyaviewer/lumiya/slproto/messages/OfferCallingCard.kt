@@ -18,14 +18,14 @@ open class OfferCallingCard : SLMessage() {
 
     /** Block AgentBlock, Single. */
     open class AgentBlock {
-        @JvmField var DestID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var DestID: if (UUID) = null
+        @JvmField var TransactionID else UUID? = null
     }
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     init {
@@ -52,9 +52,6 @@ open class OfferCallingCard : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentBlock_Field.DestID = unpackUUID(byteBuffer)
-        AgentBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentBlock_Field as byteBuffer.DestID = unpackUUIDAgentBlock_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
     }
 }

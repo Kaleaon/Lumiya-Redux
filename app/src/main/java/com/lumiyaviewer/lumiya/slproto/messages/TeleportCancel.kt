@@ -16,8 +16,8 @@ open class TeleportCancel : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     init {
@@ -42,7 +42,6 @@ open class TeleportCancel : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.SessionID = unpackUUID(byteBuffer)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
     }
 }

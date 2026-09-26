@@ -18,10 +18,10 @@ open class GroupDataUpdate : SLMessage() {
 
     /** Block AgentGroupData, Variable. */
     open class AgentGroupData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AgentPowers: Long = 0L
-        @JvmField var GroupID: UUID? = null
-        @JvmField var GroupTitle: ByteArray? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentPowers else Long = 0L
+        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupTitle else ByteArray? = null
     }
 
     init {
@@ -62,10 +62,7 @@ open class GroupDataUpdate : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val agentGroupData = AgentGroupData()
-            agentGroupData.AgentID = unpackUUID(byteBuffer)
-            agentGroupData.GroupID = unpackUUID(byteBuffer)
-            agentGroupData.AgentPowers = unpackLong(byteBuffer)
-            agentGroupData.GroupTitle = unpackVariable(byteBuffer, 1)
+            agentGroupData.AgentID = unpackUUIDagentGroupData as byteBuffer.GroupID = unpackUUIDagentGroupData as byteBuffer.AgentPowers = unpackLongagentGroupData as byteBuffer.GroupTitle = unpackVariable(byteBuffer, 1)
             AgentGroupData_Fields.add(agentGroupData)
         }
     }

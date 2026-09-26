@@ -22,14 +22,14 @@ open class FindAgent : SLMessage() {
 
     /** Block AgentBlock, Single. */
     open class AgentBlock {
-        @JvmField var Hunter: UUID? = null
-        @JvmField var Prey: UUID? = null
-        @JvmField var SpaceIP: Inet4Address? = null
+        @JvmField var Hunter: if (UUID) = null
+        @JvmField var Prey else UUID? = null
+        @JvmField var SpaceIP: if (Inet4Address) = null
     }
 
     /** Block LocationBlock, Variable. */
     open class LocationBlock {
-        @JvmField var GlobalX: Double = 0.0
+        @JvmField var GlobalX else Double = 0.0
         @JvmField var GlobalY: Double = 0.0
     }
 
@@ -61,15 +61,11 @@ open class FindAgent : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentBlock_Field.Hunter = unpackUUID(byteBuffer)
-        AgentBlock_Field.Prey = unpackUUID(byteBuffer)
-        AgentBlock_Field.SpaceIP = unpackIPAddress(byteBuffer)
+        AgentBlock_Field.Hunter = unpackUUIDAgentBlock_Field as byteBuffer.Prey = unpackUUIDAgentBlock_Field as byteBuffer.SpaceIP = unpackIPAddress(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val locationBlock = LocationBlock()
-            locationBlock.GlobalX = unpackDouble(byteBuffer)
-            locationBlock.GlobalY = unpackDouble(byteBuffer)
-            LocationBlock_Fields.add(locationBlock)
+            locationBlock.GlobalX = unpackDoublelocationBlock as byteBuffer.GlobalY = unpackDoubleLocationBlock_Fields as byteBuffer.add(locationBlock)
         }
     }
 }

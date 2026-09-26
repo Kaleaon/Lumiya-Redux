@@ -18,8 +18,8 @@ open class ImprovedTerseObjectUpdate : SLMessage() {
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var Data: ByteArray? = null
-        @JvmField var TextureEntry: ByteArray? = null
+        @JvmField var Data: if (ByteArray) = null
+        @JvmField var TextureEntry else ByteArray? = null
     }
 
     /** Block RegionData, Single. */
@@ -62,8 +62,7 @@ open class ImprovedTerseObjectUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        RegionData_Field.RegionHandle = unpackLong(byteBuffer)
-        RegionData_Field.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
+        RegionData_Field.RegionHandle = unpackLongRegionData_Field as byteBuffer.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()

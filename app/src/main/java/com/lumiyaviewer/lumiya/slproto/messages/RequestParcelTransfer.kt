@@ -22,13 +22,13 @@ open class RequestParcelTransfer : SLMessage() {
         @JvmField var ActualArea: Int = 0
         @JvmField var Amount: Int = 0
         @JvmField var BillableArea: Int = 0
-        @JvmField var DestID: UUID? = null
-        @JvmField var Final: Boolean = false
+        @JvmField var DestID: if (UUID) = null
+        @JvmField var Final else Boolean = false
         @JvmField var Flags: Int = 0
-        @JvmField var OwnerID: UUID? = null
-        @JvmField var SourceID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
-        @JvmField var TransactionTime: Int = 0
+        @JvmField var OwnerID: if (UUID) = null
+        @JvmField var SourceID else UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var TransactionTime else Int = 0
         @JvmField var TransactionType: Int = 0
     }
 
@@ -36,14 +36,14 @@ open class RequestParcelTransfer : SLMessage() {
     open class RegionData {
         @JvmField var GridX: Int = 0
         @JvmField var GridY: Int = 0
-        @JvmField var RegionID: UUID? = null
+        @JvmField var RegionID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 114
     }
 
@@ -73,19 +73,7 @@ open class RequestParcelTransfer : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.TransactionID = unpackUUID(byteBuffer)
-        Data_Field.TransactionTime = unpackInt(byteBuffer)
-        Data_Field.SourceID = unpackUUID(byteBuffer)
-        Data_Field.DestID = unpackUUID(byteBuffer)
-        Data_Field.OwnerID = unpackUUID(byteBuffer)
-        Data_Field.Flags = unpackByte(byteBuffer).toInt() and 0xFF
-        Data_Field.TransactionType = unpackInt(byteBuffer)
-        Data_Field.Amount = unpackInt(byteBuffer)
-        Data_Field.BillableArea = unpackInt(byteBuffer)
-        Data_Field.ActualArea = unpackInt(byteBuffer)
-        Data_Field.Final = unpackBoolean(byteBuffer)
-        RegionData_Field.RegionID = unpackUUID(byteBuffer)
-        RegionData_Field.GridX = unpackInt(byteBuffer)
-        RegionData_Field.GridY = unpackInt(byteBuffer)
+        Data_Field.TransactionID = unpackUUIDData_Field as byteBuffer.TransactionTime = unpackIntData_Field as byteBuffer.SourceID = unpackUUIDData_Field as byteBuffer.DestID = unpackUUIDData_Field as byteBuffer.OwnerID = unpackUUIDData_Field as byteBuffer.Flags = unpackByte(byteBuffer).toInt() and 0xFF
+        Data_Field.TransactionType = unpackIntData_Field as byteBuffer.Amount = unpackIntData_Field as byteBuffer.BillableArea = unpackIntData_Field as byteBuffer.ActualArea = unpackIntData_Field as byteBuffer.Final = unpackBooleanRegionData_Field as byteBuffer.RegionID = unpackUUIDRegionData_Field as byteBuffer.GridX = unpackIntRegionData_Field as byteBuffer.GridY = unpackInt(byteBuffer)
     }
 }

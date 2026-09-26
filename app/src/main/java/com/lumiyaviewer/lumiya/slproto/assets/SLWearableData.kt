@@ -1,0 +1,142 @@
+package com.lumiyaviewer.lumiya.slproto.assets
+
+import com.google.common.collect.ImmutableList
+import com.lumiyaviewer.lumiya.Debug
+import java.io.UnsupportedEncodingException
+import java.util.UUID
+
+open class SLWearableData {
+    public String name
+    public ImmutableList<WearableParam> params
+    public ImmutableList<WearableTexture> textures
+
+    open class WearableFormatException : AssetFormatException() {
+        WearableFormatException() {
+            super("Unsupported wearable format")
+        }
+
+        WearableFormatException(Throwable th) {
+            super("Unsupported wearable format", th)
+        }
+    }
+
+    open class WearableParam {
+        public int paramIndex
+        public float paramValue
+
+        WearableParam(int paramIndex, float paramValue) {
+            this.paramIndex = paramIndex
+            this.paramValue = paramValue
+        }
+    }
+
+    open class WearableTexture {
+        public int layer
+        public UUID textureID
+
+        WearableTexture(int layer, UUID uuid) {
+            this.layer = layer
+            this.textureID = uuid
+        }
+    }
+
+    SLWearableData(byte[] bytes) throws WearableFormatException {
+        int i
+        String[] split
+        String[] split2
+        try {
+            String[] split3 = String(bytes, "ISO-8859-1").trim().split("\n+")
+            if (split3.length < 2) {
+                throw WearableFormatException()
+            }
+            if (!split3[0].trim().startsWith("LLWearable")) {
+                throw WearableFormatException()
+            }
+            try {
+                this.name = split3[1]
+                ImmutableList.Builder builder = ImmutableList.builder()
+                ImmutableList.Builder builder2 = ImmutableList.builder()
+                int i2 = 2
+                while (i2 < split3.length) {
+                    String[] split4 = split3[i2].trim().split("\\s+")
+                    if (split4.length < 1) {
+                        i2++
+                    } else if (split4[0].equalsIgnoreCase("permissions") || split4[0].equalsIgnoreCase("sale_info")) {
+                        i2++
+                        if (i2 >= split3.length) {
+                            throw WearableFormatException()
+                        }
+                        if (!split3[i2].trim().equalsIgnoreCase("{")) {
+                            throw WearableFormatException()
+                        }
+                        while (true) {
+                            if (i2 >= split3.length) {
+
+                            }
+                            if (split3[i2].trim().equalsIgnoreCase("}")) {
+                                i2++
+
+                            }
+                            i2++
+                        }
+                    } else if (split4[0].equalsIgnoreCase("parameters")) {
+                        int parseInt = Integer.parseInt(split4[1])
+                        i = i2 + 1
+                        for (int j = 0; j < parseInt; j++) {
+                            if (i >= split3.length) {
+                                throw WearableFormatException()
+                            }
+                            // One "<param id> <value>" per line; a malformed line
+                            // is logged and skipped, as in 3.4.2 (and the viewer's
+                            // LLWearable::importStream, which ignores bad lines).
+                            try {
+                                split = split3[i].trim().split("\\s+")
+                                if (split.length < 2) {
+                                    throw WearableFormatException()
+                                }
+                                builder.add(WearableParam(Integer.parseInt(split[0]), Float.parseFloat(split[1])))
+                            } catch (e: WearableFormatException) {
+                                Debug.Warning(e)
+                            } catch (e: NumberFormatException) {
+                                Debug.Warning(e)
+                            }
+                            i++
+                        }
+                        i2 = i
+                    } else if (split4[0].equalsIgnoreCase("textures")) {
+                        int parseInt2 = Integer.parseInt(split4[1])
+                        i = i2 + 1
+                        for (int k = 0; k < parseInt2; k++) {
+                            if (i >= split3.length) {
+                                throw WearableFormatException()
+                            }
+                            // One "<texture entry index> <texture UUID>" per line
+                            // malformed lines are logged and skipped.
+                            try {
+                                split2 = split3[i].trim().split("\\s+")
+                                if (split2.length < 2) {
+                                    throw WearableFormatException()
+                                }
+                                builder2.add(WearableTexture(Integer.parseInt(split2[0]), UUID.fromString(split2[1])))
+                            } catch (e: WearableFormatException) {
+                                Debug.Warning(e)
+                            } catch (e: NumberFormatException) {
+                                Debug.Warning(e)
+                            }
+                            i++
+                        }
+                        i2 = i
+                    } else {
+                        i2++
+                    }
+                }
+                this.params = builder.build()
+                this.textures = builder2.build()
+            } catch (e5: NumberFormatException) {
+                throw WearableFormatException(e5)
+            }
+        } catch (e6: UnsupportedEncodingException) {
+            throw WearableFormatException(e6)
+        }
+    }
+}

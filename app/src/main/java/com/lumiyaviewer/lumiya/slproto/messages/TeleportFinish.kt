@@ -20,13 +20,13 @@ open class TeleportFinish : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var LocationID: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var LocationID else Int = 0
         @JvmField var RegionHandle: Long = 0L
-        @JvmField var SeedCapability: ByteArray? = null
-        @JvmField var SimAccess: Int = 0
-        @JvmField var SimIP: Inet4Address? = null
-        @JvmField var SimPort: Int = 0
+        @JvmField var SeedCapability: if (ByteArray) = null
+        @JvmField var SimAccess else Int = 0
+        @JvmField var SimIP: if (Inet4Address) = null
+        @JvmField var SimPort else Int = 0
         @JvmField var TeleportFlags: Int = 0
     }
 
@@ -58,12 +58,8 @@ open class TeleportFinish : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.LocationID = unpackInt(byteBuffer)
-        Info_Field.SimIP = unpackIPAddress(byteBuffer)
-        Info_Field.SimPort = unpackShort(byteBuffer).toInt() and 65535
-        Info_Field.RegionHandle = unpackLong(byteBuffer)
-        Info_Field.SeedCapability = unpackVariable(byteBuffer, 2)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.LocationID = unpackIntInfo_Field as byteBuffer.SimIP = unpackIPAddressInfo_Field as byteBuffer.SimPort = unpackShort(byteBuffer).toInt() and 65535
+        Info_Field.RegionHandle = unpackLongInfo_Field as byteBuffer.SeedCapability = unpackVariable(byteBuffer, 2)
         Info_Field.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
         Info_Field.TeleportFlags = unpackInt(byteBuffer)
     }

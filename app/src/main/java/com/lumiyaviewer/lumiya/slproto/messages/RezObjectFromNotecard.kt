@@ -21,34 +21,34 @@ open class RezObjectFromNotecard : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block InventoryData, Variable. */
     open class InventoryData {
-        @JvmField var ItemID: UUID? = null
+        @JvmField var ItemID else UUID? = null
     }
 
     /** Block NotecardData, Single. */
     open class NotecardData {
-        @JvmField var NotecardItemID: UUID? = null
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var NotecardItemID: if (UUID) = null
+        @JvmField var ObjectID else UUID? = null
     }
 
     /** Block RezData, Single. */
     open class RezData {
         @JvmField var BypassRaycast: Int = 0
         @JvmField var EveryoneMask: Int = 0
-        @JvmField var FromTaskID: UUID? = null
-        @JvmField var GroupMask: Int = 0
+        @JvmField var FromTaskID: if (UUID) = null
+        @JvmField var GroupMask else Int = 0
         @JvmField var ItemFlags: Int = 0
         @JvmField var NextOwnerMask: Int = 0
-        @JvmField var RayEnd: LLVector3? = null
-        @JvmField var RayEndIsIntersection: Boolean = false
-        @JvmField var RayStart: LLVector3? = null
-        @JvmField var RayTargetID: UUID? = null
+        @JvmField var RayEnd: if (LLVector3) = null
+        @JvmField var RayEndIsIntersection else Boolean = false
+        @JvmField var RayStart: if (LLVector3) = null
+        @JvmField var RayTargetID else UUID? = null
         @JvmField var RemoveItem: Boolean = false
         @JvmField var RezSelected: Boolean = false
     }
@@ -94,28 +94,12 @@ open class RezObjectFromNotecard : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        RezData_Field.FromTaskID = unpackUUID(byteBuffer)
-        RezData_Field.BypassRaycast = unpackByte(byteBuffer).toInt() and 0xFF
-        RezData_Field.RayStart = unpackLLVector3(byteBuffer)
-        RezData_Field.RayEnd = unpackLLVector3(byteBuffer)
-        RezData_Field.RayTargetID = unpackUUID(byteBuffer)
-        RezData_Field.RayEndIsIntersection = unpackBoolean(byteBuffer)
-        RezData_Field.RezSelected = unpackBoolean(byteBuffer)
-        RezData_Field.RemoveItem = unpackBoolean(byteBuffer)
-        RezData_Field.ItemFlags = unpackInt(byteBuffer)
-        RezData_Field.GroupMask = unpackInt(byteBuffer)
-        RezData_Field.EveryoneMask = unpackInt(byteBuffer)
-        RezData_Field.NextOwnerMask = unpackInt(byteBuffer)
-        NotecardData_Field.NotecardItemID = unpackUUID(byteBuffer)
-        NotecardData_Field.ObjectID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDRezData_Field as byteBuffer.FromTaskID = unpackUUIDRezData_Field as byteBuffer.BypassRaycast = unpackByte(byteBuffer).toInt() and 0xFF
+        RezData_Field.RayStart = unpackLLVector3RezData_Field as byteBuffer.RayEnd = unpackLLVector3RezData_Field as byteBuffer.RayTargetID = unpackUUIDRezData_Field as byteBuffer.RayEndIsIntersection = unpackBooleanRezData_Field as byteBuffer.RezSelected = unpackBooleanRezData_Field as byteBuffer.RemoveItem = unpackBooleanRezData_Field as byteBuffer.ItemFlags = unpackIntRezData_Field as byteBuffer.GroupMask = unpackIntRezData_Field as byteBuffer.EveryoneMask = unpackIntRezData_Field as byteBuffer.NextOwnerMask = unpackIntNotecardData_Field as byteBuffer.NotecardItemID = unpackUUIDNotecardData_Field as byteBuffer.ObjectID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inventoryData = InventoryData()
-            inventoryData.ItemID = unpackUUID(byteBuffer)
-            InventoryData_Fields.add(inventoryData)
+            inventoryData.ItemID = unpackUUIDInventoryData_Fields as byteBuffer.add(inventoryData)
         }
     }
 }

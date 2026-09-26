@@ -17,21 +17,21 @@ open class EventLocationReply : SLMessage() {
 
     /** Block EventData, Single. */
     open class EventData {
-        @JvmField var RegionID: UUID? = null
-        @JvmField var RegionPos: LLVector3? = null
+        @JvmField var RegionID: if (UUID) = null
+        @JvmField var RegionPos else LLVector3? = null
         @JvmField var Success: Boolean = false
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID: UUID? = null
+        @JvmField var QueryID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 49
     }
 
@@ -51,9 +51,6 @@ open class EventLocationReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        QueryData_Field.QueryID = unpackUUID(byteBuffer)
-        EventData_Field.Success = unpackBoolean(byteBuffer)
-        EventData_Field.RegionID = unpackUUID(byteBuffer)
-        EventData_Field.RegionPos = unpackLLVector3(byteBuffer)
+        QueryData_Field.QueryID = unpackUUIDEventData_Field as byteBuffer.Success = unpackBooleanEventData_Field as byteBuffer.RegionID = unpackUUIDEventData_Field as byteBuffer.RegionPos = unpackLLVector3(byteBuffer)
     }
 }

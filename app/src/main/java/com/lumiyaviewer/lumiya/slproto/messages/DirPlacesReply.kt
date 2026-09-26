@@ -24,12 +24,12 @@ open class DirPlacesReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block QueryData, Variable. */
     open class QueryData {
-        @JvmField var QueryID: UUID? = null
+        @JvmField var QueryID else UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
@@ -37,8 +37,8 @@ open class DirPlacesReply : SLMessage() {
         @JvmField var Auction: Boolean = false
         @JvmField var Dwell: Float = 0f
         @JvmField var ForSale: Boolean = false
-        @JvmField var Name: ByteArray? = null
-        @JvmField var ParcelID: UUID? = null
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var ParcelID else UUID? = null
     }
 
     /** Block StatusData, Variable. */
@@ -96,24 +96,18 @@ open class DirPlacesReply : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryData = QueryData()
-            queryData.QueryID = unpackUUID(byteBuffer)
-            QueryData_Fields.add(queryData)
+            queryData.QueryID = unpackUUIDQueryData_Fields as byteBuffer.add(queryData)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val queryReplies = QueryReplies()
-            queryReplies.ParcelID = unpackUUID(byteBuffer)
-            queryReplies.Name = unpackVariable(byteBuffer, 1)
-            queryReplies.ForSale = unpackBoolean(byteBuffer)
-            queryReplies.Auction = unpackBoolean(byteBuffer)
-            queryReplies.Dwell = unpackFloat(byteBuffer)
-            QueryReplies_Fields.add(queryReplies)
+            queryReplies.ParcelID = unpackUUIDqueryReplies as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+            queryReplies.ForSale = unpackBooleanqueryReplies as byteBuffer.Auction = unpackBooleanqueryReplies as byteBuffer.Dwell = unpackFloatQueryReplies_Fields as byteBuffer.add(queryReplies)
         }
         val i5 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i5) {
             val statusData = StatusData()
-            statusData.Status = unpackInt(byteBuffer)
-            StatusData_Fields.add(statusData)
+            statusData.Status = unpackIntStatusData_Fields as byteBuffer.add(statusData)
         }
     }
 }

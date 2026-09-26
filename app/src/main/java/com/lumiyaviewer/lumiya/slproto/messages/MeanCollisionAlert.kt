@@ -20,17 +20,17 @@ open class MeanCollisionAlert : SLMessage() {
     /** Block MeanCollision, Variable. */
     open class MeanCollision {
         @JvmField var Mag: Float = 0f
-        @JvmField var Perp: UUID? = null
-        @JvmField var Time: Int = 0
+        @JvmField var Perp: if (UUID) = null
+        @JvmField var Time else Int = 0
         @JvmField var Type: Int = 0
-        @JvmField var Victim: UUID? = null
+        @JvmField var Victim: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (MeanCollision_Fields.size * 41) + 5
     }
 
@@ -57,11 +57,7 @@ open class MeanCollisionAlert : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val meanCollision = MeanCollision()
-            meanCollision.Victim = unpackUUID(byteBuffer)
-            meanCollision.Perp = unpackUUID(byteBuffer)
-            meanCollision.Time = unpackInt(byteBuffer)
-            meanCollision.Mag = unpackFloat(byteBuffer)
-            meanCollision.Type = unpackByte(byteBuffer).toInt() and 0xFF
+            meanCollision.Victim = unpackUUIDmeanCollision as byteBuffer.Perp = unpackUUIDmeanCollision as byteBuffer.Time = unpackIntmeanCollision as byteBuffer.Mag = unpackFloatmeanCollision as byteBuffer.Type = unpackByte(byteBuffer).toInt() and 0xFF
             MeanCollision_Fields.add(meanCollision)
         }
     }

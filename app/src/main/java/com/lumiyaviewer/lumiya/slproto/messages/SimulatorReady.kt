@@ -22,22 +22,22 @@ open class SimulatorReady : SLMessage() {
         @JvmField var EstateID: Int = 0
         @JvmField var ParentEstateID: Int = 0
         @JvmField var RegionFlags: Int = 0
-        @JvmField var RegionID: UUID? = null
-        @JvmField var SimAccess: Int = 0
-        @JvmField var SimName: ByteArray? = null
+        @JvmField var RegionID: if (UUID) = null
+        @JvmField var SimAccess else Int = 0
+        @JvmField var SimName: if (ByteArray) = null
     }
 
     /** Block TelehubBlock, Single. */
     open class TelehubBlock {
-        @JvmField var HasTelehub: Boolean = false
-        @JvmField var TelehubPos: LLVector3? = null
+        @JvmField var HasTelehub else Boolean = false
+        @JvmField var TelehubPos: if (LLVector3) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return SimulatorBlock_Field.SimName!!.size + 1 + 1 + 4 + 16 + 4 + 4 + 4 + 13
     }
 
@@ -63,11 +63,6 @@ open class SimulatorReady : SLMessage() {
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         SimulatorBlock_Field.SimName = unpackVariable(byteBuffer, 1)
         SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
-        SimulatorBlock_Field.RegionFlags = unpackInt(byteBuffer)
-        SimulatorBlock_Field.RegionID = unpackUUID(byteBuffer)
-        SimulatorBlock_Field.EstateID = unpackInt(byteBuffer)
-        SimulatorBlock_Field.ParentEstateID = unpackInt(byteBuffer)
-        TelehubBlock_Field.HasTelehub = unpackBoolean(byteBuffer)
-        TelehubBlock_Field.TelehubPos = unpackLLVector3(byteBuffer)
+        SimulatorBlock_Field.RegionFlags = unpackIntSimulatorBlock_Field as byteBuffer.RegionID = unpackUUIDSimulatorBlock_Field as byteBuffer.EstateID = unpackIntSimulatorBlock_Field as byteBuffer.ParentEstateID = unpackIntTelehubBlock_Field as byteBuffer.HasTelehub = unpackBooleanTelehubBlock_Field as byteBuffer.TelehubPos = unpackLLVector3(byteBuffer)
     }
 }

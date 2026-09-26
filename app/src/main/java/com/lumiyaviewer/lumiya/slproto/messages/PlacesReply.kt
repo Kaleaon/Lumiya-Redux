@@ -24,37 +24,37 @@ open class PlacesReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var QueryID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var QueryID else UUID? = null
     }
 
     /** Block QueryData, Variable. */
     open class QueryData {
         @JvmField var ActualArea: Int = 0
         @JvmField var BillableArea: Int = 0
-        @JvmField var Desc: ByteArray? = null
-        @JvmField var Dwell: Float = 0f
+        @JvmField var Desc: if (ByteArray) = null
+        @JvmField var Dwell else Float = 0f
         @JvmField var Flags: Int = 0
         @JvmField var GlobalX: Float = 0f
         @JvmField var GlobalY: Float = 0f
         @JvmField var GlobalZ: Float = 0f
-        @JvmField var Name: ByteArray? = null
-        @JvmField var OwnerID: UUID? = null
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var OwnerID else UUID? = null
         @JvmField var Price: Int = 0
-        @JvmField var SimName: ByteArray? = null
-        @JvmField var SnapshotID: UUID? = null
+        @JvmField var SimName: if (ByteArray) = null
+        @JvmField var SnapshotID else UUID? = null
     }
 
     /** Block TransactionData, Single. */
     open class TransactionData {
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 53
         val it = QueryData_Fields.iterator()
         while (true) {
@@ -98,26 +98,15 @@ open class PlacesReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.QueryID = unpackUUID(byteBuffer)
-        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.QueryID = unpackUUIDTransactionData_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryData = QueryData()
-            queryData.OwnerID = unpackUUID(byteBuffer)
-            queryData.Name = unpackVariable(byteBuffer, 1)
+            queryData.OwnerID = unpackUUIDqueryData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             queryData.Desc = unpackVariable(byteBuffer, 1)
-            queryData.ActualArea = unpackInt(byteBuffer)
-            queryData.BillableArea = unpackInt(byteBuffer)
-            queryData.Flags = unpackByte(byteBuffer).toInt() and 0xFF
-            queryData.GlobalX = unpackFloat(byteBuffer)
-            queryData.GlobalY = unpackFloat(byteBuffer)
-            queryData.GlobalZ = unpackFloat(byteBuffer)
-            queryData.SimName = unpackVariable(byteBuffer, 1)
-            queryData.SnapshotID = unpackUUID(byteBuffer)
-            queryData.Dwell = unpackFloat(byteBuffer)
-            queryData.Price = unpackInt(byteBuffer)
-            QueryData_Fields.add(queryData)
+            queryData.ActualArea = unpackIntqueryData as byteBuffer.BillableArea = unpackIntqueryData as byteBuffer.Flags = unpackByte(byteBuffer).toInt() and 0xFF
+            queryData.GlobalX = unpackFloatqueryData as byteBuffer.GlobalY = unpackFloatqueryData as byteBuffer.GlobalZ = unpackFloatqueryData as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
+            queryData.SnapshotID = unpackUUIDqueryData as byteBuffer.Dwell = unpackFloatqueryData as byteBuffer.Price = unpackIntQueryData_Fields as byteBuffer.add(queryData)
         }
     }
 }

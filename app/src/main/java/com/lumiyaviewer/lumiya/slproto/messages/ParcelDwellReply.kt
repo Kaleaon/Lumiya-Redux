@@ -19,21 +19,21 @@ open class ParcelDwellReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Dwell: Float = 0f
+        @JvmField var Dwell else Float = 0f
         @JvmField var LocalID: Int = 0
-        @JvmField var ParcelID: UUID? = null
+        @JvmField var ParcelID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 44
     }
 
@@ -53,9 +53,6 @@ open class ParcelDwellReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        Data_Field.LocalID = unpackInt(byteBuffer)
-        Data_Field.ParcelID = unpackUUID(byteBuffer)
-        Data_Field.Dwell = unpackFloat(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDData_Field as byteBuffer.LocalID = unpackIntData_Field as byteBuffer.ParcelID = unpackUUIDData_Field as byteBuffer.Dwell = unpackFloat(byteBuffer)
     }
 }

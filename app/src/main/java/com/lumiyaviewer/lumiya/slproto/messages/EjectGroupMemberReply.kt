@@ -21,24 +21,24 @@ open class EjectGroupMemberReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block EjectData, Single. */
     open class EjectData {
-        @JvmField var Success: Boolean = false
+        @JvmField var Success else Boolean = false
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: UUID? = null
+        @JvmField var GroupID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 37
     }
 
@@ -57,8 +57,6 @@ open class EjectGroupMemberReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        GroupData_Field.GroupID = unpackUUID(byteBuffer)
-        EjectData_Field.Success = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDEjectData_Field as byteBuffer.Success = unpackBoolean(byteBuffer)
     }
 }

@@ -20,14 +20,14 @@ open class DeRezAck : SLMessage() {
     /** Block TransactionData, Single. */
     open class TransactionData {
         @JvmField var Success: Boolean = false
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 21
     }
 
@@ -45,7 +45,6 @@ open class DeRezAck : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
-        TransactionData_Field.Success = unpackBoolean(byteBuffer)
+        TransactionData_Field.TransactionID = unpackUUIDTransactionData_Field as byteBuffer.Success = unpackBoolean(byteBuffer)
     }
 }

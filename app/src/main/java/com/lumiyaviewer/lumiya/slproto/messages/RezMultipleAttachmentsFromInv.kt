@@ -18,35 +18,35 @@ open class RezMultipleAttachmentsFromInv : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block HeaderData, Single. */
     open class HeaderData {
-        @JvmField var CompoundMsgID: UUID? = null
-        @JvmField var FirstDetachAll: Boolean = false
+        @JvmField var CompoundMsgID: if (UUID) = null
+        @JvmField var FirstDetachAll else Boolean = false
         @JvmField var TotalObjects: Int = 0
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
         @JvmField var AttachmentPt: Int = 0
-        @JvmField var Description: ByteArray? = null
-        @JvmField var EveryoneMask: Int = 0
+        @JvmField var Description: if (ByteArray) = null
+        @JvmField var EveryoneMask else Int = 0
         @JvmField var GroupMask: Int = 0
         @JvmField var ItemFlags: Int = 0
-        @JvmField var ItemID: UUID? = null
-        @JvmField var Name: ByteArray? = null
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var Name else ByteArray? = null
         @JvmField var NextOwnerMask: Int = 0
-        @JvmField var OwnerID: UUID? = null
+        @JvmField var OwnerID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 55
         val it = ObjectData_Fields.iterator()
         while (true) {
@@ -88,22 +88,13 @@ open class RezMultipleAttachmentsFromInv : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        HeaderData_Field.CompoundMsgID = unpackUUID(byteBuffer)
-        HeaderData_Field.TotalObjects = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDHeaderData_Field as byteBuffer.CompoundMsgID = unpackUUIDHeaderData_Field as byteBuffer.TotalObjects = unpackByte(byteBuffer).toInt() and 0xFF
         HeaderData_Field.FirstDetachAll = unpackBoolean(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ItemID = unpackUUID(byteBuffer)
-            objectData.OwnerID = unpackUUID(byteBuffer)
-            objectData.AttachmentPt = unpackByte(byteBuffer).toInt() and 0xFF
-            objectData.ItemFlags = unpackInt(byteBuffer)
-            objectData.GroupMask = unpackInt(byteBuffer)
-            objectData.EveryoneMask = unpackInt(byteBuffer)
-            objectData.NextOwnerMask = unpackInt(byteBuffer)
-            objectData.Name = unpackVariable(byteBuffer, 1)
+            objectData.ItemID = unpackUUIDobjectData as byteBuffer.OwnerID = unpackUUIDobjectData as byteBuffer.AttachmentPt = unpackByte(byteBuffer).toInt() and 0xFF
+            objectData.ItemFlags = unpackIntobjectData as byteBuffer.GroupMask = unpackIntobjectData as byteBuffer.EveryoneMask = unpackIntobjectData as byteBuffer.NextOwnerMask = unpackIntobjectData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             objectData.Description = unpackVariable(byteBuffer, 1)
             ObjectData_Fields.add(objectData)
         }

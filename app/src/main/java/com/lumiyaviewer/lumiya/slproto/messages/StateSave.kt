@@ -18,20 +18,20 @@ open class StateSave : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var Filename: ByteArray? = null
+        @JvmField var Filename: if (ByteArray) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return DataBlock_Field.Filename!!.size + 1 + 36
     }
 
@@ -50,8 +50,6 @@ open class StateSave : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        DataBlock_Field.Filename = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDDataBlock_Field as byteBuffer.Filename = unpackVariable(byteBuffer, 1)
     }
 }

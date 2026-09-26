@@ -17,8 +17,8 @@ open class AvatarPropertiesRequestBackend : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AvatarID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AvatarID else UUID? = null
         @JvmField var GodLevel: Int = 0
         @JvmField var WebProfilesDisabled: Boolean = false
     }
@@ -47,9 +47,7 @@ open class AvatarPropertiesRequestBackend : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.AvatarID = unpackUUID(byteBuffer)
-        AgentData_Field.GodLevel = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.AvatarID = unpackUUIDAgentData_Field as byteBuffer.GodLevel = unpackByte(byteBuffer).toInt() and 0xFF
         AgentData_Field.WebProfilesDisabled = unpackBoolean(byteBuffer)
     }
 }

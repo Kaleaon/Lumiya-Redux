@@ -16,12 +16,12 @@ open class ImagePacket : SLMessage() {
 
     /** Block ImageData, Single. */
     open class ImageData {
-        @JvmField var Data: ByteArray? = null
+        @JvmField var Data: if (ByteArray) = null
     }
 
     /** Block ImageID, Single. */
     open class ImageID {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID else UUID? = null
         @JvmField var Packet: Int = 0
     }
 
@@ -46,8 +46,7 @@ open class ImagePacket : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ImageID_Field.ID = unpackUUID(byteBuffer)
-        ImageID_Field.Packet = unpackShort(byteBuffer).toInt() and 65535
+        ImageID_Field.ID = unpackUUIDImageID_Field as byteBuffer.Packet = unpackShort(byteBuffer).toInt() and 65535
         ImageData_Field.Data = unpackVariable(byteBuffer, 2)
     }
 }

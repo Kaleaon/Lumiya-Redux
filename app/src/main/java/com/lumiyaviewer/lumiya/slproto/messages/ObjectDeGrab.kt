@@ -19,8 +19,8 @@ open class ObjectDeGrab : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Single. */
@@ -30,12 +30,12 @@ open class ObjectDeGrab : SLMessage() {
 
     /** Block SurfaceInfo, Variable. */
     open class SurfaceInfo {
-        @JvmField var Binormal: LLVector3? = null
-        @JvmField var FaceIndex: Int = 0
-        @JvmField var Normal: LLVector3? = null
-        @JvmField var Position: LLVector3? = null
-        @JvmField var STCoord: LLVector3? = null
-        @JvmField var UVCoord: LLVector3? = null
+        @JvmField var Binormal: if (LLVector3) = null
+        @JvmField var FaceIndex else Int = 0
+        @JvmField var Normal: if (LLVector3) = null
+        @JvmField var Position else LLVector3? = null
+        @JvmField var STCoord: if (LLVector3) = null
+        @JvmField var UVCoord else LLVector3? = null
     }
 
     init {
@@ -70,19 +70,11 @@ open class ObjectDeGrab : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ObjectData_Field.LocalID = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDObjectData_Field as byteBuffer.LocalID = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val surfaceInfo = SurfaceInfo()
-            surfaceInfo.UVCoord = unpackLLVector3(byteBuffer)
-            surfaceInfo.STCoord = unpackLLVector3(byteBuffer)
-            surfaceInfo.FaceIndex = unpackInt(byteBuffer)
-            surfaceInfo.Position = unpackLLVector3(byteBuffer)
-            surfaceInfo.Normal = unpackLLVector3(byteBuffer)
-            surfaceInfo.Binormal = unpackLLVector3(byteBuffer)
-            SurfaceInfo_Fields.add(surfaceInfo)
+            surfaceInfo.UVCoord = unpackLLVector3surfaceInfo as byteBuffer.STCoord = unpackLLVector3surfaceInfo as byteBuffer.FaceIndex = unpackIntsurfaceInfo as byteBuffer.Position = unpackLLVector3surfaceInfo as byteBuffer.Normal = unpackLLVector3surfaceInfo as byteBuffer.Binormal = unpackLLVector3SurfaceInfo_Fields as byteBuffer.add(surfaceInfo)
         }
     }
 }

@@ -18,14 +18,14 @@ open class TransferInventory : SLMessage() {
 
     /** Block InfoBlock, Single. */
     open class InfoBlock {
-        @JvmField var DestID: UUID? = null
-        @JvmField var SourceID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var DestID: if (UUID) = null
+        @JvmField var SourceID else UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     /** Block InventoryBlock, Variable. */
     open class InventoryBlock {
-        @JvmField var InventoryID: UUID? = null
+        @JvmField var InventoryID else UUID? = null
         @JvmField var Type: Int = 0
     }
 
@@ -57,14 +57,11 @@ open class TransferInventory : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        InfoBlock_Field.SourceID = unpackUUID(byteBuffer)
-        InfoBlock_Field.DestID = unpackUUID(byteBuffer)
-        InfoBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        InfoBlock_Field.SourceID = unpackUUIDInfoBlock_Field as byteBuffer.DestID = unpackUUIDInfoBlock_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inventoryBlock = InventoryBlock()
-            inventoryBlock.InventoryID = unpackUUID(byteBuffer)
-            inventoryBlock.Type = unpackByte(byteBuffer).toInt()
+            inventoryBlock.InventoryID = unpackUUIDinventoryBlock as byteBuffer.Type = unpackByte(byteBuffer).toInt()
             InventoryBlock_Fields.add(inventoryBlock)
         }
     }

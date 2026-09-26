@@ -17,29 +17,29 @@ open class FetchInventoryReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block InventoryData, Variable. */
     open class InventoryData {
-        @JvmField var AssetID: UUID? = null
+        @JvmField var AssetID else UUID? = null
         @JvmField var BaseMask: Int = 0
         @JvmField var CRC: Int = 0
         @JvmField var CreationDate: Int = 0
-        @JvmField var CreatorID: UUID? = null
-        @JvmField var Description: ByteArray? = null
+        @JvmField var CreatorID: if (UUID) = null
+        @JvmField var Description else ByteArray? = null
         @JvmField var EveryoneMask: Int = 0
         @JvmField var Flags: Int = 0
-        @JvmField var FolderID: UUID? = null
-        @JvmField var GroupID: UUID? = null
+        @JvmField var FolderID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
         @JvmField var GroupMask: Int = 0
         @JvmField var GroupOwned: Boolean = false
         @JvmField var InvType: Int = 0
-        @JvmField var ItemID: UUID? = null
-        @JvmField var Name: ByteArray? = null
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var Name else ByteArray? = null
         @JvmField var NextOwnerMask: Int = 0
-        @JvmField var OwnerID: UUID? = null
-        @JvmField var OwnerMask: Int = 0
+        @JvmField var OwnerID: if (UUID) = null
+        @JvmField var OwnerMask else Int = 0
         @JvmField var SalePrice: Int = 0
         @JvmField var SaleType: Int = 0
         @JvmField var Type: Int = 0
@@ -103,28 +103,12 @@ open class FetchInventoryReply : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inventoryData = InventoryData()
-            inventoryData.ItemID = unpackUUID(byteBuffer)
-            inventoryData.FolderID = unpackUUID(byteBuffer)
-            inventoryData.CreatorID = unpackUUID(byteBuffer)
-            inventoryData.OwnerID = unpackUUID(byteBuffer)
-            inventoryData.GroupID = unpackUUID(byteBuffer)
-            inventoryData.BaseMask = unpackInt(byteBuffer)
-            inventoryData.OwnerMask = unpackInt(byteBuffer)
-            inventoryData.GroupMask = unpackInt(byteBuffer)
-            inventoryData.EveryoneMask = unpackInt(byteBuffer)
-            inventoryData.NextOwnerMask = unpackInt(byteBuffer)
-            inventoryData.GroupOwned = unpackBoolean(byteBuffer)
-            inventoryData.AssetID = unpackUUID(byteBuffer)
-            inventoryData.Type = unpackByte(byteBuffer).toInt()
+            inventoryData.ItemID = unpackUUIDinventoryData as byteBuffer.FolderID = unpackUUIDinventoryData as byteBuffer.CreatorID = unpackUUIDinventoryData as byteBuffer.OwnerID = unpackUUIDinventoryData as byteBuffer.GroupID = unpackUUIDinventoryData as byteBuffer.BaseMask = unpackIntinventoryData as byteBuffer.OwnerMask = unpackIntinventoryData as byteBuffer.GroupMask = unpackIntinventoryData as byteBuffer.EveryoneMask = unpackIntinventoryData as byteBuffer.NextOwnerMask = unpackIntinventoryData as byteBuffer.GroupOwned = unpackBooleaninventoryData as byteBuffer.AssetID = unpackUUIDinventoryData as byteBuffer.Type = unpackByte(byteBuffer).toInt()
             inventoryData.InvType = unpackByte(byteBuffer).toInt()
-            inventoryData.Flags = unpackInt(byteBuffer)
-            inventoryData.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
-            inventoryData.SalePrice = unpackInt(byteBuffer)
-            inventoryData.Name = unpackVariable(byteBuffer, 1)
+            inventoryData.Flags = unpackIntinventoryData as byteBuffer.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
+            inventoryData.SalePrice = unpackIntinventoryData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             inventoryData.Description = unpackVariable(byteBuffer, 1)
-            inventoryData.CreationDate = unpackInt(byteBuffer)
-            inventoryData.CRC = unpackInt(byteBuffer)
-            InventoryData_Fields.add(inventoryData)
+            inventoryData.CreationDate = unpackIntinventoryData as byteBuffer.CRC = unpackIntInventoryData_Fields as byteBuffer.add(inventoryData)
         }
     }
 }

@@ -24,12 +24,12 @@ open class CoarseLocationUpdate : SLMessage() {
 
     /** Block AgentData, Variable. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block Index, Single. */
     open class Index {
-        @JvmField var Prey: Int = 0
+        @JvmField var Prey else Int = 0
         @JvmField var You: Int = 0
     }
 
@@ -84,8 +84,7 @@ open class CoarseLocationUpdate : SLMessage() {
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val agentData = AgentData()
-            agentData.AgentID = unpackUUID(byteBuffer)
-            AgentData_Fields.add(agentData)
+            agentData.AgentID = unpackUUIDAgentData_Fields as byteBuffer.add(agentData)
         }
     }
 }

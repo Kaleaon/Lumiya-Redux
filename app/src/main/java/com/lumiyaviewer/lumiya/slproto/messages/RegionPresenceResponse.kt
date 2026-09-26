@@ -17,12 +17,12 @@ open class RegionPresenceResponse : SLMessage() {
 
     /** Block RegionData, Variable. */
     open class RegionData {
-        @JvmField var ExternalRegionIP: Inet4Address? = null
-        @JvmField var InternalRegionIP: Inet4Address? = null
-        @JvmField var Message: ByteArray? = null
-        @JvmField var RegionHandle: Long = 0L
-        @JvmField var RegionID: UUID? = null
-        @JvmField var RegionPort: Int = 0
+        @JvmField var ExternalRegionIP: if (Inet4Address) = null
+        @JvmField var InternalRegionIP else Inet4Address? = null
+        @JvmField var Message: if (ByteArray) = null
+        @JvmField var RegionHandle else Long = 0L
+        @JvmField var RegionID: if (UUID) = null
+        @JvmField var RegionPort else Int = 0
         @JvmField var ValidUntil: Double = 0.0
     }
 
@@ -67,13 +67,8 @@ open class RegionPresenceResponse : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val regionData = RegionData()
-            regionData.RegionID = unpackUUID(byteBuffer)
-            regionData.RegionHandle = unpackLong(byteBuffer)
-            regionData.InternalRegionIP = unpackIPAddress(byteBuffer)
-            regionData.ExternalRegionIP = unpackIPAddress(byteBuffer)
-            regionData.RegionPort = unpackShort(byteBuffer).toInt() and 65535
-            regionData.ValidUntil = unpackDouble(byteBuffer)
-            regionData.Message = unpackVariable(byteBuffer, 1)
+            regionData.RegionID = unpackUUIDregionData as byteBuffer.RegionHandle = unpackLongregionData as byteBuffer.InternalRegionIP = unpackIPAddressregionData as byteBuffer.ExternalRegionIP = unpackIPAddressregionData as byteBuffer.RegionPort = unpackShort(byteBuffer).toInt() and 65535
+            regionData.ValidUntil = unpackDoubleregionData as byteBuffer.Message = unpackVariable(byteBuffer, 1)
             RegionData_Fields.add(regionData)
         }
     }

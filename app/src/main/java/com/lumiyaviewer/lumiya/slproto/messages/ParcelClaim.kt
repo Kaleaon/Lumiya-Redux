@@ -20,15 +20,15 @@ open class ParcelClaim : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
         @JvmField var Final: Boolean = false
-        @JvmField var GroupID: UUID? = null
-        @JvmField var IsGroupOwned: Boolean = false
+        @JvmField var GroupID: if (UUID) = null
+        @JvmField var IsGroupOwned else Boolean = false
     }
 
     /** Block ParcelData, Variable. */
@@ -71,19 +71,11 @@ open class ParcelClaim : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Data_Field.GroupID = unpackUUID(byteBuffer)
-        Data_Field.IsGroupOwned = unpackBoolean(byteBuffer)
-        Data_Field.Final = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.GroupID = unpackUUIDData_Field as byteBuffer.IsGroupOwned = unpackBooleanData_Field as byteBuffer.Final = unpackBoolean(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.West = unpackFloat(byteBuffer)
-            parcelData.South = unpackFloat(byteBuffer)
-            parcelData.East = unpackFloat(byteBuffer)
-            parcelData.North = unpackFloat(byteBuffer)
-            ParcelData_Fields.add(parcelData)
+            parcelData.West = unpackFloatparcelData as byteBuffer.South = unpackFloatparcelData as byteBuffer.East = unpackFloatparcelData as byteBuffer.North = unpackFloatParcelData_Fields as byteBuffer.add(parcelData)
         }
     }
 }

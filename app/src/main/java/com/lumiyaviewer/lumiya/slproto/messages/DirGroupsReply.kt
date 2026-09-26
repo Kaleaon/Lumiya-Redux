@@ -22,18 +22,18 @@ open class DirGroupsReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID: UUID? = null
+        @JvmField var QueryID else UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
     open class QueryReplies {
-        @JvmField var GroupID: UUID? = null
-        @JvmField var GroupName: ByteArray? = null
+        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupName else ByteArray? = null
         @JvmField var Members: Int = 0
         @JvmField var SearchOrder: Float = 0f
     }
@@ -75,16 +75,12 @@ open class DirGroupsReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.GroupID = unpackUUID(byteBuffer)
-            queryReplies.GroupName = unpackVariable(byteBuffer, 1)
-            queryReplies.Members = unpackInt(byteBuffer)
-            queryReplies.SearchOrder = unpackFloat(byteBuffer)
-            QueryReplies_Fields.add(queryReplies)
+            queryReplies.GroupID = unpackUUIDqueryReplies as byteBuffer.GroupName = unpackVariable(byteBuffer, 1)
+            queryReplies.Members = unpackIntqueryReplies as byteBuffer.SearchOrder = unpackFloatQueryReplies_Fields as byteBuffer.add(queryReplies)
         }
     }
 }

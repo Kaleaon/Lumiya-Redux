@@ -16,10 +16,10 @@ open class GroupTitlesRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var RequestID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var RequestID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     init {
@@ -46,9 +46,6 @@ open class GroupTitlesRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        AgentData_Field.RequestID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDAgentData_Field as byteBuffer.RequestID = unpackUUID(byteBuffer)
     }
 }

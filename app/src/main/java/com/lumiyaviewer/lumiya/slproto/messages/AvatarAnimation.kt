@@ -23,30 +23,30 @@ open class AvatarAnimation : SLMessage() {
 
     /** Block AnimationList, Variable. */
     open class AnimationList {
-        @JvmField var AnimID: UUID? = null
-        @JvmField var AnimSequenceID: Int = 0
+        @JvmField var AnimID: if (UUID) = null
+        @JvmField var AnimSequenceID else Int = 0
     }
 
     /** Block AnimationSourceList, Variable. */
     open class AnimationSourceList {
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectID: if (UUID) = null
     }
 
     /** Block PhysicalAvatarEventList, Variable. */
     open class PhysicalAvatarEventList {
-        @JvmField var TypeData: ByteArray? = null
+        @JvmField var TypeData else ByteArray? = null
     }
 
     /** Block Sender, Single. */
     open class Sender {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var size = (AnimationList_Fields.size * 20) + 18 + 1 + (AnimationSourceList_Fields.size * 16) + 1
         val it = PhysicalAvatarEventList_Fields.iterator()
         while (true) {
@@ -87,15 +87,12 @@ open class AvatarAnimation : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val animationList = AnimationList()
-            animationList.AnimID = unpackUUID(byteBuffer)
-            animationList.AnimSequenceID = unpackInt(byteBuffer)
-            AnimationList_Fields.add(animationList)
+            animationList.AnimID = unpackUUIDanimationList as byteBuffer.AnimSequenceID = unpackIntAnimationList_Fields as byteBuffer.add(animationList)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val animationSourceList = AnimationSourceList()
-            animationSourceList.ObjectID = unpackUUID(byteBuffer)
-            AnimationSourceList_Fields.add(animationSourceList)
+            animationSourceList.ObjectID = unpackUUIDAnimationSourceList_Fields as byteBuffer.add(animationSourceList)
         }
         val i5 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i5) {

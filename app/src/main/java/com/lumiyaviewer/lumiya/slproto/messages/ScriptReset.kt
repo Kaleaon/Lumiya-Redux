@@ -16,14 +16,14 @@ open class ScriptReset : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Script, Single. */
     open class Script {
-        @JvmField var ItemID: UUID? = null
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var ObjectID else UUID? = null
     }
 
     init {
@@ -50,9 +50,6 @@ open class ScriptReset : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Script_Field.ObjectID = unpackUUID(byteBuffer)
-        Script_Field.ItemID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDScript_Field as byteBuffer.ObjectID = unpackUUIDScript_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
     }
 }

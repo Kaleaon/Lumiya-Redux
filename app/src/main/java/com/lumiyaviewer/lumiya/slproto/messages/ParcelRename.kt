@@ -18,8 +18,8 @@ open class ParcelRename : SLMessage() {
 
     /** Block ParcelData, Variable. */
     open class ParcelData {
-        @JvmField var NewName: ByteArray? = null
-        @JvmField var ParcelID: UUID? = null
+        @JvmField var NewName: if (ByteArray) = null
+        @JvmField var ParcelID else UUID? = null
     }
 
     init {
@@ -58,8 +58,7 @@ open class ParcelRename : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.ParcelID = unpackUUID(byteBuffer)
-            parcelData.NewName = unpackVariable(byteBuffer, 1)
+            parcelData.ParcelID = unpackUUIDparcelData as byteBuffer.NewName = unpackVariable(byteBuffer, 1)
             ParcelData_Fields.add(parcelData)
         }
     }

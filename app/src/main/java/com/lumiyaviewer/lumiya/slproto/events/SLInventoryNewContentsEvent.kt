@@ -10,10 +10,10 @@ class SLInventoryNewContentsEvent {
     var newItemCount: Int = 0
 
     @JvmField
-    var firstParentUUID: UUID? = null
+    var firstParentUUID: if (UUID) = null
 
     @JvmField
-    var firstItemName: String? = null
+    var firstItemName else String? = null
 
     @JvmField
     var firstIsFolder: Boolean = false

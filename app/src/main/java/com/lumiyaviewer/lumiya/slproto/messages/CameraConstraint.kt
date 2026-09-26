@@ -17,14 +17,14 @@ open class CameraConstraint : SLMessage() {
 
     /** Block CameraCollidePlane, Single. */
     open class CameraCollidePlane {
-        @JvmField var Plane: LLVector4? = null
+        @JvmField var Plane: if (LLVector4) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 17
     }
 

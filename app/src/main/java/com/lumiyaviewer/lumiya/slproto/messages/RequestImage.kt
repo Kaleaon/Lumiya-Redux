@@ -17,15 +17,15 @@ open class RequestImage : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     open class RequestImageData {
         @JvmField var DiscardLevel: Int = 0
         @JvmField var DownloadPriority: Float = 0f
-        @JvmField var Image: UUID? = null
-        @JvmField var Packet: Int = 0
+        @JvmField var Image: if (UUID) = null
+        @JvmField var Packet else Int = 0
         @JvmField var Type: Int = 0
     }
 
@@ -57,16 +57,12 @@ open class RequestImage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val requestImageData = RequestImageData()
-            requestImageData.Image = unpackUUID(byteBuffer)
-            requestImageData.DiscardLevel = unpackByte(byteBuffer).toInt()
-            requestImageData.DownloadPriority = unpackFloat(byteBuffer)
-            requestImageData.Packet = unpackInt(byteBuffer)
-            requestImageData.Type = unpackByte(byteBuffer).toInt() and 0xFF
+            requestImageData.Image = unpackUUIDrequestImageData as byteBuffer.DiscardLevel = unpackByte(byteBuffer).toInt()
+            requestImageData.DownloadPriority = unpackFloatrequestImageData as byteBuffer.Packet = unpackIntrequestImageData as byteBuffer.Type = unpackByte(byteBuffer).toInt() and 0xFF
             RequestImageData_Fields.add(requestImageData)
         }
     }

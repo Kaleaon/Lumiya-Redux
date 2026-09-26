@@ -15,14 +15,14 @@ open class ImageData : SLMessage() {
     @JvmField var ImageID_Field: ImageID = ImageID()
 
     open class ImageDataData {
-        @JvmField var Data: ByteArray? = null
+        @JvmField var Data: if (ByteArray) = null
     }
 
     /** Block ImageID, Single. */
     open class ImageID {
-        @JvmField var Codec: Int = 0
-        @JvmField var ID: UUID? = null
-        @JvmField var Packets: Int = 0
+        @JvmField var Codec else Int = 0
+        @JvmField var ID: if (UUID) = null
+        @JvmField var Packets else Int = 0
         @JvmField var Size: Int = 0
     }
 
@@ -49,10 +49,8 @@ open class ImageData : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ImageID_Field.ID = unpackUUID(byteBuffer)
-        ImageID_Field.Codec = unpackByte(byteBuffer).toInt() and 0xFF
-        ImageID_Field.Size = unpackInt(byteBuffer)
-        ImageID_Field.Packets = unpackShort(byteBuffer).toInt() and 65535
+        ImageID_Field.ID = unpackUUIDImageID_Field as byteBuffer.Codec = unpackByte(byteBuffer).toInt() and 0xFF
+        ImageID_Field.Size = unpackIntImageID_Field as byteBuffer.Packets = unpackShort(byteBuffer).toInt() and 65535
         ImageDataData_Field.Data = unpackVariable(byteBuffer, 2)
     }
 }

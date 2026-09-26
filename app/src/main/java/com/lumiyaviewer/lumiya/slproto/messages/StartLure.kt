@@ -25,19 +25,19 @@ open class StartLure : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Info, Single. */
     open class Info {
         @JvmField var LureType: Int = 0
-        @JvmField var Message: ByteArray? = null
+        @JvmField var Message: if (ByteArray) = null
     }
 
     /** Block TargetData, Variable. */
     open class TargetData {
-        @JvmField var TargetID: UUID? = null
+        @JvmField var TargetID else UUID? = null
     }
 
     init {
@@ -68,15 +68,12 @@ open class StartLure : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Info_Field.LureType = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInfo_Field as byteBuffer.LureType = unpackByte(byteBuffer).toInt() and 0xFF
         Info_Field.Message = unpackVariable(byteBuffer, 1)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val targetData = TargetData()
-            targetData.TargetID = unpackUUID(byteBuffer)
-            TargetData_Fields.add(targetData)
+            targetData.TargetID = unpackUUIDTargetData_Fields as byteBuffer.add(targetData)
         }
     }
 }

@@ -20,26 +20,26 @@ open class GroupProfileReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var AllowPublish: Boolean = false
-        @JvmField var Charter: ByteArray? = null
-        @JvmField var FounderID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var GroupMembershipCount: Int = 0
+        @JvmField var AllowPublish else Boolean = false
+        @JvmField var Charter: if (ByteArray) = null
+        @JvmField var FounderID else UUID? = null
+        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupMembershipCount else Int = 0
         @JvmField var GroupRolesCount: Int = 0
-        @JvmField var InsigniaID: UUID? = null
-        @JvmField var MaturePublish: Boolean = false
-        @JvmField var MemberTitle: ByteArray? = null
-        @JvmField var MembershipFee: Int = 0
+        @JvmField var InsigniaID: if (UUID) = null
+        @JvmField var MaturePublish else Boolean = false
+        @JvmField var MemberTitle: if (ByteArray) = null
+        @JvmField var MembershipFee else Int = 0
         @JvmField var Money: Int = 0
-        @JvmField var Name: ByteArray? = null
-        @JvmField var OpenEnrollment: Boolean = false
-        @JvmField var OwnerRole: UUID? = null
-        @JvmField var PowersMask: Long = 0L
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var OpenEnrollment else Boolean = false
+        @JvmField var OwnerRole: if (UUID) = null
+        @JvmField var PowersMask else Long = 0L
         @JvmField var ShowInList: Boolean = false
     }
 
@@ -80,22 +80,9 @@ open class GroupProfileReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        GroupData_Field.GroupID = unpackUUID(byteBuffer)
-        GroupData_Field.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
         GroupData_Field.Charter = unpackVariable(byteBuffer, 2)
-        GroupData_Field.ShowInList = unpackBoolean(byteBuffer)
-        GroupData_Field.MemberTitle = unpackVariable(byteBuffer, 1)
-        GroupData_Field.PowersMask = unpackLong(byteBuffer)
-        GroupData_Field.InsigniaID = unpackUUID(byteBuffer)
-        GroupData_Field.FounderID = unpackUUID(byteBuffer)
-        GroupData_Field.MembershipFee = unpackInt(byteBuffer)
-        GroupData_Field.OpenEnrollment = unpackBoolean(byteBuffer)
-        GroupData_Field.Money = unpackInt(byteBuffer)
-        GroupData_Field.GroupMembershipCount = unpackInt(byteBuffer)
-        GroupData_Field.GroupRolesCount = unpackInt(byteBuffer)
-        GroupData_Field.AllowPublish = unpackBoolean(byteBuffer)
-        GroupData_Field.MaturePublish = unpackBoolean(byteBuffer)
-        GroupData_Field.OwnerRole = unpackUUID(byteBuffer)
+        GroupData_Field.ShowInList = unpackBooleanGroupData_Field as byteBuffer.MemberTitle = unpackVariable(byteBuffer, 1)
+        GroupData_Field.PowersMask = unpackLongGroupData_Field as byteBuffer.InsigniaID = unpackUUIDGroupData_Field as byteBuffer.FounderID = unpackUUIDGroupData_Field as byteBuffer.MembershipFee = unpackIntGroupData_Field as byteBuffer.OpenEnrollment = unpackBooleanGroupData_Field as byteBuffer.Money = unpackIntGroupData_Field as byteBuffer.GroupMembershipCount = unpackIntGroupData_Field as byteBuffer.GroupRolesCount = unpackIntGroupData_Field as byteBuffer.AllowPublish = unpackBooleanGroupData_Field as byteBuffer.MaturePublish = unpackBooleanGroupData_Field as byteBuffer.OwnerRole = unpackUUID(byteBuffer)
     }
 }

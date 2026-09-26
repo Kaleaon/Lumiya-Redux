@@ -18,14 +18,14 @@ open class ImageNotInDatabase : SLMessage() {
 
     /** Block ImageID, Single. */
     open class ImageID {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 20
     }
 

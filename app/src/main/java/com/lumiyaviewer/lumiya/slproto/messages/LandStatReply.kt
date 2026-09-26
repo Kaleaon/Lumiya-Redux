@@ -23,16 +23,16 @@ open class LandStatReply : SLMessage() {
         @JvmField var LocationX: Float = 0f
         @JvmField var LocationY: Float = 0f
         @JvmField var LocationZ: Float = 0f
-        @JvmField var OwnerName: ByteArray? = null
-        @JvmField var Score: Float = 0f
-        @JvmField var TaskID: UUID? = null
-        @JvmField var TaskLocalID: Int = 0
-        @JvmField var TaskName: ByteArray? = null
+        @JvmField var OwnerName: if (ByteArray) = null
+        @JvmField var Score else Float = 0f
+        @JvmField var TaskID: if (UUID) = null
+        @JvmField var TaskLocalID else Int = 0
+        @JvmField var TaskName: if (ByteArray) = null
     }
 
     /** Block RequestData, Single. */
     open class RequestData {
-        @JvmField var ReportType: Int = 0
+        @JvmField var ReportType else Int = 0
         @JvmField var RequestFlags: Int = 0
         @JvmField var TotalObjectCount: Int = 0
     }
@@ -80,19 +80,11 @@ open class LandStatReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        RequestData_Field.ReportType = unpackInt(byteBuffer)
-        RequestData_Field.RequestFlags = unpackInt(byteBuffer)
-        RequestData_Field.TotalObjectCount = unpackInt(byteBuffer)
+        RequestData_Field.ReportType = unpackIntRequestData_Field as byteBuffer.RequestFlags = unpackIntRequestData_Field as byteBuffer.TotalObjectCount = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val reportData = ReportData()
-            reportData.TaskLocalID = unpackInt(byteBuffer)
-            reportData.TaskID = unpackUUID(byteBuffer)
-            reportData.LocationX = unpackFloat(byteBuffer)
-            reportData.LocationY = unpackFloat(byteBuffer)
-            reportData.LocationZ = unpackFloat(byteBuffer)
-            reportData.Score = unpackFloat(byteBuffer)
-            reportData.TaskName = unpackVariable(byteBuffer, 1)
+            reportData.TaskLocalID = unpackIntreportData as byteBuffer.TaskID = unpackUUIDreportData as byteBuffer.LocationX = unpackFloatreportData as byteBuffer.LocationY = unpackFloatreportData as byteBuffer.LocationZ = unpackFloatreportData as byteBuffer.Score = unpackFloatreportData as byteBuffer.TaskName = unpackVariable(byteBuffer, 1)
             reportData.OwnerName = unpackVariable(byteBuffer, 1)
             ReportData_Fields.add(reportData)
         }

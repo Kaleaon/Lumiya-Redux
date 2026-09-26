@@ -21,22 +21,22 @@ open class AvatarPickerReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var QueryID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var QueryID else UUID? = null
     }
 
     /** Block Data, Variable. */
     open class Data {
-        @JvmField var AvatarID: UUID? = null
-        @JvmField var FirstName: ByteArray? = null
-        @JvmField var LastName: ByteArray? = null
+        @JvmField var AvatarID: if (UUID) = null
+        @JvmField var FirstName else ByteArray? = null
+        @JvmField var LastName: if (ByteArray) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 37
         val it = Data_Fields.iterator()
         while (true) {
@@ -69,13 +69,11 @@ open class AvatarPickerReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.AvatarID = unpackUUID(byteBuffer)
-            data.FirstName = unpackVariable(byteBuffer, 1)
+            data.AvatarID = unpackUUIDdata as byteBuffer.FirstName = unpackVariable(byteBuffer, 1)
             data.LastName = unpackVariable(byteBuffer, 1)
             Data_Fields.add(data)
         }

@@ -22,8 +22,8 @@ open class GodUpdateRegionInfo : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block RegionInfo, Single. */
@@ -35,12 +35,12 @@ open class GodUpdateRegionInfo : SLMessage() {
         @JvmField var RedirectGridX: Int = 0
         @JvmField var RedirectGridY: Int = 0
         @JvmField var RegionFlags: Int = 0
-        @JvmField var SimName: ByteArray? = null
+        @JvmField var SimName: if (ByteArray) = null
     }
 
     /** Block RegionInfo2, Variable. */
     open class RegionInfo2 {
-        @JvmField var RegionFlagsExtended: Long = 0L
+        @JvmField var RegionFlagsExtended else Long = 0L
     }
 
     init {
@@ -77,21 +77,12 @@ open class GodUpdateRegionInfo : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        RegionInfo_Field.SimName = unpackVariable(byteBuffer, 1)
-        RegionInfo_Field.EstateID = unpackInt(byteBuffer)
-        RegionInfo_Field.ParentEstateID = unpackInt(byteBuffer)
-        RegionInfo_Field.RegionFlags = unpackInt(byteBuffer)
-        RegionInfo_Field.BillableFactor = unpackFloat(byteBuffer)
-        RegionInfo_Field.PricePerMeter = unpackInt(byteBuffer)
-        RegionInfo_Field.RedirectGridX = unpackInt(byteBuffer)
-        RegionInfo_Field.RedirectGridY = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDRegionInfo_Field as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
+        RegionInfo_Field.EstateID = unpackIntRegionInfo_Field as byteBuffer.ParentEstateID = unpackIntRegionInfo_Field as byteBuffer.RegionFlags = unpackIntRegionInfo_Field as byteBuffer.BillableFactor = unpackFloatRegionInfo_Field as byteBuffer.PricePerMeter = unpackIntRegionInfo_Field as byteBuffer.RedirectGridX = unpackIntRegionInfo_Field as byteBuffer.RedirectGridY = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val regionInfo2 = RegionInfo2()
-            regionInfo2.RegionFlagsExtended = unpackLong(byteBuffer)
-            RegionInfo2_Fields.add(regionInfo2)
+            regionInfo2.RegionFlagsExtended = unpackLongRegionInfo2_Fields as byteBuffer.add(regionInfo2)
         }
     }
 }

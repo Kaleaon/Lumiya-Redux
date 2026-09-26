@@ -20,16 +20,16 @@ open class MapItemReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Flags: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Flags else Int = 0
     }
 
     /** Block Data, Variable. */
     open class Data {
         @JvmField var Extra: Int = 0
         @JvmField var Extra2: Int = 0
-        @JvmField var ID: UUID? = null
-        @JvmField var Name: ByteArray? = null
+        @JvmField var ID: if (UUID) = null
+        @JvmField var Name else ByteArray? = null
         @JvmField var X: Int = 0
         @JvmField var Y: Int = 0
     }
@@ -79,18 +79,11 @@ open class MapItemReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.Flags = unpackInt(byteBuffer)
-        RequestData_Field.ItemType = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackIntRequestData_Field as byteBuffer.ItemType = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.X = unpackInt(byteBuffer)
-            data.Y = unpackInt(byteBuffer)
-            data.ID = unpackUUID(byteBuffer)
-            data.Extra = unpackInt(byteBuffer)
-            data.Extra2 = unpackInt(byteBuffer)
-            data.Name = unpackVariable(byteBuffer, 1)
+            data.X = unpackIntdata as byteBuffer.Y = unpackIntdata as byteBuffer.ID = unpackUUIDdata as byteBuffer.Extra = unpackIntdata as byteBuffer.Extra2 = unpackIntdata as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             Data_Fields.add(data)
         }
     }

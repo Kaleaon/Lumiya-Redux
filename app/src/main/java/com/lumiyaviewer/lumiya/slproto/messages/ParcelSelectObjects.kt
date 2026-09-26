@@ -20,8 +20,8 @@ open class ParcelSelectObjects : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ParcelData, Single. */
@@ -32,14 +32,14 @@ open class ParcelSelectObjects : SLMessage() {
 
     /** Block ReturnIDs, Variable. */
     open class ReturnIDs {
-        @JvmField var ReturnID: UUID? = null
+        @JvmField var ReturnID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (ReturnIDs_Fields.size * 16) + 45
     }
 
@@ -63,15 +63,11 @@ open class ParcelSelectObjects : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ParcelData_Field.LocalID = unpackInt(byteBuffer)
-        ParcelData_Field.ReturnType = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDParcelData_Field as byteBuffer.LocalID = unpackIntParcelData_Field as byteBuffer.ReturnType = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val returnIDs = ReturnIDs()
-            returnIDs.ReturnID = unpackUUID(byteBuffer)
-            ReturnIDs_Fields.add(returnIDs)
+            returnIDs.ReturnID = unpackUUIDReturnIDs_Fields as byteBuffer.add(returnIDs)
         }
     }
 }

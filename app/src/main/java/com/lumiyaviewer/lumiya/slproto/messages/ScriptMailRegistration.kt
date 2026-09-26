@@ -17,16 +17,16 @@ open class ScriptMailRegistration : SLMessage() {
     /** Block DataBlock, Single. */
     open class DataBlock {
         @JvmField var Flags: Int = 0
-        @JvmField var TargetIP: ByteArray? = null
-        @JvmField var TargetPort: Int = 0
-        @JvmField var TaskID: UUID? = null
+        @JvmField var TargetIP: if (ByteArray) = null
+        @JvmField var TargetPort else Int = 0
+        @JvmField var TaskID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return DataBlock_Field.TargetIP!!.size + 1 + 2 + 16 + 4 + 4
     }
 
@@ -48,7 +48,6 @@ open class ScriptMailRegistration : SLMessage() {
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         DataBlock_Field.TargetIP = unpackVariable(byteBuffer, 1)
         DataBlock_Field.TargetPort = unpackShort(byteBuffer).toInt() and 65535
-        DataBlock_Field.TaskID = unpackUUID(byteBuffer)
-        DataBlock_Field.Flags = unpackInt(byteBuffer)
+        DataBlock_Field.TaskID = unpackUUIDDataBlock_Field as byteBuffer.Flags = unpackInt(byteBuffer)
     }
 }

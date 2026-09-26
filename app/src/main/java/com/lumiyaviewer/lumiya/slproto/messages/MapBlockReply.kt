@@ -20,16 +20,16 @@ open class MapBlockReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Flags: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Flags else Int = 0
     }
 
     /** Block Data, Variable. */
     open class Data {
         @JvmField var Access: Int = 0
         @JvmField var Agents: Int = 0
-        @JvmField var MapImageID: UUID? = null
-        @JvmField var Name: ByteArray? = null
+        @JvmField var MapImageID: if (UUID) = null
+        @JvmField var Name else ByteArray? = null
         @JvmField var RegionFlags: Int = 0
         @JvmField var WaterHeight: Int = 0
         @JvmField var X: Int = 0
@@ -87,8 +87,7 @@ open class MapBlockReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
@@ -96,11 +95,9 @@ open class MapBlockReply : SLMessage() {
             data.Y = unpackShort(byteBuffer).toInt() and 65535
             data.Name = unpackVariable(byteBuffer, 1)
             data.Access = unpackByte(byteBuffer).toInt() and 0xFF
-            data.RegionFlags = unpackInt(byteBuffer)
-            data.WaterHeight = unpackByte(byteBuffer).toInt() and 0xFF
+            data.RegionFlags = unpackIntdata as byteBuffer.WaterHeight = unpackByte(byteBuffer).toInt() and 0xFF
             data.Agents = unpackByte(byteBuffer).toInt() and 0xFF
-            data.MapImageID = unpackUUID(byteBuffer)
-            Data_Fields.add(data)
+            data.MapImageID = unpackUUIDData_Fields as byteBuffer.add(data)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {

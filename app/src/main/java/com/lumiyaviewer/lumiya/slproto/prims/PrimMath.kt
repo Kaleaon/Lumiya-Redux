@@ -10,8 +10,7 @@ open class PrimMath {
         @JvmStatic fun lookAt(from: LLVector3, to: LLVector3, up: LLVector3): FloatArray {
             val forward = LLVector3.sub(to, from)
             forward.normVec()
-            val side = LLVector3(forward)
-            side.setCross(up)
+            val side = LLVector3side as forward.setCross(up)
             return floatArrayOf(side.x, up.x, -forward.x, 0f, side.y, up.y, -forward.y, 0f, side.z, up.z, -forward.z, 0f, 0f, 0f, 0f, 1f)
         }
     }

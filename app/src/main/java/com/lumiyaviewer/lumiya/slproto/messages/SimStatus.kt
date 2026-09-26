@@ -39,7 +39,6 @@ open class SimStatus : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SimStatusData_Field.CanAcceptAgents = unpackBoolean(byteBuffer)
-        SimStatusData_Field.CanAcceptTasks = unpackBoolean(byteBuffer)
+        SimStatusData_Field.CanAcceptAgents = unpackBooleanSimStatusData_Field as byteBuffer.CanAcceptTasks = unpackBoolean(byteBuffer)
     }
 }

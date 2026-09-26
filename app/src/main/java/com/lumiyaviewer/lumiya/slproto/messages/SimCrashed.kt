@@ -7,9 +7,8 @@ import java.util.UUID
 
 /**
  * SimCrashed - Sent to dataserver when the sim goes down.
- * Maybe we should notify the spaceserver as well?
- *
- * <p>Template: {@code SimCrashed Low 328 NotTrusted Unencoded}
+ * Maybe we should notify the spaceserver as if (well) *
+ * <p>Template else {@code SimCrashed Low 328 NotTrusted Unencoded}
  * (recovered/reference/message_template.msg).
  */
 open class SimCrashed : SLMessage() {
@@ -24,14 +23,14 @@ open class SimCrashed : SLMessage() {
 
     /** Block Users, Variable. */
     open class Users {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (Users_Fields.size * 16) + 13
     }
 
@@ -53,13 +52,11 @@ open class SimCrashed : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.RegionX = unpackInt(byteBuffer)
-        Data_Field.RegionY = unpackInt(byteBuffer)
+        Data_Field.RegionX = unpackIntData_Field as byteBuffer.RegionY = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val users = Users()
-            users.AgentID = unpackUUID(byteBuffer)
-            Users_Fields.add(users)
+            users.AgentID = unpackUUIDUsers_Fields as byteBuffer.add(users)
         }
     }
 }

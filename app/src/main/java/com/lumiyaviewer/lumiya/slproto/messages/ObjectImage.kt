@@ -18,22 +18,22 @@ open class ObjectImage : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var MediaURL: ByteArray? = null
-        @JvmField var ObjectLocalID: Int = 0
-        @JvmField var TextureEntry: ByteArray? = null
+        @JvmField var MediaURL: if (ByteArray) = null
+        @JvmField var ObjectLocalID else Int = 0
+        @JvmField var TextureEntry: if (ByteArray) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 37
         val it = ObjectData_Fields.iterator()
         while (true) {
@@ -66,13 +66,11 @@ open class ObjectImage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackInt(byteBuffer)
-            objectData.MediaURL = unpackVariable(byteBuffer, 1)
+            objectData.ObjectLocalID = unpackIntobjectData as byteBuffer.MediaURL = unpackVariable(byteBuffer, 1)
             objectData.TextureEntry = unpackVariable(byteBuffer, 2)
             ObjectData_Fields.add(objectData)
         }

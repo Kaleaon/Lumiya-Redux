@@ -22,8 +22,8 @@ open class DataHomeLocationRequest : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var KickedFromEstateID: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var KickedFromEstateID else Int = 0
     }
 
     init {
@@ -49,8 +49,6 @@ open class DataHomeLocationRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.KickedFromEstateID = unpackInt(byteBuffer)
-        AgentInfo_Field.AgentEffectiveMaturity = unpackInt(byteBuffer)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.KickedFromEstateID = unpackIntAgentInfo_Field as byteBuffer.AgentEffectiveMaturity = unpackInt(byteBuffer)
     }
 }

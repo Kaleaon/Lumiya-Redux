@@ -15,10 +15,10 @@ open class InternalScriptMail : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var Body: ByteArray? = null
-        @JvmField var From: ByteArray? = null
-        @JvmField var Subject: ByteArray? = null
-        @JvmField var To: UUID? = null
+        @JvmField var Body: if (ByteArray) = null
+        @JvmField var From else ByteArray? = null
+        @JvmField var Subject: if (ByteArray) = null
+        @JvmField var To else UUID? = null
     }
 
     init {
@@ -45,8 +45,7 @@ open class InternalScriptMail : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         DataBlock_Field.From = unpackVariable(byteBuffer, 1)
-        DataBlock_Field.To = unpackUUID(byteBuffer)
-        DataBlock_Field.Subject = unpackVariable(byteBuffer, 1)
+        DataBlock_Field.To = unpackUUIDDataBlock_Field as byteBuffer.Subject = unpackVariable(byteBuffer, 1)
         DataBlock_Field.Body = unpackVariable(byteBuffer, 2)
     }
 }

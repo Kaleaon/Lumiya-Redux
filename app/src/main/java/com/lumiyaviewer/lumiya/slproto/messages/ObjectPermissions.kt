@@ -22,8 +22,8 @@ open class ObjectPermissions : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block HeaderData, Single. */
@@ -69,17 +69,13 @@ open class ObjectPermissions : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        HeaderData_Field.Override = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDHeaderData_Field as byteBuffer.Override = unpackBoolean(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackInt(byteBuffer)
-            objectData.Field = unpackByte(byteBuffer).toInt() and 0xFF
+            objectData.ObjectLocalID = unpackIntobjectData as byteBuffer.Field = unpackByte(byteBuffer).toInt() and 0xFF
             objectData.Set = unpackByte(byteBuffer).toInt() and 0xFF
-            objectData.Mask = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.Mask = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

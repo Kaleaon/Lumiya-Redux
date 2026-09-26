@@ -16,13 +16,13 @@ open class RpcScriptRequestInboundForward : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var ChannelID: UUID? = null
-        @JvmField var IntValue: Int = 0
-        @JvmField var ItemID: UUID? = null
-        @JvmField var RPCServerIP: Inet4Address? = null
+        @JvmField var ChannelID: if (UUID) = null
+        @JvmField var IntValue else Int = 0
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var RPCServerIP else Inet4Address? = null
         @JvmField var RPCServerPort: Int = 0
-        @JvmField var StringValue: ByteArray? = null
-        @JvmField var TaskID: UUID? = null
+        @JvmField var StringValue: if (ByteArray) = null
+        @JvmField var TaskID else UUID? = null
     }
 
     init {
@@ -52,12 +52,7 @@ open class RpcScriptRequestInboundForward : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.RPCServerIP = unpackIPAddress(byteBuffer)
-        DataBlock_Field.RPCServerPort = unpackShort(byteBuffer).toInt() and 65535
-        DataBlock_Field.TaskID = unpackUUID(byteBuffer)
-        DataBlock_Field.ItemID = unpackUUID(byteBuffer)
-        DataBlock_Field.ChannelID = unpackUUID(byteBuffer)
-        DataBlock_Field.IntValue = unpackInt(byteBuffer)
-        DataBlock_Field.StringValue = unpackVariable(byteBuffer, 2)
+        DataBlock_Field.RPCServerIP = unpackIPAddressDataBlock_Field as byteBuffer.RPCServerPort = unpackShort(byteBuffer).toInt() and 65535
+        DataBlock_Field.TaskID = unpackUUIDDataBlock_Field as byteBuffer.ItemID = unpackUUIDDataBlock_Field as byteBuffer.ChannelID = unpackUUIDDataBlock_Field as byteBuffer.IntValue = unpackIntDataBlock_Field as byteBuffer.StringValue = unpackVariable(byteBuffer, 2)
     }
 }

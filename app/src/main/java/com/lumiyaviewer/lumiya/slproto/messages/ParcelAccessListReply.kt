@@ -20,8 +20,8 @@ open class ParcelAccessListReply : SLMessage() {
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Flags: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Flags else Int = 0
         @JvmField var LocalID: Int = 0
         @JvmField var SequenceID: Int = 0
     }
@@ -29,8 +29,8 @@ open class ParcelAccessListReply : SLMessage() {
     /** Block List, Variable. */
     open class List {
         @JvmField var Flags: Int = 0
-        @JvmField var ID: UUID? = null
-        @JvmField var Time: Int = 0
+        @JvmField var ID: if (UUID) = null
+        @JvmField var Time else Int = 0
     }
 
     init {
@@ -63,17 +63,11 @@ open class ParcelAccessListReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.AgentID = unpackUUID(byteBuffer)
-        Data_Field.SequenceID = unpackInt(byteBuffer)
-        Data_Field.Flags = unpackInt(byteBuffer)
-        Data_Field.LocalID = unpackInt(byteBuffer)
+        Data_Field.AgentID = unpackUUIDData_Field as byteBuffer.SequenceID = unpackIntData_Field as byteBuffer.Flags = unpackIntData_Field as byteBuffer.LocalID = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val list = List()
-            list.ID = unpackUUID(byteBuffer)
-            list.Time = unpackInt(byteBuffer)
-            list.Flags = unpackInt(byteBuffer)
-            List_Fields.add(list)
+            list.ID = unpackUUIDlist as byteBuffer.Time = unpackIntlist as byteBuffer.Flags = unpackIntList_Fields as byteBuffer.add(list)
         }
     }
 }

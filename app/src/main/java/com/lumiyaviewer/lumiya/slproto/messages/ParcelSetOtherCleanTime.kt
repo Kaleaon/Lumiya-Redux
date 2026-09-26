@@ -18,8 +18,8 @@ open class ParcelSetOtherCleanTime : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ParcelData, Single. */
@@ -52,9 +52,6 @@ open class ParcelSetOtherCleanTime : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ParcelData_Field.LocalID = unpackInt(byteBuffer)
-        ParcelData_Field.OtherCleanTime = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDParcelData_Field as byteBuffer.LocalID = unpackIntParcelData_Field as byteBuffer.OtherCleanTime = unpackInt(byteBuffer)
     }
 }

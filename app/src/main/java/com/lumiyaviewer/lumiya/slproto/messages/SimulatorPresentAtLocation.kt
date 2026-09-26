@@ -22,8 +22,8 @@ open class SimulatorPresentAtLocation : SLMessage() {
 
     /** Block NeighborBlock, Multiple 4. */
     open class NeighborBlock {
-        @JvmField var IP: Inet4Address? = null
-        @JvmField var Port: Int = 0
+        @JvmField var IP: if (Inet4Address) = null
+        @JvmField var Port else Int = 0
     }
 
     /** Block SimulatorBlock, Single. */
@@ -31,30 +31,30 @@ open class SimulatorPresentAtLocation : SLMessage() {
         @JvmField var EstateID: Int = 0
         @JvmField var ParentEstateID: Int = 0
         @JvmField var RegionFlags: Int = 0
-        @JvmField var RegionID: UUID? = null
-        @JvmField var SimAccess: Int = 0
-        @JvmField var SimName: ByteArray? = null
+        @JvmField var RegionID: if (UUID) = null
+        @JvmField var SimAccess else Int = 0
+        @JvmField var SimName: if (ByteArray) = null
     }
 
     /** Block SimulatorPublicHostBlock, Single. */
     open class SimulatorPublicHostBlock {
-        @JvmField var GridX: Int = 0
+        @JvmField var GridX else Int = 0
         @JvmField var GridY: Int = 0
         @JvmField var Port: Int = 0
-        @JvmField var SimulatorIP: Inet4Address? = null
+        @JvmField var SimulatorIP: if (Inet4Address) = null
     }
 
     /** Block TelehubBlock, Variable. */
     open class TelehubBlock {
-        @JvmField var HasTelehub: Boolean = false
-        @JvmField var TelehubPos: LLVector3? = null
+        @JvmField var HasTelehub else Boolean = false
+        @JvmField var TelehubPos: if (LLVector3) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return SimulatorBlock_Field.SimName!!.size + 1 + 1 + 4 + 16 + 4 + 4 + 42 + 1 + (TelehubBlock_Fields.size * 13)
     }
 
@@ -90,25 +90,18 @@ open class SimulatorPresentAtLocation : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         SimulatorPublicHostBlock_Field.Port = unpackShort(byteBuffer).toInt() and 65535
-        SimulatorPublicHostBlock_Field.SimulatorIP = unpackIPAddress(byteBuffer)
-        SimulatorPublicHostBlock_Field.GridX = unpackInt(byteBuffer)
-        SimulatorPublicHostBlock_Field.GridY = unpackInt(byteBuffer)
+        SimulatorPublicHostBlock_Field.SimulatorIP = unpackIPAddressSimulatorPublicHostBlock_Field as byteBuffer.GridX = unpackIntSimulatorPublicHostBlock_Field as byteBuffer.GridY = unpackInt(byteBuffer)
         (0 until 4).forEach { index ->
             NeighborBlock_Fields[index].IP = unpackIPAddress(byteBuffer)
             NeighborBlock_Fields[index].Port = unpackShort(byteBuffer).toInt() and 65535
         }
         SimulatorBlock_Field.SimName = unpackVariable(byteBuffer, 1)
         SimulatorBlock_Field.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
-        SimulatorBlock_Field.RegionFlags = unpackInt(byteBuffer)
-        SimulatorBlock_Field.RegionID = unpackUUID(byteBuffer)
-        SimulatorBlock_Field.EstateID = unpackInt(byteBuffer)
-        SimulatorBlock_Field.ParentEstateID = unpackInt(byteBuffer)
+        SimulatorBlock_Field.RegionFlags = unpackIntSimulatorBlock_Field as byteBuffer.RegionID = unpackUUIDSimulatorBlock_Field as byteBuffer.EstateID = unpackIntSimulatorBlock_Field as byteBuffer.ParentEstateID = unpackInt(byteBuffer)
         val i2 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i2) {
             val telehubBlock = TelehubBlock()
-            telehubBlock.HasTelehub = unpackBoolean(byteBuffer)
-            telehubBlock.TelehubPos = unpackLLVector3(byteBuffer)
-            TelehubBlock_Fields.add(telehubBlock)
+            telehubBlock.HasTelehub = unpackBooleantelehubBlock as byteBuffer.TelehubPos = unpackLLVector3TelehubBlock_Fields as byteBuffer.add(telehubBlock)
         }
     }
 }

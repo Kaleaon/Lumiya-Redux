@@ -19,14 +19,14 @@ open class RequestObjectPropertiesFamily : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var ObjectID: UUID? = null
-        @JvmField var RequestFlags: Int = 0
+        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var RequestFlags else Int = 0
     }
 
     init {
@@ -52,9 +52,6 @@ open class RequestObjectPropertiesFamily : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        ObjectData_Field.RequestFlags = unpackInt(byteBuffer)
-        ObjectData_Field.ObjectID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDObjectData_Field as byteBuffer.RequestFlags = unpackIntObjectData_Field as byteBuffer.ObjectID = unpackUUID(byteBuffer)
     }
 }

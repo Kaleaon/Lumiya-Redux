@@ -22,14 +22,14 @@ open class GrantUserRights : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Rights, Variable. */
     open class Rights {
-        @JvmField var AgentRelated: UUID? = null
-        @JvmField var RelatedRights: Int = 0
+        @JvmField var AgentRelated: if (UUID) = null
+        @JvmField var RelatedRights else Int = 0
     }
 
     init {
@@ -59,14 +59,11 @@ open class GrantUserRights : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val rights = Rights()
-            rights.AgentRelated = unpackUUID(byteBuffer)
-            rights.RelatedRights = unpackInt(byteBuffer)
-            Rights_Fields.add(rights)
+            rights.AgentRelated = unpackUUIDrights as byteBuffer.RelatedRights = unpackIntRights_Fields as byteBuffer.add(rights)
         }
     }
 }

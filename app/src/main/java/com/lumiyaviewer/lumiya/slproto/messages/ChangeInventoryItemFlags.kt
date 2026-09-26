@@ -17,21 +17,21 @@ open class ChangeInventoryItemFlags : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block InventoryData, Variable. */
     open class InventoryData {
         @JvmField var Flags: Int = 0
-        @JvmField var ItemID: UUID? = null
+        @JvmField var ItemID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (InventoryData_Fields.size * 20) + 37
     }
 
@@ -54,14 +54,11 @@ open class ChangeInventoryItemFlags : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inventoryData = InventoryData()
-            inventoryData.ItemID = unpackUUID(byteBuffer)
-            inventoryData.Flags = unpackInt(byteBuffer)
-            InventoryData_Fields.add(inventoryData)
+            inventoryData.ItemID = unpackUUIDinventoryData as byteBuffer.Flags = unpackIntInventoryData_Fields as byteBuffer.add(inventoryData)
         }
     }
 }

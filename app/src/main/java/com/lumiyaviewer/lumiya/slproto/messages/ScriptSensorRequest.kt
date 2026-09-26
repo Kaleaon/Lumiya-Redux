@@ -20,14 +20,14 @@ open class ScriptSensorRequest : SLMessage() {
         @JvmField var Arc: Float = 0f
         @JvmField var Range: Float = 0f
         @JvmField var RegionHandle: Long = 0L
-        @JvmField var RequestID: UUID? = null
-        @JvmField var SearchDir: LLQuaternion? = null
-        @JvmField var SearchID: UUID? = null
-        @JvmField var SearchName: ByteArray? = null
-        @JvmField var SearchPos: LLVector3? = null
-        @JvmField var SearchRegions: Int = 0
-        @JvmField var SourceID: UUID? = null
-        @JvmField var Type: Int = 0
+        @JvmField var RequestID: if (UUID) = null
+        @JvmField var SearchDir else LLQuaternion? = null
+        @JvmField var SearchID: if (UUID) = null
+        @JvmField var SearchName else ByteArray? = null
+        @JvmField var SearchPos: if (LLVector3) = null
+        @JvmField var SearchRegions else Int = 0
+        @JvmField var SourceID: if (UUID) = null
+        @JvmField var Type else Int = 0
     }
 
     init {
@@ -61,16 +61,7 @@ open class ScriptSensorRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Requester_Field.SourceID = unpackUUID(byteBuffer)
-        Requester_Field.RequestID = unpackUUID(byteBuffer)
-        Requester_Field.SearchID = unpackUUID(byteBuffer)
-        Requester_Field.SearchPos = unpackLLVector3(byteBuffer)
-        Requester_Field.SearchDir = unpackLLQuaternion(byteBuffer)
-        Requester_Field.SearchName = unpackVariable(byteBuffer, 1)
-        Requester_Field.Type = unpackInt(byteBuffer)
-        Requester_Field.Range = unpackFloat(byteBuffer)
-        Requester_Field.Arc = unpackFloat(byteBuffer)
-        Requester_Field.RegionHandle = unpackLong(byteBuffer)
-        Requester_Field.SearchRegions = unpackByte(byteBuffer).toInt() and 0xFF
+        Requester_Field.SourceID = unpackUUIDRequester_Field as byteBuffer.RequestID = unpackUUIDRequester_Field as byteBuffer.SearchID = unpackUUIDRequester_Field as byteBuffer.SearchPos = unpackLLVector3Requester_Field as byteBuffer.SearchDir = unpackLLQuaternionRequester_Field as byteBuffer.SearchName = unpackVariable(byteBuffer, 1)
+        Requester_Field.Type = unpackIntRequester_Field as byteBuffer.Range = unpackFloatRequester_Field as byteBuffer.Arc = unpackFloatRequester_Field as byteBuffer.RegionHandle = unpackLongRequester_Field as byteBuffer.SearchRegions = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

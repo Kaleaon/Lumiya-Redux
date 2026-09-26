@@ -17,17 +17,17 @@ open class SendPostcard : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AllowPublish: Boolean = false
-        @JvmField var AssetID: UUID? = null
-        @JvmField var From: ByteArray? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AllowPublish else Boolean = false
+        @JvmField var AssetID: if (UUID) = null
+        @JvmField var From else ByteArray? = null
         @JvmField var MaturePublish: Boolean = false
-        @JvmField var Msg: ByteArray? = null
-        @JvmField var Name: ByteArray? = null
-        @JvmField var PosGlobal: LLVector3d? = null
-        @JvmField var SessionID: UUID? = null
-        @JvmField var Subject: ByteArray? = null
-        @JvmField var To: ByteArray? = null
+        @JvmField var Msg: if (ByteArray) = null
+        @JvmField var Name else ByteArray? = null
+        @JvmField var PosGlobal: if (LLVector3d) = null
+        @JvmField var SessionID else UUID? = null
+        @JvmField var Subject: if (ByteArray) = null
+        @JvmField var To else ByteArray? = null
     }
 
     init {
@@ -61,16 +61,11 @@ open class SendPostcard : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.AssetID = unpackUUID(byteBuffer)
-        AgentData_Field.PosGlobal = unpackLLVector3d(byteBuffer)
-        AgentData_Field.To = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.AssetID = unpackUUIDAgentData_Field as byteBuffer.PosGlobal = unpackLLVector3dAgentData_Field as byteBuffer.To = unpackVariable(byteBuffer, 1)
         AgentData_Field.From = unpackVariable(byteBuffer, 1)
         AgentData_Field.Name = unpackVariable(byteBuffer, 1)
         AgentData_Field.Subject = unpackVariable(byteBuffer, 1)
         AgentData_Field.Msg = unpackVariable(byteBuffer, 2)
-        AgentData_Field.AllowPublish = unpackBoolean(byteBuffer)
-        AgentData_Field.MaturePublish = unpackBoolean(byteBuffer)
+        AgentData_Field.AllowPublish = unpackBooleanAgentData_Field as byteBuffer.MaturePublish = unpackBoolean(byteBuffer)
     }
 }

@@ -20,16 +20,16 @@ open class AgentCachedTextureResponse : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SerialNum: Int = 0
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SerialNum else Int = 0
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block WearableData, Variable. */
     open class WearableData {
-        @JvmField var HostName: ByteArray? = null
-        @JvmField var TextureID: UUID? = null
-        @JvmField var TextureIndex: Int = 0
+        @JvmField var HostName else ByteArray? = null
+        @JvmField var TextureID: if (UUID) = null
+        @JvmField var TextureIndex else Int = 0
     }
 
     init {
@@ -69,14 +69,11 @@ open class AgentCachedTextureResponse : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.SerialNum = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.SerialNum = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val wearableData = WearableData()
-            wearableData.TextureID = unpackUUID(byteBuffer)
-            wearableData.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
+            wearableData.TextureID = unpackUUIDwearableData as byteBuffer.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
             wearableData.HostName = unpackVariable(byteBuffer, 1)
             WearableData_Fields.add(wearableData)
         }

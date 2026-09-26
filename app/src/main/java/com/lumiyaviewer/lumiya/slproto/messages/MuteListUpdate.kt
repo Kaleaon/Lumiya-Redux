@@ -30,8 +30,8 @@ open class MuteListUpdate : SLMessage() {
 
     /** Block MuteData, Single. */
     open class MuteData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Filename: ByteArray? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Filename else ByteArray? = null
     }
 
     init {
@@ -56,7 +56,6 @@ open class MuteListUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        MuteData_Field.AgentID = unpackUUID(byteBuffer)
-        MuteData_Field.Filename = unpackVariable(byteBuffer, 1)
+        MuteData_Field.AgentID = unpackUUIDMuteData_Field as byteBuffer.Filename = unpackVariable(byteBuffer, 1)
     }
 }

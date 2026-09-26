@@ -16,23 +16,23 @@ open class GroupAccountTransactionsRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block MoneyData, Single. */
     open class MoneyData {
-        @JvmField var CurrentInterval: Int = 0
+        @JvmField var CurrentInterval else Int = 0
         @JvmField var IntervalDays: Int = 0
-        @JvmField var RequestID: UUID? = null
+        @JvmField var RequestID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 76
     }
 
@@ -54,11 +54,6 @@ open class GroupAccountTransactionsRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        MoneyData_Field.RequestID = unpackUUID(byteBuffer)
-        MoneyData_Field.IntervalDays = unpackInt(byteBuffer)
-        MoneyData_Field.CurrentInterval = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDMoneyData_Field as byteBuffer.RequestID = unpackUUIDMoneyData_Field as byteBuffer.IntervalDays = unpackIntMoneyData_Field as byteBuffer.CurrentInterval = unpackInt(byteBuffer)
     }
 }

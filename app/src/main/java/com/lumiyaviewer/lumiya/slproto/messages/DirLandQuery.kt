@@ -18,8 +18,8 @@ open class DirLandQuery : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block QueryData, Single. */
@@ -27,8 +27,8 @@ open class DirLandQuery : SLMessage() {
         @JvmField var Area: Int = 0
         @JvmField var Price: Int = 0
         @JvmField var QueryFlags: Int = 0
-        @JvmField var QueryID: UUID? = null
-        @JvmField var QueryStart: Int = 0
+        @JvmField var QueryID: if (UUID) = null
+        @JvmField var QueryStart else Int = 0
         @JvmField var SearchType: Int = 0
     }
 
@@ -60,13 +60,6 @@ open class DirLandQuery : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        QueryData_Field.QueryID = unpackUUID(byteBuffer)
-        QueryData_Field.QueryFlags = unpackInt(byteBuffer)
-        QueryData_Field.SearchType = unpackInt(byteBuffer)
-        QueryData_Field.Price = unpackInt(byteBuffer)
-        QueryData_Field.Area = unpackInt(byteBuffer)
-        QueryData_Field.QueryStart = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUIDQueryData_Field as byteBuffer.QueryFlags = unpackIntQueryData_Field as byteBuffer.SearchType = unpackIntQueryData_Field as byteBuffer.Price = unpackIntQueryData_Field as byteBuffer.Area = unpackIntQueryData_Field as byteBuffer.QueryStart = unpackInt(byteBuffer)
     }
 }

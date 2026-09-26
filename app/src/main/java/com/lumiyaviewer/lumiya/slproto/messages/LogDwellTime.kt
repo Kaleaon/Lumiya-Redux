@@ -15,14 +15,14 @@ open class LogDwellTime : SLMessage() {
 
     /** Block DwellInfo, Single. */
     open class DwellInfo {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AvgAgentsInView: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AvgAgentsInView else Int = 0
         @JvmField var AvgViewerFPS: Int = 0
         @JvmField var Duration: Float = 0f
         @JvmField var RegionX: Int = 0
         @JvmField var RegionY: Int = 0
-        @JvmField var SessionID: UUID? = null
-        @JvmField var SimName: ByteArray? = null
+        @JvmField var SessionID: if (UUID) = null
+        @JvmField var SimName else ByteArray? = null
     }
 
     init {
@@ -53,13 +53,8 @@ open class LogDwellTime : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DwellInfo_Field.AgentID = unpackUUID(byteBuffer)
-        DwellInfo_Field.SessionID = unpackUUID(byteBuffer)
-        DwellInfo_Field.Duration = unpackFloat(byteBuffer)
-        DwellInfo_Field.SimName = unpackVariable(byteBuffer, 1)
-        DwellInfo_Field.RegionX = unpackInt(byteBuffer)
-        DwellInfo_Field.RegionY = unpackInt(byteBuffer)
-        DwellInfo_Field.AvgAgentsInView = unpackByte(byteBuffer).toInt() and 0xFF
+        DwellInfo_Field.AgentID = unpackUUIDDwellInfo_Field as byteBuffer.SessionID = unpackUUIDDwellInfo_Field as byteBuffer.Duration = unpackFloatDwellInfo_Field as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
+        DwellInfo_Field.RegionX = unpackIntDwellInfo_Field as byteBuffer.RegionY = unpackIntDwellInfo_Field as byteBuffer.AvgAgentsInView = unpackByte(byteBuffer).toInt() and 0xFF
         DwellInfo_Field.AvgViewerFPS = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

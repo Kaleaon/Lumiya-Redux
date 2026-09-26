@@ -16,14 +16,14 @@ open class RemoveTaskInventory : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block InventoryData, Single. */
     open class InventoryData {
-        @JvmField var ItemID: UUID? = null
-        @JvmField var LocalID: Int = 0
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var LocalID else Int = 0
     }
 
     init {
@@ -50,9 +50,6 @@ open class RemoveTaskInventory : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        InventoryData_Field.LocalID = unpackInt(byteBuffer)
-        InventoryData_Field.ItemID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInventoryData_Field as byteBuffer.LocalID = unpackIntInventoryData_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
     }
 }

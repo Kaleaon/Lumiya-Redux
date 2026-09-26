@@ -18,18 +18,18 @@ open class GroupRoleUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block RoleData, Variable. */
     open class RoleData {
-        @JvmField var Description: ByteArray? = null
-        @JvmField var Name: ByteArray? = null
-        @JvmField var Powers: Long = 0L
-        @JvmField var RoleID: UUID? = null
-        @JvmField var Title: ByteArray? = null
+        @JvmField var Description else ByteArray? = null
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var Powers else Long = 0L
+        @JvmField var RoleID: if (UUID) = null
+        @JvmField var Title else ByteArray? = null
         @JvmField var UpdateType: Int = 0
     }
 
@@ -74,18 +74,14 @@ open class GroupRoleUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val roleData = RoleData()
-            roleData.RoleID = unpackUUID(byteBuffer)
-            roleData.Name = unpackVariable(byteBuffer, 1)
+            roleData.RoleID = unpackUUIDroleData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
             roleData.Description = unpackVariable(byteBuffer, 1)
             roleData.Title = unpackVariable(byteBuffer, 1)
-            roleData.Powers = unpackLong(byteBuffer)
-            roleData.UpdateType = unpackByte(byteBuffer).toInt() and 0xFF
+            roleData.Powers = unpackLongroleData as byteBuffer.UpdateType = unpackByte(byteBuffer).toInt() and 0xFF
             RoleData_Fields.add(roleData)
         }
     }

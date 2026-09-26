@@ -22,30 +22,30 @@ open class ScriptDialog : SLMessage() {
 
     /** Block Buttons, Variable. */
     open class Buttons {
-        @JvmField var ButtonLabel: ByteArray? = null
+        @JvmField var ButtonLabel: if (ByteArray) = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var ChatChannel: Int = 0
-        @JvmField var FirstName: ByteArray? = null
-        @JvmField var ImageID: UUID? = null
-        @JvmField var LastName: ByteArray? = null
-        @JvmField var Message: ByteArray? = null
-        @JvmField var ObjectID: UUID? = null
-        @JvmField var ObjectName: ByteArray? = null
+        @JvmField var ChatChannel else Int = 0
+        @JvmField var FirstName: if (ByteArray) = null
+        @JvmField var ImageID else UUID? = null
+        @JvmField var LastName: if (ByteArray) = null
+        @JvmField var Message else ByteArray? = null
+        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var ObjectName else ByteArray? = null
     }
 
     /** Block OwnerData, Variable. */
     open class OwnerData {
-        @JvmField var OwnerID: UUID? = null
+        @JvmField var OwnerID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var length = Data_Field.FirstName!!.size + 17 + 1 + Data_Field.LastName!!.size + 1 + Data_Field.ObjectName!!.size + 2 + Data_Field.Message!!.size + 4 + 16 + 4 + 1
         val it = Buttons_Fields.iterator()
         while (true) {
@@ -85,13 +85,11 @@ open class ScriptDialog : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.ObjectID = unpackUUID(byteBuffer)
-        Data_Field.FirstName = unpackVariable(byteBuffer, 1)
+        Data_Field.ObjectID = unpackUUIDData_Field as byteBuffer.FirstName = unpackVariable(byteBuffer, 1)
         Data_Field.LastName = unpackVariable(byteBuffer, 1)
         Data_Field.ObjectName = unpackVariable(byteBuffer, 1)
         Data_Field.Message = unpackVariable(byteBuffer, 2)
-        Data_Field.ChatChannel = unpackInt(byteBuffer)
-        Data_Field.ImageID = unpackUUID(byteBuffer)
+        Data_Field.ChatChannel = unpackIntData_Field as byteBuffer.ImageID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val buttons = Buttons()
@@ -101,8 +99,7 @@ open class ScriptDialog : SLMessage() {
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val ownerData = OwnerData()
-            ownerData.OwnerID = unpackUUID(byteBuffer)
-            OwnerData_Fields.add(ownerData)
+            ownerData.OwnerID = unpackUUIDOwnerData_Fields as byteBuffer.add(ownerData)
         }
     }
 }

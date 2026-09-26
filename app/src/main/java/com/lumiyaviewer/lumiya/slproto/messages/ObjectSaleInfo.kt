@@ -17,8 +17,8 @@ open class ObjectSaleInfo : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
@@ -56,15 +56,12 @@ open class ObjectSaleInfo : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.LocalID = unpackInt(byteBuffer)
-            objectData.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
-            objectData.SalePrice = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.LocalID = unpackIntobjectData as byteBuffer.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
+            objectData.SalePrice = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

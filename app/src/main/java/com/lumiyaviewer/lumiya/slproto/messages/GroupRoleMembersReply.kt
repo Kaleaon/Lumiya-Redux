@@ -21,16 +21,16 @@ open class GroupRoleMembersReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var RequestID: UUID? = null
-        @JvmField var TotalPairs: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var RequestID: if (UUID) = null
+        @JvmField var TotalPairs else Int = 0
     }
 
     /** Block MemberData, Variable. */
     open class MemberData {
-        @JvmField var MemberID: UUID? = null
-        @JvmField var RoleID: UUID? = null
+        @JvmField var MemberID: if (UUID) = null
+        @JvmField var RoleID else UUID? = null
     }
 
     init {
@@ -62,16 +62,11 @@ open class GroupRoleMembersReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        AgentData_Field.RequestID = unpackUUID(byteBuffer)
-        AgentData_Field.TotalPairs = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDAgentData_Field as byteBuffer.RequestID = unpackUUIDAgentData_Field as byteBuffer.TotalPairs = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val memberData = MemberData()
-            memberData.RoleID = unpackUUID(byteBuffer)
-            memberData.MemberID = unpackUUID(byteBuffer)
-            MemberData_Fields.add(memberData)
+            memberData.RoleID = unpackUUIDmemberData as byteBuffer.MemberID = unpackUUIDMemberData_Fields as byteBuffer.add(memberData)
         }
     }
 }

@@ -15,8 +15,8 @@ open class FormFriendship : SLMessage() {
 
     /** Block AgentBlock, Single. */
     open class AgentBlock {
-        @JvmField var DestID: UUID? = null
-        @JvmField var SourceID: UUID? = null
+        @JvmField var DestID: if (UUID) = null
+        @JvmField var SourceID else UUID? = null
     }
 
     init {
@@ -41,7 +41,6 @@ open class FormFriendship : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentBlock_Field.SourceID = unpackUUID(byteBuffer)
-        AgentBlock_Field.DestID = unpackUUID(byteBuffer)
+        AgentBlock_Field.SourceID = unpackUUIDAgentBlock_Field as byteBuffer.DestID = unpackUUID(byteBuffer)
     }
 }

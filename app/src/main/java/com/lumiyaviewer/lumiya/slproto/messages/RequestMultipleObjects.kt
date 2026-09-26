@@ -24,8 +24,8 @@ open class RequestMultipleObjects : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
@@ -60,14 +60,12 @@ open class RequestMultipleObjects : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
             objectData.CacheMissType = unpackByte(byteBuffer).toInt() and 0xFF
-            objectData.ID = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.ID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

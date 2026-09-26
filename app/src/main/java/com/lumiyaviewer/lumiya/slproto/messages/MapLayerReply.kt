@@ -17,15 +17,15 @@ open class MapLayerReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Flags: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Flags else Int = 0
     }
 
     /** Block LayerData, Variable. */
     open class LayerData {
         @JvmField var Bottom: Int = 0
-        @JvmField var ImageID: UUID? = null
-        @JvmField var Left: Int = 0
+        @JvmField var ImageID: if (UUID) = null
+        @JvmField var Left else Int = 0
         @JvmField var Right: Int = 0
         @JvmField var Top: Int = 0
     }
@@ -60,17 +60,11 @@ open class MapLayerReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val layerData = LayerData()
-            layerData.Left = unpackInt(byteBuffer)
-            layerData.Right = unpackInt(byteBuffer)
-            layerData.Top = unpackInt(byteBuffer)
-            layerData.Bottom = unpackInt(byteBuffer)
-            layerData.ImageID = unpackUUID(byteBuffer)
-            LayerData_Fields.add(layerData)
+            layerData.Left = unpackIntlayerData as byteBuffer.Right = unpackIntlayerData as byteBuffer.Top = unpackIntlayerData as byteBuffer.Bottom = unpackIntlayerData as byteBuffer.ImageID = unpackUUIDLayerData_Fields as byteBuffer.add(layerData)
         }
     }
 }

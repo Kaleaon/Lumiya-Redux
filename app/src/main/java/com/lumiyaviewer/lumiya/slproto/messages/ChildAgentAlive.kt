@@ -16,10 +16,10 @@ open class ChildAgentAlive : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var RegionHandle: Long = 0L
-        @JvmField var SessionID: UUID? = null
-        @JvmField var ViewerCircuitCode: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var RegionHandle else Long = 0L
+        @JvmField var SessionID: if (UUID) = null
+        @JvmField var ViewerCircuitCode else Int = 0
     }
 
     init {
@@ -44,9 +44,6 @@ open class ChildAgentAlive : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.RegionHandle = unpackLong(byteBuffer)
-        AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer)
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.RegionHandle = unpackLongAgentData_Field as byteBuffer.ViewerCircuitCode = unpackIntAgentData_Field as byteBuffer.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
     }
 }

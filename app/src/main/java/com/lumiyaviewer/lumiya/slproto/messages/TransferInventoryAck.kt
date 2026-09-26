@@ -17,8 +17,8 @@ open class TransferInventoryAck : SLMessage() {
 
     /** Block InfoBlock, Single. */
     open class InfoBlock {
-        @JvmField var InventoryID: UUID? = null
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var InventoryID: if (UUID) = null
+        @JvmField var TransactionID else UUID? = null
     }
 
     init {
@@ -43,7 +43,6 @@ open class TransferInventoryAck : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        InfoBlock_Field.TransactionID = unpackUUID(byteBuffer)
-        InfoBlock_Field.InventoryID = unpackUUID(byteBuffer)
+        InfoBlock_Field.TransactionID = unpackUUIDInfoBlock_Field as byteBuffer.InventoryID = unpackUUID(byteBuffer)
     }
 }

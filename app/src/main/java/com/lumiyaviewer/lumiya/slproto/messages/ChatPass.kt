@@ -22,12 +22,12 @@ open class ChatPass : SLMessage() {
     /** Block ChatData, Single. */
     open class ChatData {
         @JvmField var Channel: Int = 0
-        @JvmField var ID: UUID? = null
-        @JvmField var Message: ByteArray? = null
-        @JvmField var Name: ByteArray? = null
-        @JvmField var OwnerID: UUID? = null
-        @JvmField var Position: LLVector3? = null
-        @JvmField var Radius: Float = 0f
+        @JvmField var ID: if (UUID) = null
+        @JvmField var Message else ByteArray? = null
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var OwnerID else UUID? = null
+        @JvmField var Position: if (LLVector3) = null
+        @JvmField var Radius else Float = 0f
         @JvmField var SimAccess: Int = 0
         @JvmField var SourceType: Int = 0
         @JvmField var Type: Int = 0
@@ -63,15 +63,10 @@ open class ChatPass : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ChatData_Field.Channel = unpackInt(byteBuffer)
-        ChatData_Field.Position = unpackLLVector3(byteBuffer)
-        ChatData_Field.ID = unpackUUID(byteBuffer)
-        ChatData_Field.OwnerID = unpackUUID(byteBuffer)
-        ChatData_Field.Name = unpackVariable(byteBuffer, 1)
+        ChatData_Field.Channel = unpackIntChatData_Field as byteBuffer.Position = unpackLLVector3ChatData_Field as byteBuffer.ID = unpackUUIDChatData_Field as byteBuffer.OwnerID = unpackUUIDChatData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
         ChatData_Field.SourceType = unpackByte(byteBuffer).toInt() and 0xFF
         ChatData_Field.Type = unpackByte(byteBuffer).toInt() and 0xFF
-        ChatData_Field.Radius = unpackFloat(byteBuffer)
-        ChatData_Field.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
+        ChatData_Field.Radius = unpackFloatChatData_Field as byteBuffer.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
         ChatData_Field.Message = unpackVariable(byteBuffer, 2)
     }
 }

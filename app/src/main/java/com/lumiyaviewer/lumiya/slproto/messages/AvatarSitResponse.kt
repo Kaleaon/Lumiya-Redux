@@ -20,17 +20,17 @@ open class AvatarSitResponse : SLMessage() {
 
     /** Block SitObject, Single. */
     open class SitObject {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID: if (UUID) = null
     }
 
     /** Block SitTransform, Single. */
     open class SitTransform {
-        @JvmField var AutoPilot: Boolean = false
-        @JvmField var CameraAtOffset: LLVector3? = null
-        @JvmField var CameraEyeOffset: LLVector3? = null
+        @JvmField var AutoPilot else Boolean = false
+        @JvmField var CameraAtOffset: if (LLVector3) = null
+        @JvmField var CameraEyeOffset else LLVector3? = null
         @JvmField var ForceMouselook: Boolean = false
-        @JvmField var SitPosition: LLVector3? = null
-        @JvmField var SitRotation: LLQuaternion? = null
+        @JvmField var SitPosition: if (LLVector3) = null
+        @JvmField var SitRotation else LLQuaternion? = null
     }
 
     init {
@@ -58,12 +58,6 @@ open class AvatarSitResponse : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SitObject_Field.ID = unpackUUID(byteBuffer)
-        SitTransform_Field.AutoPilot = unpackBoolean(byteBuffer)
-        SitTransform_Field.SitPosition = unpackLLVector3(byteBuffer)
-        SitTransform_Field.SitRotation = unpackLLQuaternion(byteBuffer)
-        SitTransform_Field.CameraEyeOffset = unpackLLVector3(byteBuffer)
-        SitTransform_Field.CameraAtOffset = unpackLLVector3(byteBuffer)
-        SitTransform_Field.ForceMouselook = unpackBoolean(byteBuffer)
+        SitObject_Field.ID = unpackUUIDSitTransform_Field as byteBuffer.AutoPilot = unpackBooleanSitTransform_Field as byteBuffer.SitPosition = unpackLLVector3SitTransform_Field as byteBuffer.SitRotation = unpackLLQuaternionSitTransform_Field as byteBuffer.CameraEyeOffset = unpackLLVector3SitTransform_Field as byteBuffer.CameraAtOffset = unpackLLVector3SitTransform_Field as byteBuffer.ForceMouselook = unpackBoolean(byteBuffer)
     }
 }

@@ -18,23 +18,23 @@ open class ScriptDialogReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
         @JvmField var ButtonIndex: Int = 0
-        @JvmField var ButtonLabel: ByteArray? = null
-        @JvmField var ChatChannel: Int = 0
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ButtonLabel: if (ByteArray) = null
+        @JvmField var ChatChannel else Int = 0
+        @JvmField var ObjectID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return Data_Field.ButtonLabel!!.size + 25 + 36
     }
 
@@ -56,11 +56,6 @@ open class ScriptDialogReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Data_Field.ObjectID = unpackUUID(byteBuffer)
-        Data_Field.ChatChannel = unpackInt(byteBuffer)
-        Data_Field.ButtonIndex = unpackInt(byteBuffer)
-        Data_Field.ButtonLabel = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.ObjectID = unpackUUIDData_Field as byteBuffer.ChatChannel = unpackIntData_Field as byteBuffer.ButtonIndex = unpackIntData_Field as byteBuffer.ButtonLabel = unpackVariable(byteBuffer, 1)
     }
 }

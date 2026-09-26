@@ -16,15 +16,15 @@ open class UpdateMuteListEntry : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block MuteData, Single. */
     open class MuteData {
         @JvmField var MuteFlags: Int = 0
-        @JvmField var MuteID: UUID? = null
-        @JvmField var MuteName: ByteArray? = null
+        @JvmField var MuteID: if (UUID) = null
+        @JvmField var MuteName else ByteArray? = null
         @JvmField var MuteType: Int = 0
     }
 
@@ -54,11 +54,7 @@ open class UpdateMuteListEntry : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        MuteData_Field.MuteID = unpackUUID(byteBuffer)
-        MuteData_Field.MuteName = unpackVariable(byteBuffer, 1)
-        MuteData_Field.MuteType = unpackInt(byteBuffer)
-        MuteData_Field.MuteFlags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDMuteData_Field as byteBuffer.MuteID = unpackUUIDMuteData_Field as byteBuffer.MuteName = unpackVariable(byteBuffer, 1)
+        MuteData_Field.MuteType = unpackIntMuteData_Field as byteBuffer.MuteFlags = unpackInt(byteBuffer)
     }
 }

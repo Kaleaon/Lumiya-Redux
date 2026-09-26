@@ -21,10 +21,10 @@ open class SetSimPresenceInDatabase : SLMessage() {
         @JvmField var AgentCount: Int = 0
         @JvmField var GridX: Int = 0
         @JvmField var GridY: Int = 0
-        @JvmField var HostName: ByteArray? = null
-        @JvmField var PID: Int = 0
-        @JvmField var RegionID: UUID? = null
-        @JvmField var Status: ByteArray? = null
+        @JvmField var HostName: if (ByteArray) = null
+        @JvmField var PID else Int = 0
+        @JvmField var RegionID: if (UUID) = null
+        @JvmField var Status else ByteArray? = null
         @JvmField var TimeToLive: Int = 0
     }
 
@@ -56,13 +56,7 @@ open class SetSimPresenceInDatabase : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SimData_Field.RegionID = unpackUUID(byteBuffer)
-        SimData_Field.HostName = unpackVariable(byteBuffer, 1)
-        SimData_Field.GridX = unpackInt(byteBuffer)
-        SimData_Field.GridY = unpackInt(byteBuffer)
-        SimData_Field.PID = unpackInt(byteBuffer)
-        SimData_Field.AgentCount = unpackInt(byteBuffer)
-        SimData_Field.TimeToLive = unpackInt(byteBuffer)
-        SimData_Field.Status = unpackVariable(byteBuffer, 1)
+        SimData_Field.RegionID = unpackUUIDSimData_Field as byteBuffer.HostName = unpackVariable(byteBuffer, 1)
+        SimData_Field.GridX = unpackIntSimData_Field as byteBuffer.GridY = unpackIntSimData_Field as byteBuffer.PID = unpackIntSimData_Field as byteBuffer.AgentCount = unpackIntSimData_Field as byteBuffer.TimeToLive = unpackIntSimData_Field as byteBuffer.Status = unpackVariable(byteBuffer, 1)
     }
 }

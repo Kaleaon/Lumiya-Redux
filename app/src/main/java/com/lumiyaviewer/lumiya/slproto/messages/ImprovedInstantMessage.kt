@@ -28,31 +28,31 @@ open class ImprovedInstantMessage : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block MessageBlock, Single. */
     open class MessageBlock {
-        @JvmField var BinaryBucket: ByteArray? = null
-        @JvmField var Dialog: Int = 0
-        @JvmField var FromAgentName: ByteArray? = null
-        @JvmField var FromGroup: Boolean = false
-        @JvmField var ID: UUID? = null
-        @JvmField var Message: ByteArray? = null
+        @JvmField var BinaryBucket: if (ByteArray) = null
+        @JvmField var Dialog else Int = 0
+        @JvmField var FromAgentName: if (ByteArray) = null
+        @JvmField var FromGroup else Boolean = false
+        @JvmField var ID: if (UUID) = null
+        @JvmField var Message else ByteArray? = null
         @JvmField var Offline: Int = 0
         @JvmField var ParentEstateID: Int = 0
-        @JvmField var Position: LLVector3? = null
-        @JvmField var RegionID: UUID? = null
+        @JvmField var Position: if (LLVector3) = null
+        @JvmField var RegionID else UUID? = null
         @JvmField var Timestamp: Int = 0
-        @JvmField var ToAgentID: UUID? = null
+        @JvmField var ToAgentID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return MessageBlock_Field.FromAgentName!!.size + 72 + 2 + MessageBlock_Field.Message!!.size + 2 + MessageBlock_Field.BinaryBucket!!.size + 36
     }
 
@@ -82,18 +82,9 @@ open class ImprovedInstantMessage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        MessageBlock_Field.FromGroup = unpackBoolean(byteBuffer)
-        MessageBlock_Field.ToAgentID = unpackUUID(byteBuffer)
-        MessageBlock_Field.ParentEstateID = unpackInt(byteBuffer)
-        MessageBlock_Field.RegionID = unpackUUID(byteBuffer)
-        MessageBlock_Field.Position = unpackLLVector3(byteBuffer)
-        MessageBlock_Field.Offline = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDMessageBlock_Field as byteBuffer.FromGroup = unpackBooleanMessageBlock_Field as byteBuffer.ToAgentID = unpackUUIDMessageBlock_Field as byteBuffer.ParentEstateID = unpackIntMessageBlock_Field as byteBuffer.RegionID = unpackUUIDMessageBlock_Field as byteBuffer.Position = unpackLLVector3MessageBlock_Field as byteBuffer.Offline = unpackByte(byteBuffer).toInt() and 0xFF
         MessageBlock_Field.Dialog = unpackByte(byteBuffer).toInt() and 0xFF
-        MessageBlock_Field.ID = unpackUUID(byteBuffer)
-        MessageBlock_Field.Timestamp = unpackInt(byteBuffer)
-        MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1)
+        MessageBlock_Field.ID = unpackUUIDMessageBlock_Field as byteBuffer.Timestamp = unpackIntMessageBlock_Field as byteBuffer.FromAgentName = unpackVariable(byteBuffer, 1)
         MessageBlock_Field.Message = unpackVariable(byteBuffer, 2)
         MessageBlock_Field.BinaryBucket = unpackVariable(byteBuffer, 2)
     }

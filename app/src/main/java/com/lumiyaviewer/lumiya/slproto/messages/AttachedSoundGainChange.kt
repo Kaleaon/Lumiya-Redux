@@ -18,14 +18,14 @@ open class AttachedSoundGainChange : SLMessage() {
     /** Block DataBlock, Single. */
     open class DataBlock {
         @JvmField var Gain: Float = 0f
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 22
     }
 
@@ -42,7 +42,6 @@ open class AttachedSoundGainChange : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.ObjectID = unpackUUID(byteBuffer)
-        DataBlock_Field.Gain = unpackFloat(byteBuffer)
+        DataBlock_Field.ObjectID = unpackUUIDDataBlock_Field as byteBuffer.Gain = unpackFloat(byteBuffer)
     }
 }

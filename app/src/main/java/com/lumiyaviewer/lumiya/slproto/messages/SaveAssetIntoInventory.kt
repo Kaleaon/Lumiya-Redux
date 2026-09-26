@@ -21,20 +21,20 @@ open class SaveAssetIntoInventory : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block InventoryData, Single. */
     open class InventoryData {
-        @JvmField var ItemID: UUID? = null
-        @JvmField var NewAssetID: UUID? = null
+        @JvmField var ItemID else UUID? = null
+        @JvmField var NewAssetID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 52
     }
 
@@ -53,8 +53,6 @@ open class SaveAssetIntoInventory : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        InventoryData_Field.ItemID = unpackUUID(byteBuffer)
-        InventoryData_Field.NewAssetID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDInventoryData_Field as byteBuffer.ItemID = unpackUUIDInventoryData_Field as byteBuffer.NewAssetID = unpackUUID(byteBuffer)
     }
 }

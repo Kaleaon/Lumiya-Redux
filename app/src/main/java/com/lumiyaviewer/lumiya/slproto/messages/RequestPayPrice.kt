@@ -16,14 +16,14 @@ open class RequestPayPrice : SLMessage() {
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 20
     }
 

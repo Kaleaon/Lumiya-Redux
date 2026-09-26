@@ -21,17 +21,17 @@ open class GroupNoticesListReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
     }
 
     /** Block Data, Variable. */
     open class Data {
         @JvmField var AssetType: Int = 0
-        @JvmField var FromName: ByteArray? = null
-        @JvmField var HasAttachment: Boolean = false
-        @JvmField var NoticeID: UUID? = null
-        @JvmField var Subject: ByteArray? = null
+        @JvmField var FromName: if (ByteArray) = null
+        @JvmField var HasAttachment else Boolean = false
+        @JvmField var NoticeID: if (UUID) = null
+        @JvmField var Subject else ByteArray? = null
         @JvmField var Timestamp: Int = 0
     }
 
@@ -75,17 +75,13 @@ open class GroupNoticesListReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.NoticeID = unpackUUID(byteBuffer)
-            data.Timestamp = unpackInt(byteBuffer)
-            data.FromName = unpackVariable(byteBuffer, 2)
+            data.NoticeID = unpackUUIDdata as byteBuffer.Timestamp = unpackIntdata as byteBuffer.FromName = unpackVariable(byteBuffer, 2)
             data.Subject = unpackVariable(byteBuffer, 2)
-            data.HasAttachment = unpackBoolean(byteBuffer)
-            data.AssetType = unpackByte(byteBuffer).toInt() and 0xFF
+            data.HasAttachment = unpackBooleandata as byteBuffer.AssetType = unpackByte(byteBuffer).toInt() and 0xFF
             Data_Fields.add(data)
         }
     }

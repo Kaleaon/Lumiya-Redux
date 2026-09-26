@@ -19,16 +19,16 @@ open class GroupRoleChanges : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block RoleChange, Variable. */
     open class RoleChange {
-        @JvmField var Change: Int = 0
-        @JvmField var MemberID: UUID? = null
-        @JvmField var RoleID: UUID? = null
+        @JvmField var Change else Int = 0
+        @JvmField var MemberID: if (UUID) = null
+        @JvmField var RoleID else UUID? = null
     }
 
     init {
@@ -60,16 +60,11 @@ open class GroupRoleChanges : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val roleChange = RoleChange()
-            roleChange.RoleID = unpackUUID(byteBuffer)
-            roleChange.MemberID = unpackUUID(byteBuffer)
-            roleChange.Change = unpackInt(byteBuffer)
-            RoleChange_Fields.add(roleChange)
+            roleChange.RoleID = unpackUUIDroleChange as byteBuffer.MemberID = unpackUUIDroleChange as byteBuffer.Change = unpackIntRoleChange_Fields as byteBuffer.add(roleChange)
         }
     }
 }

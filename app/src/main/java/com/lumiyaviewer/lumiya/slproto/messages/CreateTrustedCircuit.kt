@@ -19,8 +19,8 @@ open class CreateTrustedCircuit : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var Digest: ByteArray? = null
-        @JvmField var EndPointID: UUID? = null
+        @JvmField var Digest: if (ByteArray) = null
+        @JvmField var EndPointID else UUID? = null
     }
 
     init {
@@ -45,7 +45,6 @@ open class CreateTrustedCircuit : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.EndPointID = unpackUUID(byteBuffer)
-        DataBlock_Field.Digest = unpackFixed(byteBuffer, 32)
+        DataBlock_Field.EndPointID = unpackUUIDDataBlock_Field as byteBuffer.Digest = unpackFixed(byteBuffer, 32)
     }
 }

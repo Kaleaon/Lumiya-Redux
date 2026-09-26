@@ -17,8 +17,8 @@ open class ScriptRunningReply : SLMessage() {
 
     /** Block Script, Single. */
     open class Script {
-        @JvmField var ItemID: UUID? = null
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ItemID: if (UUID) = null
+        @JvmField var ObjectID else UUID? = null
         @JvmField var Running: Boolean = false
     }
 
@@ -45,8 +45,6 @@ open class ScriptRunningReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Script_Field.ObjectID = unpackUUID(byteBuffer)
-        Script_Field.ItemID = unpackUUID(byteBuffer)
-        Script_Field.Running = unpackBoolean(byteBuffer)
+        Script_Field.ObjectID = unpackUUIDScript_Field as byteBuffer.ItemID = unpackUUIDScript_Field as byteBuffer.Running = unpackBoolean(byteBuffer)
     }
 }

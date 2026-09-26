@@ -17,10 +17,10 @@ open class TeleportLureRequest : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var LureID: UUID? = null
-        @JvmField var SessionID: UUID? = null
-        @JvmField var TeleportFlags: Int = 0
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var LureID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
+        @JvmField var TeleportFlags else Int = 0
     }
 
     init {
@@ -47,9 +47,6 @@ open class TeleportLureRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.SessionID = unpackUUID(byteBuffer)
-        Info_Field.LureID = unpackUUID(byteBuffer)
-        Info_Field.TeleportFlags = unpackInt(byteBuffer)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.SessionID = unpackUUIDInfo_Field as byteBuffer.LureID = unpackUUIDInfo_Field as byteBuffer.TeleportFlags = unpackInt(byteBuffer)
     }
 }

@@ -21,29 +21,29 @@ open class ClassifiedInfoUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
         @JvmField var Category: Int = 0
         @JvmField var ClassifiedFlags: Int = 0
-        @JvmField var ClassifiedID: UUID? = null
-        @JvmField var Desc: ByteArray? = null
-        @JvmField var Name: ByteArray? = null
-        @JvmField var ParcelID: UUID? = null
+        @JvmField var ClassifiedID: if (UUID) = null
+        @JvmField var Desc else ByteArray? = null
+        @JvmField var Name: if (ByteArray) = null
+        @JvmField var ParcelID else UUID? = null
         @JvmField var ParentEstate: Int = 0
-        @JvmField var PosGlobal: LLVector3d? = null
-        @JvmField var PriceForListing: Int = 0
-        @JvmField var SnapshotID: UUID? = null
+        @JvmField var PosGlobal: if (LLVector3d) = null
+        @JvmField var PriceForListing else Int = 0
+        @JvmField var SnapshotID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return Data_Field.Name!!.size + 21 + 2 + Data_Field.Desc!!.size + 16 + 4 + 16 + 24 + 1 + 4 + 36
     }
 
@@ -71,17 +71,9 @@ open class ClassifiedInfoUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Data_Field.ClassifiedID = unpackUUID(byteBuffer)
-        Data_Field.Category = unpackInt(byteBuffer)
-        Data_Field.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.ClassifiedID = unpackUUIDData_Field as byteBuffer.Category = unpackIntData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
         Data_Field.Desc = unpackVariable(byteBuffer, 2)
-        Data_Field.ParcelID = unpackUUID(byteBuffer)
-        Data_Field.ParentEstate = unpackInt(byteBuffer)
-        Data_Field.SnapshotID = unpackUUID(byteBuffer)
-        Data_Field.PosGlobal = unpackLLVector3d(byteBuffer)
-        Data_Field.ClassifiedFlags = unpackByte(byteBuffer).toInt() and 0xFF
+        Data_Field.ParcelID = unpackUUIDData_Field as byteBuffer.ParentEstate = unpackIntData_Field as byteBuffer.SnapshotID = unpackUUIDData_Field as byteBuffer.PosGlobal = unpackLLVector3dData_Field as byteBuffer.ClassifiedFlags = unpackByte(byteBuffer).toInt() and 0xFF
         Data_Field.PriceForListing = unpackInt(byteBuffer)
     }
 }

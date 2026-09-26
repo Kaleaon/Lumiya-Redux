@@ -19,8 +19,8 @@ open class UUIDGroupNameReply : SLMessage() {
 
     /** Block UUIDNameBlock, Variable. */
     open class UUIDNameBlock {
-        @JvmField var GroupName: ByteArray? = null
-        @JvmField var ID: UUID? = null
+        @JvmField var GroupName: if (ByteArray) = null
+        @JvmField var ID else UUID? = null
     }
 
     init {
@@ -59,8 +59,7 @@ open class UUIDGroupNameReply : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val uuidNameBlock = UUIDNameBlock()
-            uuidNameBlock.ID = unpackUUID(byteBuffer)
-            uuidNameBlock.GroupName = unpackVariable(byteBuffer, 1)
+            uuidNameBlock.ID = unpackUUIDuuidNameBlock as byteBuffer.GroupName = unpackVariable(byteBuffer, 1)
             UUIDNameBlock_Fields.add(uuidNameBlock)
         }
     }

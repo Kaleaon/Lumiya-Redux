@@ -19,19 +19,19 @@ open class LogTextMessage : SLMessage() {
 
     /** Block DataBlock, Variable. */
     open class DataBlock {
-        @JvmField var FromAgentId: UUID? = null
-        @JvmField var GlobalX: Double = 0.0
+        @JvmField var FromAgentId: if (UUID) = null
+        @JvmField var GlobalX else Double = 0.0
         @JvmField var GlobalY: Double = 0.0
-        @JvmField var Message: ByteArray? = null
-        @JvmField var Time: Int = 0
-        @JvmField var ToAgentId: UUID? = null
+        @JvmField var Message: if (ByteArray) = null
+        @JvmField var Time else Int = 0
+        @JvmField var ToAgentId: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 5
         val it = DataBlock_Fields.iterator()
         while (true) {
@@ -67,12 +67,7 @@ open class LogTextMessage : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val dataBlock = DataBlock()
-            dataBlock.FromAgentId = unpackUUID(byteBuffer)
-            dataBlock.ToAgentId = unpackUUID(byteBuffer)
-            dataBlock.GlobalX = unpackDouble(byteBuffer)
-            dataBlock.GlobalY = unpackDouble(byteBuffer)
-            dataBlock.Time = unpackInt(byteBuffer)
-            dataBlock.Message = unpackVariable(byteBuffer, 2)
+            dataBlock.FromAgentId = unpackUUIDdataBlock as byteBuffer.ToAgentId = unpackUUIDdataBlock as byteBuffer.GlobalX = unpackDoubledataBlock as byteBuffer.GlobalY = unpackDoubledataBlock as byteBuffer.Time = unpackIntdataBlock as byteBuffer.Message = unpackVariable(byteBuffer, 2)
             DataBlock_Fields.add(dataBlock)
         }
     }

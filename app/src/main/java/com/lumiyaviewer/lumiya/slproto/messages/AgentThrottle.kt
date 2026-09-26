@@ -16,22 +16,22 @@ open class AgentThrottle : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var CircuitCode: Int = 0
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var CircuitCode else Int = 0
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block Throttle, Single. */
     open class Throttle {
-        @JvmField var GenCounter: Int = 0
-        @JvmField var Throttles: ByteArray? = null
+        @JvmField var GenCounter else Int = 0
+        @JvmField var Throttles: if (ByteArray) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return Throttle_Field.Throttles!!.size + 5 + 40
     }
 
@@ -52,10 +52,6 @@ open class AgentThrottle : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.CircuitCode = unpackInt(byteBuffer)
-        Throttle_Field.GenCounter = unpackInt(byteBuffer)
-        Throttle_Field.Throttles = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.CircuitCode = unpackIntThrottle_Field as byteBuffer.GenCounter = unpackIntThrottle_Field as byteBuffer.Throttles = unpackVariable(byteBuffer, 1)
     }
 }

@@ -19,12 +19,12 @@ open class TeleportProgress : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var Message: ByteArray? = null
+        @JvmField var Message else ByteArray? = null
         @JvmField var TeleportFlags: Int = 0
     }
 
@@ -51,8 +51,6 @@ open class TeleportProgress : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.TeleportFlags = unpackInt(byteBuffer)
-        Info_Field.Message = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.TeleportFlags = unpackIntInfo_Field as byteBuffer.Message = unpackVariable(byteBuffer, 1)
     }
 }

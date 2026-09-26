@@ -16,20 +16,20 @@ open class DeclineFriendship : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block TransactionBlock, Single. */
     open class TransactionBlock {
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 52
     }
 
@@ -48,8 +48,6 @@ open class DeclineFriendship : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        TransactionBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDTransactionBlock_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
     }
 }

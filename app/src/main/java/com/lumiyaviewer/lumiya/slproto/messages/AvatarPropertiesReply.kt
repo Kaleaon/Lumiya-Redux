@@ -21,28 +21,28 @@ open class AvatarPropertiesReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AvatarID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AvatarID else UUID? = null
     }
 
     /** Block PropertiesData, Single. */
     open class PropertiesData {
-        @JvmField var AboutText: ByteArray? = null
-        @JvmField var BornOn: ByteArray? = null
-        @JvmField var CharterMember: ByteArray? = null
-        @JvmField var FLAboutText: ByteArray? = null
-        @JvmField var FLImageID: UUID? = null
-        @JvmField var Flags: Int = 0
-        @JvmField var ImageID: UUID? = null
-        @JvmField var PartnerID: UUID? = null
-        @JvmField var ProfileURL: ByteArray? = null
+        @JvmField var AboutText: if (ByteArray) = null
+        @JvmField var BornOn else ByteArray? = null
+        @JvmField var CharterMember: if (ByteArray) = null
+        @JvmField var FLAboutText else ByteArray? = null
+        @JvmField var FLImageID: if (UUID) = null
+        @JvmField var Flags else Int = 0
+        @JvmField var ImageID: if (UUID) = null
+        @JvmField var PartnerID else UUID? = null
+        @JvmField var ProfileURL: if (ByteArray) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return PropertiesData_Field.AboutText!!.size + 50 + 1 + PropertiesData_Field.FLAboutText!!.size + 1 + PropertiesData_Field.BornOn!!.size + 1 + PropertiesData_Field.ProfileURL!!.size + 1 + PropertiesData_Field.CharterMember!!.size + 4 + 36
     }
 
@@ -69,12 +69,7 @@ open class AvatarPropertiesReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.AvatarID = unpackUUID(byteBuffer)
-        PropertiesData_Field.ImageID = unpackUUID(byteBuffer)
-        PropertiesData_Field.FLImageID = unpackUUID(byteBuffer)
-        PropertiesData_Field.PartnerID = unpackUUID(byteBuffer)
-        PropertiesData_Field.AboutText = unpackVariable(byteBuffer, 2)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.AvatarID = unpackUUIDPropertiesData_Field as byteBuffer.ImageID = unpackUUIDPropertiesData_Field as byteBuffer.FLImageID = unpackUUIDPropertiesData_Field as byteBuffer.PartnerID = unpackUUIDPropertiesData_Field as byteBuffer.AboutText = unpackVariable(byteBuffer, 2)
         PropertiesData_Field.FLAboutText = unpackVariable(byteBuffer, 1)
         PropertiesData_Field.BornOn = unpackVariable(byteBuffer, 1)
         PropertiesData_Field.ProfileURL = unpackVariable(byteBuffer, 1)

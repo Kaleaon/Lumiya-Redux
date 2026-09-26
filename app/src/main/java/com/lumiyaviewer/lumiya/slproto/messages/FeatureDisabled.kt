@@ -17,16 +17,16 @@ open class FeatureDisabled : SLMessage() {
 
     /** Block FailureInfo, Single. */
     open class FailureInfo {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var ErrorMessage: ByteArray? = null
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var ErrorMessage else ByteArray? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return FailureInfo_Field.ErrorMessage!!.size + 1 + 16 + 16 + 4
     }
 
@@ -46,7 +46,6 @@ open class FeatureDisabled : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         FailureInfo_Field.ErrorMessage = unpackVariable(byteBuffer, 1)
-        FailureInfo_Field.AgentID = unpackUUID(byteBuffer)
-        FailureInfo_Field.TransactionID = unpackUUID(byteBuffer)
+        FailureInfo_Field.AgentID = unpackUUIDFailureInfo_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
     }
 }

@@ -20,14 +20,14 @@ open class UUIDNameRequest : SLMessage() {
 
     /** Block UUIDNameBlock, Variable. */
     open class UUIDNameBlock {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (UUIDNameBlock_Fields.size * 16) + 5
     }
 
@@ -50,8 +50,7 @@ open class UUIDNameRequest : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val uuidNameBlock = UUIDNameBlock()
-            uuidNameBlock.ID = unpackUUID(byteBuffer)
-            UUIDNameBlock_Fields.add(uuidNameBlock)
+            uuidNameBlock.ID = unpackUUIDUUIDNameBlock_Fields as byteBuffer.add(uuidNameBlock)
         }
     }
 }

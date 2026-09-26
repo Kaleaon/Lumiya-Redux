@@ -17,15 +17,15 @@ open class ObjectExtraParams : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
         @JvmField var ObjectLocalID: Int = 0
-        @JvmField var ParamData: ByteArray? = null
-        @JvmField var ParamInUse: Boolean = false
+        @JvmField var ParamData: if (ByteArray) = null
+        @JvmField var ParamInUse else Boolean = false
         @JvmField var ParamSize: Int = 0
         @JvmField var ParamType: Int = 0
     }
@@ -68,16 +68,12 @@ open class ObjectExtraParams : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackInt(byteBuffer)
-            objectData.ParamType = unpackShort(byteBuffer).toInt() and 65535
-            objectData.ParamInUse = unpackBoolean(byteBuffer)
-            objectData.ParamSize = unpackInt(byteBuffer)
-            objectData.ParamData = unpackVariable(byteBuffer, 1)
+            objectData.ObjectLocalID = unpackIntobjectData as byteBuffer.ParamType = unpackShort(byteBuffer).toInt() and 65535
+            objectData.ParamInUse = unpackBooleanobjectData as byteBuffer.ParamSize = unpackIntobjectData as byteBuffer.ParamData = unpackVariable(byteBuffer, 1)
             ObjectData_Fields.add(objectData)
         }
     }

@@ -19,12 +19,12 @@ open class RemoveNameValuePair : SLMessage() {
 
     /** Block NameValueData, Variable. */
     open class NameValueData {
-        @JvmField var NVPair: ByteArray? = null
+        @JvmField var NVPair: if (ByteArray) = null
     }
 
     /** Block TaskData, Single. */
     open class TaskData {
-        @JvmField var ID: UUID? = null
+        @JvmField var ID else UUID? = null
     }
 
     init {

@@ -56,15 +56,11 @@ open class ObjectUpdateCached : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        RegionData_Field.RegionHandle = unpackLong(byteBuffer)
-        RegionData_Field.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
+        RegionData_Field.RegionHandle = unpackLongRegionData_Field as byteBuffer.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ID = unpackInt(byteBuffer)
-            objectData.CRC = unpackInt(byteBuffer)
-            objectData.UpdateFlags = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.ID = unpackIntobjectData as byteBuffer.CRC = unpackIntobjectData as byteBuffer.UpdateFlags = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

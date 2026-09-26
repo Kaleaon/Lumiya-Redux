@@ -23,12 +23,12 @@ open class ChangeUserRights : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block Rights, Variable. */
     open class Rights {
-        @JvmField var AgentRelated: UUID? = null
+        @JvmField var AgentRelated else UUID? = null
         @JvmField var RelatedRights: Int = 0
     }
 
@@ -62,9 +62,7 @@ open class ChangeUserRights : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val rights = Rights()
-            rights.AgentRelated = unpackUUID(byteBuffer)
-            rights.RelatedRights = unpackInt(byteBuffer)
-            Rights_Fields.add(rights)
+            rights.AgentRelated = unpackUUIDrights as byteBuffer.RelatedRights = unpackIntRights_Fields as byteBuffer.add(rights)
         }
     }
 }

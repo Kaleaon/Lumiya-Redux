@@ -52,10 +52,7 @@ open class ScriptControlChange : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.TakeControls = unpackBoolean(byteBuffer)
-            data.Controls = unpackInt(byteBuffer)
-            data.PassToAgent = unpackBoolean(byteBuffer)
-            Data_Fields.add(data)
+            data.TakeControls = unpackBooleandata as byteBuffer.Controls = unpackIntdata as byteBuffer.PassToAgent = unpackBooleanData_Fields as byteBuffer.add(data)
         }
     }
 }

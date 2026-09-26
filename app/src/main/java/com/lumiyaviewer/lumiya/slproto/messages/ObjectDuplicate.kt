@@ -21,27 +21,27 @@ open class ObjectDuplicate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectLocalID: Int = 0
+        @JvmField var ObjectLocalID else Int = 0
     }
 
     /** Block SharedData, Single. */
     open class SharedData {
         @JvmField var DuplicateFlags: Int = 0
-        @JvmField var Offset: LLVector3? = null
+        @JvmField var Offset: if (LLVector3) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (ObjectData_Fields.size * 4) + 69
     }
 
@@ -66,16 +66,11 @@ open class ObjectDuplicate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        SharedData_Field.Offset = unpackLLVector3(byteBuffer)
-        SharedData_Field.DuplicateFlags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDSharedData_Field as byteBuffer.Offset = unpackLLVector3SharedData_Field as byteBuffer.DuplicateFlags = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackInt(byteBuffer)
-            ObjectData_Fields.add(objectData)
+            objectData.ObjectLocalID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
         }
     }
 }

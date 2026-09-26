@@ -18,14 +18,14 @@ open class AvatarNotesUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Notes: ByteArray? = null
-        @JvmField var TargetID: UUID? = null
+        @JvmField var Notes: if (ByteArray) = null
+        @JvmField var TargetID else UUID? = null
     }
 
     init {
@@ -52,9 +52,6 @@ open class AvatarNotesUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        Data_Field.TargetID = unpackUUID(byteBuffer)
-        Data_Field.Notes = unpackVariable(byteBuffer, 2)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.TargetID = unpackUUIDData_Field as byteBuffer.Notes = unpackVariable(byteBuffer, 2)
     }
 }

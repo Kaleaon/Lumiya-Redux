@@ -23,29 +23,29 @@ open class PlacesQuery : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var QueryID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var QueryID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var Category: Int = 0
+        @JvmField var Category else Int = 0
         @JvmField var QueryFlags: Int = 0
-        @JvmField var QueryText: ByteArray? = null
-        @JvmField var SimName: ByteArray? = null
+        @JvmField var QueryText: if (ByteArray) = null
+        @JvmField var SimName else ByteArray? = null
     }
 
     /** Block TransactionData, Single. */
     open class TransactionData {
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return QueryData_Field.QueryText!!.size + 1 + 4 + 1 + 1 + QueryData_Field.SimName!!.size + 68
     }
 
@@ -69,13 +69,8 @@ open class PlacesQuery : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.QueryID = unpackUUID(byteBuffer)
-        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
-        QueryData_Field.QueryText = unpackVariable(byteBuffer, 1)
-        QueryData_Field.QueryFlags = unpackInt(byteBuffer)
-        QueryData_Field.Category = unpackByte(byteBuffer).toInt()
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.QueryID = unpackUUIDTransactionData_Field as byteBuffer.TransactionID = unpackUUIDQueryData_Field as byteBuffer.QueryText = unpackVariable(byteBuffer, 1)
+        QueryData_Field.QueryFlags = unpackIntQueryData_Field as byteBuffer.Category = unpackByte(byteBuffer).toInt()
         QueryData_Field.SimName = unpackVariable(byteBuffer, 1)
     }
 }

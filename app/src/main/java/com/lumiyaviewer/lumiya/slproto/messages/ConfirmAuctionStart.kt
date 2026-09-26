@@ -16,14 +16,14 @@ open class ConfirmAuctionStart : SLMessage() {
     /** Block AuctionData, Single. */
     open class AuctionData {
         @JvmField var AuctionID: Int = 0
-        @JvmField var ParcelID: UUID? = null
+        @JvmField var ParcelID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 24
     }
 
@@ -41,7 +41,6 @@ open class ConfirmAuctionStart : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AuctionData_Field.ParcelID = unpackUUID(byteBuffer)
-        AuctionData_Field.AuctionID = unpackInt(byteBuffer)
+        AuctionData_Field.ParcelID = unpackUUIDAuctionData_Field as byteBuffer.AuctionID = unpackInt(byteBuffer)
     }
 }

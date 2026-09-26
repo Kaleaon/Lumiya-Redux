@@ -22,20 +22,20 @@ open class AlertMessage : SLMessage() {
 
     /** Block AlertData, Single. */
     open class AlertData {
-        @JvmField var Message: ByteArray? = null
+        @JvmField var Message: if (ByteArray) = null
     }
 
     /** Block AlertInfo, Variable. */
     open class AlertInfo {
-        @JvmField var ExtraParams: ByteArray? = null
-        @JvmField var Message: ByteArray? = null
+        @JvmField var ExtraParams else ByteArray? = null
+        @JvmField var Message: if (ByteArray) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var length = AlertData_Field.Message!!.size + 1 + 4 + 1
         val it = AlertInfo_Fields.iterator()
         while (true) {

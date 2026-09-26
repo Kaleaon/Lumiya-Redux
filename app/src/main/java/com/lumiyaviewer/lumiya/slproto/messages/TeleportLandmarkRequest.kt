@@ -16,16 +16,16 @@ open class TeleportLandmarkRequest : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var LandmarkID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var LandmarkID else UUID? = null
+        @JvmField var SessionID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 52
     }
 
@@ -44,8 +44,6 @@ open class TeleportLandmarkRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUID(byteBuffer)
-        Info_Field.SessionID = unpackUUID(byteBuffer)
-        Info_Field.LandmarkID = unpackUUID(byteBuffer)
+        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.SessionID = unpackUUIDInfo_Field as byteBuffer.LandmarkID = unpackUUID(byteBuffer)
     }
 }

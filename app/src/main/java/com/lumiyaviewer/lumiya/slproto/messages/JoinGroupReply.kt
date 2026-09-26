@@ -19,12 +19,12 @@ open class JoinGroupReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: UUID? = null
+        @JvmField var GroupID else UUID? = null
         @JvmField var Success: Boolean = false
     }
 
@@ -51,8 +51,6 @@ open class JoinGroupReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        GroupData_Field.GroupID = unpackUUID(byteBuffer)
-        GroupData_Field.Success = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.Success = unpackBoolean(byteBuffer)
     }
 }

@@ -20,35 +20,35 @@ open class GroupActiveProposalItemReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var GroupID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var GroupID else UUID? = null
     }
 
     /** Block ProposalData, Variable. */
     open class ProposalData {
         @JvmField var AlreadyVoted: Boolean = false
-        @JvmField var EndDateTime: ByteArray? = null
-        @JvmField var Majority: Float = 0f
-        @JvmField var ProposalText: ByteArray? = null
-        @JvmField var Quorum: Int = 0
-        @JvmField var StartDateTime: ByteArray? = null
-        @JvmField var TerseDateID: ByteArray? = null
-        @JvmField var VoteCast: ByteArray? = null
-        @JvmField var VoteID: UUID? = null
-        @JvmField var VoteInitiator: UUID? = null
+        @JvmField var EndDateTime: if (ByteArray) = null
+        @JvmField var Majority else Float = 0f
+        @JvmField var ProposalText: if (ByteArray) = null
+        @JvmField var Quorum else Int = 0
+        @JvmField var StartDateTime: if (ByteArray) = null
+        @JvmField var TerseDateID else ByteArray? = null
+        @JvmField var VoteCast: if (ByteArray) = null
+        @JvmField var VoteID else UUID? = null
+        @JvmField var VoteInitiator: if (UUID) = null
     }
 
     /** Block TransactionData, Single. */
     open class TransactionData {
-        @JvmField var TotalNumItems: Int = 0
-        @JvmField var TransactionID: UUID? = null
+        @JvmField var TotalNumItems else Int = 0
+        @JvmField var TransactionID: if (UUID) = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         var i = 57
         val it = ProposalData_Fields.iterator()
         while (true) {
@@ -90,23 +90,15 @@ open class GroupActiveProposalItemReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.GroupID = unpackUUID(byteBuffer)
-        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
-        TransactionData_Field.TotalNumItems = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDTransactionData_Field as byteBuffer.TransactionID = unpackUUIDTransactionData_Field as byteBuffer.TotalNumItems = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val proposalData = ProposalData()
-            proposalData.VoteID = unpackUUID(byteBuffer)
-            proposalData.VoteInitiator = unpackUUID(byteBuffer)
-            proposalData.TerseDateID = unpackVariable(byteBuffer, 1)
+            proposalData.VoteID = unpackUUIDproposalData as byteBuffer.VoteInitiator = unpackUUIDproposalData as byteBuffer.TerseDateID = unpackVariable(byteBuffer, 1)
             proposalData.StartDateTime = unpackVariable(byteBuffer, 1)
             proposalData.EndDateTime = unpackVariable(byteBuffer, 1)
-            proposalData.AlreadyVoted = unpackBoolean(byteBuffer)
-            proposalData.VoteCast = unpackVariable(byteBuffer, 1)
-            proposalData.Majority = unpackFloat(byteBuffer)
-            proposalData.Quorum = unpackInt(byteBuffer)
-            proposalData.ProposalText = unpackVariable(byteBuffer, 1)
+            proposalData.AlreadyVoted = unpackBooleanproposalData as byteBuffer.VoteCast = unpackVariable(byteBuffer, 1)
+            proposalData.Majority = unpackFloatproposalData as byteBuffer.Quorum = unpackIntproposalData as byteBuffer.ProposalText = unpackVariable(byteBuffer, 1)
             ProposalData_Fields.add(proposalData)
         }
     }

@@ -25,14 +25,14 @@ open class SetFollowCamProperties : SLMessage() {
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (CameraProperty_Fields.size * 8) + 21
     }
 
@@ -58,9 +58,7 @@ open class SetFollowCamProperties : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val cameraProperty = CameraProperty()
-            cameraProperty.Type = unpackInt(byteBuffer)
-            cameraProperty.Value = unpackFloat(byteBuffer)
-            CameraProperty_Fields.add(cameraProperty)
+            cameraProperty.Type = unpackIntcameraProperty as byteBuffer.Value = unpackFloatCameraProperty_Fields as byteBuffer.add(cameraProperty)
         }
     }
 }

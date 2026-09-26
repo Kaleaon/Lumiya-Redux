@@ -19,20 +19,20 @@ open class CopyInventoryFromNotecard : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block InventoryData, Variable. */
     open class InventoryData {
-        @JvmField var FolderID: UUID? = null
-        @JvmField var ItemID: UUID? = null
+        @JvmField var FolderID: if (UUID) = null
+        @JvmField var ItemID else UUID? = null
     }
 
     /** Block NotecardData, Single. */
     open class NotecardData {
-        @JvmField var NotecardItemID: UUID? = null
-        @JvmField var ObjectID: UUID? = null
+        @JvmField var NotecardItemID: if (UUID) = null
+        @JvmField var ObjectID else UUID? = null
     }
 
     init {
@@ -64,16 +64,11 @@ open class CopyInventoryFromNotecard : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        NotecardData_Field.NotecardItemID = unpackUUID(byteBuffer)
-        NotecardData_Field.ObjectID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDNotecardData_Field as byteBuffer.NotecardItemID = unpackUUIDNotecardData_Field as byteBuffer.ObjectID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inventoryData = InventoryData()
-            inventoryData.ItemID = unpackUUID(byteBuffer)
-            inventoryData.FolderID = unpackUUID(byteBuffer)
-            InventoryData_Fields.add(inventoryData)
+            inventoryData.ItemID = unpackUUIDinventoryData as byteBuffer.FolderID = unpackUUIDInventoryData_Fields as byteBuffer.add(inventoryData)
         }
     }
 }

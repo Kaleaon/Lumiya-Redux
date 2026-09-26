@@ -23,23 +23,23 @@ open class AvatarGroupsReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var AvatarID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AvatarID else UUID? = null
     }
 
     /** Block GroupData, Variable. */
     open class GroupData {
         @JvmField var AcceptNotices: Boolean = false
-        @JvmField var GroupID: UUID? = null
-        @JvmField var GroupInsigniaID: UUID? = null
-        @JvmField var GroupName: ByteArray? = null
-        @JvmField var GroupPowers: Long = 0L
-        @JvmField var GroupTitle: ByteArray? = null
+        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupInsigniaID else UUID? = null
+        @JvmField var GroupName: if (ByteArray) = null
+        @JvmField var GroupPowers else Long = 0L
+        @JvmField var GroupTitle: if (ByteArray) = null
     }
 
     /** Block NewGroupData, Single. */
     open class NewGroupData {
-        @JvmField var ListInProfile: Boolean = false
+        @JvmField var ListInProfile else Boolean = false
     }
 
     init {
@@ -83,18 +83,13 @@ open class AvatarGroupsReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.AvatarID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.AvatarID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val groupData = GroupData()
-            groupData.GroupPowers = unpackLong(byteBuffer)
-            groupData.AcceptNotices = unpackBoolean(byteBuffer)
-            groupData.GroupTitle = unpackVariable(byteBuffer, 1)
-            groupData.GroupID = unpackUUID(byteBuffer)
-            groupData.GroupName = unpackVariable(byteBuffer, 1)
-            groupData.GroupInsigniaID = unpackUUID(byteBuffer)
-            GroupData_Fields.add(groupData)
+            groupData.GroupPowers = unpackLonggroupData as byteBuffer.AcceptNotices = unpackBooleangroupData as byteBuffer.GroupTitle = unpackVariable(byteBuffer, 1)
+            groupData.GroupID = unpackUUIDgroupData as byteBuffer.GroupName = unpackVariable(byteBuffer, 1)
+            groupData.GroupInsigniaID = unpackUUIDGroupData_Fields as byteBuffer.add(groupData)
         }
         NewGroupData_Field.ListInProfile = unpackBoolean(byteBuffer)
     }

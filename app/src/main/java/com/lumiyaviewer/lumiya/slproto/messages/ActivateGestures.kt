@@ -19,23 +19,23 @@ open class ActivateGestures : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var Flags: Int = 0
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var Flags else Int = 0
+        @JvmField var SessionID: if (UUID) = null
     }
 
     /** Block Data, Variable. */
     open class Data {
-        @JvmField var AssetID: UUID? = null
+        @JvmField var AssetID else UUID? = null
         @JvmField var GestureFlags: Int = 0
-        @JvmField var ItemID: UUID? = null
+        @JvmField var ItemID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return (Data_Fields.size * 36) + 41
     }
 
@@ -60,16 +60,11 @@ open class ActivateGestures : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        AgentData_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.ItemID = unpackUUID(byteBuffer)
-            data.AssetID = unpackUUID(byteBuffer)
-            data.GestureFlags = unpackInt(byteBuffer)
-            Data_Fields.add(data)
+            data.ItemID = unpackUUIDdata as byteBuffer.AssetID = unpackUUIDdata as byteBuffer.GestureFlags = unpackIntData_Fields as byteBuffer.add(data)
         }
     }
 }

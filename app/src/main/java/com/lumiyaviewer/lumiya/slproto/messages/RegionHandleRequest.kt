@@ -16,14 +16,14 @@ open class RegionHandleRequest : SLMessage() {
 
     /** Block RequestBlock, Single. */
     open class RequestBlock {
-        @JvmField var RegionID: UUID? = null
+        @JvmField var RegionID: if (UUID) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return 20
     }
 

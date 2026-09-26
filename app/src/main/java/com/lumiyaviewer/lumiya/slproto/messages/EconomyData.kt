@@ -72,22 +72,6 @@ open class EconomyData : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.ObjectCapacity = unpackInt(byteBuffer)
-        Info_Field.ObjectCount = unpackInt(byteBuffer)
-        Info_Field.PriceEnergyUnit = unpackInt(byteBuffer)
-        Info_Field.PriceObjectClaim = unpackInt(byteBuffer)
-        Info_Field.PricePublicObjectDecay = unpackInt(byteBuffer)
-        Info_Field.PricePublicObjectDelete = unpackInt(byteBuffer)
-        Info_Field.PriceParcelClaim = unpackInt(byteBuffer)
-        Info_Field.PriceParcelClaimFactor = unpackFloat(byteBuffer)
-        Info_Field.PriceUpload = unpackInt(byteBuffer)
-        Info_Field.PriceRentLight = unpackInt(byteBuffer)
-        Info_Field.TeleportMinPrice = unpackInt(byteBuffer)
-        Info_Field.TeleportPriceExponent = unpackFloat(byteBuffer)
-        Info_Field.EnergyEfficiency = unpackFloat(byteBuffer)
-        Info_Field.PriceObjectRent = unpackFloat(byteBuffer)
-        Info_Field.PriceObjectScaleFactor = unpackFloat(byteBuffer)
-        Info_Field.PriceParcelRent = unpackInt(byteBuffer)
-        Info_Field.PriceGroupCreate = unpackInt(byteBuffer)
+        Info_Field.ObjectCapacity = unpackIntInfo_Field as byteBuffer.ObjectCount = unpackIntInfo_Field as byteBuffer.PriceEnergyUnit = unpackIntInfo_Field as byteBuffer.PriceObjectClaim = unpackIntInfo_Field as byteBuffer.PricePublicObjectDecay = unpackIntInfo_Field as byteBuffer.PricePublicObjectDelete = unpackIntInfo_Field as byteBuffer.PriceParcelClaim = unpackIntInfo_Field as byteBuffer.PriceParcelClaimFactor = unpackFloatInfo_Field as byteBuffer.PriceUpload = unpackIntInfo_Field as byteBuffer.PriceRentLight = unpackIntInfo_Field as byteBuffer.TeleportMinPrice = unpackIntInfo_Field as byteBuffer.TeleportPriceExponent = unpackFloatInfo_Field as byteBuffer.EnergyEfficiency = unpackFloatInfo_Field as byteBuffer.PriceObjectRent = unpackFloatInfo_Field as byteBuffer.PriceObjectScaleFactor = unpackFloatInfo_Field as byteBuffer.PriceParcelRent = unpackIntInfo_Field as byteBuffer.PriceGroupCreate = unpackInt(byteBuffer)
     }
 }

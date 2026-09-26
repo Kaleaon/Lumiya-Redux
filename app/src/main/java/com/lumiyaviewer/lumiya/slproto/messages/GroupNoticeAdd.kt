@@ -19,17 +19,17 @@ open class GroupNoticeAdd : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
     }
 
     /** Block MessageBlock, Single. */
     open class MessageBlock {
-        @JvmField var BinaryBucket: ByteArray? = null
+        @JvmField var BinaryBucket else ByteArray? = null
         @JvmField var Dialog: Int = 0
-        @JvmField var FromAgentName: ByteArray? = null
-        @JvmField var ID: UUID? = null
-        @JvmField var Message: ByteArray? = null
-        @JvmField var ToGroupID: UUID? = null
+        @JvmField var FromAgentName: if (ByteArray) = null
+        @JvmField var ID else UUID? = null
+        @JvmField var Message: if (ByteArray) = null
+        @JvmField var ToGroupID else UUID? = null
     }
 
     init {
@@ -59,10 +59,7 @@ open class GroupNoticeAdd : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        MessageBlock_Field.ToGroupID = unpackUUID(byteBuffer)
-        MessageBlock_Field.ID = unpackUUID(byteBuffer)
-        MessageBlock_Field.Dialog = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUIDMessageBlock_Field as byteBuffer.ToGroupID = unpackUUIDMessageBlock_Field as byteBuffer.ID = unpackUUIDMessageBlock_Field as byteBuffer.Dialog = unpackByte(byteBuffer).toInt() and 0xFF
         MessageBlock_Field.FromAgentName = unpackVariable(byteBuffer, 1)
         MessageBlock_Field.Message = unpackVariable(byteBuffer, 2)
         MessageBlock_Field.BinaryBucket = unpackVariable(byteBuffer, 2)

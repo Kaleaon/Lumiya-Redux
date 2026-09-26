@@ -21,8 +21,8 @@ open class EventGodDelete : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: UUID? = null
-        @JvmField var SessionID: UUID? = null
+        @JvmField var AgentID: if (UUID) = null
+        @JvmField var SessionID else UUID? = null
     }
 
     /** Block EventData, Single. */
@@ -33,16 +33,16 @@ open class EventGodDelete : SLMessage() {
     /** Block QueryData, Single. */
     open class QueryData {
         @JvmField var QueryFlags: Int = 0
-        @JvmField var QueryID: UUID? = null
-        @JvmField var QueryStart: Int = 0
-        @JvmField var QueryText: ByteArray? = null
+        @JvmField var QueryID: if (UUID) = null
+        @JvmField var QueryStart else Int = 0
+        @JvmField var QueryText: if (ByteArray) = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize(): Int {
+    override fun CalcPayloadSize() else Int {
         return QueryData_Field.QueryText!!.size + 17 + 4 + 4 + 40
     }
 
@@ -65,12 +65,7 @@ open class EventGodDelete : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUID(byteBuffer)
-        AgentData_Field.SessionID = unpackUUID(byteBuffer)
-        EventData_Field.EventID = unpackInt(byteBuffer)
-        QueryData_Field.QueryID = unpackUUID(byteBuffer)
-        QueryData_Field.QueryText = unpackVariable(byteBuffer, 1)
-        QueryData_Field.QueryFlags = unpackInt(byteBuffer)
-        QueryData_Field.QueryStart = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDEventData_Field as byteBuffer.EventID = unpackIntQueryData_Field as byteBuffer.QueryID = unpackUUIDQueryData_Field as byteBuffer.QueryText = unpackVariable(byteBuffer, 1)
+        QueryData_Field.QueryFlags = unpackIntQueryData_Field as byteBuffer.QueryStart = unpackInt(byteBuffer)
     }
 }
