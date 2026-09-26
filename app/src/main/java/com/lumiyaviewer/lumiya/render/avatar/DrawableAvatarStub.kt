@@ -11,16 +11,17 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever
 import java.util.UUID
 
 open class DrawableAvatarStub(
-    protected val drawableStore: DrawableStore,
+    @JvmField protected val drawableStore: DrawableStore,
     uuid: UUID,
-    val avatarObject: SLObjectAvatarInfo
+    @JvmField protected val avatarObject: SLObjectAvatarInfo
 ) : ChatterNameRetriever.OnChatterNameUpdated {
 
     private val chatterNameRetriever =
         ChatterNameRetriever(ChatterID.getUserChatterID(uuid, avatarObject.id), this, null)
 
     @Volatile
-    var drawableNameTag: DrawableHoverText? = null
+    @JvmField
+    protected var drawableNameTag: DrawableHoverText? = null
 
     @Volatile
     private var nameTag: String? = null
@@ -36,7 +37,7 @@ open class DrawableAvatarStub(
         }
     }
 
-    fun DrawNameTag(renderContext: RenderContext) {
+    open fun DrawNameTag(renderContext: RenderContext) {
         val drawableHoverText = drawableNameTag
         val worldMatrix = getWorldMatrix(renderContext)
         if (drawableHoverText == null || worldMatrix == null) {

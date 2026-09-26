@@ -670,3 +670,5 @@ com/lumiyaviewer/lumiya/render/glres/GLResourceManager.kt,src/migration_batch3_s
 com/lumiyaviewer/lumiya/render/glres/GLQuery.kt,src/migration_batch3_small2.rs,boundary
 com/lumiyaviewer/lumiya/render/spatial/SpatialIndex.kt,src/migration_batch3_small2.rs,behavior
 com/lumiyaviewer/lumiya/ui/objpopup/ObjectPopupsActionProvider.kt,src/migration_batch3_small2.rs,boundary
+com/lumiyaviewer/lumiya/utils/BitBuffer.kt,src/migration_batch3_small3.rs,behavior
+com/lumiyaviewer/lumiya/utils/StringUtils.kt,src/migration_batch3_small3.rs,behavior
