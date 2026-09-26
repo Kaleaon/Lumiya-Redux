@@ -137,7 +137,7 @@ except for the few that are no longer distributed:
 | ~~ButterKnife~~ | Removed. Unmigrated screens keep their `*_ViewBinding` classes as plain source with the small `ui/common/binding` runtime. `MinimapActivity` is the first screen moved to generated Android View Binding; later screens follow opportunistically. No annotation processor or JDK `--add-opens` flags remain. |
 | Gson 2.11.0, Guava 33.3.1-android, JSR-305 3.0.2 | Maven Central. |
 | ~~PagerSlidingTabStrip~~ | Replaced by Material `TabLayout` (the four tabbed screens). It was the last dependency built against the old support library, so Jetifier is now off; `verifyNoLegacySupportDependencies` enforces that invariant for debug and release runtime graphs. |
-| **PhotoView** | Shipped in-tree at `uk/co/senab/photoview/` because no reliable Maven drop-in preserves the legacy package. Migration target: `com.github.chrisbanes:PhotoView:2.3.0` + rewrite of the one consumer (`TextureViewFragment`). |
+| ~~PhotoView (in-tree)~~ | Migrated: `com.github.chrisbanes:PhotoView:2.3.0` (JitPack) replaces the `uk/co/senab/photoview/` sources; `TextureViewFragment` now imports `com.github.chrisbanes.photoview.PhotoViewAttacher`. |
 | **Google VR SDK** | Shipped in-tree at `com/google/vr/` and `com/google/vrtoolkit/` plus `jniLibs/*/libgvr.so`. Google retired the SDK in 2019 and removed the Maven artefacts in 2021. Keep only until Cardboard/OpenXR replacement reaches parity and rollout confidence gates are met; then remove in-tree packages + `libgvr.so`. |
 | **protobuf-nano** | Shipped in-tree at `com/google/protobuf/nano/`. protobuf-javanano was discontinued. Only the GVR stack uses it, so remove with the GVR teardown after parity/rollout confidence is established. |
 

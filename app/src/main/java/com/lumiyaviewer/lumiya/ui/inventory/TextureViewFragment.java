@@ -19,7 +19,7 @@ import com.lumiyaviewer.lumiya.ui.common.StateAwareFragment;
 import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.UUID;
 import javax.annotation.Nullable;
-import uk.co.senab.photoview.PhotoViewAttacher;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 public class TextureViewFragment extends StateAwareFragment {
     private static final String ASSET_UUID_KEY = "assetUUID";

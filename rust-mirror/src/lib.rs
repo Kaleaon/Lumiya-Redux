@@ -6,5 +6,8 @@
 
 pub mod callbacks;
 pub mod migration_batch;
+pub mod migration_batch3_small0;
+pub mod migration_batch3_small1;
+pub mod migration_batch3_small2;
 pub mod protocol_messages;
 pub mod utils;

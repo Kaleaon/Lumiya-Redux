@@ -222,7 +222,7 @@ the one path it names for VR is the wrong path.
 | OkHttp 3.14.9 | Final 3.x, 2020 | OkHttp 4.12 / 5.x | Mostly source-compatible; no longer receives TLS fixes |
 | nineoldandroids 2.4.0 | Dead since ~2014 | Framework `ViewPropertyAnimator` (API 12+) | **One file.** Free win. |
 | PagerSlidingTabStrip 1.0.1 | 2014 | Material `TabLayout` | Small |
-| `uk.co.senab.photoview` (in-tree) | Renamed upstream 2016; 2 methods are undecompiled stubs | `com.github.chrisbanes:PhotoView:2.3.0` | `TextureViewFragment` + attacher rewrite |
+| ~~`uk.co.senab.photoview` (in-tree)~~ | Migrated | `com.github.chrisbanes:PhotoView:2.3.0` | Done: `TextureViewFragment` now uses `com.github.chrisbanes.photoview.PhotoViewAttacher` |
 | `legacy-support-v4` / `-v13` | Umbrella of the entire old support library | Delete; depend on what's used | Wide but mechanical |
 | `lifecycle-extensions:2.2.0` | Deprecated, removed upstream | `lifecycle-*-ktx` | Small |
 | protobuf-nano | Dead; only GVR needs it | Removed with GVR | Free once §3 lands |

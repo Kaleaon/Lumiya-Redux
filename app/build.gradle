@@ -253,7 +253,6 @@ tasks.register('rejectUndecompiledMethods') {
     doLast {
         def offenders = fileTree("$projectDir/src/main/java") {
             include 'com/lumiyaviewer/lumiya/**/*.java'
-            include 'uk/co/senab/photoview/**/*.java'
         }.files.findAll { sourceFile ->
             sourceFile.getText('UTF-8').contains('Method not decompiled')
         }
@@ -361,13 +360,12 @@ dependencies {
     implementation 'de.greenrobot:greendao:2.1.0'
 
     // ── PhotoView ──
-    // The `uk.co.senab.photoview` package was discontinued in 2016 when
-    // chrisbanes renamed to `com.github.chrisbanes.photoview`. No reliable
-    // Maven drop-in exists for the old package name, so the decompiled
-    // PhotoView sources live in-tree under uk/co/senab/photoview/.
-    // Migrate to `com.github.chrisbanes:PhotoView:2.3.0` and rewrite
-    // TextureViewFragment.java to use `PhotoViewAttacher(ImageView)` when
-    // you get to that cleanup.
+    // Replaces the in-tree `uk.co.senab.photoview` sources (discontinued in
+    // 2016) with the actively-referenced `com.github.chrisbanes.photoview`
+    // package, resolved from JitPack (see settings.gradle). 2.3.0 is the
+    // last tag published by Baseflow, who maintain the fork; it targets
+    // AndroidX and needs no further transitive support-library deps.
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
 
     // ── Google libraries ──

@@ -90,7 +90,7 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
     }
 
     private fun drawTerrain20(context: RenderContext, matrix: FloatArray, texture: GLLoadedTexture?) {
-        GLES20.glUseProgram(context.primProgram.handle)
+        GLES20.glUseProgram(context.primProgram.getHandle())
         vertexBuffer.Bind20(context, context.primProgram.vPosition, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 0)
         vertexBuffer.Bind20(context, context.primProgram.vNormal, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 12)
         GLES20.glUniformMatrix4fv(context.primProgram.uObjWorldMatrix, 1, false, matrix, 0)
@@ -129,7 +129,7 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
 
     private fun drawWater20(context: RenderContext, matrix: FloatArray) {
         GLES20.glDisable(GLES20.GL_CULL_FACE)
-        GLES20.glUseProgram(context.waterProgram.handle)
+        GLES20.glUseProgram(context.waterProgram.getHandle())
         GLES20.glUniformMatrix4fv(context.waterProgram.uObjWorldMatrix, 1, false, matrix, 0)
         waterVertexBuffer.Bind20(context, context.waterProgram.vPosition, 3, GLES20.GL_FLOAT, 0, 0)
         waterIndexBuffer.BindElements20(context)
@@ -179,12 +179,12 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
                 GLES11.glMatrixMode(GLES11.GL_MODELVIEW)
                 return
             }
-            GLES20.glUseProgram(context.primProgram.handle)
+            GLES20.glUseProgram(context.primProgram.getHandle())
             context.glModelApplyMatrix(context.primProgram.uMVPMatrix)
             context.primProgram.SetupLighting(context, context.windlightPreset)
             GLES20.glUniform4f(context.primProgram.uObjCoordScale, 1f, 1f, 1f, 1f)
             GLES20.glUniformMatrix4fv(context.primProgram.uTexMatrix, 1, false, IdentityMatrix.getMatrix(), 0)
-            GLES20.glUseProgram(context.waterProgram.handle)
+            GLES20.glUseProgram(context.waterProgram.getHandle())
             GLES20.glUniform4f(context.waterProgram.vColor, 0.4f, 0.4f, 0.6f, 1f)
             context.glModelApplyMatrix(context.waterProgram.uMVPMatrix)
             GLES20.glUniform1f(context.waterProgram.uTime, context.waterTime)

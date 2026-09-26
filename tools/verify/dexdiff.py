@@ -48,7 +48,7 @@ REF_RE = re.compile(r'(L[^;\s]+;)->([^\s(:]+)(\([^)]*\)\S+|:\S+)')
 TYPE_RE = re.compile(r'L[^;\s]+;')
 
 
-APP_PREFIXES = ('Lcom/lumiyaviewer/', 'Luk/co/senab/', 'Lcom/google/vr/', 'Lcom/google/vrtoolkit/')
+APP_PREFIXES = ('Lcom/lumiyaviewer/', 'Lcom/google/vr/', 'Lcom/google/vrtoolkit/')
 ANON_RE = re.compile(r'\$(?:AnonymousClass)?\d+;$')
 # Reads that disappear on purpose: minSdk was raised to 26, so SDK_INT
 # checks were removed. Reported separately, never counted as damage.

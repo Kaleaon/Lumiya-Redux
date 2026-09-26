@@ -11,8 +11,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // PhotoView (com.commit451 fork preserves the `uk.co.senab.photoview` package
-        // that the decompilation imports against).
+        // PhotoView: `com.github.chrisbanes:PhotoView` (Baseflow-maintained fork,
+        // package `com.github.chrisbanes.photoview`) is only published on JitPack.
         maven { url 'https://jitpack.io' }
     }
 }

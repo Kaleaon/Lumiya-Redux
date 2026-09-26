@@ -22,8 +22,8 @@ class CachedResponseRepositoryAdapter(
     }
 
     private fun CachedResponse.toRoomEntity() = CachedResponseEntity().also { entity ->
-        entity.key = key
-        entity.data = data
-        entity.mustRevalidate = mustRevalidate
+        entity.key = getKey().orEmpty()
+        entity.data = getData()
+        entity.mustRevalidate = getMustRevalidate()
     }
 }
