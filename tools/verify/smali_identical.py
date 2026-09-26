@@ -52,7 +52,7 @@ def main():
     ap.add_argument('after')
     ap.add_argument('--prefix', action='append', default=None)
     a = ap.parse_args()
-    prefixes = a.prefix or ['com/lumiyaviewer/', 'uk/co/senab/', 'com/google/vr/', 'com/google/vrtoolkit/', 'com/google/protobuf/']
+    prefixes = a.prefix or ['com/lumiyaviewer/', 'com/google/vr/', 'com/google/vrtoolkit/', 'com/google/protobuf/']
     files = set()
     for root in (a.before, a.after):
         for dp, _, fns in os.walk(root):

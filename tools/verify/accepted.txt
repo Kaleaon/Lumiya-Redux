@@ -81,7 +81,6 @@ Lcom/lumiyaviewer/lumiya/utils/PriorityBinQueue;->size()I  allItems.size() inste
 # --- login (SLAuth), deliberate changes
 Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuth;->SendLoginRequest(Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthParams;)Lcom/lumiyaviewer/lumiya/slproto/auth/SLAuthReply;  "md5 hash: " and "Auth request: " debug logs (credential-bearing; Debug.Log is a no-op in 3.4.2) removed; XML-RPC string values escaped with TextUtils.htmlEncode so "uri:Region&x&y&z" start locations produce valid XML
 Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPath;->generate(Lcom/lumiyaviewer/lumiya/slproto/prims/PrimPathParams;FIZI)Z  test path step 1.0f / 4 is constant-folded by javac to 0.25f; 3.4.2 divided at runtime (same value)
-Luk/co/senab/photoview/gestures/VersionedGestureDetector;->newInstance(Landroid/content/Context;Luk/co/senab/photoview/gestures/OnGestureListener;)Luk/co/senab/photoview/gestures/GestureDetector;  Cupcake (API < 5) and Eclair (API < 8) detector branches removed: unreachable at minSdk 26
 
 # --- Room migration (commit 6f972bd): search results go through SearchGridResultRepositoryAdapter,
 #     which performs the same greenDAO insert / buildDelete and mirrors the rows into Room

@@ -71,7 +71,7 @@ def main():
     ap.add_argument('smali')
     ap.add_argument('--prefix', action='append', default=None)
     a = ap.parse_args()
-    prefixes = tuple('L' + p for p in (a.prefix or ['com/lumiyaviewer/', 'uk/co/senab/', 'com/google/vr/', 'com/google/vrtoolkit/']))
+    prefixes = tuple('L' + p for p in (a.prefix or ['com/lumiyaviewer/', 'com/google/vr/', 'com/google/vrtoolkit/']))
     classes, refs = load(a.smali)
     bad = set()
     for src, owner, member in refs:

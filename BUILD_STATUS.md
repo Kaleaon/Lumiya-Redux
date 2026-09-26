@@ -110,7 +110,7 @@ pattern for `SearchViewHolder`, `TransactionViewHolder`, `UploadImageResult`.
 ### Specific additional one-offs
 
 - `ui/common/UserFunctionsFragment.java:11` — duplicate `AlertDialog` import after AndroidX migration. Remove the non-AndroidX one.
-- `uk/co/senab/photoview/PhotoViewAttacher.java:902` — jadx lost `r0` variable. Either migrate to `com.github.chrisbanes:PhotoView:2.3.0` or declare `Matrix r0 = getDisplayMatrix();` (or equivalent, inferred from the smali) above the call site.
+- ~~`uk/co/senab/photoview/PhotoViewAttacher.java:902`~~ — resolved by migrating to `com.github.chrisbanes:PhotoView:2.3.0`; the in-tree jadx stub is deleted.
 - `com/google/protobuf/nano/MessageNano.java:58` — `@Override` on a method whose superclass doesn't have it; drop the annotation.
 - `com/google/protobuf/nano/ExtendableMessageNano.java:62` — generic-return decompile bug; cast `(M) this`.
 - `com/google/vr/vrcore/library/api/ObjectWrapper.java:21` — same generic-return bug; cast `(T) ((ObjectWrapper) iObjectWrapper).wrappedObject`.
