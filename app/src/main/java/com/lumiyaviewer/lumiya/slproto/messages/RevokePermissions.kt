@@ -1,0 +1,59 @@
+package com.lumiyaviewer.lumiya.slproto.messages
+
+import com.lumiyaviewer.lumiya.slproto.SLMessage
+import java.nio.ByteBuffer
+import java.util.UUID
+
+/**
+ * RevokePermissions
+ * reliable
+ *
+ * <p>Template: {@code RevokePermissions Low 193 NotTrusted Unencoded}
+ * (recovered/reference/message_template.msg).
+ */
+open class RevokePermissions : SLMessage() {
+    @JvmField var AgentData_Field: AgentData = AgentData()
+    @JvmField var Data_Field: Data = Data()
+
+    /** Block AgentData, Single. */
+    open class AgentData {
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
+    }
+
+    /** Block Data, Single. */
+    open class Data {
+        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectPermissions: Int = 0
+    }
+
+    init {
+        zeroCoded = false
+    }
+
+    override fun CalcPayloadSize(): Int {
+        return 56
+    }
+
+    override fun Handle(messageHandler: SLMessageHandler) {
+        messageHandler.HandleRevokePermissions(this)
+    }
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
+        // Message number: Low 193 (RevokePermissions).
+        byteBuffer.putShort(0xFFFF.toShort())
+        byteBuffer.put((0x00).toByte())
+        byteBuffer.put((0xC1).toByte())
+        packUUID(byteBuffer, AgentData_Field.AgentID)
+        packUUID(byteBuffer, AgentData_Field.SessionID)
+        packUUID(byteBuffer, Data_Field.ObjectID)
+        packInt(byteBuffer, Data_Field.ObjectPermissions)
+    }
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.ObjectID = unpackUUID(byteBuffer)
+        Data_Field.ObjectPermissions = unpackInt(byteBuffer)
+    }
+}

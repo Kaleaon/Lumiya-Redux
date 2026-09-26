@@ -1,7 +1,5 @@
 package com.lumiyaviewer.lumiya.utils
 
-class CreateFailureException(str: String?) : Exception(str) {
-    companion object {
-        private const val serialVersionUID = 1L
-    }
+open class CreateFailureException(message: String) : Exception(message) {
+    companion object { private const val serialVersionUID: Long = 1L }
 }

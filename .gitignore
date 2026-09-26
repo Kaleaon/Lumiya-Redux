@@ -11,6 +11,7 @@ local.properties
 .idea/
 captures/
 out/
+rust-mirror/target/
 
 # OS / editor
 .DS_Store

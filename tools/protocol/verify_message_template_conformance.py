@@ -108,22 +108,58 @@ def parse_java_message(path: Path) -> MessageSpec:
     return MessageSpec(path.stem, blocks)
 
 
+def parse_kotlin_message(path: Path) -> MessageSpec:
+    """Extract generated message block/field order from Kotlin declarations."""
+    text = path.read_text(encoding="utf-8")
+    block_names: list[str] = []
+    for line in text.splitlines():
+        single = re.search(r"@JvmField\s+var\s+(\w+)_Field:\s*(\w+)", line)
+        if single and single.group(1) == single.group(2):
+            block_names.append(single.group(1))
+            continue
+        repeated = re.search(
+            r"@JvmField\s+val\s+(\w+)_Fields\s*=\s*ArrayList<\s*(\w+)\s*>", line
+        )
+        if repeated and repeated.group(1) == repeated.group(2):
+            block_names.append(repeated.group(1))
+
+    blocks: list[BlockSpec] = []
+    for name in block_names:
+        declaration = re.search(rf"(?:open\s+)?class\s+{re.escape(name)}\s*\{{", text)
+        fields: list[str] = []
+        if declaration:
+            start = declaration.end()
+            end = text.find("\n    }", start)
+            body = text[start:end] if end >= 0 else ""
+            for inner in body.splitlines():
+                field = re.match(r"\s*@JvmField\s+var\s+(\w+):", inner)
+                if field:
+                    fields.append(field.group(1))
+        blocks.append(BlockSpec(name, fields))
+    return MessageSpec(path.stem, blocks)
+
+
 def collect_mismatches(template: dict[str, MessageSpec], messages_dir: Path) -> list[str]:
     out: list[str] = []
-    for java_file in sorted(messages_dir.glob("*.java")):
-        java = parse_java_message(java_file)
-        ref = template.get(java.name)
+    source_files = sorted([*messages_dir.glob("*.java"), *messages_dir.glob("*.kt")])
+    for source_file in source_files:
+        source = (
+            parse_java_message(source_file)
+            if source_file.suffix == ".java"
+            else parse_kotlin_message(source_file)
+        )
+        ref = template.get(source.name)
         if not ref:
             continue
         ref_block_names = [b.name for b in ref.blocks]
-        java_block_names = [b.name for b in java.blocks]
-        if ref_block_names != java_block_names:
-            out.append(f"{java.name}: block order mismatch")
-        by_name = {b.name: b for b in java.blocks}
+        source_block_names = [b.name for b in source.blocks]
+        if ref_block_names != source_block_names:
+            out.append(f"{source.name}: block order mismatch")
+        by_name = {b.name: b for b in source.blocks}
         for rb in ref.blocks:
             jb = by_name.get(rb.name)
             if jb and rb.fields != jb.fields:
-                out.append(f"{java.name}.{rb.name}: field order mismatch")
+                out.append(f"{source.name}.{rb.name}: field order mismatch")
     return sorted(out)
 
 
