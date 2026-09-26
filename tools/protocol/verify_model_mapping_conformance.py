@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 MAPPING_DOC = Path("docs/protocol_model_mapping.md")
-MODEL_FILE = Path("app/src/main/java/com/lumiyaviewer/lumiya/orm/InventoryEntryDBObject.java")
+MODEL_FILE = Path("app/src/main/java/com/lumiyaviewer/lumiya/orm/InventoryEntryDBObject.kt")
 
 DOC_REQUIRED = [
     "InventoryEntryDBObject",

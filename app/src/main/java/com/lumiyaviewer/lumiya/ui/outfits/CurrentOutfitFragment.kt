@@ -1,0 +1,99 @@
+package com.lumiyaviewer.lumiya.ui.outfits
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ListAdapter
+import android.widget.ListView
+import com.google.common.collect.ImmutableList
+import com.lumiyaviewer.lumiya.R
+import com.lumiyaviewer.lumiya.react.SubscriptionData
+import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey
+import com.lumiyaviewer.lumiya.react.UIThreadExecutor
+import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit
+import com.lumiyaviewer.lumiya.slproto.modules.SLAvatarAppearance
+import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
+import com.lumiyaviewer.lumiya.ui.common.ActivityUtils
+import com.lumiyaviewer.lumiya.ui.common.DismissableAdapter
+import com.lumiyaviewer.lumiya.ui.common.SwipeDismissListViewTouchListener
+import com.lumiyaviewer.lumiya.ui.common.loadmon.LoadableMonitor
+import java.util.UUID
+
+open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataChangedListener, AdapterView.OnItemClickListener {
+    private CurrentOutfitAdapter listAdapter
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, ImmutableList<SLAvatarAppearance.WornItem>> wornItems = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private LoadableMonitor loadableMonitor = LoadableMonitor(this.wornItems).withOptionalLoadables(this.agentCircuit).withDataChangedListener(this)
+
+    @JvmStatic
+    fun makeSelection(uuid: UUID): Bundle {
+        Bundle bundle = Bundle()
+        ActivityUtils.setActiveAgentID(bundle, uuid)
+        return bundle
+    }
+
+    override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup, bundle: Bundle): View {
+        super.onCreateView(layoutInflater, viewGroup, bundle)
+        View inflate = layoutInflater.inflate(R.layout.current_outfit_fragment, viewGroup, false)
+        this.listAdapter = CurrentOutfitAdapter(layoutInflater.getContext())
+        ListView listView = (ListView) inflate.findViewById(R.id.currentOutfitListView)
+        listView.setAdapter((ListAdapter) this.listAdapter)
+        listView.setOnItemClickListener(this)
+        listView.setEmptyView(inflate.findViewById(android.R.id.empty))
+        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+            override fun canDismiss(listView2: ListView, i: Int): Boolean {
+                ListAdapter adapter = listView2.getAdapter()
+                internal fun if(DismissableAdapter: adapter instanceof):  {
+                    return ((DismissableAdapter) adapter).canDismiss(i)
+                }
+                return false
+            }
+
+            override fun onDismiss(listView2: ListView, i: Int) {
+                ListAdapter adapter = listView2.getAdapter()
+                internal fun if(DismissableAdapter: adapter instanceof):  {
+                    ((DismissableAdapter) adapter).onDismiss(i)
+                }
+            }
+        })
+        listView.setOnTouchListener(swipeDismissListViewTouchListener)
+        listView.setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener())
+        return inflate
+    }
+
+    override fun onItemClick(adapterView: AdapterView<?>, view: View, i: Int, j: Long) {
+        SLAvatarAppearance.WornItem item
+        SLAgentCircuit data = this.agentCircuit.getData()
+        if (this.listAdapter == null || data == null || (item = this.listAdapter.getItem(i)) == null || !item.getIsTouchable() || item.getWornOn() != null) {
+            return
+        }
+        data.TouchObject(item.getObjectLocalID())
+    }
+
+    override fun onLoadableDataChanged() {
+        internal fun if(null: this.listAdapter !=):  {
+            SLAgentCircuit data = this.agentCircuit.getData()
+            this.listAdapter.setAvatarAppearance(data != null ? data.getModules().avatarAppearance : null)
+            this.listAdapter.setData(this.wornItems.getData())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        UserManager userManager = ActivityUtils.getUserManager(getArguments())
+        internal fun if(null: userManager ==):  {
+            this.loadableMonitor.unsubscribeAll()
+        } else {
+            this.agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID())
+            this.wornItems.subscribe(userManager.wornItems(), SubscriptionSingleKey.Value)
+        }
+    }
+
+    override fun onStop() {
+        this.loadableMonitor.unsubscribeAll()
+        super.onStop()
+    }
+}
