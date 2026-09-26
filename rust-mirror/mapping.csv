@@ -666,3 +666,7 @@ com/lumiyaviewer/lumiya/ui/chat/contacts/ChatterListSimpleAdapter.kt,src/migrati
 com/lumiyaviewer/lumiya/ui/settings/RingtonePreference.kt,src/migration_batch3_small1.rs,boundary
 com/lumiyaviewer/lumiya/ui/chat/ChatLayoutManager.kt,src/migration_batch3_small1.rs,boundary
 com/lumiyaviewer/lumiya/ui/common/LinkMovementMethodSafe.kt,src/migration_batch3_small1.rs,boundary
+com/lumiyaviewer/lumiya/render/glres/GLResourceManager.kt,src/migration_batch3_small2.rs,boundary
+com/lumiyaviewer/lumiya/render/glres/GLQuery.kt,src/migration_batch3_small2.rs,boundary
+com/lumiyaviewer/lumiya/render/spatial/SpatialIndex.kt,src/migration_batch3_small2.rs,behavior
+com/lumiyaviewer/lumiya/ui/objpopup/ObjectPopupsActionProvider.kt,src/migration_batch3_small2.rs,boundary
