@@ -10,11 +10,7 @@ object HashUtils {
     @JvmStatic
     fun MD5_Hash(str: String): String {
         return try {
-            var digest = md5Instance
-            if (digest == null) {
-                digest = MessageDigest.getInstance("MD5")
-                md5Instance = digest
-            }
+            val digest = md5Instance ?: MessageDigest.getInstance("MD5").also { md5Instance = it }
             digest.update(str.toByteArray())
             val bytes = digest.digest()
             val sb = StringBuilder()
