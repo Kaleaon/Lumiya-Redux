@@ -18,78 +18,81 @@ import java.util.UUID
  * (secondlife/viewer @ c179f76c01).
  */
 open class RegionHandshake : SLMessage() {
-    var RegionInfo2_Field: RegionInfo2 = null
-    var RegionInfo3_Field: RegionInfo3 = null
-    var RegionInfo4_Fields: ArrayList<RegionInfo4> = ArrayList<>()
-    var RegionInfo_Field: RegionInfo = null
+    @JvmField var RegionInfo2_Field: RegionInfo2 = RegionInfo2()
+    @JvmField var RegionInfo3_Field: RegionInfo3 = RegionInfo3()
+    @JvmField val RegionInfo4_Fields = ArrayList<RegionInfo4>()
+    @JvmField var RegionInfo_Field: RegionInfo = RegionInfo()
 
     /** Block RegionInfo, Single. */
     open class RegionInfo {
-        public float BillableFactor; // F32
-        public UUID CacheID; // LLUUID
-        public boolean IsEstateManager; // BOOL - this agent, for this sim
-        public int RegionFlags; // U32
-        public int SimAccess; // U8
-        public byte[] SimName; // Variable 1 - string
-        public UUID SimOwner; // LLUUID
-        public UUID TerrainBase0; // LLUUID
-        public UUID TerrainBase1; // LLUUID
-        public UUID TerrainBase2; // LLUUID
-        public UUID TerrainBase3; // LLUUID
-        public UUID TerrainDetail0; // LLUUID
-        public UUID TerrainDetail1; // LLUUID
-        public UUID TerrainDetail2; // LLUUID
-        public UUID TerrainDetail3; // LLUUID
-        public float TerrainHeightRange00; // F32
-        public float TerrainHeightRange01; // F32
-        public float TerrainHeightRange10; // F32
-        public float TerrainHeightRange11; // F32
-        public float TerrainStartHeight00; // F32
-        public float TerrainStartHeight01; // F32
-        public float TerrainStartHeight10; // F32
-        public float TerrainStartHeight11; // F32
-        public float WaterHeight; // F32
+        @JvmField var BillableFactor: Float = 0f // F32
+        @JvmField var CacheID: UUID? = null // LLUUID
+        @JvmField var IsEstateManager: Boolean = false // BOOL - this agent, for this sim
+        @JvmField var RegionFlags: Int = 0 // U32
+        @JvmField var SimAccess: Int = 0 // U8
+        @JvmField var SimName: ByteArray? = null // Variable 1 - string
+        @JvmField var SimOwner: UUID? = null // LLUUID
+        @JvmField var TerrainBase0: UUID? = null // LLUUID
+        @JvmField var TerrainBase1: UUID? = null // LLUUID
+        @JvmField var TerrainBase2: UUID? = null // LLUUID
+        @JvmField var TerrainBase3: UUID? = null // LLUUID
+        @JvmField var TerrainDetail0: UUID? = null // LLUUID
+        @JvmField var TerrainDetail1: UUID? = null // LLUUID
+        @JvmField var TerrainDetail2: UUID? = null // LLUUID
+        @JvmField var TerrainDetail3: UUID? = null // LLUUID
+        @JvmField var TerrainHeightRange00: Float = 0f // F32
+        @JvmField var TerrainHeightRange01: Float = 0f // F32
+        @JvmField var TerrainHeightRange10: Float = 0f // F32
+        @JvmField var TerrainHeightRange11: Float = 0f // F32
+        @JvmField var TerrainStartHeight00: Float = 0f // F32
+        @JvmField var TerrainStartHeight01: Float = 0f // F32
+        @JvmField var TerrainStartHeight10: Float = 0f // F32
+        @JvmField var TerrainStartHeight11: Float = 0f // F32
+        @JvmField var WaterHeight: Float = 0f // F32
     }
 
     /** Block RegionInfo2, Single. */
     open class RegionInfo2 {
-        public UUID RegionID; // LLUUID
+        @JvmField var RegionID: UUID? = null // LLUUID
     }
 
     /** Block RegionInfo3, Single. */
     open class RegionInfo3 {
-        public int CPUClassID; // S32
-        public int CPURatio; // S32
-        public byte[] ColoName; // Variable 1 - string
-        public byte[] ProductName; // Variable 1 - string
-        public byte[] ProductSKU; // Variable 1 - string
+        @JvmField var CPUClassID: Int = 0 // S32
+        @JvmField var CPURatio: Int = 0 // S32
+        @JvmField var ColoName: ByteArray? = null // Variable 1 - string
+        @JvmField var ProductName: ByteArray? = null // Variable 1 - string
+        @JvmField var ProductSKU: ByteArray? = null // Variable 1 - string
     }
 
     /** Block RegionInfo4, Variable. */
     open class RegionInfo4 {
-        public long RegionFlagsExtended; // U64
-        public long RegionProtocols; // U64
+        @JvmField var RegionFlagsExtended: Long = 0L // U64
+        @JvmField var RegionProtocols: Long = 0L // U64
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
         this.RegionInfo_Field = RegionInfo()
         this.RegionInfo2_Field = RegionInfo2()
         this.RegionInfo3_Field = RegionInfo3()
     }
-    fun CalcPayloadSize(): Int {
-        return this.RegionInfo_Field.SimName.length + 6 + 16 + 1 + 4 + 4 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 16 + this.RegionInfo3_Field.ColoName.length + 9 + 1 + this.RegionInfo3_Field.ProductSKU.length + 1 + this.RegionInfo3_Field.ProductName.length + 1 + (this.RegionInfo4_Fields.size() * 16)
+
+    override fun CalcPayloadSize(): Int {
+        return this.RegionInfo_Field.SimName.size + 6 + 16 + 1 + 4 + 4 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 16 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 16 + this.RegionInfo3_Field.ColoName.size + 9 + 1 + this.RegionInfo3_Field.ProductSKU.size + 1 + this.RegionInfo3_Field.ProductName.size + 1 + (this.RegionInfo4_Fields.size * 16)
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleRegionHandshake(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: Low 148 (RegionHandshake).
-        byteBuffer.putShort(0xFFFF as short)
-        byteBuffer.put(0x00 as byte)
-        byteBuffer.put(0x94 as byte)
+        byteBuffer.putShort((short) 0xFFFF)
+        byteBuffer.put((0x00).toByte())
+        byteBuffer.put((0x94).toByte())
         packInt(byteBuffer, this.RegionInfo_Field.RegionFlags)
-        packByte(byteBuffer, this as byte.RegionInfo_Field.SimAccess)
+        packByte(byteBuffer, (this.RegionInfo_Field.SimAccess).toByte())
         packVariable(byteBuffer, this.RegionInfo_Field.SimName, 1)
         packUUID(byteBuffer, this.RegionInfo_Field.SimOwner)
         packBoolean(byteBuffer, this.RegionInfo_Field.IsEstateManager)
@@ -118,22 +121,51 @@ open class RegionHandshake : SLMessage() {
         packVariable(byteBuffer, this.RegionInfo3_Field.ColoName, 1)
         packVariable(byteBuffer, this.RegionInfo3_Field.ProductSKU, 1)
         packVariable(byteBuffer, this.RegionInfo3_Field.ProductName, 1)
-        byteBuffer.put(this as byte.RegionInfo4_Fields.size())
+        byteBuffer.put((this.RegionInfo4_Fields.size).toByte())
         for (regionInfo4 in this.RegionInfo4_Fields) {
             packLong(byteBuffer, regionInfo4.RegionFlagsExtended)
             packLong(byteBuffer, regionInfo4.RegionProtocols)
         }
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        this.RegionInfo_Field.RegionFlags = unpackIntthis as byteBuffer.RegionInfo_Field.SimAccess = unpackByte(byteBuffer) & 0xFF
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        this.RegionInfo_Field.RegionFlags = unpackInt(byteBuffer)
+        this.RegionInfo_Field.SimAccess = unpackByte(byteBuffer) & 0xFF
         this.RegionInfo_Field.SimName = unpackVariable(byteBuffer, 1)
-        this.RegionInfo_Field.SimOwner = unpackUUIDthis as byteBuffer.RegionInfo_Field.IsEstateManager = unpackBooleanthis as byteBuffer.RegionInfo_Field.WaterHeight = unpackFloatthis as byteBuffer.RegionInfo_Field.BillableFactor = unpackFloatthis as byteBuffer.RegionInfo_Field.CacheID = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainBase0 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainBase1 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainBase2 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainBase3 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainDetail0 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainDetail1 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainDetail2 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainDetail3 = unpackUUIDthis as byteBuffer.RegionInfo_Field.TerrainStartHeight00 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainStartHeight01 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainStartHeight10 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainStartHeight11 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainHeightRange00 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainHeightRange01 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainHeightRange10 = unpackFloatthis as byteBuffer.RegionInfo_Field.TerrainHeightRange11 = unpackFloatthis as byteBuffer.RegionInfo2_Field.RegionID = unpackUUIDthis as byteBuffer.RegionInfo3_Field.CPUClassID = unpackIntthis as byteBuffer.RegionInfo3_Field.CPURatio = unpackIntthis as byteBuffer.RegionInfo3_Field.ColoName = unpackVariable(byteBuffer, 1)
+        this.RegionInfo_Field.SimOwner = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.IsEstateManager = unpackBoolean(byteBuffer)
+        this.RegionInfo_Field.WaterHeight = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.BillableFactor = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.CacheID = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainBase0 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainBase1 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainBase2 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainBase3 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainDetail0 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainDetail1 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainDetail2 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainDetail3 = unpackUUID(byteBuffer)
+        this.RegionInfo_Field.TerrainStartHeight00 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainStartHeight01 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainStartHeight10 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainStartHeight11 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainHeightRange00 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainHeightRange01 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainHeightRange10 = unpackFloat(byteBuffer)
+        this.RegionInfo_Field.TerrainHeightRange11 = unpackFloat(byteBuffer)
+        this.RegionInfo2_Field.RegionID = unpackUUID(byteBuffer)
+        this.RegionInfo3_Field.CPUClassID = unpackInt(byteBuffer)
+        this.RegionInfo3_Field.CPURatio = unpackInt(byteBuffer)
+        this.RegionInfo3_Field.ColoName = unpackVariable(byteBuffer, 1)
         this.RegionInfo3_Field.ProductSKU = unpackVariable(byteBuffer, 1)
         this.RegionInfo3_Field.ProductName = unpackVariable(byteBuffer, 1)
-        var i: Int = byteBuffer.get() & 0xFF
-        for (int j = 0; j < i; j++) {
-            var regionInfo4: RegionInfo4 = RegionInfo4()
-            regionInfo4.RegionFlagsExtended = unpackLongregionInfo4 as byteBuffer.RegionProtocols = unpackLongthis as byteBuffer.RegionInfo4_Fields.add(regionInfo4)
+        val i = byteBuffer.get().toInt() and 0xFF
+        repeat(i) {
+            val regionInfo4 = RegionInfo4()
+            regionInfo4.RegionFlagsExtended = unpackLong(byteBuffer)
+            regionInfo4.RegionProtocols = unpackLong(byteBuffer)
+            this.RegionInfo4_Fields.add(regionInfo4)
         }
     }
 }
+

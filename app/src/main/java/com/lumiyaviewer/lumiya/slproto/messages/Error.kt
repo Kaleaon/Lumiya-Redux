@@ -22,24 +22,24 @@ open class Error : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Code else Int = 0
-        @JvmField var Data: if (ByteArray) = null
-        @JvmField var ID else UUID? = null
-        @JvmField var Message: if (ByteArray) = null
-        @JvmField var System else ByteArray? = null
-        @JvmField var Token: if (ByteArray) = null
+        @JvmField var Code: Int = 0
+        @JvmField var Data: ByteArray? = null
+        @JvmField var ID: UUID? = null
+        @JvmField var Message: ByteArray? = null
+        @JvmField var System: ByteArray? = null
+        @JvmField var Token: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return Data_Field.Token!!.size + 5 + 16 + 1 + Data_Field.System!!.size + 2 + Data_Field.Message!!.size + 2 + Data_Field.Data!!.size + 20
     }
 
@@ -62,8 +62,11 @@ open class Error : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDData_Field as byteBuffer.Code = unpackIntData_Field as byteBuffer.Token = unpackVariable(byteBuffer, 1)
-        Data_Field.ID = unpackUUIDData_Field as byteBuffer.System = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        Data_Field.Code = unpackInt(byteBuffer)
+        Data_Field.Token = unpackVariable(byteBuffer, 1)
+        Data_Field.ID = unpackUUID(byteBuffer)
+        Data_Field.System = unpackVariable(byteBuffer, 1)
         Data_Field.Message = unpackVariable(byteBuffer, 2)
         Data_Field.Data = unpackVariable(byteBuffer, 2)
     }

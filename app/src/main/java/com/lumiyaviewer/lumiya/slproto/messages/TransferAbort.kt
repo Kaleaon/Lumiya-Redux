@@ -18,14 +18,14 @@ open class TransferAbort : SLMessage() {
     /** Block TransferInfo, Single. */
     open class TransferInfo {
         @JvmField var ChannelType: Int = 0
-        @JvmField var TransferID: if (UUID) = null
+        @JvmField var TransferID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 24
     }
 
@@ -43,6 +43,7 @@ open class TransferAbort : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TransferInfo_Field.TransferID = unpackUUIDTransferInfo_Field as byteBuffer.ChannelType = unpackInt(byteBuffer)
+        TransferInfo_Field.TransferID = unpackUUID(byteBuffer)
+        TransferInfo_Field.ChannelType = unpackInt(byteBuffer)
     }
 }

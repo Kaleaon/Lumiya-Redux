@@ -146,7 +146,7 @@ abstract class SLChatEvent : View.OnLongClickListener {
         VoiceUpgrade,
         MissedVoiceCall
 
-        public static ChatMessageType[] VALUES = valuesCustom()
+        Array<ChatMessageType> VALUES = valuesCustom()
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         fun valuesCustom(): Array<ChatMessageType> {
@@ -204,9 +204,9 @@ abstract class SLChatEvent : View.OnLongClickListener {
             }
         })
 
-        public static ChatMessageViewType[] VALUES = valuesCustom()
-        private boolean alwaysInflate
-        private int resourceId
+        Array<ChatMessageViewType> VALUES = valuesCustom()
+        private var alwaysInflate: Boolean
+        private var resourceId: Int
         private ChatEventViewHolder.Factory viewHolderFactory
 
         /* renamed from: -com_lumiyaviewer_lumiya_slproto_chat_generic_SLChatEvent$ChatMessageViewType-mthref-0, reason: not valid java name */

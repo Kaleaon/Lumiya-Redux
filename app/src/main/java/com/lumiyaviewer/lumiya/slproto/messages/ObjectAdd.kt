@@ -21,101 +21,109 @@ import java.util.UUID
  * (recovered/reference/message_template.msg).
  */
 open class ObjectAdd : SLMessage() {
-    var AgentData_Field: AgentData = null
-    var ObjectData_Field: ObjectData = null
+    @JvmField var AgentData_Field: AgentData = AgentData()
+    @JvmField var ObjectData_Field: ObjectData = ObjectData()
 
     /** Block AgentData, Single. */
     open class AgentData {
-        public UUID AgentID; // LLUUID
-        public UUID GroupID; // LLUUID
-        public UUID SessionID; // LLUUID
+        @JvmField var AgentID: UUID? = null // LLUUID
+        @JvmField var GroupID: UUID? = null // LLUUID
+        @JvmField var SessionID: UUID? = null // LLUUID
     }
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        public int AddFlags; // U32 - see object_flags.h
-        public int BypassRaycast; // U8
-        public int Material; // U8
-        public int PCode; // U8
-        public int PathBegin; // U16 - 0 to 1, quanta = 0.01
-        public int PathCurve; // U8
-        public int PathEnd; // U16 - 0 to 1, quanta = 0.01
-        public int PathRadiusOffset; // S8 - -1 to 1, quanta = 0.01
-        public int PathRevolutions; // U8 - 0 to 3, quanta = 0.015
-        public int PathScaleX; // U8 - 0 to 1, quanta = 0.01
-        public int PathScaleY; // U8 - 0 to 1, quanta = 0.01
-        public int PathShearX; // U8 - -.5 to .5, quanta = 0.01
-        public int PathShearY; // U8 - -.5 to .5, quanta = 0.01
-        public int PathSkew; // S8 - -1 to 1, quanta = 0.01
-        public int PathTaperX; // S8 - -1 to 1, quanta = 0.01
-        public int PathTaperY; // S8 - -1 to 1, quanta = 0.01
-        public int PathTwist; // S8 - -1 to 1, quanta = 0.01
-        public int PathTwistBegin; // S8 - -1 to 1, quanta = 0.01
-        public int ProfileBegin; // U16 - 0 to 1, quanta = 0.01
-        public int ProfileCurve; // U8
-        public int ProfileEnd; // U16 - 0 to 1, quanta = 0.01
-        public int ProfileHollow; // U16 - 0 to 1, quanta = 0.01
-        public LLVector3 RayEnd; // LLVector3
-        public int RayEndIsIntersection; // U8
-        public LLVector3 RayStart; // LLVector3
-        public UUID RayTargetID; // LLUUID
-        public LLQuaternion Rotation; // LLQuaternion
-        public LLVector3 Scale; // LLVector3
-        public int State; // U8
+        @JvmField var AddFlags: Int = 0 // U32 - see object_flags.h
+        @JvmField var BypassRaycast: Int = 0 // U8
+        @JvmField var Material: Int = 0 // U8
+        @JvmField var PCode: Int = 0 // U8
+        @JvmField var PathBegin: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var PathCurve: Int = 0 // U8
+        @JvmField var PathEnd: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var PathRadiusOffset: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathRevolutions: Int = 0 // U8 - 0 to 3, quanta = 0.015
+        @JvmField var PathScaleX: Int = 0 // U8 - 0 to 1, quanta = 0.01
+        @JvmField var PathScaleY: Int = 0 // U8 - 0 to 1, quanta = 0.01
+        @JvmField var PathShearX: Int = 0 // U8 - -.5 to .5, quanta = 0.01
+        @JvmField var PathShearY: Int = 0 // U8 - -.5 to .5, quanta = 0.01
+        @JvmField var PathSkew: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTaperX: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTaperY: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTwist: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTwistBegin: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var ProfileBegin: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var ProfileCurve: Int = 0 // U8
+        @JvmField var ProfileEnd: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var ProfileHollow: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var RayEnd: LLVector3? = null // LLVector3
+        @JvmField var RayEndIsIntersection: Int = 0 // U8
+        @JvmField var RayStart: LLVector3? = null // LLVector3
+        @JvmField var RayTargetID: UUID? = null // LLUUID
+        @JvmField var Rotation: LLQuaternion? = null // LLQuaternion
+        @JvmField var Scale: LLVector3? = null // LLVector3
+        @JvmField var State: Int = 0 // U8
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
         this.AgentData_Field = AgentData()
         this.ObjectData_Field = ObjectData()
     }
-    fun CalcPayloadSize(): Int {
+
+    override fun CalcPayloadSize(): Int {
         return 146
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleObjectAdd(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: Medium 1 (ObjectAdd).
-        byteBuffer.put(0xFF as byte)
-        byteBuffer.put(0x01 as byte)
+        byteBuffer.put((0xFF).toByte())
+        byteBuffer.put((0x01).toByte())
         packUUID(byteBuffer, this.AgentData_Field.AgentID)
         packUUID(byteBuffer, this.AgentData_Field.SessionID)
         packUUID(byteBuffer, this.AgentData_Field.GroupID)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PCode)
-        packByte(byteBuffer, this as byte.ObjectData_Field.Material)
+        packByte(byteBuffer, (this.ObjectData_Field.PCode).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.Material).toByte())
         packInt(byteBuffer, this.ObjectData_Field.AddFlags)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathCurve)
-        packByte(byteBuffer, this as byte.ObjectData_Field.ProfileCurve)
-        packShort(byteBuffer, this as short.ObjectData_Field.PathBegin)
-        packShort(byteBuffer, this as short.ObjectData_Field.PathEnd)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathScaleX)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathScaleY)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathShearX)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathShearY)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathTwist)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathTwistBegin)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathRadiusOffset)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathTaperX)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathTaperY)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathRevolutions)
-        packByte(byteBuffer, this as byte.ObjectData_Field.PathSkew)
-        packShort(byteBuffer, this as short.ObjectData_Field.ProfileBegin)
-        packShort(byteBuffer, this as short.ObjectData_Field.ProfileEnd)
-        packShort(byteBuffer, this as short.ObjectData_Field.ProfileHollow)
-        packByte(byteBuffer, this as byte.ObjectData_Field.BypassRaycast)
+        packByte(byteBuffer, (this.ObjectData_Field.PathCurve).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.ProfileCurve).toByte())
+        packShort(byteBuffer, (short) this.ObjectData_Field.PathBegin)
+        packShort(byteBuffer, (short) this.ObjectData_Field.PathEnd)
+        packByte(byteBuffer, (this.ObjectData_Field.PathScaleX).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathScaleY).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathShearX).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathShearY).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathTwist).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathTwistBegin).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathRadiusOffset).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathTaperX).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathTaperY).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathRevolutions).toByte())
+        packByte(byteBuffer, (this.ObjectData_Field.PathSkew).toByte())
+        packShort(byteBuffer, (short) this.ObjectData_Field.ProfileBegin)
+        packShort(byteBuffer, (short) this.ObjectData_Field.ProfileEnd)
+        packShort(byteBuffer, (short) this.ObjectData_Field.ProfileHollow)
+        packByte(byteBuffer, (this.ObjectData_Field.BypassRaycast).toByte())
         packLLVector3(byteBuffer, this.ObjectData_Field.RayStart)
         packLLVector3(byteBuffer, this.ObjectData_Field.RayEnd)
         packUUID(byteBuffer, this.ObjectData_Field.RayTargetID)
-        packByte(byteBuffer, this as byte.ObjectData_Field.RayEndIsIntersection)
+        packByte(byteBuffer, (this.ObjectData_Field.RayEndIsIntersection).toByte())
         packLLVector3(byteBuffer, this.ObjectData_Field.Scale)
         packLLQuaternion(byteBuffer, this.ObjectData_Field.Rotation)
-        packByte(byteBuffer, this as byte.ObjectData_Field.State)
+        packByte(byteBuffer, (this.ObjectData_Field.State).toByte())
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        this.AgentData_Field.AgentID = unpackUUIDthis as byteBuffer.AgentData_Field.SessionID = unpackUUIDthis as byteBuffer.AgentData_Field.GroupID = unpackUUIDthis as byteBuffer.ObjectData_Field.PCode = unpackByte(byteBuffer) & 0xFF
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        this.AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        this.AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        this.AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        this.ObjectData_Field.PCode = unpackByte(byteBuffer) & 0xFF
         this.ObjectData_Field.Material = unpackByte(byteBuffer) & 0xFF
-        this.ObjectData_Field.AddFlags = unpackIntthis as byteBuffer.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & 0xFF
+        this.ObjectData_Field.AddFlags = unpackInt(byteBuffer)
+        this.ObjectData_Field.PathCurve = unpackByte(byteBuffer) & 0xFF
         this.ObjectData_Field.ProfileCurve = unpackByte(byteBuffer) & 0xFF
         this.ObjectData_Field.PathBegin = unpackShort(byteBuffer) & 65535
         this.ObjectData_Field.PathEnd = unpackShort(byteBuffer) & 65535
@@ -123,12 +131,24 @@ open class ObjectAdd : SLMessage() {
         this.ObjectData_Field.PathScaleY = unpackByte(byteBuffer) & 0xFF
         this.ObjectData_Field.PathShearX = unpackByte(byteBuffer) & 0xFF
         this.ObjectData_Field.PathShearY = unpackByte(byteBuffer) & 0xFF
-        this.ObjectData_Field.PathTwist = unpackBytethis as byteBuffer.ObjectData_Field.PathTwistBegin = unpackBytethis as byteBuffer.ObjectData_Field.PathRadiusOffset = unpackBytethis as byteBuffer.ObjectData_Field.PathTaperX = unpackBytethis as byteBuffer.ObjectData_Field.PathTaperY = unpackBytethis as byteBuffer.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & 0xFF
-        this.ObjectData_Field.PathSkew = unpackBytethis as byteBuffer.ObjectData_Field.ProfileBegin = unpackShort(byteBuffer) & 65535
+        this.ObjectData_Field.PathTwist = unpackByte(byteBuffer)
+        this.ObjectData_Field.PathTwistBegin = unpackByte(byteBuffer)
+        this.ObjectData_Field.PathRadiusOffset = unpackByte(byteBuffer)
+        this.ObjectData_Field.PathTaperX = unpackByte(byteBuffer)
+        this.ObjectData_Field.PathTaperY = unpackByte(byteBuffer)
+        this.ObjectData_Field.PathRevolutions = unpackByte(byteBuffer) & 0xFF
+        this.ObjectData_Field.PathSkew = unpackByte(byteBuffer)
+        this.ObjectData_Field.ProfileBegin = unpackShort(byteBuffer) & 65535
         this.ObjectData_Field.ProfileEnd = unpackShort(byteBuffer) & 65535
         this.ObjectData_Field.ProfileHollow = unpackShort(byteBuffer) & 65535
         this.ObjectData_Field.BypassRaycast = unpackByte(byteBuffer) & 0xFF
-        this.ObjectData_Field.RayStart = unpackLLVector3this as byteBuffer.ObjectData_Field.RayEnd = unpackLLVector3this as byteBuffer.ObjectData_Field.RayTargetID = unpackUUIDthis as byteBuffer.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & 0xFF
-        this.ObjectData_Field.Scale = unpackLLVector3this as byteBuffer.ObjectData_Field.Rotation = unpackLLQuaternionthis as byteBuffer.ObjectData_Field.State = unpackByte(byteBuffer) & 0xFF
+        this.ObjectData_Field.RayStart = unpackLLVector3(byteBuffer)
+        this.ObjectData_Field.RayEnd = unpackLLVector3(byteBuffer)
+        this.ObjectData_Field.RayTargetID = unpackUUID(byteBuffer)
+        this.ObjectData_Field.RayEndIsIntersection = unpackByte(byteBuffer) & 0xFF
+        this.ObjectData_Field.Scale = unpackLLVector3(byteBuffer)
+        this.ObjectData_Field.Rotation = unpackLLQuaternion(byteBuffer)
+        this.ObjectData_Field.State = unpackByte(byteBuffer) & 0xFF
     }
 }
+

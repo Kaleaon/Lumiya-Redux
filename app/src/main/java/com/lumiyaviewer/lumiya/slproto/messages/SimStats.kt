@@ -76,17 +76,23 @@ open class SimStats : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Region_Field.RegionX = unpackIntRegion_Field as byteBuffer.RegionY = unpackIntRegion_Field as byteBuffer.RegionFlags = unpackIntRegion_Field as byteBuffer.ObjectCapacity = unpackInt(byteBuffer)
+        Region_Field.RegionX = unpackInt(byteBuffer)
+        Region_Field.RegionY = unpackInt(byteBuffer)
+        Region_Field.RegionFlags = unpackInt(byteBuffer)
+        Region_Field.ObjectCapacity = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val stat = Stat()
-            stat.StatID = unpackIntstat as byteBuffer.StatValue = unpackFloatStat_Fields as byteBuffer.add(stat)
+            stat.StatID = unpackInt(byteBuffer)
+            stat.StatValue = unpackFloat(byteBuffer)
+            Stat_Fields.add(stat)
         }
         PidStat_Field.PID = unpackInt(byteBuffer)
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val regionInfo = RegionInfo()
-            regionInfo.RegionFlagsExtended = unpackLongRegionInfo_Fields as byteBuffer.add(regionInfo)
+            regionInfo.RegionFlagsExtended = unpackLong(byteBuffer)
+            RegionInfo_Fields.add(regionInfo)
         }
     }
 }

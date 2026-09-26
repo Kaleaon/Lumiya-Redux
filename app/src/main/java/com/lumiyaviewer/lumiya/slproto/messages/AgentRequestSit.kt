@@ -17,14 +17,14 @@ open class AgentRequestSit : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block TargetObject, Single. */
     open class TargetObject {
-        @JvmField var Offset: if (LLVector3) = null
-        @JvmField var TargetID else UUID? = null
+        @JvmField var Offset: LLVector3? = null
+        @JvmField var TargetID: UUID? = null
     }
 
     init {
@@ -49,6 +49,9 @@ open class AgentRequestSit : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDTargetObject_Field as byteBuffer.TargetID = unpackUUIDTargetObject_Field as byteBuffer.Offset = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        TargetObject_Field.TargetID = unpackUUID(byteBuffer)
+        TargetObject_Field.Offset = unpackLLVector3(byteBuffer)
     }
 }

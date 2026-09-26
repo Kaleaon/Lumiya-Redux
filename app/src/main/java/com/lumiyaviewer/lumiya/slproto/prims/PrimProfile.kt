@@ -19,21 +19,21 @@ open class PrimProfile {
     var Faces: ArrayList<Face> = ArrayList<>()
 
     open class Face {
-        public static short LL_FACE_INNER_SIDE = 4
-        public static short LL_FACE_OUTER_SIDE_0 = 32
-        public static short LL_FACE_OUTER_SIDE_1 = 64
-        public static short LL_FACE_OUTER_SIDE_2 = 128
-        public static short LL_FACE_OUTER_SIDE_3 = 256
-        public static short LL_FACE_PATH_BEGIN = 1
-        public static short LL_FACE_PATH_END = 2
-        public static short LL_FACE_PROFILE_BEGIN = 8
-        public static short LL_FACE_PROFILE_END = 16
-        public boolean Cap
-        public int Count
-        public short FaceID
-        public boolean Flat
-        public int Index
-        public float ScaleU
+        short LL_FACE_INNER_SIDE = 4
+        short LL_FACE_OUTER_SIDE_0 = 32
+        short LL_FACE_OUTER_SIDE_1 = 64
+        short LL_FACE_OUTER_SIDE_2 = 128
+        short LL_FACE_OUTER_SIDE_3 = 256
+        short LL_FACE_PATH_BEGIN = 1
+        short LL_FACE_PATH_END = 2
+        short LL_FACE_PROFILE_BEGIN = 8
+        short LL_FACE_PROFILE_END = 16
+        public var Cap: Boolean
+        public var Count: Int
+        public var FaceID: Short
+        public var Flat: Boolean
+        public var Index: Int
+        public var ScaleU: Float
     }
 
     private fun addCap(s: Short): Face {

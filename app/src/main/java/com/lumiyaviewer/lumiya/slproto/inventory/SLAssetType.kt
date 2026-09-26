@@ -1,10 +1,17 @@
 package com.lumiyaviewer.lumiya.slproto.inventory
 
 import androidx.core.os.EnvironmentCompat
-import com.google.common.collect.ImmutableMap
 import com.lumiyaviewer.lumiya.R
 
-enum class SLAssetType {
+enum class SLAssetType(
+    val typeCode: Int,
+    val stringCode: String,
+    val invType: SLInventoryType,
+    val specialFolderType: Int,
+    val drawableResource: Int,
+    val typeDescription: Int,
+    val actionDescription: Int
+) {
     AT_TEXTURE(0, "texture", SLInventoryType.IT_TEXTURE, 0, R.drawable.inv_image, R.string.asset_type_texture, R.string.asset_action_view),
     AT_SOUND(1, "sound", SLInventoryType.IT_SOUND, 1, R.drawable.inv_sound, R.string.asset_type_sound, -1),
     AT_CALLINGCARD(2, "callcard", SLInventoryType.IT_CALLINGCARD, 2, R.drawable.inv_vcard, R.string.asset_type_calling_card, -1),
@@ -28,78 +35,34 @@ enum class SLAssetType {
     AT_LINK_FOLDER(25, "link_f", SLInventoryType.IT_UNKNOWN, 6, R.drawable.inv_link, R.string.asset_type_link, -1),
     AT_MESH(49, "mesh", SLInventoryType.IT_MESH, 6, R.drawable.inv_object, R.string.asset_type_object, -1),
     AT_WIDGET(40, "widget", SLInventoryType.IT_WIDGET, 6, R.drawable.inv_object, R.string.asset_type_object, -1),
-    AT_UNKNOWN(-1, EnvironmentCompat.MEDIA_UNKNOWN, SLInventoryType.IT_UNKNOWN, -1, -1, -1, -1)
+    AT_UNKNOWN(-1, EnvironmentCompat.MEDIA_UNKNOWN, SLInventoryType.IT_UNKNOWN, -1, -1, -1, -1);
 
-    @JvmStatic private var tagMap: ImmutableMap<String, SLAssetType> = null
-    private var actionDescription: Int = 0
-    private var drawableResource: Int = 0
-    private var invType: SLInventoryType = null
-    private var specialFolderType: Int = 0
-    private var stringCode: String = ""
-    private var typeCode: Int = 0
-    private var typeDescription: Int = 0
-    init {
-        var builder: ImmutableMap.Builder = ImmutableMap.builder()
-        for (sLAssetType in valuesCustom()) {
-            builder.put(sLAssetType.stringCode, sLAssetType)
+    companion object {
+        private val tagMap: Map<String, SLAssetType> = values().associateBy { it.stringCode }
+
+        @JvmStatic
+        fun getByString(str: String): SLAssetType {
+            return tagMap[str] ?: AT_UNKNOWN
         }
-        tagMap = builder.build()
-    }
 
-    constructor(typeCode: Int, stringCode: String, inventoryType: SLInventoryType, specialFolderType: Int, drawableResource: Int, typeDescription: Int, actionDescription: Int) {
-        this.typeCode = typeCode
-        this.stringCode = stringCode
-        this.invType = inventoryType
-        this.specialFolderType = specialFolderType
-        this.drawableResource = drawableResource
-        this.typeDescription = typeDescription
-        this.actionDescription = actionDescription
-    }
-
-    fun getByString(str: String): SLAssetType {
-        var assetType: SLAssetType = tagMap.get(str)
-        var assetType: return = = if (null) AT_UNKNOWN else assetType
-    }
-
-    fun getByType(i: Int): SLAssetType {
-        for (assetType in valuesCustom()) {
-            if (assetType.typeCode == i) {
-        return assetType
+        @JvmStatic
+        fun getByType(i: Int): SLAssetType {
+            for (assetType in values()) {
+                if (assetType.typeCode == i) {
+                    return assetType
+                }
             }
+            return AT_UNKNOWN
         }
-        return AT_UNKNOWN
-    }
 
-    /* renamed from: values, reason: to resolve conflict with enum method */
-    fun valuesCustom(): Array<SLAssetType> {
-        return values()
-    }
-
-    fun getActionDescription(): Int {
-        return this.actionDescription
-    }
-
-    fun getDrawableResource(): Int {
-        return this.drawableResource
+        /* renamed from: values, reason: to resolve conflict with enum method */
+        @JvmStatic
+        fun valuesCustom(): Array<SLAssetType> {
+            return values()
+        }
     }
 
     fun getInventoryType(): SLInventoryType {
         return this.invType
-    }
-
-    fun getSpecialFolderType(): Int {
-        return this.specialFolderType
-    }
-
-    fun getStringCode(): String {
-        return this.stringCode
-    }
-
-    fun getTypeCode(): Int {
-        return this.typeCode
-    }
-
-    fun getTypeDescription(): Int {
-        return this.typeDescription
     }
 }

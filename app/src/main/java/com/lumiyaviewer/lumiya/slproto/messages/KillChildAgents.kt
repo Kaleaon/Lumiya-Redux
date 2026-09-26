@@ -15,14 +15,14 @@ open class KillChildAgents : SLMessage() {
 
     /** Block IDBlock, Single. */
     open class IDBlock {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 20
     }
 

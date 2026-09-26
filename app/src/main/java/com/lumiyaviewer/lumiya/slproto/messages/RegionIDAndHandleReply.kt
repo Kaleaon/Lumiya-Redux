@@ -16,14 +16,14 @@ open class RegionIDAndHandleReply : SLMessage() {
     /** Block ReplyBlock, Single. */
     open class ReplyBlock {
         @JvmField var RegionHandle: Long = 0L
-        @JvmField var RegionID: if (UUID) = null
+        @JvmField var RegionID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 28
     }
 
@@ -41,6 +41,7 @@ open class RegionIDAndHandleReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ReplyBlock_Field.RegionID = unpackUUIDReplyBlock_Field as byteBuffer.RegionHandle = unpackLong(byteBuffer)
+        ReplyBlock_Field.RegionID = unpackUUID(byteBuffer)
+        ReplyBlock_Field.RegionHandle = unpackLong(byteBuffer)
     }
 }

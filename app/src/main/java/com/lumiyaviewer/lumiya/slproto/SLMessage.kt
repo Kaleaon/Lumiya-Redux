@@ -194,7 +194,7 @@ abstract class SLMessage : Parcelable {
         try {
             return (str + "\u0000").getBytes("ISO-8859-1")
         } catch (e: UnsupportedEncodingException) {
-            return new byte[]{0}
+            return new Array<byte>{0}
         }
     }
 
@@ -202,7 +202,7 @@ abstract class SLMessage : Parcelable {
         try {
             return (str + "\u0000").getBytes("UTF-8")
         } catch (e: UnsupportedEncodingException) {
-            return new byte[]{0}
+            return new Array<byte>{0}
         }
     }
 

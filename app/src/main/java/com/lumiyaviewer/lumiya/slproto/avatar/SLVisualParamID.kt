@@ -468,7 +468,7 @@ enum class SLVisualParamID {
     AppearanceMessage_Version
 
     /* renamed from: values, reason: to resolve conflict with enum method */
-    public static SLVisualParamID[] valuesCustom() {
+    Array<SLVisualParamID> valuesCustom() {
         return values()
     }
 }

@@ -21,22 +21,22 @@ open class ObjectDuplicateOnRay : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var BypassRaycast else Boolean = false
+        @JvmField var AgentID: UUID? = null
+        @JvmField var BypassRaycast: Boolean = false
         @JvmField var CopyCenters: Boolean = false
         @JvmField var CopyRotates: Boolean = false
         @JvmField var DuplicateFlags: Int = 0
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var RayEnd else LLVector3? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var RayEnd: LLVector3? = null
         @JvmField var RayEndIsIntersection: Boolean = false
-        @JvmField var RayStart: if (LLVector3) = null
-        @JvmField var RayTargetID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var RayStart: LLVector3? = null
+        @JvmField var RayTargetID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectLocalID else Int = 0
+        @JvmField var ObjectLocalID: Int = 0
     }
 
     init {
@@ -74,11 +74,22 @@ open class ObjectDuplicateOnRay : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDAgentData_Field as byteBuffer.RayStart = unpackLLVector3AgentData_Field as byteBuffer.RayEnd = unpackLLVector3AgentData_Field as byteBuffer.BypassRaycast = unpackBooleanAgentData_Field as byteBuffer.RayEndIsIntersection = unpackBooleanAgentData_Field as byteBuffer.CopyCenters = unpackBooleanAgentData_Field as byteBuffer.CopyRotates = unpackBooleanAgentData_Field as byteBuffer.RayTargetID = unpackUUIDAgentData_Field as byteBuffer.DuplicateFlags = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.RayStart = unpackLLVector3(byteBuffer)
+        AgentData_Field.RayEnd = unpackLLVector3(byteBuffer)
+        AgentData_Field.BypassRaycast = unpackBoolean(byteBuffer)
+        AgentData_Field.RayEndIsIntersection = unpackBoolean(byteBuffer)
+        AgentData_Field.CopyCenters = unpackBoolean(byteBuffer)
+        AgentData_Field.CopyRotates = unpackBoolean(byteBuffer)
+        AgentData_Field.RayTargetID = unpackUUID(byteBuffer)
+        AgentData_Field.DuplicateFlags = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectLocalID = unpackInt(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

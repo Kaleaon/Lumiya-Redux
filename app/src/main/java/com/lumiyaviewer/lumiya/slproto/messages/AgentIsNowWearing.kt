@@ -20,14 +20,14 @@ open class AgentIsNowWearing : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block WearableData, Variable. */
     open class WearableData {
-        @JvmField var ItemID: if (UUID) = null
-        @JvmField var WearableType else Int = 0
+        @JvmField var ItemID: UUID? = null
+        @JvmField var WearableType: Int = 0
     }
 
     init {
@@ -57,11 +57,13 @@ open class AgentIsNowWearing : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val wearableData = WearableData()
-            wearableData.ItemID = unpackUUIDwearableData as byteBuffer.WearableType = unpackByte(byteBuffer).toInt() and 0xFF
+            wearableData.ItemID = unpackUUID(byteBuffer)
+            wearableData.WearableType = unpackByte(byteBuffer).toInt() and 0xFF
             WearableData_Fields.add(wearableData)
         }
     }

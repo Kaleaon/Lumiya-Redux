@@ -23,24 +23,24 @@ open class GroupMembersReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID else UUID? = null
+        @JvmField var GroupID: UUID? = null
         @JvmField var MemberCount: Int = 0
-        @JvmField var RequestID: if (UUID) = null
+        @JvmField var RequestID: UUID? = null
     }
 
     /** Block MemberData, Variable. */
     open class MemberData {
-        @JvmField var AgentID else UUID? = null
+        @JvmField var AgentID: UUID? = null
         @JvmField var AgentPowers: Long = 0L
         @JvmField var Contribution: Int = 0
         @JvmField var IsOwner: Boolean = false
-        @JvmField var OnlineStatus: if (ByteArray) = null
-        @JvmField var Title else ByteArray? = null
+        @JvmField var OnlineStatus: ByteArray? = null
+        @JvmField var Title: ByteArray? = null
     }
 
     init {
@@ -85,13 +85,20 @@ open class GroupMembersReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.RequestID = unpackUUIDGroupData_Field as byteBuffer.MemberCount = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
+        GroupData_Field.RequestID = unpackUUID(byteBuffer)
+        GroupData_Field.MemberCount = unpackInt(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val memberData = MemberData()
-            memberData.AgentID = unpackUUIDmemberData as byteBuffer.Contribution = unpackIntmemberData as byteBuffer.OnlineStatus = unpackVariable(byteBuffer, 1)
-            memberData.AgentPowers = unpackLongmemberData as byteBuffer.Title = unpackVariable(byteBuffer, 1)
-            memberData.IsOwner = unpackBooleanMemberData_Fields as byteBuffer.add(memberData)
+            memberData.AgentID = unpackUUID(byteBuffer)
+            memberData.Contribution = unpackInt(byteBuffer)
+            memberData.OnlineStatus = unpackVariable(byteBuffer, 1)
+            memberData.AgentPowers = unpackLong(byteBuffer)
+            memberData.Title = unpackVariable(byteBuffer, 1)
+            memberData.IsOwner = unpackBoolean(byteBuffer)
+            MemberData_Fields.add(memberData)
         }
     }
 }

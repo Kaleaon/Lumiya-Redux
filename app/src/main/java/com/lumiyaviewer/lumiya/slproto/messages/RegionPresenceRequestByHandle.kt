@@ -45,7 +45,8 @@ open class RegionPresenceRequestByHandle : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val regionData = RegionData()
-            regionData.RegionHandle = unpackLongRegionData_Fields as byteBuffer.add(regionData)
+            regionData.RegionHandle = unpackLong(byteBuffer)
+            RegionData_Fields.add(regionData)
         }
     }
 }

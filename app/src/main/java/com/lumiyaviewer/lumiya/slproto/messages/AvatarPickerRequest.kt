@@ -20,14 +20,14 @@ open class AvatarPickerRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var QueryID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var QueryID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Name else ByteArray? = null
+        @JvmField var Name: ByteArray? = null
     }
 
     init {
@@ -54,6 +54,9 @@ open class AvatarPickerRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.QueryID = unpackUUIDData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.QueryID = unpackUUID(byteBuffer)
+        Data_Field.Name = unpackVariable(byteBuffer, 1)
     }
 }

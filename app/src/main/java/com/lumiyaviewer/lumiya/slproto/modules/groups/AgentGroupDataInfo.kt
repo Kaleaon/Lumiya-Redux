@@ -27,10 +27,10 @@ open class AgentGroupDataInfo {
     open class GroupDataEntry {
 
         @LLSDSerialized
-        public boolean AcceptNotices
+        public var AcceptNotices: Boolean
 
         @LLSDSerialized
-        public int Contribution
+        public var Contribution: Int
 
         @LLSDSerialized
         public UUID GroupID
@@ -39,21 +39,21 @@ open class AgentGroupDataInfo {
         public UUID GroupInsigniaID
 
         @LLSDSerialized
-        public String GroupName
+        public var GroupName: String
 
         @LLSDSerialized
-        public long GroupPowers
+        public var GroupPowers: Long
 
         @LLSDSerialized
-        public String GroupTitle
+        public var GroupTitle: String
 
         @LLSDSerialized
-        public boolean ListInProfile
+        public var ListInProfile: Boolean
     }
 
     open class NewGroupDataEntry {
 
         @LLSDSerialized
-        public boolean ListInProfile
+        public var ListInProfile: Boolean
     }
 }

@@ -93,7 +93,7 @@ open class RLVController : SLModule() {
         if (i >= 0 && i < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[i]) != null) {
             str = attachmentPoint.name
         }
-        var str: return = = null || this.restrictions.isAllowed(RLVRestrictionType.detach, str, uuid)
+        return = null || this.restrictions.isAllowed(RLVRestrictionType.detach, str, uuid)
     }
 
     fun canRecvChat(str: String, uuid: UUID): Boolean {

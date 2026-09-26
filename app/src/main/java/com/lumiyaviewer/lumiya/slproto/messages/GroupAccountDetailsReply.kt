@@ -20,22 +20,22 @@ open class GroupAccountDetailsReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block HistoryData, Variable. */
     open class HistoryData {
         @JvmField var Amount: Int = 0
-        @JvmField var Description: if (ByteArray) = null
+        @JvmField var Description: ByteArray? = null
     }
 
     /** Block MoneyData, Single. */
     open class MoneyData {
-        @JvmField var CurrentInterval else Int = 0
+        @JvmField var CurrentInterval: Int = 0
         @JvmField var IntervalDays: Int = 0
-        @JvmField var RequestID: if (UUID) = null
-        @JvmField var StartDate else ByteArray? = null
+        @JvmField var RequestID: UUID? = null
+        @JvmField var StartDate: ByteArray? = null
     }
 
     init {
@@ -77,12 +77,18 @@ open class GroupAccountDetailsReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDMoneyData_Field as byteBuffer.RequestID = unpackUUIDMoneyData_Field as byteBuffer.IntervalDays = unpackIntMoneyData_Field as byteBuffer.CurrentInterval = unpackIntMoneyData_Field as byteBuffer.StartDate = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        MoneyData_Field.RequestID = unpackUUID(byteBuffer)
+        MoneyData_Field.IntervalDays = unpackInt(byteBuffer)
+        MoneyData_Field.CurrentInterval = unpackInt(byteBuffer)
+        MoneyData_Field.StartDate = unpackVariable(byteBuffer, 1)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val historyData = HistoryData()
             historyData.Description = unpackVariable(byteBuffer, 1)
-            historyData.Amount = unpackIntHistoryData_Fields as byteBuffer.add(historyData)
+            historyData.Amount = unpackInt(byteBuffer)
+            HistoryData_Fields.add(historyData)
         }
     }
 }

@@ -31,22 +31,22 @@ open class TeleportRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var LookAt: if (LLVector3) = null
-        @JvmField var Position else LLVector3? = null
-        @JvmField var RegionID: if (UUID) = null
+        @JvmField var LookAt: LLVector3? = null
+        @JvmField var Position: LLVector3? = null
+        @JvmField var RegionID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 76
     }
 
@@ -67,6 +67,10 @@ open class TeleportRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInfo_Field as byteBuffer.RegionID = unpackUUIDInfo_Field as byteBuffer.Position = unpackLLVector3Info_Field as byteBuffer.LookAt = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Info_Field.RegionID = unpackUUID(byteBuffer)
+        Info_Field.Position = unpackLLVector3(byteBuffer)
+        Info_Field.LookAt = unpackLLVector3(byteBuffer)
     }
 }

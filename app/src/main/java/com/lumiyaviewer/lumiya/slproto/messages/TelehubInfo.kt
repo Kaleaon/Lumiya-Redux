@@ -23,22 +23,22 @@ open class TelehubInfo : SLMessage() {
 
     /** Block SpawnPointBlock, Variable. */
     open class SpawnPointBlock {
-        @JvmField var SpawnPointPos: if (LLVector3) = null
+        @JvmField var SpawnPointPos: LLVector3? = null
     }
 
     /** Block TelehubBlock, Single. */
     open class TelehubBlock {
-        @JvmField var ObjectID else UUID? = null
-        @JvmField var ObjectName: if (ByteArray) = null
-        @JvmField var TelehubPos else LLVector3? = null
-        @JvmField var TelehubRot: if (LLQuaternion) = null
+        @JvmField var ObjectID: UUID? = null
+        @JvmField var ObjectName: ByteArray? = null
+        @JvmField var TelehubPos: LLVector3? = null
+        @JvmField var TelehubRot: LLQuaternion? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return TelehubBlock_Field.ObjectName!!.size + 17 + 12 + 12 + 4 + 1 + (SpawnPointBlock_Fields.size * 12)
     }
 
@@ -62,12 +62,15 @@ open class TelehubInfo : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TelehubBlock_Field.ObjectID = unpackUUIDTelehubBlock_Field as byteBuffer.ObjectName = unpackVariable(byteBuffer, 1)
-        TelehubBlock_Field.TelehubPos = unpackLLVector3TelehubBlock_Field as byteBuffer.TelehubRot = unpackLLQuaternion(byteBuffer)
+        TelehubBlock_Field.ObjectID = unpackUUID(byteBuffer)
+        TelehubBlock_Field.ObjectName = unpackVariable(byteBuffer, 1)
+        TelehubBlock_Field.TelehubPos = unpackLLVector3(byteBuffer)
+        TelehubBlock_Field.TelehubRot = unpackLLQuaternion(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val spawnPointBlock = SpawnPointBlock()
-            spawnPointBlock.SpawnPointPos = unpackLLVector3SpawnPointBlock_Fields as byteBuffer.add(spawnPointBlock)
+            spawnPointBlock.SpawnPointPos = unpackLLVector3(byteBuffer)
+            SpawnPointBlock_Fields.add(spawnPointBlock)
         }
     }
 }

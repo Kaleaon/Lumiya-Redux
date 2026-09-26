@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.messages
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 import java.nio.ByteBuffer
 import java.util.ArrayList
-import java.util.Iterator
 import java.util.UUID
 
 /**
@@ -16,99 +15,92 @@ import java.util.UUID
  * (recovered/reference/message_template.msg).
  */
 open class InventoryDescendents : SLMessage() {
-    var AgentData_Field: AgentData = null
-    var FolderData_Fields: ArrayList<FolderData> = ArrayList<>()
-    var ItemData_Fields: ArrayList<ItemData> = ArrayList<>()
+    @JvmField var AgentData_Field: AgentData = AgentData()
+    @JvmField val FolderData_Fields = ArrayList<FolderData>()
+    @JvmField val ItemData_Fields = ArrayList<ItemData>()
 
     /** Block AgentData, Single. */
     open class AgentData {
-        public UUID AgentID; // LLUUID
-        public int Descendents; // S32 - count to help with caching
-        public UUID FolderID; // LLUUID
-        public UUID OwnerID; // LLUUID - owner of the folders creatd.
-        public int Version; // S32 - version of the folder for caching
+        @JvmField var AgentID: UUID? = null // LLUUID
+        @JvmField var Descendents: Int = 0 // S32 - count to help with caching
+        @JvmField var FolderID: UUID? = null // LLUUID
+        @JvmField var OwnerID: UUID? = null // LLUUID - owner of the folders creatd.
+        @JvmField var Version: Int = 0 // S32 - version of the folder for caching
     }
 
     /** Block FolderData, Variable. */
     open class FolderData {
-        public UUID FolderID; // LLUUID
-        public byte[] Name; // Variable 1
-        public UUID ParentID; // LLUUID
-        public int Type; // S8
+        @JvmField var FolderID: UUID? = null // LLUUID
+        @JvmField var Name: ByteArray? = null // Variable 1
+        @JvmField var ParentID: UUID? = null // LLUUID
+        @JvmField var Type: Int = 0 // S8
     }
 
     /** Block ItemData, Variable. */
     open class ItemData {
-        public UUID AssetID; // LLUUID
-        public int BaseMask; // U32 - permissions
-        public int CRC; // U32
-        public int CreationDate; // S32
-        public UUID CreatorID; // LLUUID - permissions
-        public byte[] Description; // Variable 1
-        public int EveryoneMask; // U32 - permissions
-        public int Flags; // U32
-        public UUID FolderID; // LLUUID
-        public UUID GroupID; // LLUUID - permissions
-        public int GroupMask; // U32 - permissions
-        public boolean GroupOwned; // BOOL - permissions
-        public int InvType; // S8
-        public UUID ItemID; // LLUUID
-        public byte[] Name; // Variable 1
-        public int NextOwnerMask; // U32 - permissions
-        public UUID OwnerID; // LLUUID - owner of the folders creatd.
-        public int OwnerMask; // U32 - permissions
-        public int SalePrice; // S32
-        public int SaleType; // U8
-        public int Type; // S8
+        @JvmField var AssetID: UUID? = null // LLUUID
+        @JvmField var BaseMask: Int = 0 // U32 - permissions
+        @JvmField var CRC: Int = 0 // U32
+        @JvmField var CreationDate: Int = 0 // S32
+        @JvmField var CreatorID: UUID? = null // LLUUID - permissions
+        @JvmField var Description: ByteArray? = null // Variable 1
+        @JvmField var EveryoneMask: Int = 0 // U32 - permissions
+        @JvmField var Flags: Int = 0 // U32
+        @JvmField var FolderID: UUID? = null // LLUUID
+        @JvmField var GroupID: UUID? = null // LLUUID - permissions
+        @JvmField var GroupMask: Int = 0 // U32 - permissions
+        @JvmField var GroupOwned: Boolean = false // BOOL - permissions
+        @JvmField var InvType: Int = 0 // S8
+        @JvmField var ItemID: UUID? = null // LLUUID
+        @JvmField var Name: ByteArray? = null // Variable 1
+        @JvmField var NextOwnerMask: Int = 0 // U32 - permissions
+        @JvmField var OwnerID: UUID? = null // LLUUID - owner of the folders creatd.
+        @JvmField var OwnerMask: Int = 0 // U32 - permissions
+        @JvmField var SalePrice: Int = 0 // S32
+        @JvmField var SaleType: Int = 0 // U8
+        @JvmField var Type: Int = 0 // S8
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
         this.AgentData_Field = AgentData()
     }
-    fun CalcPayloadSize(): Int {
-        var i: Int = 0
-        var i2: Int = 61
-        var it: Iterator<?> = this.FolderData_Fields.iterator()
-        while (true) {
-            i = i2
-            if (!it.hasNext()) {
 
-            }
-            i2 = (it as FolderData.next()).Name.length + 34 + i
+    override fun CalcPayloadSize(): Int {
+        var i2 = 61
+        for (entry in this.FolderData_Fields) {
+            i2 = entry.Name.size + 34 + i2
         }
-        var i3: Int = i + 1
-        var iterator: Iterator<?> = this.ItemData_Fields.iterator()
-        while (true) {
-            var i4: Int = i3
-            if (!iterator.hasNext()) {
-        return i4
-            }
-            var itemData: ItemData = iterator as ItemData.next()
-            i3 = itemData.Description.length + itemData.Name.length + 129 + 1 + 4 + 4 + i4
+        val i = i2
+        var i3 = i + 1
+        for (entry in this.ItemData_Fields) {
+            i3 = entry.Description.size + entry.Name.size + 129 + 1 + 4 + 4 + i3
         }
+        return i3
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleInventoryDescendents(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: Low 278 (InventoryDescendents).
-        byteBuffer.putShort(0xFFFF as short)
-        byteBuffer.put(0x01 as byte)
-        byteBuffer.put(0x16 as byte)
+        byteBuffer.putShort((short) 0xFFFF)
+        byteBuffer.put((0x01).toByte())
+        byteBuffer.put((0x16).toByte())
         packUUID(byteBuffer, this.AgentData_Field.AgentID)
         packUUID(byteBuffer, this.AgentData_Field.FolderID)
         packUUID(byteBuffer, this.AgentData_Field.OwnerID)
         packInt(byteBuffer, this.AgentData_Field.Version)
         packInt(byteBuffer, this.AgentData_Field.Descendents)
-        byteBuffer.put(this as byte.FolderData_Fields.size())
+        byteBuffer.put((this.FolderData_Fields.size).toByte())
         for (folderData in this.FolderData_Fields) {
             packUUID(byteBuffer, folderData.FolderID)
             packUUID(byteBuffer, folderData.ParentID)
-            packByte(byteBuffer, folderData as byte.Type)
+            packByte(byteBuffer, (folderData.Type).toByte())
             packVariable(byteBuffer, folderData.Name, 1)
         }
-        byteBuffer.put(this as byte.ItemData_Fields.size())
+        byteBuffer.put((this.ItemData_Fields.size).toByte())
         for (itemData in this.ItemData_Fields) {
             packUUID(byteBuffer, itemData.ItemID)
             packUUID(byteBuffer, itemData.FolderID)
@@ -122,10 +114,10 @@ open class InventoryDescendents : SLMessage() {
             packInt(byteBuffer, itemData.NextOwnerMask)
             packBoolean(byteBuffer, itemData.GroupOwned)
             packUUID(byteBuffer, itemData.AssetID)
-            packByte(byteBuffer, itemData as byte.Type)
-            packByte(byteBuffer, itemData as byte.InvType)
+            packByte(byteBuffer, (itemData.Type).toByte())
+            packByte(byteBuffer, (itemData.InvType).toByte())
             packInt(byteBuffer, itemData.Flags)
-            packByte(byteBuffer, itemData as byte.SaleType)
+            packByte(byteBuffer, (itemData.SaleType).toByte())
             packInt(byteBuffer, itemData.SalePrice)
             packVariable(byteBuffer, itemData.Name, 1)
             packVariable(byteBuffer, itemData.Description, 1)
@@ -133,21 +125,48 @@ open class InventoryDescendents : SLMessage() {
             packInt(byteBuffer, itemData.CRC)
         }
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        this.AgentData_Field.AgentID = unpackUUIDthis as byteBuffer.AgentData_Field.FolderID = unpackUUIDthis as byteBuffer.AgentData_Field.OwnerID = unpackUUIDthis as byteBuffer.AgentData_Field.Version = unpackIntthis as byteBuffer.AgentData_Field.Descendents = unpackInt(byteBuffer)
-        var i: Int = byteBuffer.get() & 0xFF
-        for (int j = 0; j < i; j++) {
-            var folderData: FolderData = FolderData()
-            folderData.FolderID = unpackUUIDfolderData as byteBuffer.ParentID = unpackUUIDfolderData as byteBuffer.Type = unpackBytefolderData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        this.AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        this.AgentData_Field.FolderID = unpackUUID(byteBuffer)
+        this.AgentData_Field.OwnerID = unpackUUID(byteBuffer)
+        this.AgentData_Field.Version = unpackInt(byteBuffer)
+        this.AgentData_Field.Descendents = unpackInt(byteBuffer)
+        val i = byteBuffer.get().toInt() and 0xFF
+        repeat(i) {
+            val folderData = FolderData()
+            folderData.FolderID = unpackUUID(byteBuffer)
+            folderData.ParentID = unpackUUID(byteBuffer)
+            folderData.Type = unpackByte(byteBuffer)
+            folderData.Name = unpackVariable(byteBuffer, 1)
             this.FolderData_Fields.add(folderData)
         }
-        var i3: Int = byteBuffer.get() & 0xFF
-        for (int k = 0; k < i3; k++) {
-            var itemData: ItemData = ItemData()
-            itemData.ItemID = unpackUUIDitemData as byteBuffer.FolderID = unpackUUIDitemData as byteBuffer.CreatorID = unpackUUIDitemData as byteBuffer.OwnerID = unpackUUIDitemData as byteBuffer.GroupID = unpackUUIDitemData as byteBuffer.BaseMask = unpackIntitemData as byteBuffer.OwnerMask = unpackIntitemData as byteBuffer.GroupMask = unpackIntitemData as byteBuffer.EveryoneMask = unpackIntitemData as byteBuffer.NextOwnerMask = unpackIntitemData as byteBuffer.GroupOwned = unpackBooleanitemData as byteBuffer.AssetID = unpackUUIDitemData as byteBuffer.Type = unpackByteitemData as byteBuffer.InvType = unpackByteitemData as byteBuffer.Flags = unpackIntitemData as byteBuffer.SaleType = unpackByte(byteBuffer) & 0xFF
-            itemData.SalePrice = unpackIntitemData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        val i3 = byteBuffer.get().toInt() and 0xFF
+        repeat(i3) {
+            val itemData = ItemData()
+            itemData.ItemID = unpackUUID(byteBuffer)
+            itemData.FolderID = unpackUUID(byteBuffer)
+            itemData.CreatorID = unpackUUID(byteBuffer)
+            itemData.OwnerID = unpackUUID(byteBuffer)
+            itemData.GroupID = unpackUUID(byteBuffer)
+            itemData.BaseMask = unpackInt(byteBuffer)
+            itemData.OwnerMask = unpackInt(byteBuffer)
+            itemData.GroupMask = unpackInt(byteBuffer)
+            itemData.EveryoneMask = unpackInt(byteBuffer)
+            itemData.NextOwnerMask = unpackInt(byteBuffer)
+            itemData.GroupOwned = unpackBoolean(byteBuffer)
+            itemData.AssetID = unpackUUID(byteBuffer)
+            itemData.Type = unpackByte(byteBuffer)
+            itemData.InvType = unpackByte(byteBuffer)
+            itemData.Flags = unpackInt(byteBuffer)
+            itemData.SaleType = unpackByte(byteBuffer) & 0xFF
+            itemData.SalePrice = unpackInt(byteBuffer)
+            itemData.Name = unpackVariable(byteBuffer, 1)
             itemData.Description = unpackVariable(byteBuffer, 1)
-            itemData.CreationDate = unpackIntitemData as byteBuffer.CRC = unpackIntthis as byteBuffer.ItemData_Fields.add(itemData)
+            itemData.CreationDate = unpackInt(byteBuffer)
+            itemData.CRC = unpackInt(byteBuffer)
+            this.ItemData_Fields.add(itemData)
         }
     }
 }
+

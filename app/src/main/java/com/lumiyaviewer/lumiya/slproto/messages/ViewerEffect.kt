@@ -23,25 +23,25 @@ open class ViewerEffect : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Effect, Variable. */
     open class Effect {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var Color else ByteArray? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var Color: ByteArray? = null
         @JvmField var Duration: Float = 0f
-        @JvmField var ID: if (UUID) = null
-        @JvmField var Type else Int = 0
-        @JvmField var TypeData: if (ByteArray) = null
+        @JvmField var ID: UUID? = null
+        @JvmField var Type: Int = 0
+        @JvmField var TypeData: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var i = 35
         val it = Effect_Fields.iterator()
         while (true) {
@@ -75,12 +75,16 @@ open class ViewerEffect : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val effect = Effect()
-            effect.ID = unpackUUIDeffect as byteBuffer.AgentID = unpackUUIDeffect as byteBuffer.Type = unpackByte(byteBuffer).toInt() and 0xFF
-            effect.Duration = unpackFloateffect as byteBuffer.Color = unpackFixed(byteBuffer, 4)
+            effect.ID = unpackUUID(byteBuffer)
+            effect.AgentID = unpackUUID(byteBuffer)
+            effect.Type = unpackByte(byteBuffer).toInt() and 0xFF
+            effect.Duration = unpackFloat(byteBuffer)
+            effect.Color = unpackFixed(byteBuffer, 4)
             effect.TypeData = unpackVariable(byteBuffer, 1)
             Effect_Fields.add(effect)
         }

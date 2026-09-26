@@ -16,14 +16,14 @@ open class AgentFOV : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var CircuitCode else Int = 0
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var CircuitCode: Int = 0
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block FOVBlock, Single. */
     open class FOVBlock {
-        @JvmField var GenCounter else Int = 0
+        @JvmField var GenCounter: Int = 0
         @JvmField var VerticalAngle: Float = 0f
     }
 
@@ -52,6 +52,10 @@ open class AgentFOV : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.CircuitCode = unpackIntFOVBlock_Field as byteBuffer.GenCounter = unpackIntFOVBlock_Field as byteBuffer.VerticalAngle = unpackFloat(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.CircuitCode = unpackInt(byteBuffer)
+        FOVBlock_Field.GenCounter = unpackInt(byteBuffer)
+        FOVBlock_Field.VerticalAngle = unpackFloat(byteBuffer)
     }
 }

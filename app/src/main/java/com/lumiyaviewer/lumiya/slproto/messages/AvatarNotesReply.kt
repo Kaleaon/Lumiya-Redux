@@ -21,20 +21,20 @@ open class AvatarNotesReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Notes else ByteArray? = null
-        @JvmField var TargetID: if (UUID) = null
+        @JvmField var Notes: ByteArray? = null
+        @JvmField var TargetID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return Data_Field.Notes!!.size + 18 + 20
     }
 
@@ -53,6 +53,8 @@ open class AvatarNotesReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDData_Field as byteBuffer.TargetID = unpackUUIDData_Field as byteBuffer.Notes = unpackVariable(byteBuffer, 2)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        Data_Field.TargetID = unpackUUID(byteBuffer)
+        Data_Field.Notes = unpackVariable(byteBuffer, 2)
     }
 }

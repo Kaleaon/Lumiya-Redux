@@ -71,10 +71,10 @@ abstract class ResponseCacher<KeyType, MessageType> : Refreshable<KeyType> {
         }
     }
 
-    protected abstract MessageType loadCached(byte[] bytes)
+    protected abstract MessageType loadCached(Array<byte> bytes)
     fun requestUpdate(keytype: KeyType) {
         this.pool.requestUpdate(keytype)
     }
 
-    protected abstract byte[] storeCached(MessageType messagetype)
+    protected abstract Array<byte> storeCached(MessageType messagetype)
 }

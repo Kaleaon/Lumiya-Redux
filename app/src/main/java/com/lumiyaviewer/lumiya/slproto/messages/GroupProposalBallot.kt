@@ -18,22 +18,22 @@ open class GroupProposalBallot : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ProposalData, Single. */
     open class ProposalData {
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var ProposalID else UUID? = null
-        @JvmField var VoteCast: if (ByteArray) = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var ProposalID: UUID? = null
+        @JvmField var VoteCast: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return ProposalData_Field.VoteCast!!.size + 33 + 36
     }
 
@@ -54,6 +54,10 @@ open class GroupProposalBallot : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDProposalData_Field as byteBuffer.ProposalID = unpackUUIDProposalData_Field as byteBuffer.GroupID = unpackUUIDProposalData_Field as byteBuffer.VoteCast = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ProposalData_Field.ProposalID = unpackUUID(byteBuffer)
+        ProposalData_Field.GroupID = unpackUUID(byteBuffer)
+        ProposalData_Field.VoteCast = unpackVariable(byteBuffer, 1)
     }
 }

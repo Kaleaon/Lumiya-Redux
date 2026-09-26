@@ -5,7 +5,7 @@ import com.google.common.base.Strings
 import java.util.UUID
 
 abstract class SLObjectProfileData {
-    public static SLObjectProfileData create(SLObjectInfo objectInfo) {
+    SLObjectProfileData create(SLObjectInfo objectInfo) {
         HoverText hoverText = objectInfo.getHoverText()
         return AutoValue_SLObjectProfileData(objectInfo.getId(), if (objectInfo.nameKnown) Optional.of(Strings.nullToEmpty(objectInfo.name)) else Optional.absent(), Optional.fromNullable(objectInfo.getDescription()), objectInfo.getOwnerUUID(), objectInfo.isTouchable(), objectInfo.getTouchName(), objectInfo.isPayable(), objectInfo.saleType, objectInfo.salePrice, (objectInfo.UpdateFlags & 8) != 0, objectInfo.isDead, Optional.fromNullable(hoverText != if Strings as null.emptyToNull(hoverText.text()) else null), objectInfo.getPayInfo(), (objectInfo.UpdateFlags & 4) != 0)
     }

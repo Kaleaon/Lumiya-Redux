@@ -17,10 +17,10 @@ open class ObjectBuy : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var CategoryID else UUID? = null
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var CategoryID: UUID? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
@@ -60,12 +60,17 @@ open class ObjectBuy : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDAgentData_Field as byteBuffer.CategoryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.CategoryID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackIntobjectData as byteBuffer.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
-            objectData.SalePrice = unpackIntObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectLocalID = unpackInt(byteBuffer)
+            objectData.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
+            objectData.SalePrice = unpackInt(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

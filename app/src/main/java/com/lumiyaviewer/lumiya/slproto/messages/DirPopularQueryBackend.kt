@@ -18,22 +18,22 @@ open class DirPopularQueryBackend : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var EstateID else Int = 0
+        @JvmField var EstateID: Int = 0
         @JvmField var Godlike: Boolean = false
         @JvmField var QueryFlags: Int = 0
-        @JvmField var QueryID: if (UUID) = null
+        @JvmField var QueryID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 45
     }
 
@@ -54,6 +54,10 @@ open class DirPopularQueryBackend : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUIDQueryData_Field as byteBuffer.QueryFlags = unpackIntQueryData_Field as byteBuffer.EstateID = unpackIntQueryData_Field as byteBuffer.Godlike = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryFlags = unpackInt(byteBuffer)
+        QueryData_Field.EstateID = unpackInt(byteBuffer)
+        QueryData_Field.Godlike = unpackBoolean(byteBuffer)
     }
 }

@@ -18,8 +18,8 @@ open class ObjectUpdateCompressed : SLMessage() {
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var Data: if (ByteArray) = null
-        @JvmField var UpdateFlags else Int = 0
+        @JvmField var Data: ByteArray? = null
+        @JvmField var UpdateFlags: Int = 0
     }
 
     /** Block RegionData, Single. */
@@ -61,11 +61,13 @@ open class ObjectUpdateCompressed : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        RegionData_Field.RegionHandle = unpackLongRegionData_Field as byteBuffer.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
+        RegionData_Field.RegionHandle = unpackLong(byteBuffer)
+        RegionData_Field.TimeDilation = unpackShort(byteBuffer).toInt() and 65535
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.UpdateFlags = unpackIntobjectData as byteBuffer.Data = unpackVariable(byteBuffer, 2)
+            objectData.UpdateFlags = unpackInt(byteBuffer)
+            objectData.Data = unpackVariable(byteBuffer, 2)
             ObjectData_Fields.add(objectData)
         }
     }

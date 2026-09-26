@@ -17,12 +17,12 @@ open class SendXferPacket : SLMessage() {
 
     /** Block DataPacket, Single. */
     open class DataPacket {
-        @JvmField var Data: if (ByteArray) = null
+        @JvmField var Data: ByteArray? = null
     }
 
     /** Block XferID, Single. */
     open class XferID {
-        @JvmField var ID else Long = 0L
+        @JvmField var ID: Long = 0L
         @JvmField var Packet: Int = 0
     }
 
@@ -47,6 +47,8 @@ open class SendXferPacket : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        XferID_Field.ID = unpackLongXferID_Field as byteBuffer.Packet = unpackIntDataPacket_Field as byteBuffer.Data = unpackVariable(byteBuffer, 2)
+        XferID_Field.ID = unpackLong(byteBuffer)
+        XferID_Field.Packet = unpackInt(byteBuffer)
+        DataPacket_Field.Data = unpackVariable(byteBuffer, 2)
     }
 }

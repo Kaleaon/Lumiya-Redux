@@ -20,28 +20,28 @@ open class AgentMovementComplete : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var LookAt: if (LLVector3) = null
-        @JvmField var Position else LLVector3? = null
+        @JvmField var LookAt: LLVector3? = null
+        @JvmField var Position: LLVector3? = null
         @JvmField var RegionHandle: Long = 0L
         @JvmField var Timestamp: Int = 0
     }
 
     /** Block SimData, Single. */
     open class SimData {
-        @JvmField var ChannelVersion: if (ByteArray) = null
+        @JvmField var ChannelVersion: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return SimData_Field.ChannelVersion!!.size + 2 + 72
     }
 
@@ -64,6 +64,12 @@ open class AgentMovementComplete : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.Position = unpackLLVector3Data_Field as byteBuffer.LookAt = unpackLLVector3Data_Field as byteBuffer.RegionHandle = unpackLongData_Field as byteBuffer.Timestamp = unpackIntSimData_Field as byteBuffer.ChannelVersion = unpackVariable(byteBuffer, 2)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.Position = unpackLLVector3(byteBuffer)
+        Data_Field.LookAt = unpackLLVector3(byteBuffer)
+        Data_Field.RegionHandle = unpackLong(byteBuffer)
+        Data_Field.Timestamp = unpackInt(byteBuffer)
+        SimData_Field.ChannelVersion = unpackVariable(byteBuffer, 2)
     }
 }

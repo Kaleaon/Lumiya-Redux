@@ -17,16 +17,16 @@ open class AvatarPropertiesRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var AvatarID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var AvatarID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 52
     }
 
@@ -45,6 +45,8 @@ open class AvatarPropertiesRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.AvatarID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AvatarID = unpackUUID(byteBuffer)
     }
 }

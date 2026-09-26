@@ -17,34 +17,34 @@ open class RezScript : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block InventoryBlock, Single. */
     open class InventoryBlock {
-        @JvmField var BaseMask else Int = 0
+        @JvmField var BaseMask: Int = 0
         @JvmField var CRC: Int = 0
         @JvmField var CreationDate: Int = 0
-        @JvmField var CreatorID: if (UUID) = null
-        @JvmField var Description else ByteArray? = null
+        @JvmField var CreatorID: UUID? = null
+        @JvmField var Description: ByteArray? = null
         @JvmField var EveryoneMask: Int = 0
         @JvmField var Flags: Int = 0
-        @JvmField var FolderID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var FolderID: UUID? = null
+        @JvmField var GroupID: UUID? = null
         @JvmField var GroupMask: Int = 0
         @JvmField var GroupOwned: Boolean = false
         @JvmField var InvType: Int = 0
-        @JvmField var ItemID: if (UUID) = null
-        @JvmField var Name else ByteArray? = null
+        @JvmField var ItemID: UUID? = null
+        @JvmField var Name: ByteArray? = null
         @JvmField var NextOwnerMask: Int = 0
-        @JvmField var OwnerID: if (UUID) = null
-        @JvmField var OwnerMask else Int = 0
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var OwnerMask: Int = 0
         @JvmField var SalePrice: Int = 0
         @JvmField var SaleType: Int = 0
-        @JvmField var TransactionID: if (UUID) = null
-        @JvmField var Type else Int = 0
+        @JvmField var TransactionID: UUID? = null
+        @JvmField var Type: Int = 0
     }
 
     /** Block UpdateBlock, Single. */
@@ -99,11 +99,31 @@ open class RezScript : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDUpdateBlock_Field as byteBuffer.ObjectLocalID = unpackIntUpdateBlock_Field as byteBuffer.Enabled = unpackBooleanInventoryBlock_Field as byteBuffer.ItemID = unpackUUIDInventoryBlock_Field as byteBuffer.FolderID = unpackUUIDInventoryBlock_Field as byteBuffer.CreatorID = unpackUUIDInventoryBlock_Field as byteBuffer.OwnerID = unpackUUIDInventoryBlock_Field as byteBuffer.GroupID = unpackUUIDInventoryBlock_Field as byteBuffer.BaseMask = unpackIntInventoryBlock_Field as byteBuffer.OwnerMask = unpackIntInventoryBlock_Field as byteBuffer.GroupMask = unpackIntInventoryBlock_Field as byteBuffer.EveryoneMask = unpackIntInventoryBlock_Field as byteBuffer.NextOwnerMask = unpackIntInventoryBlock_Field as byteBuffer.GroupOwned = unpackBooleanInventoryBlock_Field as byteBuffer.TransactionID = unpackUUIDInventoryBlock_Field as byteBuffer.Type = unpackByte(byteBuffer).toInt()
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        UpdateBlock_Field.ObjectLocalID = unpackInt(byteBuffer)
+        UpdateBlock_Field.Enabled = unpackBoolean(byteBuffer)
+        InventoryBlock_Field.ItemID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.FolderID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.CreatorID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.OwnerID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.GroupID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.BaseMask = unpackInt(byteBuffer)
+        InventoryBlock_Field.OwnerMask = unpackInt(byteBuffer)
+        InventoryBlock_Field.GroupMask = unpackInt(byteBuffer)
+        InventoryBlock_Field.EveryoneMask = unpackInt(byteBuffer)
+        InventoryBlock_Field.NextOwnerMask = unpackInt(byteBuffer)
+        InventoryBlock_Field.GroupOwned = unpackBoolean(byteBuffer)
+        InventoryBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.Type = unpackByte(byteBuffer).toInt()
         InventoryBlock_Field.InvType = unpackByte(byteBuffer).toInt()
-        InventoryBlock_Field.Flags = unpackIntInventoryBlock_Field as byteBuffer.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
-        InventoryBlock_Field.SalePrice = unpackIntInventoryBlock_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        InventoryBlock_Field.Flags = unpackInt(byteBuffer)
+        InventoryBlock_Field.SaleType = unpackByte(byteBuffer).toInt() and 0xFF
+        InventoryBlock_Field.SalePrice = unpackInt(byteBuffer)
+        InventoryBlock_Field.Name = unpackVariable(byteBuffer, 1)
         InventoryBlock_Field.Description = unpackVariable(byteBuffer, 1)
-        InventoryBlock_Field.CreationDate = unpackIntInventoryBlock_Field as byteBuffer.CRC = unpackInt(byteBuffer)
+        InventoryBlock_Field.CreationDate = unpackInt(byteBuffer)
+        InventoryBlock_Field.CRC = unpackInt(byteBuffer)
     }
 }

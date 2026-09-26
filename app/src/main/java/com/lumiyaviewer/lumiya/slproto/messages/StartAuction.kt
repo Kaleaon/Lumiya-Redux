@@ -17,14 +17,14 @@ open class StartAuction : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block ParcelData, Single. */
     open class ParcelData {
-        @JvmField var Name else ByteArray? = null
-        @JvmField var ParcelID: if (UUID) = null
-        @JvmField var SnapshotID else UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var ParcelID: UUID? = null
+        @JvmField var SnapshotID: UUID? = null
     }
 
     init {
@@ -51,6 +51,9 @@ open class StartAuction : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDParcelData_Field as byteBuffer.ParcelID = unpackUUIDParcelData_Field as byteBuffer.SnapshotID = unpackUUIDParcelData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        ParcelData_Field.ParcelID = unpackUUID(byteBuffer)
+        ParcelData_Field.SnapshotID = unpackUUID(byteBuffer)
+        ParcelData_Field.Name = unpackVariable(byteBuffer, 1)
     }
 }

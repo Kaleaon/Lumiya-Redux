@@ -17,14 +17,14 @@ open class KickUserAck : SLMessage() {
     /** Block UserInfo, Single. */
     open class UserInfo {
         @JvmField var Flags: Int = 0
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var SessionID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 24
     }
 
@@ -42,6 +42,7 @@ open class KickUserAck : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        UserInfo_Field.SessionID = unpackUUIDUserInfo_Field as byteBuffer.Flags = unpackInt(byteBuffer)
+        UserInfo_Field.SessionID = unpackUUID(byteBuffer)
+        UserInfo_Field.Flags = unpackInt(byteBuffer)
     }
 }

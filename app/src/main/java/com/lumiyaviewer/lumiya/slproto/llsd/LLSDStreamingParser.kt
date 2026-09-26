@@ -52,7 +52,7 @@ open class LLSDStreamingParser {
         }
     }
 
-    public static void parseAny(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
+    void parseAny(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
             var bufferedInputStream: BufferedInputStream = BufferedInputStream(inputStream, 65536)
             switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
@@ -72,7 +72,7 @@ open class LLSDStreamingParser {
         }
     }
 
-    public static void parseBinary(DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
+    void parseBinary(DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
             parseBinaryNode(1, null, dataInputStream, lsdContentHandler)
         } catch (e: LLSDValueTypeException) {
@@ -90,7 +90,7 @@ open class LLSDStreamingParser {
         }
     }
 
-    private static void parseBinaryNode(int i, String str, DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, LLSDValueTypeException, InterruptedException, IOException {
+    private void parseBinaryNode(int i, String str, DataInputStream dataInputStream, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, LLSDValueTypeException, InterruptedException, IOException {
         var i2: Int = 0
         var i3: Int = i
         while (i3 > 0) {
@@ -193,7 +193,7 @@ open class LLSDStreamingParser {
         }
     }
 
-    public static void parseXML(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
+    void parseXML(InputStream inputStream, String str, LLSDContentHandler lsdContentHandler) throws LLSDXMLException {
         try {
             var newPullParser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
             newPullParser.setInput(inputStream, str)
@@ -223,7 +223,7 @@ open class LLSDStreamingParser {
         }
     }
 
-    private static void parseXMLNode(String str, XmlPullParser xmlPullParser, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, XmlPullParserException, IOException, LLSDValueTypeException, InterruptedException {
+    private void parseXMLNode(String str, XmlPullParser xmlPullParser, LLSDContentHandler lsdContentHandler) throws LLSDXMLException, XmlPullParserException, IOException, LLSDValueTypeException, InterruptedException {
         var name: String = xmlPullParser.getName()
         var byTag: LLSDNodeType = LLSDNodeType.byTag(name)
         if (byTag == null) {

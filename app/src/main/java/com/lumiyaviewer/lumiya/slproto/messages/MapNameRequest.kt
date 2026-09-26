@@ -19,16 +19,16 @@ open class MapNameRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var EstateID else Int = 0
+        @JvmField var AgentID: UUID? = null
+        @JvmField var EstateID: Int = 0
         @JvmField var Flags: Int = 0
         @JvmField var Godlike: Boolean = false
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block NameData, Single. */
     open class NameData {
-        @JvmField var Name else ByteArray? = null
+        @JvmField var Name: ByteArray? = null
     }
 
     init {
@@ -57,6 +57,11 @@ open class MapNameRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackIntAgentData_Field as byteBuffer.EstateID = unpackIntAgentData_Field as byteBuffer.Godlike = unpackBooleanNameData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.EstateID = unpackInt(byteBuffer)
+        AgentData_Field.Godlike = unpackBoolean(byteBuffer)
+        NameData_Field.Name = unpackVariable(byteBuffer, 1)
     }
 }

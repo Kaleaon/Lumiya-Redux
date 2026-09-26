@@ -19,16 +19,16 @@ open class RpcScriptRequestInbound : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var ChannelID: if (UUID) = null
-        @JvmField var IntValue else Int = 0
-        @JvmField var ItemID: if (UUID) = null
-        @JvmField var StringValue else ByteArray? = null
-        @JvmField var TaskID: if (UUID) = null
+        @JvmField var ChannelID: UUID? = null
+        @JvmField var IntValue: Int = 0
+        @JvmField var ItemID: UUID? = null
+        @JvmField var StringValue: ByteArray? = null
+        @JvmField var TaskID: UUID? = null
     }
 
     /** Block TargetBlock, Single. */
     open class TargetBlock {
-        @JvmField var GridX else Int = 0
+        @JvmField var GridX: Int = 0
         @JvmField var GridY: Int = 0
     }
 
@@ -59,6 +59,12 @@ open class RpcScriptRequestInbound : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TargetBlock_Field.GridX = unpackIntTargetBlock_Field as byteBuffer.GridY = unpackIntDataBlock_Field as byteBuffer.TaskID = unpackUUIDDataBlock_Field as byteBuffer.ItemID = unpackUUIDDataBlock_Field as byteBuffer.ChannelID = unpackUUIDDataBlock_Field as byteBuffer.IntValue = unpackIntDataBlock_Field as byteBuffer.StringValue = unpackVariable(byteBuffer, 2)
+        TargetBlock_Field.GridX = unpackInt(byteBuffer)
+        TargetBlock_Field.GridY = unpackInt(byteBuffer)
+        DataBlock_Field.TaskID = unpackUUID(byteBuffer)
+        DataBlock_Field.ItemID = unpackUUID(byteBuffer)
+        DataBlock_Field.ChannelID = unpackUUID(byteBuffer)
+        DataBlock_Field.IntValue = unpackInt(byteBuffer)
+        DataBlock_Field.StringValue = unpackVariable(byteBuffer, 2)
     }
 }

@@ -16,11 +16,11 @@ open class AssetUploadRequest : SLMessage() {
 
     /** Block AssetBlock, Single. */
     open class AssetBlock {
-        @JvmField var AssetData: if (ByteArray) = null
-        @JvmField var StoreLocal else Boolean = false
+        @JvmField var AssetData: ByteArray? = null
+        @JvmField var StoreLocal: Boolean = false
         @JvmField var Tempfile: Boolean = false
-        @JvmField var TransactionID: if (UUID) = null
-        @JvmField var Type else Int = 0
+        @JvmField var TransactionID: UUID? = null
+        @JvmField var Type: Int = 0
     }
 
     init {
@@ -48,7 +48,10 @@ open class AssetUploadRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AssetBlock_Field.TransactionID = unpackUUIDAssetBlock_Field as byteBuffer.Type = unpackByte(byteBuffer).toInt()
-        AssetBlock_Field.Tempfile = unpackBooleanAssetBlock_Field as byteBuffer.StoreLocal = unpackBooleanAssetBlock_Field as byteBuffer.AssetData = unpackVariable(byteBuffer, 2)
+        AssetBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        AssetBlock_Field.Type = unpackByte(byteBuffer).toInt()
+        AssetBlock_Field.Tempfile = unpackBoolean(byteBuffer)
+        AssetBlock_Field.StoreLocal = unpackBoolean(byteBuffer)
+        AssetBlock_Field.AssetData = unpackVariable(byteBuffer, 2)
     }
 }

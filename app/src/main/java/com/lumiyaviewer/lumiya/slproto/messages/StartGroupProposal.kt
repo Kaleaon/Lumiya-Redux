@@ -18,17 +18,17 @@ open class StartGroupProposal : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ProposalData, Single. */
     open class ProposalData {
         @JvmField var Duration: Int = 0
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var Majority else Float = 0f
-        @JvmField var ProposalText: if (ByteArray) = null
-        @JvmField var Quorum else Int = 0
+        @JvmField var GroupID: UUID? = null
+        @JvmField var Majority: Float = 0f
+        @JvmField var ProposalText: ByteArray? = null
+        @JvmField var Quorum: Int = 0
     }
 
     init {
@@ -58,6 +58,12 @@ open class StartGroupProposal : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDProposalData_Field as byteBuffer.GroupID = unpackUUIDProposalData_Field as byteBuffer.Quorum = unpackIntProposalData_Field as byteBuffer.Majority = unpackFloatProposalData_Field as byteBuffer.Duration = unpackIntProposalData_Field as byteBuffer.ProposalText = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ProposalData_Field.GroupID = unpackUUID(byteBuffer)
+        ProposalData_Field.Quorum = unpackInt(byteBuffer)
+        ProposalData_Field.Majority = unpackFloat(byteBuffer)
+        ProposalData_Field.Duration = unpackInt(byteBuffer)
+        ProposalData_Field.ProposalText = unpackVariable(byteBuffer, 1)
     }
 }

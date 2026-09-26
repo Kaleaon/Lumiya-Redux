@@ -17,14 +17,14 @@ open class AgentHeightWidth : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var CircuitCode else Int = 0
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var CircuitCode: Int = 0
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block HeightWidthBlock, Single. */
     open class HeightWidthBlock {
-        @JvmField var GenCounter else Int = 0
+        @JvmField var GenCounter: Int = 0
         @JvmField var Height: Int = 0
         @JvmField var Width: Int = 0
     }
@@ -55,7 +55,11 @@ open class AgentHeightWidth : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.CircuitCode = unpackIntHeightWidthBlock_Field as byteBuffer.GenCounter = unpackIntHeightWidthBlock_Field as byteBuffer.Height = unpackShort(byteBuffer).toInt() and 65535
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.CircuitCode = unpackInt(byteBuffer)
+        HeightWidthBlock_Field.GenCounter = unpackInt(byteBuffer)
+        HeightWidthBlock_Field.Height = unpackShort(byteBuffer).toInt() and 65535
         HeightWidthBlock_Field.Width = unpackShort(byteBuffer).toInt() and 65535
     }
 }

@@ -22,20 +22,20 @@ open class TerminateFriendship : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ExBlock, Single. */
     open class ExBlock {
-        @JvmField var OtherID: if (UUID) = null
+        @JvmField var OtherID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 52
     }
 
@@ -54,6 +54,8 @@ open class TerminateFriendship : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDExBlock_Field as byteBuffer.OtherID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ExBlock_Field.OtherID = unpackUUID(byteBuffer)
     }
 }

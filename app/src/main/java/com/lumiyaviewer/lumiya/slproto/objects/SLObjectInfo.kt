@@ -156,7 +156,7 @@ abstract class SLObjectInfo : Identifiable<UUID> {
         return floats
     }
 
-    public static SLObjectInfo create(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
+    SLObjectInfo create(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
         var objectPrimInfo: SLObjectPrimInfo = SLObjectPrimInfo()
         objectPrimInfo.ApplyObjectUpdate(objectData)
         return objectPrimInfo

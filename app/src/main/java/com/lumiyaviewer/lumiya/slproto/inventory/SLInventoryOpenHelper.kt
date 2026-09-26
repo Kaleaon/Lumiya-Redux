@@ -14,7 +14,7 @@ open class SLInventoryOpenHelper : DBHandleCache.DBOpenHelper {
     @JvmStatic private var DB_VERSION: Int = 21
 
     private open class InstanceHolder {
-        private static SLInventoryOpenHelper Instance = SLInventoryOpenHelper()
+        private SLInventoryOpenHelper Instance = SLInventoryOpenHelper()
 
         fun InstanceHolder(): private {
         }
@@ -45,11 +45,11 @@ open class SLInventoryOpenHelper : DBHandleCache.DBOpenHelper {
         return InstanceHolder.Instance
     }
 
-    private boolean initTables(SQLiteDatabase sqLiteDatabase) throws SQLiteException {
+    private var initTables: Boolean(SQLiteDatabase sqLiteDatabase) throws SQLiteException {
         var z: Boolean = false
         var z2: Boolean = false
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS DBVersion (Version INTEGER);")
-        var query: Cursor = sqLiteDatabase.query("DBVersion", new String[]{"Version"}, null, null, null, null, null)
+        var query: Cursor = sqLiteDatabase.query("DBVersion", new Array<String>{"Version"}, null, null, null, null, null)
         if (!query.moveToFirst()) {
             z = true
             z2 = true

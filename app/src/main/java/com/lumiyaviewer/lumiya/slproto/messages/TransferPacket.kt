@@ -18,17 +18,17 @@ open class TransferPacket : SLMessage() {
     /** Block TransferData, Single. */
     open class TransferData {
         @JvmField var ChannelType: Int = 0
-        @JvmField var Data: if (ByteArray) = null
-        @JvmField var Packet else Int = 0
+        @JvmField var Data: ByteArray? = null
+        @JvmField var Packet: Int = 0
         @JvmField var Status: Int = 0
-        @JvmField var TransferID: if (UUID) = null
+        @JvmField var TransferID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return TransferData_Field.Data!!.size + 30 + 1
     }
 
@@ -47,6 +47,10 @@ open class TransferPacket : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TransferData_Field.TransferID = unpackUUIDTransferData_Field as byteBuffer.ChannelType = unpackIntTransferData_Field as byteBuffer.Packet = unpackIntTransferData_Field as byteBuffer.Status = unpackIntTransferData_Field as byteBuffer.Data = unpackVariable(byteBuffer, 2)
+        TransferData_Field.TransferID = unpackUUID(byteBuffer)
+        TransferData_Field.ChannelType = unpackInt(byteBuffer)
+        TransferData_Field.Packet = unpackInt(byteBuffer)
+        TransferData_Field.Status = unpackInt(byteBuffer)
+        TransferData_Field.Data = unpackVariable(byteBuffer, 2)
     }
 }

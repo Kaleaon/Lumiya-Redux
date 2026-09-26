@@ -19,14 +19,14 @@ open class GroupMembersRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var RequestID else UUID? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var RequestID: UUID? = null
     }
 
     init {
@@ -53,6 +53,9 @@ open class GroupMembersRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.RequestID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
+        GroupData_Field.RequestID = unpackUUID(byteBuffer)
     }
 }

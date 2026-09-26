@@ -3,7 +3,7 @@ package com.lumiyaviewer.lumiya.slproto.messages
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 
 open class SLMessageFactory {
-    public static SLMessage CreateByID(int i) {
+    SLMessage CreateByID(int i) {
         when (i) {
             -65535 ->
                 return TestMessage()

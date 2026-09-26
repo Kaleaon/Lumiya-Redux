@@ -19,14 +19,14 @@ open class UUIDGroupNameRequest : SLMessage() {
 
     /** Block UUIDNameBlock, Variable. */
     open class UUIDNameBlock {
-        @JvmField var ID: if (UUID) = null
+        @JvmField var ID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (UUIDNameBlock_Fields.size * 16) + 5
     }
 
@@ -49,7 +49,8 @@ open class UUIDGroupNameRequest : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val uuidNameBlock = UUIDNameBlock()
-            uuidNameBlock.ID = unpackUUIDUUIDNameBlock_Fields as byteBuffer.add(uuidNameBlock)
+            uuidNameBlock.ID = unpackUUID(byteBuffer)
+            UUIDNameBlock_Fields.add(uuidNameBlock)
         }
     }
 }

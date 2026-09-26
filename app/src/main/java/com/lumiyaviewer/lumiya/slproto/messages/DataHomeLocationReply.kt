@@ -17,10 +17,10 @@ open class DataHomeLocationReply : SLMessage() {
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var LookAt else LLVector3? = null
-        @JvmField var Position: if (LLVector3) = null
-        @JvmField var RegionHandle else Long = 0L
+        @JvmField var AgentID: UUID? = null
+        @JvmField var LookAt: LLVector3? = null
+        @JvmField var Position: LLVector3? = null
+        @JvmField var RegionHandle: Long = 0L
     }
 
     init {
@@ -47,6 +47,9 @@ open class DataHomeLocationReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.RegionHandle = unpackLongInfo_Field as byteBuffer.Position = unpackLLVector3Info_Field as byteBuffer.LookAt = unpackLLVector3(byteBuffer)
+        Info_Field.AgentID = unpackUUID(byteBuffer)
+        Info_Field.RegionHandle = unpackLong(byteBuffer)
+        Info_Field.Position = unpackLLVector3(byteBuffer)
+        Info_Field.LookAt = unpackLLVector3(byteBuffer)
     }
 }

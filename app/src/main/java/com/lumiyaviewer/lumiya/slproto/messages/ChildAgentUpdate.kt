@@ -5,14 +5,13 @@ import com.lumiyaviewer.lumiya.slproto.types.LLQuaternion
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3
 import java.nio.ByteBuffer
 import java.util.ArrayList
-import java.util.Iterator
 import java.util.UUID
 
 /**
  * Child Agent Update - agents send child agents to neighboring simulators.
  * This will create a child camera if there isn't one at the target already
  * Can't send viewer IP and port between simulators -- the port may get remapped
- * if the viewer is behind a Network Address Translation box as NAT.
+ * if the viewer is behind a Network Address Translation (NAT) box.
  * Note: some of the fields of this message really only need to be sent when an
  * agent crosses a region boundary and changes from a child to a main agent
  * (such as Head/BodyRotation, ControlFlags, Animations etc)
@@ -23,105 +22,104 @@ import java.util.UUID
  * (recovered/reference/message_template.msg).
  */
 open class ChildAgentUpdate : SLMessage() {
-    var AgentData_Field: AgentData = null
-    var GroupData_Fields: ArrayList<GroupData> = ArrayList<>()
-    var AnimationData_Fields: ArrayList<AnimationData> = ArrayList<>()
-    var GranterBlock_Fields: ArrayList<GranterBlock> = ArrayList<>()
-    var NVPairData_Fields: ArrayList<NVPairData> = ArrayList<>()
-    var VisualParam_Fields: ArrayList<VisualParam> = ArrayList<>()
-    var AgentAccess_Fields: ArrayList<AgentAccess> = ArrayList<>()
-    var AgentInfo_Fields: ArrayList<AgentInfo> = ArrayList<>()
+    @JvmField var AgentData_Field: AgentData = AgentData()
+    @JvmField val GroupData_Fields = ArrayList<GroupData>()
+    @JvmField val AnimationData_Fields = ArrayList<AnimationData>()
+    @JvmField val GranterBlock_Fields = ArrayList<GranterBlock>()
+    @JvmField val NVPairData_Fields = ArrayList<NVPairData>()
+    @JvmField val VisualParam_Fields = ArrayList<VisualParam>()
+    @JvmField val AgentAccess_Fields = ArrayList<AgentAccess>()
+    @JvmField val AgentInfo_Fields = ArrayList<AgentInfo>()
 
     /** Block AgentAccess, Variable. */
     open class AgentAccess {
-        public int AgentLegacyAccess; // U8
-        public int AgentMaxAccess; // U8
+        @JvmField var AgentLegacyAccess: Int = 0 // U8
+        @JvmField var AgentMaxAccess: Int = 0 // U8
     }
 
     /** Block AgentData, Single. */
     open class AgentData {
-        public UUID ActiveGroupID; // LLUUID
-        public int AgentAccess; // U8
-        public UUID AgentID; // LLUUID
-        public LLVector3 AgentPos; // LLVector3
-        public byte[] AgentTextures; // Variable 2
-        public LLVector3 AgentVel; // LLVector3
-        public boolean AlwaysRun; // BOOL
-        public float Aspect; // F32
-        public LLVector3 AtAxis; // LLVector3
-        public LLQuaternion BodyRotation; // LLQuaternion
-        public LLVector3 Center; // LLVector3
-        public boolean ChangedGrid; // BOOL
-        public int ControlFlags; // U32
-        public float EnergyLevel; // F32
-        public float Far; // F32
-        public int GodLevel; // U8 - Changed from BOOL to U8, and renamed GodLevel (from Godlike)
-        public LLQuaternion HeadRotation; // LLQuaternion
-        public LLVector3 LeftAxis; // LLVector3
-        public int LocomotionState; // U32
-        public UUID PreyAgent; // LLUUID
-        public long RegionHandle; // U64
-        public UUID SessionID; // LLUUID
-        public LLVector3 Size; // LLVector3
-        public byte[] Throttles; // Variable 1
-        public LLVector3 UpAxis; // LLVector3
-        public int ViewerCircuitCode; // U32
+        @JvmField var ActiveGroupID: UUID? = null // LLUUID
+        @JvmField var AgentAccess: Int = 0 // U8
+        @JvmField var AgentID: UUID? = null // LLUUID
+        @JvmField var AgentPos: LLVector3? = null // LLVector3
+        @JvmField var AgentTextures: ByteArray? = null // Variable 2
+        @JvmField var AgentVel: LLVector3? = null // LLVector3
+        @JvmField var AlwaysRun: Boolean = false // BOOL
+        @JvmField var Aspect: Float = 0f // F32
+        @JvmField var AtAxis: LLVector3? = null // LLVector3
+        @JvmField var BodyRotation: LLQuaternion? = null // LLQuaternion
+        @JvmField var Center: LLVector3? = null // LLVector3
+        @JvmField var ChangedGrid: Boolean = false // BOOL
+        @JvmField var ControlFlags: Int = 0 // U32
+        @JvmField var EnergyLevel: Float = 0f // F32
+        @JvmField var Far: Float = 0f // F32
+        @JvmField var GodLevel: Int = 0 // U8 - Changed from BOOL to U8, and renamed GodLevel (from Godlike)
+        @JvmField var HeadRotation: LLQuaternion? = null // LLQuaternion
+        @JvmField var LeftAxis: LLVector3? = null // LLVector3
+        @JvmField var LocomotionState: Int = 0 // U32
+        @JvmField var PreyAgent: UUID? = null // LLUUID
+        @JvmField var RegionHandle: Long = 0L // U64
+        @JvmField var SessionID: UUID? = null // LLUUID
+        @JvmField var Size: LLVector3? = null // LLVector3
+        @JvmField var Throttles: ByteArray? = null // Variable 1
+        @JvmField var UpAxis: LLVector3? = null // LLVector3
+        @JvmField var ViewerCircuitCode: Int = 0 // U32
     }
 
     /** Block AgentInfo, Variable. */
     open class AgentInfo {
-        public int Flags; // U32
+        @JvmField var Flags: Int = 0 // U32
     }
 
     /** Block AnimationData, Variable. */
     open class AnimationData {
-        public UUID Animation; // LLUUID
-        public UUID ObjectID; // LLUUID
+        @JvmField var Animation: UUID? = null // LLUUID
+        @JvmField var ObjectID: UUID? = null // LLUUID
     }
 
     /** Block GranterBlock, Variable. */
     open class GranterBlock {
-        public UUID GranterID; // LLUUID
+        @JvmField var GranterID: UUID? = null // LLUUID
     }
 
     /** Block GroupData, Variable. */
     open class GroupData {
-        public boolean AcceptNotices; // BOOL
-        public UUID GroupID; // LLUUID
-        public long GroupPowers; // U64
+        @JvmField var AcceptNotices: Boolean = false // BOOL
+        @JvmField var GroupID: UUID? = null // LLUUID
+        @JvmField var GroupPowers: Long = 0L // U64
     }
 
     /** Block NVPairData, Variable. */
     open class NVPairData {
-        public byte[] NVPairs; // Variable 2
+        @JvmField var NVPairs: ByteArray? = null // Variable 2
     }
 
     /** Block VisualParam, Variable. */
     open class VisualParam {
-        public int ParamValue; // U8
+        @JvmField var ParamValue: Int = 0 // U8
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
         this.AgentData_Field = AgentData()
     }
-    fun CalcPayloadSize(): Int {
-        var length: Int = this.AgentData_Field.Throttles.length + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.length + 16 + 1 + 1 + (this.GroupData_Fields.size() * 25) + 1 + (this.AnimationData_Fields.size() * 32) + 1 + (this.GranterBlock_Fields.size() * 16) + 1
-        var it: Iterator<?> = this.NVPairData_Fields.iterator()
-        while (true) {
-            var length2: Int = length
-            if (!it.hasNext()) {
-                return length2 + 1 + (this.VisualParam_Fields.size() * 1) + 1 + (this.AgentAccess_Fields.size() * 2) + 1 + (this.AgentInfo_Fields.size() * 4)
-            }
-            length = (it as NVPairData.next()).NVPairs.length + 2 + length2
+
+    override fun CalcPayloadSize(): Int {
+        var length = this.AgentData_Field.Throttles.size + 138 + 4 + 12 + 12 + 4 + 4 + 1 + 1 + 16 + 1 + 2 + this.AgentData_Field.AgentTextures.size + 16 + 1 + 1 + (this.GroupData_Fields.size * 25) + 1 + (this.AnimationData_Fields.size * 32) + 1 + (this.GranterBlock_Fields.size * 16) + 1
+        for (entry in this.NVPairData_Fields) {
+            length = entry.NVPairs.size + 2 + length
         }
+        return length + 1 + (this.VisualParam_Fields.size * 1) + 1 + (this.AgentAccess_Fields.size * 2) + 1 + (this.AgentInfo_Fields.size * 4)
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleChildAgentUpdate(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: High 25 (ChildAgentUpdate).
-        byteBuffer.put(0x19 as byte)
+        byteBuffer.put((0x19).toByte())
         packLong(byteBuffer, this.AgentData_Field.RegionHandle)
         packInt(byteBuffer, this.AgentData_Field.ViewerCircuitCode)
         packUUID(byteBuffer, this.AgentData_Field.AgentID)
@@ -142,93 +140,119 @@ open class ChildAgentUpdate : SLMessage() {
         packLLQuaternion(byteBuffer, this.AgentData_Field.BodyRotation)
         packInt(byteBuffer, this.AgentData_Field.ControlFlags)
         packFloat(byteBuffer, this.AgentData_Field.EnergyLevel)
-        packByte(byteBuffer, this as byte.AgentData_Field.GodLevel)
+        packByte(byteBuffer, (this.AgentData_Field.GodLevel).toByte())
         packBoolean(byteBuffer, this.AgentData_Field.AlwaysRun)
         packUUID(byteBuffer, this.AgentData_Field.PreyAgent)
-        packByte(byteBuffer, this as byte.AgentData_Field.AgentAccess)
+        packByte(byteBuffer, (this.AgentData_Field.AgentAccess).toByte())
         packVariable(byteBuffer, this.AgentData_Field.AgentTextures, 2)
         packUUID(byteBuffer, this.AgentData_Field.ActiveGroupID)
-        byteBuffer.put(this as byte.GroupData_Fields.size())
+        byteBuffer.put((this.GroupData_Fields.size).toByte())
         for (groupData in this.GroupData_Fields) {
             packUUID(byteBuffer, groupData.GroupID)
             packLong(byteBuffer, groupData.GroupPowers)
             packBoolean(byteBuffer, groupData.AcceptNotices)
         }
-        byteBuffer.put(this as byte.AnimationData_Fields.size())
+        byteBuffer.put((this.AnimationData_Fields.size).toByte())
         for (animationData in this.AnimationData_Fields) {
             packUUID(byteBuffer, animationData.Animation)
             packUUID(byteBuffer, animationData.ObjectID)
         }
-        byteBuffer.put(this as byte.GranterBlock_Fields.size())
-        var it: Iterator<?> = this.GranterBlock_Fields.iterator()
-        while (it.hasNext()) {
-            packUUID(byteBuffer, (it as GranterBlock.next()).GranterID)
+        byteBuffer.put((this.GranterBlock_Fields.size).toByte())
+        for (entry in this.GranterBlock_Fields) {
+            packUUID(byteBuffer, entry.GranterID)
         }
-        byteBuffer.put(this as byte.NVPairData_Fields.size())
-        var iterator: Iterator<?> = this.NVPairData_Fields.iterator()
-        while (iterator.hasNext()) {
-            packVariable(byteBuffer, (iterator as NVPairData.next()).NVPairs, 2)
+        byteBuffer.put((this.NVPairData_Fields.size).toByte())
+        for (entry in this.NVPairData_Fields) {
+            packVariable(byteBuffer, entry.NVPairs, 2)
         }
-        byteBuffer.put(this as byte.VisualParam_Fields.size())
-        var iterator2: Iterator<?> = this.VisualParam_Fields.iterator()
-        while (iterator2.hasNext()) {
-            packByte(byteBuffer, (byte) (iterator2 as VisualParam.next()).ParamValue)
+        byteBuffer.put((this.VisualParam_Fields.size).toByte())
+        for (entry in this.VisualParam_Fields) {
+            packByte(byteBuffer, (entry.ParamValue).toByte())
         }
-        byteBuffer.put(this as byte.AgentAccess_Fields.size())
+        byteBuffer.put((this.AgentAccess_Fields.size).toByte())
         for (agentAccess in this.AgentAccess_Fields) {
-            packByte(byteBuffer, agentAccess as byte.AgentLegacyAccess)
-            packByte(byteBuffer, agentAccess as byte.AgentMaxAccess)
+            packByte(byteBuffer, (agentAccess.AgentLegacyAccess).toByte())
+            packByte(byteBuffer, (agentAccess.AgentMaxAccess).toByte())
         }
-        byteBuffer.put(this as byte.AgentInfo_Fields.size())
-        var iterator3: Iterator<?> = this.AgentInfo_Fields.iterator()
-        while (iterator3.hasNext()) {
-            packInt(byteBuffer, (iterator3 as AgentInfo.next()).Flags)
+        byteBuffer.put((this.AgentInfo_Fields.size).toByte())
+        for (entry in this.AgentInfo_Fields) {
+            packInt(byteBuffer, entry.Flags)
         }
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        this.AgentData_Field.RegionHandle = unpackLongthis as byteBuffer.AgentData_Field.ViewerCircuitCode = unpackIntthis as byteBuffer.AgentData_Field.AgentID = unpackUUIDthis as byteBuffer.AgentData_Field.SessionID = unpackUUIDthis as byteBuffer.AgentData_Field.AgentPos = unpackLLVector3this as byteBuffer.AgentData_Field.AgentVel = unpackLLVector3this as byteBuffer.AgentData_Field.Center = unpackLLVector3this as byteBuffer.AgentData_Field.Size = unpackLLVector3this as byteBuffer.AgentData_Field.AtAxis = unpackLLVector3this as byteBuffer.AgentData_Field.LeftAxis = unpackLLVector3this as byteBuffer.AgentData_Field.UpAxis = unpackLLVector3this as byteBuffer.AgentData_Field.ChangedGrid = unpackBooleanthis as byteBuffer.AgentData_Field.Far = unpackFloatthis as byteBuffer.AgentData_Field.Aspect = unpackFloatthis as byteBuffer.AgentData_Field.Throttles = unpackVariable(byteBuffer, 1)
-        this.AgentData_Field.LocomotionState = unpackIntthis as byteBuffer.AgentData_Field.HeadRotation = unpackLLQuaternionthis as byteBuffer.AgentData_Field.BodyRotation = unpackLLQuaternionthis as byteBuffer.AgentData_Field.ControlFlags = unpackIntthis as byteBuffer.AgentData_Field.EnergyLevel = unpackFloatthis as byteBuffer.AgentData_Field.GodLevel = unpackByte(byteBuffer) & 0xFF
-        this.AgentData_Field.AlwaysRun = unpackBooleanthis as byteBuffer.AgentData_Field.PreyAgent = unpackUUIDthis as byteBuffer.AgentData_Field.AgentAccess = unpackByte(byteBuffer) & 0xFF
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        this.AgentData_Field.RegionHandle = unpackLong(byteBuffer)
+        this.AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer)
+        this.AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        this.AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        this.AgentData_Field.AgentPos = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.AgentVel = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.Center = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.Size = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.AtAxis = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.LeftAxis = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.UpAxis = unpackLLVector3(byteBuffer)
+        this.AgentData_Field.ChangedGrid = unpackBoolean(byteBuffer)
+        this.AgentData_Field.Far = unpackFloat(byteBuffer)
+        this.AgentData_Field.Aspect = unpackFloat(byteBuffer)
+        this.AgentData_Field.Throttles = unpackVariable(byteBuffer, 1)
+        this.AgentData_Field.LocomotionState = unpackInt(byteBuffer)
+        this.AgentData_Field.HeadRotation = unpackLLQuaternion(byteBuffer)
+        this.AgentData_Field.BodyRotation = unpackLLQuaternion(byteBuffer)
+        this.AgentData_Field.ControlFlags = unpackInt(byteBuffer)
+        this.AgentData_Field.EnergyLevel = unpackFloat(byteBuffer)
+        this.AgentData_Field.GodLevel = unpackByte(byteBuffer) & 0xFF
+        this.AgentData_Field.AlwaysRun = unpackBoolean(byteBuffer)
+        this.AgentData_Field.PreyAgent = unpackUUID(byteBuffer)
+        this.AgentData_Field.AgentAccess = unpackByte(byteBuffer) & 0xFF
         this.AgentData_Field.AgentTextures = unpackVariable(byteBuffer, 2)
         this.AgentData_Field.ActiveGroupID = unpackUUID(byteBuffer)
-        var i: Int = byteBuffer.get() & 0xFF
-        for (int j = 0; j < i; j++) {
-            var groupData: GroupData = GroupData()
-            groupData.GroupID = unpackUUIDgroupData as byteBuffer.GroupPowers = unpackLonggroupData as byteBuffer.AcceptNotices = unpackBooleanthis as byteBuffer.GroupData_Fields.add(groupData)
+        val i = byteBuffer.get().toInt() and 0xFF
+        repeat(i) {
+            val groupData = GroupData()
+            groupData.GroupID = unpackUUID(byteBuffer)
+            groupData.GroupPowers = unpackLong(byteBuffer)
+            groupData.AcceptNotices = unpackBoolean(byteBuffer)
+            this.GroupData_Fields.add(groupData)
         }
-        var i3: Int = byteBuffer.get() & 0xFF
-        for (int k = 0; k < i3; k++) {
-            var animationData: AnimationData = AnimationData()
-            animationData.Animation = unpackUUIDanimationData as byteBuffer.ObjectID = unpackUUIDthis as byteBuffer.AnimationData_Fields.add(animationData)
+        val i3 = byteBuffer.get().toInt() and 0xFF
+        repeat(i3) {
+            val animationData = AnimationData()
+            animationData.Animation = unpackUUID(byteBuffer)
+            animationData.ObjectID = unpackUUID(byteBuffer)
+            this.AnimationData_Fields.add(animationData)
         }
-        var i5: Int = byteBuffer.get() & 0xFF
-        for (int m = 0; m < i5; m++) {
-            var granterBlock: GranterBlock = GranterBlock()
-            granterBlock.GranterID = unpackUUIDthis as byteBuffer.GranterBlock_Fields.add(granterBlock)
+        val i5 = byteBuffer.get().toInt() and 0xFF
+        repeat(i5) {
+            val granterBlock = GranterBlock()
+            granterBlock.GranterID = unpackUUID(byteBuffer)
+            this.GranterBlock_Fields.add(granterBlock)
         }
-        var i7: Int = byteBuffer.get() & 0xFF
-        for (int n = 0; n < i7; n++) {
-            var nvPairData: NVPairData = NVPairData()
+        val i7 = byteBuffer.get().toInt() and 0xFF
+        repeat(i7) {
+            val nvPairData = NVPairData()
             nvPairData.NVPairs = unpackVariable(byteBuffer, 2)
             this.NVPairData_Fields.add(nvPairData)
         }
-        var i9: Int = byteBuffer.get() & 0xFF
-        for (int i10 = 0; i10 < i9; i10++) {
-            var visualParam: VisualParam = VisualParam()
+        val i9 = byteBuffer.get().toInt() and 0xFF
+        repeat(i9) {
+            val visualParam = VisualParam()
             visualParam.ParamValue = unpackByte(byteBuffer) & 0xFF
             this.VisualParam_Fields.add(visualParam)
         }
-        var i11: Int = byteBuffer.get() & 0xFF
-        for (int i12 = 0; i12 < i11; i12++) {
-            var agentAccess: AgentAccess = AgentAccess()
+        val i11 = byteBuffer.get().toInt() and 0xFF
+        repeat(i11) {
+            val agentAccess = AgentAccess()
             agentAccess.AgentLegacyAccess = unpackByte(byteBuffer) & 0xFF
             agentAccess.AgentMaxAccess = unpackByte(byteBuffer) & 0xFF
             this.AgentAccess_Fields.add(agentAccess)
         }
-        var i13: Int = byteBuffer.get() & 0xFF
-        for (int i14 = 0; i14 < i13; i14++) {
-            var agentInfo: AgentInfo = AgentInfo()
-            agentInfo.Flags = unpackIntthis as byteBuffer.AgentInfo_Fields.add(agentInfo)
+        val i13 = byteBuffer.get().toInt() and 0xFF
+        repeat(i13) {
+            val agentInfo = AgentInfo()
+            agentInfo.Flags = unpackInt(byteBuffer)
+            this.AgentInfo_Fields.add(agentInfo)
         }
     }
 }
+

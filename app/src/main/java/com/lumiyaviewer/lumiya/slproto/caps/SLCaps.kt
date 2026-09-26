@@ -15,7 +15,7 @@ open class SLCaps {
     private var caps: MutableMap<SLCapability, String> = EnumMap(SLCapability.class)
 
     open class NoSuchCapabilityException : Exception() {
-        private static long serialVersionUID = 1
+        private long serialVersionUID = 1
 
         fun NoSuchCapabilityException(capability: SLCapability): public {
             super("No such capability: " + capability.name())
@@ -260,7 +260,7 @@ open class SLCaps {
         return if (url != null) url else this.caps.get(SLCapability.GetMesh)
     }
 
-    public String getCapabilityOrThrow(SLCapability capability) throws NoSuchCapabilityException {
+    public var getCapabilityOrThrow: String(SLCapability capability) throws NoSuchCapabilityException {
         var str: String = this.caps.get(capability)
         if (str == null) {
             throw NoSuchCapabilityException(capability)

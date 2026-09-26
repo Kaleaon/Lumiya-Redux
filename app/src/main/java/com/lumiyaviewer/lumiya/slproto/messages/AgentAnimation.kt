@@ -19,26 +19,26 @@ open class AgentAnimation : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block AnimationList, Variable. */
     open class AnimationList {
-        @JvmField var AnimID: if (UUID) = null
-        @JvmField var StartAnim else Boolean = false
+        @JvmField var AnimID: UUID? = null
+        @JvmField var StartAnim: Boolean = false
     }
 
     /** Block PhysicalAvatarEventList, Variable. */
     open class PhysicalAvatarEventList {
-        @JvmField var TypeData: if (ByteArray) = null
+        @JvmField var TypeData: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var size = (AnimationList_Fields.size * 17) + 34 + 1
         val it = PhysicalAvatarEventList_Fields.iterator()
         while (true) {
@@ -71,11 +71,14 @@ open class AgentAnimation : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val animationList = AnimationList()
-            animationList.AnimID = unpackUUIDanimationList as byteBuffer.StartAnim = unpackBooleanAnimationList_Fields as byteBuffer.add(animationList)
+            animationList.AnimID = unpackUUID(byteBuffer)
+            animationList.StartAnim = unpackBoolean(byteBuffer)
+            AnimationList_Fields.add(animationList)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {

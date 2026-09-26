@@ -24,17 +24,17 @@ open class AgentUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var BodyRotation else LLQuaternion? = null
-        @JvmField var CameraAtAxis: if (LLVector3) = null
-        @JvmField var CameraCenter else LLVector3? = null
-        @JvmField var CameraLeftAxis: if (LLVector3) = null
-        @JvmField var CameraUpAxis else LLVector3? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var BodyRotation: LLQuaternion? = null
+        @JvmField var CameraAtAxis: LLVector3? = null
+        @JvmField var CameraCenter: LLVector3? = null
+        @JvmField var CameraLeftAxis: LLVector3? = null
+        @JvmField var CameraUpAxis: LLVector3? = null
         @JvmField var ControlFlags: Int = 0
         @JvmField var Far: Float = 0f
         @JvmField var Flags: Int = 0
-        @JvmField var HeadRotation: if (LLQuaternion) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var HeadRotation: LLQuaternion? = null
+        @JvmField var SessionID: UUID? = null
         @JvmField var State: Int = 0
     }
 
@@ -68,7 +68,17 @@ open class AgentUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.BodyRotation = unpackLLQuaternionAgentData_Field as byteBuffer.HeadRotation = unpackLLQuaternionAgentData_Field as byteBuffer.State = unpackByte(byteBuffer).toInt() and 0xFF
-        AgentData_Field.CameraCenter = unpackLLVector3AgentData_Field as byteBuffer.CameraAtAxis = unpackLLVector3AgentData_Field as byteBuffer.CameraLeftAxis = unpackLLVector3AgentData_Field as byteBuffer.CameraUpAxis = unpackLLVector3AgentData_Field as byteBuffer.Far = unpackFloatAgentData_Field as byteBuffer.ControlFlags = unpackIntAgentData_Field as byteBuffer.Flags = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.BodyRotation = unpackLLQuaternion(byteBuffer)
+        AgentData_Field.HeadRotation = unpackLLQuaternion(byteBuffer)
+        AgentData_Field.State = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.CameraCenter = unpackLLVector3(byteBuffer)
+        AgentData_Field.CameraAtAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.CameraLeftAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.CameraUpAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.Far = unpackFloat(byteBuffer)
+        AgentData_Field.ControlFlags = unpackInt(byteBuffer)
+        AgentData_Field.Flags = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

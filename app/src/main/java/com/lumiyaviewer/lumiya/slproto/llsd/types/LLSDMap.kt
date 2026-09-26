@@ -120,7 +120,7 @@ open class LLSDMap : LLSDNode() {
                             field.set(newInstance, byKey.asURI())
                         } else if (type.equals(Date.class)) {
                             field.set(newInstance, byKey.asDate())
-                        } else if (type.equals(byte[].class)) {
+                        } else if (type.equals(Array<byte>.class)) {
                             field.set(newInstance, byKey.asBinary())
                         } else if (type.isAssignableFrom(List.class)) {
                             var genericType: Type = field.getGenericType()

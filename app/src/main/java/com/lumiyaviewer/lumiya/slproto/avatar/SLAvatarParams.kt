@@ -8,21 +8,21 @@ import java.util.HashMap
 import java.util.Map
 
 open class SLAvatarParams {
-    public static int NUM_PARAMS = 218
+    int NUM_PARAMS = 218
 
-    public static ImmutableMap<Integer, ParamSet> paramByIDs
+    ImmutableMap<Integer, ParamSet> paramByIDs
 
-    public static ParamSet[] paramDefs = arrayOfNulls<ParamSet>(218)
+    Array<ParamSet> paramDefs = arrayOfNulls<ParamSet>(218)
 
     open class AvatarParam {
-        public float defValue
+        public var defValue: Float
 
         public ImmutableList<DrivenParam> drivenParams
-        public float maxValue
+        public var maxValue: Float
 
         public MeshIndex meshIndex
-        public float minValue
-        public boolean morph
+        public var minValue: Float
+        public var morph: Boolean
 
         public SLAvatarParamAlpha paramAlpha
 
@@ -44,11 +44,11 @@ open class SLAvatarParams {
     }
 
     open class DrivenParam {
-        public int drivenID
-        public float max1
-        public float max2
-        public float min1
-        public float min2
+        public var drivenID: Int
+        public var max1: Float
+        public var max2: Float
+        public var min1: Float
+        public var min2: Float
 
         DrivenParam(int drivenID, float min1, float max1, float min2, float max2) {
             this.drivenID = drivenID
@@ -60,8 +60,8 @@ open class SLAvatarParams {
     }
 
     open class ParamSet {
-        public int appearanceIndex
-        public int id
+        public var appearanceIndex: Int
+        public var id: Int
 
         public SLVisualParamID name
 

@@ -17,8 +17,8 @@ open class CreateLandmarkForEvent : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block EventData, Single. */
@@ -28,8 +28,8 @@ open class CreateLandmarkForEvent : SLMessage() {
 
     /** Block InventoryBlock, Single. */
     open class InventoryBlock {
-        @JvmField var FolderID: if (UUID) = null
-        @JvmField var Name else ByteArray? = null
+        @JvmField var FolderID: UUID? = null
+        @JvmField var Name: ByteArray? = null
     }
 
     init {
@@ -57,6 +57,10 @@ open class CreateLandmarkForEvent : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDEventData_Field as byteBuffer.EventID = unpackIntInventoryBlock_Field as byteBuffer.FolderID = unpackUUIDInventoryBlock_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        EventData_Field.EventID = unpackInt(byteBuffer)
+        InventoryBlock_Field.FolderID = unpackUUID(byteBuffer)
+        InventoryBlock_Field.Name = unpackVariable(byteBuffer, 1)
     }
 }

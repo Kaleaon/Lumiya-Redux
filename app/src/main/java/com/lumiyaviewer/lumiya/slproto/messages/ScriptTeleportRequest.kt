@@ -21,10 +21,10 @@ open class ScriptTeleportRequest : SLMessage() {
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var LookAt: if (LLVector3) = null
-        @JvmField var ObjectName else ByteArray? = null
-        @JvmField var SimName: if (ByteArray) = null
-        @JvmField var SimPosition else LLVector3? = null
+        @JvmField var LookAt: LLVector3? = null
+        @JvmField var ObjectName: ByteArray? = null
+        @JvmField var SimName: ByteArray? = null
+        @JvmField var SimPosition: LLVector3? = null
     }
 
     init {
@@ -53,6 +53,7 @@ open class ScriptTeleportRequest : SLMessage() {
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         Data_Field.ObjectName = unpackVariable(byteBuffer, 1)
         Data_Field.SimName = unpackVariable(byteBuffer, 1)
-        Data_Field.SimPosition = unpackLLVector3Data_Field as byteBuffer.LookAt = unpackLLVector3(byteBuffer)
+        Data_Field.SimPosition = unpackLLVector3(byteBuffer)
+        Data_Field.LookAt = unpackLLVector3(byteBuffer)
     }
 }

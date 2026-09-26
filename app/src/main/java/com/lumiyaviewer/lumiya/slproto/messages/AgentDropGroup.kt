@@ -21,8 +21,8 @@ open class AgentDropGroup : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
     }
 
     init {
@@ -47,6 +47,7 @@ open class AgentDropGroup : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
     }
 }

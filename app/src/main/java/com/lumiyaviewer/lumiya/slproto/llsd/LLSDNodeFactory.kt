@@ -93,7 +93,7 @@ open class LLSDNodeFactory {
         tagMap.put("map", createMap)
     }
 
-    public static LLSDNode parseNode(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException, LLSDXMLException {
+    LLSDNode parseNode(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException, LLSDXMLException {
         var name: String = xmlPullParser.getName()
         var lsdNodeConstructor: LLSDNodeConstructor = tagMap.get(name)
         if (lsdNodeConstructor == null) {

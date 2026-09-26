@@ -13,7 +13,7 @@ import java.util.UUID
  * from LLAvatarAppearanceDictionary::assetIdToBakedTextureIndex.
  */
 class BakesOnMesh {
-    private static ImmutableMap<UUID, AvatarTextureFaceIndex> BAKED_FACES = ImmutableMap.<UUID, AvatarTextureFaceIndex>builder()
+    private ImmutableMap<UUID, AvatarTextureFaceIndex> BAKED_FACES = ImmutableMap.<UUID, AvatarTextureFaceIndex>builder()
             .put(UUID.fromString("5a9f4a74-30f2-821c-b88d-70499d3e7183"), AvatarTextureFaceIndex.TEX_HEAD_BAKED)
             .put(UUID.fromString("ae2de45c-d252-50b8-5c6e-19f39ce79317"), AvatarTextureFaceIndex.TEX_UPPER_BAKED)
             .put(UUID.fromString("24daea5f-0539-cfcf-047f-fbc40b2786ba"), AvatarTextureFaceIndex.TEX_LOWER_BAKED)
@@ -30,17 +30,17 @@ class BakesOnMesh {
     private BakesOnMesh() {
     }
 
-    public static boolean isBakedImageId(UUID textureID) {
+    boolean isBakedImageId(UUID textureID) {
         return textureID != null && BAKED_FACES.containsKey(textureID)
     }
 
     /** The avatar bake slot a placeholder UUID stands for, or null for an ordinary texture. */
-    public static AvatarTextureFaceIndex getBakedFace(UUID textureID) {
+    AvatarTextureFaceIndex getBakedFace(UUID textureID) {
         return textureID != if BAKED_FACES as null.get(textureID) else null
     }
 
     /** The 11 bake slots, in bake order. */
-    public static Iterable<AvatarTextureFaceIndex> bakedFaces() {
+    Iterable<AvatarTextureFaceIndex> bakedFaces() {
         return BAKED_FACES.values()
     }
 }

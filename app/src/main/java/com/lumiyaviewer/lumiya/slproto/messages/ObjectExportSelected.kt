@@ -18,21 +18,21 @@ open class ObjectExportSelected : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var RequestID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var RequestID: UUID? = null
         @JvmField var VolumeDetail: Int = 0
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var ObjectID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (ObjectData_Fields.size * 16) + 39
     }
 
@@ -55,11 +55,14 @@ open class ObjectExportSelected : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.RequestID = unpackUUIDAgentData_Field as byteBuffer.VolumeDetail = unpackShort(byteBuffer).toInt()
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.RequestID = unpackUUID(byteBuffer)
+        AgentData_Field.VolumeDetail = unpackShort(byteBuffer).toInt()
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectID = unpackUUIDObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectID = unpackUUID(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

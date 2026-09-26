@@ -21,7 +21,7 @@ abstract class ChatterID : Parcelable, Comparable<ChatterID> {
     var agentUUID: UUID = null
 
     open class ChatterIDGroup : ChatterIDWithUUID() {
-        public static Parcelable.Creator<ChatterIDGroup> CREATOR = Parcelable.Creator<ChatterIDGroup>() {
+        Parcelable.Creator<ChatterIDGroup> CREATOR = Parcelable.Creator<ChatterIDGroup>() {
             /* JADX WARN: Can't rename method to resolve collision */
             fun createFromParcel(parcel: Parcel): ChatterIDGroup {
                 return ChatterIDGroup(parcel, null as ChatterIDGroup)
@@ -87,7 +87,7 @@ abstract class ChatterID : Parcelable, Comparable<ChatterID> {
     }
 
     open class ChatterIDLocal : ChatterID() {
-        public static Parcelable.Creator<ChatterIDLocal> CREATOR = Parcelable.Creator<ChatterIDLocal>() {
+        Parcelable.Creator<ChatterIDLocal> CREATOR = Parcelable.Creator<ChatterIDLocal>() {
             /* JADX WARN: Can't rename method to resolve collision */
             fun createFromParcel(parcel: Parcel): ChatterIDLocal {
                 return ChatterIDLocal(parcel, null as ChatterIDLocal)
@@ -126,7 +126,7 @@ abstract class ChatterID : Parcelable, Comparable<ChatterID> {
     }
 
     open class ChatterIDUser : ChatterIDWithUUID() {
-        public static Parcelable.Creator<ChatterIDUser> CREATOR = Parcelable.Creator<ChatterIDUser>() {
+        Parcelable.Creator<ChatterIDUser> CREATOR = Parcelable.Creator<ChatterIDUser>() {
             /* JADX WARN: Can't rename method to resolve collision */
             fun createFromParcel(parcel: Parcel): ChatterIDUser {
                 return ChatterIDUser(parcel, null as ChatterIDUser)
@@ -268,7 +268,7 @@ abstract class ChatterID : Parcelable, Comparable<ChatterID> {
         User(NotificationType.Private),
         Group(NotificationType.Group)
 
-        public static ChatterType[] VALUES = valuesCustom()
+        Array<ChatterType> VALUES = valuesCustom()
 
         private NotificationType notificationType
 

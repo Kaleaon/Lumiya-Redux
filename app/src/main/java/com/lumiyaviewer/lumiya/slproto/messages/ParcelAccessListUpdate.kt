@@ -19,8 +19,8 @@ open class ParcelAccessListUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
@@ -29,14 +29,14 @@ open class ParcelAccessListUpdate : SLMessage() {
         @JvmField var LocalID: Int = 0
         @JvmField var Sections: Int = 0
         @JvmField var SequenceID: Int = 0
-        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var TransactionID: UUID? = null
     }
 
     /** Block List, Variable. */
     open class List {
-        @JvmField var Flags else Int = 0
-        @JvmField var ID: if (UUID) = null
-        @JvmField var Time else Int = 0
+        @JvmField var Flags: Int = 0
+        @JvmField var ID: UUID? = null
+        @JvmField var Time: Int = 0
     }
 
     init {
@@ -72,11 +72,20 @@ open class ParcelAccessListUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.Flags = unpackIntData_Field as byteBuffer.LocalID = unpackIntData_Field as byteBuffer.TransactionID = unpackUUIDData_Field as byteBuffer.SequenceID = unpackIntData_Field as byteBuffer.Sections = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.Flags = unpackInt(byteBuffer)
+        Data_Field.LocalID = unpackInt(byteBuffer)
+        Data_Field.TransactionID = unpackUUID(byteBuffer)
+        Data_Field.SequenceID = unpackInt(byteBuffer)
+        Data_Field.Sections = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val list = List()
-            list.ID = unpackUUIDlist as byteBuffer.Time = unpackIntlist as byteBuffer.Flags = unpackIntList_Fields as byteBuffer.add(list)
+            list.ID = unpackUUID(byteBuffer)
+            list.Time = unpackInt(byteBuffer)
+            list.Flags = unpackInt(byteBuffer)
+            List_Fields.add(list)
         }
     }
 }

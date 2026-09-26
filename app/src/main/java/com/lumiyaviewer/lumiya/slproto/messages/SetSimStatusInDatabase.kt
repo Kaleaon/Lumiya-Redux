@@ -19,10 +19,10 @@ open class SetSimStatusInDatabase : SLMessage() {
     /** Block Data, Single. */
     open class Data {
         @JvmField var AgentCount: Int = 0
-        @JvmField var HostName: if (ByteArray) = null
-        @JvmField var PID else Int = 0
-        @JvmField var RegionID: if (UUID) = null
-        @JvmField var Status else ByteArray? = null
+        @JvmField var HostName: ByteArray? = null
+        @JvmField var PID: Int = 0
+        @JvmField var RegionID: UUID? = null
+        @JvmField var Status: ByteArray? = null
         @JvmField var TimeToLive: Int = 0
         @JvmField var X: Int = 0
         @JvmField var Y: Int = 0
@@ -56,7 +56,13 @@ open class SetSimStatusInDatabase : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.RegionID = unpackUUIDData_Field as byteBuffer.HostName = unpackVariable(byteBuffer, 1)
-        Data_Field.X = unpackIntData_Field as byteBuffer.Y = unpackIntData_Field as byteBuffer.PID = unpackIntData_Field as byteBuffer.AgentCount = unpackIntData_Field as byteBuffer.TimeToLive = unpackIntData_Field as byteBuffer.Status = unpackVariable(byteBuffer, 1)
+        Data_Field.RegionID = unpackUUID(byteBuffer)
+        Data_Field.HostName = unpackVariable(byteBuffer, 1)
+        Data_Field.X = unpackInt(byteBuffer)
+        Data_Field.Y = unpackInt(byteBuffer)
+        Data_Field.PID = unpackInt(byteBuffer)
+        Data_Field.AgentCount = unpackInt(byteBuffer)
+        Data_Field.TimeToLive = unpackInt(byteBuffer)
+        Data_Field.Status = unpackVariable(byteBuffer, 1)
     }
 }

@@ -20,19 +20,19 @@ open class DirPopularReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID else UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
     open class QueryReplies {
         @JvmField var Dwell: Float = 0f
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var ParcelID else UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var ParcelID: UUID? = null
     }
 
     init {
@@ -71,12 +71,15 @@ open class DirPopularReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.ParcelID = unpackUUIDqueryReplies as byteBuffer.Name = unpackVariable(byteBuffer, 1)
-            queryReplies.Dwell = unpackFloatQueryReplies_Fields as byteBuffer.add(queryReplies)
+            queryReplies.ParcelID = unpackUUID(byteBuffer)
+            queryReplies.Name = unpackVariable(byteBuffer, 1)
+            queryReplies.Dwell = unpackFloat(byteBuffer)
+            QueryReplies_Fields.add(queryReplies)
         }
     }
 }

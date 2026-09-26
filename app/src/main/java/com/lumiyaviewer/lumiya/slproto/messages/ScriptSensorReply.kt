@@ -19,27 +19,27 @@ open class ScriptSensorReply : SLMessage() {
 
     /** Block Requester, Single. */
     open class Requester {
-        @JvmField var SourceID: if (UUID) = null
+        @JvmField var SourceID: UUID? = null
     }
 
     /** Block SensedData, Variable. */
     open class SensedData {
-        @JvmField var GroupID else UUID? = null
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var ObjectID else UUID? = null
-        @JvmField var OwnerID: if (UUID) = null
-        @JvmField var Position else LLVector3? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var ObjectID: UUID? = null
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var Position: LLVector3? = null
         @JvmField var Range: Float = 0f
-        @JvmField var Rotation: if (LLQuaternion) = null
-        @JvmField var Type else Int = 0
-        @JvmField var Velocity: if (LLVector3) = null
+        @JvmField var Rotation: LLQuaternion? = null
+        @JvmField var Type: Int = 0
+        @JvmField var Velocity: LLVector3? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var i = 21
         val it = SensedData_Fields.iterator()
         while (true) {
@@ -80,8 +80,16 @@ open class ScriptSensorReply : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val sensedData = SensedData()
-            sensedData.ObjectID = unpackUUIDsensedData as byteBuffer.OwnerID = unpackUUIDsensedData as byteBuffer.GroupID = unpackUUIDsensedData as byteBuffer.Position = unpackLLVector3sensedData as byteBuffer.Velocity = unpackLLVector3sensedData as byteBuffer.Rotation = unpackLLQuaternionsensedData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
-            sensedData.Type = unpackIntsensedData as byteBuffer.Range = unpackFloatSensedData_Fields as byteBuffer.add(sensedData)
+            sensedData.ObjectID = unpackUUID(byteBuffer)
+            sensedData.OwnerID = unpackUUID(byteBuffer)
+            sensedData.GroupID = unpackUUID(byteBuffer)
+            sensedData.Position = unpackLLVector3(byteBuffer)
+            sensedData.Velocity = unpackLLVector3(byteBuffer)
+            sensedData.Rotation = unpackLLQuaternion(byteBuffer)
+            sensedData.Name = unpackVariable(byteBuffer, 1)
+            sensedData.Type = unpackInt(byteBuffer)
+            sensedData.Range = unpackFloat(byteBuffer)
+            SensedData_Fields.add(sensedData)
         }
     }
 }

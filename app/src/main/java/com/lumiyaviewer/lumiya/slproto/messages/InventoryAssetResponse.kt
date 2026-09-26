@@ -16,16 +16,16 @@ open class InventoryAssetResponse : SLMessage() {
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var AssetID: if (UUID) = null
-        @JvmField var IsReadable else Boolean = false
-        @JvmField var QueryID: if (UUID) = null
+        @JvmField var AssetID: UUID? = null
+        @JvmField var IsReadable: Boolean = false
+        @JvmField var QueryID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 37
     }
 
@@ -44,6 +44,8 @@ open class InventoryAssetResponse : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        QueryData_Field.QueryID = unpackUUIDQueryData_Field as byteBuffer.AssetID = unpackUUIDQueryData_Field as byteBuffer.IsReadable = unpackBoolean(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        QueryData_Field.AssetID = unpackUUID(byteBuffer)
+        QueryData_Field.IsReadable = unpackBoolean(byteBuffer)
     }
 }

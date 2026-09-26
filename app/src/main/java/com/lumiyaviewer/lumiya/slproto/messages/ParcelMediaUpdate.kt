@@ -21,17 +21,17 @@ open class ParcelMediaUpdate : SLMessage() {
     /** Block DataBlock, Single. */
     open class DataBlock {
         @JvmField var MediaAutoScale: Int = 0
-        @JvmField var MediaID: if (UUID) = null
-        @JvmField var MediaURL else ByteArray? = null
+        @JvmField var MediaID: UUID? = null
+        @JvmField var MediaURL: ByteArray? = null
     }
 
     /** Block DataBlockExtended, Single. */
     open class DataBlockExtended {
-        @JvmField var MediaDesc: if (ByteArray) = null
-        @JvmField var MediaHeight else Int = 0
+        @JvmField var MediaDesc: ByteArray? = null
+        @JvmField var MediaHeight: Int = 0
         @JvmField var MediaLoop: Int = 0
-        @JvmField var MediaType: if (ByteArray) = null
-        @JvmField var MediaWidth else Int = 0
+        @JvmField var MediaType: ByteArray? = null
+        @JvmField var MediaWidth: Int = 0
     }
 
     init {
@@ -63,9 +63,12 @@ open class ParcelMediaUpdate : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         DataBlock_Field.MediaURL = unpackVariable(byteBuffer, 1)
-        DataBlock_Field.MediaID = unpackUUIDDataBlock_Field as byteBuffer.MediaAutoScale = unpackByte(byteBuffer).toInt() and 0xFF
+        DataBlock_Field.MediaID = unpackUUID(byteBuffer)
+        DataBlock_Field.MediaAutoScale = unpackByte(byteBuffer).toInt() and 0xFF
         DataBlockExtended_Field.MediaType = unpackVariable(byteBuffer, 1)
         DataBlockExtended_Field.MediaDesc = unpackVariable(byteBuffer, 1)
-        DataBlockExtended_Field.MediaWidth = unpackIntDataBlockExtended_Field as byteBuffer.MediaHeight = unpackIntDataBlockExtended_Field as byteBuffer.MediaLoop = unpackByte(byteBuffer).toInt() and 0xFF
+        DataBlockExtended_Field.MediaWidth = unpackInt(byteBuffer)
+        DataBlockExtended_Field.MediaHeight = unpackInt(byteBuffer)
+        DataBlockExtended_Field.MediaLoop = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

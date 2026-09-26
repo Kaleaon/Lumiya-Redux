@@ -106,7 +106,7 @@ open class MfaHashStore {
         this.prefs.edit().remove(accountKey(gridName, loginName)).apply()
     }
 
-    private static SecretKey getOrCreateKey() throws Exception {
+    private SecretKey getOrCreateKey() throws Exception {
         var keyStore: KeyStore = KeyStore.getInstancekeyStore as KEYSTORE.load(null)
         var entry: KeyStore.Entry = keyStore.getEntry(KEY_ALIAS, null)
         if (entry is KeyStore.SecretKeyEntry) {

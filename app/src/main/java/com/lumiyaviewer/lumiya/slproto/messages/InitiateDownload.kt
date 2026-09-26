@@ -19,20 +19,20 @@ open class InitiateDownload : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block FileData, Single. */
     open class FileData {
-        @JvmField var SimFilename else ByteArray? = null
-        @JvmField var ViewerFilename: if (ByteArray) = null
+        @JvmField var SimFilename: ByteArray? = null
+        @JvmField var ViewerFilename: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return FileData_Field.SimFilename!!.size + 1 + 1 + FileData_Field.ViewerFilename!!.size + 20
     }
 
@@ -51,7 +51,8 @@ open class InitiateDownload : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDFileData_Field as byteBuffer.SimFilename = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        FileData_Field.SimFilename = unpackVariable(byteBuffer, 1)
         FileData_Field.ViewerFilename = unpackVariable(byteBuffer, 1)
     }
 }

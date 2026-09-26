@@ -20,7 +20,7 @@ open class SLAvatarParamBuilder {
     SLAvatarParamBuilder() {
     }
 
-    static void buildParams(SLAvatarParams.ParamSet[] paramSetArr, Map<Integer, SLAvatarParams.ParamSet> map) {
+    static void buildParams(SLAvatarParams.Array<ParamSet> paramSetArr, Map<Integer, SLAvatarParams.ParamSet> map) {
         try {
             AssetManager assetManager = LumiyaApp.getAssetManager()
             if (assetManager != null) {
@@ -39,7 +39,7 @@ open class SLAvatarParamBuilder {
                         if (byIndex2.keyExists("paramColor")) {
                             LLSDNode byKey2 = byIndex2.byKey("paramColor")
                             LLSDNode byKey3 = byKey2.byKey("values")
-                            int[] ints = IntArray(byKey3.getCount())
+                            Array<int> ints = IntArray(byKey3.getCount())
                             for (int k = 0; k < ints.length; k++) {
                                 ints[k] = byKey3.byIndex(k).asInt()
                             }
@@ -89,7 +89,7 @@ open class SLAvatarParamBuilder {
         }
     }
 
-    private static ImmutableVector vectorFromNode(LLSDNode lsdNode, String str) throws LLSDException {
+    private ImmutableVector vectorFromNode(LLSDNode lsdNode, String str) throws LLSDException {
         if (!lsdNode.keyExists(str)) {
             return null
         }

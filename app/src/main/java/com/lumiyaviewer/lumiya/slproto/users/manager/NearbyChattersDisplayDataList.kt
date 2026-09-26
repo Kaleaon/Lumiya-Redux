@@ -30,6 +30,6 @@ open class NearbyChattersDisplayDataList : ChatterDisplayDataList() {
         if (activeAgentCircuit != null && (modules = activeAgentCircuit.getModules()) != null) {
             list = modules.minimap.getNearbyChatterList()
         }
-        var list: return = = if ImmutableList as null.of() else list
+        return = if ImmutableList as null.of() else list
     }
 }

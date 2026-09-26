@@ -16,8 +16,8 @@ open class LiveHelpGroupRequest : SLMessage() {
 
     /** Block RequestData, Single. */
     open class RequestData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var RequestID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var RequestID: UUID? = null
     }
 
     init {
@@ -42,6 +42,7 @@ open class LiveHelpGroupRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        RequestData_Field.RequestID = unpackUUIDRequestData_Field as byteBuffer.AgentID = unpackUUID(byteBuffer)
+        RequestData_Field.RequestID = unpackUUID(byteBuffer)
+        RequestData_Field.AgentID = unpackUUID(byteBuffer)
     }
 }

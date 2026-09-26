@@ -23,7 +23,7 @@ abstract class UnreadNotificationInfo {
     }
 
     abstract class ObjectPopupNotification {
-        private static ObjectPopupNotification empty = AutoValue_UnreadNotificationInfo_ObjectPopupNotification(0, 0, Optional.absent())
+        private ObjectPopupNotification empty = AutoValue_UnreadNotificationInfo_ObjectPopupNotification(0, 0, Optional.absent())
 
         fun create(i: Int, i2: Int, objectPopupMessage: ObjectPopupMessage): ObjectPopupNotification {
             return (i == 0 && i2 == 0 && objectPopupMessage == null) ? empty : AutoValue_UnreadNotificationInfo_ObjectPopupNotification(i, i2, Optional.fromNullable(objectPopupMessage))

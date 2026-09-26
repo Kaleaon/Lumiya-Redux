@@ -40,6 +40,7 @@ open class ConfirmXferPacket : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        XferID_Field.ID = unpackLongXferID_Field as byteBuffer.Packet = unpackInt(byteBuffer)
+        XferID_Field.ID = unpackLong(byteBuffer)
+        XferID_Field.Packet = unpackInt(byteBuffer)
     }
 }

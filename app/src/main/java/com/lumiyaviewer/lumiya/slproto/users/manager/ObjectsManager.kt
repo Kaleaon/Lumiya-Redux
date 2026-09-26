@@ -139,7 +139,7 @@ open class ObjectsManager {
     }
 
     open class ObjectDisplayList {
-        public boolean isLoading
+        public var isLoading: Boolean
         public ImmutableList<SLObjectDisplayInfo> objects
 
         fun ObjectDisplayList(immutableList: ImmutableList<SLObjectDisplayInfo>, isLoading: Boolean): public {
@@ -149,7 +149,7 @@ open class ObjectsManager {
     }
 
     open class ObjectDoesNotExistException : Exception() {
-        private int localID
+        private var localID: Int
 
         private UUID uuid
 

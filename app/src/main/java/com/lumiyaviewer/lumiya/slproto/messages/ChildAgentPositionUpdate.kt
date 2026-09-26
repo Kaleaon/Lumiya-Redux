@@ -17,18 +17,18 @@ open class ChildAgentPositionUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var AgentPos else LLVector3? = null
-        @JvmField var AgentVel: if (LLVector3) = null
-        @JvmField var AtAxis else LLVector3? = null
-        @JvmField var Center: if (LLVector3) = null
-        @JvmField var ChangedGrid else Boolean = false
-        @JvmField var LeftAxis: if (LLVector3) = null
-        @JvmField var RegionHandle else Long = 0L
-        @JvmField var SessionID: if (UUID) = null
-        @JvmField var Size else LLVector3? = null
-        @JvmField var UpAxis: if (LLVector3) = null
-        @JvmField var ViewerCircuitCode else Int = 0
+        @JvmField var AgentID: UUID? = null
+        @JvmField var AgentPos: LLVector3? = null
+        @JvmField var AgentVel: LLVector3? = null
+        @JvmField var AtAxis: LLVector3? = null
+        @JvmField var Center: LLVector3? = null
+        @JvmField var ChangedGrid: Boolean = false
+        @JvmField var LeftAxis: LLVector3? = null
+        @JvmField var RegionHandle: Long = 0L
+        @JvmField var SessionID: UUID? = null
+        @JvmField var Size: LLVector3? = null
+        @JvmField var UpAxis: LLVector3? = null
+        @JvmField var ViewerCircuitCode: Int = 0
     }
 
     init {
@@ -61,6 +61,17 @@ open class ChildAgentPositionUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.RegionHandle = unpackLongAgentData_Field as byteBuffer.ViewerCircuitCode = unpackIntAgentData_Field as byteBuffer.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.AgentPos = unpackLLVector3AgentData_Field as byteBuffer.AgentVel = unpackLLVector3AgentData_Field as byteBuffer.Center = unpackLLVector3AgentData_Field as byteBuffer.Size = unpackLLVector3AgentData_Field as byteBuffer.AtAxis = unpackLLVector3AgentData_Field as byteBuffer.LeftAxis = unpackLLVector3AgentData_Field as byteBuffer.UpAxis = unpackLLVector3AgentData_Field as byteBuffer.ChangedGrid = unpackBoolean(byteBuffer)
+        AgentData_Field.RegionHandle = unpackLong(byteBuffer)
+        AgentData_Field.ViewerCircuitCode = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentPos = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentVel = unpackLLVector3(byteBuffer)
+        AgentData_Field.Center = unpackLLVector3(byteBuffer)
+        AgentData_Field.Size = unpackLLVector3(byteBuffer)
+        AgentData_Field.AtAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.LeftAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.UpAxis = unpackLLVector3(byteBuffer)
+        AgentData_Field.ChangedGrid = unpackBoolean(byteBuffer)
     }
 }

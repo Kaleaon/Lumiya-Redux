@@ -26,14 +26,14 @@ open class PayPriceReply : SLMessage() {
     /** Block ObjectData, Single. */
     open class ObjectData {
         @JvmField var DefaultPayPrice: Int = 0
-        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var ObjectID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (ButtonData_Fields.size * 4) + 25
     }
 
@@ -55,11 +55,13 @@ open class PayPriceReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ObjectData_Field.ObjectID = unpackUUIDObjectData_Field as byteBuffer.DefaultPayPrice = unpackInt(byteBuffer)
+        ObjectData_Field.ObjectID = unpackUUID(byteBuffer)
+        ObjectData_Field.DefaultPayPrice = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val buttonData = ButtonData()
-            buttonData.PayButton = unpackIntButtonData_Fields as byteBuffer.add(buttonData)
+            buttonData.PayButton = unpackInt(byteBuffer)
+            ButtonData_Fields.add(buttonData)
         }
     }
 }

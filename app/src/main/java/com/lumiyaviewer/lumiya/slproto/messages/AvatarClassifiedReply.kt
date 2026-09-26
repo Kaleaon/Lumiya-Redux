@@ -23,14 +23,14 @@ open class AvatarClassifiedReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var TargetID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var TargetID: UUID? = null
     }
 
     /** Block Data, Variable. */
     open class Data {
-        @JvmField var ClassifiedID: if (UUID) = null
-        @JvmField var Name else ByteArray? = null
+        @JvmField var ClassifiedID: UUID? = null
+        @JvmField var Name: ByteArray? = null
     }
 
     init {
@@ -68,11 +68,13 @@ open class AvatarClassifiedReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.TargetID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.TargetID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.ClassifiedID = unpackUUIDdata as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+            data.ClassifiedID = unpackUUID(byteBuffer)
+            data.Name = unpackVariable(byteBuffer, 1)
             Data_Fields.add(data)
         }
     }

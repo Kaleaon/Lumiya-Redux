@@ -16,14 +16,14 @@ open class AtomicPassObject : SLMessage() {
     /** Block TaskData, Single. */
     open class TaskData {
         @JvmField var AttachmentNeedsSave: Boolean = false
-        @JvmField var TaskID: if (UUID) = null
+        @JvmField var TaskID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 18
     }
 
@@ -39,6 +39,7 @@ open class AtomicPassObject : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TaskData_Field.TaskID = unpackUUIDTaskData_Field as byteBuffer.AttachmentNeedsSave = unpackBoolean(byteBuffer)
+        TaskData_Field.TaskID = unpackUUID(byteBuffer)
+        TaskData_Field.AttachmentNeedsSave = unpackBoolean(byteBuffer)
     }
 }

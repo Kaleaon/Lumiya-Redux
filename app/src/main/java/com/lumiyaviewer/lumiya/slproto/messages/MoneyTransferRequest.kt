@@ -20,8 +20,8 @@ open class MoneyTransferRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block MoneyData, Single. */
@@ -29,11 +29,11 @@ open class MoneyTransferRequest : SLMessage() {
         @JvmField var AggregatePermInventory: Int = 0
         @JvmField var AggregatePermNextOwner: Int = 0
         @JvmField var Amount: Int = 0
-        @JvmField var Description: if (ByteArray) = null
-        @JvmField var DestID else UUID? = null
+        @JvmField var Description: ByteArray? = null
+        @JvmField var DestID: UUID? = null
         @JvmField var Flags: Int = 0
-        @JvmField var SourceID: if (UUID) = null
-        @JvmField var TransactionType else Int = 0
+        @JvmField var SourceID: UUID? = null
+        @JvmField var TransactionType: Int = 0
     }
 
     init {
@@ -66,9 +66,15 @@ open class MoneyTransferRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDMoneyData_Field as byteBuffer.SourceID = unpackUUIDMoneyData_Field as byteBuffer.DestID = unpackUUIDMoneyData_Field as byteBuffer.Flags = unpackByte(byteBuffer).toInt() and 0xFF
-        MoneyData_Field.Amount = unpackIntMoneyData_Field as byteBuffer.AggregatePermNextOwner = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        MoneyData_Field.SourceID = unpackUUID(byteBuffer)
+        MoneyData_Field.DestID = unpackUUID(byteBuffer)
+        MoneyData_Field.Flags = unpackByte(byteBuffer).toInt() and 0xFF
+        MoneyData_Field.Amount = unpackInt(byteBuffer)
+        MoneyData_Field.AggregatePermNextOwner = unpackByte(byteBuffer).toInt() and 0xFF
         MoneyData_Field.AggregatePermInventory = unpackByte(byteBuffer).toInt() and 0xFF
-        MoneyData_Field.TransactionType = unpackIntMoneyData_Field as byteBuffer.Description = unpackVariable(byteBuffer, 1)
+        MoneyData_Field.TransactionType = unpackInt(byteBuffer)
+        MoneyData_Field.Description = unpackVariable(byteBuffer, 1)
     }
 }

@@ -16,14 +16,14 @@ open class ScriptDataReply : SLMessage() {
     /** Block DataBlock, Variable. */
     open class DataBlock {
         @JvmField var Hash: Long = 0L
-        @JvmField var Reply: if (ByteArray) = null
+        @JvmField var Reply: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var i = 5
         val it = DataBlock_Fields.iterator()
         while (true) {
@@ -55,7 +55,8 @@ open class ScriptDataReply : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val dataBlock = DataBlock()
-            dataBlock.Hash = unpackLongdataBlock as byteBuffer.Reply = unpackVariable(byteBuffer, 2)
+            dataBlock.Hash = unpackLong(byteBuffer)
+            dataBlock.Reply = unpackVariable(byteBuffer, 2)
             DataBlock_Fields.add(dataBlock)
         }
     }

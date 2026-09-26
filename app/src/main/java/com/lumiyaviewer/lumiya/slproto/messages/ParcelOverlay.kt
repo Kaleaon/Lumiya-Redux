@@ -23,8 +23,8 @@ open class ParcelOverlay : SLMessage() {
 
     /** Block ParcelData, Single. */
     open class ParcelData {
-        @JvmField var Data: if (ByteArray) = null
-        @JvmField var SequenceID else Int = 0
+        @JvmField var Data: ByteArray? = null
+        @JvmField var SequenceID: Int = 0
     }
 
     init {
@@ -49,6 +49,7 @@ open class ParcelOverlay : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ParcelData_Field.SequenceID = unpackIntParcelData_Field as byteBuffer.Data = unpackVariable(byteBuffer, 2)
+        ParcelData_Field.SequenceID = unpackInt(byteBuffer)
+        ParcelData_Field.Data = unpackVariable(byteBuffer, 2)
     }
 }

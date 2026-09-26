@@ -1,10 +1,8 @@
 package com.lumiyaviewer.lumiya.slproto.inventory
 
 import androidx.core.os.EnvironmentCompat
-import java.util.HashMap
-import java.util.Map
 
-enum class SLInventoryType {
+enum class SLInventoryType(val typeCode: Int, val stringCode: String, val readableName: String) {
     IT_TEXTURE(0, "texture", "Texture"),
     IT_SOUND(1, "sound", "Sound"),
     IT_CALLINGCARD(2, "callcard", "Calling card"),
@@ -22,52 +20,30 @@ enum class SLInventoryType {
     IT_GESTURE(20, "gesture", "Gesture"),
     IT_MESH(22, "mesh", "Mesh"),
     IT_WIDGET(23, "widget", "Widget"),
-    IT_UNKNOWN(-1, EnvironmentCompat.MEDIA_UNKNOWN, "Unknown")
+    IT_UNKNOWN(-1, EnvironmentCompat.MEDIA_UNKNOWN, "Unknown");
 
-    @JvmStatic private var tagMap: MutableMap<String, SLInventoryType> = HashMap(valuesCustom().length * 2)
-    private var readableName: String = ""
-    private var stringCode: String = ""
-    private var typeCode: Int = 0
-    init {
-        for (sLInventoryType in valuesCustom()) {
-            tagMap.put(sLInventoryType.stringCode, sLInventoryType)
+    companion object {
+        private val tagMap: Map<String, SLInventoryType> = values().associateBy { it.stringCode }
+
+        @JvmStatic
+        fun getByString(str: String): SLInventoryType {
+            return tagMap[str] ?: IT_UNKNOWN
         }
-    }
 
-    constructor(typeCode: Int, stringCode: String, readableName: String) {
-        this.typeCode = typeCode
-        this.stringCode = stringCode
-        this.readableName = readableName
-    }
-
-    fun getByString(str: String): SLInventoryType {
-        var inventoryType: SLInventoryType = tagMap.get(str)
-        var inventoryType: return = = if (null) IT_UNKNOWN else inventoryType
-    }
-
-    fun getByType(i: Int): SLInventoryType {
-        for (inventoryType in valuesCustom()) {
-            if (inventoryType.typeCode == i) {
-        return inventoryType
+        @JvmStatic
+        fun getByType(i: Int): SLInventoryType {
+            for (inventoryType in values()) {
+                if (inventoryType.typeCode == i) {
+                    return inventoryType
+                }
             }
+            return IT_UNKNOWN
         }
-        return IT_UNKNOWN
-    }
 
-    /* renamed from: values, reason: to resolve conflict with enum method */
-    fun valuesCustom(): Array<SLInventoryType> {
-        return values()
-    }
-
-    fun getReadableName(): String {
-        return this.readableName
-    }
-
-    fun getStringCode(): String {
-        return this.stringCode
-    }
-
-    fun getTypeCode(): Int {
-        return this.typeCode
+        /* renamed from: values, reason: to resolve conflict with enum method */
+        @JvmStatic
+        fun valuesCustom(): Array<SLInventoryType> {
+            return values()
+        }
     }
 }

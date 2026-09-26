@@ -6,21 +6,21 @@ import java.io.IOException
 
 open class LLSDContentTypeDetector {
 
-    private static byte[] UTF8_BOM = { 0xEF as byte, 0xBB as byte, (byte) 0xBF }
+    private Array<byte> UTF8_BOM = { 0xEF as byte, 0xBB as byte, (byte) 0xBF }
 
     enum class LLSDContentType {
         llsdXML,
         llsdBinary
 
         /* renamed from: values, reason: to resolve conflict with enum method */
-        public static LLSDContentType[] valuesCustom() {
+        Array<LLSDContentType> valuesCustom() {
             return values()
         }
     }
 
-    public static LLSDContentType DetectContentType(BufferedInputStream stream, String contentType) throws IOException {
+    LLSDContentType DetectContentType(BufferedInputStream stream, String contentType) throws IOException {
         stream.mark(64)
-        byte[] buf = ByteArray(32)
+        Array<byte> buf = ByteArray(32)
         int bytesRead = stream.read(buf, 0, buf.length)
         if (bytesRead < 0) {
             bytesRead = 0

@@ -21,14 +21,14 @@ open class CreateGroupReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block ReplyData, Single. */
     open class ReplyData {
-        @JvmField var GroupID else UUID? = null
-        @JvmField var Message: if (ByteArray) = null
-        @JvmField var Success else Boolean = false
+        @JvmField var GroupID: UUID? = null
+        @JvmField var Message: ByteArray? = null
+        @JvmField var Success: Boolean = false
     }
 
     init {
@@ -55,6 +55,9 @@ open class CreateGroupReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDReplyData_Field as byteBuffer.GroupID = unpackUUIDReplyData_Field as byteBuffer.Success = unpackBooleanReplyData_Field as byteBuffer.Message = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        ReplyData_Field.GroupID = unpackUUID(byteBuffer)
+        ReplyData_Field.Success = unpackBoolean(byteBuffer)
+        ReplyData_Field.Message = unpackVariable(byteBuffer, 1)
     }
 }

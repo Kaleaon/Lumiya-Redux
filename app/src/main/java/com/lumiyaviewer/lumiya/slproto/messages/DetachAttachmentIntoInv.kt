@@ -15,8 +15,8 @@ open class DetachAttachmentIntoInv : SLMessage() {
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var ItemID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var ItemID: UUID? = null
     }
 
     init {
@@ -41,6 +41,7 @@ open class DetachAttachmentIntoInv : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ObjectData_Field.AgentID = unpackUUIDObjectData_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
+        ObjectData_Field.AgentID = unpackUUID(byteBuffer)
+        ObjectData_Field.ItemID = unpackUUID(byteBuffer)
     }
 }

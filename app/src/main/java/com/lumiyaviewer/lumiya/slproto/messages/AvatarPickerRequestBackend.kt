@@ -16,22 +16,22 @@ open class AvatarPickerRequestBackend : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GodLevel else Int = 0
-        @JvmField var QueryID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GodLevel: Int = 0
+        @JvmField var QueryID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Name: if (ByteArray) = null
+        @JvmField var Name: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return Data_Field.Name!!.size + 1 + 53
     }
 
@@ -52,7 +52,10 @@ open class AvatarPickerRequestBackend : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.QueryID = unpackUUIDAgentData_Field as byteBuffer.GodLevel = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.GodLevel = unpackByte(byteBuffer).toInt() and 0xFF
         Data_Field.Name = unpackVariable(byteBuffer, 1)
     }
 }

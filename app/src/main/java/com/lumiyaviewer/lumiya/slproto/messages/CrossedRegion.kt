@@ -22,21 +22,21 @@ open class CrossedRegion : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var LookAt: if (LLVector3) = null
-        @JvmField var Position else LLVector3? = null
+        @JvmField var LookAt: LLVector3? = null
+        @JvmField var Position: LLVector3? = null
     }
 
     /** Block RegionData, Single. */
     open class RegionData {
         @JvmField var RegionHandle: Long = 0L
-        @JvmField var SeedCapability: if (ByteArray) = null
-        @JvmField var SimIP else Inet4Address? = null
+        @JvmField var SeedCapability: ByteArray? = null
+        @JvmField var SimIP: Inet4Address? = null
         @JvmField var SimPort: Int = 0
     }
 
@@ -67,8 +67,13 @@ open class CrossedRegion : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDRegionData_Field as byteBuffer.SimIP = unpackIPAddressRegionData_Field as byteBuffer.SimPort = unpackShort(byteBuffer).toInt() and 65535
-        RegionData_Field.RegionHandle = unpackLongRegionData_Field as byteBuffer.SeedCapability = unpackVariable(byteBuffer, 2)
-        Info_Field.Position = unpackLLVector3Info_Field as byteBuffer.LookAt = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        RegionData_Field.SimIP = unpackIPAddress(byteBuffer)
+        RegionData_Field.SimPort = unpackShort(byteBuffer).toInt() and 65535
+        RegionData_Field.RegionHandle = unpackLong(byteBuffer)
+        RegionData_Field.SeedCapability = unpackVariable(byteBuffer, 2)
+        Info_Field.Position = unpackLLVector3(byteBuffer)
+        Info_Field.LookAt = unpackLLVector3(byteBuffer)
     }
 }

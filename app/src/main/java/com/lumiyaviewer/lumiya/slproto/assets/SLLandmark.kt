@@ -9,16 +9,16 @@ open class SLLandmark {
     public UUID regionUUID
 
     open class LandmarkFormatException : AssetFormatException() {
-        private static long serialVersionUID = -1927623876075592027L
+        private long serialVersionUID = -1927623876075592027L
 
         public LandmarkFormatException() {
             super("Unsupported landmark format")
         }
     }
 
-    public SLLandmark(byte[] bytes) throws LandmarkFormatException {
+    public SLLandmark(Array<byte> bytes) throws LandmarkFormatException {
         try {
-            String[] split = String(bytes, "ISO-8859-1").trim().split("\n+")
+            Array<String> split = String(bytes, "ISO-8859-1").trim().split("\n+")
             if (split.length < 1) {
                 throw LandmarkFormatException()
             }
@@ -26,7 +26,7 @@ open class SLLandmark {
                 throw LandmarkFormatException()
             }
             for (int i = 1; i < split.length; i++) {
-                String[] split2 = split[i].trim().split("\\s+")
+                Array<String> split2 = split[i].trim().split("\\s+")
                 if (split2.length >= 1) {
                     if (split2[0].equalsIgnoreCase("region_id")) {
                         this.regionUUID = UUID.fromString(split2[1])

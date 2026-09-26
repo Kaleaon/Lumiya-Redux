@@ -17,8 +17,8 @@ open class OpenCircuit : SLMessage() {
 
     /** Block CircuitInfo, Single. */
     open class CircuitInfo {
-        @JvmField var IP: if (Inet4Address) = null
-        @JvmField var Port else Int = 0
+        @JvmField var IP: Inet4Address? = null
+        @JvmField var Port: Int = 0
     }
 
     init {
@@ -43,6 +43,7 @@ open class OpenCircuit : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        CircuitInfo_Field.IP = unpackIPAddressCircuitInfo_Field as byteBuffer.Port = unpackShort(byteBuffer).toInt() and 65535
+        CircuitInfo_Field.IP = unpackIPAddress(byteBuffer)
+        CircuitInfo_Field.Port = unpackShort(byteBuffer).toInt() and 65535
     }
 }

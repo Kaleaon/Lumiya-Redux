@@ -19,8 +19,8 @@ open class ParcelJoin : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ParcelData, Single. */
@@ -57,6 +57,11 @@ open class ParcelJoin : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDParcelData_Field as byteBuffer.West = unpackFloatParcelData_Field as byteBuffer.South = unpackFloatParcelData_Field as byteBuffer.East = unpackFloatParcelData_Field as byteBuffer.North = unpackFloat(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ParcelData_Field.West = unpackFloat(byteBuffer)
+        ParcelData_Field.South = unpackFloat(byteBuffer)
+        ParcelData_Field.East = unpackFloat(byteBuffer)
+        ParcelData_Field.North = unpackFloat(byteBuffer)
     }
 }

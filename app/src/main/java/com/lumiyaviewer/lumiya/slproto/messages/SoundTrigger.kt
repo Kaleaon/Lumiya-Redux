@@ -21,18 +21,18 @@ open class SoundTrigger : SLMessage() {
     open class SoundData {
         @JvmField var Gain: Float = 0f
         @JvmField var Handle: Long = 0L
-        @JvmField var ObjectID: if (UUID) = null
-        @JvmField var OwnerID else UUID? = null
-        @JvmField var ParentID: if (UUID) = null
-        @JvmField var Position else LLVector3? = null
-        @JvmField var SoundID: if (UUID) = null
+        @JvmField var ObjectID: UUID? = null
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var ParentID: UUID? = null
+        @JvmField var Position: LLVector3? = null
+        @JvmField var SoundID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 89
     }
 
@@ -53,6 +53,12 @@ open class SoundTrigger : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SoundData_Field.SoundID = unpackUUIDSoundData_Field as byteBuffer.OwnerID = unpackUUIDSoundData_Field as byteBuffer.ObjectID = unpackUUIDSoundData_Field as byteBuffer.ParentID = unpackUUIDSoundData_Field as byteBuffer.Handle = unpackLongSoundData_Field as byteBuffer.Position = unpackLLVector3SoundData_Field as byteBuffer.Gain = unpackFloat(byteBuffer)
+        SoundData_Field.SoundID = unpackUUID(byteBuffer)
+        SoundData_Field.OwnerID = unpackUUID(byteBuffer)
+        SoundData_Field.ObjectID = unpackUUID(byteBuffer)
+        SoundData_Field.ParentID = unpackUUID(byteBuffer)
+        SoundData_Field.Handle = unpackLong(byteBuffer)
+        SoundData_Field.Position = unpackLLVector3(byteBuffer)
+        SoundData_Field.Gain = unpackFloat(byteBuffer)
     }
 }

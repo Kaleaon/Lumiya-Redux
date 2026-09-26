@@ -16,16 +16,16 @@ open class FetchInventoryDescendents : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block InventoryData, Single. */
     open class InventoryData {
         @JvmField var FetchFolders: Boolean = false
         @JvmField var FetchItems: Boolean = false
-        @JvmField var FolderID: if (UUID) = null
-        @JvmField var OwnerID else UUID? = null
+        @JvmField var FolderID: UUID? = null
+        @JvmField var OwnerID: UUID? = null
         @JvmField var SortOrder: Int = 0
     }
 
@@ -56,6 +56,12 @@ open class FetchInventoryDescendents : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInventoryData_Field as byteBuffer.FolderID = unpackUUIDInventoryData_Field as byteBuffer.OwnerID = unpackUUIDInventoryData_Field as byteBuffer.SortOrder = unpackIntInventoryData_Field as byteBuffer.FetchFolders = unpackBooleanInventoryData_Field as byteBuffer.FetchItems = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        InventoryData_Field.FolderID = unpackUUID(byteBuffer)
+        InventoryData_Field.OwnerID = unpackUUID(byteBuffer)
+        InventoryData_Field.SortOrder = unpackInt(byteBuffer)
+        InventoryData_Field.FetchFolders = unpackBoolean(byteBuffer)
+        InventoryData_Field.FetchItems = unpackBoolean(byteBuffer)
     }
 }

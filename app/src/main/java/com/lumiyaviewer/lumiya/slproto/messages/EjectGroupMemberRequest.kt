@@ -20,18 +20,18 @@ open class EjectGroupMemberRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block EjectData, Variable. */
     open class EjectData {
-        @JvmField var EjecteeID: if (UUID) = null
+        @JvmField var EjecteeID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID else UUID? = null
+        @JvmField var GroupID: UUID? = null
     }
 
     init {
@@ -61,11 +61,14 @@ open class EjectGroupMemberRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val ejectData = EjectData()
-            ejectData.EjecteeID = unpackUUIDEjectData_Fields as byteBuffer.add(ejectData)
+            ejectData.EjecteeID = unpackUUID(byteBuffer)
+            EjectData_Fields.add(ejectData)
         }
     }
 }

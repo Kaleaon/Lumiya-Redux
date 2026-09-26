@@ -22,32 +22,32 @@ open class UpdateParcel : SLMessage() {
     open class ParcelData {
         @JvmField var ActualArea: Int = 0
         @JvmField var AllowPublish: Boolean = false
-        @JvmField var AuthorizedBuyerID: if (UUID) = null
-        @JvmField var BillableArea else Int = 0
+        @JvmField var AuthorizedBuyerID: UUID? = null
+        @JvmField var BillableArea: Int = 0
         @JvmField var Category: Int = 0
-        @JvmField var Description: if (ByteArray) = null
-        @JvmField var GroupOwned else Boolean = false
+        @JvmField var Description: ByteArray? = null
+        @JvmField var GroupOwned: Boolean = false
         @JvmField var IsForSale: Boolean = false
         @JvmField var MaturePublish: Boolean = false
-        @JvmField var MusicURL: if (ByteArray) = null
-        @JvmField var Name else ByteArray? = null
-        @JvmField var OwnerID: if (UUID) = null
-        @JvmField var ParcelID else UUID? = null
+        @JvmField var MusicURL: ByteArray? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var ParcelID: UUID? = null
         @JvmField var RegionHandle: Long = 0L
         @JvmField var RegionX: Float = 0f
         @JvmField var RegionY: Float = 0f
         @JvmField var SalePrice: Int = 0
         @JvmField var ShowDir: Boolean = false
-        @JvmField var SnapshotID: if (UUID) = null
-        @JvmField var Status else Int = 0
-        @JvmField var UserLocation: if (LLVector3) = null
+        @JvmField var SnapshotID: UUID? = null
+        @JvmField var Status: Int = 0
+        @JvmField var UserLocation: LLVector3? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return ParcelData_Field.Name!!.size + 43 + 1 + ParcelData_Field.Description!!.size + 1 + ParcelData_Field.MusicURL!!.size + 4 + 4 + 4 + 4 + 1 + 1 + 1 + 16 + 12 + 4 + 16 + 1 + 1 + 4
     }
 
@@ -84,11 +84,26 @@ open class UpdateParcel : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        ParcelData_Field.ParcelID = unpackUUIDParcelData_Field as byteBuffer.RegionHandle = unpackLongParcelData_Field as byteBuffer.OwnerID = unpackUUIDParcelData_Field as byteBuffer.GroupOwned = unpackBooleanParcelData_Field as byteBuffer.Status = unpackByte(byteBuffer).toInt() and 0xFF
+        ParcelData_Field.ParcelID = unpackUUID(byteBuffer)
+        ParcelData_Field.RegionHandle = unpackLong(byteBuffer)
+        ParcelData_Field.OwnerID = unpackUUID(byteBuffer)
+        ParcelData_Field.GroupOwned = unpackBoolean(byteBuffer)
+        ParcelData_Field.Status = unpackByte(byteBuffer).toInt() and 0xFF
         ParcelData_Field.Name = unpackVariable(byteBuffer, 1)
         ParcelData_Field.Description = unpackVariable(byteBuffer, 1)
         ParcelData_Field.MusicURL = unpackVariable(byteBuffer, 1)
-        ParcelData_Field.RegionX = unpackFloatParcelData_Field as byteBuffer.RegionY = unpackFloatParcelData_Field as byteBuffer.ActualArea = unpackIntParcelData_Field as byteBuffer.BillableArea = unpackIntParcelData_Field as byteBuffer.ShowDir = unpackBooleanParcelData_Field as byteBuffer.IsForSale = unpackBooleanParcelData_Field as byteBuffer.Category = unpackByte(byteBuffer).toInt() and 0xFF
-        ParcelData_Field.SnapshotID = unpackUUIDParcelData_Field as byteBuffer.UserLocation = unpackLLVector3ParcelData_Field as byteBuffer.SalePrice = unpackIntParcelData_Field as byteBuffer.AuthorizedBuyerID = unpackUUIDParcelData_Field as byteBuffer.AllowPublish = unpackBooleanParcelData_Field as byteBuffer.MaturePublish = unpackBoolean(byteBuffer)
+        ParcelData_Field.RegionX = unpackFloat(byteBuffer)
+        ParcelData_Field.RegionY = unpackFloat(byteBuffer)
+        ParcelData_Field.ActualArea = unpackInt(byteBuffer)
+        ParcelData_Field.BillableArea = unpackInt(byteBuffer)
+        ParcelData_Field.ShowDir = unpackBoolean(byteBuffer)
+        ParcelData_Field.IsForSale = unpackBoolean(byteBuffer)
+        ParcelData_Field.Category = unpackByte(byteBuffer).toInt() and 0xFF
+        ParcelData_Field.SnapshotID = unpackUUID(byteBuffer)
+        ParcelData_Field.UserLocation = unpackLLVector3(byteBuffer)
+        ParcelData_Field.SalePrice = unpackInt(byteBuffer)
+        ParcelData_Field.AuthorizedBuyerID = unpackUUID(byteBuffer)
+        ParcelData_Field.AllowPublish = unpackBoolean(byteBuffer)
+        ParcelData_Field.MaturePublish = unpackBoolean(byteBuffer)
     }
 }

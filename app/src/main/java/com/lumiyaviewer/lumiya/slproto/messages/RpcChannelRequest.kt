@@ -19,8 +19,8 @@ open class RpcChannelRequest : SLMessage() {
     open class DataBlock {
         @JvmField var GridX: Int = 0
         @JvmField var GridY: Int = 0
-        @JvmField var ItemID: if (UUID) = null
-        @JvmField var TaskID else UUID? = null
+        @JvmField var ItemID: UUID? = null
+        @JvmField var TaskID: UUID? = null
     }
 
     init {
@@ -47,6 +47,9 @@ open class RpcChannelRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        DataBlock_Field.GridX = unpackIntDataBlock_Field as byteBuffer.GridY = unpackIntDataBlock_Field as byteBuffer.TaskID = unpackUUIDDataBlock_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
+        DataBlock_Field.GridX = unpackInt(byteBuffer)
+        DataBlock_Field.GridY = unpackInt(byteBuffer)
+        DataBlock_Field.TaskID = unpackUUID(byteBuffer)
+        DataBlock_Field.ItemID = unpackUUID(byteBuffer)
     }
 }

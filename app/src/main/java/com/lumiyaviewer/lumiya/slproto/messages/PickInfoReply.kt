@@ -22,31 +22,31 @@ open class PickInfoReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var CreatorID else UUID? = null
-        @JvmField var Desc: if (ByteArray) = null
-        @JvmField var Enabled else Boolean = false
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var OriginalName else ByteArray? = null
-        @JvmField var ParcelID: if (UUID) = null
-        @JvmField var PickID else UUID? = null
-        @JvmField var PosGlobal: if (LLVector3d) = null
-        @JvmField var SimName else ByteArray? = null
-        @JvmField var SnapshotID: if (UUID) = null
-        @JvmField var SortOrder else Int = 0
+        @JvmField var CreatorID: UUID? = null
+        @JvmField var Desc: ByteArray? = null
+        @JvmField var Enabled: Boolean = false
+        @JvmField var Name: ByteArray? = null
+        @JvmField var OriginalName: ByteArray? = null
+        @JvmField var ParcelID: UUID? = null
+        @JvmField var PickID: UUID? = null
+        @JvmField var PosGlobal: LLVector3d? = null
+        @JvmField var SimName: ByteArray? = null
+        @JvmField var SnapshotID: UUID? = null
+        @JvmField var SortOrder: Int = 0
         @JvmField var TopPick: Boolean = false
-        @JvmField var User: if (ByteArray) = null
+        @JvmField var User: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return Data_Field.Name!!.size + 50 + 2 + Data_Field.Desc!!.size + 16 + 1 + Data_Field.User!!.size + 1 + Data_Field.OriginalName!!.size + 1 + Data_Field.SimName!!.size + 24 + 4 + 1 + 20
     }
 
@@ -76,11 +76,19 @@ open class PickInfoReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDData_Field as byteBuffer.PickID = unpackUUIDData_Field as byteBuffer.CreatorID = unpackUUIDData_Field as byteBuffer.TopPick = unpackBooleanData_Field as byteBuffer.ParcelID = unpackUUIDData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        Data_Field.PickID = unpackUUID(byteBuffer)
+        Data_Field.CreatorID = unpackUUID(byteBuffer)
+        Data_Field.TopPick = unpackBoolean(byteBuffer)
+        Data_Field.ParcelID = unpackUUID(byteBuffer)
+        Data_Field.Name = unpackVariable(byteBuffer, 1)
         Data_Field.Desc = unpackVariable(byteBuffer, 2)
-        Data_Field.SnapshotID = unpackUUIDData_Field as byteBuffer.User = unpackVariable(byteBuffer, 1)
+        Data_Field.SnapshotID = unpackUUID(byteBuffer)
+        Data_Field.User = unpackVariable(byteBuffer, 1)
         Data_Field.OriginalName = unpackVariable(byteBuffer, 1)
         Data_Field.SimName = unpackVariable(byteBuffer, 1)
-        Data_Field.PosGlobal = unpackLLVector3dData_Field as byteBuffer.SortOrder = unpackIntData_Field as byteBuffer.Enabled = unpackBoolean(byteBuffer)
+        Data_Field.PosGlobal = unpackLLVector3d(byteBuffer)
+        Data_Field.SortOrder = unpackInt(byteBuffer)
+        Data_Field.Enabled = unpackBoolean(byteBuffer)
     }
 }

@@ -17,8 +17,8 @@ open class ObjectShape : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
@@ -88,11 +88,13 @@ open class ObjectShape : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackIntobjectData as byteBuffer.PathCurve = unpackByte(byteBuffer).toInt() and 0xFF
+            objectData.ObjectLocalID = unpackInt(byteBuffer)
+            objectData.PathCurve = unpackByte(byteBuffer).toInt() and 0xFF
             objectData.ProfileCurve = unpackByte(byteBuffer).toInt() and 0xFF
             objectData.PathBegin = unpackShort(byteBuffer).toInt() and 65535
             objectData.PathEnd = unpackShort(byteBuffer).toInt() and 65535

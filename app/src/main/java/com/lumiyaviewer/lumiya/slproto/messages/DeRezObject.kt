@@ -31,22 +31,22 @@ open class DeRezObject : SLMessage() {
     /** Block AgentBlock, Single. */
     open class AgentBlock {
         @JvmField var Destination: Int = 0
-        @JvmField var DestinationID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var DestinationID: UUID? = null
+        @JvmField var GroupID: UUID? = null
         @JvmField var PacketCount: Int = 0
         @JvmField var PacketNumber: Int = 0
-        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var TransactionID: UUID? = null
     }
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectLocalID else Int = 0
+        @JvmField var ObjectLocalID: Int = 0
     }
 
     init {
@@ -81,13 +81,19 @@ open class DeRezObject : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentBlock_Field as byteBuffer.GroupID = unpackUUIDAgentBlock_Field as byteBuffer.Destination = unpackByte(byteBuffer).toInt() and 0xFF
-        AgentBlock_Field.DestinationID = unpackUUIDAgentBlock_Field as byteBuffer.TransactionID = unpackUUIDAgentBlock_Field as byteBuffer.PacketCount = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentBlock_Field.GroupID = unpackUUID(byteBuffer)
+        AgentBlock_Field.Destination = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentBlock_Field.DestinationID = unpackUUID(byteBuffer)
+        AgentBlock_Field.TransactionID = unpackUUID(byteBuffer)
+        AgentBlock_Field.PacketCount = unpackByte(byteBuffer).toInt() and 0xFF
         AgentBlock_Field.PacketNumber = unpackByte(byteBuffer).toInt() and 0xFF
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectLocalID = unpackInt(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

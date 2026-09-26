@@ -75,7 +75,7 @@ class SLChatScriptDialog : SLChatDialogEvent() {
         this.selectedOption = null
         this.selectedOption = chatMessage.getDialogSelectedOption()
         try {
-            strArr = (String[]) ObjectInputStream(ByteArrayInputStream(chatMessage.getDialogButtons())).readObject()
+            strArr = (Array<String>) ObjectInputStream(ByteArrayInputStream(chatMessage.getDialogButtons())).readObject()
         } catch (IOException | ClassNotFoundException e) {
             Debug.Warning(e)
             strArr = null

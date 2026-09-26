@@ -22,31 +22,31 @@ open class ParcelDisableObjects : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block OwnerIDs, Variable. */
     open class OwnerIDs {
-        @JvmField var OwnerID: if (UUID) = null
+        @JvmField var OwnerID: UUID? = null
     }
 
     /** Block ParcelData, Single. */
     open class ParcelData {
-        @JvmField var LocalID else Int = 0
+        @JvmField var LocalID: Int = 0
         @JvmField var ReturnType: Int = 0
     }
 
     /** Block TaskIDs, Variable. */
     open class TaskIDs {
-        @JvmField var TaskID: if (UUID) = null
+        @JvmField var TaskID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (TaskIDs_Fields.size * 16) + 45 + 1 + (OwnerIDs_Fields.size * 16)
     }
 
@@ -75,16 +75,21 @@ open class ParcelDisableObjects : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDParcelData_Field as byteBuffer.LocalID = unpackIntParcelData_Field as byteBuffer.ReturnType = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ParcelData_Field.LocalID = unpackInt(byteBuffer)
+        ParcelData_Field.ReturnType = unpackInt(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val taskIDs = TaskIDs()
-            taskIDs.TaskID = unpackUUIDTaskIDs_Fields as byteBuffer.add(taskIDs)
+            taskIDs.TaskID = unpackUUID(byteBuffer)
+            TaskIDs_Fields.add(taskIDs)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val ownerIDs = OwnerIDs()
-            ownerIDs.OwnerID = unpackUUIDOwnerIDs_Fields as byteBuffer.add(ownerIDs)
+            ownerIDs.OwnerID = unpackUUID(byteBuffer)
+            OwnerIDs_Fields.add(ownerIDs)
         }
     }
 }

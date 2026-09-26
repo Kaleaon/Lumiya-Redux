@@ -17,13 +17,13 @@ open class NeighborList : SLMessage() {
 
     /** Block NeighborBlock, Multiple 4. */
     open class NeighborBlock {
-        @JvmField var IP: if (Inet4Address) = null
-        @JvmField var Name else ByteArray? = null
+        @JvmField var IP: Inet4Address? = null
+        @JvmField var Name: ByteArray? = null
         @JvmField var Port: Int = 0
-        @JvmField var PublicIP: if (Inet4Address) = null
-        @JvmField var PublicPort else Int = 0
-        @JvmField var RegionID: if (UUID) = null
-        @JvmField var SimAccess else Int = 0
+        @JvmField var PublicIP: Inet4Address? = null
+        @JvmField var PublicPort: Int = 0
+        @JvmField var RegionID: UUID? = null
+        @JvmField var SimAccess: Int = 0
     }
 
     init {

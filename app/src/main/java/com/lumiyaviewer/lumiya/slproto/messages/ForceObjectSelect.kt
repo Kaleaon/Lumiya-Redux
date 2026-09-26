@@ -57,7 +57,8 @@ open class ForceObjectSelect : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val data = Data()
-            data.LocalID = unpackIntData_Fields as byteBuffer.add(data)
+            data.LocalID = unpackInt(byteBuffer)
+            Data_Fields.add(data)
         }
     }
 }

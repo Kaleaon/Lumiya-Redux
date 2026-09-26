@@ -18,14 +18,14 @@ open class SystemMessage : SLMessage() {
 
     /** Block MethodData, Single. */
     open class MethodData {
-        @JvmField var Digest: if (ByteArray) = null
-        @JvmField var Invoice else UUID? = null
-        @JvmField var Method: if (ByteArray) = null
+        @JvmField var Digest: ByteArray? = null
+        @JvmField var Invoice: UUID? = null
+        @JvmField var Method: ByteArray? = null
     }
 
     /** Block ParamList, Variable. */
     open class ParamList {
-        @JvmField var Parameter else ByteArray? = null
+        @JvmField var Parameter: ByteArray? = null
     }
 
     init {
@@ -64,7 +64,8 @@ open class SystemMessage : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         MethodData_Field.Method = unpackVariable(byteBuffer, 1)
-        MethodData_Field.Invoice = unpackUUIDMethodData_Field as byteBuffer.Digest = unpackFixed(byteBuffer, 32)
+        MethodData_Field.Invoice = unpackUUID(byteBuffer)
+        MethodData_Field.Digest = unpackFixed(byteBuffer, 32)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val paramList = ParamList()

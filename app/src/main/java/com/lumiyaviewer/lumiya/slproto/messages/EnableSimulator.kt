@@ -18,8 +18,8 @@ open class EnableSimulator : SLMessage() {
     /** Block SimulatorInfo, Single. */
     open class SimulatorInfo {
         @JvmField var Handle: Long = 0L
-        @JvmField var IP: if (Inet4Address) = null
-        @JvmField var Port else Int = 0
+        @JvmField var IP: Inet4Address? = null
+        @JvmField var Port: Int = 0
     }
 
     init {
@@ -45,6 +45,8 @@ open class EnableSimulator : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SimulatorInfo_Field.Handle = unpackLongSimulatorInfo_Field as byteBuffer.IP = unpackIPAddressSimulatorInfo_Field as byteBuffer.Port = unpackShort(byteBuffer).toInt() and 65535
+        SimulatorInfo_Field.Handle = unpackLong(byteBuffer)
+        SimulatorInfo_Field.IP = unpackIPAddress(byteBuffer)
+        SimulatorInfo_Field.Port = unpackShort(byteBuffer).toInt() and 65535
     }
 }

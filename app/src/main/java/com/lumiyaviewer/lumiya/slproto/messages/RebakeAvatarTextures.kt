@@ -16,14 +16,14 @@ open class RebakeAvatarTextures : SLMessage() {
 
     /** Block TextureData, Single. */
     open class TextureData {
-        @JvmField var TextureID: if (UUID) = null
+        @JvmField var TextureID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 20
     }
 

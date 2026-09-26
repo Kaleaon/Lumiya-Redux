@@ -17,20 +17,20 @@ open class PurgeInventoryDescendents : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block InventoryData, Single. */
     open class InventoryData {
-        @JvmField var FolderID: if (UUID) = null
+        @JvmField var FolderID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 52
     }
 
@@ -49,6 +49,8 @@ open class PurgeInventoryDescendents : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDInventoryData_Field as byteBuffer.FolderID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        InventoryData_Field.FolderID = unpackUUID(byteBuffer)
     }
 }

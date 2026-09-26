@@ -141,7 +141,7 @@ class TlsPolicy {
             return if (engine != null) engine.getPeerHost() else null
         }
 
-        private void onFailure(String host, X509Certificate[] chain, CertificateException e) throws CertificateException {
+        private void onFailure(String host, Array<X509Certificate> chain, CertificateException e) throws CertificateException {
             var subject: String = (chain != null && chain.length > 0) ? chain[0].getSubjectX500Principal().getName() : "(none)"
             if (mayBypass(host)) {
                 Debug.AlwaysPrintf("TLS: untrusted certificate for %s (%s) accepted (grid allows untrusted certificates): %s", host, subject, e.getMessage())
@@ -150,7 +150,7 @@ class TlsPolicy {
             Debug.AlwaysPrintf("TLS: rejected certificate for %s (%s): %s", host, subject, e.getMessage())
             var e: throw = null
         }
-        public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
+        public void checkServerTrusted(Array<X509Certificate> chain, String authType, Socket socket) throws CertificateException {
             try {
                 if (this.delegate is X509ExtendedTrustManager) {
                     (this as X509ExtendedTrustManager.delegate).checkServerTrusted(chain, authType, socket)
@@ -161,7 +161,7 @@ class TlsPolicy {
                 onFailure(peerHost(socket), chain, e)
             }
         }
-        public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) throws CertificateException {
+        public void checkServerTrusted(Array<X509Certificate> chain, String authType, SSLEngine engine) throws CertificateException {
             try {
                 if (this.delegate is X509ExtendedTrustManager) {
                     (this as X509ExtendedTrustManager.delegate).checkServerTrusted(chain, authType, engine)
@@ -174,20 +174,20 @@ class TlsPolicy {
         }
 
         /** No host is known here, so nothing may be bypassed. */
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        public void checkServerTrusted(Array<X509Certificate> chain, String authType) throws CertificateException {
             try {
                 this.delegate.checkServerTrusted(chain, authType)
             } catch (e: CertificateException) {
                 onFailure(null, chain, e)
             }
         }
-        public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
+        public void checkClientTrusted(Array<X509Certificate> chain, String authType, Socket socket) throws CertificateException {
             this.delegate.checkClientTrusted(chain, authType)
         }
-        public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) throws CertificateException {
+        public void checkClientTrusted(Array<X509Certificate> chain, String authType, SSLEngine engine) throws CertificateException {
             this.delegate.checkClientTrusted(chain, authType)
         }
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        public void checkClientTrusted(Array<X509Certificate> chain, String authType) throws CertificateException {
             this.delegate.checkClientTrusted(chain, authType)
         }
         fun getAcceptedIssuers(): Array<X509Certificate> {

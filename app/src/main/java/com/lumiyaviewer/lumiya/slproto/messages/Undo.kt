@@ -18,14 +18,14 @@ open class Undo : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectID else UUID? = null
+        @JvmField var ObjectID: UUID? = null
     }
 
     init {
@@ -55,11 +55,14 @@ open class Undo : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectID = unpackUUIDObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectID = unpackUUID(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

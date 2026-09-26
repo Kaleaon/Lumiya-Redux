@@ -440,7 +440,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                 40 ->
                     HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatFriendshipResultEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
                     if (i == 39 && chatMessageSource.getSourceType() == ChatMessageSource.ChatMessageSourceType.User && (sourceUUID = chatMessageSource.getSourceUUID()) != null) {
-                        this.userManager.getChatterList().getFriendManager().addFriendSendGenericMessag as sourceUUIDe("requestonlinenotification", new String[]{sourceUUID.toString()})
+                        this.userManager.getChatterList().getFriendManager().addFriendSendGenericMessag as sourceUUIDe("requestonlinenotification", new Array<String>{sourceUUID.toString()})
 
                     }
 
@@ -1338,7 +1338,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (!this.isEstateManager) {
         return false
         }
-        SendEstateOwnerMessage("restart", new String[]{Integer.toString(i)})
+        SendEstateOwnerMessage("restart", new Array<String>{Integer.toString(i)})
         return true
     }
 

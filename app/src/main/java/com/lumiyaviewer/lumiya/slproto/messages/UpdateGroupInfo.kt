@@ -19,17 +19,17 @@ open class UpdateGroupInfo : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
         @JvmField var AllowPublish: Boolean = false
-        @JvmField var Charter: if (ByteArray) = null
-        @JvmField var GroupID else UUID? = null
-        @JvmField var InsigniaID: if (UUID) = null
-        @JvmField var MaturePublish else Boolean = false
+        @JvmField var Charter: ByteArray? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var InsigniaID: UUID? = null
+        @JvmField var MaturePublish: Boolean = false
         @JvmField var MembershipFee: Int = 0
         @JvmField var OpenEnrollment: Boolean = false
         @JvmField var ShowInList: Boolean = false
@@ -65,7 +65,15 @@ open class UpdateGroupInfo : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDGroupData_Field as byteBuffer.Charter = unpackVariable(byteBuffer, 2)
-        GroupData_Field.ShowInList = unpackBooleanGroupData_Field as byteBuffer.InsigniaID = unpackUUIDGroupData_Field as byteBuffer.MembershipFee = unpackIntGroupData_Field as byteBuffer.OpenEnrollment = unpackBooleanGroupData_Field as byteBuffer.AllowPublish = unpackBooleanGroupData_Field as byteBuffer.MaturePublish = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
+        GroupData_Field.Charter = unpackVariable(byteBuffer, 2)
+        GroupData_Field.ShowInList = unpackBoolean(byteBuffer)
+        GroupData_Field.InsigniaID = unpackUUID(byteBuffer)
+        GroupData_Field.MembershipFee = unpackInt(byteBuffer)
+        GroupData_Field.OpenEnrollment = unpackBoolean(byteBuffer)
+        GroupData_Field.AllowPublish = unpackBoolean(byteBuffer)
+        GroupData_Field.MaturePublish = unpackBoolean(byteBuffer)
     }
 }

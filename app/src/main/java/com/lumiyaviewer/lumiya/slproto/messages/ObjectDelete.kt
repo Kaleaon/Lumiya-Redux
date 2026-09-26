@@ -18,14 +18,14 @@ open class ObjectDelete : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var Force else Boolean = false
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var Force: Boolean = false
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        @JvmField var ObjectLocalID else Int = 0
+        @JvmField var ObjectLocalID: Int = 0
     }
 
     init {
@@ -55,11 +55,14 @@ open class ObjectDelete : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.Force = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.Force = unpackBoolean(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val objectData = ObjectData()
-            objectData.ObjectLocalID = unpackIntObjectData_Fields as byteBuffer.add(objectData)
+            objectData.ObjectLocalID = unpackInt(byteBuffer)
+            ObjectData_Fields.add(objectData)
         }
     }
 }

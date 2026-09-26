@@ -170,7 +170,7 @@ open class SLHTTPSConnection {
     private fun getSocketFactory(): SSLSocketFactory {
         try {
             var sslContext: SSLContext = SSLContext.getInstance("TLS")
-            sslContext.init(null, new TrustManager[]{trustManager}, null)
+            sslContext.init(null, new Array<TrustManager>{trustManager}, null)
             return sslContext.getSocketFactory()
         } catch (e: Exception) {
             // No fallback to an unverified factory: fail loudly instead.

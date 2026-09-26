@@ -8,7 +8,7 @@ open class VertexData {
     public LLVector4 Position
     public LLVector2 TexCoord
 
-    public static VertexData LerpPlanarVertex(VertexData vertexData, VertexData vertexData2, VertexData vertexData3, float f, float f2) {
+    VertexData LerpPlanarVertex(VertexData vertexData, VertexData vertexData2, VertexData vertexData3, float f, float f2) {
         LLVector4 sub = LLVector4.sub(vertexData2.Position, vertexData.Position)
         sub.mul(f)
         LLVector4 vector4 = LLVector4.sub(vertexData3.Position, vertexData.Position)

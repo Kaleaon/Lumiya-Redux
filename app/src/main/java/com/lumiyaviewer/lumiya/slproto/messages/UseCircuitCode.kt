@@ -23,8 +23,8 @@ open class UseCircuitCode : SLMessage() {
     /** Block CircuitCode, Single. */
     open class CircuitCode {
         @JvmField var Code: Int = 0
-        @JvmField var ID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var ID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     init {
@@ -50,6 +50,8 @@ open class UseCircuitCode : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        CircuitCode_Field.Code = unpackIntCircuitCode_Field as byteBuffer.SessionID = unpackUUIDCircuitCode_Field as byteBuffer.ID = unpackUUID(byteBuffer)
+        CircuitCode_Field.Code = unpackInt(byteBuffer)
+        CircuitCode_Field.SessionID = unpackUUID(byteBuffer)
+        CircuitCode_Field.ID = unpackUUID(byteBuffer)
     }
 }

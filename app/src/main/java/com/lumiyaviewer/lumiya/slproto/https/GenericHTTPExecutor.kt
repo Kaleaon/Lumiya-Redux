@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 open class GenericHTTPExecutor : ThreadPoolExecutor() {
 
     private open class InstanceHolder {
-        private static GenericHTTPExecutor instance = GenericHTTPExecutor(null)
+        private GenericHTTPExecutor instance = GenericHTTPExecutor(null)
 
         fun InstanceHolder(): private {
         }

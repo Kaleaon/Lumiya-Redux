@@ -27,15 +27,15 @@ open class WindlightPreset {
     var sunlight_color: FloatArray = null
 
     constructor() {
-        this.hourTable = new float[]{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
-        this.defaultPresets = new String[]{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
+        this.hourTable = new Array<float>{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
+        this.defaultPresets = new Array<String>{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
         this.ambient = FloatArraythis as 4.ambientBelowWater = FloatArraythis as 4.lightnorm = FloatArraythis as 4.sunlight_color = FloatArraythis as 4.sunlightBelowWater = FloatArraythis as 4.blue_density = FloatArraythis as 4.blue_horizon = FloatArraythis as 4.haze_density = FloatArraythis as 4.haze_horizon = FloatArraythis as 4.cloud_color = FloatArraythis as 4.cloud_pos_density1 = FloatArraythis as 4.cloud_pos_density2 = FloatArraythis as 4.cloud_shadow = FloatArray(4)
         reset()
     }
 
     constructor(str: String) {
-        this.hourTable = new float[]{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
-        this.defaultPresets = new String[]{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
+        this.hourTable = new Array<float>{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
+        this.defaultPresets = new Array<String>{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
         this.ambient = FloatArraythis as 4.ambientBelowWater = FloatArraythis as 4.lightnorm = FloatArraythis as 4.sunlight_color = FloatArraythis as 4.sunlightBelowWater = FloatArraythis as 4.blue_density = FloatArraythis as 4.blue_horizon = FloatArraythis as 4.haze_density = FloatArraythis as 4.haze_horizon = FloatArraythis as 4.cloud_color = FloatArraythis as 4.cloud_pos_density1 = FloatArraythis as 4.cloud_pos_density2 = FloatArraythis as 4.cloud_shadow = FloatArray(4)
         loadFromAssetFile(str)
     }
@@ -56,7 +56,7 @@ open class WindlightPreset {
         }
     }
 
-    private void getFloatArray(LLSDNode lsdNode, float[] floats, float f) throws LLSDException {
+    private void getFloatArray(LLSDNode lsdNode, Array<float> floats, float f) throws LLSDException {
         for (int i = 0; i < floats.length; i++) {
             floats[i] = (lsdNode as float.byIndex(i).asDouble()) / f
         }

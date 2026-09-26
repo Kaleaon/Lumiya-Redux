@@ -18,14 +18,14 @@ open class RemoveParcel : SLMessage() {
 
     /** Block ParcelData, Variable. */
     open class ParcelData {
-        @JvmField var ParcelID: if (UUID) = null
+        @JvmField var ParcelID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (ParcelData_Fields.size * 16) + 5
     }
 
@@ -48,7 +48,8 @@ open class RemoveParcel : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val parcelData = ParcelData()
-            parcelData.ParcelID = unpackUUIDParcelData_Fields as byteBuffer.add(parcelData)
+            parcelData.ParcelID = unpackUUID(byteBuffer)
+            ParcelData_Fields.add(parcelData)
         }
     }
 }

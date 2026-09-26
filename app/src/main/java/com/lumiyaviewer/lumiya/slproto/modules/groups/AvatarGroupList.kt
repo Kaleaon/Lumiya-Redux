@@ -13,18 +13,18 @@ import java.util.UUID
 open class AvatarGroupList : Serializable {
     public ImmutableMap<UUID, AvatarGroupEntry> Groups
     public UUID avatarID
-    public boolean newGroupDataValid
+    public var newGroupDataValid: Boolean
 
     open class AvatarGroupEntry : Serializable {
-        public boolean AcceptNotices
-        public int Contribution
+        public var AcceptNotices: Boolean
+        public var Contribution: Int
         public UUID GroupID
         public UUID GroupInsigniaID
-        public String GroupName
-        public long GroupPowers
+        public var GroupName: String
+        public var GroupPowers: Long
 
-        public String GroupTitle
-        public boolean ListInProfile
+        public var GroupTitle: String
+        public var ListInProfile: Boolean
 
         public AvatarGroupEntry(AgentGroupDataUpdate.GroupData groupData) {
             this.GroupName = SLMessage.stringFromVariableOEM(groupData.GroupName)

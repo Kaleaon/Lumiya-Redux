@@ -136,7 +136,7 @@ open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
     private open class FolderDataContentHandler : LLSDStreamingParser.LLSDDefaultContentHandler() {
         private DatabaseCommitThread commitThread
         private UUID gotUUID
-        private int gotVersion
+        private var gotVersion: Int
 
         fun FolderDataContentHandler(databaseCommitThread: DatabaseCommitThread): private {
             this.commitThread = databaseCommitThread
@@ -257,7 +257,7 @@ open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
         parent_id,
         preferred_type
 
-        private static Map<String, FolderValueKey> tagMap = HashMap(valuesCustom().length * 2)
+        private Map<String, FolderValueKey> tagMap = HashMap(valuesCustom().length * 2)
     init {
             for (folderValueKey in valuesCustom()) {
                 tagMap.put(folderValueKey.toString(), folderValueKey)
@@ -430,7 +430,7 @@ open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
         created_at,
         asset_id
 
-        private static Map<String, ItemValueKey> tagMap = HashMap(valuesCustom().length * 2)
+        private Map<String, ItemValueKey> tagMap = HashMap(valuesCustom().length * 2)
     init {
             for (itemValueKey in valuesCustom()) {
                 tagMap.put(itemValueKey.toString(), itemValueKey)
@@ -459,7 +459,7 @@ open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
         group_mask,
         everyone_mask
 
-        private static Map<String, PermissionsValueKey> tagMap = HashMap(valuesCustom().length * 2)
+        private Map<String, PermissionsValueKey> tagMap = HashMap(valuesCustom().length * 2)
     init {
             for (permissionsValueKey in valuesCustom()) {
                 tagMap.put(permissionsValueKey.toString(), permissionsValueKey)

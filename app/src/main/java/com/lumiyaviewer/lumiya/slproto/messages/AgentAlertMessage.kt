@@ -19,12 +19,12 @@ open class AgentAlertMessage : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block AlertData, Single. */
     open class AlertData {
-        @JvmField var Message else ByteArray? = null
+        @JvmField var Message: ByteArray? = null
         @JvmField var Modal: Boolean = false
     }
 
@@ -51,6 +51,8 @@ open class AgentAlertMessage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAlertData_Field as byteBuffer.Modal = unpackBooleanAlertData_Field as byteBuffer.Message = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AlertData_Field.Modal = unpackBoolean(byteBuffer)
+        AlertData_Field.Message = unpackVariable(byteBuffer, 1)
     }
 }

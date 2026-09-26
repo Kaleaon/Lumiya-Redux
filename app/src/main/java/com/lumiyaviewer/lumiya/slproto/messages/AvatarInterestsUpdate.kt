@@ -18,24 +18,24 @@ open class AvatarInterestsUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block PropertiesData, Single. */
     open class PropertiesData {
-        @JvmField var LanguagesText: if (ByteArray) = null
-        @JvmField var SkillsMask else Int = 0
-        @JvmField var SkillsText: if (ByteArray) = null
-        @JvmField var WantToMask else Int = 0
-        @JvmField var WantToText: if (ByteArray) = null
+        @JvmField var LanguagesText: ByteArray? = null
+        @JvmField var SkillsMask: Int = 0
+        @JvmField var SkillsText: ByteArray? = null
+        @JvmField var WantToMask: Int = 0
+        @JvmField var WantToText: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return PropertiesData_Field.WantToText!!.size + 5 + 4 + 1 + PropertiesData_Field.SkillsText!!.size + 1 + PropertiesData_Field.LanguagesText!!.size + 36
     }
 
@@ -58,8 +58,12 @@ open class AvatarInterestsUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDPropertiesData_Field as byteBuffer.WantToMask = unpackIntPropertiesData_Field as byteBuffer.WantToText = unpackVariable(byteBuffer, 1)
-        PropertiesData_Field.SkillsMask = unpackIntPropertiesData_Field as byteBuffer.SkillsText = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        PropertiesData_Field.WantToMask = unpackInt(byteBuffer)
+        PropertiesData_Field.WantToText = unpackVariable(byteBuffer, 1)
+        PropertiesData_Field.SkillsMask = unpackInt(byteBuffer)
+        PropertiesData_Field.SkillsText = unpackVariable(byteBuffer, 1)
         PropertiesData_Field.LanguagesText = unpackVariable(byteBuffer, 1)
     }
 }

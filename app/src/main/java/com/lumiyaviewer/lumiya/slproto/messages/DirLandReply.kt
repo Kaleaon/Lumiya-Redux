@@ -22,12 +22,12 @@ open class DirLandReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID else UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
@@ -35,8 +35,8 @@ open class DirLandReply : SLMessage() {
         @JvmField var ActualArea: Int = 0
         @JvmField var Auction: Boolean = false
         @JvmField var ForSale: Boolean = false
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var ParcelID else UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var ParcelID: UUID? = null
         @JvmField var SalePrice: Int = 0
     }
 
@@ -79,12 +79,18 @@ open class DirLandReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.ParcelID = unpackUUIDqueryReplies as byteBuffer.Name = unpackVariable(byteBuffer, 1)
-            queryReplies.Auction = unpackBooleanqueryReplies as byteBuffer.ForSale = unpackBooleanqueryReplies as byteBuffer.SalePrice = unpackIntqueryReplies as byteBuffer.ActualArea = unpackIntQueryReplies_Fields as byteBuffer.add(queryReplies)
+            queryReplies.ParcelID = unpackUUID(byteBuffer)
+            queryReplies.Name = unpackVariable(byteBuffer, 1)
+            queryReplies.Auction = unpackBoolean(byteBuffer)
+            queryReplies.ForSale = unpackBoolean(byteBuffer)
+            queryReplies.SalePrice = unpackInt(byteBuffer)
+            queryReplies.ActualArea = unpackInt(byteBuffer)
+            QueryReplies_Fields.add(queryReplies)
         }
     }
 }

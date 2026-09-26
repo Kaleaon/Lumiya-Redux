@@ -19,8 +19,8 @@ open class ScriptDataRequest : SLMessage() {
     /** Block DataBlock, Variable. */
     open class DataBlock {
         @JvmField var Hash: Long = 0L
-        @JvmField var Request: if (ByteArray) = null
-        @JvmField var RequestType else Int = 0
+        @JvmField var Request: ByteArray? = null
+        @JvmField var RequestType: Int = 0
     }
 
     init {
@@ -60,7 +60,8 @@ open class ScriptDataRequest : SLMessage() {
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val dataBlock = DataBlock()
-            dataBlock.Hash = unpackLongdataBlock as byteBuffer.RequestType = unpackByte(byteBuffer).toInt()
+            dataBlock.Hash = unpackLong(byteBuffer)
+            dataBlock.RequestType = unpackByte(byteBuffer).toInt()
             dataBlock.Request = unpackVariable(byteBuffer, 2)
             DataBlock_Fields.add(dataBlock)
         }

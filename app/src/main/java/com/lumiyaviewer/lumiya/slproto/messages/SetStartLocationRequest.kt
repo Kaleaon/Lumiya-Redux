@@ -20,23 +20,23 @@ open class SetStartLocationRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block StartLocationData, Single. */
     open class StartLocationData {
         @JvmField var LocationID: Int = 0
-        @JvmField var LocationLookAt: if (LLVector3) = null
-        @JvmField var LocationPos else LLVector3? = null
-        @JvmField var SimName: if (ByteArray) = null
+        @JvmField var LocationLookAt: LLVector3? = null
+        @JvmField var LocationPos: LLVector3? = null
+        @JvmField var SimName: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return StartLocationData_Field.SimName!!.size + 1 + 4 + 12 + 12 + 36
     }
 
@@ -58,7 +58,11 @@ open class SetStartLocationRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDStartLocationData_Field as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
-        StartLocationData_Field.LocationID = unpackIntStartLocationData_Field as byteBuffer.LocationPos = unpackLLVector3StartLocationData_Field as byteBuffer.LocationLookAt = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        StartLocationData_Field.SimName = unpackVariable(byteBuffer, 1)
+        StartLocationData_Field.LocationID = unpackInt(byteBuffer)
+        StartLocationData_Field.LocationPos = unpackLLVector3(byteBuffer)
+        StartLocationData_Field.LocationLookAt = unpackLLVector3(byteBuffer)
     }
 }

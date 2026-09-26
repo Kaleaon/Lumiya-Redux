@@ -18,13 +18,13 @@ open class ObjectFlagUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var CastsShadows else Boolean = false
+        @JvmField var AgentID: UUID? = null
+        @JvmField var CastsShadows: Boolean = false
         @JvmField var IsPhantom: Boolean = false
         @JvmField var IsTemporary: Boolean = false
         @JvmField var ObjectLocalID: Int = 0
-        @JvmField var SessionID: if (UUID) = null
-        @JvmField var UsePhysics else Boolean = false
+        @JvmField var SessionID: UUID? = null
+        @JvmField var UsePhysics: Boolean = false
     }
 
     /** Block ExtraPhysics, Variable. */
@@ -71,12 +71,22 @@ open class ObjectFlagUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.ObjectLocalID = unpackIntAgentData_Field as byteBuffer.UsePhysics = unpackBooleanAgentData_Field as byteBuffer.IsTemporary = unpackBooleanAgentData_Field as byteBuffer.IsPhantom = unpackBooleanAgentData_Field as byteBuffer.CastsShadows = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.ObjectLocalID = unpackInt(byteBuffer)
+        AgentData_Field.UsePhysics = unpackBoolean(byteBuffer)
+        AgentData_Field.IsTemporary = unpackBoolean(byteBuffer)
+        AgentData_Field.IsPhantom = unpackBoolean(byteBuffer)
+        AgentData_Field.CastsShadows = unpackBoolean(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val extraPhysics = ExtraPhysics()
             extraPhysics.PhysicsShapeType = unpackByte(byteBuffer).toInt() and 0xFF
-            extraPhysics.Density = unpackFloatextraPhysics as byteBuffer.Friction = unpackFloatextraPhysics as byteBuffer.Restitution = unpackFloatextraPhysics as byteBuffer.GravityMultiplier = unpackFloatExtraPhysics_Fields as byteBuffer.add(extraPhysics)
+            extraPhysics.Density = unpackFloat(byteBuffer)
+            extraPhysics.Friction = unpackFloat(byteBuffer)
+            extraPhysics.Restitution = unpackFloat(byteBuffer)
+            extraPhysics.GravityMultiplier = unpackFloat(byteBuffer)
+            ExtraPhysics_Fields.add(extraPhysics)
         }
     }
 }

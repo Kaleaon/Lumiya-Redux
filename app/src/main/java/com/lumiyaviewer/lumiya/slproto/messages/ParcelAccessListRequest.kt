@@ -17,8 +17,8 @@ open class ParcelAccessListRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
@@ -53,6 +53,10 @@ open class ParcelAccessListRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.SequenceID = unpackIntData_Field as byteBuffer.Flags = unpackIntData_Field as byteBuffer.LocalID = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.SequenceID = unpackInt(byteBuffer)
+        Data_Field.Flags = unpackInt(byteBuffer)
+        Data_Field.LocalID = unpackInt(byteBuffer)
     }
 }

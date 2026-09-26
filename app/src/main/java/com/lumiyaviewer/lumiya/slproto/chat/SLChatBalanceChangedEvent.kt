@@ -35,8 +35,14 @@ open class SLChatBalanceChangedEvent : SLChatEvent() {
         if (!this.transactionAmountValid) {
             return context.getString(R.string.your_account_balance_is_now, this.newBalance)
         }
-        var sourceName: String = this.source.getSourceName(userManager)
-        return sourceName != null if (this.transactionAmount >= 0) context.getString(R.string.you_were_paid_by_agent, this.transactionAmount, getNewBalance()) else context.getString(R.string.you_have_paid_to_agent, -this.transactionAmount, sourceName, getNewBalance()) else if (this.transactionAmount >= 0) context.getString(R.string.you_were_paid, this.transactionAmount, this.newBalance) else context.getString(R.string.you_have_paid, -this.transactionAmount, this.newBalance)
+        val sourceName: String? = this.source.getSourceName(userManager)
+        return if (sourceName != null) {
+            if (this.transactionAmount >= 0) context.getString(R.string.you_were_paid_by_agent, this.transactionAmount, getNewBalance())
+            else context.getString(R.string.you_have_paid_to_agent, -this.transactionAmount, sourceName, getNewBalance())
+        } else {
+            if (this.transactionAmount >= 0) context.getString(R.string.you_were_paid, this.transactionAmount, this.newBalance)
+            else context.getString(R.string.you_have_paid, -this.transactionAmount, this.newBalance)
+        }
     }
 
     fun getTransactionAmount(): Int {
@@ -56,7 +62,7 @@ open class SLChatBalanceChangedEvent : SLChatEvent() {
         return false
     }
     fun serializeToDatabaseObject(chatMessage: ChatMessage) {
-        super.serializeToDatabaseObjectchatMessag(e)
+        super.serializeToDatabaseObject(chatMessage)
         chatMessage.setTransactionAmount(if (this.transactionAmountValid) this.transactionAmount else null)
         chatMessage.setNewBalance(this.newBalance)
     }

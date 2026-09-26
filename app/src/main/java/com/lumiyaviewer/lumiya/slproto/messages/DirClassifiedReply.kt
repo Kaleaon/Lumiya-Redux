@@ -22,22 +22,22 @@ open class DirClassifiedReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID else UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
     open class QueryReplies {
         @JvmField var ClassifiedFlags: Int = 0
-        @JvmField var ClassifiedID: if (UUID) = null
-        @JvmField var CreationDate else Int = 0
+        @JvmField var ClassifiedID: UUID? = null
+        @JvmField var CreationDate: Int = 0
         @JvmField var ExpirationDate: Int = 0
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var PriceForListing else Int = 0
+        @JvmField var Name: ByteArray? = null
+        @JvmField var PriceForListing: Int = 0
     }
 
     /** Block StatusData, Variable. */
@@ -88,18 +88,24 @@ open class DirClassifiedReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.ClassifiedID = unpackUUIDqueryReplies as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+            queryReplies.ClassifiedID = unpackUUID(byteBuffer)
+            queryReplies.Name = unpackVariable(byteBuffer, 1)
             queryReplies.ClassifiedFlags = unpackByte(byteBuffer).toInt() and 0xFF
-            queryReplies.CreationDate = unpackIntqueryReplies as byteBuffer.ExpirationDate = unpackIntqueryReplies as byteBuffer.PriceForListing = unpackIntQueryReplies_Fields as byteBuffer.add(queryReplies)
+            queryReplies.CreationDate = unpackInt(byteBuffer)
+            queryReplies.ExpirationDate = unpackInt(byteBuffer)
+            queryReplies.PriceForListing = unpackInt(byteBuffer)
+            QueryReplies_Fields.add(queryReplies)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val statusData = StatusData()
-            statusData.Status = unpackIntStatusData_Fields as byteBuffer.add(statusData)
+            statusData.Status = unpackInt(byteBuffer)
+            StatusData_Fields.add(statusData)
         }
     }
 }

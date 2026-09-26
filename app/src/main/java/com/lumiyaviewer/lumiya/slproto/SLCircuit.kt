@@ -30,14 +30,14 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 
 open class SLCircuit : SLMessageHandler() {
-   private static int DEFAULT_IDLE_INTERVAL = 1000
-   private static int FAST_IDLE_INTERVAL = 100
-   private static int MESSAGE_MAX_RETRIES = 3
-   private static int MESSAGE_TIMEOUT_MILLIS = 5000
-   private static long NEED_PING_TIMEOUT = 10000L
-   private static long PING_INTERVAL = 5000L
-   private static int TRACK_HANDLED_PACKETS = 1024
-   private static int UNANSWERED_PINGS = 3
+   private int DEFAULT_IDLE_INTERVAL = 1000
+   private int FAST_IDLE_INTERVAL = 100
+   private int MESSAGE_MAX_RETRIES = 3
+   private int MESSAGE_TIMEOUT_MILLIS = 5000
+   private long NEED_PING_TIMEOUT = 10000L
+   private long PING_INTERVAL = 5000L
+   private int TRACK_HANDLED_PACKETS = 1024
+   private int UNANSWERED_PINGS = 3
    SLAuthReply authReply
    public SLCircuitInfo circuitInfo
    private DatagramChannel datagramChannel
@@ -45,21 +45,21 @@ open class SLCircuit : SLMessageHandler() {
    protected SLGridConnection gridConn
    private Queue<Integer> handledPackets
    private List<SLIdleHandler> idleHandlers
-   private byte lastPingID
-   private long lastPingSent
-   private long lastReceivedPacketMillis = 0L
-   private int lastReceivedSeqnum
+   private var lastPingID: Byte
+   private var lastPingSent: Long
+   private var lastReceivedPacketMillis: Long = 0L
+   private var lastReceivedSeqnum: Int
    private AtomicInteger lastSeqNum
    private SLMessageRouter messageRouter
    private ConcurrentLinkedQueue<SLMessage> outgoingQueue
    private List<Integer> pendingAcks
-   private int pingSentCount
+   private var pingSentCount: Int
    private List<Integer> receivedAcks
    private ByteBuffer rxBuffer
    private SelectionKey selectionKey
    Selector selector
    private ByteBuffer tempBuffer
-   private boolean timedOut
+   private var timedOut: Boolean
    private ByteBuffer txBuffer
    private ConcurrentLinkedQueue<SLMessage> unackedQueue
 
@@ -197,7 +197,7 @@ open class SLCircuit : SLMessageHandler() {
    fun ProcessNetworkError() {
    }
 
-   public boolean ProcessReceive() throws IOException {
+   public var ProcessReceive: Boolean() throws IOException {
       ((Buffer)this.rxBuffer).clear()
       this.rxBuffer.orderi as ByteOrder.BIG_ENDIANf (this.datagramChannel.read(this.rxBuffer) == 0) {
         return false
@@ -305,7 +305,7 @@ open class SLCircuit : SLMessageHandler() {
    fun ProcessTimeout() {
    }
 
-   public boolean ProcessTransmit() throws IOException {
+   public var ProcessTransmit: Boolean() throws IOException {
       SLMessage message = this.outgoingQueue.peek()
       if (message != null) {
          message.Pack(this.txBuffer, this.tempBuffer)

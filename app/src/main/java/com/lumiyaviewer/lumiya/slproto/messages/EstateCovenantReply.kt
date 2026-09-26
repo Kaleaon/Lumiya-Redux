@@ -19,10 +19,10 @@ open class EstateCovenantReply : SLMessage() {
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var CovenantID: if (UUID) = null
-        @JvmField var CovenantTimestamp else Int = 0
-        @JvmField var EstateName: if (ByteArray) = null
-        @JvmField var EstateOwnerID else UUID? = null
+        @JvmField var CovenantID: UUID? = null
+        @JvmField var CovenantTimestamp: Int = 0
+        @JvmField var EstateName: ByteArray? = null
+        @JvmField var EstateOwnerID: UUID? = null
     }
 
     init {
@@ -49,7 +49,9 @@ open class EstateCovenantReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.CovenantID = unpackUUIDData_Field as byteBuffer.CovenantTimestamp = unpackIntData_Field as byteBuffer.EstateName = unpackVariable(byteBuffer, 1)
+        Data_Field.CovenantID = unpackUUID(byteBuffer)
+        Data_Field.CovenantTimestamp = unpackInt(byteBuffer)
+        Data_Field.EstateName = unpackVariable(byteBuffer, 1)
         Data_Field.EstateOwnerID = unpackUUID(byteBuffer)
     }
 }

@@ -34,8 +34,8 @@ open class SLAuth {
     }
 
     private open class LoginRequestField {
-        public String name
-        public String value
+        public var name: String
+        public var value: String
 
         fun LoginRequestField(name: String, value: String): private {
             this.name = name
@@ -226,7 +226,7 @@ open class SLAuth {
      * (SL-17034): codes are often pasted as "123 456".
      */
     fun normalizeMfaToken(token: String): String {
-        var token: return = = if (null) "" else token.replaceAll("\\s", "")
+        return token ?: "".replaceAll("\\s", "")
     }
 
     public SLAuthReply Login(SLAuthParams authParams) throws IOException {
@@ -259,7 +259,7 @@ open class SLAuth {
 
     /** The login server's certificate did not verify (TlsPolicy). */
     open class CertificateVerificationException : IOException() {
-        private static long serialVersionUID = 1L
+        private long serialVersionUID = 1L
 
         CertificateVerificationException(Throwable cause) {
             super("The login server's security certificate could not be verified. The connection may be intercepted. "

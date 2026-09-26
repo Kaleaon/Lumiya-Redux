@@ -1,9 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.llsd
 
-import java.util.HashMap
-import java.util.Map
-
-enum class LLSDNodeType {
+enum class LLSDNodeType(val tagName: String) {
     llsdRoot("llsd"),
     llsdUndef("undef"),
     llsdBoolean("boolean"),
@@ -16,26 +13,20 @@ enum class LLSDNodeType {
     llsdBinary("binary"),
     llsdArray("array"),
     llsdMap("map"),
-    llsdKey("key")
+    llsdKey("key");
 
-    private static Map<String, LLSDNodeType> tagMap = HashMap(valuesCustom().length * 2)
-    private String tagName
-    init {
-        for (lLSDNodeType in valuesCustom()) {
-            tagMap.put(lLSDNodeType.tagName, lLSDNodeType)
+    companion object {
+        private val tagMap: Map<String, LLSDNodeType> = values().associateBy { it.tagName }
+
+        @JvmStatic
+        fun byTag(str: String): LLSDNodeType? {
+            return tagMap[str]
         }
-    }
 
-    LLSDNodeType(String tagName) {
-        this.tagName = tagName
-    }
-
-    public static LLSDNodeType byTag(String str) {
-        return tagMap.get(str)
-    }
-
-    /* renamed from: values, reason: to resolve conflict with enum method */
-    public static LLSDNodeType[] valuesCustom() {
-        return values()
+        /* renamed from: values, reason: to resolve conflict with enum method */
+        @JvmStatic
+        fun valuesCustom(): Array<LLSDNodeType> {
+            return values()
+        }
     }
 }

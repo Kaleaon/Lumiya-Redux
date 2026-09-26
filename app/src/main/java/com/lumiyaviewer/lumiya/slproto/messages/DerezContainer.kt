@@ -19,14 +19,14 @@ open class DerezContainer : SLMessage() {
     /** Block Data, Single. */
     open class Data {
         @JvmField var Delete: Boolean = false
-        @JvmField var ObjectID: if (UUID) = null
+        @JvmField var ObjectID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 21
     }
 
@@ -44,6 +44,7 @@ open class DerezContainer : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Data_Field.ObjectID = unpackUUIDData_Field as byteBuffer.Delete = unpackBoolean(byteBuffer)
+        Data_Field.ObjectID = unpackUUID(byteBuffer)
+        Data_Field.Delete = unpackBoolean(byteBuffer)
     }
 }

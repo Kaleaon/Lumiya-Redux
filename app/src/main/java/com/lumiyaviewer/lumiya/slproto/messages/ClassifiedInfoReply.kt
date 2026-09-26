@@ -22,26 +22,26 @@ open class ClassifiedInfoReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
-        @JvmField var Category else Int = 0
+        @JvmField var Category: Int = 0
         @JvmField var ClassifiedFlags: Int = 0
-        @JvmField var ClassifiedID: if (UUID) = null
-        @JvmField var CreationDate else Int = 0
-        @JvmField var CreatorID: if (UUID) = null
-        @JvmField var Desc else ByteArray? = null
+        @JvmField var ClassifiedID: UUID? = null
+        @JvmField var CreationDate: Int = 0
+        @JvmField var CreatorID: UUID? = null
+        @JvmField var Desc: ByteArray? = null
         @JvmField var ExpirationDate: Int = 0
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var ParcelID else UUID? = null
-        @JvmField var ParcelName: if (ByteArray) = null
-        @JvmField var ParentEstate else Int = 0
-        @JvmField var PosGlobal: if (LLVector3d) = null
-        @JvmField var PriceForListing else Int = 0
-        @JvmField var SimName: if (ByteArray) = null
-        @JvmField var SnapshotID else UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var ParcelID: UUID? = null
+        @JvmField var ParcelName: ByteArray? = null
+        @JvmField var ParentEstate: Int = 0
+        @JvmField var PosGlobal: LLVector3d? = null
+        @JvmField var PriceForListing: Int = 0
+        @JvmField var SimName: ByteArray? = null
+        @JvmField var SnapshotID: UUID? = null
     }
 
     init {
@@ -80,10 +80,20 @@ open class ClassifiedInfoReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDData_Field as byteBuffer.ClassifiedID = unpackUUIDData_Field as byteBuffer.CreatorID = unpackUUIDData_Field as byteBuffer.CreationDate = unpackIntData_Field as byteBuffer.ExpirationDate = unpackIntData_Field as byteBuffer.Category = unpackIntData_Field as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        Data_Field.ClassifiedID = unpackUUID(byteBuffer)
+        Data_Field.CreatorID = unpackUUID(byteBuffer)
+        Data_Field.CreationDate = unpackInt(byteBuffer)
+        Data_Field.ExpirationDate = unpackInt(byteBuffer)
+        Data_Field.Category = unpackInt(byteBuffer)
+        Data_Field.Name = unpackVariable(byteBuffer, 1)
         Data_Field.Desc = unpackVariable(byteBuffer, 2)
-        Data_Field.ParcelID = unpackUUIDData_Field as byteBuffer.ParentEstate = unpackIntData_Field as byteBuffer.SnapshotID = unpackUUIDData_Field as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
-        Data_Field.PosGlobal = unpackLLVector3dData_Field as byteBuffer.ParcelName = unpackVariable(byteBuffer, 1)
+        Data_Field.ParcelID = unpackUUID(byteBuffer)
+        Data_Field.ParentEstate = unpackInt(byteBuffer)
+        Data_Field.SnapshotID = unpackUUID(byteBuffer)
+        Data_Field.SimName = unpackVariable(byteBuffer, 1)
+        Data_Field.PosGlobal = unpackLLVector3d(byteBuffer)
+        Data_Field.ParcelName = unpackVariable(byteBuffer, 1)
         Data_Field.ClassifiedFlags = unpackByte(byteBuffer).toInt() and 0xFF
         Data_Field.PriceForListing = unpackInt(byteBuffer)
     }

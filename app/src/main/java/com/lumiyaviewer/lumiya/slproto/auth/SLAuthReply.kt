@@ -41,8 +41,8 @@ class SLAuthReply {
     @JvmStatic var REASON_MFA_CHALLENGE: String = "mfa_challenge"
 
     open class Friend {
-        public int rightsGiven
-        public int rightsHas
+        public var rightsGiven: Int
+        public var rightsHas: Int
 
         public UUID uuid
 
@@ -196,7 +196,7 @@ class SLAuthReply {
         }
     }
 
-    private String getInnerText(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
+    private var getInnerText: String(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
         if (xmlPullParser.getEventType() != 4) {
             return ""
         }
@@ -235,7 +235,7 @@ class SLAuthReply {
         return uuid
     }
 
-    private String getSimpleValue(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
+    private var getSimpleValue: String(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
         while (xmlPullParser.getEventType() == 4) {
             xmlPullParser.next()
         }
@@ -306,7 +306,7 @@ class SLAuthReply {
         }
     }
 
-    private boolean skipUntilTag(XmlPullParser xmlPullParser, String str) throws XmlPullParserException, IOException {
+    private var skipUntilTag: Boolean(XmlPullParser xmlPullParser, String str) throws XmlPullParserException, IOException {
         while (xmlPullParser.getEventType() != 3 && xmlPullParser.getEventType() != 1) {
             if (xmlPullParser.getEventType() == 4) {
                 xmlPullParser.next()

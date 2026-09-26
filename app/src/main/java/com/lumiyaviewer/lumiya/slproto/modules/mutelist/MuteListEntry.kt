@@ -6,13 +6,13 @@ import javax.annotation.concurrent.Immutable
 
 @Immutable
 open class MuteListEntry {
-    public static int flagAll = 15
-    public static int flagObjectSounds = 8
-    public static int flagParticles = 4
-    public static int flagTextChat = 1
-    public static int flagVoiceChat = 2
-    public int flags
-    public String name
+    int flagAll = 15
+    int flagObjectSounds = 8
+    int flagParticles = 4
+    int flagTextChat = 1
+    int flagVoiceChat = 2
+    public var flags: Int
+    public var name: String
     public MuteType type
     public UUID uuid
 

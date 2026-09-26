@@ -109,7 +109,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
 
     fun find(sqLiteDatabase: SQLiteDatabase, uuid: UUID): SLInventoryEntry {
         try {
-            var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+            var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
             if (!query.moveToFirst()) {
                 query.close()
         return null
@@ -122,14 +122,14 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    public static SLInventoryEntry findOrCreate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
+    SLInventoryEntry findOrCreate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
         if (sqLiteDatabase == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "database is null")
         }
         if (uuid == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null")
         }
-        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
         if (query.moveToFirst()) {
             var inventoryEntry: SLInventoryEntry = SLInventoryEntryquery as query.close()
         return inventoryEntry
@@ -140,14 +140,14 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         return inventoryEntry2
     }
 
-    public static SLInventoryEntry findOrCreateForUpdate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
+    SLInventoryEntry findOrCreateForUpdate(SQLiteDatabase sqLiteDatabase, UUID uuid) throws DBObject.DatabaseBindingException {
         if (sqLiteDatabase == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "database is null")
         }
         if (uuid == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null")
         }
-        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, new String[]{"_id"}, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, new Array<String>{"_id"}, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
         if (!query.moveToFirst()) {
             query.close()
             var inventoryEntry: SLInventoryEntry = SLInventoryEntry()
@@ -202,7 +202,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    public static SQLiteStatement getInsertStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
+    SQLiteStatement getInsertStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
         if (sqLiteDatabase == null) {
             throw DBObject.DatabaseBindingException("Database is closed")
         }
@@ -218,7 +218,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    public static SQLiteStatement getUpdateStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
+    SQLiteStatement getUpdateStatement(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
         if (sqLiteDatabase == null) {
             throw DBObject.DatabaseBindingException("Database is closed")
         }
@@ -234,7 +234,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    private static void parsePermissions(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
+    private void parsePermissions(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
         simpleStringParser.expectToken("{", DELIM_EOL)
         while (true) {
             var nextToken: String = simpleStringParser.nextToken(DELIM_ANY)
@@ -265,7 +265,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    private static void parseSaleInfo(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
+    private void parseSaleInfo(SimpleStringParser simpleStringParser, SLInventoryEntry inventoryEntry) throws SimpleStringParser.StringParsingException {
         simpleStringParser.expectToken("{", DELIM_EOL)
         while (true) {
             var nextToken: String = simpleStringParser.nextToken(DELIM_ANY)
@@ -282,7 +282,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         }
     }
 
-    public static SLInventoryEntry parseString(SimpleStringParser simpleStringParser) throws SimpleStringParser.StringParsingException {
+    SLInventoryEntry parseString(SimpleStringParser simpleStringParser) throws SimpleStringParser.StringParsingException {
         var inventoryEntry: SLInventoryEntry = SLInventoryEntry()
         simpleStringParser.expectToken("{", DELIM_EOL)
         while (true) {
@@ -500,7 +500,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
     }
 
     public void updateOrInsert(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
-        super.updateOrInsert(sqLiteDatabase, "uuid_low = ? AND uuid_high = ?", new String[]{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())})
+        super.updateOrInsert(sqLiteDatabase, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())})
     }
     public void updateOrInsert(SQLiteStatement sqLiteStatement, SQLiteStatement sqLiteStatement2) throws DBObject.DatabaseBindingException {
         sqLiteStatement.bindLong(19, this.uuid.getMostSignificantBits())

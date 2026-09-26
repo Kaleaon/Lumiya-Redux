@@ -17,16 +17,16 @@ open class UpdateSimulator : SLMessage() {
     /** Block SimulatorInfo, Single. */
     open class SimulatorInfo {
         @JvmField var EstateID: Int = 0
-        @JvmField var RegionID: if (UUID) = null
-        @JvmField var SimAccess else Int = 0
-        @JvmField var SimName: if (ByteArray) = null
+        @JvmField var RegionID: UUID? = null
+        @JvmField var SimAccess: Int = 0
+        @JvmField var SimName: ByteArray? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return SimulatorInfo_Field.SimName!!.size + 17 + 4 + 1 + 4
     }
 
@@ -46,7 +46,9 @@ open class UpdateSimulator : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        SimulatorInfo_Field.RegionID = unpackUUIDSimulatorInfo_Field as byteBuffer.SimName = unpackVariable(byteBuffer, 1)
-        SimulatorInfo_Field.EstateID = unpackIntSimulatorInfo_Field as byteBuffer.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
+        SimulatorInfo_Field.RegionID = unpackUUID(byteBuffer)
+        SimulatorInfo_Field.SimName = unpackVariable(byteBuffer, 1)
+        SimulatorInfo_Field.EstateID = unpackInt(byteBuffer)
+        SimulatorInfo_Field.SimAccess = unpackByte(byteBuffer).toInt() and 0xFF
     }
 }

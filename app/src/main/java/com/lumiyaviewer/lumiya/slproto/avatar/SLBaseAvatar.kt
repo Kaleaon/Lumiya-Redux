@@ -12,14 +12,14 @@ open class SLBaseAvatar {
     private var meshes: MutableMap<MeshIndex, MeshEntry> = null
 
     private open class InstanceHolder {
-        private static SLBaseAvatar Instance = SLBaseAvatar(null)
+        private SLBaseAvatar Instance = SLBaseAvatar(null)
 
         fun InstanceHolder(): private {
         }
     }
 
     open class MeshEntry {
-        public String meshName
+        public var meshName: String
         public SLPolyMesh polyMesh
         public AvatarTextureFaceIndex textureFaceIndex
         public BakedTextureIndex textureIndex

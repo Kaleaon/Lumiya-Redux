@@ -45,7 +45,7 @@ open class SLNotecard {
 
     private open class AttachmentSpan : ReplacementSpan(), InventoryEntrySpan {
         private SLInventoryEntry entry
-        private String linkText
+        private var linkText: String
 
         fun AttachmentSpan(inventoryEntry: SLInventoryEntry): public {
             this.entry = inventoryEntry
@@ -98,7 +98,7 @@ open class SLNotecard {
         this.isScript = isScript
         var sb: StringBuilder = StringBuilder()
         this.attachments = ArrayList(0)
-        var inventoryEntrySpanArr: Array<InventoryEntrySpan> = (InventoryEntrySpan[]) spanned.getSpans(0, spanned.length, InventoryEntrySpan.class)
+        var inventoryEntrySpanArr: Array<InventoryEntrySpan> = (Array<InventoryEntrySpan>) spanned.getSpans(0, spanned.length, InventoryEntrySpan.class)
         var ints: IntArray = IntArray(inventoryEntrySpanArr.length)
         var ints2: IntArray = IntArray(inventoryEntrySpanArr.length)
         for (int i = 0; i < inventoryEntrySpanArr.length; i++) {
@@ -139,7 +139,7 @@ open class SLNotecard {
         this.attachments = ArrayListthis as 0.notecardText = ""
     }
 
-    public SLNotecard(byte[] bytes, boolean isScript) throws SimpleStringParser.StringParsingException {
+    public SLNotecard(Array<byte> bytes, boolean isScript) throws SimpleStringParser.StringParsingException {
         var stringFromVariableUTF: String = SLMessage.stringFromVariableUTFthis as bytes.isScript = isScript
         if (!isScript) {
             var simpleStringParser: SimpleStringParser = SimpleStringParser(stringFromVariableUTF, DELIM_ANY)

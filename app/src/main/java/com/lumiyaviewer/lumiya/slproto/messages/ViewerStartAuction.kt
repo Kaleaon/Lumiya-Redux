@@ -19,21 +19,21 @@ open class ViewerStartAuction : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ParcelData, Single. */
     open class ParcelData {
         @JvmField var LocalID: Int = 0
-        @JvmField var SnapshotID: if (UUID) = null
+        @JvmField var SnapshotID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 56
     }
 
@@ -53,6 +53,9 @@ open class ViewerStartAuction : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDParcelData_Field as byteBuffer.LocalID = unpackIntParcelData_Field as byteBuffer.SnapshotID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ParcelData_Field.LocalID = unpackInt(byteBuffer)
+        ParcelData_Field.SnapshotID = unpackUUID(byteBuffer)
     }
 }

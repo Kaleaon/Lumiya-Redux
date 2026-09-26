@@ -23,7 +23,7 @@ open class SLXfer {
     private var expectedPacketNum: Int = 0
 
     interface SLXferCompletionListener {
-        void onXferComplete(Object obj, String str, byte[] bytes)
+        void onXferComplete(Object obj, String str, Array<byte> bytes)
     }
 
     private open class XferListenerInvocation {

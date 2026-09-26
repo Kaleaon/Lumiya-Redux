@@ -4,7 +4,6 @@ import com.lumiyaviewer.lumiya.slproto.SLMessage
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3
 import java.nio.ByteBuffer
 import java.util.ArrayList
-import java.util.Iterator
 import java.util.UUID
 
 /**
@@ -21,120 +20,118 @@ import java.util.UUID
  * (secondlife/viewer @ c179f76c01).
  */
 open class ObjectUpdate : SLMessage() {
-    var ObjectData_Fields: ArrayList<ObjectData> = ArrayList<>()
-    var RegionData_Field: RegionData = null
+    @JvmField val ObjectData_Fields = ArrayList<ObjectData>()
+    @JvmField var RegionData_Field: RegionData = RegionData()
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        public int CRC; // U32 - TEMPORARY HACK FOR JAMES
-        public int ClickAction; // U8
-        public byte[] Data; // Variable 2
-        public byte[] ExtraParams; // Variable 1
-        public int Flags; // U8
-        public UUID FullID; // LLUUID
-        public float Gain; // F32
-        public int ID; // U32
-        public LLVector3 JointAxisOrAnchor; // LLVector3
-        public LLVector3 JointPivot; // LLVector3
-        public int JointType; // U8
-        public int Material; // U8
-        public byte[] MediaURL; // Variable 1 - URL for web page, movie, etc.
-        public byte[] NameValue; // Variable 2
-        public byte[] ObjectData; // Variable 1
-        public UUID OwnerID; // LLUUID - HACK object's owner id, only set if non-null sound, for muting
-        public int PCode; // U8
-        public byte[] PSBlock; // Variable 1
-        public int ParentID; // U32
-        public int PathBegin; // U16 - 0 to 1, quanta = 0.01
-        public int PathCurve; // U8
-        public int PathEnd; // U16 - 0 to 1, quanta = 0.01
-        public int PathRadiusOffset; // S8 - -1 to 1, quanta = 0.01
-        public int PathRevolutions; // U8 - 0 to 3, quanta = 0.015
-        public int PathScaleX; // U8 - 0 to 1, quanta = 0.01
-        public int PathScaleY; // U8 - 0 to 1, quanta = 0.01
-        public int PathShearX; // U8 - -.5 to .5, quanta = 0.01
-        public int PathShearY; // U8 - -.5 to .5, quanta = 0.01
-        public int PathSkew; // S8 - -1 to 1, quanta = 0.01
-        public int PathTaperX; // S8 - -1 to 1, quanta = 0.01
-        public int PathTaperY; // S8 - -1 to 1, quanta = 0.01
-        public int PathTwist; // S8 - -1 to 1, quanta = 0.01
-        public int PathTwistBegin; // S8 - -1 to 1, quanta = 0.01
-        public int ProfileBegin; // U16 - 0 to 1, quanta = 0.01
-        public int ProfileCurve; // U8
-        public int ProfileEnd; // U16 - 0 to 1, quanta = 0.01
-        public int ProfileHollow; // U16 - 0 to 1, quanta = 0.01
-        public float Radius; // F32 - cutoff radius
-        public LLVector3 Scale; // LLVector3
-        public UUID Sound; // LLUUID
-        public int State; // U8
-        public byte[] Text; // Variable 1 - llSetText() hovering text
-        public byte[] TextColor; // Fixed 4 - actually, a LLColor4U
-        public byte[] TextureAnim; // Variable 1
-        public byte[] TextureEntry; // Variable 2
-        public int UpdateFlags; // U32 - see object_flags.h
+        @JvmField var CRC: Int = 0 // U32 - TEMPORARY HACK FOR JAMES
+        @JvmField var ClickAction: Int = 0 // U8
+        @JvmField var Data: ByteArray? = null // Variable 2
+        @JvmField var ExtraParams: ByteArray? = null // Variable 1
+        @JvmField var Flags: Int = 0 // U8
+        @JvmField var FullID: UUID? = null // LLUUID
+        @JvmField var Gain: Float = 0f // F32
+        @JvmField var ID: Int = 0 // U32
+        @JvmField var JointAxisOrAnchor: LLVector3? = null // LLVector3
+        @JvmField var JointPivot: LLVector3? = null // LLVector3
+        @JvmField var JointType: Int = 0 // U8
+        @JvmField var Material: Int = 0 // U8
+        @JvmField var MediaURL: ByteArray? = null // Variable 1 - URL for web page, movie, etc.
+        @JvmField var NameValue: ByteArray? = null // Variable 2
+        @JvmField var ObjectData: ByteArray? = null // Variable 1
+        @JvmField var OwnerID: UUID? = null // LLUUID - HACK object's owner id, only set if non-null sound, for muting
+        @JvmField var PCode: Int = 0 // U8
+        @JvmField var PSBlock: ByteArray? = null // Variable 1
+        @JvmField var ParentID: Int = 0 // U32
+        @JvmField var PathBegin: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var PathCurve: Int = 0 // U8
+        @JvmField var PathEnd: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var PathRadiusOffset: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathRevolutions: Int = 0 // U8 - 0 to 3, quanta = 0.015
+        @JvmField var PathScaleX: Int = 0 // U8 - 0 to 1, quanta = 0.01
+        @JvmField var PathScaleY: Int = 0 // U8 - 0 to 1, quanta = 0.01
+        @JvmField var PathShearX: Int = 0 // U8 - -.5 to .5, quanta = 0.01
+        @JvmField var PathShearY: Int = 0 // U8 - -.5 to .5, quanta = 0.01
+        @JvmField var PathSkew: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTaperX: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTaperY: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTwist: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var PathTwistBegin: Int = 0 // S8 - -1 to 1, quanta = 0.01
+        @JvmField var ProfileBegin: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var ProfileCurve: Int = 0 // U8
+        @JvmField var ProfileEnd: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var ProfileHollow: Int = 0 // U16 - 0 to 1, quanta = 0.01
+        @JvmField var Radius: Float = 0f // F32 - cutoff radius
+        @JvmField var Scale: LLVector3? = null // LLVector3
+        @JvmField var Sound: UUID? = null // LLUUID
+        @JvmField var State: Int = 0 // U8
+        @JvmField var Text: ByteArray? = null // Variable 1 - llSetText() hovering text
+        @JvmField var TextColor: ByteArray? = null // Fixed 4 - actually, a LLColor4U
+        @JvmField var TextureAnim: ByteArray? = null // Variable 1
+        @JvmField var TextureEntry: ByteArray? = null // Variable 2
+        @JvmField var UpdateFlags: Int = 0 // U32 - see object_flags.h
     }
 
     /** Block RegionData, Single. */
     open class RegionData {
-        public long RegionHandle; // U64
-        public int TimeDilation; // U16
+        @JvmField var RegionHandle: Long = 0L // U64
+        @JvmField var TimeDilation: Int = 0 // U16
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
         this.RegionData_Field = RegionData()
     }
-    fun CalcPayloadSize(): Int {
-        var i: Int = 12
-        var it: Iterator<?> = this.ObjectData_Fields.iterator()
-        while (true) {
-            var i2: Int = i
-            if (!it.hasNext()) {
-        return i2
-            }
-            var objectData: ObjectData = it as ObjectData.next()
-            i = objectData.ExtraParams.length + objectData.ObjectData.length + 41 + 4 + 4 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 2 + 2 + 2 + objectData.TextureEntry.length + 1 + objectData.TextureAnim.length + 2 + objectData.NameValue.length + 2 + objectData.Data.length + 1 + objectData.Text.length + 4 + 1 + objectData.MediaURL.length + 1 + objectData.PSBlock.length + 1 + 16 + 16 + 4 + 1 + 4 + 1 + 12 + 12 + i2
+
+    override fun CalcPayloadSize(): Int {
+        var i = 12
+        for (entry in this.ObjectData_Fields) {
+            i = entry.ExtraParams.size + entry.ObjectData.size + 41 + 4 + 4 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 2 + 2 + 2 + entry.TextureEntry.size + 1 + entry.TextureAnim.size + 2 + entry.NameValue.size + 2 + entry.Data.size + 1 + entry.Text.size + 4 + 1 + entry.MediaURL.size + 1 + entry.PSBlock.size + 1 + 16 + 16 + 4 + 1 + 4 + 1 + 12 + 12 + i
         }
+        return i
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleObjectUpdate(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: High 12 (ObjectUpdate).
-        byteBuffer.put(0x0C as byte)
+        byteBuffer.put((0x0C).toByte())
         packLong(byteBuffer, this.RegionData_Field.RegionHandle)
-        packShort(byteBuffer, this as short.RegionData_Field.TimeDilation)
-        byteBuffer.put(this as byte.ObjectData_Fields.size())
+        packShort(byteBuffer, (short) this.RegionData_Field.TimeDilation)
+        byteBuffer.put((this.ObjectData_Fields.size).toByte())
         for (objectData in this.ObjectData_Fields) {
             packInt(byteBuffer, objectData.ID)
-            packByte(byteBuffer, objectData as byte.State)
+            packByte(byteBuffer, (objectData.State).toByte())
             packUUID(byteBuffer, objectData.FullID)
             packInt(byteBuffer, objectData.CRC)
-            packByte(byteBuffer, objectData as byte.PCode)
-            packByte(byteBuffer, objectData as byte.Material)
-            packByte(byteBuffer, objectData as byte.ClickAction)
+            packByte(byteBuffer, (objectData.PCode).toByte())
+            packByte(byteBuffer, (objectData.Material).toByte())
+            packByte(byteBuffer, (objectData.ClickAction).toByte())
             packLLVector3(byteBuffer, objectData.Scale)
             packVariable(byteBuffer, objectData.ObjectData, 1)
             packInt(byteBuffer, objectData.ParentID)
             packInt(byteBuffer, objectData.UpdateFlags)
-            packByte(byteBuffer, objectData as byte.PathCurve)
-            packByte(byteBuffer, objectData as byte.ProfileCurve)
-            packShort(byteBuffer, objectData as short.PathBegin)
-            packShort(byteBuffer, objectData as short.PathEnd)
-            packByte(byteBuffer, objectData as byte.PathScaleX)
-            packByte(byteBuffer, objectData as byte.PathScaleY)
-            packByte(byteBuffer, objectData as byte.PathShearX)
-            packByte(byteBuffer, objectData as byte.PathShearY)
-            packByte(byteBuffer, objectData as byte.PathTwist)
-            packByte(byteBuffer, objectData as byte.PathTwistBegin)
-            packByte(byteBuffer, objectData as byte.PathRadiusOffset)
-            packByte(byteBuffer, objectData as byte.PathTaperX)
-            packByte(byteBuffer, objectData as byte.PathTaperY)
-            packByte(byteBuffer, objectData as byte.PathRevolutions)
-            packByte(byteBuffer, objectData as byte.PathSkew)
-            packShort(byteBuffer, objectData as short.ProfileBegin)
-            packShort(byteBuffer, objectData as short.ProfileEnd)
-            packShort(byteBuffer, objectData as short.ProfileHollow)
+            packByte(byteBuffer, (objectData.PathCurve).toByte())
+            packByte(byteBuffer, (objectData.ProfileCurve).toByte())
+            packShort(byteBuffer, (short) objectData.PathBegin)
+            packShort(byteBuffer, (short) objectData.PathEnd)
+            packByte(byteBuffer, (objectData.PathScaleX).toByte())
+            packByte(byteBuffer, (objectData.PathScaleY).toByte())
+            packByte(byteBuffer, (objectData.PathShearX).toByte())
+            packByte(byteBuffer, (objectData.PathShearY).toByte())
+            packByte(byteBuffer, (objectData.PathTwist).toByte())
+            packByte(byteBuffer, (objectData.PathTwistBegin).toByte())
+            packByte(byteBuffer, (objectData.PathRadiusOffset).toByte())
+            packByte(byteBuffer, (objectData.PathTaperX).toByte())
+            packByte(byteBuffer, (objectData.PathTaperY).toByte())
+            packByte(byteBuffer, (objectData.PathRevolutions).toByte())
+            packByte(byteBuffer, (objectData.PathSkew).toByte())
+            packShort(byteBuffer, (short) objectData.ProfileBegin)
+            packShort(byteBuffer, (short) objectData.ProfileEnd)
+            packShort(byteBuffer, (short) objectData.ProfileHollow)
             packVariable(byteBuffer, objectData.TextureEntry, 2)
             packVariable(byteBuffer, objectData.TextureAnim, 1)
             packVariable(byteBuffer, objectData.NameValue, 2)
@@ -147,24 +144,32 @@ open class ObjectUpdate : SLMessage() {
             packUUID(byteBuffer, objectData.Sound)
             packUUID(byteBuffer, objectData.OwnerID)
             packFloat(byteBuffer, objectData.Gain)
-            packByte(byteBuffer, objectData as byte.Flags)
+            packByte(byteBuffer, (objectData.Flags).toByte())
             packFloat(byteBuffer, objectData.Radius)
-            packByte(byteBuffer, objectData as byte.JointType)
+            packByte(byteBuffer, (objectData.JointType).toByte())
             packLLVector3(byteBuffer, objectData.JointPivot)
             packLLVector3(byteBuffer, objectData.JointAxisOrAnchor)
         }
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        this.RegionData_Field.RegionHandle = unpackLongthis as byteBuffer.RegionData_Field.TimeDilation = unpackShort(byteBuffer) & 65535
-        var i: Int = byteBuffer.get() & 0xFF
-        for (int j = 0; j < i; j++) {
-            var objectData: ObjectData = ObjectData()
-            objectData.ID = unpackIntobjectData as byteBuffer.State = unpackByte(byteBuffer) & 0xFF
-            objectData.FullID = unpackUUIDobjectData as byteBuffer.CRC = unpackIntobjectData as byteBuffer.PCode = unpackByte(byteBuffer) & 0xFF
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        this.RegionData_Field.RegionHandle = unpackLong(byteBuffer)
+        this.RegionData_Field.TimeDilation = unpackShort(byteBuffer) & 65535
+        val i = byteBuffer.get().toInt() and 0xFF
+        repeat(i) {
+            val objectData = ObjectData()
+            objectData.ID = unpackInt(byteBuffer)
+            objectData.State = unpackByte(byteBuffer) & 0xFF
+            objectData.FullID = unpackUUID(byteBuffer)
+            objectData.CRC = unpackInt(byteBuffer)
+            objectData.PCode = unpackByte(byteBuffer) & 0xFF
             objectData.Material = unpackByte(byteBuffer) & 0xFF
             objectData.ClickAction = unpackByte(byteBuffer) & 0xFF
-            objectData.Scale = unpackLLVector3objectData as byteBuffer.ObjectData = unpackVariable(byteBuffer, 1)
-            objectData.ParentID = unpackIntobjectData as byteBuffer.UpdateFlags = unpackIntobjectData as byteBuffer.PathCurve = unpackByte(byteBuffer) & 0xFF
+            objectData.Scale = unpackLLVector3(byteBuffer)
+            objectData.ObjectData = unpackVariable(byteBuffer, 1)
+            objectData.ParentID = unpackInt(byteBuffer)
+            objectData.UpdateFlags = unpackInt(byteBuffer)
+            objectData.PathCurve = unpackByte(byteBuffer) & 0xFF
             objectData.ProfileCurve = unpackByte(byteBuffer) & 0xFF
             objectData.PathBegin = unpackShort(byteBuffer) & 65535
             objectData.PathEnd = unpackShort(byteBuffer) & 65535
@@ -172,8 +177,14 @@ open class ObjectUpdate : SLMessage() {
             objectData.PathScaleY = unpackByte(byteBuffer) & 0xFF
             objectData.PathShearX = unpackByte(byteBuffer) & 0xFF
             objectData.PathShearY = unpackByte(byteBuffer) & 0xFF
-            objectData.PathTwist = unpackByteobjectData as byteBuffer.PathTwistBegin = unpackByteobjectData as byteBuffer.PathRadiusOffset = unpackByteobjectData as byteBuffer.PathTaperX = unpackByteobjectData as byteBuffer.PathTaperY = unpackByteobjectData as byteBuffer.PathRevolutions = unpackByte(byteBuffer) & 0xFF
-            objectData.PathSkew = unpackByteobjectData as byteBuffer.ProfileBegin = unpackShort(byteBuffer) & 65535
+            objectData.PathTwist = unpackByte(byteBuffer)
+            objectData.PathTwistBegin = unpackByte(byteBuffer)
+            objectData.PathRadiusOffset = unpackByte(byteBuffer)
+            objectData.PathTaperX = unpackByte(byteBuffer)
+            objectData.PathTaperY = unpackByte(byteBuffer)
+            objectData.PathRevolutions = unpackByte(byteBuffer) & 0xFF
+            objectData.PathSkew = unpackByte(byteBuffer)
+            objectData.ProfileBegin = unpackShort(byteBuffer) & 65535
             objectData.ProfileEnd = unpackShort(byteBuffer) & 65535
             objectData.ProfileHollow = unpackShort(byteBuffer) & 65535
             objectData.TextureEntry = unpackVariable(byteBuffer, 2)
@@ -185,9 +196,16 @@ open class ObjectUpdate : SLMessage() {
             objectData.MediaURL = unpackVariable(byteBuffer, 1)
             objectData.PSBlock = unpackVariable(byteBuffer, 1)
             objectData.ExtraParams = unpackVariable(byteBuffer, 1)
-            objectData.Sound = unpackUUIDobjectData as byteBuffer.OwnerID = unpackUUIDobjectData as byteBuffer.Gain = unpackFloatobjectData as byteBuffer.Flags = unpackByte(byteBuffer) & 0xFF
-            objectData.Radius = unpackFloatobjectData as byteBuffer.JointType = unpackByte(byteBuffer) & 0xFF
-            objectData.JointPivot = unpackLLVector3objectData as byteBuffer.JointAxisOrAnchor = unpackLLVector3this as byteBuffer.ObjectData_Fields.add(objectData)
+            objectData.Sound = unpackUUID(byteBuffer)
+            objectData.OwnerID = unpackUUID(byteBuffer)
+            objectData.Gain = unpackFloat(byteBuffer)
+            objectData.Flags = unpackByte(byteBuffer) & 0xFF
+            objectData.Radius = unpackFloat(byteBuffer)
+            objectData.JointType = unpackByte(byteBuffer) & 0xFF
+            objectData.JointPivot = unpackLLVector3(byteBuffer)
+            objectData.JointAxisOrAnchor = unpackLLVector3(byteBuffer)
+            this.ObjectData_Fields.add(objectData)
         }
     }
 }
+

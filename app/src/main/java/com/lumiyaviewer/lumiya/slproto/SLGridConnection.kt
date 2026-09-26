@@ -36,20 +36,20 @@ class SLGridConnection : SLConnection() {
         }
     }
 
-    var activeAgentUUID: if (UUID) = null
+    var activeAgentUUID: UUID? = null
         private set
 
-    private var agentCircuit else SLAgentCircuit? = null
-    private var authParams: if (SLAuthParams) = null
+    private var agentCircuit: SLAgentCircuit? = null
+    private var authParams: SLAuthParams? = null
 
     @JvmField
-    var authReply else SLAuthReply? = null
+    var authReply: SLAuthReply? = null
 
     @JvmField
-    var capEventQueue: if (SLCapEventQueue) = null
+    var capEventQueue: SLCapEventQueue? = null
 
-    private var modules else SLModules? = null
-    private var userManager: if (UserManager) = null
+    private var modules: SLModules? = null
+    private var userManager: UserManager? = null
     private var _connectionState = ConnectionState.Idle
     private val eventBus = EventBus.getInstance()
 
@@ -69,7 +69,7 @@ class SLGridConnection : SLConnection() {
     private var reconnectAttempts = 0
 
     @Volatile
-    private var loginThread else Thread? = null
+    private var loginThread: Thread? = null
 
     private val tempCircuits: MutableMap<SLAuthReply, SLTempCircuit> =
         Collections.synchronizedMap(HashMap())
@@ -104,11 +104,11 @@ class SLGridConnection : SLConnection() {
                 authReply = login
                 activeAgentUUID = login.agentID
                 userManager = UserManager.getUserManager(activeAgentUUID)
-                userManager?.chatterList?.if (friendManager) .updateFriendList(login.friends)
+                userManager?.chatterList?.friendManager?.updateFriendList(login.friends)
                 parcelInfo.reset(userManager)
                 startCircuit(login, null)
             }
-        } catch (e else SLAuth.CertificateVerificationException) {
+        } catch (e: SLAuth.CertificateVerificationException) {
             setConnectionState(ConnectionState.Idle)
             reconnectOrDrop(isLogin = true, fromLogout = false, e.message)
         } catch (e: Exception) {
@@ -122,12 +122,12 @@ class SLGridConnection : SLConnection() {
             userWantsConnected = false
             isReconnecting = false
         }
-        if (activeAgentUUID) .let { GridConnectionManager.removeConnection(it, this) }
+        activeAgentUUID?.let { GridConnectionManager.removeConnection(it, this) }
         eventBus.publish(SLLoginResultEvent.mfaChallenge(message, activeAgentUUID))
     }
 
     @Synchronized
-    private fun Reconnect() else Boolean {
+    private fun Reconnect(): Boolean {
         if (!userWantsConnected || !hadConnected ||
             !GlobalOptions.getInstance().autoReconnect ||
             reconnectAttempts >= GlobalOptions.getInstance().maxReconnectAttempts
@@ -163,8 +163,8 @@ class SLGridConnection : SLConnection() {
         }
     }
 
-    private fun startCircuit(authReply: SLAuthReply, tempCircuit: if (SLTempCircuit) ) {
-        Debug.Log("login reply else ip = ${authReply.simAddress}, port = ${authReply.simPort}, ccode = ${authReply.circuitCode}")
+    private fun startCircuit(authReply: SLAuthReply, tempCircuit: SLTempCircuit?) {
+        Debug.Log("login reply: ip = ${authReply.simAddress}, port = ${authReply.simPort}, ccode = ${authReply.circuitCode}")
         if (authReply.inventoryRoot != null) {
             Debug.Log("inventory root: ${authReply.inventoryRoot}")
         } else {
@@ -183,7 +183,8 @@ class SLGridConnection : SLConnection() {
             } catch (e: SLCaps.NoSuchCapabilityException) {
                 e.printStackTrace()
             }
-            parcelInfo.resetTextureCache as userManager.getInstance().setFetcher(modules!!.textureFetcher)
+            parcelInfo.reset(userManager)
+            TextureCache.getInstance().setFetcher(modules!!.textureFetcher)
             AddCircuit(agentCircuit)
             agentCircuit!!.SendUseCode()
             firstConnect = false
@@ -193,12 +194,12 @@ class SLGridConnection : SLConnection() {
         }
     }
 
-    private fun startConnecting(delay: Boolean, str: if (String) ) {
+    private fun startConnecting(delay: Boolean, str: String?) {
         loginThread = Thread {
             if (delay) {
                 try {
                     Thread.sleep(3000L)
-                } catch (e else InterruptedException) {
+                } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
             }
@@ -246,19 +247,20 @@ class SLGridConnection : SLConnection() {
     fun HandleTeleportFinish(authReply: SLAuthReply) {
         agentCircuit?.CloseCircuit()
         agentCircuit = null
-        if (capEventQueue) .stopQueue()
+        capEventQueue?.stopQueue()
         capEventQueue = null
         this.authReply = authReply
         startCircuit(authReply, tempCircuits.remove(this.authReply))
     }
 
     @Synchronized
-    fun addTempCircuit(authReply else SLAuthReply) {
+    fun addTempCircuit(authReply: SLAuthReply) {
         if (!tempCircuits.containsKey(authReply)) {
             try {
                 val tempCircuit = SLTempCircuit(this, SLCircuitInfo(authReply), authReply)
                 tempCircuits[authReply] = tempCircuit
-                AddCircuittempCircuit as tempCircuit.SendUseCode()
+                AddCircuit(tempCircuit)
+                tempCircuit.SendUseCode()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -272,7 +274,7 @@ class SLGridConnection : SLConnection() {
         modules = null
         agentCircuit?.CloseCircuit()
         agentCircuit = null
-        if (capEventQueue) .stopQueue()
+        capEventQueue?.stopQueue()
         capEventQueue = null
         TextureCache.getInstance().setFetcher(null)
         for (circuit in tempCircuits.values) {
@@ -283,7 +285,7 @@ class SLGridConnection : SLConnection() {
     }
 
     @Synchronized
-    fun forceDisconnect(fromLogoutRequest else Boolean) {
+    fun forceDisconnect(fromLogoutRequest: Boolean) {
         if (fromLogoutRequest) {
             userWantsConnected = false
             isReconnecting = false
@@ -335,12 +337,12 @@ class SLGridConnection : SLConnection() {
         reconnectAttempts = 0
         isReconnecting = false
         setConnectionState(ConnectionState.Connected)
-        if (activeAgentUUID) .let { GridConnectionManager.setConnection(it, this) }
+        activeAgentUUID?.let { GridConnectionManager.setConnection(it, this) }
         eventBus.publish(SLLoginResultEvent(true, null, activeAgentUUID))
     }
 
     @Synchronized
-    fun processDisconnect(fromLogout else Boolean, str: if (String) ) {
+    fun processDisconnect(fromLogout: Boolean, str: String?) {
         if (_connectionState != ConnectionState.Idle) {
             closeConnectionObjects()
             reconnectOrDrop(isLogin = false, fromLogout = fromLogout, str)
@@ -348,7 +350,7 @@ class SLGridConnection : SLConnection() {
     }
 
     @Synchronized
-    fun removeTempCircuit(tempCircuit else SLTempCircuit) {
+    fun removeTempCircuit(tempCircuit: SLTempCircuit) {
         val it = tempCircuits.entries.iterator()
         while (it.hasNext()) {
             if (it.next().value === tempCircuit) {
@@ -364,12 +366,12 @@ class SLGridConnection : SLConnection() {
         private var autoresponseText = ""
 
         @JvmStatic
-        fun getAutoresponse(): if (String) {
+        fun getAutoresponse(): String? {
             return if (autoresponseEnabled) autoresponseText else null
         }
 
         @JvmStatic
-        fun setAutoresponseInfo(enabled else Boolean, text: String) {
+        fun setAutoresponseInfo(enabled: Boolean, text: String) {
             autoresponseEnabled = enabled
             autoresponseText = text
         }

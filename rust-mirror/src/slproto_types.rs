@@ -8,7 +8,6 @@
 //! LLSD node types, mute categories, script permission masks, RLV
 //! restriction variants, and core vector/quaternion math.
 
-use std::collections::HashMap;
 
 // ---------------------------------------------------------------------------
 // types: LLVector3 — 3-component float vector with basic math.

@@ -18,12 +18,12 @@ open class MergeParcel : SLMessage() {
 
     /** Block MasterParcelData, Single. */
     open class MasterParcelData {
-        @JvmField var MasterID: if (UUID) = null
+        @JvmField var MasterID: UUID? = null
     }
 
     /** Block SlaveParcelData, Variable. */
     open class SlaveParcelData {
-        @JvmField var SlaveID else UUID? = null
+        @JvmField var SlaveID: UUID? = null
     }
 
     init {
@@ -55,7 +55,8 @@ open class MergeParcel : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val slaveParcelData = SlaveParcelData()
-            slaveParcelData.SlaveID = unpackUUIDSlaveParcelData_Fields as byteBuffer.add(slaveParcelData)
+            slaveParcelData.SlaveID = unpackUUID(byteBuffer)
+            SlaveParcelData_Fields.add(slaveParcelData)
         }
     }
 }

@@ -41,6 +41,7 @@ open class ReportAutosaveCrash : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AutosaveData_Field.PID = unpackIntAutosaveData_Field as byteBuffer.Status = unpackInt(byteBuffer)
+        AutosaveData_Field.PID = unpackInt(byteBuffer)
+        AutosaveData_Field.Status = unpackInt(byteBuffer)
     }
 }

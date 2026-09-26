@@ -18,23 +18,23 @@ open class MoneyBalanceReply : SLMessage() {
 
     /** Block MoneyData, Single. */
     open class MoneyData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var Description else ByteArray? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var Description: ByteArray? = null
         @JvmField var MoneyBalance: Int = 0
         @JvmField var SquareMetersCommitted: Int = 0
         @JvmField var SquareMetersCredit: Int = 0
-        @JvmField var TransactionID: if (UUID) = null
-        @JvmField var TransactionSuccess else Boolean = false
+        @JvmField var TransactionID: UUID? = null
+        @JvmField var TransactionSuccess: Boolean = false
     }
 
     /** Block TransactionInfo, Single. */
     open class TransactionInfo {
         @JvmField var Amount: Int = 0
-        @JvmField var DestID: if (UUID) = null
-        @JvmField var IsDestGroup else Boolean = false
+        @JvmField var DestID: UUID? = null
+        @JvmField var IsDestGroup: Boolean = false
         @JvmField var IsSourceGroup: Boolean = false
-        @JvmField var ItemDescription: if (ByteArray) = null
-        @JvmField var SourceID else UUID? = null
+        @JvmField var ItemDescription: ByteArray? = null
+        @JvmField var SourceID: UUID? = null
         @JvmField var TransactionType: Int = 0
     }
 
@@ -72,7 +72,19 @@ open class MoneyBalanceReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        MoneyData_Field.AgentID = unpackUUIDMoneyData_Field as byteBuffer.TransactionID = unpackUUIDMoneyData_Field as byteBuffer.TransactionSuccess = unpackBooleanMoneyData_Field as byteBuffer.MoneyBalance = unpackIntMoneyData_Field as byteBuffer.SquareMetersCredit = unpackIntMoneyData_Field as byteBuffer.SquareMetersCommitted = unpackIntMoneyData_Field as byteBuffer.Description = unpackVariable(byteBuffer, 1)
-        TransactionInfo_Field.TransactionType = unpackIntTransactionInfo_Field as byteBuffer.SourceID = unpackUUIDTransactionInfo_Field as byteBuffer.IsSourceGroup = unpackBooleanTransactionInfo_Field as byteBuffer.DestID = unpackUUIDTransactionInfo_Field as byteBuffer.IsDestGroup = unpackBooleanTransactionInfo_Field as byteBuffer.Amount = unpackIntTransactionInfo_Field as byteBuffer.ItemDescription = unpackVariable(byteBuffer, 1)
+        MoneyData_Field.AgentID = unpackUUID(byteBuffer)
+        MoneyData_Field.TransactionID = unpackUUID(byteBuffer)
+        MoneyData_Field.TransactionSuccess = unpackBoolean(byteBuffer)
+        MoneyData_Field.MoneyBalance = unpackInt(byteBuffer)
+        MoneyData_Field.SquareMetersCredit = unpackInt(byteBuffer)
+        MoneyData_Field.SquareMetersCommitted = unpackInt(byteBuffer)
+        MoneyData_Field.Description = unpackVariable(byteBuffer, 1)
+        TransactionInfo_Field.TransactionType = unpackInt(byteBuffer)
+        TransactionInfo_Field.SourceID = unpackUUID(byteBuffer)
+        TransactionInfo_Field.IsSourceGroup = unpackBoolean(byteBuffer)
+        TransactionInfo_Field.DestID = unpackUUID(byteBuffer)
+        TransactionInfo_Field.IsDestGroup = unpackBoolean(byteBuffer)
+        TransactionInfo_Field.Amount = unpackInt(byteBuffer)
+        TransactionInfo_Field.ItemDescription = unpackVariable(byteBuffer, 1)
     }
 }

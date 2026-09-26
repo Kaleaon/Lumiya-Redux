@@ -23,7 +23,7 @@ abstract class SLChatYesNoEvent : SLChatTextEvent() {
         EventAccepted,
         EventCancelled
 
-        public static EventState[] VALUES = valuesCustom()
+        Array<EventState> VALUES = valuesCustom()
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         fun valuesCustom(): Array<EventState> {

@@ -100,7 +100,7 @@ open class InventoryManager {
     open class InventoryClipboardEntry {
 
         public SLInventoryEntry inventoryEntry
-        public boolean isCut
+        public var isCut: Boolean
 
         fun InventoryClipboardEntry(isCut: Boolean, inventoryEntry: SLInventoryEntry): public {
             this.isCut = isCut

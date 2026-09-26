@@ -19,8 +19,8 @@ open class GroupAccountSummaryReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block MoneyData, Single. */
@@ -32,18 +32,18 @@ open class GroupAccountSummaryReply : SLMessage() {
         @JvmField var IntervalDays: Int = 0
         @JvmField var LandTaxCurrent: Int = 0
         @JvmField var LandTaxEstimate: Int = 0
-        @JvmField var LastTaxDate: if (ByteArray) = null
-        @JvmField var LightTaxCurrent else Int = 0
+        @JvmField var LastTaxDate: ByteArray? = null
+        @JvmField var LightTaxCurrent: Int = 0
         @JvmField var LightTaxEstimate: Int = 0
         @JvmField var NonExemptMembers: Int = 0
         @JvmField var ObjectTaxCurrent: Int = 0
         @JvmField var ObjectTaxEstimate: Int = 0
         @JvmField var ParcelDirFeeCurrent: Int = 0
         @JvmField var ParcelDirFeeEstimate: Int = 0
-        @JvmField var RequestID: if (UUID) = null
-        @JvmField var StartDate else ByteArray? = null
-        @JvmField var TaxDate: if (ByteArray) = null
-        @JvmField var TotalCredits else Int = 0
+        @JvmField var RequestID: UUID? = null
+        @JvmField var StartDate: ByteArray? = null
+        @JvmField var TaxDate: ByteArray? = null
+        @JvmField var TotalCredits: Int = 0
         @JvmField var TotalDebits: Int = 0
     }
 
@@ -89,8 +89,27 @@ open class GroupAccountSummaryReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDMoneyData_Field as byteBuffer.RequestID = unpackUUIDMoneyData_Field as byteBuffer.IntervalDays = unpackIntMoneyData_Field as byteBuffer.CurrentInterval = unpackIntMoneyData_Field as byteBuffer.StartDate = unpackVariable(byteBuffer, 1)
-        MoneyData_Field.Balance = unpackIntMoneyData_Field as byteBuffer.TotalCredits = unpackIntMoneyData_Field as byteBuffer.TotalDebits = unpackIntMoneyData_Field as byteBuffer.ObjectTaxCurrent = unpackIntMoneyData_Field as byteBuffer.LightTaxCurrent = unpackIntMoneyData_Field as byteBuffer.LandTaxCurrent = unpackIntMoneyData_Field as byteBuffer.GroupTaxCurrent = unpackIntMoneyData_Field as byteBuffer.ParcelDirFeeCurrent = unpackIntMoneyData_Field as byteBuffer.ObjectTaxEstimate = unpackIntMoneyData_Field as byteBuffer.LightTaxEstimate = unpackIntMoneyData_Field as byteBuffer.LandTaxEstimate = unpackIntMoneyData_Field as byteBuffer.GroupTaxEstimate = unpackIntMoneyData_Field as byteBuffer.ParcelDirFeeEstimate = unpackIntMoneyData_Field as byteBuffer.NonExemptMembers = unpackIntMoneyData_Field as byteBuffer.LastTaxDate = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        MoneyData_Field.RequestID = unpackUUID(byteBuffer)
+        MoneyData_Field.IntervalDays = unpackInt(byteBuffer)
+        MoneyData_Field.CurrentInterval = unpackInt(byteBuffer)
+        MoneyData_Field.StartDate = unpackVariable(byteBuffer, 1)
+        MoneyData_Field.Balance = unpackInt(byteBuffer)
+        MoneyData_Field.TotalCredits = unpackInt(byteBuffer)
+        MoneyData_Field.TotalDebits = unpackInt(byteBuffer)
+        MoneyData_Field.ObjectTaxCurrent = unpackInt(byteBuffer)
+        MoneyData_Field.LightTaxCurrent = unpackInt(byteBuffer)
+        MoneyData_Field.LandTaxCurrent = unpackInt(byteBuffer)
+        MoneyData_Field.GroupTaxCurrent = unpackInt(byteBuffer)
+        MoneyData_Field.ParcelDirFeeCurrent = unpackInt(byteBuffer)
+        MoneyData_Field.ObjectTaxEstimate = unpackInt(byteBuffer)
+        MoneyData_Field.LightTaxEstimate = unpackInt(byteBuffer)
+        MoneyData_Field.LandTaxEstimate = unpackInt(byteBuffer)
+        MoneyData_Field.GroupTaxEstimate = unpackInt(byteBuffer)
+        MoneyData_Field.ParcelDirFeeEstimate = unpackInt(byteBuffer)
+        MoneyData_Field.NonExemptMembers = unpackInt(byteBuffer)
+        MoneyData_Field.LastTaxDate = unpackVariable(byteBuffer, 1)
         MoneyData_Field.TaxDate = unpackVariable(byteBuffer, 1)
     }
 }

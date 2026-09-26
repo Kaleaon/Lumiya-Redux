@@ -113,11 +113,11 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     private var wornWearables: Table<SLWearableType, UUID, SLWearable> = null
 
     open class WornItem {
-        private int attachedTo
-        private boolean isTouchable
+        private var attachedTo: Int
+        private var isTouchable: Boolean
         private UUID itemID
-        private String name
-        private int objectLocalID
+        private var name: String
+        private var objectLocalID: Int
         private SLWearableType wornOn
 
         WornItem(SLWearableType wearableType, int attachedTo, UUID uuid, String name, int objectLocalID, boolean isTouchable) {
@@ -1390,7 +1390,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
         return false
         }
         var byCode: SLWearableType = SLWearableType.getByCode(inventoryEntry.flags & 255)
-        var byCode: return = = null || canWearItem(byCode)
+        return = null || canWearItem(byCode)
     }
 
     fun finishBaking(bakeProcess: BakeProcess, textureEntry: SLTextureEntry) {

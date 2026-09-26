@@ -20,26 +20,26 @@ open class AgentSetAppearance : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SerialNum else Int = 0
-        @JvmField var SessionID: if (UUID) = null
-        @JvmField var Size else LLVector3? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SerialNum: Int = 0
+        @JvmField var SessionID: UUID? = null
+        @JvmField var Size: LLVector3? = null
     }
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var TextureEntry: if (ByteArray) = null
+        @JvmField var TextureEntry: ByteArray? = null
     }
 
     /** Block VisualParam, Variable. */
     open class VisualParam {
-        @JvmField var ParamValue else Int = 0
+        @JvmField var ParamValue: Int = 0
     }
 
     /** Block WearableData, Variable. */
     open class WearableData {
-        @JvmField var CacheID: if (UUID) = null
-        @JvmField var TextureIndex else Int = 0
+        @JvmField var CacheID: UUID? = null
+        @JvmField var TextureIndex: Int = 0
     }
 
     init {
@@ -76,11 +76,15 @@ open class AgentSetAppearance : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.SerialNum = unpackIntAgentData_Field as byteBuffer.Size = unpackLLVector3(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.SerialNum = unpackInt(byteBuffer)
+        AgentData_Field.Size = unpackLLVector3(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val wearableData = WearableData()
-            wearableData.CacheID = unpackUUIDwearableData as byteBuffer.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
+            wearableData.CacheID = unpackUUID(byteBuffer)
+            wearableData.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
             WearableData_Fields.add(wearableData)
         }
         ObjectData_Field.TextureEntry = unpackVariable(byteBuffer, 2)

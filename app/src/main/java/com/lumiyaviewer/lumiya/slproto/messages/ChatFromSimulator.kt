@@ -24,12 +24,12 @@ open class ChatFromSimulator : SLMessage() {
     open class ChatData {
         @JvmField var Audible: Int = 0
         @JvmField var ChatType: Int = 0
-        @JvmField var FromName: if (ByteArray) = null
-        @JvmField var Message else ByteArray? = null
-        @JvmField var OwnerID: if (UUID) = null
-        @JvmField var Position else LLVector3? = null
-        @JvmField var SourceID: if (UUID) = null
-        @JvmField var SourceType else Int = 0
+        @JvmField var FromName: ByteArray? = null
+        @JvmField var Message: ByteArray? = null
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var Position: LLVector3? = null
+        @JvmField var SourceID: UUID? = null
+        @JvmField var SourceType: Int = 0
     }
 
     init {
@@ -61,9 +61,12 @@ open class ChatFromSimulator : SLMessage() {
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
         ChatData_Field.FromName = unpackVariable(byteBuffer, 1)
-        ChatData_Field.SourceID = unpackUUIDChatData_Field as byteBuffer.OwnerID = unpackUUIDChatData_Field as byteBuffer.SourceType = unpackByte(byteBuffer).toInt() and 0xFF
+        ChatData_Field.SourceID = unpackUUID(byteBuffer)
+        ChatData_Field.OwnerID = unpackUUID(byteBuffer)
+        ChatData_Field.SourceType = unpackByte(byteBuffer).toInt() and 0xFF
         ChatData_Field.ChatType = unpackByte(byteBuffer).toInt() and 0xFF
         ChatData_Field.Audible = unpackByte(byteBuffer).toInt() and 0xFF
-        ChatData_Field.Position = unpackLLVector3ChatData_Field as byteBuffer.Message = unpackVariable(byteBuffer, 2)
+        ChatData_Field.Position = unpackLLVector3(byteBuffer)
+        ChatData_Field.Message = unpackVariable(byteBuffer, 2)
     }
 }

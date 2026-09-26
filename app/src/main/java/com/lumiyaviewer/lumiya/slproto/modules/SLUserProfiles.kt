@@ -88,17 +88,17 @@ open class SLUserProfiles : SLModule() {
         }, false, 3, 15000L)
         this.avatarNotesRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<UUID>() {
             fun onRequest(uuid: UUID) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarnotesrequest", new String[]{uuid.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarnotesrequest", new Array<String>{uuid.toString()})
             }
         }, false, 3, 15000L)
         this.avatarPicksRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<UUID>() {
             fun onRequest(uuid: UUID) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarpicksrequest", new String[]{uuid.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarpicksrequest", new Array<String>{uuid.toString()})
             }
         }, false, 3, 15000L)
         this.avatarPickInfosRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<AvatarPickKey>() {
             fun onRequest(avatarPickKey: AvatarPickKey) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", new String[]{avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", new Array<String>{avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()})
             }
         }, false, 3, 15000L)
         this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID)

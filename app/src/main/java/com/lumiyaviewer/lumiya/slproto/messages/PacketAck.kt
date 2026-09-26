@@ -49,7 +49,8 @@ open class PacketAck : SLMessage() {
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val packets = Packets()
-            packets.ID = unpackIntPackets_Fields as byteBuffer.add(packets)
+            packets.ID = unpackInt(byteBuffer)
+            Packets_Fields.add(packets)
         }
     }
 }

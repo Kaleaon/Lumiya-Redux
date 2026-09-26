@@ -68,8 +68,8 @@ open class SLMinimap : SLModule() {
     private var userPositions: MutableMap<UUID, UserLocation> = null
 
     open class MinimapBitmap {
-        private int bitmapHeight
-        private int bitmapWidth
+        private var bitmapHeight: Int
+        private var bitmapWidth: Int
         var colors: IntArray = null
 
         MinimapBitmap(int bitmapWidth, int bitmapHeight) {
@@ -78,7 +78,7 @@ open class SLMinimap : SLModule() {
             this.colors = IntArray(bitmapWidth * bitmapHeight)
         }
 
-        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, int[] ints) {
+        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, Array<int> ints) {
             this.bitmapWidth = minimapBitmap.bitmapWidth
             this.bitmapHeight = minimapBitmap.bitmapHeight
             this.colors = Arrays.copyOf(minimapBitmap.colors, minimapBitmap.colors.length)
@@ -108,7 +108,7 @@ open class SLMinimap : SLModule() {
     }
 
     open class UserLocations {
-        public float myAvatarHeading
+        public var myAvatarHeading: Float
 
         public ImmutableVector myAvatarPosition
         public Map<UUID, UserLocation> userPositions

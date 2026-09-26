@@ -19,14 +19,14 @@ open class AssetUploadComplete : SLMessage() {
     open class AssetBlock {
         @JvmField var Success: Boolean = false
         @JvmField var Type: Int = 0
-        @JvmField var UUID: if (UUID) = null
+        @JvmField var UUID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 22
     }
 
@@ -45,7 +45,8 @@ open class AssetUploadComplete : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AssetBlock_Field.UUID = unpackUUIDAssetBlock_Field as byteBuffer.Type = unpackByte(byteBuffer).toInt()
+        AssetBlock_Field.UUID = unpackUUID(byteBuffer)
+        AssetBlock_Field.Type = unpackByte(byteBuffer).toInt()
         AssetBlock_Field.Success = unpackBoolean(byteBuffer)
     }
 }

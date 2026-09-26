@@ -17,19 +17,19 @@ open class SetGroupAcceptNotices : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
         @JvmField var AcceptNotices: Boolean = false
-        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block NewData, Single. */
     open class NewData {
-        @JvmField var ListInProfile else Boolean = false
+        @JvmField var ListInProfile: Boolean = false
     }
 
     init {
@@ -57,6 +57,10 @@ open class SetGroupAcceptNotices : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.GroupID = unpackUUIDData_Field as byteBuffer.AcceptNotices = unpackBooleanNewData_Field as byteBuffer.ListInProfile = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.GroupID = unpackUUID(byteBuffer)
+        Data_Field.AcceptNotices = unpackBoolean(byteBuffer)
+        NewData_Field.ListInProfile = unpackBoolean(byteBuffer)
     }
 }

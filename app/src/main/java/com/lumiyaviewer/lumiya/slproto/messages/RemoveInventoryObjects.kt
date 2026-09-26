@@ -22,18 +22,18 @@ open class RemoveInventoryObjects : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block FolderData, Variable. */
     open class FolderData {
-        @JvmField var FolderID: if (UUID) = null
+        @JvmField var FolderID: UUID? = null
     }
 
     /** Block ItemData, Variable. */
     open class ItemData {
-        @JvmField var ItemID else UUID? = null
+        @JvmField var ItemID: UUID? = null
     }
 
     init {
@@ -67,16 +67,19 @@ open class RemoveInventoryObjects : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val folderData = FolderData()
-            folderData.FolderID = unpackUUIDFolderData_Fields as byteBuffer.add(folderData)
+            folderData.FolderID = unpackUUID(byteBuffer)
+            FolderData_Fields.add(folderData)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val itemData = ItemData()
-            itemData.ItemID = unpackUUIDItemData_Fields as byteBuffer.add(itemData)
+            itemData.ItemID = unpackUUID(byteBuffer)
+            ItemData_Fields.add(itemData)
         }
     }
 }

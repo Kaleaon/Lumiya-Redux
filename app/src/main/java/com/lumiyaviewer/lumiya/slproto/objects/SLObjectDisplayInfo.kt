@@ -3,11 +3,11 @@ package com.lumiyaviewer.lumiya.slproto.objects
 import com.google.common.collect.ImmutableList
 
 open class SLObjectDisplayInfo {
-    public float distance
-    public int hierarchyLevel
-    public int localID
+    public var distance: Float
+    public var hierarchyLevel: Int
+    public var localID: Int
 
-    public String name
+    public var name: String
 
     interface HasChildrenObjects {
         ImmutableList<SLObjectDisplayInfo> getChildren()

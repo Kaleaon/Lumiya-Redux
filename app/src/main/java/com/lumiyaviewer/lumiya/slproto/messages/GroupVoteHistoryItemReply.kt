@@ -21,42 +21,42 @@ open class GroupVoteHistoryItemReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block HistoryItemData, Single. */
     open class HistoryItemData {
-        @JvmField var EndDateTime: if (ByteArray) = null
-        @JvmField var Majority else Float = 0f
-        @JvmField var ProposalText: if (ByteArray) = null
-        @JvmField var Quorum else Int = 0
-        @JvmField var StartDateTime: if (ByteArray) = null
-        @JvmField var TerseDateID else ByteArray? = null
-        @JvmField var VoteID: if (UUID) = null
-        @JvmField var VoteInitiator else UUID? = null
-        @JvmField var VoteResult: if (ByteArray) = null
-        @JvmField var VoteType else ByteArray? = null
+        @JvmField var EndDateTime: ByteArray? = null
+        @JvmField var Majority: Float = 0f
+        @JvmField var ProposalText: ByteArray? = null
+        @JvmField var Quorum: Int = 0
+        @JvmField var StartDateTime: ByteArray? = null
+        @JvmField var TerseDateID: ByteArray? = null
+        @JvmField var VoteID: UUID? = null
+        @JvmField var VoteInitiator: UUID? = null
+        @JvmField var VoteResult: ByteArray? = null
+        @JvmField var VoteType: ByteArray? = null
     }
 
     /** Block TransactionData, Single. */
     open class TransactionData {
         @JvmField var TotalNumItems: Int = 0
-        @JvmField var TransactionID: if (UUID) = null
+        @JvmField var TransactionID: UUID? = null
     }
 
     /** Block VoteItem, Variable. */
     open class VoteItem {
-        @JvmField var CandidateID else UUID? = null
+        @JvmField var CandidateID: UUID? = null
         @JvmField var NumVotes: Int = 0
-        @JvmField var VoteCast: if (ByteArray) = null
+        @JvmField var VoteCast: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var length = HistoryItemData_Field.TerseDateID!!.size + 17 + 1 + HistoryItemData_Field.StartDateTime!!.size + 1 + HistoryItemData_Field.EndDateTime!!.size + 16 + 1 + HistoryItemData_Field.VoteType!!.size + 1 + HistoryItemData_Field.VoteResult!!.size + 4 + 4 + 2 + HistoryItemData_Field.ProposalText!!.size + 56 + 1
         val it = VoteItem_Fields.iterator()
         while (true) {
@@ -100,17 +100,27 @@ open class GroupVoteHistoryItemReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDTransactionData_Field as byteBuffer.TransactionID = unpackUUIDTransactionData_Field as byteBuffer.TotalNumItems = unpackIntHistoryItemData_Field as byteBuffer.VoteID = unpackUUIDHistoryItemData_Field as byteBuffer.TerseDateID = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
+        TransactionData_Field.TotalNumItems = unpackInt(byteBuffer)
+        HistoryItemData_Field.VoteID = unpackUUID(byteBuffer)
+        HistoryItemData_Field.TerseDateID = unpackVariable(byteBuffer, 1)
         HistoryItemData_Field.StartDateTime = unpackVariable(byteBuffer, 1)
         HistoryItemData_Field.EndDateTime = unpackVariable(byteBuffer, 1)
-        HistoryItemData_Field.VoteInitiator = unpackUUIDHistoryItemData_Field as byteBuffer.VoteType = unpackVariable(byteBuffer, 1)
+        HistoryItemData_Field.VoteInitiator = unpackUUID(byteBuffer)
+        HistoryItemData_Field.VoteType = unpackVariable(byteBuffer, 1)
         HistoryItemData_Field.VoteResult = unpackVariable(byteBuffer, 1)
-        HistoryItemData_Field.Majority = unpackFloatHistoryItemData_Field as byteBuffer.Quorum = unpackIntHistoryItemData_Field as byteBuffer.ProposalText = unpackVariable(byteBuffer, 2)
+        HistoryItemData_Field.Majority = unpackFloat(byteBuffer)
+        HistoryItemData_Field.Quorum = unpackInt(byteBuffer)
+        HistoryItemData_Field.ProposalText = unpackVariable(byteBuffer, 2)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val voteItem = VoteItem()
-            voteItem.CandidateID = unpackUUIDvoteItem as byteBuffer.VoteCast = unpackVariable(byteBuffer, 1)
-            voteItem.NumVotes = unpackIntVoteItem_Fields as byteBuffer.add(voteItem)
+            voteItem.CandidateID = unpackUUID(byteBuffer)
+            voteItem.VoteCast = unpackVariable(byteBuffer, 1)
+            voteItem.NumVotes = unpackInt(byteBuffer)
+            VoteItem_Fields.add(voteItem)
         }
     }
 }

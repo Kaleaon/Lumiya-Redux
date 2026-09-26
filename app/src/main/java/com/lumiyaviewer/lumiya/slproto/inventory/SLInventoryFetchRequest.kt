@@ -8,7 +8,7 @@ abstract class SLInventoryFetchRequest {
     protected InventoryDB db
 
     protected SLInventoryEntry folderEntry
-    protected long folderId
+    protected var folderId: Long
     protected UUID folderUUID
     protected SLInventory inventory
 

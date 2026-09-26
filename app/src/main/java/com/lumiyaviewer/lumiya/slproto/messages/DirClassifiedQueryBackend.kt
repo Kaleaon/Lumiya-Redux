@@ -17,25 +17,25 @@ open class DirClassifiedQueryBackend : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var Category else Int = 0
+        @JvmField var Category: Int = 0
         @JvmField var EstateID: Int = 0
         @JvmField var Godlike: Boolean = false
         @JvmField var QueryFlags: Int = 0
-        @JvmField var QueryID: if (UUID) = null
-        @JvmField var QueryStart else Int = 0
-        @JvmField var QueryText: if (ByteArray) = null
+        @JvmField var QueryID: UUID? = null
+        @JvmField var QueryStart: Int = 0
+        @JvmField var QueryText: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return QueryData_Field.QueryText!!.size + 17 + 4 + 4 + 4 + 1 + 4 + 20
     }
 
@@ -59,7 +59,13 @@ open class DirClassifiedQueryBackend : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUIDQueryData_Field as byteBuffer.QueryText = unpackVariable(byteBuffer, 1)
-        QueryData_Field.QueryFlags = unpackIntQueryData_Field as byteBuffer.Category = unpackIntQueryData_Field as byteBuffer.EstateID = unpackIntQueryData_Field as byteBuffer.Godlike = unpackBooleanQueryData_Field as byteBuffer.QueryStart = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryText = unpackVariable(byteBuffer, 1)
+        QueryData_Field.QueryFlags = unpackInt(byteBuffer)
+        QueryData_Field.Category = unpackInt(byteBuffer)
+        QueryData_Field.EstateID = unpackInt(byteBuffer)
+        QueryData_Field.Godlike = unpackBoolean(byteBuffer)
+        QueryData_Field.QueryStart = unpackInt(byteBuffer)
     }
 }

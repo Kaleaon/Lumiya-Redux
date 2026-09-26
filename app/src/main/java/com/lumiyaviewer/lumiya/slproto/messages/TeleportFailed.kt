@@ -20,14 +20,14 @@ open class TeleportFailed : SLMessage() {
 
     /** Block AlertInfo, Variable. */
     open class AlertInfo {
-        @JvmField var ExtraParams: if (ByteArray) = null
-        @JvmField var Message else ByteArray? = null
+        @JvmField var ExtraParams: ByteArray? = null
+        @JvmField var Message: ByteArray? = null
     }
 
     /** Block Info, Single. */
     open class Info {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var Reason else ByteArray? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var Reason: ByteArray? = null
     }
 
     init {
@@ -66,7 +66,8 @@ open class TeleportFailed : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Info_Field.AgentID = unpackUUIDInfo_Field as byteBuffer.Reason = unpackVariable(byteBuffer, 1)
+        Info_Field.AgentID = unpackUUID(byteBuffer)
+        Info_Field.Reason = unpackVariable(byteBuffer, 1)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val alertInfo = AlertInfo()

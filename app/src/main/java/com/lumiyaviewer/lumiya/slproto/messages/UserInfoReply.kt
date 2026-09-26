@@ -18,14 +18,14 @@ open class UserInfoReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block UserData, Single. */
     open class UserData {
-        @JvmField var DirectoryVisibility else ByteArray? = null
-        @JvmField var EMail: if (ByteArray) = null
-        @JvmField var IMViaEMail else Boolean = false
+        @JvmField var DirectoryVisibility: ByteArray? = null
+        @JvmField var EMail: ByteArray? = null
+        @JvmField var IMViaEMail: Boolean = false
     }
 
     init {
@@ -52,7 +52,9 @@ open class UserInfoReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDUserData_Field as byteBuffer.IMViaEMail = unpackBooleanUserData_Field as byteBuffer.DirectoryVisibility = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        UserData_Field.IMViaEMail = unpackBoolean(byteBuffer)
+        UserData_Field.DirectoryVisibility = unpackVariable(byteBuffer, 1)
         UserData_Field.EMail = unpackVariable(byteBuffer, 2)
     }
 }

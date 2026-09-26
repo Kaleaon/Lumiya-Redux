@@ -24,22 +24,22 @@ open class KickUser : SLMessage() {
 
     /** Block TargetBlock, Single. */
     open class TargetBlock {
-        @JvmField var TargetIP: if (Inet4Address) = null
-        @JvmField var TargetPort else Int = 0
+        @JvmField var TargetIP: Inet4Address? = null
+        @JvmField var TargetPort: Int = 0
     }
 
     /** Block UserInfo, Single. */
     open class UserInfo {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var Reason else ByteArray? = null
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var Reason: ByteArray? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return UserInfo_Field.Reason!!.size + 34 + 10
     }
 
@@ -60,7 +60,10 @@ open class KickUser : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TargetBlock_Field.TargetIP = unpackIPAddressTargetBlock_Field as byteBuffer.TargetPort = unpackShort(byteBuffer).toInt() and 65535
-        UserInfo_Field.AgentID = unpackUUIDUserInfo_Field as byteBuffer.SessionID = unpackUUIDUserInfo_Field as byteBuffer.Reason = unpackVariable(byteBuffer, 2)
+        TargetBlock_Field.TargetIP = unpackIPAddress(byteBuffer)
+        TargetBlock_Field.TargetPort = unpackShort(byteBuffer).toInt() and 65535
+        UserInfo_Field.AgentID = unpackUUID(byteBuffer)
+        UserInfo_Field.SessionID = unpackUUID(byteBuffer)
+        UserInfo_Field.Reason = unpackVariable(byteBuffer, 2)
     }
 }

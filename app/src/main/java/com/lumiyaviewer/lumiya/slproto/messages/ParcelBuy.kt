@@ -19,15 +19,15 @@ open class ParcelBuy : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block Data, Single. */
     open class Data {
         @JvmField var Final: Boolean = false
-        @JvmField var GroupID: if (UUID) = null
-        @JvmField var IsGroupOwned else Boolean = false
+        @JvmField var GroupID: UUID? = null
+        @JvmField var IsGroupOwned: Boolean = false
         @JvmField var LocalID: Int = 0
         @JvmField var RemoveContribution: Boolean = false
     }
@@ -67,6 +67,14 @@ open class ParcelBuy : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDData_Field as byteBuffer.GroupID = unpackUUIDData_Field as byteBuffer.IsGroupOwned = unpackBooleanData_Field as byteBuffer.RemoveContribution = unpackBooleanData_Field as byteBuffer.LocalID = unpackIntData_Field as byteBuffer.Final = unpackBooleanParcelData_Field as byteBuffer.Price = unpackIntParcelData_Field as byteBuffer.Area = unpackInt(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        Data_Field.GroupID = unpackUUID(byteBuffer)
+        Data_Field.IsGroupOwned = unpackBoolean(byteBuffer)
+        Data_Field.RemoveContribution = unpackBoolean(byteBuffer)
+        Data_Field.LocalID = unpackInt(byteBuffer)
+        Data_Field.Final = unpackBoolean(byteBuffer)
+        ParcelData_Field.Price = unpackInt(byteBuffer)
+        ParcelData_Field.Area = unpackInt(byteBuffer)
     }
 }

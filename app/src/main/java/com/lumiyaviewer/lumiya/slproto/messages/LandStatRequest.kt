@@ -17,14 +17,14 @@ open class LandStatRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block RequestData, Single. */
     open class RequestData {
-        @JvmField var Filter: if (ByteArray) = null
-        @JvmField var ParcelLocalID else Int = 0
+        @JvmField var Filter: ByteArray? = null
+        @JvmField var ParcelLocalID: Int = 0
         @JvmField var ReportType: Int = 0
         @JvmField var RequestFlags: Int = 0
     }
@@ -55,7 +55,11 @@ open class LandStatRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDRequestData_Field as byteBuffer.ReportType = unpackIntRequestData_Field as byteBuffer.RequestFlags = unpackIntRequestData_Field as byteBuffer.Filter = unpackVariable(byteBuffer, 1)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        RequestData_Field.ReportType = unpackInt(byteBuffer)
+        RequestData_Field.RequestFlags = unpackInt(byteBuffer)
+        RequestData_Field.Filter = unpackVariable(byteBuffer, 1)
         RequestData_Field.ParcelLocalID = unpackInt(byteBuffer)
     }
 }

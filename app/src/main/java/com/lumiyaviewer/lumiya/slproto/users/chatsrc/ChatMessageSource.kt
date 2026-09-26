@@ -14,7 +14,7 @@ abstract class ChatMessageSource {
         Group,
         Object
 
-        public static ChatMessageSourceType[] VALUES = valuesCustom()
+        Array<ChatMessageSourceType> VALUES = valuesCustom()
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         fun valuesCustom(): Array<ChatMessageSourceType> {

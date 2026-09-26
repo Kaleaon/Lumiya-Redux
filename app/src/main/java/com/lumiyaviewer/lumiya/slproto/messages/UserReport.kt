@@ -18,31 +18,31 @@ open class UserReport : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block ReportData, Single. */
     open class ReportData {
-        @JvmField var AbuseRegionID: if (UUID) = null
-        @JvmField var AbuseRegionName else ByteArray? = null
-        @JvmField var AbuserID: if (UUID) = null
-        @JvmField var Category else Int = 0
+        @JvmField var AbuseRegionID: UUID? = null
+        @JvmField var AbuseRegionName: ByteArray? = null
+        @JvmField var AbuserID: UUID? = null
+        @JvmField var Category: Int = 0
         @JvmField var CheckFlags: Int = 0
-        @JvmField var Details: if (ByteArray) = null
-        @JvmField var ObjectID else UUID? = null
-        @JvmField var Position: if (LLVector3) = null
-        @JvmField var ReportType else Int = 0
-        @JvmField var ScreenshotID: if (UUID) = null
-        @JvmField var Summary else ByteArray? = null
-        @JvmField var VersionString: if (ByteArray) = null
+        @JvmField var Details: ByteArray? = null
+        @JvmField var ObjectID: UUID? = null
+        @JvmField var Position: LLVector3? = null
+        @JvmField var ReportType: Int = 0
+        @JvmField var ScreenshotID: UUID? = null
+        @JvmField var Summary: ByteArray? = null
+        @JvmField var VersionString: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return ReportData_Field.AbuseRegionName!!.size + 64 + 16 + 1 + ReportData_Field.Summary!!.size + 2 + ReportData_Field.Details!!.size + 1 + ReportData_Field.VersionString!!.size + 36
     }
 
@@ -72,11 +72,18 @@ open class UserReport : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDReportData_Field as byteBuffer.ReportType = unpackByte(byteBuffer).toInt() and 0xFF
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        ReportData_Field.ReportType = unpackByte(byteBuffer).toInt() and 0xFF
         ReportData_Field.Category = unpackByte(byteBuffer).toInt() and 0xFF
-        ReportData_Field.Position = unpackLLVector3ReportData_Field as byteBuffer.CheckFlags = unpackByte(byteBuffer).toInt() and 0xFF
-        ReportData_Field.ScreenshotID = unpackUUIDReportData_Field as byteBuffer.ObjectID = unpackUUIDReportData_Field as byteBuffer.AbuserID = unpackUUIDReportData_Field as byteBuffer.AbuseRegionName = unpackVariable(byteBuffer, 1)
-        ReportData_Field.AbuseRegionID = unpackUUIDReportData_Field as byteBuffer.Summary = unpackVariable(byteBuffer, 1)
+        ReportData_Field.Position = unpackLLVector3(byteBuffer)
+        ReportData_Field.CheckFlags = unpackByte(byteBuffer).toInt() and 0xFF
+        ReportData_Field.ScreenshotID = unpackUUID(byteBuffer)
+        ReportData_Field.ObjectID = unpackUUID(byteBuffer)
+        ReportData_Field.AbuserID = unpackUUID(byteBuffer)
+        ReportData_Field.AbuseRegionName = unpackVariable(byteBuffer, 1)
+        ReportData_Field.AbuseRegionID = unpackUUID(byteBuffer)
+        ReportData_Field.Summary = unpackVariable(byteBuffer, 1)
         ReportData_Field.Details = unpackVariable(byteBuffer, 2)
         ReportData_Field.VersionString = unpackVariable(byteBuffer, 1)
     }

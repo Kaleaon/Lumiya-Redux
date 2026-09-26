@@ -20,20 +20,20 @@ open class AvatarTextureUpdate : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var TexturesChanged else Boolean = false
+        @JvmField var AgentID: UUID? = null
+        @JvmField var TexturesChanged: Boolean = false
     }
 
     /** Block TextureData, Variable. */
     open class TextureData {
-        @JvmField var TextureID: if (UUID) = null
+        @JvmField var TextureID: UUID? = null
     }
 
     /** Block WearableData, Variable. */
     open class WearableData {
-        @JvmField var CacheID else UUID? = null
-        @JvmField var HostName: if (ByteArray) = null
-        @JvmField var TextureIndex else Int = 0
+        @JvmField var CacheID: UUID? = null
+        @JvmField var HostName: ByteArray? = null
+        @JvmField var TextureIndex: Int = 0
     }
 
     init {
@@ -76,18 +76,21 @@ open class AvatarTextureUpdate : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.TexturesChanged = unpackBoolean(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.TexturesChanged = unpackBoolean(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val wearableData = WearableData()
-            wearableData.CacheID = unpackUUIDwearableData as byteBuffer.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
+            wearableData.CacheID = unpackUUID(byteBuffer)
+            wearableData.TextureIndex = unpackByte(byteBuffer).toInt() and 0xFF
             wearableData.HostName = unpackVariable(byteBuffer, 1)
             WearableData_Fields.add(wearableData)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val textureData = TextureData()
-            textureData.TextureID = unpackUUIDTextureData_Fields as byteBuffer.add(textureData)
+            textureData.TextureID = unpackUUID(byteBuffer)
+            TextureData_Fields.add(textureData)
         }
     }
 }

@@ -21,14 +21,14 @@ open class EventLocationRequest : SLMessage() {
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID: if (UUID) = null
+        @JvmField var QueryID: UUID? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 24
     }
 
@@ -46,6 +46,7 @@ open class EventLocationRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        QueryData_Field.QueryID = unpackUUIDEventData_Field as byteBuffer.EventID = unpackInt(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        EventData_Field.EventID = unpackInt(byteBuffer)
     }
 }

@@ -114,7 +114,7 @@ open class SLInventory : SLModule() {
     }
 
     open class NoInventoryItemException : Exception() {
-        private static long serialVersionUID = 1
+        private long serialVersionUID = 1
 
         fun NoInventoryItemException(j: Long): public {
             super("Inventory item " + j + " not found")
@@ -352,7 +352,7 @@ open class SLInventory : SLModule() {
     fun StartUploadingNotecardContents(sLInventoryEntry: final SLInventoryEntry, uuid: UUID, z: Boolean, bArr: ByteArray, onNotecardUpdatedListener: OnNotecardUpdatedListener) {
         GenericHTTPExecutor.getInstance().execute(Runnable() {
             private /* synthetic */ void $m$0() {
-                SLInventory.this.m190x8292c7bb(sLInventoryEntry as SLInventoryEntry, (byte[]) bArr, uuid as UUID, z, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener)
+                SLInventory.this.m190x8292c7bb(sLInventoryEntry as SLInventoryEntry, (Array<byte>) bArr, uuid as UUID, z, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener)
             }
             fun run() {
                 $m$0()
@@ -453,7 +453,7 @@ open class SLInventory : SLModule() {
         }
         var uuid: UUID = this.circuitInfo.sessionID
         try {
-            var query: Cursor = this.db.getDatabase().query(InventoryEntryDBObject.tableName, new String[]{"uuid_high", "uuid_low"}, "isFolder AND (sessionID_high != ? OR sessionID_low != ?)", new String[]{Long.toString(uuid.getMostSignificantBits()), Long.toString(uuid.getLeastSignificantBits())}, null, null, null, "1")
+            var query: Cursor = this.db.getDatabase().query(InventoryEntryDBObject.tableName, new Array<String>{"uuid_high", "uuid_low"}, "isFolder AND (sessionID_high != ? OR sessionID_low != ?)", new Array<String>{Long.toString(uuid.getMostSignificantBits()), Long.toString(uuid.getLeastSignificantBits())}, null, null, null, "1")
             if (query.moveToFirst()) {
                 var uuid2: UUID = UUIDPool.getUUID(query.getLong(0), query.getLong(1))
                 Debug.Printf("InventorySearch: fetching next folder: %s", uuid2)
@@ -510,7 +510,7 @@ open class SLInventory : SLModule() {
 
     fun CollectGiveableItems(sLInventoryEntry: SLInventoryEntry): MutableCollection<SLInventoryEntry> {
         var arrayList: ArrayList = ArrayList()
-        var query: Cursor = SLInventoryEntry.query(this.db.getDatabase(), "parent_id = ?", new String[]{Long.toString(sLInventoryEntry.getId())}, null as String)
+        var query: Cursor = SLInventoryEntry.query(this.db.getDatabase(), "parent_id = ?", new Array<String>{Long.toString(sLInventoryEntry.getId())}, null as String)
         if (query != null) {
             while (query.moveToNext()) {
                 var sLInventoryEntry2: SLInventoryEntry = SLInventoryEntry(query)
@@ -1017,7 +1017,7 @@ open class SLInventory : SLModule() {
             Debug.Printf("Notecard: Creating new inventory entry.", arrayOfNulls<Object>(0))
             DoCreateInventoryItem(uuid, if SLAssetType as z.AT_LSL_TEXT.getTypeCode() else SLAssetType.AT_NOTECARD.getTypeCode(), if SLInventoryType as z.IT_LSL.getTypeCode() else SLInventoryType.IT_NOTECARD.getTypeCode(), str, str2, OnInventoryCallbackListener() {
                 private /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    SLInventory.this.m191x82934f61(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2)
+                    SLInventory.this.m191x82934f61(z, (Array<byte>) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2)
                 }
                 fun onInventoryCallback(sLInventoryEntry2: SLInventoryEntry) {
                     $m$0(sLInventoryEntry2)
@@ -1038,7 +1038,7 @@ open class SLInventory : SLModule() {
             Debug.Printf("Notecard: Updating existing inventory entry %s", sLInventoryEntry.uuid)
             DoUpdateInventoryItem(sLInventoryEntry, OnInventoryCallbackListener() {
                 private /* synthetic */ void $m$0(SLInventoryEntry sLInventoryEntry2) {
-                    SLInventory.this.m192x829d436f(z, (byte[]) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2)
+                    SLInventory.this.m192x829d436f(z, (Array<byte>) bArr, (SLInventory.OnNotecardUpdatedListener) onNotecardUpdatedListener, sLInventoryEntry2)
                 }
                 fun onInventoryCallback(sLInventoryEntry2: SLInventoryEntry) {
                     $m$0(sLInventoryEntry2)
@@ -1133,7 +1133,7 @@ open class SLInventory : SLModule() {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_48053, reason: not valid java name */
-    /* synthetic */ void m190x8292c7bb(SLInventoryEntry sLInventoryEntry, byte[] bArr, UUID uuid, boolean z, OnNotecardUpdatedListener onNotecardUpdatedListener) {
+    /* synthetic */ void m190x8292c7bb(SLInventoryEntry sLInventoryEntry, Array<byte> bArr, UUID uuid, boolean z, OnNotecardUpdatedListener onNotecardUpdatedListener) {
         var objArr: Array<Any> = arrayOfNulls<Object>(1)
         objArr[0] = if (sLInventoryEntry != null) sLInventoryEntry.uuid else null
         Debug.Printf("Notecard: Starting to upload contents for entry %s", objArr)
@@ -1147,12 +1147,12 @@ open class SLInventory : SLModule() {
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_49599, reason: not valid java name */
-    /* synthetic */ void m191x82934f61(boolean z, byte[] bArr, OnNotecardUpdatedListener onNotecardUpdatedListener, SLInventoryEntry sLInventoryEntry) {
+    /* synthetic */ void m191x82934f61(boolean z, Array<byte> bArr, OnNotecardUpdatedListener onNotecardUpdatedListener, SLInventoryEntry sLInventoryEntry) {
         StartUploadingNotecardContents(sLInventoryEntry, null, z, bArr, onNotecardUpdatedListener)
     }
 
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_50229, reason: not valid java name */
-    /* synthetic */ void m192x829d436f(boolean z, byte[] bArr, OnNotecardUpdatedListener onNotecardUpdatedListener, SLInventoryEntry sLInventoryEntry) {
+    /* synthetic */ void m192x829d436f(boolean z, Array<byte> bArr, OnNotecardUpdatedListener onNotecardUpdatedListener, SLInventoryEntry sLInventoryEntry) {
         StartUploadingNotecardContents(sLInventoryEntry, null, z, bArr, onNotecardUpdatedListener)
     }
 

@@ -86,7 +86,7 @@ open class SLAvatarControl : SLModule() {
     @JvmStatic private var animUUID_Standup: UUID = UUID.fromString("3da1d753-028a-5446-24f3-9c9b856d9422")
 
     private open class AgentUpdateTimerTask : TimerTask() {
-        private int scheduledInterval
+        private var scheduledInterval: Int
 
         fun AgentUpdateTimerTask(scheduledInterval: Int): private {
             this.scheduledInterval = scheduledInterval

@@ -16,10 +16,10 @@ open class RequestInventoryAsset : SLMessage() {
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var ItemID else UUID? = null
-        @JvmField var OwnerID: if (UUID) = null
-        @JvmField var QueryID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var ItemID: UUID? = null
+        @JvmField var OwnerID: UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     init {
@@ -46,6 +46,9 @@ open class RequestInventoryAsset : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        QueryData_Field.QueryID = unpackUUIDQueryData_Field as byteBuffer.AgentID = unpackUUIDQueryData_Field as byteBuffer.OwnerID = unpackUUIDQueryData_Field as byteBuffer.ItemID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
+        QueryData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.OwnerID = unpackUUID(byteBuffer)
+        QueryData_Field.ItemID = unpackUUID(byteBuffer)
     }
 }

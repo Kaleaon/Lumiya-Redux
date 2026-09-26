@@ -22,14 +22,14 @@ open class DenyTrustedCircuit : SLMessage() {
 
     /** Block DataBlock, Single. */
     open class DataBlock {
-        @JvmField var EndPointID: if (UUID) = null
+        @JvmField var EndPointID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return 20
     }
 

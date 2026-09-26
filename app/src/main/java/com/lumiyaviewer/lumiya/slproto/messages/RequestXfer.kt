@@ -20,11 +20,11 @@ open class RequestXfer : SLMessage() {
     open class XferID {
         @JvmField var DeleteOnCompletion: Boolean = false
         @JvmField var FilePath: Int = 0
-        @JvmField var Filename: if (ByteArray) = null
-        @JvmField var ID else Long = 0L
+        @JvmField var Filename: ByteArray? = null
+        @JvmField var ID: Long = 0L
         @JvmField var UseBigPackets: Boolean = false
-        @JvmField var VFileID: if (UUID) = null
-        @JvmField var VFileType else Int = 0
+        @JvmField var VFileID: UUID? = null
+        @JvmField var VFileType: Int = 0
     }
 
     init {
@@ -54,8 +54,12 @@ open class RequestXfer : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        XferID_Field.ID = unpackLongXferID_Field as byteBuffer.Filename = unpackVariable(byteBuffer, 1)
+        XferID_Field.ID = unpackLong(byteBuffer)
+        XferID_Field.Filename = unpackVariable(byteBuffer, 1)
         XferID_Field.FilePath = unpackByte(byteBuffer).toInt() and 0xFF
-        XferID_Field.DeleteOnCompletion = unpackBooleanXferID_Field as byteBuffer.UseBigPackets = unpackBooleanXferID_Field as byteBuffer.VFileID = unpackUUIDXferID_Field as byteBuffer.VFileType = unpackShort(byteBuffer).toInt()
+        XferID_Field.DeleteOnCompletion = unpackBoolean(byteBuffer)
+        XferID_Field.UseBigPackets = unpackBoolean(byteBuffer)
+        XferID_Field.VFileID = unpackUUID(byteBuffer)
+        XferID_Field.VFileType = unpackShort(byteBuffer).toInt()
     }
 }

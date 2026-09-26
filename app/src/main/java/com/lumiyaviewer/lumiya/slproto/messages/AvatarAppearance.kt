@@ -28,12 +28,12 @@ open class AvatarAppearance : SLMessage() {
 
     /** Block ObjectData, Single. */
     open class ObjectData {
-        @JvmField var TextureEntry: if (ByteArray) = null
+        @JvmField var TextureEntry: ByteArray? = null
     }
 
     /** Block Sender, Single. */
     open class Sender {
-        @JvmField var ID else UUID? = null
+        @JvmField var ID: UUID? = null
         @JvmField var IsTrial: Boolean = false
     }
 
@@ -75,7 +75,9 @@ open class AvatarAppearance : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        Sender_Field.ID = unpackUUIDSender_Field as byteBuffer.IsTrial = unpackBooleanObjectData_Field as byteBuffer.TextureEntry = unpackVariable(byteBuffer, 2)
+        Sender_Field.ID = unpackUUID(byteBuffer)
+        Sender_Field.IsTrial = unpackBoolean(byteBuffer)
+        ObjectData_Field.TextureEntry = unpackVariable(byteBuffer, 2)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val visualParam = VisualParam()
@@ -86,7 +88,9 @@ open class AvatarAppearance : SLMessage() {
         repeat(i3) {
             val appearanceData = AppearanceData()
             appearanceData.AppearanceVersion = unpackByte(byteBuffer).toInt() and 0xFF
-            appearanceData.CofVersion = unpackIntappearanceData as byteBuffer.Flags = unpackIntAppearanceData_Fields as byteBuffer.add(appearanceData)
+            appearanceData.CofVersion = unpackInt(byteBuffer)
+            appearanceData.Flags = unpackInt(byteBuffer)
+            AppearanceData_Fields.add(appearanceData)
         }
     }
 }

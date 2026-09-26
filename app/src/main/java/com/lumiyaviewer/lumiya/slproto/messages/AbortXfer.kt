@@ -42,6 +42,7 @@ open class AbortXfer : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        XferID_Field.ID = unpackLongXferID_Field as byteBuffer.Result = unpackInt(byteBuffer)
+        XferID_Field.ID = unpackLong(byteBuffer)
+        XferID_Field.Result = unpackInt(byteBuffer)
     }
 }

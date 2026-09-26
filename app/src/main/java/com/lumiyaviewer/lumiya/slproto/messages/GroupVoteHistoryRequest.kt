@@ -19,18 +19,18 @@ open class GroupVoteHistoryRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block TransactionData, Single. */
     open class TransactionData {
-        @JvmField var TransactionID else UUID? = null
+        @JvmField var TransactionID: UUID? = null
     }
 
     init {
@@ -57,6 +57,9 @@ open class GroupVoteHistoryRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUIDTransactionData_Field as byteBuffer.TransactionID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
+        TransactionData_Field.TransactionID = unpackUUID(byteBuffer)
     }
 }

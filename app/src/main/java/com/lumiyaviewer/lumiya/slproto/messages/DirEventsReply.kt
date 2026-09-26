@@ -21,21 +21,21 @@ open class DirEventsReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID else UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
     open class QueryReplies {
-        @JvmField var Date: if (ByteArray) = null
-        @JvmField var EventFlags else Int = 0
+        @JvmField var Date: ByteArray? = null
+        @JvmField var EventFlags: Int = 0
         @JvmField var EventID: Int = 0
-        @JvmField var Name: if (ByteArray) = null
-        @JvmField var OwnerID else UUID? = null
+        @JvmField var Name: ByteArray? = null
+        @JvmField var OwnerID: UUID? = null
         @JvmField var UnixTime: Int = 0
     }
 
@@ -88,18 +88,24 @@ open class DirEventsReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.OwnerID = unpackUUIDqueryReplies as byteBuffer.Name = unpackVariable(byteBuffer, 1)
-            queryReplies.EventID = unpackIntqueryReplies as byteBuffer.Date = unpackVariable(byteBuffer, 1)
-            queryReplies.UnixTime = unpackIntqueryReplies as byteBuffer.EventFlags = unpackIntQueryReplies_Fields as byteBuffer.add(queryReplies)
+            queryReplies.OwnerID = unpackUUID(byteBuffer)
+            queryReplies.Name = unpackVariable(byteBuffer, 1)
+            queryReplies.EventID = unpackInt(byteBuffer)
+            queryReplies.Date = unpackVariable(byteBuffer, 1)
+            queryReplies.UnixTime = unpackInt(byteBuffer)
+            queryReplies.EventFlags = unpackInt(byteBuffer)
+            QueryReplies_Fields.add(queryReplies)
         }
         val i3 = (byteBuffer.get().toInt() and 0xFF)
         repeat(i3) {
             val statusData = StatusData()
-            statusData.Status = unpackIntStatusData_Fields as byteBuffer.add(statusData)
+            statusData.Status = unpackInt(byteBuffer)
+            StatusData_Fields.add(statusData)
         }
     }
 }

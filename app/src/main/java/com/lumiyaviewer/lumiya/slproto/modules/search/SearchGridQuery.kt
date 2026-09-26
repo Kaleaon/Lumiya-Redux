@@ -10,12 +10,12 @@ abstract class SearchGridQuery {
         Places
 
         /* renamed from: values, reason: to resolve conflict with enum method */
-        public static SearchType[] valuesCustom() {
+        Array<SearchType> valuesCustom() {
             return values()
         }
     }
 
-    public static SearchGridQuery create(UUID uuid, String str, SearchType searchType) {
+    SearchGridQuery create(UUID uuid, String str, SearchType searchType) {
         return AutoValue_SearchGridQuery(uuid, str, searchType)
     }
 

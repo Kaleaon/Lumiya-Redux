@@ -3,7 +3,6 @@ package com.lumiyaviewer.lumiya.slproto.messages
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 import java.nio.ByteBuffer
 import java.util.ArrayList
-import java.util.Iterator
 import java.util.UUID
 
 /**
@@ -17,62 +16,60 @@ import java.util.UUID
  * (secondlife/viewer @ c179f76c01).
  */
 open class ObjectProperties : SLMessage() {
-    var ObjectData_Fields: ArrayList<ObjectData> = ArrayList<>()
+    @JvmField val ObjectData_Fields = ArrayList<ObjectData>()
 
     /** Block ObjectData, Variable. */
     open class ObjectData {
-        public int AggregatePermTextures; // U8
-        public int AggregatePermTexturesOwner; // U8
-        public int AggregatePerms; // U8
-        public int BaseMask; // U32
-        public int Category; // U32 - LLCategory
-        public long CreationDate; // U64
-        public UUID CreatorID; // LLUUID
-        public byte[] Description; // Variable 1
-        public int EveryoneMask; // U32
-        public UUID FolderID; // LLUUID
-        public UUID FromTaskID; // LLUUID
-        public UUID GroupID; // LLUUID
-        public int GroupMask; // U32
-        public int InventorySerial; // S16
-        public UUID ItemID; // LLUUID
-        public UUID LastOwnerID; // LLUUID
-        public byte[] Name; // Variable 1
-        public int NextOwnerMask; // U32
-        public UUID ObjectID; // LLUUID
-        public UUID OwnerID; // LLUUID
-        public int OwnerMask; // U32
-        public int OwnershipCost; // S32
-        public int SalePrice; // S32
-        public int SaleType; // U8 - > EForSale
-        public byte[] SitName; // Variable 1
-        public byte[] TextureID; // Variable 1
-        public byte[] TouchName; // Variable 1
+        @JvmField var AggregatePermTextures: Int = 0 // U8
+        @JvmField var AggregatePermTexturesOwner: Int = 0 // U8
+        @JvmField var AggregatePerms: Int = 0 // U8
+        @JvmField var BaseMask: Int = 0 // U32
+        @JvmField var Category: Int = 0 // U32 - LLCategory
+        @JvmField var CreationDate: Long = 0L // U64
+        @JvmField var CreatorID: UUID? = null // LLUUID
+        @JvmField var Description: ByteArray? = null // Variable 1
+        @JvmField var EveryoneMask: Int = 0 // U32
+        @JvmField var FolderID: UUID? = null // LLUUID
+        @JvmField var FromTaskID: UUID? = null // LLUUID
+        @JvmField var GroupID: UUID? = null // LLUUID
+        @JvmField var GroupMask: Int = 0 // U32
+        @JvmField var InventorySerial: Int = 0 // S16
+        @JvmField var ItemID: UUID? = null // LLUUID
+        @JvmField var LastOwnerID: UUID? = null // LLUUID
+        @JvmField var Name: ByteArray? = null // Variable 1
+        @JvmField var NextOwnerMask: Int = 0 // U32
+        @JvmField var ObjectID: UUID? = null // LLUUID
+        @JvmField var OwnerID: UUID? = null // LLUUID
+        @JvmField var OwnerMask: Int = 0 // U32
+        @JvmField var OwnershipCost: Int = 0 // S32
+        @JvmField var SalePrice: Int = 0 // S32
+        @JvmField var SaleType: Int = 0 // U8 - > EForSale
+        @JvmField var SitName: ByteArray? = null // Variable 1
+        @JvmField var TextureID: ByteArray? = null // Variable 1
+        @JvmField var TouchName: ByteArray? = null // Variable 1
     }
 
-    constructor() {
+    init {
         this.zeroCoded = true
     }
-    fun CalcPayloadSize(): Int {
-        var i: Int = 3
-        var it: Iterator<?> = this.ObjectData_Fields.iterator()
-        while (true) {
-            var i2: Int = i
-            if (!it.hasNext()) {
-        return i2
-            }
-            var objectData: ObjectData = it as ObjectData.next()
-            i = objectData.TextureID.length + objectData.Name.length + 175 + 1 + objectData.Description.length + 1 + objectData.TouchName.length + 1 + objectData.SitName.length + 1 + i2
+
+    override fun CalcPayloadSize(): Int {
+        var i = 3
+        for (entry in this.ObjectData_Fields) {
+            i = entry.TextureID.size + entry.Name.size + 175 + 1 + entry.Description.size + 1 + entry.TouchName.size + 1 + entry.SitName.size + 1 + i
         }
+        return i
     }
-    fun Handle(messageHandler: SLMessageHandler) {
+
+    override fun Handle(messageHandler: SLMessageHandler) {
         messageHandler.HandleObjectProperties(this)
     }
-    fun PackPayload(byteBuffer: ByteBuffer) {
+
+    override fun PackPayload(byteBuffer: ByteBuffer) {
         // Message number: Medium 9 (ObjectProperties).
-        byteBuffer.put(0xFF as byte)
-        byteBuffer.put(0x09 as byte)
-        byteBuffer.put(this as byte.ObjectData_Fields.size())
+        byteBuffer.put((0xFF).toByte())
+        byteBuffer.put((0x09).toByte())
+        byteBuffer.put((this.ObjectData_Fields.size).toByte())
         for (objectData in this.ObjectData_Fields) {
             packUUID(byteBuffer, objectData.ObjectID)
             packUUID(byteBuffer, objectData.CreatorID)
@@ -85,13 +82,13 @@ open class ObjectProperties : SLMessage() {
             packInt(byteBuffer, objectData.EveryoneMask)
             packInt(byteBuffer, objectData.NextOwnerMask)
             packInt(byteBuffer, objectData.OwnershipCost)
-            packByte(byteBuffer, objectData as byte.SaleType)
+            packByte(byteBuffer, (objectData.SaleType).toByte())
             packInt(byteBuffer, objectData.SalePrice)
-            packByte(byteBuffer, objectData as byte.AggregatePerms)
-            packByte(byteBuffer, objectData as byte.AggregatePermTextures)
-            packByte(byteBuffer, objectData as byte.AggregatePermTexturesOwner)
+            packByte(byteBuffer, (objectData.AggregatePerms).toByte())
+            packByte(byteBuffer, (objectData.AggregatePermTextures).toByte())
+            packByte(byteBuffer, (objectData.AggregatePermTexturesOwner).toByte())
             packInt(byteBuffer, objectData.Category)
-            packShort(byteBuffer, objectData as short.InventorySerial)
+            packShort(byteBuffer, (short) objectData.InventorySerial)
             packUUID(byteBuffer, objectData.ItemID)
             packUUID(byteBuffer, objectData.FolderID)
             packUUID(byteBuffer, objectData.FromTaskID)
@@ -103,15 +100,34 @@ open class ObjectProperties : SLMessage() {
             packVariable(byteBuffer, objectData.TextureID, 1)
         }
     }
-    fun UnpackPayload(byteBuffer: ByteBuffer) {
-        var i: Int = byteBuffer.get() & 0xFF
-        for (int j = 0; j < i; j++) {
-            var objectData: ObjectData = ObjectData()
-            objectData.ObjectID = unpackUUIDobjectData as byteBuffer.CreatorID = unpackUUIDobjectData as byteBuffer.OwnerID = unpackUUIDobjectData as byteBuffer.GroupID = unpackUUIDobjectData as byteBuffer.CreationDate = unpackLongobjectData as byteBuffer.BaseMask = unpackIntobjectData as byteBuffer.OwnerMask = unpackIntobjectData as byteBuffer.GroupMask = unpackIntobjectData as byteBuffer.EveryoneMask = unpackIntobjectData as byteBuffer.NextOwnerMask = unpackIntobjectData as byteBuffer.OwnershipCost = unpackIntobjectData as byteBuffer.SaleType = unpackByte(byteBuffer) & 0xFF
-            objectData.SalePrice = unpackIntobjectData as byteBuffer.AggregatePerms = unpackByte(byteBuffer) & 0xFF
+
+    override fun UnpackPayload(byteBuffer: ByteBuffer) {
+        val i = byteBuffer.get().toInt() and 0xFF
+        repeat(i) {
+            val objectData = ObjectData()
+            objectData.ObjectID = unpackUUID(byteBuffer)
+            objectData.CreatorID = unpackUUID(byteBuffer)
+            objectData.OwnerID = unpackUUID(byteBuffer)
+            objectData.GroupID = unpackUUID(byteBuffer)
+            objectData.CreationDate = unpackLong(byteBuffer)
+            objectData.BaseMask = unpackInt(byteBuffer)
+            objectData.OwnerMask = unpackInt(byteBuffer)
+            objectData.GroupMask = unpackInt(byteBuffer)
+            objectData.EveryoneMask = unpackInt(byteBuffer)
+            objectData.NextOwnerMask = unpackInt(byteBuffer)
+            objectData.OwnershipCost = unpackInt(byteBuffer)
+            objectData.SaleType = unpackByte(byteBuffer) & 0xFF
+            objectData.SalePrice = unpackInt(byteBuffer)
+            objectData.AggregatePerms = unpackByte(byteBuffer) & 0xFF
             objectData.AggregatePermTextures = unpackByte(byteBuffer) & 0xFF
             objectData.AggregatePermTexturesOwner = unpackByte(byteBuffer) & 0xFF
-            objectData.Category = unpackIntobjectData as byteBuffer.InventorySerial = unpackShortobjectData as byteBuffer.ItemID = unpackUUIDobjectData as byteBuffer.FolderID = unpackUUIDobjectData as byteBuffer.FromTaskID = unpackUUIDobjectData as byteBuffer.LastOwnerID = unpackUUIDobjectData as byteBuffer.Name = unpackVariable(byteBuffer, 1)
+            objectData.Category = unpackInt(byteBuffer)
+            objectData.InventorySerial = unpackShort(byteBuffer)
+            objectData.ItemID = unpackUUID(byteBuffer)
+            objectData.FolderID = unpackUUID(byteBuffer)
+            objectData.FromTaskID = unpackUUID(byteBuffer)
+            objectData.LastOwnerID = unpackUUID(byteBuffer)
+            objectData.Name = unpackVariable(byteBuffer, 1)
             objectData.Description = unpackVariable(byteBuffer, 1)
             objectData.TouchName = unpackVariable(byteBuffer, 1)
             objectData.SitName = unpackVariable(byteBuffer, 1)
@@ -120,3 +136,4 @@ open class ObjectProperties : SLMessage() {
         }
     }
 }
+

@@ -18,8 +18,8 @@ open class SimulatorSetMap : SLMessage() {
 
     /** Block MapData, Single. */
     open class MapData {
-        @JvmField var MapImage: if (UUID) = null
-        @JvmField var RegionHandle else Long = 0L
+        @JvmField var MapImage: UUID? = null
+        @JvmField var RegionHandle: Long = 0L
         @JvmField var Type: Int = 0
     }
 
@@ -46,6 +46,8 @@ open class SimulatorSetMap : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        MapData_Field.RegionHandle = unpackLongMapData_Field as byteBuffer.Type = unpackIntMapData_Field as byteBuffer.MapImage = unpackUUID(byteBuffer)
+        MapData_Field.RegionHandle = unpackLong(byteBuffer)
+        MapData_Field.Type = unpackInt(byteBuffer)
+        MapData_Field.MapImage = unpackUUID(byteBuffer)
     }
 }

@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException
 import java.util.UUID
 
 open class SLWearableData {
-    public String name
+    public var name: String
     public ImmutableList<WearableParam> params
     public ImmutableList<WearableTexture> textures
 
@@ -21,8 +21,8 @@ open class SLWearableData {
     }
 
     open class WearableParam {
-        public int paramIndex
-        public float paramValue
+        public var paramIndex: Int
+        public var paramValue: Float
 
         WearableParam(int paramIndex, float paramValue) {
             this.paramIndex = paramIndex
@@ -31,7 +31,7 @@ open class SLWearableData {
     }
 
     open class WearableTexture {
-        public int layer
+        public var layer: Int
         public UUID textureID
 
         WearableTexture(int layer, UUID uuid) {
@@ -40,12 +40,12 @@ open class SLWearableData {
         }
     }
 
-    SLWearableData(byte[] bytes) throws WearableFormatException {
+    SLWearableData(Array<byte> bytes) throws WearableFormatException {
         int i
-        String[] split
-        String[] split2
+        Array<String> split
+        Array<String> split2
         try {
-            String[] split3 = String(bytes, "ISO-8859-1").trim().split("\n+")
+            Array<String> split3 = String(bytes, "ISO-8859-1").trim().split("\n+")
             if (split3.length < 2) {
                 throw WearableFormatException()
             }
@@ -58,7 +58,7 @@ open class SLWearableData {
                 ImmutableList.Builder builder2 = ImmutableList.builder()
                 int i2 = 2
                 while (i2 < split3.length) {
-                    String[] split4 = split3[i2].trim().split("\\s+")
+                    Array<String> split4 = split3[i2].trim().split("\\s+")
                     if (split4.length < 1) {
                         i2++
                     } else if (split4[0].equalsIgnoreCase("permissions") || split4[0].equalsIgnoreCase("sale_info")) {

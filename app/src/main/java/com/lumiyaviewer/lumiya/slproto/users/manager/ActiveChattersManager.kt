@@ -74,8 +74,8 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     open class ChatMessageEvent {
 
         public ChatMessage chatMessage
-        public boolean isNewMessage
-        public boolean isPrivate
+        public var isNewMessage: Boolean
+        public var isPrivate: Boolean
 
         ChatMessageEvent(ChatMessage chatMessage, boolean z, boolean z2) {
             this.chatMessage = chatMessage

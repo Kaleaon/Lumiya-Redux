@@ -20,20 +20,20 @@ open class DirPeopleReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
     }
 
     /** Block QueryData, Single. */
     open class QueryData {
-        @JvmField var QueryID else UUID? = null
+        @JvmField var QueryID: UUID? = null
     }
 
     /** Block QueryReplies, Variable. */
     open class QueryReplies {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var FirstName else ByteArray? = null
-        @JvmField var Group: if (ByteArray) = null
-        @JvmField var LastName else ByteArray? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var FirstName: ByteArray? = null
+        @JvmField var Group: ByteArray? = null
+        @JvmField var LastName: ByteArray? = null
         @JvmField var Online: Boolean = false
         @JvmField var Reputation: Int = 0
     }
@@ -78,14 +78,18 @@ open class DirPeopleReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDQueryData_Field as byteBuffer.QueryID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        QueryData_Field.QueryID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val queryReplies = QueryReplies()
-            queryReplies.AgentID = unpackUUIDqueryReplies as byteBuffer.FirstName = unpackVariable(byteBuffer, 1)
+            queryReplies.AgentID = unpackUUID(byteBuffer)
+            queryReplies.FirstName = unpackVariable(byteBuffer, 1)
             queryReplies.LastName = unpackVariable(byteBuffer, 1)
             queryReplies.Group = unpackVariable(byteBuffer, 1)
-            queryReplies.Online = unpackBooleanqueryReplies as byteBuffer.Reputation = unpackIntQueryReplies_Fields as byteBuffer.add(queryReplies)
+            queryReplies.Online = unpackBoolean(byteBuffer)
+            queryReplies.Reputation = unpackInt(byteBuffer)
+            QueryReplies_Fields.add(queryReplies)
         }
     }
 }

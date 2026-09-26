@@ -19,8 +19,8 @@ open class SimulatorViewerTimeMessage : SLMessage() {
     open class TimeInfo {
         @JvmField var SecPerDay: Int = 0
         @JvmField var SecPerYear: Int = 0
-        @JvmField var SunAngVelocity: if (LLVector3) = null
-        @JvmField var SunDirection else LLVector3? = null
+        @JvmField var SunAngVelocity: LLVector3? = null
+        @JvmField var SunDirection: LLVector3? = null
         @JvmField var SunPhase: Float = 0f
         @JvmField var UsecSinceStart: Long = 0L
     }
@@ -51,6 +51,11 @@ open class SimulatorViewerTimeMessage : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        TimeInfo_Field.UsecSinceStart = unpackLongTimeInfo_Field as byteBuffer.SecPerDay = unpackIntTimeInfo_Field as byteBuffer.SecPerYear = unpackIntTimeInfo_Field as byteBuffer.SunDirection = unpackLLVector3TimeInfo_Field as byteBuffer.SunPhase = unpackFloatTimeInfo_Field as byteBuffer.SunAngVelocity = unpackLLVector3(byteBuffer)
+        TimeInfo_Field.UsecSinceStart = unpackLong(byteBuffer)
+        TimeInfo_Field.SecPerDay = unpackInt(byteBuffer)
+        TimeInfo_Field.SecPerYear = unpackInt(byteBuffer)
+        TimeInfo_Field.SunDirection = unpackLLVector3(byteBuffer)
+        TimeInfo_Field.SunPhase = unpackFloat(byteBuffer)
+        TimeInfo_Field.SunAngVelocity = unpackLLVector3(byteBuffer)
     }
 }

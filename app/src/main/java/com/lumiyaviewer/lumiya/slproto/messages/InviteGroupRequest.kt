@@ -20,26 +20,26 @@ open class InviteGroupRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var SessionID else UUID? = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block GroupData, Single. */
     open class GroupData {
-        @JvmField var GroupID: if (UUID) = null
+        @JvmField var GroupID: UUID? = null
     }
 
     /** Block InviteData, Variable. */
     open class InviteData {
-        @JvmField var InviteeID else UUID? = null
-        @JvmField var RoleID: if (UUID) = null
+        @JvmField var InviteeID: UUID? = null
+        @JvmField var RoleID: UUID? = null
     }
 
     init {
         zeroCoded = false
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         return (InviteData_Fields.size * 32) + 53
     }
 
@@ -63,11 +63,15 @@ open class InviteGroupRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDGroupData_Field as byteBuffer.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        GroupData_Field.GroupID = unpackUUID(byteBuffer)
         val i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val inviteData = InviteData()
-            inviteData.InviteeID = unpackUUIDinviteData as byteBuffer.RoleID = unpackUUIDInviteData_Fields as byteBuffer.add(inviteData)
+            inviteData.InviteeID = unpackUUID(byteBuffer)
+            inviteData.RoleID = unpackUUID(byteBuffer)
+            InviteData_Fields.add(inviteData)
         }
     }
 }

@@ -6,18 +6,18 @@ import java.util.HashMap
 import java.util.Map
 
 open class SLAttachmentPoint {
-    public static int NON_HUD_ATTACHMENT_POINTS = 47
-    public static int NUM_ATTACHMENT_POINTS = 56
+    int NON_HUD_ATTACHMENT_POINTS = 47
+    int NUM_ATTACHMENT_POINTS = 56
     public SLSkeletonBoneID bone
-    public int id
-    public boolean isHUD
-    public String name
-    public int nonHUDindex
+    public var id: Int
+    public var isHUD: Boolean
+    public var name: String
+    public var nonHUDindex: Int
     public LLVector3 position
     public LLQuaternion rotation
-    public static SLAttachmentPoint[] attachmentPoints = arrayOfNulls<SLAttachmentPoint>(56)
-    public static Map<String, SLAttachmentPoint> pointsByName = HashMap()
-    public static int[] nonHUDpoints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55}
+    Array<SLAttachmentPoint> attachmentPoints = arrayOfNulls<SLAttachmentPoint>(56)
+    Map<String, SLAttachmentPoint> pointsByName = HashMap()
+    Array<int> nonHUDpoints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55}
     init {
         attachmentPoints[1] = SLAttachmentPoint(1, "Chest", 0, false, SLSkeletonBoneID.mChest, LLVector3(0.15f, 0.0f, -0.1f), LLQuaternion(0.5f, 0.5f, 0.5f, 0.5f))
         attachmentPoints[2] = SLAttachmentPoint(2, "Skull", 1, false, SLSkeletonBoneID.mHead, LLVector3(0.0f, 0.0f, 0.15f), LLQuaternion(0.0f, 0.0f, 0.707107f, 0.707107f))

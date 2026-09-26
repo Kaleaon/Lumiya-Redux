@@ -16,12 +16,12 @@ open class LayerData : SLMessage() {
     @JvmField var LayerID_Field: LayerID = LayerID()
 
     open class LayerDataData {
-        @JvmField var Data: if (ByteArray) = null
+        @JvmField var Data: ByteArray? = null
     }
 
     /** Block LayerID, Single. */
     open class LayerID {
-        @JvmField var Type else Int = 0
+        @JvmField var Type: Int = 0
     }
 
     init {

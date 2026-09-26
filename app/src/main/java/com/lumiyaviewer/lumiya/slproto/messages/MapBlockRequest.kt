@@ -19,16 +19,16 @@ open class MapBlockRequest : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var EstateID else Int = 0
+        @JvmField var AgentID: UUID? = null
+        @JvmField var EstateID: Int = 0
         @JvmField var Flags: Int = 0
         @JvmField var Godlike: Boolean = false
-        @JvmField var SessionID: if (UUID) = null
+        @JvmField var SessionID: UUID? = null
     }
 
     /** Block PositionData, Single. */
     open class PositionData {
-        @JvmField var MaxX else Int = 0
+        @JvmField var MaxX: Int = 0
         @JvmField var MaxY: Int = 0
         @JvmField var MinX: Int = 0
         @JvmField var MinY: Int = 0
@@ -63,7 +63,12 @@ open class MapBlockRequest : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.SessionID = unpackUUIDAgentData_Field as byteBuffer.Flags = unpackIntAgentData_Field as byteBuffer.EstateID = unpackIntAgentData_Field as byteBuffer.Godlike = unpackBooleanPositionData_Field as byteBuffer.MinX = unpackShort(byteBuffer).toInt() and 65535
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.SessionID = unpackUUID(byteBuffer)
+        AgentData_Field.Flags = unpackInt(byteBuffer)
+        AgentData_Field.EstateID = unpackInt(byteBuffer)
+        AgentData_Field.Godlike = unpackBoolean(byteBuffer)
+        PositionData_Field.MinX = unpackShort(byteBuffer).toInt() and 65535
         PositionData_Field.MaxX = unpackShort(byteBuffer).toInt() and 65535
         PositionData_Field.MinY = unpackShort(byteBuffer).toInt() and 65535
         PositionData_Field.MaxY = unpackShort(byteBuffer).toInt() and 65535

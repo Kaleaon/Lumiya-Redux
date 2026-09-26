@@ -204,7 +204,7 @@ open class UserManager {
         this.chatterList = ChatterListthis as this.userPicBitmapCache = UserPicBitmapCachethis as this.syncManager = SyncManager(this)
     }
 
-    public static Subscribable<UUID, SLAgentCircuit> agentCircuits() {
+    Subscribable<UUID, SLAgentCircuit> agentCircuits() {
         return activeAgentCircuitsPool
     }
 
@@ -216,7 +216,7 @@ open class UserManager {
         return userManager.getActiveAgentCircuit()
     }
 
-    public static SLAgentCircuit getConnectedAgentCircuit(UUID uuid) throws SLGridConnection.NotConnectedException {
+    SLAgentCircuit getConnectedAgentCircuit(UUID uuid) throws SLGridConnection.NotConnectedException {
         var activeAgentCircuit: SLAgentCircuit = getActiveAgentCircuit(uuid)
         if (activeAgentCircuit != null) {
         return activeAgentCircuit

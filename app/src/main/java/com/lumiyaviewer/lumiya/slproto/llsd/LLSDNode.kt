@@ -36,7 +36,7 @@ import org.xmlpull.v1.XmlSerializer
 
 abstract class LLSDNode {
 
-    public static LLSDNode fromAny(InputStream inputStream, String str) throws LLSDXMLException {
+    LLSDNode fromAny(InputStream inputStream, String str) throws LLSDXMLException {
         try {
             var bufferedInputStream: BufferedInputStream = BufferedInputStream(inputStream, 65536)
             switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
@@ -54,7 +54,7 @@ abstract class LLSDNode {
         }
     }
 
-    public static LLSDNode fromBinary(DataInputStream dataInputStream) throws LLSDXMLException {
+    LLSDNode fromBinary(DataInputStream dataInputStream) throws LLSDXMLException {
         var i: Int = 0
         while (true) {
             try {
@@ -135,7 +135,7 @@ abstract class LLSDNode {
         }
     }
 
-    public static LLSDNode fromBinaryFile(File file) throws LLSDXMLException {
+    LLSDNode fromBinaryFile(File file) throws LLSDXMLException {
         try (DataInputStream dataInputStream = DataInputStream(FileInputStream(file))) {
             return fromBinary(dataInputStream)
         } catch (e: IOException) {
@@ -145,7 +145,7 @@ abstract class LLSDNode {
         }
     }
 
-    public static LLSDNode parseXML(InputStream inputStream, String str) throws LLSDXMLException {
+    LLSDNode parseXML(InputStream inputStream, String str) throws LLSDXMLException {
         try {
             var newPullParser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
             newPullParser.setInput(inputStream, str)
@@ -166,11 +166,11 @@ abstract class LLSDNode {
         }
     }
 
-    public byte[] asBinary() throws LLSDValueTypeException {
+    public Array<byte> asBinary() throws LLSDValueTypeException {
         throw LLSDValueTypeException("binary", this)
     }
 
-    public boolean asBoolean() throws LLSDValueTypeException {
+    public var asBoolean: Boolean() throws LLSDValueTypeException {
         throw LLSDValueTypeException("boolean", this)
     }
 
@@ -178,19 +178,19 @@ abstract class LLSDNode {
         throw LLSDValueTypeException("date", this)
     }
 
-    public double asDouble() throws LLSDValueTypeException {
+    public var asDouble: Double() throws LLSDValueTypeException {
         throw LLSDValueTypeException("real", this)
     }
 
-    public int asInt() throws LLSDValueTypeException {
+    public var asInt: Int() throws LLSDValueTypeException {
         throw LLSDValueTypeException("integer", this)
     }
 
-    public long asLong() throws LLSDValueTypeException {
+    public var asLong: Long() throws LLSDValueTypeException {
         throw LLSDValueTypeException("long", this)
     }
 
-    public String asString() throws LLSDValueTypeException {
+    public var asString: String() throws LLSDValueTypeException {
         throw LLSDValueTypeException("string", this)
     }
 
@@ -210,7 +210,7 @@ abstract class LLSDNode {
         throw LLSDValueTypeException("map", this)
     }
 
-    public int getCount() throws LLSDException {
+    public var getCount: Int() throws LLSDException {
         throw LLSDValueTypeException("array", this)
     }
 
@@ -250,11 +250,11 @@ abstract class LLSDNode {
         return this is LLSDUUID
     }
 
-    public boolean keyExists(String str) throws LLSDException {
+    public var keyExists: Boolean(String str) throws LLSDException {
         throw LLSDValueTypeException("map", this)
     }
 
-    public String serializeToXML() throws IOException {
+    public var serializeToXML: String() throws IOException {
         var newSerializer: XmlSerializer = Xml.newSerializer()
         var stringWriter: StringWriter = StringWriter()
         newSerializer.setOutputnewSerializer as stringWriter.startTag("", "llsd")

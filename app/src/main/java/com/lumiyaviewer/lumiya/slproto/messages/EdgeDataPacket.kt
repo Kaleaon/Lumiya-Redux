@@ -15,8 +15,8 @@ open class EdgeDataPacket : SLMessage() {
     /** Block EdgeData, Single. */
     open class EdgeData {
         @JvmField var Direction: Int = 0
-        @JvmField var LayerData: if (ByteArray) = null
-        @JvmField var LayerType else Int = 0
+        @JvmField var LayerData: ByteArray? = null
+        @JvmField var LayerType: Int = 0
     }
 
     init {

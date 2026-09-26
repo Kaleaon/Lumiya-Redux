@@ -20,23 +20,23 @@ open class GroupTitlesReply : SLMessage() {
 
     /** Block AgentData, Single. */
     open class AgentData {
-        @JvmField var AgentID: if (UUID) = null
-        @JvmField var GroupID else UUID? = null
-        @JvmField var RequestID: if (UUID) = null
+        @JvmField var AgentID: UUID? = null
+        @JvmField var GroupID: UUID? = null
+        @JvmField var RequestID: UUID? = null
     }
 
     /** Block GroupData, Variable. */
     open class GroupData {
-        @JvmField var RoleID else UUID? = null
+        @JvmField var RoleID: UUID? = null
         @JvmField var Selected: Boolean = false
-        @JvmField var Title: if (ByteArray) = null
+        @JvmField var Title: ByteArray? = null
     }
 
     init {
         zeroCoded = true
     }
 
-    override fun CalcPayloadSize() else Int {
+    override fun CalcPayloadSize(): Int {
         var i = 53
         val it = GroupData_Fields.iterator()
         while (true) {
@@ -69,12 +69,16 @@ open class GroupTitlesReply : SLMessage() {
     }
 
     override fun UnpackPayload(byteBuffer: ByteBuffer) {
-        AgentData_Field.AgentID = unpackUUIDAgentData_Field as byteBuffer.GroupID = unpackUUIDAgentData_Field as byteBuffer.RequestID = unpackUUID(byteBuffer)
+        AgentData_Field.AgentID = unpackUUID(byteBuffer)
+        AgentData_Field.GroupID = unpackUUID(byteBuffer)
+        AgentData_Field.RequestID = unpackUUID(byteBuffer)
         var i = (byteBuffer.get().toInt() and 0xFF)
         repeat(i) {
             val groupData = GroupData()
             groupData.Title = unpackVariable(byteBuffer, 1)
-            groupData.RoleID = unpackUUIDgroupData as byteBuffer.Selected = unpackBooleanGroupData_Fields as byteBuffer.add(groupData)
+            groupData.RoleID = unpackUUID(byteBuffer)
+            groupData.Selected = unpackBoolean(byteBuffer)
+            GroupData_Fields.add(groupData)
         }
     }
 }
