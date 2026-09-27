@@ -2,9 +2,10 @@ package com.lumiyaviewer.lumiya.slproto.messages
 
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 
-open class SLMessageFactory {
-    SLMessage CreateByID(int i) {
-        when (i) {
+object SLMessageFactory {
+    @JvmStatic
+    fun CreateByID(i: Int): SLMessage? {
+        return when (i) {
             -65535 ->
                 return TestMessage()
             -65534 ->
