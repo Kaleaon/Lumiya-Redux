@@ -17,7 +17,7 @@ open class InlineList<T : InlineListEntry<T>> {
 
     fun getFirst(): T? = first
 
-    fun removeEntry(t: T) {
+    open fun removeEntry(t: T) {
         if (t.getList() === this) {
             val next = t.getNext()
             val prev = t.getPrev()

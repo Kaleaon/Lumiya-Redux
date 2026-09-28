@@ -68,7 +68,7 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
     }
 
     private fun isEmpty(): Boolean {
-        return first == null && children == null
+        return getFirst() == null && children == null
     }
 
     private fun longestAxis(): Int {
