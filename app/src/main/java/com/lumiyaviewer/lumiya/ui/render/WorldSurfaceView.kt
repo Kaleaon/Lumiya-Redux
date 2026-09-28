@@ -55,7 +55,7 @@ open class WorldSurfaceView : GLSurfaceView() {
                         WorldSurfaceView.this.activity.rendererShaderCompileError()
                         }
                     5 -> {
-                        internal fun if(Bitmap: message.obj instanceof):  {
+                        if (message.obj instanceof Bitmap) {
                             WorldSurfaceView.this.activity.processScreenshot((Bitmap) message.obj)
                             }
                         }
@@ -74,7 +74,7 @@ open class WorldSurfaceView : GLSurfaceView() {
         objArr[1] = this.wantGL20 ? "yes" : "no"
         Debug.Printf("WorldSurfaceView: API level %d, wantGL20 %s", objArr)
         setEGLContextClientVersion(3)
-        internal fun if(this.wantGL20):  {
+        if (this.wantGL20) {
             setPreserveEGLContextOnPause(true)
         }
         this.renderer = WorldViewRenderer(this.mHandler, this.wantGL20, userManager, applyDimension)

@@ -99,20 +99,20 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
         internal fun bindToData(groupRoleMember: GroupRoleMember, z: Boolean, canDelete: Boolean) {
             ChatterID.ChatterIDUser userChatterID = groupRoleMember != null ? ChatterID.getUserChatterID(this.agentUUID, groupRoleMember.getUserID()) : null
             if (!Objects.equal(userChatterID, this.boundChatterID)) {
-                internal fun if(null: this.chatterNameRetriever !=):  {
+                if (this.chatterNameRetriever != null) {
                     this.chatterNameRetriever.dispose()
                     this.chatterNameRetriever = null
                 }
                 this.userNameTextView.setText((CharSequence) null)
                 this.boundChatterID = userChatterID
-                internal fun if(null: userChatterID !=):  {
+                if (userChatterID != null) {
                     this.chatterNameRetriever = ChatterNameRetriever(this.boundChatterID, this, UIThreadExecutor.getInstance())
                     this.userPicView.setChatterID(userChatterID, this.chatterNameRetriever.getResolvedName())
                 } else {
                     this.userPicView.setChatterID(null, null)
                 }
             }
-            internal fun if(z):  {
+            if (z) {
                 canDelete = true
             } else if (!this.agentUUID == (this.boundChatterID.getChatterUUID())) {
                 canDelete = false
@@ -122,7 +122,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
         }
 
         override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-            internal fun if(null: chatterNameRetriever !=):  {
+            if (chatterNameRetriever != null) {
                 this.userNameTextView.setText(chatterNameRetriever.getResolvedName())
                 this.userPicView.setChatterID(chatterNameRetriever.chatterID, chatterNameRetriever.getResolvedName())
             }
@@ -131,7 +131,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
         override fun onClick(view: View) {
             when (view.getId()) {
                 R.id.role_member_remove_button -> {
-                    internal fun if(this.canDelete: this.boundChatterID != null &&):  {
+                    if (this.boundChatterID != null && this.canDelete) {
                         GroupRoleMembersFragment.this.removeMemberFromRole(this.boundChatterID)
                         }
                     }
@@ -140,7 +140,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
         }
 
         internal fun recycle() {
-            internal fun if(null: this.chatterNameRetriever !=):  {
+            if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose()
                 this.chatterNameRetriever = null
             }
@@ -162,7 +162,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
 
     private fun getMyGroupPowers(): Long {
         AvatarGroupList.AvatarGroupEntry myGroupEntry = getMyGroupEntry()
-        internal fun if(null: myGroupEntry !=):  {
+        if (myGroupEntry != null) {
             return myGroupEntry.GroupPowers
         }
         return 0L
@@ -171,7 +171,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
     @JvmStatic
     fun makeSelection(chatterID: ChatterID, uuid: UUID): Bundle {
         Bundle makeSelection = ChatterFragment.makeSelection(chatterID)
-        internal fun if(null: uuid !=):  {
+        if (uuid != null) {
             makeSelection.putString(ROLE_ID_KEY, uuid.toString())
         }
         return makeSelection
@@ -194,7 +194,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
                     }
                 }
             }
-            internal fun if(z):  {
+            if (z) {
                 this.canAddMembers = true
             }
         }
@@ -211,10 +211,10 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
             z2 = false
         }
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             view.findViewById(R.id.add_role_member_button).setVisibility(this.canAddMembers ? View.VISIBLE : View.GONE)
         }
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setData(this.roleMembers.getData(), z2, z3)
         }
     }

@@ -185,7 +185,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
         }
 
         override fun onRmsChanged(f: Float) {
-            internal fun if(CardboardActivity.this.isSpeechFinished):  {
+            if (CardboardActivity.this.isSpeechFinished) {
                 return
             }
             if (Float.isNaN(CardboardActivity.this.speechRmsMin) || f < CardboardActivity.this.speechRmsMin) {
@@ -195,14 +195,14 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
                 CardboardActivity.this.speechRmsMax = f
             }
             float f2 = CardboardActivity.this.speechRmsMax
-            internal fun if(1.0f: f2 - CardboardActivity.this.speechRmsMin <):  {
+            if (f2 - CardboardActivity.this.speechRmsMin < 1.0f) {
                 f2 = CardboardActivity.this.speechRmsMin + 1.0f
             }
             int round = Math.round(((f - CardboardActivity.this.speechRmsMin) * 100.0f) / (f2 - CardboardActivity.this.speechRmsMin))
-            internal fun if(0: round <):  {
+            if (round < 0) {
                 round = 0
             }
-            internal fun if(100: round >):  {
+            if (round > 100) {
                 round = 100
             }
             Debug.Printf("Cardboard: speech recognition: RMS %f", Float.valueOf(f))
@@ -244,10 +244,10 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
     }
     private View.OnClickListener onDialogButtonClick = new View.OnClickListener() {
         override fun onClick(view: View) {
-            internal fun if(null: CardboardActivity.this.activeScriptDialog !=):  {
+            if (CardboardActivity.this.activeScriptDialog != null) {
                 int i = 0
-                internal fun while(true):  {
-                    internal fun if(CardboardActivity.dialogButtonIds.length: i >=):  {
+                while (true) {
+                    if (i >= CardboardActivity.dialogButtonIds.length) {
                         i = -1
                         }
                     } else if (view.getId() == CardboardActivity.dialogButtonIds[i]) {
@@ -331,9 +331,9 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
                 System.arraycopy(eye.getPerspective(0.5f, CardboardActivity.this.renderSettings.drawDistance), 0, this.eyeProjection, i2 * 16, 16)
             }
             CardboardActivity.this.renderer.onDrawFrame(null, this.headTransformCompat, this.eyeOffset, this.eyeViewport, null, null, 0)
-            internal fun if(null: this.externalTexture !=):  {
+            if (this.externalTexture != null) {
                 CardboardActivity.this.renderer.drawExternalTexture(this.externalTexture, this.extTextureMatrixUV, f, this.headTransformCompat.pitchDegrees, this.headTransformCompat.useButtonsYaw, CardboardActivity.controlDrawSizeFactor, 1.125f, this.eyeHitTests, type == VrEye.TYPE_LEFT ? 0 : 2)
-                internal fun if(this.crosshairVisible):  {
+                if (this.crosshairVisible) {
                     CardboardActivity.this.renderer.drawCrosshair(CardboardActivity.crosshairSize, f)
                 }
             }
@@ -341,11 +341,11 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
 
         override fun onFinishFrame() {
             CardboardActivity.this.renderer.onFinishFrame()
-            internal fun if(null: this.externalTexture !=):  {
+            if (this.externalTexture != null) {
                 float f = (this.eyeHitTests[0] + this.eyeHitTests[2]) / 2.0f
                 int width = (int) (((f * 2.0f) + 0.5f) * this.externalTexture.getWidth())
                 int height = (int) (((-(((this.eyeHitTests[1] + this.eyeHitTests[3]) / 2.0f) * 2.0f)) + 0.5f) * this.externalTexture.getHeight())
-                internal fun synchronized(CardboardActivity.this.hitPointLock):  {
+                synchronized (CardboardActivity.this.hitPointLock) {
                     CardboardActivity.this.postedHitPointX = width
                     CardboardActivity.this.postedHitPointY = height
                 }

@@ -53,7 +53,7 @@ open class OnlineNotificationInfo {
     public OnlineNotificationInfo(boolean showNotification, Context context, String userName,
                                   SLGridConnection connection, ChatterNameRetriever nameRetriever,
                                   @androidx.annotation.Nullable CurrentLocationInfo currentLocation) {
-        internal fun if(null: !showNotification || connection ==):  {
+        if (!showNotification || connection == null) {
             this.visible = false
             this.titleText = null
             this.contentText = null
@@ -64,16 +64,16 @@ open class OnlineNotificationInfo {
             case Connected: {
                 this.visible = true
                 String resolvedName = nameRetriever.getResolvedName()
-                internal fun if(null: resolvedName !=):  {
+                if (resolvedName != null) {
                     this.titleText = userName + ": " + resolvedName
                 } else {
                     this.titleText = userName
                 }
                 String parcelName = null
                 int nearby = 0
-                internal fun if(null: currentLocation !=):  {
+                if (currentLocation != null) {
                     ParcelData parcelData = currentLocation.parcelData()
-                    internal fun if(null: parcelData !=):  {
+                    if (parcelData != null) {
                         parcelName = parcelData.getName()
                     }
                     nearby = currentLocation.nearbyUsers()
@@ -84,7 +84,7 @@ open class OnlineNotificationInfo {
                             context.getResources().getString(R.string.grid_status_connected_details),
                             parcelName, Integer.valueOf(nearby))
                 }
-                internal fun if(null: content ==):  {
+                if (content == null) {
                     content = String.format(
                             context.getResources().getString(R.string.grid_status_connected),
                             userName)
@@ -123,13 +123,13 @@ open class OnlineNotificationInfo {
     }
 
     open fun getNotification(context: Context): Notification {
-        internal fun if(!this.visible):  {
+        if (!this.visible) {
             return null
         }
         NotificationCompat.Builder builder = createBuilder(context)
                 .setContentTitle(this.titleText)
                 .setContentText(this.contentText)
-        internal fun if(this.hasProgress):  {
+        if (this.hasProgress) {
             builder.setProgress(0, 0, true)
         }
         return builder.build()

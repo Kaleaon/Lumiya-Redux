@@ -58,9 +58,9 @@ open class MyAvatarFragment : FragmentWithTitle(), AdapterView.OnItemClickListen
     }
 
     open fun onMyBalance(num: Int) {
-        internal fun if(null: this.binding !=):  {
+        if (this.binding != null) {
             ListAdapter adapter = binding.myAvaOptionsList.getAdapter()
-            internal fun if(MyAvatarPagesAdapter: adapter instanceof):  {
+            if (adapter instanceof MyAvatarPagesAdapter) {
                 ((MyAvatarPagesAdapter) adapter).notifyDataSetChanged()
             }
         }
@@ -68,7 +68,7 @@ open class MyAvatarFragment : FragmentWithTitle(), AdapterView.OnItemClickListen
 
     override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
         String resolvedName = chatterNameRetriever.getResolvedName()
-        internal fun if(null: this.binding !=):  {
+        if (this.binding != null) {
             binding.myAvatarName.setText(resolvedName != null ? resolvedName : getString(R.string.name_loading_title))
             binding.myAvatarPic.setChatterID(chatterNameRetriever.chatterID, resolvedName)
         }
@@ -114,16 +114,16 @@ open class MyAvatarFragment : FragmentWithTitle(), AdapterView.OnItemClickListen
         super.onStart()
         UUID agentUUID = getAgentUUID()
         UserManager userManager = UserManager.getUserManager(agentUUID)
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             this.myBalance.subscribe(userManager.getBalanceManager().getBalance(), SubscriptionSingleKey.Value)
         }
-        internal fun if(null: agentUUID !=):  {
+        if (agentUUID != null) {
             this.myAvatarNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(agentUUID, agentUUID), this, UIThreadExecutor.getSerialInstance())
         }
     }
 
     override fun onStop() {
-        internal fun if(null: this.myAvatarNameRetriever !=):  {
+        if (this.myAvatarNameRetriever != null) {
             this.myAvatarNameRetriever.dispose()
             this.myAvatarNameRetriever = null
         }

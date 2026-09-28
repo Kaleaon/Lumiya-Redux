@@ -25,7 +25,7 @@ open class MinimapFragment : Fragment(), MinimapView.OnUserClickListener {
         override fun onData(obj: Any) {
         }
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             ((MinimapView) view.findViewById(R.id.minimapView)).setSelectedUser(uuid)
         }
     }

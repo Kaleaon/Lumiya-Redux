@@ -69,20 +69,20 @@ open class InventorySaveInfo : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, i: Int) {
         parcel.writeInt(this.saveType.ordinal())
-        internal fun if(null: this.saveItemUUID !=):  {
+        if (this.saveItemUUID != null) {
             parcel.writeByte((byte) 1)
             parcel.writeString(this.saveItemUUID.toString())
         } else {
             parcel.writeByte((byte) 0)
         }
         parcel.writeString(this.saveItemName)
-        internal fun if(null: this.notecardUUID !=):  {
+        if (this.notecardUUID != null) {
             parcel.writeByte((byte) 1)
             parcel.writeString(this.notecardUUID.toString())
         } else {
             parcel.writeByte((byte) 0)
         }
-        internal fun if(null: this.assetType !=):  {
+        if (this.assetType != null) {
             parcel.writeByte((byte) 1)
             parcel.writeInt(this.assetType.getTypeCode())
         } else {

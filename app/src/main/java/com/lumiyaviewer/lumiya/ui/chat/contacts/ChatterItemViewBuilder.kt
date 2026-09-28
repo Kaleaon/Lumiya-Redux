@@ -32,25 +32,25 @@ open class ChatterItemViewBuilder {
         int userDistanceInlineTextView = R.id.userDistanceInlineTextView
         View view2 = (view == null || view.getId() != R.id.contactListItemLayout) ? null : view
         View inflate = view2 == null ? layoutInflater.inflate(R.layout.contact_list_item, viewGroup, false) : view2
-        internal fun if(null: inflate !=):  {
+        if (inflate != null) {
             ((TextView) inflate.findViewById(R.id.userNameTextView)).setText(this.label)
             View findViewById = inflate.findViewById(R.id.onlineUserIcon)
-            internal fun if(null: findViewById !=):  {
-                internal fun if(this.onlineVisible):  {
+            if (findViewById != null) {
+                if (this.onlineVisible) {
                     findViewById.setVisibility(View.VISIBLE)
                 } else {
                     findViewById.setVisibility(View.GONE)
                 }
             }
             View viewById = inflate.findViewById(R.id.activeVoiceIcon)
-            internal fun if(null: viewById !=):  {
+            if (viewById != null) {
                 viewById.setVisibility(this.voiceActive ? View.VISIBLE : View.GONE)
             }
             TextView textView = (TextView) inflate.findViewById(z ? R.id.userDistanceInlineTextView : R.id.userDistanceTextView)
-            internal fun if(null: textView !=):  {
-                internal fun if(this.distanceSet):  {
+            if (textView != null) {
+                if (this.distanceSet) {
                     textView.setText((this.distance >= 9.5f ? Integer.toString(Math.round(this.distance)) : String.format("%.1f", Float.valueOf(this.distance))) + " m")
-                    internal fun if(20.0f: this.distance <=):  {
+                    if (this.distance <= 20.0f) {
                         textView.setTypeface(textView.getTypeface(), 1)
                     } else {
                         textView.setTypeface(Typeface.create(textView.getTypeface(), 0))
@@ -61,25 +61,25 @@ open class ChatterItemViewBuilder {
                     textView.setVisibility(z ? View.GONE : View.INVISIBLE)
                 }
             }
-            internal fun if(z):  {
+            if (z) {
                 userDistanceInlineTextView = R.id.userDistanceTextView
             }
             View viewById2 = inflate.findViewById(userDistanceInlineTextView)
-            internal fun if(null: viewById2 !=):  {
+            if (viewById2 != null) {
                 viewById2.setVisibility(View.GONE)
             }
             TextView viewById3 = (TextView) inflate.findViewById(R.id.unreadCountTextView)
-            internal fun if(null: viewById3 !=):  {
+            if (viewById3 != null) {
                 viewById3.setText(Integer.toString(this.unreadCount))
-                internal fun if(0: this.unreadCount !=):  {
+                if (this.unreadCount != 0) {
                     viewById3.setVisibility(View.VISIBLE)
                 } else {
                     viewById3.setVisibility(View.GONE)
                 }
             }
             TextView viewById4 = (TextView) inflate.findViewById(R.id.lastMessageText)
-            internal fun if(null: viewById4 !=):  {
-                internal fun if(null: this.lastMessage !=):  {
+            if (viewById4 != null) {
+                if (this.lastMessage != null) {
                     viewById4.setText(this.lastMessage)
                     viewById4.setVisibility(View.VISIBLE)
                 } else {
@@ -87,17 +87,17 @@ open class ChatterItemViewBuilder {
                 }
             }
             View viewById5 = inflate.findViewById(R.id.activeGroupIcon)
-            internal fun if(null: viewById5 !=):  {
+            if (viewById5 != null) {
                 viewById5.setVisibility(this.isActiveGroup ? View.VISIBLE : View.GONE)
             }
             ChatterPicView chatterPicView = (ChatterPicView) inflate.findViewById(R.id.userPicView)
-            internal fun if(null: chatterPicView !=):  {
+            if (chatterPicView != null) {
                 chatterPicView.setDefaultIcon(this.thumbnailDefaultIcon, false)
                 chatterPicView.setChatterID(this.thumbnailChatterID, this.thumbnailLabel)
                 chatterPicView.setVisibility((this.thumbnailChatterID == null && this.thumbnailDefaultIcon == -1) ? View.GONE : View.VISIBLE)
             }
             TypingIndicatorView typingIndicatorView = (TypingIndicatorView) inflate.findViewById(R.id.typing_indicator)
-            internal fun if(null: typingIndicatorView !=):  {
+            if (typingIndicatorView != null) {
                 typingIndicatorView.setChatterID(this.thumbnailChatterID)
             }
         }

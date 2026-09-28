@@ -57,14 +57,14 @@ open class NearbyPeopleMinimapFragment : Fragment() {
         }
 
         open fun setChatters(immutableList: ImmutableList<ChatterDisplayData>) {
-            internal fun if(null: immutableList ==):  {
+            if (immutableList == null) {
                 immutableList = ImmutableList.of()
             }
             this.chatters = immutableList
             this.selectedPosition = -1
             HashSet hashSet = HashSet()
             int i = 0
-            internal fun while(true):  {
+            while (true) {
                 int i2 = i
                 if (i2 >= this.chatters.size()) {
                     this.stableIds.keySet().retainAll(hashSet)
@@ -72,7 +72,7 @@ open class NearbyPeopleMinimapFragment : Fragment() {
                     return
                 }
                 UUID optionalChatterUUID = this.chatters.get(i2).chatterID.getOptionalChatterUUID()
-                internal fun if(null: optionalChatterUUID !=):  {
+                if (optionalChatterUUID != null) {
                     hashSet.add(optionalChatterUUID)
                     if (!this.stableIds.containsKey(optionalChatterUUID)) {
                         this.stableIds.put(optionalChatterUUID, Long.valueOf(this.nextStableId))
@@ -89,9 +89,9 @@ open class NearbyPeopleMinimapFragment : Fragment() {
         open fun setSelected(uuid: UUID) {
             int i
             this.selectedUUID = uuid
-            internal fun if(null: uuid !=):  {
+            if (uuid != null) {
                 int i2 = 0
-                internal fun while(true):  {
+                while (true) {
                     i = i2
                     if (i >= this.chatters.size()) {
                         }
@@ -139,13 +139,13 @@ open class NearbyPeopleMinimapFragment : Fragment() {
             chatterDisplayData.buildView(context, this.viewBuilder, userManager)
             View childAt = this.userItemViewHolder.getChildAt(0)
             View view = this.viewBuilder.getView(layoutInflater, childAt, this.userItemViewHolder, true)
-            internal fun if(childAt: view !=):  {
-                internal fun if(null: childAt !=):  {
+            if (view != childAt) {
+                if (childAt != null) {
                     this.userItemViewHolder.removeView(childAt)
                 }
                 this.userItemViewHolder.addView(view)
             }
-            internal fun if(z):  {
+            if (z) {
                 this.cardView.setCardElevation(this.cardSelectedElevation)
                 this.cardView.setCardBackgroundColor(NearbyPeopleMinimapFragment.this.cardSelectedColor)
                 this.selectedLayout.setVisibility(View.VISIBLE)
@@ -161,16 +161,16 @@ open class NearbyPeopleMinimapFragment : Fragment() {
             when (view.getId()) {
                 R.id.user_item_view_holder -> {
                     FragmentManager fragmentManager = NearbyPeopleMinimapFragment.this.getFragmentManager()
-                    internal fun if(null: fragmentManager !=):  {
+                    if (fragmentManager != null) {
                         ComponentCallbacks findFragmentById = fragmentManager.findFragmentById(R.id.selector)
-                        internal fun if(MinimapView.OnUserClickListener: findFragmentById instanceof):  {
+                        if (findFragmentById instanceof MinimapView.OnUserClickListener) {
                             ((MinimapView.OnUserClickListener) findFragmentById).onUserClick(this.chatterDisplayData.chatterID.getOptionalChatterUUID())
                             }
                         }
                     }
                     }
                 R.id.user_item_chat_button -> {
-                    internal fun if(null: this.chatterDisplayData !=):  {
+                    if (this.chatterDisplayData != null) {
                         DetailsActivity.showDetails(NearbyPeopleMinimapFragment.this.getActivity(), ChatFragmentActivityFactory.getInstance(), ChatFragment.makeSelection(this.chatterDisplayData.chatterID))
                         }
                     }
@@ -187,7 +187,7 @@ open class NearbyPeopleMinimapFragment : Fragment() {
     }
 
     open fun onChatterList(immutableList: ImmutableList<ChatterDisplayData>) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setChatters(immutableList)
         }
         if (getView() != null) {
@@ -216,7 +216,7 @@ open class NearbyPeopleMinimapFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             this.chatterList.subscribe(userManager.getChatterList().getChatterList(), ChatterListType.Nearby)
         } else {
             this.chatterList.unsubscribe()
@@ -229,7 +229,7 @@ open class NearbyPeopleMinimapFragment : Fragment() {
     }
 
     open fun setSelectedUser(uuid: UUID) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setSelected(uuid)
         }
     }

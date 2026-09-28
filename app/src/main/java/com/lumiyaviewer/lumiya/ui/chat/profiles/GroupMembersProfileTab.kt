@@ -75,10 +75,10 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
             if (selectedPosition2 != this.selectedPosition) {
                 int selectedPosition = this.selectedPosition
                 this.selectedPosition = selectedPosition2
-                internal fun if(-1: selectedPosition !=):  {
+                if (selectedPosition != -1) {
                     notifyItemChanged(selectedPosition)
                 }
-                internal fun if(-1: selectedPosition2 !=):  {
+                if (selectedPosition2 != -1) {
                     notifyItemChanged(selectedPosition2)
                 }
             }
@@ -129,13 +129,13 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
         internal fun bindToData(groupMember: GroupMember, z: Boolean) {
             ChatterID.ChatterIDUser userChatterID = groupMember != null ? ChatterID.getUserChatterID(this.agentUUID, groupMember.getUserID()) : null
             if (!Objects.equal(userChatterID, this.boundChatterID)) {
-                internal fun if(null: this.chatterNameRetriever !=):  {
+                if (this.chatterNameRetriever != null) {
                     this.chatterNameRetriever.dispose()
                     this.chatterNameRetriever = null
                 }
                 this.userNameTextView.setText((CharSequence) null)
                 this.boundChatterID = userChatterID
-                internal fun if(null: userChatterID !=):  {
+                if (userChatterID != null) {
                     this.chatterNameRetriever = ChatterNameRetriever(this.boundChatterID, this, UIThreadExecutor.getInstance())
                     this.userPicView.setChatterID(userChatterID, this.chatterNameRetriever.getResolvedName())
                 } else {
@@ -144,7 +144,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
             }
             this.userTitleText.setText(groupMember != null ? groupMember.getTitle() : null)
             this.userOnlineStatusText.setText(groupMember != null ? groupMember.getOnlineStatus() : null)
-            internal fun if(z):  {
+            if (z) {
                 this.cardView.setCardElevation(this.cardSelectedElevation)
                 this.cardView.setCardBackgroundColor(this.cardSelectedColor)
             } else {
@@ -158,7 +158,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
         }
 
         override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-            internal fun if(null: chatterNameRetriever !=):  {
+            if (chatterNameRetriever != null) {
                 this.userNameTextView.setText(chatterNameRetriever.getResolvedName())
                 this.userPicView.setChatterID(chatterNameRetriever.chatterID, chatterNameRetriever.getResolvedName())
             }
@@ -168,7 +168,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
             when (view.getId()) {
                 R.id.group_member_card_view -> {
                     if (!GroupMembersProfileTab.this.getArguments().containsKey(GroupMembersProfileTab.ROLE_TO_ADD_KEY)) {
-                        internal fun if(null: GroupMembersProfileTab.this.adapter !=):  {
+                        if (GroupMembersProfileTab.this.adapter != null) {
                             GroupMembersProfileTab.this.adapter.setSelectedPosition(getAdapterPosition())
                             }
                         }
@@ -178,7 +178,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
                     }
                     }
                 R.id.group_member_chat_button -> {
-                    internal fun if(null: this.boundChatterID !=):  {
+                    if (this.boundChatterID != null) {
                         DetailsActivity.showDetails(GroupMembersProfileTab.this.getActivity(), ChatFragmentActivityFactory.getInstance(), ChatFragment.makeSelection(this.boundChatterID))
                         }
                     }
@@ -187,13 +187,13 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
                     DetailsActivity.showEmbeddedDetails(GroupMembersProfileTab.this.getActivity(), UserProfileFragment.class, UserProfileFragment.makeSelection(this.boundChatterID))
                     }
                 R.id.group_member_roles_button -> {
-                    internal fun if(null: this.boundChatterID !=):  {
+                    if (this.boundChatterID != null) {
                         DetailsActivity.showEmbeddedDetails(GroupMembersProfileTab.this.getActivity(), GroupMemberRolesFragment.class, GroupMemberRolesFragment.makeSelection(GroupMembersProfileTab.this.chatterID, this.boundChatterID.getChatterUUID()))
                         }
                     }
                     }
                 R.id.group_member_eject_button -> {
-                    internal fun if(null: this.boundChatterID !=):  {
+                    if (this.boundChatterID != null) {
                         GroupMembersProfileTab.this.ejectGroupMember(this.boundChatterID)
                         }
                     }
@@ -202,7 +202,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
         }
 
         internal fun recycle() {
-            internal fun if(null: this.chatterNameRetriever !=):  {
+            if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose()
                 this.chatterNameRetriever = null
             }
@@ -213,7 +213,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
 
     open fun addGroupRoleMember(chatterIDUser: ChatterID.ChatterIDUser) {
         UUID uuid = UUIDPool.getUUID(getArguments().getString(ROLE_TO_ADD_KEY))
-        internal fun if(null: uuid !=):  {
+        if (uuid != null) {
             new AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, new DialogInterface.OnClickListener() {
                     GroupMembersProfileTab.this.m484xf9973c0c((UUID) uuid, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i)
                 }

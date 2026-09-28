@@ -30,7 +30,7 @@ open class SingleObjectPopupFragment : Fragment() {
             mustAnimatePopup = false
             displayedObjectPopup2 = null
         }
-        internal fun if(null: displayedObjectPopup2 ==):  {
+        if (displayedObjectPopup2 == null) {
             hideAndDismiss()
         } else {
             CoordinatorLayout coordinatorLayout = (CoordinatorLayout) inflate.findViewById(R.id.single_object_popup_container)
@@ -38,18 +38,18 @@ open class SingleObjectPopupFragment : Fragment() {
             displayedObjectPopup2.bindViewHolder(createViewHolder, userManager, null)
             coordinatorLayout.addView(createViewHolder.itemView)
             ViewGroup.LayoutParams layoutParams = createViewHolder.itemView.getLayoutParams()
-            internal fun if(CoordinatorLayout.LayoutParams: layoutParams instanceof):  {
+            if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
                 SwipeDismissAdvancedBehavior swipeDismissAdvancedBehavior = SwipeDismissAdvancedBehavior()
                 swipeDismissAdvancedBehavior.setSwipeDirection(7)
                 swipeDismissAdvancedBehavior.setListener(this.dismissListener)
                 ((CoordinatorLayout.LayoutParams) layoutParams).setBehavior(swipeDismissAdvancedBehavior)
             }
-            internal fun if(mustAnimatePopup):  {
+            if (mustAnimatePopup) {
                 createViewHolder.itemView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_from_above))
             }
         }
         View findViewById = inflate.findViewById(R.id.touch_capture_view)
-        internal fun if(null: findViewById !=):  {
+        if (findViewById != null) {
             findViewById.setOnClickListener(this.frameClickListener)
         }
         return inflate

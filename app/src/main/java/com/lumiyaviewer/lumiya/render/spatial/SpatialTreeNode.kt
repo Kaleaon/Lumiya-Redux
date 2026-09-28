@@ -121,7 +121,7 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
             i++
         }
         parent.singleChild = spatialTreeNode
-        if (parent.first == null) {
+        if (parent.getFirst() == null) {
             spatialTree.removeEntry(parent)
         }
         parent.shrinkBoundingBox()
@@ -130,14 +130,14 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
     private fun shrinkBoundingBox() {
         if (parent != null) {
             val floats = FloatArray(6)
-            var first = first
+            var first = getFirst()
             var z3 = false
             while (first != null) {
                 for (i in 0 until 3) {
                     floats[i] = if (z3) Math.min(floats[i], first.boundingBox[i]) else first.boundingBox[i]
                     floats[i + 3] = if (z3) Math.max(floats[i + 3], first.boundingBox[i + 3]) else first.boundingBox[i + 3]
                 }
-                first = first.next
+                first = first.getNext()
                 z3 = true
             }
             if (children != null) {
@@ -174,17 +174,17 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
     }
 
     fun addDrawables(drawList: DrawList) {
-        var first = first
+        var first = getFirst()
         while (first != null) {
             first.addToDrawList(drawList)
-            first = first.next
+            first = first.getNext()
         }
     }
 
     override fun addEntry(drawListEntry: DrawListEntry) {
-        val z = first == null && children == null
+        val z = getFirst() == null && children == null
         val z2 = singleChild != null
-        if (drawListEntry.list === this) {
+        if (drawListEntry.getList() === this) {
             shrinkBoundingBox()
             return
         }
@@ -241,7 +241,7 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
         if (depthBin != -1) {
             spatialTree.setDrawListChanged()
         }
-        if (first == null) {
+        if (getFirst() == null) {
             spatialTree.removeEntry(this)
             if (isEmpty()) {
                 removeFromParent()
@@ -256,7 +256,7 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
     }
 
     fun walkTree(frustrumPlanes: FrustrumPlanes, i: Int, floats: FloatArray): Int {
-        if (singleChild != null && first == null) {
+        if (singleChild != null && getFirst() == null) {
             return singleChild!!.walkTree(frustrumPlanes, i, floats)
         }
         var testResult = i

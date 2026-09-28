@@ -70,12 +70,12 @@ open class NotecardEditActivity : ThemedActivity(), SLNotecard.OnAttachmentClick
     private fun saveChanges() {
         boolean z = true
         byte[] bArr = null
-        internal fun if(null: !this.editMode || this.notecard ==):  {
+        if (!this.editMode || this.notecard == null) {
             return
         }
         String editable = ((EditText) findViewById(R.id.notecardEditTitle)).getText().toString()
         String editable2 = ((EditText) findViewById(R.id.notecardEditDescription)).getText().toString()
-        internal fun if(null: this.noteEntry !=):  {
+        if (this.noteEntry != null) {
             z = !(Objects.equal(editable, this.noteEntry.name) ? Objects.equal(editable2, this.noteEntry.description) : false)
         }
         SLNotecard sLNotecard = SLNotecard(((EditText) findViewById(R.id.notecardEditContents)).getText(), this.isEditingScript)
@@ -84,7 +84,7 @@ open class NotecardEditActivity : ThemedActivity(), SLNotecard.OnAttachmentClick
             this.notecard = sLNotecard
             bArr = lindenText
         }
-        internal fun if(z: bArr != null || this.noteEntry == null ||):  {
+        if (bArr != null || this.noteEntry == null || z) {
             this.notecardTitle = editable
             this.notecardDescription = editable2
             try {

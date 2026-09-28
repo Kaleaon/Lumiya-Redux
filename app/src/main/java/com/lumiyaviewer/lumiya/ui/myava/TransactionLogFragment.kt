@@ -41,7 +41,7 @@ open class TransactionLogFragment : FragmentWithTitle(), LoadableMonitor.OnLoada
         override fun run() {
             int itemCount
             TransactionLogFragment.this.scrollToBottomRunnablePosted = false
-            internal fun if(null: TransactionLogFragment.this.binding !=):  {
+            if (TransactionLogFragment.this.binding != null) {
                 RecyclerView recyclerView = TransactionLogFragment.this.binding.transactionLogView
                 if (recyclerView.hasPendingAdapterUpdates()) {
                     TransactionLogFragment.this.scrollToBottomRunnablePosted = true

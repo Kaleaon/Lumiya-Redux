@@ -31,12 +31,12 @@ open class FadingTextViewLog {
     private Runnable RemoveStaleChatsTask = Runnable() {
         override fun run() {
             FadingTextViewLog.this.removeStaleChatsPosted = false
-            internal fun if(null: FadingTextViewLog.this.chatsOverlayLayout !=):  {
+            if (FadingTextViewLog.this.chatsOverlayLayout != null) {
                 long uptimeMillis = SystemClock.uptimeMillis()
                 Iterator it = FadingTextViewLog.this.chatEventOverlays.entrySet().iterator()
                 while (it.hasNext()) {
                     Map.Entry entry = (Map.Entry) it.next()
-                    internal fun if(null: entry !=):  {
+                    if (entry != null) {
                         if (uptimeMillis < ((ChatEventOverlay) entry.getValue()).timestamp + FadingTextViewLog.STALE_CHAT_TIMEOUT) {
                             }
                         }
@@ -63,7 +63,7 @@ open class FadingTextViewLog {
     }
 
     internal fun clearChatEvents() {
-        internal fun if(null: this.chatsOverlayLayout !=):  {
+        if (this.chatsOverlayLayout != null) {
             this.chatsOverlayLayout.removeAllViews()
         }
         this.chatEventOverlays.clear()
@@ -72,14 +72,14 @@ open class FadingTextViewLog {
     internal fun handleChatEvent(chatMessageEvent: ActiveChattersManager.ChatMessageEvent) {
         TextView textView = null
         SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(chatMessageEvent.chatMessage, this.userManager.getUserID())
-        internal fun if(null: loadFromDatabaseObject !=):  {
+        if (loadFromDatabaseObject != null) {
             CharSequence plainTextMessage = loadFromDatabaseObject.getPlainTextMessage(this.context, this.userManager, false)
             String charSequence = plainTextMessage != null ? plainTextMessage.toString() : null
             if (Strings.isNullOrEmpty(charSequence)) {
                 return
             }
             String str = chatMessageEvent.isPrivate ? "[IM] " + charSequence : charSequence
-            internal fun if(chatMessageEvent.isNewMessage):  {
+            if (chatMessageEvent.isNewMessage) {
                 DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics()
                 int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, displayMetrics)
                 int applyDimension2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, displayMetrics)
@@ -97,11 +97,11 @@ open class FadingTextViewLog {
                 postRemovingStaleChats()
             } else {
                 ChatEventOverlay chatEventOverlay = this.chatEventOverlays.get(chatMessageEvent.chatMessage.getId())
-                internal fun if(null: chatEventOverlay !=):  {
+                if (chatEventOverlay != null) {
                     textView = chatEventOverlay.textView
                 }
             }
-            internal fun if(null: textView !=):  {
+            if (textView != null) {
                 textView.setText(str)
             }
         }
@@ -109,7 +109,7 @@ open class FadingTextViewLog {
 
     internal fun postRemovingStaleChats() {
         Map.Entry<Long, ChatEventOverlay> next
-        internal fun if(this.removeStaleChatsPosted):  {
+        if (this.removeStaleChatsPosted) {
             return
         }
         Iterator<Map.Entry<Long, ChatEventOverlay>> it = this.chatEventOverlays.entrySet().iterator()

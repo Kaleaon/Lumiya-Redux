@@ -62,7 +62,7 @@ open class TransactionLogAdapter : RecyclerView.Adapter<TransactionLogAdapter.Tr
         }
 
         override fun onClick(view: View) {
-            internal fun if(null: TransactionLogAdapter.this.onTransactionClickListener == null || this.moneyTransaction ==):  {
+            if (TransactionLogAdapter.this.onTransactionClickListener == null || this.moneyTransaction == null) {
                 return
             }
             TransactionLogAdapter.this.onTransactionClickListener.onTransactionClicked(this.moneyTransaction)
@@ -83,7 +83,7 @@ open class TransactionLogAdapter : RecyclerView.Adapter<TransactionLogAdapter.Tr
     }
 
     override fun getItemCount(): Int {
-        internal fun if(null: this.data !=):  {
+        if (this.data != null) {
             return this.data.size()
         }
         return 0

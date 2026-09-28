@@ -36,7 +36,7 @@ open class TouchableObjectsFragment : Fragment(), AdapterView.OnItemClickListene
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
         UUID objectUUID = getObjectUUID()
-        internal fun if(null: userManager == null || objectUUID ==):  {
+        if (userManager == null || objectUUID == null) {
             this.touchableObjects.unsubscribe()
         } else {
             this.touchableObjects.subscribe(userManager.getObjectsManager().touchableObjects(), objectUUID)

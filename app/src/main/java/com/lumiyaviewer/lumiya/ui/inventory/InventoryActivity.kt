@@ -91,7 +91,7 @@ open class InventoryActivity : MasterDetailsActivity() {
         intent.putExtra(SELECT_ITEM_INTENT_TAG, true)
         intent.putExtra(SELECT_ACTION_INTENT_TAG, selectAction.toString())
         intent.putExtra(SELECT_ACTION_PARAMS_TAG, bundle)
-        internal fun if(null: assetType !=):  {
+        if (assetType != null) {
             intent.putExtra(SELECT_ACTION_ASSET_TYPE, assetType.getTypeCode())
         }
         return intent
@@ -111,7 +111,7 @@ open class InventoryActivity : MasterDetailsActivity() {
         intent.putExtra("activeAgentUUID", uuid.toString())
         intent.putExtra(SELECT_ITEM_INTENT_TAG, true)
         intent.putExtra(TRANSFER_TO_INTENT_TAG, uuid2.toString())
-        internal fun if(null: str !=):  {
+        if (str != null) {
             intent.putExtra(TRANSFER_TO_NAME_TAG, str)
         }
         return intent
@@ -135,7 +135,7 @@ open class InventoryActivity : MasterDetailsActivity() {
         getMenuInflater().inflate(R.menu.inventory_menu, menu)
         this.searchMenuItem = menu.findItem(R.id.inventory_search_item)
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(this.searchMenuItem)
-        internal fun if(this.searchActive):  {
+        if (this.searchActive) {
             MenuItemCompat.expandActionView(this.searchMenuItem)
             searchView.setQuery(this.nameFilter, false)
         }
@@ -178,7 +178,7 @@ open class InventoryActivity : MasterDetailsActivity() {
 
     override protected fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-        internal fun if(null: bundle !=):  {
+        if (bundle != null) {
             bundle.putBoolean(SEARCH_ACTIVE_TAG, this.searchActive)
             bundle.putString(NAME_FILTER_TAG, this.nameFilter)
         }

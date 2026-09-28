@@ -61,7 +61,7 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
 
     override fun getItemId(i: Int): Long {
         SLInventoryEntry item = getItem(i)
-        internal fun if(null: item !=):  {
+        if (item != null) {
             return item.getId()
         }
         return -1L
@@ -72,11 +72,11 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
         int drawableResource
         int subtypeDrawableResource
         boolean z = true
-        internal fun if(null: view ==):  {
+        if (view == null) {
             view = this.inflater.inflate(R.layout.inventory_item, viewGroup, false)
         }
         SLInventoryEntry item = getItem(i)
-        internal fun if(null: item !=):  {
+        if (item != null) {
             TextView textView = (TextView) view.findViewById(R.id.itemNameTextView)
             textView.setText(item.name)
             int i4 = -1
@@ -85,7 +85,7 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
                 item2 = item
             } else {
                 SLInventoryEntry resolveLink = this.database.resolveLink(item)
-                internal fun if(null: resolveLink !=):  {
+                if (resolveLink != null) {
                     i4 = resolveLink.getDrawableResource()
                     i5 = R.drawable.inv_link
                     item2 = resolveLink
@@ -93,16 +93,16 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
                     item2 = item
                 }
             }
-            internal fun if(0: i4 <):  {
+            if (i4 < 0) {
                 drawableResource = item.getDrawableResource()
                 subtypeDrawableResource = item.getSubtypeDrawableResource()
             } else {
                 drawableResource = i4
                 subtypeDrawableResource = i5
             }
-            internal fun if(0: drawableResource >=):  {
+            if (drawableResource >= 0) {
                 ((ImageView) view.findViewById(R.id.itemTypeIconView)).setImageResource(drawableResource)
-                internal fun if(0: subtypeDrawableResource >=):  {
+                if (subtypeDrawableResource >= 0) {
                     ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageResource(subtypeDrawableResource)
                 } else {
                     ((ImageView) view.findViewById(R.id.itemSubTypeIconView)).setImageBitmap(null)
@@ -116,13 +116,13 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
             } else {
                 textView.setTypeface(null, 1)
             }
-            internal fun if(this.wornCheckboxes):  {
+            if (this.wornCheckboxes) {
                 if ((item.assetType == SLAssetType.AT_OBJECT.getTypeCode() || (item.isLink() && item.invType == SLInventoryType.IT_OBJECT.getTypeCode()) || item.isWearable() || item2.assetType == SLAssetType.AT_OBJECT.getTypeCode()) ? true : item2.isWearable()) {
                     Object whatIsItemWornOn = item2.whatIsItemWornOn(this.wornAttachments, this.wornWearables, false)
                     boolean z2 = whatIsItemWornOn != null
                     boolean isBodyPart = whatIsItemWornOn is SLWearableType ? ((SLWearableType) whatIsItemWornOn).isBodyPart() : false
-                    internal fun if(null: this.avatarAppearance !=):  {
-                        internal fun if(z2):  {
+                    if (this.avatarAppearance != null) {
+                        if (z2) {
                             if (!item2.isWearable()) {
                                 z = this.avatarAppearance.canDetachItem(item2)
                             } else if (this.avatarAppearance.canTakeItemOff(item2)) {
@@ -158,9 +158,9 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        internal fun if(null: this.onItemCheckboxClickListener !=):  {
+        if (this.onItemCheckboxClickListener != null) {
             Object tag = view.getTag(R.id.tag_outfit_object)
-            internal fun if(SLInventoryEntry: tag instanceof):  {
+            if (tag instanceof SLInventoryEntry) {
                 this.onItemCheckboxClickListener.onItemCheckboxClicked((SLInventoryEntry) tag)
             }
         }
@@ -172,7 +172,7 @@ open class InventoryFolderAdapter : BaseAdapter(), View.OnClickListener {
     }
 
     open fun setData(inventoryEntryList: InventoryEntryList) {
-        internal fun if(null: inventoryEntryList ==):  {
+        if (inventoryEntryList == null) {
             inventoryEntryList = InventoryEntryList()
         }
         this.data = inventoryEntryList

@@ -46,7 +46,7 @@ open class CardboardControlsPlaceholder : ViewGroup() {
 
     override fun invalidateChildInParent(ints: IntArray, rect: Rect): ViewParent {
         ViewParent invalidateChildInParent = super.invalidateChildInParent(ints, rect)
-        internal fun if(null: this.onViewInvalidateListener !=):  {
+        if (this.onViewInvalidateListener != null) {
             this.onViewInvalidateListener.onViewInvalidated()
         }
         return invalidateChildInParent

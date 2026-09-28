@@ -34,23 +34,23 @@ internal class GvrVrSessionAdapter : VrSession {
             }
         })
         this.controller = this.controllerManager.getController()
-        internal fun if(null: this.controller !=):  {
+        if (this.controller != null) {
             this.controller.setEventListener(new Controller.EventListener() {
                 override fun onConnectionStateChanged(i: Int) {
                     super.onConnectionStateChanged(i)
                     GvrVrSessionAdapter.this.controllerConnectionState = i
-                    internal fun if(null: GvrVrSessionAdapter.this.inputListener !=):  {
+                    if (GvrVrSessionAdapter.this.inputListener != null) {
                         GvrVrSessionAdapter.this.inputListener.onConnectionStateChanged(i)
                     }
                 }
 
                 override fun onUpdate() {
                     super.onUpdate()
-                    internal fun if(null: GvrVrSessionAdapter.this.controller ==):  {
+                    if (GvrVrSessionAdapter.this.controller == null) {
                         return
                     }
                     GvrVrSessionAdapter.this.controller.update()
-                    internal fun if(null: GvrVrSessionAdapter.this.inputListener !=):  {
+                    if (GvrVrSessionAdapter.this.inputListener != null) {
                         GvrVrSessionAdapter.this.inputListener.onInputUpdated(VrInputState(GvrVrSessionAdapter.this.controller.appButtonState, GvrVrSessionAdapter.this.controller.isTouching, GvrVrSessionAdapter.this.controller.touch.x, GvrVrSessionAdapter.this.controller.touch.y, GvrVrSessionAdapter.this.controllerConnectionState))
                     }
                 }

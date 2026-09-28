@@ -77,7 +77,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
         UserManager userManager
         SLAgentCircuit activeAgentCircuit
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             Object selectedItem = ((Spinner) view.findViewById(R.id.role_picker_spinner)).getSelectedItem()
             if (!(selectedItem is RoleEntry) || (userManager = chatterID.getUserManager()) == null || !(chatterID is ChatterID.ChatterIDUser) || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null) {
                 return
@@ -85,7 +85,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
             activeAgentCircuit.getModules().groupManager.SendGroupInvite(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), getGroupID(), ((RoleEntry) selectedItem).roleID)
             Toast.makeText(getContext(), R.string.group_invitation_sent, Toast.LENGTH_LONG).show()
             FragmentActivity activity = getActivity()
-            internal fun if(DetailsActivity: activity instanceof):  {
+            if (activity instanceof DetailsActivity) {
                 ((DetailsActivity) activity).closeDetailsFragment(this)
             }
         }
@@ -103,7 +103,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
         GroupRoleDataReply groupRoleDataReply = (GroupRoleDataReply) getArguments().getParcelable(GROUP_ROLES)
         boolean z4 = false
         HashSet hashSet = HashSet()
-        internal fun if(null: groupTitlesReply == null || groupProfileReply ==):  {
+        if (groupTitlesReply == null || groupProfileReply == null) {
             z = false
         } else {
             internal fun for(groupTitlesReply.GroupData_Fields: GroupTitlesReply.GroupData groupData :):  {
@@ -126,7 +126,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
             }
         }
         ImmutableList.Builder builder = new ImmutableList.Builder()
-        internal fun if(null: groupRoleDataReply != null && groupProfileReply !=):  {
+        if (groupRoleDataReply != null && groupProfileReply != null) {
             internal fun for(groupRoleDataReply.RoleData_Fields: GroupRoleDataReply.RoleData roleData :):  {
                 if ((z || (z3 && (roleData.RoleID == (groupProfileReply.GroupData_Field.OwnerRole) ^ true)) || roleData.RoleID == (UUIDPool.ZeroUUID)) ? true : z2 ? hashSet.contains(roleData.RoleID) : false) {
                     builder.add(RoleEntry(roleData.RoleID, SLMessage.stringFromVariableOEM(roleData.Title), null))
@@ -135,7 +135,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
         }
         ImmutableList build = builder.build()
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             ((Spinner) view.findViewById(R.id.role_picker_spinner)).setAdapter((SpinnerAdapter) ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, build))
         }
     }

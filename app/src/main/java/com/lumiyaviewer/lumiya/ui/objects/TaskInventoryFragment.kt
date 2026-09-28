@@ -52,9 +52,9 @@ open class TaskInventoryFragment : FragmentWithTitle() {
         override fun onData(taskInventory: SLTaskInventory) {
             TaskInventoryFragment.this.taskInventory = taskInventory
             View view = TaskInventoryFragment.this.getView()
-            internal fun if(null: view !=):  {
+            if (view != null) {
                 ListAdapter adapter = ((ListView) view.findViewById(R.id.taskInventoryListView)).getAdapter()
-                internal fun if(TaskInventoryListAdapter: adapter instanceof):  {
+                if (adapter instanceof TaskInventoryListAdapter) {
                     ((TaskInventoryListAdapter) adapter).setData(taskInventory)
                 }
                 ((TextView) view.findViewById(R.id.taskInventoryEmptyText)).setText(R.string.object_contents_empty)
@@ -82,7 +82,7 @@ open class TaskInventoryFragment : FragmentWithTitle() {
 
     private fun canModifyObjectContents(inventoryEntry: SLInventoryEntry): Boolean {
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             return userManager.getUserID() == (inventoryEntry.ownerUUID) ? (inventoryEntry.ownerMask & 16384) != 0 : (inventoryEntry.everyoneMask & 16384) != 0
         }
         return false
@@ -106,9 +106,9 @@ open class TaskInventoryFragment : FragmentWithTitle() {
             Toast.makeText(getActivity(), R.string.object_contents_not_owned, Toast.LENGTH_LONG).show()
             return
         }
-        internal fun if(!z):  {
+        if (!z) {
             Iterator<SLInventoryEntry> it = this.taskInventory.entries.iterator()
-            internal fun while(true):  {
+            while (true) {
                 z2 = z3
                 if (!it.hasNext()) {
                     }
@@ -116,7 +116,7 @@ open class TaskInventoryFragment : FragmentWithTitle() {
                     z3 = (it.next().ownerMask & 32768) == 0 ? true : z2
                 }
             }
-            internal fun if(z2):  {
+            if (z2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() {
                         TaskInventoryFragment.this.m697x992e5209(dialogInterface, i)

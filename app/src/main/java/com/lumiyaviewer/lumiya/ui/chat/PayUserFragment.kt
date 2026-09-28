@@ -38,7 +38,7 @@ open class PayUserFragment : ChatterFragment() {
 
     private fun payUser(i: Int, str: String) {
         ChatterID chatterID = this.chatterID
-        internal fun if(ChatterID.ChatterIDUser: chatterID instanceof):  {
+        if (chatterID instanceof ChatterID.ChatterIDUser) {
             String resolvedName = this.chatterNameDisplayer.getResolvedName(getContext())
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
             builder.setMessage(String.format(getString(R.string.user_pay_confirm), resolvedName, Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {

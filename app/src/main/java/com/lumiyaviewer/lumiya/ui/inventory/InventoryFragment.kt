@@ -88,7 +88,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
             data.getModules().userProfiles.UpdateAvatarProperties(uuid, uuid2, SLMessage.stringFromVariableUTF(avatarPropertiesReply.PropertiesData_Field.AboutText), SLMessage.stringFromVariableOEM(avatarPropertiesReply.PropertiesData_Field.FLAboutText), (avatarPropertiesReply.PropertiesData_Field.Flags & 1) != 0, (avatarPropertiesReply.PropertiesData_Field.Flags & 2) != 0, SLMessage.stringFromVariableOEM(avatarPropertiesReply.PropertiesData_Field.ProfileURL))
         }
         FragmentActivity activity = getActivity()
-        internal fun if(null: activity !=):  {
+        if (activity != null) {
             activity.finish()
         }
     }
@@ -124,7 +124,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
         Bundle arguments = getArguments()
         UUID uuid = UUIDPool.getUUID(arguments.getString(FOLDER_ID_KEY))
         String string = arguments.getBoolean(IS_SEARCHING_KEY) ? arguments.getString(SEARCH_STRING_KEY) : null
-        internal fun if(null: string !=):  {
+        if (string != null) {
             string = string.trim()
         }
         String emptyToNull = Strings.emptyToNull(string)
@@ -147,7 +147,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
 
     private fun getUserManager(): UserManager? {
         FragmentActivity activity = getActivity()
-        internal fun if(null: activity !=):  {
+        if (activity != null) {
             return ActivityUtils.getUserManager(activity.getIntent())
         }
         return null
@@ -172,7 +172,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
 
     private fun isSplitScreen(): Boolean {
         FragmentActivity activity = getActivity()
-        internal fun if(MasterDetailsActivity: activity instanceof):  {
+        if (activity instanceof MasterDetailsActivity) {
             return ((MasterDetailsActivity) activity).isSplitScreen()
         }
         return false
@@ -190,7 +190,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
     @JvmStatic
     fun makeSelection(uuid: UUID, str: String): Bundle {
         Bundle bundle = Bundle()
-        internal fun if(null: uuid !=):  {
+        if (uuid != null) {
             bundle.putString(FOLDER_ID_KEY, uuid.toString())
         }
         bundle.putBoolean(IS_SEARCHING_KEY, str != null)
@@ -204,7 +204,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
         arguments.putBoolean(IS_SEARCHING_KEY, false)
         showInventoryList(getInventoryQuery())
         FragmentActivity activity = getActivity()
-        internal fun if(InventoryActivity: activity instanceof):  {
+        if (activity instanceof InventoryActivity) {
             ((InventoryActivity) activity).clearSearchMode()
         }
     }
@@ -213,7 +213,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
     fun newInstance(bundle: Bundle, z: Boolean): Fragment {
         InventoryFragment inventoryFragment = InventoryFragment()
         Bundle bundle2 = Bundle()
-        internal fun if(null: bundle !=):  {
+        if (bundle != null) {
             bundle2.putAll(bundle)
         }
         bundle2.putBoolean(IS_MASTER_FRAGMENT, z)
@@ -233,7 +233,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()))
         if (isForSelectItem()) {
             InventoryActivity.SelectAction selectAction = getSelectAction()
-            internal fun if(null: selectAction !=):  {
+            if (selectAction != null) {
                 setTitle(inventoryEntryList.getTitle(), getString(selectAction.subtitleResourceId))
             } else {
                 setTitle(inventoryEntryList.getTitle(), forTransferToUUID() != null ? getString(R.string.select_item_to_share_title) : getString(R.string.select_item_for_attachment_title))
@@ -241,7 +241,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
         } else {
             setTitle(inventoryEntryList.getTitle(), null)
         }
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setData(inventoryEntryList)
         }
         updateLoadingStatus()
@@ -253,13 +253,13 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
     }
 
     open fun onWornAttachmentsChanged(immutableMap: ImmutableMap<UUID, String>) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap)
         }
     }
 
     open fun onWornWearablesChanged(table: Table<SLWearableType, UUID, SLWearable>) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setWornWearables(table)
         }
     }
@@ -272,7 +272,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
             bundle = intent.getBundleExtra("selectActionParams")
             Debug.Printf("InventoryAction: actionParams %s, has params %b", bundle, Boolean.valueOf(intent.hasExtra("selectActionParams")))
         }
-        internal fun if(null: bundle ==):  {
+        if (bundle == null) {
             bundle = Bundle()
         }
         internal fun switch(selectAction):  {

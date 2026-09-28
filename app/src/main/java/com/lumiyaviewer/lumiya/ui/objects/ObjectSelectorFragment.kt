@@ -71,7 +71,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
         }
         this.filterInfo = filter
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             userManager.getObjectsManager().setFilter(this.filterInfo)
             if (this.filterInfo.range() == 0.0f || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null || (modules = activeAgentCircuit.getModules()) == null) {
                 return
@@ -119,10 +119,10 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
         MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
             override fun onMenuItemActionCollapse(menuItem: MenuItem): Boolean {
                 View view = ObjectSelectorFragment.this.getView()
-                internal fun if(null: view !=):  {
+                if (view != null) {
                     view.findViewById(R.id.filterPanel).setVisibility(View.GONE)
                     Animation animation = view.findViewById(R.id.filterPanel).getAnimation()
-                    internal fun if(null: animation !=):  {
+                    if (animation != null) {
                         animation.cancel()
                     }
                 }
@@ -132,7 +132,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
 
             override fun onMenuItemActionExpand(menuItem: MenuItem): Boolean {
                 View view = ObjectSelectorFragment.this.getView()
-                internal fun if(null: view !=):  {
+                if (view != null) {
                     view.findViewById(R.id.filterPanel).setVisibility(View.VISIBLE)
                     view.findViewById(R.id.filterPanel).startAnimation(AnimationUtils.loadAnimation(ObjectSelectorFragment.this.getContext(), R.anim.slide_from_above))
                 }
@@ -171,9 +171,9 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
 
     override fun onProgressChanged(seekBar: SeekBar, i: Int, z: Boolean) {
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             ((TextView) view.findViewById(R.id.objectListRangeDisplay)).setText(getString(R.string.object_range_format, Integer.valueOf(i)))
-            internal fun if(z):  {
+            if (z) {
                 updateFilter()
             }
         }
@@ -184,7 +184,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
         int i = 256
         super.onStart()
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             userManager.getObjectsManager().setFilter(this.filterInfo)
             this.subscription = userManager.getObjectsManager().getObjectDisplayList().subscribe(SubscriptionSingleKey.Value, UIThreadExecutor.getInstance(), this.onObjectListData, this.onObjectListError)
             SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit()
@@ -193,9 +193,9 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
             }
             modules.drawDistance.EnableObjectSelect()
             View view = getView()
-            internal fun if(null: view !=):  {
+            if (view != null) {
                 int objectSelectRange = (int) modules.drawDistance.getObjectSelectRange()
-                internal fun if(1: objectSelectRange <):  {
+                if (objectSelectRange < 1) {
                     i = 1
                 } else if (objectSelectRange <= 256) {
                     i = objectSelectRange
@@ -211,7 +211,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
     override fun onStop() {
         SLAgentCircuit activeAgentCircuit
         SLModules modules
-        internal fun if(null: this.subscription !=):  {
+        if (this.subscription != null) {
             this.subscription.unsubscribe()
             this.subscription = null
         }

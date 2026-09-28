@@ -55,7 +55,7 @@ internal open class SearchGridAdapter : RecyclerView.Adapter<SearchGridAdapter.S
             } else {
                 this.resultMemberCount.setVisibility(View.GONE)
             }
-            internal fun if(null: this.chatterNameRetriever !=):  {
+            if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose()
                 this.chatterNameRetriever = null
             }
@@ -84,7 +84,7 @@ internal open class SearchGridAdapter : RecyclerView.Adapter<SearchGridAdapter.S
         }
 
         override fun onClick(view: View) {
-            internal fun if(null: SearchGridAdapter.this.onSearchResultClickListener == null || this.searchGridResult ==):  {
+            if (SearchGridAdapter.this.onSearchResultClickListener == null || this.searchGridResult == null) {
                 return
             }
             SearchGridAdapter.this.onSearchResultClickListener.onSearchResultClicked(this.searchGridResult)
@@ -92,7 +92,7 @@ internal open class SearchGridAdapter : RecyclerView.Adapter<SearchGridAdapter.S
 
         internal fun onRecycled() {
             this.userPicView.setChatterID(null, null)
-            internal fun if(null: this.chatterNameRetriever !=):  {
+            if (this.chatterNameRetriever != null) {
                 this.chatterNameRetriever.dispose()
                 this.chatterNameRetriever = null
             }
@@ -109,7 +109,7 @@ internal open class SearchGridAdapter : RecyclerView.Adapter<SearchGridAdapter.S
     }
 
     override fun getItemCount(): Int {
-        internal fun if(null: this.data !=):  {
+        if (this.data != null) {
             return this.data.size()
         }
         return 0

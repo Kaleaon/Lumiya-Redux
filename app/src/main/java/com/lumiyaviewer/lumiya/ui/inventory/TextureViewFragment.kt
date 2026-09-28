@@ -37,10 +37,10 @@ open class TextureViewFragment : StateAwareFragment() {
         }
 
         override fun OnResourceReady(obj: Any, z: Boolean) {
-            internal fun if(OpenJPEG: obj instanceof):  {
+            if (obj instanceof OpenJPEG) {
                 this.texture = (OpenJPEG) obj
             }
-            internal fun synchronized(this.textureReady):  {
+            synchronized (this.textureReady) {
                 this.textureReady.notify()
             }
         }
@@ -48,8 +48,8 @@ open class TextureViewFragment : StateAwareFragment() {
         override fun doInBackground(vararg uuidArr: UUID): Bitmap {
             Debug.Printf("loading asset ID %s", uuidArr[0].toString())
             TextureCache.getInstance().RequestResource(DrawableTextureParams.create(uuidArr[0], TextureClass.Asset), this)
-            internal fun synchronized(this.textureReady):  {
-                internal fun if(null: this.texture ==):  {
+            synchronized (this.textureReady) {
+                if (this.texture == null) {
                     Debug.Printf("asset ID %s is not available, waiting", uuidArr[0].toString())
                     try {
                         this.textureReady.wait()
@@ -62,7 +62,7 @@ open class TextureViewFragment : StateAwareFragment() {
                     Debug.Printf("asset ID %s is already available", uuidArr[0].toString())
                 }
             }
-            internal fun if(null: this.texture !=):  {
+            if (this.texture != null) {
                 return this.texture.getAsBitmap()
             }
             return null
@@ -70,7 +70,7 @@ open class TextureViewFragment : StateAwareFragment() {
 
         override fun onPostExecute(bitmap: Bitmap) {
             if (TextureViewFragment.this.isFragmentStarted() && TextureViewFragment.this.textureImageView != null && TextureViewFragment.this.loadingLayout != null) {
-                internal fun if(null: bitmap !=):  {
+                if (bitmap != null) {
                     TextureViewFragment.this.loadingLayout.showContent(null)
                     TextureViewFragment.this.textureImageView.setImageBitmap(bitmap)
                     TextureViewFragment.this.photoViewAttacher.update()
@@ -111,8 +111,8 @@ open class TextureViewFragment : StateAwareFragment() {
         LoadAssetImageTask loadAssetImageTask = null
         super.onStart()
         UUID uuid = UUIDPool.getUUID(getArguments().getString(ASSET_UUID_KEY))
-        internal fun if(null: uuid !=):  {
-            internal fun if(null: this.loadAssetImageTask !=):  {
+        if (uuid != null) {
+            if (this.loadAssetImageTask != null) {
                 this.loadAssetImageTask.cancel(true)
                 this.loadAssetImageTask = null
             }
@@ -122,7 +122,7 @@ open class TextureViewFragment : StateAwareFragment() {
     }
 
     override fun onStop() {
-        internal fun if(null: this.loadAssetImageTask !=):  {
+        if (this.loadAssetImageTask != null) {
             this.loadAssetImageTask.cancel(true)
             this.loadAssetImageTask = null
         }

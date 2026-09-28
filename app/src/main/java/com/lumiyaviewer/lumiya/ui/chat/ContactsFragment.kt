@@ -76,7 +76,7 @@ open class ContactsFragment : Fragment() {
                     nearbyUsersFragment = null
                     }
             }
-            internal fun if(null: nearbyUsersFragment !=):  {
+            if (nearbyUsersFragment != null) {
                 Bundle arguments = ContactsFragment.this.getArguments()
                 Bundle makeFragmentArguments = ActivityUtils.makeFragmentArguments(ActivityUtils.getActiveAgentID(arguments), null)
                 if (arguments.containsKey(CardboardActivity.VR_MODE_TAG)) {
@@ -123,30 +123,30 @@ open class ContactsFragment : Fragment() {
     */
     private fun updateOptionsMenu() {
         boolean z = false
-        internal fun if(null: this.currentLocationInfo !=):  {
+        if (this.currentLocationInfo != null) {
             FragmentActivity activity = getActivity()
-            internal fun if(DetailsActivity: activity instanceof):  {
+            if (activity instanceof DetailsActivity) {
                 Fragment currentDetailsFragment = ((DetailsActivity) activity).getCurrentDetailsFragment()
                 z = currentDetailsFragment == null || currentDetailsFragment == this
             } else {
                 z = false
             }
         }
-        internal fun if(!z):  {
-            internal fun if(null: this.itemLocationDetails !=):  {
+        if (!z) {
+            if (this.itemLocationDetails != null) {
                 this.itemLocationDetails.setVisible(false)
             }
-            internal fun if(null: this.itemPlayMedia !=):  {
+            if (this.itemPlayMedia != null) {
                 this.itemPlayMedia.setVisible(false)
                 return
             }
             return
         }
-        internal fun if(null: this.itemLocationDetails !=):  {
+        if (this.itemLocationDetails != null) {
             this.itemLocationDetails.setVisible(true)
         }
         boolean z2 = this.currentLocationInfo.parcelData() != null && !Strings.isNullOrEmpty(this.currentLocationInfo.parcelData().getMediaURL())
-        internal fun if(null: this.itemPlayMedia !=):  {
+        if (this.itemPlayMedia != null) {
             this.itemPlayMedia.setVisible(z2)
         }
     }
@@ -199,7 +199,7 @@ open class ContactsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
                     ContactsFragment.this.onCurrentLocation((CurrentLocationInfo) obj)
                 }

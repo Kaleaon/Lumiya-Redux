@@ -68,13 +68,13 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
             int height = bitmap.getHeight()
             int textureWidth = Integer.highestOneBit(width)
             int textureHeight = Integer.highestOneBit(height)
-            internal fun if(width: textureWidth !=):  {
+            if (textureWidth != width) {
                 textureWidth *= 2
             }
-            internal fun if(height: textureHeight !=):  {
+            if (textureHeight != height) {
                 textureHeight *= 2
             }
-            internal fun while(1024: textureWidth > 1024 || textureHeight >):  {
+            while (1024: textureWidth > 1024 || textureHeight >) {
                 textureWidth /= 2
                 textureHeight /= 2
             }
@@ -103,7 +103,7 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
                 UserManager userManager = UserManager.getUserManager(upload.agentUUID)
                 SLAgentCircuit agentCircuit = userManager != null ? userManager.getActiveAgentCircuit() : null
                 String capabilityURL
-                internal fun if(null: agentCircuit ==):  {
+                if (agentCircuit == null) {
                     uploaded = false
                 } else if ((capabilityURL = agentCircuit.getCaps().getCapability(SLCaps.SLCapability.NewFileAgentInventory)) == null) {
                     uploaded = false
@@ -114,7 +114,7 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
                             new LLSDMap.LLSDMapEntry("folder_id", LLSDUUID(upload.folderID)),
                             new LLSDMap.LLSDMapEntry("inventory_type", LLSDString("texture")),
                             new LLSDMap.LLSDMapEntry("name", LLSDString(upload.name))))
-                    internal fun if(null: uploadTicket ==):  {
+                    if (uploadTicket == null) {
                         throw IOException("Upload request refused")
                     }
                     String uploaderURL = uploadTicket.byKey("uploader").asString()
@@ -123,7 +123,7 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
                             .header("Accept", "application/llsd+xml")
                             .post(RequestBody.create(MEDIA_TYPE_JP2, encodedFile))
                             .build()).execute()
-                    internal fun if(null: response ==):  {
+                    if (response == null) {
                         throw IOException("Null response")
                     }
                     try {
@@ -161,14 +161,14 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
     override fun onPostExecute(uploadImageResult: UploadImageResult) {
         UUID uuidFindSpecialFolder
         super.onPostExecute(uploadImageResult)
-        internal fun if(null: this.progressDialog !=):  {
+        if (this.progressDialog != null) {
             this.progressDialog.cancel()
             this.progressDialog = null
         }
         if (!(uploadImageResult != null ? uploadImageResult.success : false)) {
             String string = uploadImageResult != null ? uploadImageResult.errorMessage : null
             AlertDialog.Builder builder = new AlertDialog.Builder(this.context)
-            internal fun if(null: string ==):  {
+            if (string == null) {
                 string = this.context.getString(com.lumiyaviewer.lumiya.R.string.failed_to_upload_picture)
             }
             builder.setMessage(string).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {

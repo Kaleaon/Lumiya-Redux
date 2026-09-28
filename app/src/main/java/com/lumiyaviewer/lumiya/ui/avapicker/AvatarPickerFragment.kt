@@ -33,8 +33,8 @@ abstract class AvatarPickerFragment : FragmentWithTitle(), AdapterView.OnItemCli
         }
 
         override fun destroyItem(viewGroup: ViewGroup, i: Int, obj: Any) {
-            internal fun if(View: obj instanceof):  {
-                internal fun if(ListView: obj instanceof):  {
+            if (obj instanceof View) {
+                if (obj instanceof ListView) {
                     ((ListView) obj).setAdapter((ListAdapter) null)
                 }
                 viewGroup.removeView((View) obj)

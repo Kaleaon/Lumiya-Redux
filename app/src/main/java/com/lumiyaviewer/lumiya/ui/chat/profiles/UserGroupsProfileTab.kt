@@ -43,7 +43,7 @@ open class UserGroupsProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         override fun getCount(): Int {
-            internal fun if(null: this.avatarGroupList !=):  {
+            if (this.avatarGroupList != null) {
                 return this.avatarGroupList.size()
             }
             return 0
@@ -61,11 +61,11 @@ open class UserGroupsProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-            internal fun if(null: view ==):  {
+            if (view == null) {
                 view = this.inflater.inflate(R.layout.simple_list_item_1, viewGroup, false)
             }
             AvatarGroupList.AvatarGroupEntry item = getItem(i)
-            internal fun if(null: item !=):  {
+            if (item != null) {
                 ((TextView) view.findViewById(R.id.text1)).setText(item.GroupName)
             }
             return view

@@ -52,7 +52,7 @@ open class UserPicksProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
         }
 
         override fun getCount(): Int {
-            internal fun if(null: this.picksReply !=):  {
+            if (this.picksReply != null) {
                 return this.picksReply.Data_Fields.size()
             }
             return 0
@@ -70,11 +70,11 @@ open class UserPicksProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
         }
 
         override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-            internal fun if(null: view ==):  {
+            if (view == null) {
                 view = this.inflater.inflate(R.layout.simple_list_item_1, viewGroup, false)
             }
             AvatarPicksReply.Data item = getItem(i)
-            internal fun if(null: item !=):  {
+            if (item != null) {
                 ((TextView) view.findViewById(R.id.text1)).setText(SLMessage.stringFromVariableUTF(item.PickName))
             }
             return view
@@ -97,7 +97,7 @@ open class UserPicksProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
         CurrentLocationInfo currentLocationInfoSnapshot = this.userManager.getCurrentLocationInfoSnapshot()
         ParcelData parcelData = currentLocationInfoSnapshot != null ? currentLocationInfoSnapshot.parcelData() : null
         SLAgentCircuit activeAgentCircuit = this.userManager.getActiveAgentCircuit()
-        internal fun if(null: parcelData == null || activeAgentCircuit ==):  {
+        if (parcelData == null || activeAgentCircuit == null) {
             return
         }
         int count = this.picksAdapter != null ? this.picksAdapter.getCount() : 0

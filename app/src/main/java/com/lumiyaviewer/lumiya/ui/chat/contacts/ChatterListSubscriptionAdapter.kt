@@ -59,7 +59,7 @@ open class ChatterListSubscriptionAdapter : ChatterListSimpleAdapter(), Subscrip
     }
 
     override fun onData(immutableList: ImmutableList<ChatterDisplayData>) {
-        internal fun if(null: this.predicate ==):  {
+        if (this.predicate == null) {
             setData(immutableList)
         } else {
             setData(ImmutableList.copyOf(Iterables.filter(immutableList, this.predicate)))
