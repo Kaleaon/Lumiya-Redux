@@ -555,4 +555,9 @@ abstract class UserFunctionsFragment : ChatterReloadableFragment(), ReloadableFr
     open fun onVoiceLoginStatusChanged(bool: Boolean?) {
         activity?.supportInvalidateOptionsMenu()
     }
+
+    companion object {
+        @JvmStatic
+        fun makeSelection(chatterID: ChatterID?): Bundle = ChatterFragment.makeSelection(chatterID)
+    }
 }

@@ -80,7 +80,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
                 val posFactor = floats2[index] * factor
                 animateArray(animLength, time, vector3, posKeyframes)
                 if (skeletonBone != null && skeletonBone.boneID != SLSkeletonBoneID.mPelvis) {
-                    vector3.sub(skeletonBone.basePosition)
+                    vector3.sub(skeletonBone.getBasePosition())
                 }
                 vector3s[index].addMul(vector3, posFactor)
                 floats2[index] = floats2[index] - posFactor
