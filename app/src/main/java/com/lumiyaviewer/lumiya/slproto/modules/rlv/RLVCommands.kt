@@ -27,64 +27,61 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdUnsit
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdVersion
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.commands.RLVCmdViewNotecard
 
-enum class RLVCommands {
-    version(RLVCmdVersion.class),
-    versionnew(RLVCmdVersion.class),
-    versionnum(RLVCmdVersion.class),
-    clear(RLVCmdClear.class),
-    detach(RLVCmdDetach.class),
-    sendchat(RLVCmdSendChat.class),
-    recvchat(RLVCmdRecvChat.class),
-    sendim(RLVCmdSendIM.class),
-    recvim(RLVCmdRecvIM.class),
-    tplm(RLVCmdTeleportLandmark.class),
-    tploc(RLVCmdTeleportLocation.class),
-    sittp(RLVCmdTeleportSit.class),
-    tplure(RLVCmdTeleportLure.class),
-    tpto(RLVCmdTeleportTo.class),
-    accepttp(RLVCmdAcceptTeleport.class),
-    showinv(RLVCmdShowInventory.class),
-    viewnote(RLVCmdViewNotecard.class),
-    edit(RLVCmdEditObjects.class),
-    rez(RLVCmdRezObjects.class),
-    unsit(RLVCmdUnsit.class),
-    sit(RLVCmdSit.class),
-    remoutfit(RLVCmdRemoveOutfit.class),
-    getoutfit(RLVCmdGetOutfit.class),
-    addoutfit(RLVCmdAddOutfit.class),
-    getattach(RLVCmdGetAttach.class),
-    getstatus(RLVCmdGetStatus.class),
-    sendchannel(RLVCmdSendChannel.class),
-    redirchat(RLVCmdRedirChat.class)
-
-    private var handler: Class<? extends RLVCommand> = null
-
-    constructor(cls: Class) {
-        this.handler = cls
-    }
-
-    fun getCommand(str: String): RLVCommands {
-        try {
-            return valueOf(str)
-        } catch (e: IllegalArgumentException) {
-        return null
-        }
-    }
+enum class RLVCommands(private val handler: Class<out RLVCommand>) {
+    version(RLVCmdVersion::class.java),
+    versionnew(RLVCmdVersion::class.java),
+    versionnum(RLVCmdVersion::class.java),
+    clear(RLVCmdClear::class.java),
+    detach(RLVCmdDetach::class.java),
+    sendchat(RLVCmdSendChat::class.java),
+    recvchat(RLVCmdRecvChat::class.java),
+    sendim(RLVCmdSendIM::class.java),
+    recvim(RLVCmdRecvIM::class.java),
+    tplm(RLVCmdTeleportLandmark::class.java),
+    tploc(RLVCmdTeleportLocation::class.java),
+    sittp(RLVCmdTeleportSit::class.java),
+    tplure(RLVCmdTeleportLure::class.java),
+    tpto(RLVCmdTeleportTo::class.java),
+    accepttp(RLVCmdAcceptTeleport::class.java),
+    showinv(RLVCmdShowInventory::class.java),
+    viewnote(RLVCmdViewNotecard::class.java),
+    edit(RLVCmdEditObjects::class.java),
+    rez(RLVCmdRezObjects::class.java),
+    unsit(RLVCmdUnsit::class.java),
+    sit(RLVCmdSit::class.java),
+    remoutfit(RLVCmdRemoveOutfit::class.java),
+    getoutfit(RLVCmdGetOutfit::class.java),
+    addoutfit(RLVCmdAddOutfit::class.java),
+    getattach(RLVCmdGetAttach::class.java),
+    getstatus(RLVCmdGetStatus::class.java),
+    sendchannel(RLVCmdSendChannel::class.java),
+    redirchat(RLVCmdRedirChat::class.java);
 
     /* renamed from: values, reason: to resolve conflict with enum method */
     fun valuesCustom(): Array<RLVCommands> {
         return values()
     }
 
-    fun getHandler(): RLVCommand {
-        try {
-            return this.handler.newInstance()
+    fun getHandler(): RLVCommand? {
+        return try {
+            this.handler.newInstance()
         } catch (e: IllegalAccessException) {
-        return null
+            null
         } catch (e2: IllegalArgumentException) {
-        return null
+            null
         } catch (e3: InstantiationException) {
-        return null
+            null
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun getCommand(str: String): RLVCommands? {
+            return try {
+                valueOf(str)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
         }
     }
 }
