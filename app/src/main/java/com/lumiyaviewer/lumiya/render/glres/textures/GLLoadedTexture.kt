@@ -12,7 +12,7 @@ import com.lumiyaviewer.lumiya.render.RenderContext
 import java.io.IOException
 import javax.annotation.Nullable
 
-class GLLoadedTexture : GLResourceTexture {
+open class GLLoadedTexture : GLResourceTexture {
 
     val hasAlphaLayer: Boolean
     val height: Int
