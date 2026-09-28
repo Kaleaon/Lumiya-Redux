@@ -155,7 +155,7 @@ open class RLVController(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) 
     }
 
     fun onIncomingChat(chatFromSimulator: ChatFromSimulator): Boolean {
-        if (chatFromSimulator.ChatData_Field.SourceType.toInt() != 2 || chatFromSimulator.ChatData_Field.ChatType.toInt() != 8) {
+        if (chatFromSimulator.ChatData_Field.SourceType != 2 || chatFromSimulator.ChatData_Field.ChatType != 8) {
             return false
         }
         val stringFromVariableUTF = SLMessage.stringFromVariableUTF(chatFromSimulator.ChatData_Field.Message)
@@ -182,7 +182,7 @@ open class RLVController(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) 
         val stringFromVariableOEM = SLMessage.stringFromVariableOEM(improvedInstantMessage.MessageBlock_Field.FromAgentName)
         val stringFromVariableUTF = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message)
         Debug.Printf("IM: type %d from '%s' text '%s'", i, stringFromVariableOEM, stringFromVariableUTF)
-        if (i.toInt() == 0) {
+        if (i == 0) {
             if (stringFromVariableUTF.equals("@version", ignoreCase = true)) {
                 this.agentCircuit.SendInstantMessage(improvedInstantMessage.AgentData_Field.AgentID, RLVCmdVersion.getManualVersionReply())
                 return true
