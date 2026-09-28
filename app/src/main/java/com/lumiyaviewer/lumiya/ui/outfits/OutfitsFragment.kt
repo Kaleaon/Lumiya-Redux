@@ -108,7 +108,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
 
     open fun onRootFolderEntryList(inventoryEntryList: InventoryEntryList) {
         if (inventoryEntryList != null) {
-            internal fun for(inventoryEntryList: SLInventoryEntry inventoryEntry :):  {
+            for (inventoryEntry in inventoryEntryList) {
                 if (inventoryEntry.isFolder && inventoryEntry.typeDefault == 48) {
                     this.myOutfitsFolderUUID = inventoryEntry.uuid
                     this.rootFolderEntryList.unsubscribe()

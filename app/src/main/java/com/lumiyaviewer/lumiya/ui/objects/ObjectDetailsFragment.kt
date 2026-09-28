@@ -219,7 +219,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
 
     override fun onClick(view: View) {
         int id = view.getId()
-        internal fun for(i++: int i = 0; i < objectPayButtons.length;):  {
+        for (i in 0 until objectPayButtons.length) {
             if (objectPayButtons[i] == id) {
                 payObjectQuick(i)
             }
@@ -288,7 +288,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
         inflate.findViewById(R.id.object_button_buy).setOnClickListener(this)
         inflate.findViewById(R.id.object_pay_button).setOnClickListener(this)
         inflate.findViewById(R.id.object_contents_button).setOnClickListener(this)
-        internal fun for(objectPayButtons: int i :):  {
+        for (i in objectPayButtons) {
             inflate.findViewById(i).setOnClickListener(this)
         }
         Button button = (Button) inflate.findViewById(R.id.object_pay_button)

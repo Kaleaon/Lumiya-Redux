@@ -101,7 +101,7 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
             this.data = groupRoleDataReply
             if (groupTitlesReply != null) {
                 this.titlesByRole = HashMap()
-                internal fun for(groupTitlesReply.GroupData_Fields: GroupTitlesReply.GroupData groupData :):  {
+                for (groupData in groupTitlesReply.GroupData_Fields) {
                     this.titlesByRole.put(groupData.RoleID, groupData)
                 }
             } else {

@@ -61,7 +61,7 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
     override protected fun doInBackground(vararg uploads: UploadImageParams): UploadImageResult {
         boolean success = true
         String errorMessage = null
-        internal fun for(uploads: UploadImageParams upload :):  {
+        for (upload in uploads) {
             Bitmap bitmap = upload.bitmap
             // Second Life textures are power-of-two sized, at most 1024 x 1024.
             int width = bitmap.getWidth()
@@ -90,7 +90,7 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
             int components = scaled.hasAlpha() ? 4 : 3
             OpenJPEG encoder = OpenJPEG(scaledWidth, scaledHeight, components, components, 0, 0)
             int[] row = arrayOfNulls<int>(scaledWidth]
-            internal fun for(y++: int y = 0; y < scaledHeight;):  {
+            for (y in 0 until scaledHeight) {
                 scaled.getPixels(row, 0, scaledWidth, 0, y, scaledWidth, 1)
                 // JPEG-2000 rows are stored bottom-up.
                 encoder.putPixelRow((scaledHeight - 1) - y, row, scaledWidth)

@@ -322,7 +322,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
         override fun onDrawEye(eye: VrEye) {
             int type = eye.getType()
             float f = (type == VrEye.TYPE_LEFT ? -0.5f : 0.5f) * this.eyeSeparation
-            internal fun for(i++: int i = 0; i < 4;):  {
+            for (i in 0 until 4) {
                 this.eyeOffset[i] = this.headTransformCompat.rightVector[i] * f
             }
             eye.getViewport(this.eyeViewport, 0)

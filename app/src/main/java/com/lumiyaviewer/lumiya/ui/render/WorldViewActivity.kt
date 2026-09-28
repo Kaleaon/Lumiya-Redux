@@ -549,7 +549,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             SLObjectAvatarInfo agentAvatar = data.getGridConnection().parcelInfo.getAgentAvatar()
             if (agentAvatar != null) {
                 try {
-                    internal fun for(agentAvatar.treeNode: SLObjectInfo objectInfo :):  {
+                    for (objectInfo in agentAvatar.treeNode) {
                         if (!Strings.nullToEmpty(objectInfo.getName()).startsWith("#") && (attachmentID = objectInfo.attachmentID) >= 0 && attachmentID < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[attachmentID]) != null && attachmentPoint.isHUD) {
                             arrayList.add(SelectableAttachment(objectInfo.localID, objectInfo.name))
                         }

@@ -106,7 +106,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
         if (groupTitlesReply == null || groupProfileReply == null) {
             z = false
         } else {
-            internal fun for(groupTitlesReply.GroupData_Fields: GroupTitlesReply.GroupData groupData :):  {
+            for (groupData in groupTitlesReply.GroupData_Fields) {
                 hashSet.add(groupData.RoleID)
                 z4 = groupData.RoleID == (groupProfileReply.GroupData_Field.OwnerRole) ? true : z4
             }
@@ -127,7 +127,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
         }
         ImmutableList.Builder builder = new ImmutableList.Builder()
         if (groupRoleDataReply != null && groupProfileReply != null) {
-            internal fun for(groupRoleDataReply.RoleData_Fields: GroupRoleDataReply.RoleData roleData :):  {
+            for (roleData in groupRoleDataReply.RoleData_Fields) {
                 if ((z || (z3 && (roleData.RoleID == (groupProfileReply.GroupData_Field.OwnerRole) ^ true)) || roleData.RoleID == (UUIDPool.ZeroUUID)) ? true : z2 ? hashSet.contains(roleData.RoleID) : false) {
                     builder.add(RoleEntry(roleData.RoleID, SLMessage.stringFromVariableOEM(roleData.Title), null))
                 }

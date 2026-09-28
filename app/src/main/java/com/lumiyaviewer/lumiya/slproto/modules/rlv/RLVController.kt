@@ -158,7 +158,7 @@ open class RLVController(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) 
         if (chatFromSimulator.ChatData_Field.SourceType != 2 || chatFromSimulator.ChatData_Field.ChatType != 8) {
             return false
         }
-        val stringFromVariableUTF = SLMessage.stringFromVariableUTF(chatFromSimulator.ChatData_Field.Message)
+        val stringFromVariableUTF = SLMessage.stringFromVariableUTF(chatFromSimulator.ChatData_Field.Message!!)
         if (!stringFromVariableUTF.startsWith("@")) {
             return false
         }
@@ -179,8 +179,8 @@ open class RLVController(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) 
             return false
         }
         val i = improvedInstantMessage.MessageBlock_Field.Dialog
-        val stringFromVariableOEM = SLMessage.stringFromVariableOEM(improvedInstantMessage.MessageBlock_Field.FromAgentName)
-        val stringFromVariableUTF = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message)
+        val stringFromVariableOEM = SLMessage.stringFromVariableOEM(improvedInstantMessage.MessageBlock_Field.FromAgentName!!)
+        val stringFromVariableUTF = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message!!)
         Debug.Printf("IM: type %d from '%s' text '%s'", i, stringFromVariableOEM, stringFromVariableUTF)
         if (i == 0) {
             if (stringFromVariableUTF.equals("@version", ignoreCase = true)) {

@@ -54,14 +54,14 @@ open class CardboardControlsPlaceholder : ViewGroup() {
 
     override protected fun onLayout(z: Boolean, i: Int, i2: Int, i3: Int, i4: Int) {
         int childCount = getChildCount()
-        internal fun for(j++: int j = 0; j < childCount;):  {
+        for (j in 0 until childCount) {
             getChildAt(j).layout(0, 0, this.fixedWidth, this.fixedHeight)
         }
     }
 
     override protected fun onMeasure(i: Int, i2: Int) {
         int childCount = getChildCount()
-        internal fun for(j++: int j = 0; j < childCount;):  {
+        for (j in 0 until childCount) {
             View childAt = getChildAt(j)
             if (childAt.getVisibility() != 8) {
                 measureChild(childAt, View.MeasureSpec.makeMeasureSpec(this.fixedWidth, 1073741824), View.MeasureSpec.makeMeasureSpec(this.fixedHeight, 1073741824))

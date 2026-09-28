@@ -269,7 +269,7 @@ open class SpatialTreeNode : InlineList<DrawListEntry> {
             i2 = 0
         } else {
             i2 = 1
-            if (first != null) {
+            if (getFirst() != null) {
                 spatialTree.setEntryDepth(this, floats[0])
             } else {
                 spatialTree.removeEntry(this)
