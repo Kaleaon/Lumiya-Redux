@@ -233,10 +233,10 @@ abstract class UserFunctionsFragment : ChatterReloadableFragment(), ReloadableFr
             val nearbyAgentLocation = agentCircuit.getModules().minimap.getNearbyAgentLocation(chatterIDUser.getChatterUUID())
             if (nearbyAgentLocation != null) {
                 if (agentCircuit.TeleportToLocalPosition(nearbyAgentLocation)) {
-                    TeleportProgressDialog(context, this.userManager, R.string.teleporting_progress_message).show()
+                    TeleportProgressDialog(requireContext(), this.userManager, R.string.teleporting_progress_message).show()
                 }
             } else if (agentCircuit.getModules().worldMap.TeleportToAgent(chatterIDUser.getChatterUUID())) {
-                TeleportProgressDialog(context, this.userManager, R.string.teleporting_progress_message).show()
+                TeleportProgressDialog(requireContext(), this.userManager, R.string.teleporting_progress_message).show()
             }
         }
     }
