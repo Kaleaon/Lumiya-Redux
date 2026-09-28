@@ -2,48 +2,48 @@ package com.lumiyaviewer.lumiya.slproto.https
 
 import com.lumiyaviewer.lumiya.Debug
 import java.io.BufferedInputStream
-import java.io.IOException
 
-open class LLSDContentTypeDetector {
+object LLSDContentTypeDetector {
 
-    private Array<byte> UTF8_BOM = { 0xEF as byte, 0xBB as byte, (byte) 0xBF }
+    private val UTF8_BOM = byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte())
 
     enum class LLSDContentType {
         llsdXML,
-        llsdBinary
+        llsdBinary;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
-        Array<LLSDContentType> valuesCustom() {
+        fun valuesCustom(): Array<LLSDContentType> {
             return values()
         }
     }
 
-    LLSDContentType DetectContentType(BufferedInputStream stream, String contentType) throws IOException {
+    @JvmStatic
+    fun DetectContentType(stream: BufferedInputStream, contentType: String?): LLSDContentType {
         stream.mark(64)
-        Array<byte> buf = ByteArray(32)
-        int bytesRead = stream.read(buf, 0, buf.length)
+        val buf = ByteArray(32)
+        var bytesRead = stream.read(buf, 0, buf.size)
         if (bytesRead < 0) {
             bytesRead = 0
         }
-        int skipBytes = 0
-        if (bytesRead >= UTF8_BOM.length) {
-            boolean hasBom = true
-            for (int i = 0; i < UTF8_BOM.length; i++) {
+        var skipBytes = 0
+        if (bytesRead >= UTF8_BOM.size) {
+            var hasBom = true
+            for (i in UTF8_BOM.indices) {
                 if (buf[i] != UTF8_BOM[i]) {
                     hasBom = false
-
+                    break
                 }
             }
             if (hasBom) {
-                skipBytes = UTF8_BOM.length
+                skipBytes = UTF8_BOM.size
             }
         }
-        String firstString = String(buf, skipBytes, bytesRead - skipBytes, "UTF-8")
+        val firstString = String(buf, skipBytes, bytesRead - skipBytes, Charsets.UTF_8)
         stream.reset()
-        stream.skip(skipBytes)
+        stream.skip(skipBytes.toLong())
 
-        boolean isXml = false
-        boolean isBinary = false
+        var isXml = false
+        var isBinary = false
         if (firstString.startsWith("<llsd>") || firstString.startsWith("<?xml")) {
             isXml = true
         } else if (firstString.startsWith("<? LLSD/Binary ?>")
@@ -51,14 +51,16 @@ open class LLSDContentTypeDetector {
                 || firstString.startsWith("<?llsd/binary")) {
             isBinary = true
         }
-        Debug.Printf("LLSD: contentType '%s', detected binary %s, xml %s, skipBytes %d, firstString '%s'",
-                contentType,
-                if (isBinary) "true" else "false",
-                if (isXml) "true" else "false",
-                skipBytes,
-                firstString)
+        Debug.Printf(
+            "LLSD: contentType '%s', detected binary %s, xml %s, skipBytes %d, firstString '%s'",
+            contentType,
+            if (isBinary) "true" else "false",
+            if (isXml) "true" else "false",
+            skipBytes,
+            firstString
+        )
         if (!isBinary && !isXml && contentType != null
-                && contentType.equalsIgnoreCase("application/llsd+binary")) {
+                && contentType.equals("application/llsd+binary", ignoreCase = true)) {
             isBinary = true
         }
         if (isBinary) {
