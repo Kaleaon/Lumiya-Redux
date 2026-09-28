@@ -22,7 +22,7 @@ open class GridList(private val context: Context) {
         var gridUUID: UUID?
         var loginURL: String?
         /** Accept certificates that fail verification (self-signed OpenSim grids). Off by default. */
-        var allowUntrustedCertificates: Boolean = false
+        private var rawAllowUntrustedCertificates: Boolean = false
         val predefinedGrid: Boolean
 
         constructor(sharedPreferences: SharedPreferences, str: String) {
@@ -30,7 +30,7 @@ open class GridList(private val context: Context) {
             this.loginURL = sharedPreferences.getString(str + "_login_url", "")
             this.predefinedGrid = false
             this.gridUUID = UUID.fromString(sharedPreferences.getString(str + "_grid", ""))
-            this.allowUntrustedCertificates = sharedPreferences.getBoolean(str + "_allow_untrusted_certs", false)
+            this.rawAllowUntrustedCertificates = sharedPreferences.getBoolean(str + "_allow_untrusted_certs", false)
         }
 
         constructor(gridName: String, loginURL: String?, predefinedGrid: Boolean, gridUUID: UUID?) {
@@ -46,11 +46,11 @@ open class GridList(private val context: Context) {
 
         /** Linden grids (Second Life) always verify certificates. */
         fun getAllowUntrustedCertificates(): Boolean {
-            return this.allowUntrustedCertificates && !isLindenGrid()
+            return this.rawAllowUntrustedCertificates && !isLindenGrid()
         }
 
         fun setAllowUntrustedCertificates(allowUntrustedCertificates: Boolean) {
-            this.allowUntrustedCertificates = allowUntrustedCertificates
+            this.rawAllowUntrustedCertificates = allowUntrustedCertificates
         }
 
         fun isPredefinedGrid(): Boolean {
@@ -61,7 +61,7 @@ open class GridList(private val context: Context) {
             editor.putString(str + "_grid_name", this.gridName)
             editor.putString(str + "_login_url", this.loginURL)
             editor.putString(str + "_grid", this.gridUUID.toString())
-            editor.putBoolean(str + "_allow_untrusted_certs", this.allowUntrustedCertificates)
+            editor.putBoolean(str + "_allow_untrusted_certs", this.rawAllowUntrustedCertificates)
         }
 
         override fun toString(): String {

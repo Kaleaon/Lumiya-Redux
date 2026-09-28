@@ -12,7 +12,7 @@ internal open class AvatarRunningSequence(
     private val runningAnimations: ImmutableList<AvatarRunningAnimation> =
         animationData.createRunningAnimations(this)
 
-    fun getAnimationPriority(): Int = animationData.priority
+    fun getAnimationPriority(): Int = animationData.getPriority()
 
     fun getRunningAnimations(collection: MutableCollection<AvatarRunningAnimation>) {
         collection.addAll(runningAnimations)
