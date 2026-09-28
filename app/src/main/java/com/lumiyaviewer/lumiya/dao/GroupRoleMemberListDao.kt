@@ -22,16 +22,16 @@ class GroupRoleMemberListDao : AbstractDao<GroupRoleMemberList, UUID> {
 
     override fun bindValues(sqLiteStatement: SQLiteStatement, groupRoleMemberList: GroupRoleMemberList) {
         sqLiteStatement.clearBindings()
-        val groupID = groupRoleMemberList.groupID
+        val groupID = groupRoleMemberList.getGroupID()
         if (groupID != null) {
             sqLiteStatement.bindString(1, groupID.toString())
         }
-        sqLiteStatement.bindString(2, groupRoleMemberList.requestID.toString())
-        sqLiteStatement.bindLong(3, if (groupRoleMemberList.mustRevalidate) 1L else 0L)
+        sqLiteStatement.bindString(2, groupRoleMemberList.getRequestID().toString())
+        sqLiteStatement.bindLong(3, if (groupRoleMemberList.getMustRevalidate()) 1L else 0L)
     }
 
     override fun getKey(groupRoleMemberList: GroupRoleMemberList?): UUID? {
-        return groupRoleMemberList?.groupID
+        return groupRoleMemberList?.getGroupID()
     }
 
     override fun isEntityUpdateable(): Boolean = true
