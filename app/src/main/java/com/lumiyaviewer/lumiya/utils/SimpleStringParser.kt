@@ -44,7 +44,7 @@ class SimpleStringParser(private val string: String, private val spaceChars: Str
     @Throws(StringParsingException::class)
     fun getPipeTerminatedString(delimiters: String): String {
         val token = nextToken(delimiters)
-        val lastIndex = token.lastIndexOf(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_NOTIFY_FAILED)
+        val lastIndex = token.lastIndexOf('|')
         return if (lastIndex >= 0) token.substring(0, lastIndex) else token
     }
 
