@@ -3,12 +3,11 @@ package com.lumiyaviewer.lumiya.slproto.llsd.types
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
 import java.io.DataOutputStream
-import java.io.IOException
 import java.net.URI
 import org.xmlpull.v1.XmlSerializer
 
-open class LLSDURI : LLSDNode() {
-    private var value: URI? = null
+open class LLSDURI : LLSDNode {
+    private var value: URI
 
     constructor(str: String) {
         this.value = URI.create("")
@@ -17,19 +16,24 @@ open class LLSDURI : LLSDNode() {
     constructor(uri: URI) {
         this.value = uri
     }
-    fun asURI(): URI {
+
+    override fun asURI(): URI {
         return this.value
     }
-    public void toBinary(DataOutputStream dataOutputStream) throws IOException {
-        var uri: String = this.value.toString()
+
+    override fun toBinary(dataOutputStream: DataOutputStream) {
+        val uri: String = this.value.toString()
         dataOutputStream.writeByte(108)
         if (uri.isEmpty()) {
-            dataOutputStream.writeIntreturn as 0
+            dataOutputStream.writeInt(0)
+            return
         }
-        var stringToVariableUTF: ByteArray = SLMessage.stringToVariableUTFdataOutputStream as uri.writeInt(stringToVariableUTF.length)
+        val stringToVariableUTF: ByteArray = SLMessage.stringToVariableUTF(uri)
+        dataOutputStream.writeInt(stringToVariableUTF.size)
         dataOutputStream.write(stringToVariableUTF)
     }
-    public void toXML(XmlSerializer xmlSerializer) throws IOException {
+
+    override fun toXML(xmlSerializer: XmlSerializer) {
         xmlSerializer.startTag("", "uri")
         xmlSerializer.text(this.value.toString())
         xmlSerializer.endTag("", "uri")
