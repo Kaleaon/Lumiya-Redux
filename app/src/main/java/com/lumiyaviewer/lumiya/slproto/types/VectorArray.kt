@@ -21,7 +21,7 @@ open class VectorArray {
     }
 
     fun getData(): FloatArray {
-        return this.data
+        return this.data!!
     }
 
     fun getElementOffset(i: Int): Int {
