@@ -1,6 +1,6 @@
 package com.lumiyaviewer.lumiya.react
 
-class SubscriptionList<K, T> {
+open class SubscriptionList<K, T> {
     private val subscriptions: MutableSet<Subscription.SubscriptionReference<K, T>> = HashSet()
     private var lastData: T? = null
     private var lastError: Throwable? = null

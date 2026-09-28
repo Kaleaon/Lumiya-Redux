@@ -14,32 +14,29 @@ import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.ui.media.NotificationSounds
 import com.lumiyaviewer.lumiya.ui.settings.NotificationType
 import java.util.EnumMap
-import java.util.Map
 
 open class OreoNotificationChannelManager {
-    private ImmutableMap<NotificationChannels.Channel, NotificationChannelSettings> channelSettings
-    private Object lock = Object()
-    private Map<NotificationChannels.Channel, NotificationChannel> channels = EnumMap(NotificationChannels.Channel.class)
 
-    private class NotificationChannelSettings {
-        int importance
-        NotificationType notificationType
-        boolean showBadge
+    private class NotificationChannelSettings(
+        val importance: Int,
+        val showBadge: Boolean,
+        val notificationType: NotificationType?
+    )
 
-        internal fun NotificationChannelSettings(importance: Int, showBadge: Boolean, notificationType: NotificationType): private {
-            this.importance = importance
-            this.showBadge = showBadge
-            this.notificationType = notificationType
-        }
+    private val channelSettings: ImmutableMap<NotificationChannels.Channel, NotificationChannelSettings>
+    private val lock = Object()
+    private val channels: MutableMap<NotificationChannels.Channel, NotificationChannel> =
+        EnumMap(NotificationChannels.Channel::class.java)
 
-            this(i, z, notificationType)
-        }
-    }
-
-    internal fun OreoNotificationChannelManager(): public {
-        int i = 3
-        boolean z = true
-        this.channelSettings = ImmutableMap.of(NotificationChannels.Channel.OnlineStatus, NotificationChannelSettings(2, false, null, null), NotificationChannels.Channel.Local, NotificationChannelSettings(i, z, NotificationType.LocalChat, null), NotificationChannels.Channel.Group, NotificationChannelSettings(i, z, NotificationType.Group, null), NotificationChannels.Channel.IM, NotificationChannelSettings(4, z, NotificationType.Private, null))
+    init {
+        val i = 3
+        val z = true
+        channelSettings = ImmutableMap.of(
+            NotificationChannels.Channel.OnlineStatus, NotificationChannelSettings(2, false, null),
+            NotificationChannels.Channel.Local, NotificationChannelSettings(i, z, NotificationType.LocalChat),
+            NotificationChannels.Channel.Group, NotificationChannelSettings(i, z, NotificationType.Group),
+            NotificationChannels.Channel.IM, NotificationChannelSettings(4, z, NotificationType.Private)
+        )
     }
 
     open fun areNotificationsSystemControlled(): Boolean {
@@ -47,12 +44,13 @@ open class OreoNotificationChannelManager {
     }
 
     open fun getEnabledTypes(context: Context): ImmutableSet<NotificationType> {
-        NotificationChannels notificationChannels = NotificationChannels.getInstance()
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification")
-        ImmutableSet.Builder builder = ImmutableSet.builder()
-        internal fun for(NotificationType.VALUES: NotificationType notificationType :):  {
-            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(getNotificationChannelName(notificationChannels.getChannelByType(notificationType)))
-            if (notificationChannel != null && notificationChannel.getImportance() > 0) {
+        val notificationChannels = NotificationChannels.getInstance()
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val builder = ImmutableSet.builder<NotificationType>()
+        for (notificationType in NotificationType.VALUES) {
+            val channel = notificationChannels.getChannelByType(notificationType) ?: continue
+            val notificationChannel = notificationManager.getNotificationChannel(getNotificationChannelName(channel))
+            if (notificationChannel != null && notificationChannel.importance > 0) {
                 builder.add(notificationType)
             }
         }
@@ -60,27 +58,28 @@ open class OreoNotificationChannelManager {
     }
 
     open fun getNotificationChannelName(channel: NotificationChannels.Channel): String {
-        String id
-        internal fun synchronized(this.lock):  {
-            NotificationChannel notificationChannel = this.channels.get(channel)
-            internal fun if(null: notificationChannel !=):  {
-                id = notificationChannel.getId()
+        val id: String
+        synchronized(this.lock) {
+            val notificationChannel = this.channels[channel]
+            if (notificationChannel != null) {
+                id = notificationChannel.id
             } else {
-                Context context = LumiyaApp.getContext()
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification")
-                NotificationChannelSettings notificationChannelSettings = this.channelSettings.get(channel)
-                NotificationChannel notificationChannel2 = NotificationChannel(channel.channelId, context.getString(channel.nameStringId), notificationChannelSettings.importance)
-                notificationChannel2.setDescription(context.getString(channel.descriptionStringId))
-                internal fun if(null: notificationChannelSettings.notificationType !=):  {
-                    AudioAttributes.Builder builder = new AudioAttributes.Builder()
-                    builder.setContentType(4)
-                    builder.setUsage(5)
-                    notificationChannel2.setSound(NotificationSounds.defaultSounds.get(notificationChannelSettings.notificationType).getUri(), builder.build())
+                val context = LumiyaApp.getContext()
+                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationChannelSettings = this.channelSettings[channel]!!
+                val notificationChannel2 = NotificationChannel(channel.channelId, context.getString(channel.nameStringId), notificationChannelSettings.importance)
+                notificationChannel2.description = context.getString(channel.descriptionStringId)
+                if (notificationChannelSettings.notificationType != null) {
+                    val audioBuilder = AudioAttributes.Builder()
+                    audioBuilder.setContentType(4)
+                    audioBuilder.setUsage(5)
+                    val sound = NotificationSounds.defaultSounds[notificationChannelSettings.notificationType]
+                    notificationChannel2.setSound(sound?.getUri(), audioBuilder.build())
                 }
                 notificationChannel2.setShowBadge(notificationChannelSettings.showBadge)
                 Debug.Printf("Notifications: Creating new notification channel with id '%s'", channel.channelId)
                 notificationManager.createNotificationChannel(notificationChannel2)
-                this.channels.put(channel, notificationChannel2)
+                this.channels[channel] = notificationChannel2
                 id = channel.channelId
             }
         }
@@ -88,31 +87,24 @@ open class OreoNotificationChannelManager {
     }
 
     open fun getNotificationSummary(context: Context, channel: NotificationChannels.Channel): String? {
-        NotificationChannel notificationChannel = ((NotificationManager) context.getSystemService("notification")).getNotificationChannel(getNotificationChannelName(channel))
-        internal fun if(null: notificationChannel ==):  {
-            return null
-        }
-        when (notificationChannel.getImportance()) {
-            0 -> {
-                return context.getString(R.string.notification_summary_importance_disabled)
-            1 -> {
-                return context.getString(R.string.notification_summary_importance_min)
-            2 -> {
-                return context.getString(R.string.notification_summary_importance_low)
-            3 -> {
-            else -> {
-                return context.getString(R.string.notification_summary_importance_default)
-            4 -> {
-            5 -> {
-                return context.getString(R.string.notification_summary_importance_high)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationChannel = notificationManager.getNotificationChannel(getNotificationChannelName(channel))
+            ?: return null
+        return when (notificationChannel.importance) {
+            0 -> context.getString(R.string.notification_summary_importance_disabled)
+            1 -> context.getString(R.string.notification_summary_importance_min)
+            2 -> context.getString(R.string.notification_summary_importance_low)
+            4, 5 -> context.getString(R.string.notification_summary_importance_high)
+            else -> context.getString(R.string.notification_summary_importance_default)
         }
     }
 
-    open fun showSystemNotificationSettings(context: Context, fragment: Fragment, channel: NotificationChannels.Channel): Boolean {
-        Intent intent = Intent("android.settings.CHANNEL_NOTIFICATION_SETTINGS")
+    open fun showSystemNotificationSettings(context: Context, fragment: Fragment?, channel: NotificationChannels.Channel): Boolean {
+        val intent = Intent("android.settings.CHANNEL_NOTIFICATION_SETTINGS")
         intent.putExtra("android.provider.extra.CHANNEL_ID", getNotificationChannelName(channel))
-        intent.putExtra("android.provider.extra.APP_PACKAGE", context.getPackageName())
-        internal fun if(null: fragment !=):  {
+        intent.putExtra("android.provider.extra.APP_PACKAGE", context.packageName)
+        if (fragment != null) {
+            @Suppress("DEPRECATION")
             fragment.startActivityForResult(intent, 11)
             return true
         }
