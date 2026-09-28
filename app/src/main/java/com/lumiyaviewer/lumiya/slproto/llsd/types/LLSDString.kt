@@ -3,35 +3,40 @@ package com.lumiyaviewer.lumiya.slproto.llsd.types
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
 import java.io.DataOutputStream
-import java.io.IOException
 import java.util.UUID
 import org.xmlpull.v1.XmlSerializer
 
-open class LLSDString : LLSDNode() {
+open class LLSDString : LLSDNode {
     private var value: String = ""
 
     constructor(value: String) {
         this.value = value
     }
-    fun asBoolean(): Boolean {
-        return "true".equalsIgnoreCase(this.value)
+
+    override fun asBoolean(): Boolean {
+        return "true".equals(this.value, ignoreCase = true)
     }
-    fun asString(): String {
+
+    override fun asString(): String {
         return this.value
     }
-    fun asUUID(): UUID {
+
+    override fun asUUID(): UUID {
         return UUID.fromString(this.value)
     }
-    public void toBinary(DataOutputStream dataOutputStream) throws IOException {
+
+    override fun toBinary(dataOutputStream: DataOutputStream) {
         dataOutputStream.writeByte(115)
         if (this.value.isEmpty()) {
-            dataOutputStream.writeIntreturn as 0
+            dataOutputStream.writeInt(0)
+            return
         }
-        var stringToVariableUTF: ByteArray = SLMessage.stringToVariableUTF(this.value)
-        dataOutputStream.writeInt(stringToVariableUTF.length)
+        val stringToVariableUTF: ByteArray = SLMessage.stringToVariableUTF(this.value)
+        dataOutputStream.writeInt(stringToVariableUTF.size)
         dataOutputStream.write(stringToVariableUTF)
     }
-    public void toXML(XmlSerializer xmlSerializer) throws IOException {
+
+    override fun toXML(xmlSerializer: XmlSerializer) {
         xmlSerializer.startTag("", "string")
         xmlSerializer.text(this.value)
         xmlSerializer.endTag("", "string")
