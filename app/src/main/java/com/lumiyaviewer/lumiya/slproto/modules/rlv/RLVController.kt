@@ -22,8 +22,8 @@ open class RLVController : SLModule() {
     private var RLVEnabled: Boolean = false
     private var RLVEnablingCommand: String = ""
     private var RLVEnablingOffered: Boolean = false
-    private var RLVEnablingUUID: UUID = null
-    private var restrictions: RLVRestrictions = null
+    private var RLVEnablingUUID: UUID? = null
+    private var restrictions: RLVRestrictions? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.RLVEnabled = false
@@ -52,7 +52,7 @@ open class RLVController : SLModule() {
     }
 
     private fun handleRLVCommandParsed(uuid: UUID, str: String, str2: String, str3: String) {
-        var handler: RLVCommand = null
+        var handler: RLVCommand? = null
         Debug.Printf("RLV command: '%s' param '%s' option '%s'", str, str2, str3)
         var command: RLVCommands = RLVCommands.getCommand(str)
         if (command == null || (handler = command.getHandler()) == null) {
@@ -85,8 +85,8 @@ open class RLVController : SLModule() {
     }
 
     fun canDetachItem(i: Int, uuid: UUID): Boolean {
-        var attachmentPoint: SLAttachmentPoint = null
-        var str: String = null
+        var attachmentPoint: SLAttachmentPoint? = null
+        var str: String? = null
         if (!this.RLVEnabled) {
         return true
         }

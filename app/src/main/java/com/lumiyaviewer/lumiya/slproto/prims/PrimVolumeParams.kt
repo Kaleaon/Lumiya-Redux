@@ -27,10 +27,10 @@ open class PrimVolumeParams {
     @JvmStatic var EXTENDED_MESH_ANIMATED: Int = 1
     @JvmStatic var PARAMS_RESERVED: Short = 80
     @JvmStatic var PARAMS_SCULPT: Short = 48
-    var FlexiParams: PrimFlexibleParams = null
-    var PathParams: PrimPathParams = null
-    var ProfileParams: PrimProfileParams = null
-    var SculptID: UUID = null
+    var FlexiParams: PrimFlexibleParams? = null
+    var PathParams: PrimPathParams? = null
+    var ProfileParams: PrimProfileParams? = null
+    var SculptID: UUID? = null
     var SculptType: Byte = 0
     /** Raw flags from the 0x70 extended-mesh extra parameter. */
     var ExtendedMeshFlags: Int = 0

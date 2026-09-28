@@ -22,19 +22,19 @@ open class PrimVolumeFace {
     @JvmStatic var TOP_MASK: Int = 512
     var BeginS: Int = 0
     var BeginT: Int = 0
-    var Center: LLVector3 = null
-    var Edge: IntArray = null
+    var Center: LLVector3? = null
+    var Edge: IntArray? = null
     var ID: Int = 0
-    var Indices: ShortArray = null
-    var Normals: Vector3Array = null
+    var Indices: ShortArray? = null
+    var Normals: Vector3Array? = null
     var NumIndices: Int = 0
     var NumS: Int = 0
     var NumT: Int = 0
     var NumVertices: Int = 0
-    var Positions: Vector3Array = null
-    var TexCoords: Vector2Array = null
+    var Positions: Vector3Array? = null
+    var TexCoords: Vector2Array? = null
     var TypeMask: Int = 0
-    var vertexArray: VertexArray = null
+    var vertexArray: VertexArray? = null
     var TexCoordExtents: Array<LLVector2> = {LLVector2(), LLVector2()}
     var Extents: Array<LLVector3> = {LLVector3(), LLVector3()}
 

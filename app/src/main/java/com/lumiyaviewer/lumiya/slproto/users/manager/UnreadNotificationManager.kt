@@ -47,13 +47,13 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
     @JvmStatic private var MAX_MESSAGES_PER_NOTIFICATION: Int = 3
     @JvmStatic var unreadNotificationKey: Boolean = Boolean.FALSE
 
-    private var chatMessageDao: ChatMessageDao = null
+    private var chatMessageDao: ChatMessageDao? = null
 
-    private var chatterDao: ChatterDao = null
-    private var emptyNotification: UnreadNotificationInfo = null
-    private var updateExecutor: Executor = null
+    private var chatterDao: ChatterDao? = null
+    private var emptyNotification: UnreadNotificationInfo? = null
+    private var updateExecutor: Executor? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var chatterSources: MutableMap<Long, ChatterNameRetriever> = ConcurrentHashMap(4, 0.75f, 2)
     private var maskEnabled: AtomicInteger = AtomicInteger(7)
     private var totalUnreadCount: AtomicInteger = AtomicInteger(0)
@@ -64,7 +64,7 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
     private var lastFreshMessageNotification: AtomicLong = AtomicLong(0)
     private var notifyCaptureLock: Any = Object()
 
-    private var notifyCapture: WeakReference<NotifyCapture> = null
+    private var notifyCapture: WeakReference<NotifyCapture>? = null
     private var updateChatterDataRunnable: Runnable = Runnable() {
         fun run() {
             UnreadNotificationManager.this.updateUnreadChatterData()
@@ -99,13 +99,13 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
 
     fun getUnreadNotification(): UnreadNotifications {
         var i: Int = 0
-        var notificationType: NotificationType = null
-        var arrayList: ArrayList = null
-        var unreadMessageSource: UnreadNotificationInfo.UnreadMessageSource = null
+        var notificationType: NotificationType? = null
+        var arrayList: ArrayList? = null
+        var unreadMessageSource: UnreadNotificationInfo.UnreadMessageSource? = null
         var i2: Int = 0
         var i3: Int = 0
-        var notificationType2: NotificationType = null
-        var notificationType3: NotificationType = null
+        var notificationType2: NotificationType? = null
+        var notificationType3: NotificationType? = null
         var l: Long = 0L
         var intValue: Int = 0
         var z: Boolean = System.currentTimeMillis() >= this.lastFreshMessageNotification.get() + FRESH_MESSAGES_NOTIFICATION_INTERVAL
@@ -113,9 +113,9 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
         for (notificationType4 in NotificationType.VALUES) {
             var i4: Int = 0
             var i5: Int = 0
-            var notificationType5: NotificationType = null
-            var notificationType6: NotificationType = null
-            var l2: Long = null
+            var notificationType5: NotificationType? = null
+            var notificationType6: NotificationType? = null
+            var l2: Long? = null
             var z2: Boolean = false
             if (this.chatterSources.isEmpty()) {
                 i = 0
@@ -202,7 +202,7 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
                 }
                 var i7 else Int = if (hashMap.size() <= 1) 3 else 1
                 var arrayList2: ArrayList = ArrayList(hashMap.size())
-                var unreadMessageSource2: UnreadNotificationInfo.UnreadMessageSource = null
+                var unreadMessageSource2: UnreadNotificationInfo.UnreadMessageSource? = null
                 for (entry2 in hashMap.entrySet()) {
                     var linkedList: LinkedList = LinkedList()
                     var unreadMessagesCount: Int = ((UnreadNotificationInfo.UnreadMessageSource) entry2.getValue()).unreadMessagesCount()
@@ -290,10 +290,10 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
             }
             where = where.where(ChatterDao.Properties.Type.in(arrayList), arrayOfNulls<WhereCondition>(0))
         }
-        var hashSet: HashSet = null
+        var hashSet: HashSet? = null
         var i2: Int = 0
         var i3: Int = 0
-        var notificationType: NotificationType = null
+        var notificationType: NotificationType? = null
         for (chatter in where.orderDesc(ChatterDao.Properties.LastMessageID).listLazy()) {
             var fromDatabaseObject: ChatterID = ChatterID.fromDatabaseObject(this.userManager.getUserID(), chatter)
             if (fromDatabaseObject != null) {
@@ -330,7 +330,7 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
     }
 
     fun addFreshMessage(chatter: Chatter) {
-        var chatterType: ChatterID.ChatterType = null
+        var chatterType: ChatterID.ChatterType? = null
         var z: Boolean = true
         var id: Long = chatter.getId()
         if (id != null) {
@@ -353,7 +353,7 @@ open class UnreadNotificationManager : ChatterNameRetriever.OnChatterNameUpdated
     }
 
     fun captureNotify(unreadNotificationInfo else UnreadNotificationInfo, intent: Intent): Intent {
-        var notifyCapture: NotifyCapture = null
+        var notifyCapture: NotifyCapture? = null
         synchronized(this.notifyCaptureLock) {
             notifyCapture = if (this.notifyCapture != null) this.notifyCapture.get() else null
         }

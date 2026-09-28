@@ -6,13 +6,9 @@ import androidx.fragment.app.FragmentActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import com.lumiyaviewer.lumiya.databinding.GroupNoticeBinding
 import com.lumiyaviewer.lumiya.Debug
 import com.lumiyaviewer.lumiya.R
-import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit
 import com.lumiyaviewer.lumiya.slproto.inventory.SLInventoryEntry
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import com.lumiyaviewer.lumiya.ui.common.ChatterFragment
@@ -20,60 +16,65 @@ import com.lumiyaviewer.lumiya.ui.common.DetailsActivity
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryFragment
 
-open class GroupNoticeFragment : ChatterFragment() {
-    private static String ATTACHED_ENTRY_KEY = "attachedEntry"
-    private static int ITEM_FOR_ATTACH_REQUEST = 1
+class GroupNoticeFragment : ChatterFragment() {
+    companion object {
+        private const val ATTACHED_ENTRY_KEY = "attachedEntry"
+        private const val ITEM_FOR_ATTACH_REQUEST = 1
 
-    private GroupNoticeBinding binding
-    private SLInventoryEntry attachedEntry = null
+        @JvmStatic
+        fun makeSelection(chatterID: ChatterID?): Bundle = ChatterFragment.makeSelection(chatterID)
+    }
+
+    private var binding: GroupNoticeBinding? = null
+    private var attachedEntry: SLInventoryEntry? = null
 
     private fun updateAttachedEntry() {
         Debug.Printf("GroupNotice: current attached entry %s", this.attachedEntry)
-        internal fun if(null: this.binding !=):  {
-            internal fun if(null: this.attachedEntry ==):  {
-                this.binding.groupNoticeAttachmentText.setText(R.string.group_notice_no_attachment)
-                this.binding.groupNoticeAttachmentButton.setText(R.string.group_notice_attach)
+        val binding = this.binding
+        if (binding != null) {
+            val attachedEntry = this.attachedEntry
+            if (attachedEntry == null) {
+                binding.groupNoticeAttachmentText.setText(R.string.group_notice_no_attachment)
+                binding.groupNoticeAttachmentButton.setText(R.string.group_notice_attach)
             } else {
-                this.binding.groupNoticeAttachmentText.setText(this.attachedEntry.name)
-                this.binding.groupNoticeAttachmentButton.setText(R.string.group_notice_remove_attachment)
+                binding.groupNoticeAttachmentText.text = attachedEntry.name
+                binding.groupNoticeAttachmentButton.setText(R.string.group_notice_remove_attachment)
             }
         }
     }
 
-    override protected fun decorateFragmentTitle(str: String): String {
-        fun getString(R.string.group_notice_title_format, str): return
+    override fun decorateFragmentTitle(str: String): String {
+        return getString(R.string.group_notice_title_format, str)
     }
 
-    override fun onActivityResult(i: Int, i2: Int, intent: Intent) {
-        internal fun switch(i):  {
+    override fun onActivityResult(i: Int, i2: Int, intent: Intent?) {
+        when (i) {
             1 -> {
-                if (i2 == -1 && intent.hasExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)) {
-                    this.attachedEntry = (SLInventoryEntry) intent.getParcelableExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)
+                if (i2 == -1 && intent != null && intent.hasExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)) {
+                    this.attachedEntry = intent.getParcelableExtra(InventoryFragment.SELECTED_INVENTORY_ENTRY)
                     Debug.Printf("GroupNotice: new attached entry %s", this.attachedEntry)
                     updateAttachedEntry()
-                    }
                 }
-                }
-            else -> {
-                super.onActivityResult(i, i2, intent)
-                }
+            }
+            else -> super.onActivityResult(i, i2, intent)
         }
     }
 
-    override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup, bundle: Bundle): View {
-        this.binding = GroupNoticeBinding.inflate(layoutInflater, viewGroup, false)
-        internal fun if(null: bundle !=):  {
+    override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?): View {
+        val binding = GroupNoticeBinding.inflate(layoutInflater, viewGroup, false)
+        this.binding = binding
+        if (bundle != null) {
             if (bundle.containsKey(ATTACHED_ENTRY_KEY)) {
-                this.attachedEntry = (SLInventoryEntry) bundle.getParcelable(ATTACHED_ENTRY_KEY)
+                this.attachedEntry = bundle.getParcelable(ATTACHED_ENTRY_KEY)
                 Debug.Printf("GroupNotice: restored state attached entry %s", this.attachedEntry)
             } else {
-                Debug.Printf("GroupNotice: restored state no entry", arrayOfNulls<Object>(0])
+                Debug.Printf("GroupNotice: restored state no entry")
             }
         }
-        this.binding.groupNoticeAttachmentButton.setOnClickListener(v -> onGroupNoticeAttachmentButton())
-        this.binding.groupNoticeSendButton.setOnClickListener(v -> onGroupNoticeSendButton())
+        binding.groupNoticeAttachmentButton.setOnClickListener { onGroupNoticeAttachmentButton() }
+        binding.groupNoticeSendButton.setOnClickListener { onGroupNoticeSendButton() }
         updateAttachedEntry()
-        return this.binding.getRoot()
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -81,36 +82,37 @@ open class GroupNoticeFragment : ChatterFragment() {
         super.onDestroyView()
     }
 
-    open fun onGroupNoticeAttachmentButton() {
+    fun onGroupNoticeAttachmentButton() {
         Debug.Printf("GroupNotice: current attached entry %s", this.attachedEntry)
-        internal fun if(null: this.attachedEntry !=):  {
+        if (this.attachedEntry != null) {
             this.attachedEntry = null
             updateAttachedEntry()
         } else if (this.userManager != null) {
-            startActivityForResult(InventoryActivity.makeSelectIntent(getContext(), this.userManager.getUserID()), 1)
+            startActivityForResult(InventoryActivity.makeSelectIntent(context, this.userManager!!.getUserID()), ITEM_FOR_ATTACH_REQUEST)
         }
     }
 
-    open fun onGroupNoticeSendButton() {
-        SLAgentCircuit activeAgentCircuit
-        if (this.userManager == null || !(this.chatterID is ChatterID.ChatterIDGroup) || (activeAgentCircuit = this.userManager.getActiveAgentCircuit()) == null) {
+    fun onGroupNoticeSendButton() {
+        val userManager = this.userManager
+        val chatterID = this.chatterID
+        if (userManager == null || chatterID !is ChatterID.ChatterIDGroup) {
             return
         }
-        activeAgentCircuit.getModules().groupManager.SendGroupNotice(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID(), this.binding.groupNoticeSubject.getText().toString(), this.binding.groupNoticeEditText.getText().toString(), this.attachedEntry)
-        FragmentActivity activity = getActivity()
-        internal fun if(DetailsActivity: activity instanceof):  {
-            ((DetailsActivity) activity).closeDetailsFragment(this)
+        val activeAgentCircuit = userManager.getActiveAgentCircuit() ?: return
+        val binding = this.binding ?: return
+        activeAgentCircuit.getModules().groupManager.SendGroupNotice(chatterID.getChatterUUID(), binding.groupNoticeSubject.text.toString(), binding.groupNoticeEditText.text.toString(), this.attachedEntry)
+        val activity = activity
+        if (activity is DetailsActivity) {
+            activity.closeDetailsFragment(this)
         }
     }
 
     override fun onSaveInstanceState(bundle: Bundle) {
         Debug.Printf("GroupNotice: saved state attached entry %s", this.attachedEntry)
-        internal fun if(null: bundle !=):  {
-            bundle.putParcelable(ATTACHED_ENTRY_KEY, this.attachedEntry)
-        }
+        bundle.putParcelable(ATTACHED_ENTRY_KEY, this.attachedEntry)
         super.onSaveInstanceState(bundle)
     }
 
-    override protected fun onShowUser(chatterID: ChatterID) {
+    override fun onShowUser(chatterID: ChatterID?) {
     }
 }

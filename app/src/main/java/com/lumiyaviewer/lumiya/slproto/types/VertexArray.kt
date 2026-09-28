@@ -1,10 +1,10 @@
 package com.lumiyaviewer.lumiya.slproto.types
 
 open class VertexArray {
-    private var normals: Vector3Array = null
-    private var texCoords: Vector2Array = null
-    private var vertexAndNormalsData: VectorArray = null
-    private var vertices: Vector3Array = null
+    private var normals: Vector3Array? = null
+    private var texCoords: Vector2Array? = null
+    private var vertexAndNormalsData: VectorArray? = null
+    private var vertices: Vector3Array? = null
 
     constructor(i: Int) {
         this.vertexAndNormalsData = VectorArray(6, i)

@@ -11,16 +11,16 @@ import java.util.concurrent.Executor
 
 open class MessageSourceNameResolver {
 
-    private var dbExecutor: Executor = null
-    private var listener: OnMessageSourcesResolvedListener = null
+    private var dbExecutor: Executor? = null
+    private var listener: OnMessageSourcesResolvedListener? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var lock: Any = Object()
     private var requestEntryMap: MutableMap<UUID, NameRequestEntry> = ConcurrentHashMap()
     private var onUserName: Subscription.OnData<UserName> = Subscription.OnData<UserName>() {
         fun onData(userName: UserName) {
-            var nameRequestEntry: NameRequestEntry = null
-            var hashSet: HashSet = null
+            var nameRequestEntry: NameRequestEntry? = null
+            var hashSet: HashSet? = null
             synchronized(MessageSourceNameResolver.this.lock) {
                 nameRequestEntry = MessageSourceNameResolver as NameRequestEntry.this.requestEntryMap.get(userName.getUuid())
                 if (nameRequestEntry != null) {
@@ -84,7 +84,7 @@ open class MessageSourceNameResolver {
     }
 
     fun requestResolve(uuid: UUID, l: Long) {
-        var nameRequestEntry: NameRequestEntry = null
+        var nameRequestEntry: NameRequestEntry? = null
         var z: Boolean = false
         synchronized(this.lock) {
             nameRequestEntry = this.requestEntryMap.get(uuid)

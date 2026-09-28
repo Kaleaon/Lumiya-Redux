@@ -4,9 +4,9 @@ import java.util.Arrays
 
 open class SLAvatarParamColor {
 
-    var colorOperation: ColorOperation = null
+    var colorOperation: ColorOperation? = null
 
-    private var colorValues: IntArray = null
+    private var colorValues: IntArray? = null
 
     enum class ColorOperation {
         Default,

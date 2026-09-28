@@ -7,7 +7,7 @@ import java.util.UUID
 import org.xmlpull.v1.XmlSerializer
 
 open class LLSDUUID : LLSDNode() {
-    private var value: UUID = null
+    private var value: UUID? = null
 
     constructor() {
         this.value = null

@@ -3,8 +3,8 @@ package com.lumiyaviewer.lumiya.slproto.modules.mutelist
 import java.util.UUID
 
 open class MuteListKey {
-    var muteType: MuteType = null
-    var uuid: UUID = null
+    var muteType: MuteType? = null
+    var uuid: UUID? = null
 
     constructor(muteListEntry: MuteListEntry) {
         this.muteType = muteListEntry.type

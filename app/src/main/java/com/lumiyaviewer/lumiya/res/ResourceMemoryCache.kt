@@ -14,7 +14,7 @@ abstract class ResourceMemoryCache<ResourceParams, ResourceType> : ResourceManag
         .weakValues()
         .build<ResourceParams, ResourceType>()
 
-    override fun CompleteRequest(params: ResourceParams, result: ResourceType, consumers: Set<ResourceConsumer>) {
+    override fun CompleteRequest(params: ResourceParams, result: ResourceType?, consumers: Set<ResourceConsumer>) {
         if (result != null) {
             finalResults.put(params, result)
         } else {
@@ -23,7 +23,7 @@ abstract class ResourceMemoryCache<ResourceParams, ResourceType> : ResourceManag
         super.CompleteRequest(params, result, consumers)
     }
 
-    override fun IntermediateResult(params: ResourceParams, result: ResourceType, consumers: Set<ResourceConsumer>) {
+    override fun IntermediateResult(params: ResourceParams, result: ResourceType?, consumers: Set<ResourceConsumer>) {
         if (result != null) {
             intermediateResults.put(params, result)
         } else {

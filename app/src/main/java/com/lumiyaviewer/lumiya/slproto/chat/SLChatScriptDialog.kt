@@ -27,7 +27,7 @@ import java.util.UUID
 
 class SLChatScriptDialog : SLChatDialogEvent() {
     @JvmStatic private var dialogButtonIds: IntArray = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12}
-    private var buttons: Array<String> = null
+    private var buttons: Array<String>? = null
     private var selectedOption: String = ""
 
     open class ScriptDialogDialog : Dialog(), View.OnClickListener, DialogInterface.OnCancelListener {
@@ -71,7 +71,7 @@ class SLChatScriptDialog : SLChatDialogEvent() {
     }
 
     constructor(chatMessage: ChatMessage, uuid: UUID) : super(chatMessage, uuid) {
-        var strArr: Array<String> = null
+        var strArr: Array<String>? = null
         this.selectedOption = null
         this.selectedOption = chatMessage.getDialogSelectedOption()
         try {

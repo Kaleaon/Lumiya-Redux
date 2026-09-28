@@ -28,16 +28,16 @@ import java.util.concurrent.atomic.AtomicReference
 
 open class GroupManager {
 
-    private var chatterList: ChatterList = null
-    private var groupMemberDao: GroupMemberDao = null
-    private var groupMemberDataSetHandler: RateLimitRequestHandler<UUID, UUID> = null
-    private var groupMemberListDao: GroupMemberListDao = null
-    private var groupRoleMemberDao: GroupRoleMemberDao = null
-    private var groupRoleMemberDataSetHandler: RateLimitRequestHandler<UUID, UUID> = null
-    private var groupRoleMemberListDao: GroupRoleMemberListDao = null
-    private var subscription: Subscription<UUID, AvatarGroupList> = null
+    private var chatterList: ChatterList? = null
+    private var groupMemberDao: GroupMemberDao? = null
+    private var groupMemberDataSetHandler: RateLimitRequestHandler<UUID, UUID>? = null
+    private var groupMemberListDao: GroupMemberListDao? = null
+    private var groupRoleMemberDao: GroupRoleMemberDao? = null
+    private var groupRoleMemberDataSetHandler: RateLimitRequestHandler<UUID, UUID>? = null
+    private var groupRoleMemberListDao: GroupRoleMemberListDao? = null
+    private var subscription: Subscription<UUID, AvatarGroupList>? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var avatarGroupListRef: AtomicReference<AvatarGroupList> = AtomicReference<>()
     private var groupMemberDataSetPool: SubscriptionPool<UUID, UUID> = SubscriptionPool<>()
     private var groupRoleMemberDataSetPool: SubscriptionPool<UUID, UUID> = SubscriptionPool<>()

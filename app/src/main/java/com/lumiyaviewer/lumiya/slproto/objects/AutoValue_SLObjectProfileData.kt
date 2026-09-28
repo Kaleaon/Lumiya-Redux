@@ -4,17 +4,17 @@ import com.google.common.base.Optional
 import java.util.UUID
 
 class AutoValue_SLObjectProfileData : SLObjectProfileData() {
-    private var description: Optional<String> = null
-    private var floatingText: Optional<String> = null
+    private var description: Optional<String>? = null
+    private var floatingText: Optional<String>? = null
     private var isCopyable: Boolean = false
     private var isDead: Boolean = false
     private var isModifiable: Boolean = false
     private var isPayable: Boolean = false
     private var isTouchable: Boolean = false
-    private var name: Optional<String> = null
-    private var objectUUID: UUID = null
-    private var ownerUUID: UUID = null
-    private var payInfo: PayInfo = null
+    private var name: Optional<String>? = null
+    private var objectUUID: UUID? = null
+    private var ownerUUID: UUID? = null
+    private var payInfo: PayInfo? = null
     private var salePrice: Int = 0
     private var saleType: Byte = 0
     private var touchName: String = ""

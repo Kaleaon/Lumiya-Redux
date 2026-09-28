@@ -23,8 +23,8 @@ open class MuteListData {
             return if (viewOrder != 0) viewOrder else muteListEntry.name.compareToIgnoreCase(muteListEntry2.name)
         }
     }
-    private var muteList: ImmutableMap<MuteListKey, MuteListEntry> = null
-    private var muteListNames: ImmutableMap<String, MuteListEntry> = null
+    private var muteList: ImmutableMap<MuteListKey, MuteListEntry>? = null
+    private var muteListNames: ImmutableMap<String, MuteListEntry>? = null
 
     constructor() {
         this.muteList = ImmutableMap.of()

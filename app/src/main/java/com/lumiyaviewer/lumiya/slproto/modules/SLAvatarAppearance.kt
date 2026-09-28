@@ -73,7 +73,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     @JvmStatic private var Param_agentSizeVPLegLength: Int = 692
     @JvmStatic private var Param_agentSizeVPNeckLength: Int = 756
     @JvmStatic private var Param_agentSizeVPPlatformHeight: Int = 503
-    private var agentBakedTextures: SLTextureEntry = null
+    private var agentBakedTextures: SLTextureEntry? = null
     private var agentSizeKnown: Boolean = false
     private var agentSizeVPHeadSize: Float = 0.0f
     private var agentSizeVPHeelHeight: Float = 0.0f
@@ -82,35 +82,35 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     private var agentSizeVPLegLength: Float = 0.0f
     private var agentSizeVPNeckLength: Float = 0.0f
     private var agentSizeVPPlatformHeight: Float = 0.0f
-    private var agentVisualParams: IntArray = null
-    private var bakeProcess: BakeProcess = null
-    private var bakingThread: Thread = null
-    private var caps: SLCaps = null
-    private var cofFolderUUID: AtomicReference<UUID> = null
+    private var agentVisualParams: IntArray? = null
+    private var bakeProcess: BakeProcess? = null
+    private var bakingThread: Thread? = null
+    private var caps: SLCaps? = null
+    private var cofFolderUUID: AtomicReference<UUID>? = null
     private var cofReady: Boolean = false
     private var currentCofAppearanceVersion: Int = 0
     private var currentCofInventoryVersion: Int = 0
-    private var currentOutfitFolder: SubscriptionData<InventoryQuery, InventoryEntryList> = null
-    private var findCofFolder: SubscriptionData<InventoryQuery, InventoryEntryList> = null
-    private var inventory: SLInventory = null
+    private var currentOutfitFolder: SubscriptionData<InventoryQuery, InventoryEntryList>? = null
+    private var findCofFolder: SubscriptionData<InventoryQuery, InventoryEntryList>? = null
+    private var inventory: SLInventory? = null
     private var lastCofUpdateError: Boolean = false
     private var lastCofUpdatedVersion: Int = 0
     private var legacyAppearanceReady: Boolean = false
     private var multiLayerDone: Boolean = false
     private var needUpdateAppearance: Boolean = false
-    private var needUpdateCOF: AtomicBoolean = null
-    private var parcelInfo: SLParcelInfo = null
+    private var needUpdateCOF: AtomicBoolean? = null
+    private var parcelInfo: SLParcelInfo? = null
     private var serverSideAppearanceUpdateTask: Future<?> = null
     private var setAppearanceSerialNum: Int = 0
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private AtomicReference<Map<UUID, String>> wantedAttachments
-    private var wantedOutfitFolder: SLInventoryEntry = null
+    private var wantedOutfitFolder: SLInventoryEntry? = null
 
-    private var wornAttachments: ImmutableMap<UUID, String> = null
-    private var wornItemsRequestHandler: RequestHandler<SubscriptionSingleKey> = null
+    private var wornAttachments: ImmutableMap<UUID, String>? = null
+    private var wornItemsRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
     private ResultHandler<SubscriptionSingleKey, ImmutableList<WornItem>> wornItemsResultHandler
 
-    private var wornWearables: Table<SLWearableType, UUID, SLWearable> = null
+    private var wornWearables: Table<SLWearableType, UUID, SLWearable>? = null
 
     open class WornItem {
         private var attachedTo: Int
@@ -194,7 +194,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun DetachItem(i: Int) {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         var z: Boolean = false
         Debug.Log("Outfits: detaching item " + i)
         var z2: Boolean = false
@@ -261,7 +261,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun RequestServerRebake() {
-        var folder: SLInventoryEntry = null
+        var folder: SLInventoryEntry? = null
         var capability: String = this.caps.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance)
         var data: InventoryEntryList = this.currentOutfitFolder.getData()
         if (capability == null || data == null || (folder = data.getFolder()) == null) {
@@ -354,8 +354,8 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun UpdateCOFContents() {
-        var data: InventoryEntryList = null
-        var folder: SLInventoryEntry = null
+        var data: InventoryEntryList? = null
+        var folder: SLInventoryEntry? = null
         var z: Boolean = false
         var z2: Boolean = false
         var areWearablesReady: Boolean = areWearablesReady()
@@ -441,7 +441,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun UpdateMultiLayer() {
-        var rezMultipleAttachmentsFromInv: RezMultipleAttachmentsFromInv = null
+        var rezMultipleAttachmentsFromInv: RezMultipleAttachmentsFromInv? = null
         Debug.Printf("AvatarAppearance: MultiLayer: Updating multi layer appearance.", arrayOfNulls<Object>(0))
         var data: InventoryEntryList = this.currentOutfitFolder.getData()
         var database: InventoryDB = if (this.userManager != null) this.userManager.getInventoryManager().getDatabase() else null
@@ -466,7 +466,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
                 Debug.Printf("AvatarAppearance: Re-attaching %d attachments from COF.", linkedList2.size())
                 var hashMap: HashMap = HashMap()
                 var randomUUID: UUID = UUID.randomUUID()
-                var rezMultipleAttachmentsFromInv2: RezMultipleAttachmentsFromInv = null
+                var rezMultipleAttachmentsFromInv2: RezMultipleAttachmentsFromInv? = null
                 for (inventoryEntry2 in linkedList2) {
                     var resolveLink: SLInventoryEntry = database.resolveLink(inventoryEntry2)
                     if (resolveLink != null) {
@@ -529,9 +529,9 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun UpdateWearableNames() {
-        var resolveLink: SLInventoryEntry = null
-        var byCode: SLWearableType = null
-        var wearable: SLWearable = null
+        var resolveLink: SLInventoryEntry? = null
+        var byCode: SLWearableType? = null
+        var wearable: SLWearable? = null
         var data: InventoryEntryList = this.currentOutfitFolder.getData()
         var database: InventoryDB = if (this.userManager != null) this.userManager.getInventoryManager().getDatabase() else null
         if (data == null || database == null) {
@@ -546,7 +546,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
 
     private fun WearItemList(inventoryDB: InventoryDB, list: MutableList<SLInventoryEntry>, z: Boolean): Boolean {
         var z2: Boolean = false
-        var byCode: SLWearableType = null
+        var byCode: SLWearableType? = null
         var z3: Boolean = false
         var z4: Boolean = false
         var z5: Boolean = false
@@ -675,7 +675,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun canDetachItem(uuid: UUID): Boolean {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         if (this.parcelInfo == null || (agentAvatar = this.parcelInfo.getAgentAvatar()) == null) {
         return true
         }
@@ -703,7 +703,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     private fun getAppearanceParams(): IntArray {
-        var avatarParam: SLAvatarParams.AvatarParam = null
+        var avatarParam: SLAvatarParams.AvatarParam? = null
         var ints: IntArray = IntArray(218)
         for (int i = 0; i < 218; i++) {
             ints[i] = 0
@@ -765,7 +765,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     fun getWornItems(): ImmutableList<WornItem> {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         var builder: ImmutableList.Builder = ImmutableList.builder()
         Iterator<Table.Cell<SLWearableType, UUID, SLWearable>> it = this.wornWearables.cellSet().iterator()
         while (it.hasNext()) {
@@ -805,7 +805,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     fun onCurrentOutfitFolder(inventoryEntryList: InventoryEntryList) {
-        var folder: SLInventoryEntry = null
+        var folder: SLInventoryEntry? = null
         if (inventoryEntryList == null || (folder = inventoryEntryList.getFolder()) == null || !Objects.equal(folder.sessionID, this.agentCircuit.circuitInfo.sessionID)) {
             return
         }
@@ -891,14 +891,14 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
         var z2: Boolean = false
         var z3: Boolean = false
         var z4: Boolean = false
-        var rezMultipleAttachmentsFromInv: RezMultipleAttachmentsFromInv = null
+        var rezMultipleAttachmentsFromInv: RezMultipleAttachmentsFromInv? = null
         var z5: Boolean = false
         var z6: Boolean = false
-        var byCode: SLWearableType = null
+        var byCode: SLWearableType? = null
         var z7: Boolean = false
         var z8: Boolean = false
-        var removed: SLWearable = null
-        var rezMultipleAttachmentsFromInv2: RezMultipleAttachmentsFromInv = null
+        var removed: SLWearable? = null
+        var rezMultipleAttachmentsFromInv2: RezMultipleAttachmentsFromInv? = null
         var database: InventoryDB = if (this.userManager != null) this.userManager.getInventoryManager().getDatabase() else null
         var map: MutableMap<UUID, String> = this.wantedAttachments.get()
         var hashMap: HashMap = if (map != null) HashMap(map) else HashMap()
@@ -1121,8 +1121,8 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     fun DetachItemFromPoint(i: Int) {
-        var agentAvatar: SLObjectAvatarInfo = null
-        var hashSet: HashSet = null
+        var agentAvatar: SLObjectAvatarInfo? = null
+        var hashSet: HashSet? = null
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
                 for (objectInfo in agentAvatar.treeNode) {
@@ -1210,7 +1210,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
         }
     }
     fun HandleCircuitReady() {
-        var findSpecialFolder: SLInventoryEntry = null
+        var findSpecialFolder: SLInventoryEntry? = null
         var z: Boolean = true
         super.HandleCircuitReady()
         if (this.userManager != null) {
@@ -1306,7 +1306,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     fun UpdateMyAttachments() {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         var hashMap: HashMap = HashMap()
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
@@ -1404,7 +1404,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     fun getAttachmentUUID(i: Int): UUID {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         if (this.parcelInfo != null && (agentAvatar = this.parcelInfo.getAgentAvatar()) != null) {
             try {
                 for (objectInfo in agentAvatar.treeNode) {

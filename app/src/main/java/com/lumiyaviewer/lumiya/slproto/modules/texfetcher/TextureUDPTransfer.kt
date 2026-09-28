@@ -16,9 +16,9 @@ import java.util.Map
 open class TextureUDPTransfer {
     @JvmStatic private var MAX_RETRIES: Int = 2
     @JvmStatic private var PACKET_TIMEOUT: Long = 15000
-    var fetchReq: SLTextureFetchRequest = null
-    private var outputFile: File = null
-    private var outputStream: FileOutputStream = null
+    var fetchReq: SLTextureFetchRequest? = null
+    private var outputFile: File? = null
+    private var outputStream: FileOutputStream? = null
     private var packets: Int = 0
     private var size: Int = 0
     private var completed: Boolean = false

@@ -25,8 +25,8 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
 
 open class ObjectsManager {
-    private var nameRetriever: MultipleChatterNameRetriever = null
-    private var userManager: UserManager = null
+    private var nameRetriever: MultipleChatterNameRetriever? = null
+    private var userManager: UserManager? = null
     private var parcelInfo: AtomicReference<SLParcelInfo> = AtomicReference<>(null)
     private var filterLock: Any = Object()
     private var filterInfo: SLObjectFilterInfo = SLObjectFilterInfo.create()
@@ -55,7 +55,7 @@ open class ObjectsManager {
     private var touchableObjectsRequestHandler else SimpleRequestHandler<UUID> = AnonymousClass3()
     private var updateObjectListRunnable: Runnable = Runnable() {
         fun run() {
-            var filterInfo: SLObjectFilterInfo = null
+            var filterInfo: SLObjectFilterInfo? = null
             synchronized(ObjectsManager.this.filterLock) {
                 filterInfo = ObjectsManager.this.filterInfo
             }
@@ -81,7 +81,7 @@ open class ObjectsManager {
 
         /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_ObjectsManager$2_3438, reason: not valid java name */
         /* synthetic */ void m358xd130cea5(SLAgentCircuit agentCircuit, Integer num) {
-            var objectDoesNotExistException: ObjectDoesNotExistException = null
+            var objectDoesNotExistException: ObjectDoesNotExistException? = null
             var objectProfile: SLObjectProfileData = agentCircuit.getObjectProfile(num)
             if (objectProfile != null) {
                 ObjectsManager.this.objectProfilePool.onResultData(num, objectProfile)
@@ -113,7 +113,7 @@ open class ObjectsManager {
 
         /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_users_manager_ObjectsManager$3_4319, reason: not valid java name */
         /* synthetic */ void m359xd2e617a5(SLAgentCircuit agentCircuit, UUID uuid) {
-            var objectDoesNotExistException: ObjectDoesNotExistException = null
+            var objectDoesNotExistException: ObjectDoesNotExistException? = null
             var userTouchableObjects: ImmutableList<SLObjectInfo> = agentCircuit.getGridConnection().parcelInfo.getUserTouchableObjects(agentCircuit, uuid)
             if (userTouchableObjects != null) {
                 ObjectsManager.this.touchableObjectsPool.onResultData(uuid, userTouchableObjects)

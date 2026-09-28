@@ -13,7 +13,7 @@ import com.lumiyaviewer.lumiya.ui.common.TeleportProgressDialog
 import java.util.UUID
 
 class SLChatLureEvent : SLChatYesNoEvent() {
-    private var lureID: UUID = null
+    private var lureID: UUID? = null
 
     constructor(chatMessage: ChatMessage, uuid: UUID) : super(chatMessage, uuid) {
         this.lureID = chatMessage.getSessionID()

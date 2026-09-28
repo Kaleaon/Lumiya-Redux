@@ -68,7 +68,7 @@ open class SLHTTPSConnection {
         return lookup
             } catch (e: UnknownHostException) {
                 if (!str.equalsIgnoreCase("dns.google.com")) {
-                    var e: throw = null
+                    var e: throw? = null
                 }
                 Debug.Printf("DNS: Falling back to static IP addresses for %s", str)
                 var arrayList: ArrayList = ArrayList()
@@ -152,7 +152,7 @@ open class SLHTTPSConnection {
         return tryResolveOverHTTP
                 } catch (e2: UnknownHostException) {
                     if (!str.equalsIgnoreCase("login.agni.lindenlab.com")) {
-                        var e2: throw = null
+                        var e2: throw? = null
                     }
                     Debug.Printf("DNS: Falling back to static address for %s", str)
                     var arrayList: ArrayList = ArrayList()
@@ -170,7 +170,7 @@ open class SLHTTPSConnection {
     private fun getSocketFactory(): SSLSocketFactory {
         try {
             var sslContext: SSLContext = SSLContext.getInstance("TLS")
-            sslContext.init(null, new Array<TrustManager>{trustManager}, null)
+            sslContext.init(null, arrayOf(trustManager), null)
             return sslContext.getSocketFactory()
         } catch (e: Exception) {
             // No fallback to an unverified factory: fail loudly instead.

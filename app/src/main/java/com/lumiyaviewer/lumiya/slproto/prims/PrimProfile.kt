@@ -7,9 +7,9 @@ import java.util.ArrayList
 open class PrimProfile {
     @JvmStatic var MIN_DETAIL_FACES: Int = 6
     @JvmStatic private var tableScale: FloatArray = {1.0f, 1.0f, 1.0f, 0.5f, 0.707107f, 0.53f, 0.525f, 0.5f}
-    var EdgeCenters: Array<LLVector3> = null
-    var EdgeNormals: Array<LLVector3> = null
-    var Normals: Array<LLVector2> = null
+    var EdgeCenters: Array<LLVector3>? = null
+    var EdgeNormals: Array<LLVector3>? = null
+    var Normals: Array<LLVector2>? = null
     var Open: Boolean = false
     var Concave: Boolean = false
     var Dirty: Boolean = true
@@ -222,7 +222,7 @@ open class PrimProfile {
     }
 
     protected fun genNormals(primProfileParams: PrimProfileParams) {
-        var vector3: LLVector3 = null
+        var vector3: LLVector3? = null
         var size: Int = this.Profile.size()
         var i: Int = if (this.TotalOut != 0) this.TotalOut else this.Total / 2
         this.EdgeNormals = arrayOfNulls<LLVector3>(size * 2)
@@ -378,7 +378,7 @@ open class PrimProfile {
                                 if (z) {
                                     this.Faces.get(0).Count = this.Total
                                 }
-                                var squareFaces: break = null
+                                var squareFaces: break? = null
                             } else {
                                 this.Profile.get(i8).z *= 4.0f
                                 i7 = i8 + 1

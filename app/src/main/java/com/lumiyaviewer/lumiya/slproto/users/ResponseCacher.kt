@@ -15,11 +15,11 @@ import com.lumiyaviewer.lumiya.react.SubscriptionPool
 import java.util.concurrent.Executor
 
 abstract class ResponseCacher<KeyType, MessageType> : Refreshable<KeyType> {
-    private var cacheExecutor: Executor = null
-    private var cachedResponseRepository: CachedResponseRepositoryAdapter = null
+    private var cacheExecutor: Executor? = null
+    private var cachedResponseRepository: CachedResponseRepositoryAdapter? = null
     private var keyPrefix: String = ""
     private var pool: SubscriptionPool<KeyType, MessageType> = SubscriptionPool<>()
-    private var requestHandler: RateLimitRequestHandler<KeyType, MessageType> = null
+    private var requestHandler: RateLimitRequestHandler<KeyType, MessageType>? = null
 
     constructor(daoSession: DaoSession, executor: Executor, str: String) {
         this.cacheExecutor = executor

@@ -64,7 +64,7 @@ class TerrainTextureCache : ResourceMemoryCache<TerrainPatchInfo, OpenJPEG>() {
         }
 
         override fun execute() {
-            layerNeededMask = getParams().layerMask
+            layerNeededMask = getParams().getLayerMask()
             layerReadyMask = 0
             if (layerNeededMask == 0) {
                 bakingFuture = TextureCache.getInstance().decompressorExecutor.submit(this)
@@ -74,14 +74,14 @@ class TerrainTextureCache : ResourceMemoryCache<TerrainPatchInfo, OpenJPEG>() {
                 for (i in 0 until 4) {
                     if (rawRequests[i] == null && (layerNeededMask and (1 shl i)) != 0) {
                         rawRequests[i] = TerrainRawTextureRequest(
-                            getParams().textures.getTextureUUID(i), i
+                            getParams().getTextures().getTextureUUID(i), i
                         )
                     }
                 }
             }
         }
 
-        override fun getPriority(): Int = 0
+        override val priority: Int = 0
 
         @Synchronized
         fun onLayerReady(layer: Int, texture: OpenJPEG?) {

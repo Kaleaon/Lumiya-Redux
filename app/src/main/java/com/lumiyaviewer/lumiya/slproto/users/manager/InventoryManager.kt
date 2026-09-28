@@ -30,9 +30,9 @@ import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicReference
 
 open class InventoryManager {
-    private var folderRequestProcessor: RequestProcessor<UUID, SLInventoryEntry, SLInventoryEntry> = null
+    private var folderRequestProcessor: RequestProcessor<UUID, SLInventoryEntry, SLInventoryEntry>? = null
 
-    private var inventoryDB: InventoryDB = null
+    private var inventoryDB: InventoryDB? = null
     private var inventoryDbExecutor: OpportunisticExecutor = OpportunisticExecutor("InventoryDB")
     private var folderLoadingPool: SubscriptionPool<UUID, Boolean> = SubscriptionPool<>()
     private var folderEntryPool: SubscriptionPool<UUID, SLInventoryEntry> = SubscriptionPool<>()
@@ -45,8 +45,8 @@ open class InventoryManager {
     private var queryRequestHandler: RequestHandler<InventoryQuery> = RequestHandler<InventoryQuery>() {
         private Map<InventoryQuery, FolderSubscription> folderQueries = ConcurrentHashMap()
         fun onRequest(inventoryQuery: InventoryQuery) {
-            var put: FolderSubscription = null
-            var folderSubscription: FolderSubscription = null
+            var put: FolderSubscription? = null
+            var folderSubscription: FolderSubscription? = null
             if (inventoryQuery.containsString() != null) {
                 InventoryManager.this.entryListPool.onResultData(inventoryQuery, inventoryQuery.query(null, InventoryManager.this.inventoryDB))
                 return

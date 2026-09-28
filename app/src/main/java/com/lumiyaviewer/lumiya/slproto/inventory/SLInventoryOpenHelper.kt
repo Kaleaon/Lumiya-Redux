@@ -49,7 +49,7 @@ open class SLInventoryOpenHelper : DBHandleCache.DBOpenHelper {
         var z: Boolean = false
         var z2: Boolean = false
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS DBVersion (Version INTEGER);")
-        var query: Cursor = sqLiteDatabase.query("DBVersion", new Array<String>{"Version"}, null, null, null, null, null)
+        var query: Cursor = sqLiteDatabase.query("DBVersion", arrayOf("Version"), null, null, null, null, null)
         if (!query.moveToFirst()) {
             z = true
             z2 = true
@@ -83,7 +83,7 @@ open class SLInventoryOpenHelper : DBHandleCache.DBOpenHelper {
         } catch (e: Exception) {
             var sqLiteException: SQLiteException = SQLiteException(e.getMessage())
             sqLiteException.initCause(e)
-            var sqLiteException: throw = null
+            var sqLiteException: throw? = null
         }
     }
 

@@ -163,7 +163,7 @@ open class RLVRestrictions {
     }
 
     fun getRestrictionsByObject(uuid: UUID): MutableList<RLVRestrictionType> {
-        var linkedList: LinkedList = null
+        var linkedList: LinkedList? = null
         linkedList = LinkedList()
         Iterator<Map.Entry<RLVRestrictionType, RLVRestrictionList>> it = this.restrictions.entrySet().iterator()
         while (it.hasNext()) {

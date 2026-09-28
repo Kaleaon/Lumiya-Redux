@@ -1,7 +1,7 @@
 package com.lumiyaviewer.lumiya.slproto.types
 
 open class VectorArray {
-    protected var data: FloatArray = null
+    protected var data: FloatArray? = null
     protected var length: Int = 0
     protected var numComponents: Int = 0
     protected var offset: Int = 0

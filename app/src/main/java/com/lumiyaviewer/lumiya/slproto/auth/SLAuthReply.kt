@@ -14,12 +14,12 @@ import org.xmlpull.v1.XmlPullParserException
 
 class SLAuthReply {
     var agentAppearanceService: String = ""
-    var agentID: UUID = null
+    var agentID: UUID? = null
     var circuitCode: Int = 0
-    var friends: ImmutableList<Friend> = null
+    var friends: ImmutableList<Friend>? = null
     var fromTeleport: Boolean = false
     var gridName: String = ""
-    var inventoryRoot: UUID = null
+    var inventoryRoot: UUID? = null
     var isIndeterminate: Boolean = false
     var isTemporary: Boolean = false
     var loginURL: String = ""
@@ -28,9 +28,9 @@ class SLAuthReply {
     var mfaHash: String = ""
     var nextMethod: String = ""
     var nextURL: String = ""
-    var secureSessionID: UUID = null
+    var secureSessionID: UUID? = null
     var seedCapability: String = ""
-    var sessionID: UUID = null
+    var sessionID: UUID? = null
     var simAddress: String = ""
     var simPort: Int = 0
     var success: Boolean = false
@@ -81,21 +81,21 @@ class SLAuthReply {
         this.gridName = gridName
         this.loginURL = loginURL
         var z: Boolean = false
-        var str3: String = null
-        var str4: String = null
-        var uuid: UUID = null
-        var uuid2: UUID = null
-        var uuid3: UUID = null
+        var str3: String? = null
+        var str4: String? = null
+        var uuid: UUID? = null
+        var uuid2: UUID? = null
+        var uuid3: UUID? = null
         var i: Int = 0
-        var str5: String = null
+        var str5: String? = null
         var i2: Int = 0
-        var str6: String = null
+        var str6: String? = null
         var z2: Boolean = false
         var str7: String = ""
-        var str8: String = null
-        var uuid4: UUID = null
-        var reason: String = null
-        var mfaHash: String = null
+        var str8: String? = null
+        var uuid4: UUID? = null
+        var reason: String? = null
+        var mfaHash: String? = null
         var of: MutableList<Friend> = ImmutableList.of()
         xmlPullParser.nextTag()
         xmlPullParser.require(2, null, "methodResponse")
@@ -206,7 +206,7 @@ class SLAuthReply {
     }
 
     private UUID getInventoryRootValue(XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
-        var uuid: UUID = null
+        var uuid: UUID? = null
         if (skipUntilTag(xmlPullParser, "array")) {
             if (skipUntilTag(xmlPullParser, "data")) {
                 while (skipUntilTag(xmlPullParser, VrSettingsProviderContract.SETTING_VALUE_KEY)) {
@@ -253,7 +253,7 @@ class SLAuthReply {
                     if (skipUntilTag(xmlPullParser, "struct")) {
                         var i: Int = 0
                         var i2: Int = 0
-                        var uuid: UUID = null
+                        var uuid: UUID? = null
                         while (skipUntilTag(xmlPullParser, "member")) {
                             if (skipUntilTag(xmlPullParser, "name")) {
                                 var innerText: String = getInnerText(xmlPullParser)

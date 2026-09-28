@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class SLCapEventQueue : Runnable {
     private var capURL: String = ""
-    private var eventHandler: ICapsEventHandler = null
+    private var eventHandler: ICapsEventHandler? = null
     private var lastEventID: Int = 0
     private var threadMustExit: Boolean = false
     private var willExitGracefully: AtomicBoolean = AtomicBoolean(false)

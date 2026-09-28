@@ -12,9 +12,9 @@ import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class ChatterDisplayDataList {
-    private var chatters: SortedChatterList = null
+    private var chatters: SortedChatterList? = null
 
-    protected var userManager: UserManager = null
+    protected var userManager: UserManager? = null
     private var chatterSubscriptions: MutableMap<ChatterID, ChatterSubscription> = HashMap()
     private var needsRefresh: AtomicBoolean = AtomicBoolean(false)
     private var refreshRunnable: Runnable = Runnable() {

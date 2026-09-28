@@ -109,7 +109,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
 
     fun find(sqLiteDatabase: SQLiteDatabase, uuid: UUID): SLInventoryEntry {
         try {
-            var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+            var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", arrayOf(Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())), null, null, null)
             if (!query.moveToFirst()) {
                 query.close()
         return null
@@ -129,7 +129,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         if (uuid == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null")
         }
-        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, fieldNames, "uuid_low = ? AND uuid_high = ?", arrayOf(Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())), null, null, null)
         if (query.moveToFirst()) {
             var inventoryEntry: SLInventoryEntry = SLInventoryEntryquery as query.close()
         return inventoryEntry
@@ -147,7 +147,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         if (uuid == null) {
             throw DBObject.DatabaseBindingException(SLInventoryEntry.class, "folderUUID is null")
         }
-        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, new Array<String>{"_id"}, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())}, null, null, null)
+        var query: Cursor = sqLiteDatabase.query(InventoryEntryDBObject.tableName, arrayOf("_id"), "uuid_low = ? AND uuid_high = ?", arrayOf(Long.toString(uuid.getLeastSignificantBits()), Long.toString(uuid.getMostSignificantBits())), null, null, null)
         if (!query.moveToFirst()) {
             query.close()
             var inventoryEntry: SLInventoryEntry = SLInventoryEntry()
@@ -214,7 +214,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         } catch (e: SQLiteException) {
             var databaseBindingException: DBObject.DatabaseBindingException = DBObject.DatabaseBindingException(e.getMessage())
             databaseBindingException.initCause(e)
-            var databaseBindingException: throw = null
+            var databaseBindingException: throw? = null
         }
     }
 
@@ -230,7 +230,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
         } catch (e: SQLiteException) {
             var databaseBindingException: DBObject.DatabaseBindingException = DBObject.DatabaseBindingException(e.getMessage())
             databaseBindingException.initCause(e)
-            var databaseBindingException: throw = null
+            var databaseBindingException: throw? = null
         }
     }
 
@@ -367,7 +367,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
     }
 
     fun getDrawableResource(): Int {
-        var byType: SLAssetType = null
+        var byType: SLAssetType? = null
         return if (this.isFolder) R.drawable.inv_folder else (isLink() || (byType = SLAssetType.getByType(this.assetType)) == null) ? getDrawableResourceForType(this.invType) : byType.getDrawableResource()
     }
 
@@ -500,7 +500,7 @@ open class SLInventoryEntry : InventoryEntryDBObject(), Parcelable {
     }
 
     public void updateOrInsert(SQLiteDatabase sqLiteDatabase) throws DBObject.DatabaseBindingException {
-        super.updateOrInsert(sqLiteDatabase, "uuid_low = ? AND uuid_high = ?", new Array<String>{Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())})
+        super.updateOrInsert(sqLiteDatabase, "uuid_low = ? AND uuid_high = ?", arrayOf(Long.toString(this.uuid.getLeastSignificantBits()), Long.toString(this.uuid.getMostSignificantBits())))
     }
     public void updateOrInsert(SQLiteStatement sqLiteStatement, SQLiteStatement sqLiteStatement2) throws DBObject.DatabaseBindingException {
         sqLiteStatement.bindLong(19, this.uuid.getMostSignificantBits())

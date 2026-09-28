@@ -9,7 +9,7 @@ open class MutableSLTextureEntryFace {
     @JvmStatic var SHINY_MASK: Byte = -64
     @JvmStatic var TEX_MAP_MASK: Byte = 6
     var hasAttribute: Int = 0
-    var textureID: UUID = null
+    var textureID: UUID? = null
     var rgba: Int = -1
     var repeatU: Float = 1.0f
     var repeatV: Float = 1.0f

@@ -7,10 +7,10 @@ import com.lumiyaviewer.lumiya.slproto.SLGridConnection
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 
 open class SLModule {
-    protected var agentCircuit: SLAgentCircuit = null
-    protected var circuitInfo: SLCircuitInfo = null
+    protected var agentCircuit: SLAgentCircuit? = null
+    protected var circuitInfo: SLCircuitInfo? = null
     protected var eventBus: EventBus = EventBus.getInstance()
-    protected var gridConn: SLGridConnection = null
+    protected var gridConn: SLGridConnection? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         this.agentCircuit = agentCircuit

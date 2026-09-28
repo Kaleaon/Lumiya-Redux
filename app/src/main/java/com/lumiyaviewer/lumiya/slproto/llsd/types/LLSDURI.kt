@@ -8,7 +8,7 @@ import java.net.URI
 import org.xmlpull.v1.XmlSerializer
 
 open class LLSDURI : LLSDNode() {
-    private var value: URI = null
+    private var value: URI? = null
 
     constructor(str: String) {
         this.value = URI.create("")

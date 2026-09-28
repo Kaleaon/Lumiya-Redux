@@ -8,7 +8,7 @@ open class PrimFlexibleParams {
     var Gravity: Float = 0.0f
     var NumFlexiSections: Int = 0
     var Tension: Float = 0.0f
-    var UserForce: LLVector3 = null
+    var UserForce: LLVector3? = null
     var WindSensitivity: Float = 0.0f
 
     constructor(byteBuffer: ByteBuffer, i: Int) {

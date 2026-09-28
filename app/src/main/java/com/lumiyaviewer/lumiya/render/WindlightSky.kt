@@ -41,7 +41,7 @@ class WindlightSky(renderContext: RenderContext) {
             starsIndices.put(i.toShort())
         }
 
-        cloudsTexture = if (renderContext.skyProgram.hasCloudsTexture()) {
+        cloudsTexture = if (renderContext.skyProgram!!.hasCloudsTexture()) {
             loadClouds(renderContext)
         } else {
             null
@@ -58,23 +58,23 @@ class WindlightSky(renderContext: RenderContext) {
         GLES20.glBindBuffer(34963, buffers[SKY_INDEX_BUFFER]!!.handle)
         GLES20.glBufferData(34963, icosahedronIndices.size * 2, shortBuffer.position(0), 35044)
 
-        GLES20.glUseProgram(renderContext.skyProgram.handle)
-        GLES20.glEnableVertexAttribArray(renderContext.skyProgram.vPosition)
-        GLES20.glVertexAttribPointer(renderContext.skyProgram.vPosition, 3, 5126, false, 12, 0)
+        GLES20.glUseProgram(renderContext.skyProgram!!.getHandle())
+        GLES20.glEnableVertexAttribArray(renderContext.skyProgram!!.vPosition)
+        GLES20.glVertexAttribPointer(renderContext.skyProgram!!.vPosition, 3, 5126, false, 12, 0)
 
         GLES20.glBindBuffer(34962, buffers[STARS_VERTEX_BUFFER]!!.handle)
         GLES20.glBufferData(34962, starsCoords.capacity() * 4, starsCoords.position(0), 35044)
         GLES20.glBindBuffer(34963, buffers[STARS_INDEX_BUFFER]!!.handle)
         GLES20.glBufferData(34963, starsIndices.capacity() * 2, starsIndices.position(0), 35044)
 
-        GLES20.glUseProgram(renderContext.starsProgram.handle)
-        GLES20.glEnableVertexAttribArray(renderContext.starsProgram.vPosition)
-        GLES20.glVertexAttribPointer(renderContext.starsProgram.vPosition, 3, 5126, false, 12, 0)
+        GLES20.glUseProgram(renderContext.starsProgram!!.getHandle())
+        GLES20.glEnableVertexAttribArray(renderContext.starsProgram!!.vPosition)
+        GLES20.glVertexAttribPointer(renderContext.starsProgram!!.vPosition, 3, 5126, false, 12, 0)
     }
 
     private fun loadClouds(renderContext: RenderContext): GLResourceTexture? {
         return try {
-            val assetManager = LumiyaApp.getAssetManager()
+            val assetManager = LumiyaApp.getAssetManager()!!
             val targets = intArrayOf(34070, 34072, 34074, 34069, 34071, 34073)
             val fileNames = arrayOf("clouds_nx.tga", "clouds_py.tga", "clouds_nz.tga", "clouds_px.tga", "clouds_ny.tga", "clouds_pz.tga")
             val openJPEGArr = arrayOfNulls<OpenJPEG>(targets.size)
@@ -86,7 +86,7 @@ class WindlightSky(renderContext: RenderContext) {
                 Debug.Printf("WindlightSky: texture %dx%d,  numcomps %d, bpp %d",
                     openJPEG.width, openJPEG.height, openJPEG.num_components, openJPEG.bytes_per_pixel)
                 openJPEGArr[i] = openJPEG
-                totalSize += openJPEG.loadedSize
+                totalSize += openJPEG.getLoadedSize()
             }
             val glResourceTexture = GLResourceTexture(renderContext.glResourceManager, totalSize)
             GLES20.glBindTexture(34067, glResourceTexture.handle)
@@ -118,28 +118,28 @@ class WindlightSky(renderContext: RenderContext) {
         }
         matrix.glRotatef((-windDirection) + 90.0f, 0.0f, 0.0f, 1.0f)
 
-        GLES20.glUseProgram(renderContext.skyProgram.handle)
-        renderContext.skyProgram.ApplyWindlight(renderContext)
-        matrix.glApplyUniformMatrix(renderContext.skyProgram.uMVPMatrix)
+        GLES20.glUseProgram(renderContext.skyProgram!!.getHandle())
+        renderContext.skyProgram!!.ApplyWindlight(renderContext)
+        matrix.glApplyUniformMatrix(renderContext.skyProgram!!.uMVPMatrix)
 
         GLES20.glBindBuffer(34962, buffers[SKY_VERTEX_BUFFER]!!.handle)
-        GLES20.glEnableVertexAttribArray(renderContext.skyProgram.vPosition)
-        GLES20.glVertexAttribPointer(renderContext.skyProgram.vPosition, 3, 5126, false, 12, 0)
+        GLES20.glEnableVertexAttribArray(renderContext.skyProgram!!.vPosition)
+        GLES20.glVertexAttribPointer(renderContext.skyProgram!!.vPosition, 3, 5126, false, 12, 0)
         GLES20.glBindBuffer(34963, buffers[SKY_INDEX_BUFFER]!!.handle)
 
-        if (renderContext.skyProgram.hasCloudsTexture()) {
+        if (renderContext.skyProgram!!.hasCloudsTexture()) {
             GLES20.glBindTexture(34067, cloudsTexture!!.handle)
         }
         GLES20.glDrawElements(4, icosahedronIndices.size, 5123, 0)
 
         if (renderContext.windlightPreset.star_brightness != 0.0f) {
-            GLES20.glUseProgram(renderContext.starsProgram.handle)
-            renderContext.starsProgram.ApplyWindlight(renderContext)
-            matrix.glApplyUniformMatrix(renderContext.starsProgram.uMVPMatrix)
+            GLES20.glUseProgram(renderContext.starsProgram!!.getHandle())
+            renderContext.starsProgram!!.ApplyWindlight(renderContext)
+            matrix.glApplyUniformMatrix(renderContext.starsProgram!!.uMVPMatrix)
 
             GLES20.glBindBuffer(34962, buffers[STARS_VERTEX_BUFFER]!!.handle)
-            GLES20.glEnableVertexAttribArray(renderContext.starsProgram.vPosition)
-            GLES20.glVertexAttribPointer(renderContext.starsProgram.vPosition, 3, 5126, false, 12, 0)
+            GLES20.glEnableVertexAttribArray(renderContext.starsProgram!!.vPosition)
+            GLES20.glVertexAttribPointer(renderContext.starsProgram!!.vPosition, 3, 5126, false, 12, 0)
             GLES20.glBindBuffer(34963, buffers[STARS_INDEX_BUFFER]!!.handle)
             GLES20.glDrawElements(0, starsIndices.capacity(), 5123, 0)
         }

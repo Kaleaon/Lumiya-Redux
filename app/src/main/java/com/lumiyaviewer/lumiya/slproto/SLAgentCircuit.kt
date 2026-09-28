@@ -127,54 +127,59 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicReference
 
-open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHandler {
+open class SLAgentCircuit @Throws(IOException::class) constructor(
+    sLGridConnection: SLGridConnection,
+    sLCircuitInfo: SLCircuitInfo,
+    sLAuthReply: SLAuthReply,
+    sLCaps: SLCaps?,
+    sLTempCircuit: SLTempCircuit?
+) : SLThreadingCircuit(sLGridConnection, sLCircuitInfo, sLAuthReply, sLTempCircuit), SLCapEventQueue.ICapsEventHandler {
 
-    private var agentNameSubscription: Subscription = null
+    private var agentNameSubscription: Subscription? = null
     private var agentPaused: Boolean = false
 
-    private var agentUUID: UUID = null
-    private var agentUserName: AtomicReference<UserName> = null
-    private var caps: SLCaps = null
-    private var capsEventQueue: ConcurrentLinkedQueue<SLCapEventQueue.CapsEvent> = null
+    private var agentUUID: UUID? = null
+    private var agentUserName: AtomicReference<UserName>? = null
+    private var caps: SLCaps? = null
+    private var capsEventQueue: ConcurrentLinkedQueue<SLCapEventQueue.CapsEvent>? = null
     private var doingObjectSelection: Boolean = false
-    private var eventBus: EventBus = null
-    private var forceNeedObjectNames: MutableMap<UUID, SLObjectInfo> = null
+    private var eventBus: EventBus? = null
+    private var forceNeedObjectNames: MutableMap<UUID, SLObjectInfo>? = null
     private var isEstateManager: Boolean = false
     private var lastObjectSelection: Long = 0L
     private var lastPauseId: Int = 0
     private var lastVisibleActivities: Long = 0L
-    private var localChatterID: ChatterID = null
-    private var modules: SLModules = null
-    private var objectNamesRequested: MutableMap<UUID, SLObjectInfo> = null
-    private var objectPropertiesRateLimiter: EventRateLimiter = null
-    private var pendingGroupMessages: MutableList<ImprovedInstantMessage> = null
+    private var localChatterID: ChatterID? = null
+    private var modules: SLModules? = null
+    private var objectNamesRequested: MutableMap<UUID, SLObjectInfo>? = null
+    private var objectPropertiesRateLimiter: EventRateLimiter? = null
+    private var pendingGroupMessages: MutableList<ImprovedInstantMessage>? = null
     private var regionHandle: Long = 0L
-    private var regionID: UUID = null
+    private var regionID: UUID? = null
     private var regionName: String = ""
-    private var startedGroupSessions: MutableSet<UUID> = null
+    private var startedGroupSessions: MutableSet<UUID>? = null
     private var teleportRequestSent: Boolean = false
-    private var typingUsers: MutableSet<UUID> = null
-    private var userManager: UserManager = null
+    private var typingUsers: MutableSet<UUID>? = null
+    private var userManager: UserManager? = null
 
-    public SLAgentCircuit(SLGridConnection sLGridConnection, SLCircuitInfo sLCircuitInfo, SLAuthReply sLAuthReply, SLCaps sLCaps, SLTempCircuit sLTempCircuit) throws IOException {
-        super(sLGridConnection, sLCircuitInfo, sLAuthReply, sLTempCircuit)
+    init {
         this.eventBus = EventBus.getInstance()
-        this.capsEventQueue = ConcurrentLinkedQueue<>()
+        this.capsEventQueue = ConcurrentLinkedQueue()
         this.startedGroupSessions = HashSet()
         this.pendingGroupMessages = LinkedList()
         this.teleportRequestSent = false
         this.regionID = null
-        this.regionName = null
+        this.regionName = ""
         this.regionHandle = 0L
         this.isEstateManager = false
         this.lastObjectSelection = 0L
         this.doingObjectSelection = false
-        this.objectPropertiesRateLimiter = EventRateLimiter(this.eventBus, 500L) {
-            protected fun getEventToFire(): Any {
-        return null
+        this.objectPropertiesRateLimiter = object : EventRateLimiter(this.eventBus, 500L) {
+            override fun getEventToFire(): Any? {
+                return null
             }
-            protected fun onActualFire() {
-                SLAgentCircuit.this.notifyObjectPropertiesChange()
+            override fun onActualFire() {
+                this@SLAgentCircuit.notifyObjectPropertiesChange()
             }
         }
         this.objectNamesRequested = ConcurrentHashMap()
@@ -182,22 +187,25 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         this.agentPaused = false
         this.lastVisibleActivities = 0L
         this.lastPauseId = 0
-        this.agentUserName = AtomicReference<>this as null.typingUsers = Collections.synchronizedSet(HashSet())
+        this.agentUserName = AtomicReference(null)
+        this.typingUsers = Collections.synchronizedSet(HashSet())
         this.caps = sLCaps
         this.agentUUID = sLCircuitInfo.agentID
-        this.localChatterID = ChatterID.getLocalChatterIDthis as this.agentUUID.lastVisibleActivities = System.currentTimeMillis()
-        this.userManager = UserManager.getUserManageri as sLCircuitInfo.agentIDf (sLCaps == null || !(!sLAuthReply.isTemporary)) {
+        this.localChatterID = ChatterID.getLocalChatterID(this.agentUUID)
+        this.lastVisibleActivities = System.currentTimeMillis()
+        this.userManager = UserManager.getUserManager(sLCircuitInfo.agentID)
+        if (sLCaps == null || !(!sLAuthReply.isTemporary)) {
             this.modules = null
         } else {
             this.modules = SLModules(this, sLCaps, sLGridConnection)
         }
         if (!sLAuthReply.isTemporary && this.userManager != null) {
-            this.userManager.setActiveAgentCircuit(this)
+            this.userManager!!.setActiveAgentCircuit(this)
         }
         if (sLTempCircuit != null) {
-            var it: Iterator<?> = sLTempCircuit.getPendingMessages().iterator()
+            val it: Iterator<SLMessage> = sLTempCircuit.getPendingMessages().iterator()
             while (it.hasNext()) {
-                (it as SLMessage.next()).Handle(this)
+                it.next().Handle(this)
             }
         }
     }
@@ -210,7 +218,8 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         agentPause.AgentData_Field.SessionID = this.circuitInfo.sessionID
         agentPause.AgentData_Field.SerialNum = this.lastPauseId
         agentPause.isReliable = true
-        SendMessagethis as agentPause.lastPauseId++
+        SendMessage(agentPause)
+        this.lastPauseId++
     }
 
     private fun DoAgentResume() {
@@ -221,24 +230,24 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         agentResume.AgentData_Field.SessionID = this.circuitInfo.sessionID
         agentResume.AgentData_Field.SerialNum = this.lastPauseId
         agentResume.isReliable = true
-        SendMessagethis as agentResume.lastPauseId++
+        SendMessage(agentResume)
+        this.lastPauseId++
     }
 
     private fun HandleCapsEvent(capsEvent: SLCapEventQueue.CapsEvent) {
         when (capsEvent.eventType) {
-            ChatterBoxInvitation ->
-                HandleChatterBoxInvitationbreak as capsEvent.eventBody
-            ChatterBoxSessionStartReply ->
-                HandleChatterBoxSessionStartReplybreak as capsEvent.eventBody
-            EstablishAgentCommunication ->
-                HandleEstablishAgentCommunicationbreak as capsEvent.eventBody
-            TeleportFailed ->
-                HandleTeleportFailedbreak as capsEvent.eventBody
-            TeleportFinish ->
-                HandleTeleportFinishbreak as capsEvent.eventBody
+            SLCapEventQueue.CapsEventType.ChatterBoxInvitation ->
+                HandleChatterBoxInvitation(capsEvent.eventBody)
+            SLCapEventQueue.CapsEventType.ChatterBoxSessionStartReply ->
+                HandleChatterBoxSessionStartReply(capsEvent.eventBody)
+            SLCapEventQueue.CapsEventType.EstablishAgentCommunication ->
+                HandleEstablishAgentCommunication(capsEvent.eventBody)
+            SLCapEventQueue.CapsEventType.TeleportFailed ->
+                HandleTeleportFailed(capsEvent.eventBody)
+            SLCapEventQueue.CapsEventType.TeleportFinish ->
+                HandleTeleportFinish(capsEvent.eventBody)
             else ->
                 DefaultEventQueueHandler(capsEvent.eventType, capsEvent.eventBody)
-
         }
     }
 
@@ -250,7 +259,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         }
         try {
             var fromString: UUID = UUID.fromString(lLSDNode.byKey("session_id").asString())
-            var avatarGroupList: AvatarGroupList = this.userManager.getChatterList().getGroupManager().getAvatarGroupList()
+            var avatarGroupList: AvatarGroupList = this.userManager!!.getChatterList().getGroupManager().getAvatarGroupList()
             var avatarGroupEntry: AvatarGroupList.AvatarGroupEntry = if (avatarGroupList != null) avatarGroupList.Groups.getelse as fromString null
             var byKey: LLSDNode = lLSDNode.byKey("instantmessage").byKey("message_params")
             var asUUID: UUID = if (byKey.keyExists("from_id")) byKey.byKey("from_id").asUUID() else null
@@ -277,11 +286,13 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             e.printStackTrace()
         }
         try {
-            var asUUID: UUID = lLSDNode.byKey("session_id").asUUID()
-            this.modules.voice.onGroupSessionReadysynchronize as asUUIDd(this.startedGroupSessions) {
-                this.startedGroupSessions.addvar as asUUID it: Iterator<ImprovedInstantMessage> = this.pendingGroupMessages.iterator()
+            val asUUID: UUID = lLSDNode.byKey("session_id").asUUID()
+            this.modules!!.voice.onGroupSessionReady(asUUID)
+            synchronized(this.startedGroupSessions!!) {
+                this.startedGroupSessions!!.add(asUUID)
+                val it: Iterator<ImprovedInstantMessage> = this.pendingGroupMessages!!.iterator()
                 while (it.hasNext()) {
-                    var next: ImprovedInstantMessage = it.next()
+                    val next: ImprovedInstantMessage = it.next()
                     if (next.MessageBlock_Field.ID.equals(asUUID)) {
                         it.remove()
                         SendMessage(next)
@@ -295,7 +306,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     private fun HandleChatterOnlineStatus(chatterID: ChatterID, z: Boolean) {
-        if (this.userManager.isChatterActive(chatterID) && (chatterID is ChatterID.ChatterIDUser)) {
+        if (this.userManager!!.isChatterActive(chatterID) && (chatterID is ChatterID.ChatterIDUser)) {
             HandleChatEvent(chatterID, SLChatOnlineOfflineEvent(ChatMessageSourceUser((chatterID as ChatterID.ChatterIDUser).getChatterUUID()), this.agentUUID, z), false)
         }
     }
@@ -320,53 +331,56 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     private fun HandleGroupNotice(improvedInstantMessage: ImprovedInstantMessage, chatMessageSource: ChatMessageSource) {
-        var wrap: ByteBuffer = ByteBuffer.wrapi as improvedInstantMessage.MessageBlock_Field.BinaryBucketf (wrap.limit() < 18) {
+        val wrap: ByteBuffer = ByteBuffer.wrap(improvedInstantMessage.MessageBlock_Field.BinaryBucket)
+        if (wrap.limit() < 18) {
             return
         }
-        wrap.ordervar as ByteOrder.BIG_ENDIAN b: Byte = wrap.get()
-        var b2: Byte = wrap.get()
-        var uuid: UUID = UUID(wrap.getLong(), wrap.getLong())
-        var str: String = ""
-        if (b != 0) {
-            var bArr: ByteArray = ByteArray(wrap.remaining())
-            wrap.getstr as bArr = SLMessage.stringFromVariableOEM(bArr)
+        wrap.order(ByteOrder.BIG_ENDIAN)
+        val b: Byte = wrap.get()
+        val b2: Byte = wrap.get()
+        val uuid = UUID(wrap.getLong(), wrap.getLong())
+        var str = ""
+        if (b.toInt() != 0) {
+            val bArr = ByteArray(wrap.remaining())
+            wrap.get(bArr)
+            str = SLMessage.stringFromVariableOEM(bArr)
         }
         Debug.Log("HandleGroupNotice: group UUID = " + uuid.toString())
-        var groupChatterID: ChatterID = ChatterID.getGroupChatterID(this.agentUUID, uuid)
-        var equal: Boolean = Objects.equal(chatMessageSource.getSourceUUID(), this.circuitInfo.agentID)
-        var stringFromVariableUTF: String = SLMessage.stringFromVariableUTFvar as improvedInstantMessage.MessageBlock_Field.Message indexOf: Int = stringFromVariableUTF.indexOfi as Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_NOTIFY_FAILEDf (indexOf >= 0) {
+        val groupChatterID: ChatterID = ChatterID.getGroupChatterID(this.agentUUID, uuid)
+        val equal: Boolean = Objects.equal(chatMessageSource.getSourceUUID(), this.circuitInfo.agentID)
+        var stringFromVariableUTF: String = SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message)
+        val indexOf: Int = stringFromVariableUTF.indexOf(Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_NOTIFY_FAILED.toChar())
+        if (indexOf >= 0) {
             stringFromVariableUTF = stringFromVariableUTF.substring(0, indexOf) + "\n" + stringFromVariableUTF.substring(indexOf + 1)
         }
-        if (equal && b != 0) {
+        if (equal && b.toInt() != 0) {
             stringFromVariableUTF = stringFromVariableUTF + "\n(This notice contains attached item '" + str + "')"
         }
         HandleChatEvent(groupChatterID, SLChatTextEvent(chatMessageSource, this.agentUUID, improvedInstantMessage, stringFromVariableUTF), true)
-        if (b == 0 || !(!equal)) {
+        if (b.toInt() == 0 || !(!equal)) {
             return
         }
         HandleChatEvent(groupChatterID, SLChatInventoryItemOfferedByGroupNoticeEvent(chatMessageSource, this.agentUUID, improvedInstantMessage, str, SLAssetType.getByType(b2)), false)
     }
 
     private fun HandleIM(improvedInstantMessage: ImprovedInstantMessage, chatMessageSource: ChatMessageSource) {
-        var sourceUUID: UUID = null
-        var modules: SLModules = getModules()
+        val modules: SLModules? = getModules()
         if (modules == null || !modules.rlvController.onIncomingIM(improvedInstantMessage)) {
-            var i: Int = improvedInstantMessage.MessageBlock_Field.Dialog
+            val i: Int = improvedInstantMessage.MessageBlock_Field.Dialog
             when (i) {
-                0 ->
-                20 ->
-                    var sLChatTextEvent: SLChatTextEvent = SLChatTextEvent(chatMessageSource, this.agentUUID, improvedInstantMessage, null)
-                    var defaultChatter: ChatterID = chatMessageSource.getDefaultChattervar as this.agentUUID isChatterActive: Boolean = this.userManager.isChatterActiveHandleChatEven as defaultChattert(defaultChatter, sLChatTextEvent, true)
-                    if (!this.userManager.isChatterMuted(defaultChatter) && i != 20 && improvedInstantMessage.MessageBlock_Field.Offline == 0 && improvedInstantMessage.MessageBlock_Field.Message.length != 0 && !isChatterActive && (defaultChatter is ChatterID.ChatterIDUser)) {
-                        var autoresponse: String = SLGridConnection.getAutoresponse()
+                0, 20 -> {
+                    val sLChatTextEvent = SLChatTextEvent(chatMessageSource, this.agentUUID, improvedInstantMessage, null)
+                    val defaultChatter = chatMessageSource.getDefaultChatter(this.agentUUID)
+                    val isChatterActive = this.userManager!!.isChatterActive(defaultChatter)
+                    HandleChatEvent(defaultChatter, sLChatTextEvent, true)
+                    if (!this.userManager!!.isChatterMuted(defaultChatter) && i != 20 && improvedInstantMessage.MessageBlock_Field.Offline == 0 && improvedInstantMessage.MessageBlock_Field.Message.size != 0 && !isChatterActive && (defaultChatter is ChatterID.ChatterIDUser)) {
+                        val autoresponse = SLGridConnection.getAutoresponse()
                         if (!Strings.isNullOrEmpty(autoresponse)) {
                             SendInstantMessage((defaultChatter as ChatterID.ChatterIDUser).getChatterUUID(), autoresponse, 20)
-
                         }
                     }
-
-                1 ->
-                2 ->
+                }
+                1, 2 ->
                     HandleChatEvent(this.localChatterID, SLChatSystemMessageEvent(ChatMessageSourceUnknown.getInstance(), this.agentUUID, SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message)), true)
 
                 3 ->
@@ -375,81 +389,61 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                 4 ->
                     HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatInventoryItemOfferedEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
 
-                5 ->
-                6 ->
-                7 ->
-                8 ->
-                10 ->
-                11 ->
-                12 ->
-                13 ->
-                14 ->
-                15 ->
-                16 ->
-                18 ->
-                21 ->
-                23 ->
-                24 ->
-                25 ->
-                27 ->
-                28 ->
-                29 ->
-                30 ->
-                33 ->
-                34 ->
-                35 ->
-                36 ->
-                else ->
-                    Debug.Log("HandleIM: unknown type = " + i + ", sessionId = " + improvedInstantMessage.AgentData_Field.SessionID.toString() + ", toAgentID = " + improvedInstantMessage.MessageBlock_Field.ToAgentID.toString() + ", fromGroup = " + improvedInstantMessage.MessageBlock_Field.FromGroup + ", message = '" + SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message) + "'")
-
                 9 ->
                     HandleChatEvent(this.localChatterID, SLChatInventoryItemOfferedEvent(ChatMessageSourceObject(improvedInstantMessage.AgentData_Field.AgentID, SLMessage.stringFromVariableOEM(improvedInstantMessage.MessageBlock_Field.FromAgentName)), this.agentUUID, improvedInstantMessage), true)
 
                 17 ->
                     HandleSessionIM(improvedInstantMessage, chatMessageSource)
 
-                19 ->
-                31 ->
+                19, 31 ->
                     HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatTextEvent(chatMessageSource, this.agentUUID, improvedInstantMessage, null), true)
 
-                22 ->
+                22 -> {
+                    var handled = false
                     if (chatMessageSource.getSourceType() == ChatMessageSource.ChatMessageSourceType.User) {
-                        var sourceUUID2: UUID = chatMessageSource.getSourceUUID()
+                        val sourceUUID2 = chatMessageSource.getSourceUUID()
                         if (modules != null) {
                             if (modules.rlvController.autoAcceptTeleport(sourceUUID2)) {
-                                TeleportToLurebreak as improvedInstantMessage.MessageBlock_Field.ID
-                            } else if (!modules.rlvController.canTeleportToLure(sourceUUID2)) {
+                                TeleportToLure(improvedInstantMessage.MessageBlock_Field.ID)
+                                handled = true
                             }
                         }
                     }
-                    HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatLureEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
-
-                26 ->
+                    if (!handled) {
+                        HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatLureEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
+                    }
+                }
+                26 -> {
                     if (chatMessageSource.getSourceType() != ChatMessageSource.ChatMessageSourceType.User || modules == null || modules.rlvController.canTeleportToLure(chatMessageSource.getSourceUUID())) {
                         HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatLureRequestEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
-
+                    } else {
+                        HandleGroupNotice(improvedInstantMessage, chatMessageSource)
                     }
-                32 ->
-                37 ->
+                }
+                32, 37 ->
                     HandleGroupNotice(improvedInstantMessage, chatMessageSource)
 
                 38 ->
                     HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatFriendshipOfferedEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
 
-                39 ->
-                40 ->
+                39, 40 -> {
                     HandleChatEvent(chatMessageSource.getDefaultChatter(this.agentUUID), SLChatFriendshipResultEvent(chatMessageSource, this.agentUUID, improvedInstantMessage), true)
-                    if (i == 39 && chatMessageSource.getSourceType() == ChatMessageSource.ChatMessageSourceType.User && (sourceUUID = chatMessageSource.getSourceUUID()) != null) {
-                        this.userManager.getChatterList().getFriendManager().addFriendSendGenericMessag as sourceUUIDe("requestonlinenotification", new Array<String>{sourceUUID.toString()})
-
+                    if (i == 39 && chatMessageSource.getSourceType() == ChatMessageSource.ChatMessageSourceType.User) {
+                        val sourceUUID = chatMessageSource.getSourceUUID()
+                        if (sourceUUID != null) {
+                            this.userManager!!.getChatterList().getFriendManager().addFriend(sourceUUID)
+                            SendGenericMessage("requestonlinenotification", arrayOf(sourceUUID.toString()))
+                        }
                     }
-
+                }
                 41 ->
                     HandleTypingNotification(chatMessageSource, true)
 
                 42 ->
                     HandleTypingNotification(chatMessageSource, false)
 
+                else ->
+                    Debug.Log("HandleIM: unknown type = " + i + ", sessionId = " + improvedInstantMessage.AgentData_Field.SessionID.toString() + ", toAgentID = " + improvedInstantMessage.MessageBlock_Field.ToAgentID.toString() + ", fromGroup = " + improvedInstantMessage.MessageBlock_Field.FromGroup + ", message = '" + SLMessage.stringFromVariableUTF(improvedInstantMessage.MessageBlock_Field.Message) + "'")
             }
         }
     }
@@ -477,16 +471,18 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             e.printStackTrace()
         }
         if (!this.teleportRequestSent) {
-            Debug.Log("TeleportFinish: stale teleport if (finish) ")
+            Debug.Log("TeleportFinish: stale teleport finish?")
             return
         }
         this.teleportRequestSent = false
         try {
-            var byIndex else LLSDNode = lLSDNode.byKey("Info").byIndexvar as 0 asString: String = byIndex.byKey("SeedCapability").asString()
-            var asBinary: ByteArray = byIndex.byKey("SimIP").asBinary()
-            var sLAuthReply: SLAuthReply = SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", asBinary[0] & 0xFF, asBinary[1] & 0xFF, asBinary[2] & 0xFF, asBinary[3] & 0xFF), byIndex.byKey("SimPort").asInt(), asString)
+            val byIndex: LLSDNode = lLSDNode.byKey("Info").byIndex(0)
+            val asString: String = byIndex.byKey("SeedCapability").asString()
+            val asBinary: ByteArray = byIndex.byKey("SimIP").asBinary()
+            val sLAuthReply = SLAuthReply(this.authReply, true, false, this.authReply.agentID, String.format("%d.%d.%d.%d", asBinary[0].toInt() and 0xFF, asBinary[1].toInt() and 0xFF, asBinary[2].toInt() and 0xFF, asBinary[3].toInt() and 0xFF), byIndex.byKey("SimPort").asInt(), asString)
             Debug.Printf("new sim address: %s", sLAuthReply.simAddress)
-            this.modules.avatarControl.setEnableAgentUpdatesthis as false.gridConn.HandleTeleportFinish(sLAuthReply)
+            this.modules!!.avatarControl.setEnableAgentUpdates(false)
+            this.gridConn.HandleTeleportFinish(sLAuthReply)
         } catch (e2: LLSDException) {
             Debug.Log("TeleportFinish: LLSDException, teleport apparently failed")
             e2.printStackTrace()
@@ -494,66 +490,69 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     private fun HandleTypingNotification(chatMessageSource: ChatMessageSource, z: Boolean) {
-        var sourceUUID: UUID = null
+        var sourceUUID: UUID? = null
         if (!(chatMessageSource is ChatMessageSourceUser) || (sourceUUID = chatMessageSource.getSourceUUID()) == null) {
             return
         }
         if (z) {
             if (this.typingUsers.add(sourceUUID)) {
-                this.userManager.getChatterList().updateUserTypingStatus(sourceUUID)
+                this.userManager!!.getChatterList().updateUserTypingStatus(sourceUUID)
             }
         } else if (this.typingUsers.remove(sourceUUID)) {
-            this.userManager.getChatterList().updateUserTypingStatus(sourceUUID)
+            this.userManager!!.getChatterList().updateUserTypingStatus(sourceUUID)
         }
     }
 
     private fun ProcessObjectSelection() {
-        var objectSelect: ObjectSelect = null
+        var objectSelect: ObjectSelect? = null
         if (getNeedObjectNames() && (!this.doingObjectSelection)) {
-            var objectSelect2: ObjectSelect = null
-            for (sLObjectInfo in this.forceNeedObjectNames.values()) {
+            var objectSelect2: ObjectSelect? = null
+            for (sLObjectInfo in this.forceNeedObjectNames!!.values) {
                 if (objectSelect2 == null) {
                     objectSelect2 = ObjectSelect()
                     objectSelect2.AgentData_Field.AgentID = this.circuitInfo.agentID
                     objectSelect2.AgentData_Field.SessionID = this.circuitInfo.sessionID
                 }
-                if (objectSelect2.ObjectData_Fields.size() > 16) {
-
+                if (objectSelect2!!.ObjectData_Fields.size > 16) {
+                    break
                 }
-                var objectData: ObjectSelect.ObjectData = ObjectSelect.ObjectData()
+                val objectData = ObjectSelect.ObjectData()
                 objectData.ObjectLocalID = sLObjectInfo.localID
-                objectSelect2.ObjectData_Fields.addsLObjectInfo as objectData.nameRequested = true
+                objectSelect2!!.ObjectData_Fields.add(objectData)
+                sLObjectInfo.nameRequested = true
                 sLObjectInfo.nameRequestedAt = System.currentTimeMillis()
-                this.objectNamesRequested.put(sLObjectInfo.getId(), sLObjectInfo)
+                this.objectNamesRequested!!.put(sLObjectInfo.getId(), sLObjectInfo)
             }
             synchronized(this.gridConn.parcelInfo.objectNamesQueue) {
-                var it: Iterator<?> = this.gridConn.parcelInfo.objectNamesQueue.values().iterator()
+                val it = this.gridConn.parcelInfo.objectNamesQueue.values.iterator()
                 while (true) {
                     if (!it.hasNext()) {
                         objectSelect = objectSelect2
-
+                        break
                     }
-                    var sLObjectInfo2: SLObjectInfo = it as SLObjectInfo.next()
+                    val sLObjectInfo2: SLObjectInfo = it.next()
                     if (objectSelect2 == null) {
                         objectSelect2 = ObjectSelect()
-                        objectSelect2.AgentData_Field.AgentID = this.circuitInfo.agentID
-                        objectSelect2.AgentData_Field.SessionID = this.circuitInfo.sessionID
+                        objectSelect2!!.AgentData_Field.AgentID = this.circuitInfo.agentID
+                        objectSelect2!!.AgentData_Field.SessionID = this.circuitInfo.sessionID
                     }
-                    if (objectSelect2.ObjectData_Fields.size() > 16) {
+                    if (objectSelect2!!.ObjectData_Fields.size > 16) {
                         objectSelect = objectSelect2
-
+                        break
                     }
-                    var objectData2: ObjectSelect.ObjectData = ObjectSelect.ObjectData()
+                    val objectData2 = ObjectSelect.ObjectData()
                     objectData2.ObjectLocalID = sLObjectInfo2.localID
-                    objectSelect2.ObjectData_Fields.addsLObjectInfo2 as objectData2.nameRequested = true
+                    objectSelect2!!.ObjectData_Fields.add(objectData2)
+                    sLObjectInfo2.nameRequested = true
                     sLObjectInfo2.nameRequestedAt = System.currentTimeMillis()
-                    this.objectNamesRequested.put(sLObjectInfo2.getId(), sLObjectInfo2)
+                    this.objectNamesRequested!!.put(sLObjectInfo2.getId(), sLObjectInfo2)
                 }
             }
             if (objectSelect != null) {
-                Debug.Log("ObjectSelect: Sending ObjectSelect for " + objectSelect.ObjectData_Fields.size() + " objects, " + this.gridConn.parcelInfo.objectNamesQueue.size() + " remains.")
-                objectSelect.isReliable = true
-                SendMessagethis as objectSelect.lastObjectSelection = System.currentTimeMillis()
+                Debug.Log("ObjectSelect: Sending ObjectSelect for " + objectSelect!!.ObjectData_Fields.size + " objects, " + this.gridConn.parcelInfo.objectNamesQueue.size + " remains.")
+                objectSelect!!.isReliable = true
+                SendMessage(objectSelect!!)
+                this.lastObjectSelection = System.currentTimeMillis()
                 this.doingObjectSelection = true
             }
         }
@@ -612,7 +611,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         improvedInstantMessage.MessageBlock_Field.ToAgentID = uuid
         improvedInstantMessage.MessageBlock_Field.ParentEstateID = 0
         improvedInstantMessage.MessageBlock_Field.RegionID = UUID(0L, 0L)
-        improvedInstantMessage.MessageBlock_Field.Position = this.modules.avatarControl.getAgentPosition().getPosition()
+        improvedInstantMessage.MessageBlock_Field.Position = this.modules!!.avatarControl.getAgentPosition().getPosition()
         improvedInstantMessage.MessageBlock_Field.Offline = 0
         improvedInstantMessage.MessageBlock_Field.Dialog = 15
         improvedInstantMessage.MessageBlock_Field.ID = uuid
@@ -624,7 +623,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     private fun SendInstantMessage(uuid: UUID, str: String, i: Int): Boolean {
-        if (!getModules().rlvController.canSendIM(uuid)) {
+        if (!getModules()!!.rlvController.canSendIM(uuid)) {
         return false
         }
         var improvedInstantMessage: ImprovedInstantMessage = ImprovedInstantMessage()
@@ -659,19 +658,19 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         SendMessage(retrieveInstantMessages)
     }
 
-    private fun getActiveGroupID(): UUID {
+    private fun getActiveGroupID(): UUID? {
         if (this.modules != null) {
-            return this.modules.groupManager.getActiveGroupID()
+            return this.modules!!.groupManager.getActiveGroupID()
         }
         return null
     }
 
     private fun getNeedObjectNames(): Boolean {
-        if (this.forceNeedObjectNames != null && !this.forceNeedObjectNames.isEmpty()) {
+        if (this.forceNeedObjectNames != null && !this.forceNeedObjectNames!!.isEmpty()) {
         return true
         }
         if (this.modules != null) {
-            return this.modules.drawDistance.isObjectSelectEnabled()
+            return this.modules!!.drawDistance.isObjectSelectEnabled()
         }
         return false
     }
@@ -680,7 +679,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (this.modules == null) {
         return false
         }
-        var sLMuteList: SLMuteList = this.modules.muteList
+        var sLMuteList: SLMuteList = this.modules!!.muteList
         var source: ChatMessageSource = sLChatEvent.getSource()
         if (source.getSourceType() == ChatMessageSource.ChatMessageSourceType.User) {
             if (sLMuteList.isMuted(source.getSourceUUID(), MuteType.AGENT)) {
@@ -691,7 +690,8 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             if (sourceUUID != null && !sourceUUID.equals(UUIDPool.ZeroUUID) && sLMuteList.isMuted(sourceUUID, MuteType.OBJECT)) {
         return true
             }
-            var sourceName: String = source.getSourceNamei as this.userManagerf (sourceName != null && sLMuteList.isMutedByName(sourceName)) {
+            val sourceName: String? = source.getSourceName(this.userManager)
+            if (sourceName != null && sLMuteList.isMutedByName(sourceName)) {
         return true
             }
         }
@@ -704,27 +704,29 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
 
     fun notifyObjectPropertiesChange() {
         if (this.userManager != null) {
-            this.userManager.getObjectsManager().requestObjectListUpdate()
+            this.userManager!!.getObjectsManager().requestObjectListUpdate()
         }
     }
 
     private fun processMyAvatarUpdate(sLObjectAvatarInfo: SLObjectAvatarInfo) {
         if (this.modules != null) {
-            this.modules.avatarControl.setAgentPosition(sLObjectAvatarInfo.getAbsolutePosition(), sLObjectAvatarInfo.getObjectCoords().get(2))
+            this.modules!!.avatarControl.setAgentPosition(sLObjectAvatarInfo.getAbsolutePosition(), sLObjectAvatarInfo.getObjectCoords().get(2))
         }
     }
 
     fun AcceptFriendship(uuid: UUID, uuid2: UUID) {
-        this.userManager.getChatterList().getFriendManager().addFriendvar as uuid acceptFriendship: AcceptFriendship = AcceptFriendship()
+        this.userManager!!.getChatterList().getFriendManager().addFriend(uuid)
+        val acceptFriendship = AcceptFriendship()
         acceptFriendship.AgentData_Field.AgentID = this.circuitInfo.agentID
         acceptFriendship.AgentData_Field.SessionID = this.circuitInfo.sessionID
-        var callingCardsFolderUUID: UUID = if (this.modules != null) this.modules.inventory.getCallingCardsFolderUUID() else null
-        var folderData: AcceptFriendship.FolderData = AcceptFriendship.FolderData()
+        var callingCardsFolderUUID: UUID? = if (this.modules != null) this.modules!!.inventory.getCallingCardsFolderUUID() else null
+        val folderData = AcceptFriendship.FolderData()
         if (callingCardsFolderUUID == null) {
             callingCardsFolderUUID = UUIDPool.ZeroUUID
         }
         folderData.FolderID = callingCardsFolderUUID
-        acceptFriendship.FolderData_Fields.addacceptFriendship as folderData.TransactionBlock_Field.TransactionID = uuid2
+        acceptFriendship.FolderData_Fields.add(folderData)
+        acceptFriendship.TransactionBlock_Field.TransactionID = uuid2
         acceptFriendship.isReliable = true
         SendMessage(acceptFriendship)
     }
@@ -779,7 +781,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     fun BuyObject(i: Int, b: Byte, i2: Int) {
-        var activeGroupID: UUID = getActiveGroupID()
+        var activeGroupID: UUID? = getActiveGroupID()
         var objectBuy: ObjectBuy = ObjectBuy()
         objectBuy.AgentData_Field.AgentID = this.circuitInfo.agentID
         objectBuy.AgentData_Field.SessionID = this.circuitInfo.sessionID
@@ -788,31 +790,32 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             activeGroupID = UUIDPool.ZeroUUID
         }
         agentData.GroupID = activeGroupID
-        objectBuy.AgentData_Field.CategoryID = getModules().inventory.rootFolder.uuid
+        objectBuy.AgentData_Field.CategoryID = getModules()!!.inventory.rootFolder.uuid
         var objectData: ObjectBuy.ObjectData = ObjectBuy.ObjectData()
         objectData.ObjectLocalID = i
         objectData.SaleType = b
         objectData.SalePrice = i2
-        objectBuy.ObjectData_Fields.addobjectBuy as objectData.isReliable = true
+        objectBuy.ObjectData_Fields.add(objectData)
+        objectBuy.isReliable = true
         SendMessage(objectBuy)
     }
-    fun CloseCircuit() {
+    override fun CloseCircuit() {
         Debug.Printf("AgentCircuit: closing circuit.", arrayOfNulls<Object>(0))
         if (this.modules != null) {
-            this.modules.HandleCloseCircuit()
+            this.modules!!.HandleCloseCircuit()
         }
         if (this.userManager != null) {
-            this.userManager.clearActiveAgentCircuit(this)
+            this.userManager!!.clearActiveAgentCircuit(this)
         }
         if (this.agentNameSubscription != null) {
-            this.agentNameSubscription.unsubscribe()
+            this.agentNameSubscription!!.unsubscribe()
             this.agentNameSubscription = null
         }
         super.CloseCircuit()
     }
 
     fun DerezObject(i: Int, eDeRezDestination: EDeRezDestination) {
-        var activeGroupID: UUID = getActiveGroupID()
+        var activeGroupID: UUID? = getActiveGroupID()
         var deRezObject: DeRezObject = DeRezObject()
         deRezObject.AgentData_Field.AgentID = this.circuitInfo.agentID
         deRezObject.AgentData_Field.SessionID = this.circuitInfo.sessionID
@@ -828,7 +831,8 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         deRezObject.AgentBlock_Field.TransactionID = UUID.randomUUID()
         var objectData: DeRezObject.ObjectData = DeRezObject.ObjectData()
         objectData.ObjectLocalID = i
-        deRezObject.ObjectData_Fields.adddeRezObject as objectData.isReliable = true
+        deRezObject.ObjectData_Fields.add(objectData)
+        deRezObject.isReliable = true
         SendMessage(deRezObject)
     }
 
@@ -848,39 +852,39 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     fun GenerateChatMoneyEvent(uuid: UUID, i: Int, i2: Int) {
         HandleChatEvent(if (uuid != null) ChatterID.getUserChatterID(this.agentUUID, uuid) else this.localChatterID, SLChatBalanceChangedEvent(if (uuid != null) ChatMessageSourceUserelse as uuid ChatMessageSourceUnknown.getInstance(), this.agentUUID, true, i, i2), true)
         if (this.modules != null) {
-            this.modules.financialInfo.RecordChatEvent(uuid, i, i2)
+            this.modules!!.financialInfo.RecordChatEvent(uuid, i, i2)
         }
     }
-    fun HandleAgentMovementComplete(agentMovementComplete: AgentMovementComplete) {
+    override fun HandleAgentMovementComplete(agentMovementComplete: AgentMovementComplete) {
         this.regionHandle = agentMovementComplete.Data_Field.RegionHandle
-        this.modules.avatarControl.setAgentPosition(agentMovementComplete.Data_Field.Position, null)
-        Debug.Printf("Got agentPosition: %s", this.modules.avatarControl.getAgentPosition().getImmutablePosition())
+        this.modules!!.avatarControl.setAgentPosition(agentMovementComplete.Data_Field.Position, null)
+        Debug.Printf("Got agentPosition: %s", this.modules!!.avatarControl.getAgentPosition().getImmutablePosition())
         SendAgentFOV()
-        this.modules.avatarAppearance.SendAgentWearablesRequest()
+        this.modules!!.avatarAppearance.SendAgentWearablesRequest()
         SendRetrieveInstantMessages()
-        this.modules.avatarControl.setEnableAgentUpdates(true)
+        this.modules!!.avatarControl.setEnableAgentUpdates(true)
     }
-    fun HandleAlertMessage(alertMessage: AlertMessage) {
+    override fun HandleAlertMessage(alertMessage: AlertMessage) {
         HandleChatEvent(this.localChatterID, SLChatSystemMessageEvent(ChatMessageSourceUnknown.getInstance(), this.agentUUID, SLMessage.stringFromVariableOEM(alertMessage.AlertData_Field.Message)), true)
     }
-    fun HandleAvatarAnimation(avatarAnimation: AvatarAnimation) {
+    override fun HandleAvatarAnimation(avatarAnimation: AvatarAnimation) {
         var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
         if (sLParcelInfo == null || this.modules == null) {
             return
         }
-        sLParcelInfo.ApplyAvatarAnimation(avatarAnimation, this.modules.avatarControl)
+        sLParcelInfo.ApplyAvatarAnimation(avatarAnimation, this.modules!!.avatarControl)
     }
-    fun HandleAvatarAppearance(avatarAppearance: AvatarAppearance) {
+    override fun HandleAvatarAppearance(avatarAppearance: AvatarAppearance) {
         Debug.Log("Got AvatarAppearance, ID = " + avatarAppearance.Sender_Field.ID.toString() + " isTrial = " + avatarAppearance.Sender_Field.IsTrial + ", our ID = " + this.circuitInfo.agentID.toString())
         if (avatarAppearance.Sender_Field.ID.equals(this.circuitInfo.agentID) && this.modules != null) {
-            this.modules.avatarAppearance.HandleAvatarAppearance(avatarAppearance)
+            this.modules!!.avatarAppearance.HandleAvatarAppearance(avatarAppearance)
         }
         var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
         if (sLParcelInfo != null) {
             sLParcelInfo.ApplyAvatarAppearance(avatarAppearance)
         }
     }
-    fun HandleAvatarInterestsReply(avatarInterestsReply: AvatarInterestsReply) {
+    override fun HandleAvatarInterestsReply(avatarInterestsReply: AvatarInterestsReply) {
         Debug.Log("got AvatarInterestsReply: wantToText = " + SLMessage.stringFromVariableOEM(avatarInterestsReply.PropertiesData_Field.WantToText))
         Debug.Log("got AvatarInterestsReply: skillText = " + SLMessage.stringFromVariableOEM(avatarInterestsReply.PropertiesData_Field.SkillsText))
     }
@@ -889,17 +893,20 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (isEventMuted(chatterID, sLChatEvent)) {
             return
         }
-        this.userManager.getChatterList().getActiveChattersManager().HandleChatEvent(chatterID, sLChatEvent, z)
+        this.userManager!!.getChatterList().getActiveChattersManager().HandleChatEvent(chatterID, sLChatEvent, z)
     }
-    fun HandleChatFromSimulator(chatFromSimulator: ChatFromSimulator) {
-        var i: Int = 0
-        var modules: SLModules = getModules()
+    override fun HandleChatFromSimulator(chatFromSimulator: ChatFromSimulator) {
+        val i: Int
+        val modules: SLModules? = getModules()
         if (modules == null || !modules.rlvController.onIncomingChat(chatFromSimulator)) {
-            var uuid: UUID = chatFromSimulator.ChatData_Field.SourceID
-            var stringFromVariableOEM: String = SLMessage.stringFromVariableOEMvar as chatFromSimulator.ChatData_Field.FromName stringFromVariableUTF: String = SLMessage.stringFromVariableUTFi as chatFromSimulator.ChatData_Field.Messagef (chatFromSimulator.ChatData_Field.ChatType == 8 && chatFromSimulator.ChatData_Field.SourceType == 2 && stringFromVariableOEM.startsWith("#Firestorm LSL Bridge") && stringFromVariableUTF.startsWith("<bridgeURL>")) {
+            val uuid: UUID = chatFromSimulator.ChatData_Field.SourceID
+            val stringFromVariableOEM: String = SLMessage.stringFromVariableOEM(chatFromSimulator.ChatData_Field.FromName)
+            val stringFromVariableUTF: String = SLMessage.stringFromVariableUTF(chatFromSimulator.ChatData_Field.Message)
+            if (chatFromSimulator.ChatData_Field.ChatType == 8 && chatFromSimulator.ChatData_Field.SourceType == 2 && stringFromVariableOEM.startsWith("#Firestorm LSL Bridge") && stringFromVariableUTF.startsWith("<bridgeURL>")) {
                 return
             }
-            if ((chatFromSimulator.ChatData_Field.SourceType == 1 && modules != null && !modules.rlvController.canRecvChat(stringFromVariableUTF, uuid)) || chatFromSimulator.ChatData_Field.Audible != 1 || (i = chatFromSimulator.ChatData_Field.ChatType) == 6 || i == 4 || i == 5) {
+            i = chatFromSimulator.ChatData_Field.ChatType
+            if ((chatFromSimulator.ChatData_Field.SourceType == 1 && modules != null && !modules.rlvController.canRecvChat(stringFromVariableUTF, uuid)) || chatFromSimulator.ChatData_Field.Audible != 1 || i == 6 || i == 4 || i == 5) {
                 return
             }
             when (chatFromSimulator.ChatData_Field.SourceType) {
@@ -915,8 +922,8 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             }
         }
     }
-    fun HandleImprovedInstantMessage(improvedInstantMessage: ImprovedInstantMessage) {
-        var chatMessageSourceObject: ChatMessageSource = null
+    override fun HandleImprovedInstantMessage(improvedInstantMessage: ImprovedInstantMessage) {
+        var chatMessageSourceObject: ChatMessageSource? = null
         var i: Int = improvedInstantMessage.MessageBlock_Field.Dialog
         if (i == 19 || i == 31) {
             chatMessageSourceObject = ChatMessageSourceObject(improvedInstantMessage.AgentData_Field.AgentID, SLMessage.stringFromVariableOEM(improvedInstantMessage.MessageBlock_Field.FromAgentName))
@@ -925,20 +932,25 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         } else if (UUIDPool.ZeroUUID.equals(improvedInstantMessage.AgentData_Field.AgentID)) {
             chatMessageSourceObject = ChatMessageSourceUnknown.getInstance()
         } else {
-            chatMessageSourceObject = ChatMessageSourceUseri as improvedInstantMessage.AgentData_Field.AgentIDf (!getModules().rlvController.canRecvIM(chatMessageSourceObject.getSourceUUID())) {
+            chatMessageSourceObject = ChatMessageSourceUser(improvedInstantMessage.AgentData_Field.AgentID)
+            if (!getModules()!!.rlvController.canRecvIM(chatMessageSourceObject.getSourceUUID())) {
                 return
             }
         }
-        HandleIM(improvedInstantMessage, chatMessageSourceObject)
+        HandleIM(improvedInstantMessage, chatMessageSourceObject!!)
     }
-    fun HandleImprovedTerseObjectUpdate(improvedTerseObjectUpdate: ImprovedTerseObjectUpdate) {
-        var sLObjectInfo: SLObjectInfo = null
-        var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
-        var requestMultipleObjects: RequestMultipleObjects = null
+    override fun HandleImprovedTerseObjectUpdate(improvedTerseObjectUpdate: ImprovedTerseObjectUpdate) {
+        var sLObjectInfo: SLObjectInfo? = null
+        val sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
+        var requestMultipleObjects: RequestMultipleObjects? = null
         for (objectData in improvedTerseObjectUpdate.ObjectData_Fields) {
-            var localID: Int = SLObjectInfo.getLocalIDvar as objectData uuid: UUID = sLParcelInfo.uuidsNearby.geti as localIDf (uuid != null) {
-                sLObjectInfo = sLParcelInfo.allObjectsNearby.geti as uuidf (sLObjectInfo != null) {
-                    sLObjectInfo.ApplyTerseObjectUpdatei as objectDataf (sLObjectInfo is if (SLObjectAvatarInfo) (sLObjectInfo as SLObjectAvatarInfo).isMyAvatar() else false) {
+            val localID: Int = SLObjectInfo.getLocalID(objectData)
+            val uuid: UUID? = sLParcelInfo.uuidsNearby.get(localID)
+            if (uuid != null) {
+                sLObjectInfo = sLParcelInfo.allObjectsNearby.get(uuid)
+                if (sLObjectInfo != null) {
+                    sLObjectInfo.ApplyTerseObjectUpdate(objectData)
+                    if (if (sLObjectInfo is SLObjectAvatarInfo) sLObjectInfo.isMyAvatar() else false) {
                         processMyAvatarUpdate(sLObjectInfo as SLObjectAvatarInfo)
                     } else if (sLObjectInfo.isMyAttachment()) {
                         processMyAttachmentUpdate(sLObjectInfo)
@@ -953,77 +965,86 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                     requestMultipleObjects.AgentData_Field.AgentID = this.circuitInfo.agentID
                     requestMultipleObjects.AgentData_Field.SessionID = this.circuitInfo.sessionID
                 }
-                var objectData2: RequestMultipleObjects.ObjectData = RequestMultipleObjects.ObjectData()
+                val objectData2 = RequestMultipleObjects.ObjectData()
                 objectData2.CacheMissType = 0
                 objectData2.ID = localID
                 requestMultipleObjects.ObjectData_Fields.add(objectData2)
             }
-            requestMultipleObjects = requestMultipleObjects
         }
         if (requestMultipleObjects != null) {
-            Debug.Log("Handing cache miss for terse update: " + requestMultipleObjects.ObjectData_Fields.size() + " objects.")
+            Debug.Log("Handing cache miss for terse update: " + requestMultipleObjects.ObjectData_Fields.size + " objects.")
             requestMultipleObjects.isReliable = true
             SendMessage(requestMultipleObjects)
         }
     }
-    fun HandleKillObject(killObject: KillObject) {
-        var z: Boolean = false
-        var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
-        var z2: Boolean = false
-        var it: Iterator<?> = killObject.ObjectData_Fields.iterator()
+    override fun HandleKillObject(killObject: KillObject) {
+        var z: Boolean
+        val sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
+        var z2 = false
+        val it: Iterator<KillObject.ObjectData> = killObject.ObjectData_Fields.iterator()
         while (true) {
             z = z2
             if (!it.hasNext()) {
-
+                break
             } else {
-                z2 = sLParcelInfo.killObject(this, (it as KillObject.ObjectData.next()).ID) ? true : z
+                z2 = if (sLParcelInfo.killObject(this, it.next().ID)) true else z
             }
         }
         if (z) {
             this.objectPropertiesRateLimiter.fire()
         }
     }
-    fun HandleLayerData(layerData: LayerData) {
-        var sLParcelInfo: SLParcelInfo = null
-        if (layerData.LayerID_Field.Type != 76 || (sLParcelInfo = this.gridConn.parcelInfo) == null) {
+    override fun HandleLayerData(layerData: LayerData) {
+        val sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
+        if (layerData.LayerID_Field.Type != 76) {
             return
         }
         sLParcelInfo.terrainData.ProcessLayerData(layerData.LayerDataData_Field.Data)
     }
-    fun HandleLoadURL(loadURL: LoadURL) {
+    override fun HandleLoadURL(loadURL: LoadURL) {
         HandleChatEvent(this.localChatterID, SLChatTextEvent(ChatMessageSourceObject(loadURL.Data_Field.ObjectID, SLMessage.stringFromVariableOEM(loadURL.Data_Field.ObjectName)), this.agentUUID, loadURL), true)
     }
-    fun HandleObjectProperties(objectProperties: ObjectProperties) {
-        var id: UUID = null
-        Debug.Log("ObjectProperties: " + objectProperties.ObjectData_Fields.size() + " ObjectSelect replies. Reqd " + this.objectNamesRequested.size() + " obj, remains " + this.gridConn.parcelInfo.objectNamesQueue.size() + " objects.")
+    override fun HandleObjectProperties(objectProperties: ObjectProperties) {
+        var id: UUID?
+        Debug.Log("ObjectProperties: " + objectProperties.ObjectData_Fields.size + " ObjectSelect replies. Reqd " + this.objectNamesRequested!!.size + " obj, remains " + this.gridConn.parcelInfo.objectNamesQueue.size + " objects.")
         for (objectData in objectProperties.ObjectData_Fields) {
-            var remove: SLObjectInfo = this.gridConn.parcelInfo.objectNamesQueue.removei as objectData.ObjectIDf (remove != null) {
-                remove.ApplyObjectPropertiesthis as objectData.userManager.getObjectsManager().requestObjectProfileUpdate(remove.localID)
+            val remove: SLObjectInfo? = this.gridConn.parcelInfo.objectNamesQueue.remove(objectData.ObjectID)
+            if (remove != null) {
+                remove.ApplyObjectProperties(objectData)
+                this.userManager!!.getObjectsManager().requestObjectProfileUpdate(remove.localID)
             }
-            var remove2: SLObjectInfo = this.forceNeedObjectNames.removei as objectData.ObjectIDf (remove2 != null) {
-                remove2.ApplyObjectPropertiesthis as objectData.userManager.getObjectsManager().requestObjectProfileUpdatevar as remove2.localID parentObject: SLObjectInfo = remove2.getParentObject()
-                if (parentObject != null && (id = parentObject.getId()) != null) {
-                    this.userManager.getObjectsManager().requestTouchableChildrenUpdate(id)
+            val remove2: SLObjectInfo? = this.forceNeedObjectNames!!.remove(objectData.ObjectID)
+            if (remove2 != null) {
+                remove2.ApplyObjectProperties(objectData)
+                this.userManager!!.getObjectsManager().requestObjectProfileUpdate(remove2.localID)
+                val parentObject: SLObjectInfo? = remove2.getParentObject()
+                if (parentObject != null) {
+                    id = parentObject.getId()
+                    if (id != null) {
+                        this.userManager!!.getObjectsManager().requestTouchableChildrenUpdate(id)
+                    }
                 }
             }
-            this.objectNamesRequested.remove(objectData.ObjectID)
+            this.objectNamesRequested!!.remove(objectData.ObjectID)
         }
-        if (this.objectNamesRequested.isEmpty()) {
+        if (this.objectNamesRequested!!.isEmpty()) {
             this.doingObjectSelection = false
             ProcessObjectSelection()
         }
         this.objectPropertiesRateLimiter.fire()
     }
-    fun HandleObjectUpdate(objectUpdate: ObjectUpdate) {
-        var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
-        var z: Boolean = false
-        var z2: Boolean = false
+    override fun HandleObjectUpdate(objectUpdate: ObjectUpdate) {
+        val sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
+        var z = false
+        var z2 = false
         for (objectData in objectUpdate.ObjectData_Fields) {
             if (objectData.PCode == 47 || objectData.PCode == 9) {
-                var sLObjectInfo: SLObjectInfo = sLParcelInfo.allObjectsNearby.geti as objectData.FullIDf (sLObjectInfo != null) {
-                    var i: Int = sLObjectInfo.parentID
-                    sLObjectInfo.ApplyObjectUpdatesLParcelInfo as objectData.updateObjectParent(i, sLObjectInfo)
-                    if (sLObjectInfo.parentID != i && (sLObjectInfo is SLObjectAvatarInfo) && (sLObjectInfo as SLObjectAvatarInfo).isMyAvatar()) {
+                var sLObjectInfo: SLObjectInfo? = sLParcelInfo.allObjectsNearby.get(objectData.FullID)
+                if (sLObjectInfo != null) {
+                    val i: Int = sLObjectInfo.parentID
+                    sLObjectInfo.ApplyObjectUpdate(objectData)
+                    sLParcelInfo.updateObjectParent(i, sLObjectInfo)
+                    if (sLObjectInfo.parentID != i && (sLObjectInfo is SLObjectAvatarInfo) && sLObjectInfo.isMyAvatar()) {
                         z = true
                     }
                     z2 = true
@@ -1032,32 +1053,30 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                     if (sLParcelInfo.addObject(sLObjectInfo)) {
                         z2 = true
                     }
-                    if ((sLObjectInfo is SLObjectAvatarInfo) && (sLObjectInfo as SLObjectAvatarInfo).isMyAvatar()) {
+                    if ((sLObjectInfo is SLObjectAvatarInfo) && sLObjectInfo.isMyAvatar()) {
                         Debug.Log("ObjectUpdate: got my avatar (normal)")
-                        sLParcelInfo.setAgentAvatar(sLObjectInfo as SLObjectAvatarInfo)
-                        this.modules.avatarAppearance.OnMyAvatarCreated(sLObjectInfo as SLObjectAvatarInfo)
+                        sLParcelInfo.setAgentAvatar(sLObjectInfo)
+                        this.modules!!.avatarAppearance.OnMyAvatarCreated(sLObjectInfo)
                         z = true
                     }
                 }
-                if (sLObjectInfo is if (SLObjectAvatarInfo) (sLObjectInfo as SLObjectAvatarInfo).isMyAvatar() else false) {
+                if (if (sLObjectInfo is SLObjectAvatarInfo) sLObjectInfo.isMyAvatar() else false) {
                     processMyAvatarUpdate(sLObjectInfo as SLObjectAvatarInfo)
-                } else if (sLObjectInfo.isMyAttachment()) {
+                } else if (sLObjectInfo!!.isMyAttachment()) {
                     processMyAttachmentUpdate(sLObjectInfo)
                 }
             }
-            z = z
-            z2 = z2
         }
         if (z) {
-            this.userManager.getObjectsManager().myAvatarState().requestUpdate(SubscriptionSingleKey.Value)
+            this.userManager!!.getObjectsManager().myAvatarState().requestUpdate(SubscriptionSingleKey.Value)
         }
         if (z2) {
             ProcessObjectSelection()
             this.objectPropertiesRateLimiter.fire()
         }
     }
-    fun HandleObjectUpdateCached(objectUpdateCached: ObjectUpdateCached) {
-        var requestMultipleObjects: RequestMultipleObjects = RequestMultipleObjects()
+    override fun HandleObjectUpdateCached(objectUpdateCached: ObjectUpdateCached) {
+        val requestMultipleObjects = RequestMultipleObjects()
         requestMultipleObjects.AgentData_Field.AgentID = this.circuitInfo.agentID
         requestMultipleObjects.AgentData_Field.SessionID = this.circuitInfo.sessionID
         for (objectData in objectUpdateCached.ObjectData_Fields) {
@@ -1069,73 +1088,71 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         requestMultipleObjects.isReliable = true
         SendMessage(requestMultipleObjects)
     }
-    fun HandleObjectUpdateCompressed(objectUpdateCompressed: ObjectUpdateCompressed) {
-        var z: Boolean = false
-        var sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
-        var z2: Boolean = false
-        var z3: Boolean = false
+    override fun HandleObjectUpdateCompressed(objectUpdateCompressed: ObjectUpdateCompressed) {
+        var z: Boolean
+        val sLParcelInfo: SLParcelInfo = this.gridConn.parcelInfo
+        var z2 = false
+        var z3 = false
         for (objectData in objectUpdateCompressed.ObjectData_Fields) {
             try {
-                var uuid: UUID = sLParcelInfo.uuidsNearby.get(SLObjectInfo.getLocalID(objectData))
-                var sLObjectInfo: SLObjectInfo = if (uuid != null) sLParcelInfo.allObjectsNearby.getelse as uuid null
+                val uuid: UUID? = sLParcelInfo.uuidsNearby.get(SLObjectInfo.getLocalID(objectData))
+                var sLObjectInfo: SLObjectInfo? = if (uuid != null) sLParcelInfo.allObjectsNearby.get(uuid) else null
                 if (sLObjectInfo != null) {
-                    var i: Int = sLObjectInfo.parentID
-                    sLObjectInfo.ApplyObjectUpdatesLParcelInfo as objectData.updateObjectParent(i, sLObjectInfo)
+                    val i: Int = sLObjectInfo.parentID
+                    sLObjectInfo.ApplyObjectUpdate(objectData)
+                    sLParcelInfo.updateObjectParent(i, sLObjectInfo)
                     z = sLObjectInfo.parentID != i
                     z3 = true
                 } else {
-                    sLObjectInfo = SLObjectInfo.createi as objectDataf (sLParcelInfo.addObject(sLObjectInfo)) {
+                    sLObjectInfo = SLObjectInfo.create(objectData)
+                    if (sLParcelInfo.addObject(sLObjectInfo)) {
                         z3 = true
                     }
                     z = false
                 }
-                if (sLObjectInfo is if (SLObjectAvatarInfo) (sLObjectInfo as SLObjectAvatarInfo).isMyAvatar() else false) {
+                if (if (sLObjectInfo is SLObjectAvatarInfo) sLObjectInfo.isMyAvatar() else false) {
                     if (z) {
                         z2 = true
                     }
                     processMyAvatarUpdate(sLObjectInfo as SLObjectAvatarInfo)
-                } else if (sLObjectInfo.isMyAttachment()) {
+                } else if (sLObjectInfo!!.isMyAttachment()) {
                     processMyAttachmentUpdate(sLObjectInfo)
                 }
             } catch (e: UnsupportedObjectTypeException) {
             } catch (e2: Exception) {
                 Debug.Warning(e2)
             }
-            z2 = z2
-            z3 = z3
         }
         if (z3) {
             ProcessObjectSelection()
             this.objectPropertiesRateLimiter.fire()
         }
         if (z2) {
-            this.userManager.getObjectsManager().myAvatarState().requestUpdate(SubscriptionSingleKey.Value)
+            this.userManager!!.getObjectsManager().myAvatarState().requestUpdate(SubscriptionSingleKey.Value)
         }
     }
-    fun HandleOfflineNotification(offlineNotification: OfflineNotification) {
-        var arrayList: ArrayList = ArrayList(offlineNotification.AgentBlock_Fields.size())
-        var it: Iterator<?> = offlineNotification.AgentBlock_Fields.iterator()
-        while (it.hasNext()) {
-            arrayList.add((it as OfflineNotification.AgentBlock.next()).AgentID)
+    override fun HandleOfflineNotification(offlineNotification: OfflineNotification) {
+        val arrayList = ArrayList<UUID>(offlineNotification.AgentBlock_Fields.size)
+        for (entry in offlineNotification.AgentBlock_Fields) {
+            arrayList.add(entry.AgentID)
         }
-        this.userManager.getChatterList().getFriendManager().setUsersOnline(arrayList, false)
+        this.userManager!!.getChatterList().getFriendManager().setUsersOnline(arrayList, false)
     }
-    fun HandleOnlineNotification(onlineNotification: OnlineNotification) {
-        var arrayList: ArrayList = ArrayList(onlineNotification.AgentBlock_Fields.size())
-        var it: Iterator<?> = onlineNotification.AgentBlock_Fields.iterator()
-        while (it.hasNext()) {
-            arrayList.add((it as OnlineNotification.AgentBlock.next()).AgentID)
+    override fun HandleOnlineNotification(onlineNotification: OnlineNotification) {
+        val arrayList = ArrayList<UUID>(onlineNotification.AgentBlock_Fields.size)
+        for (entry in onlineNotification.AgentBlock_Fields) {
+            arrayList.add(entry.AgentID)
         }
-        this.userManager.getChatterList().getFriendManager().setUsersOnline(arrayList, true)
+        this.userManager!!.getChatterList().getFriendManager().setUsersOnline(arrayList, true)
     }
-    fun HandlePayPriceReply(payPriceReply: PayPriceReply) {
+    override fun HandlePayPriceReply(payPriceReply: PayPriceReply) {
         var sLObjectInfo: SLObjectInfo = this.gridConn.parcelInfo.allObjectsNearby.geti as payPriceReply.ObjectData_Field.ObjectIDf (sLObjectInfo != null) {
             var i: Int = payPriceReply.ObjectData_Field.DefaultPayPrice
-            var iArr: IntArray = IntArray(payPriceReply.ButtonData_Fields.size())
+            var iArr: IntArray = IntArray(payPriceReply.ButtonData_Fields.size)
             var i2: Int = 0
             while (true) {
                 var i3: Int = i2
-                if (i3 >= payPriceReply.ButtonData_Fields.size()) {
+                if (i3 >= payPriceReply.ButtonData_Fields.size) {
 
                 }
                 iArr[i3] = payPriceReply.ButtonData_Fields.get(i3).PayButton
@@ -1143,58 +1160,56 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             }
             sLObjectInfo.setPayInfo(PayInfo.create(i, iArr))
             if (this.userManager != null) {
-                this.userManager.getObjectsManager().requestObjectProfileUpdate(sLObjectInfo.localID)
+                this.userManager!!.getObjectsManager().requestObjectProfileUpdate(sLObjectInfo.localID)
             }
             this.eventBus.publish(SLObjectPayInfoEvent(sLObjectInfo))
         }
     }
-    fun HandleRegionHandshake(regionHandshake: RegionHandshake) {
+    override fun HandleRegionHandshake(regionHandshake: RegionHandshake) {
         if (this.authReply.isTemporary) {
             return
         }
-        var regionHandshakeReply: RegionHandshakeReply = RegionHandshakeReply()
+        val regionHandshakeReply = RegionHandshakeReply()
         regionHandshakeReply.AgentData_Field.AgentID = this.circuitInfo.agentID
         regionHandshakeReply.AgentData_Field.SessionID = this.circuitInfo.sessionID
         regionHandshakeReply.RegionInfo_Field.Flags = 0
         if (this.gridConn != null && this.gridConn.parcelInfo != null) {
             this.gridConn.parcelInfo.terrainData.ApplyRegionInfo(regionHandshake.RegionInfo_Field)
         }
-        SendMessagethis as regionHandshakeReply.regionName = SLMessage.stringFromVariableOEMi as regionHandshake.RegionInfo_Field.SimNamef (regionHandshake.RegionInfo2_Field != null && regionHandshake.RegionInfo2_Field.RegionID != null) {
+        SendMessage(regionHandshakeReply)
+        this.regionName = SLMessage.stringFromVariableOEM(regionHandshake.RegionInfo_Field.SimName)
+        if (regionHandshake.RegionInfo2_Field != null && regionHandshake.RegionInfo2_Field.RegionID != null) {
             this.regionID = regionHandshake.RegionInfo2_Field.RegionID
         }
         this.isEstateManager = regionHandshake.RegionInfo_Field.IsEstateManager
-        this.agentNameSubscription = this.userManager.getUserNames().subscribe(this.circuitInfo.agentID, Subscription.OnData() {
-            private /* synthetic */ void $m$0(Object obj) {
-                SLAgentCircuit.this.m137lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593(obj as UserName)
-            }
-            fun onData(obj: Any) {
-                $m$0(obj)
-            }
+        this.agentNameSubscription = this.userManager!!.getUserNames().subscribe(this.circuitInfo.agentID, Subscription.OnData<UserName> { userName ->
+            this.agentUserName!!.set(userName)
         })
         if (this.eventBus != null) {
             this.eventBus.publish(SLRegionInfoChangedEvent())
         }
     }
-    fun HandleScriptDialog(scriptDialog: ScriptDialog) {
-        var strArr: Array<String> = null
+    override fun HandleScriptDialog(scriptDialog: ScriptDialog) {
+        var strArr: Array<String>? = null
         var z: Boolean = false
         var i: Int = 0
-        if (scriptDialog.Buttons_Fields.size() > 0) {
-            var strArr2: Array<String> = arrayOfNulls<String>(scriptDialog.Buttons_Fields.size())
-            var it: Iterator<?> = scriptDialog.Buttons_Fields.iterator()
-            var i2: Int = 0
-            while (true) {
+        if (scriptDialog.Buttons_Fields.size > 0) {
+            @Suppress("UNCHECKED_CAST")
+            val strArr2: Array<String> = arrayOfNulls<String>(scriptDialog.Buttons_Fields.size) as Array<String>
+            val it: Iterator<ScriptDialog.Buttons> = scriptDialog.Buttons_Fields.iterator()
+            var i2 = 0
+            loop@ while (true) {
                 if (!it.hasNext()) {
                     z = false
                     strArr = strArr2
-
+                    break@loop
                 }
-                strArr2[i2] = SLMessage.stringFromVariableUTF((it as ScriptDialog.Buttons.next()).ButtonLabel)
-                if (strArr2[i2].equals("!!llTextBox!!")) {
+                strArr2[i2] = SLMessage.stringFromVariableUTF(it.next().ButtonLabel)
+                if (strArr2[i2] == "!!llTextBox!!") {
                     i = i2
                     z = true
                     strArr = strArr2
-
+                    break@loop
                 }
                 i2++
             }
@@ -1208,52 +1223,80 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             HandleChatEvent(this.localChatterID, SLChatScriptDialog(scriptDialog, this.agentUUID, strArr), true)
         }
     }
-    fun HandleSimulatorViewerTimeMessage(simulatorViewerTimeMessage: SimulatorViewerTimeMessage) {
+    override fun HandleSimulatorViewerTimeMessage(simulatorViewerTimeMessage: SimulatorViewerTimeMessage) {
         if (this.authReply.isTemporary || this.gridConn == null || this.gridConn.parcelInfo == null) {
             return
         }
         var f: Float = (simulatorViewerTimeMessage.TimeInfo_Field.SunPhase / 6.2831855f) + 0.25f
         this.gridConn.parcelInfo.setSunHour((float) (f - Math.floor(f)))
     }
-    fun HandleTeleportFailed(teleportFailed: TeleportFailed) {
+    override fun HandleTeleportFailed(teleportFailed: TeleportFailed) {
         Debug.Log("TeleportFailed: reason = " + SLMessage.stringFromVariableOEM(teleportFailed.Info_Field.Reason))
         this.teleportRequestSent = false
         this.eventBus.publish(SLTeleportResultEvent(false, SLMessage.stringFromVariableOEM(teleportFailed.Info_Field.Reason)))
     }
-    fun HandleTeleportLocal(teleportLocal: TeleportLocal) {
+    override fun HandleTeleportLocal(teleportLocal: TeleportLocal) {
         this.teleportRequestSent = false
         this.eventBus.publish(SLTeleportResultEvent(true, null))
     }
-    fun HandleTeleportProgress(teleportProgress: TeleportProgress) {
+    override fun HandleTeleportProgress(teleportProgress: TeleportProgress) {
         Debug.Log("Teleport progress: flags = " + teleportProgress.Info_Field.TeleportFlags + ", progress = " + SLMessage.stringFromVariableOEM(teleportProgress.Info_Field.Message))
     }
-    fun HandleTeleportStart(teleportStart: TeleportStart) {
+    override fun HandleTeleportStart(teleportStart: TeleportStart) {
         Debug.Log("TeleportStart: flags = " + teleportStart.Info_Field.TeleportFlags)
     }
 
-    fun OfferInventoryItem(uuid: final UUID, sLInventoryEntry: SLInventoryEntry) {
-        this.userManager.getInventoryManager().getExecutor().execute(Runnable() {
-            private /* synthetic */ void $m$0() {
-                SLAgentCircuit.this.m138lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024(sLInventoryEntry as SLInventoryEntry, uuid as UUID)
+    fun OfferInventoryItem(uuid: UUID, sLInventoryEntry: SLInventoryEntry) {
+        this.userManager!!.getInventoryManager().getExecutor().execute(Runnable {
+            val arrayList = ArrayList<SLInventoryEntry>()
+            arrayList.add(sLInventoryEntry)
+            if (sLInventoryEntry.isFolder) {
+                arrayList.addAll(this.modules!!.inventory.CollectGiveableItems(sLInventoryEntry))
             }
-            fun run() {
-                $m$0()
+            val improvedInstantMessage = ImprovedInstantMessage()
+            improvedInstantMessage.AgentData_Field.AgentID = this.circuitInfo.agentID
+            improvedInstantMessage.AgentData_Field.SessionID = this.circuitInfo.sessionID
+            improvedInstantMessage.MessageBlock_Field.FromGroup = false
+            improvedInstantMessage.MessageBlock_Field.ToAgentID = uuid
+            improvedInstantMessage.MessageBlock_Field.ParentEstateID = 0
+            improvedInstantMessage.MessageBlock_Field.RegionID = UUID(0L, 0L)
+            improvedInstantMessage.MessageBlock_Field.Position = LLVector3()
+            improvedInstantMessage.MessageBlock_Field.Offline = 0
+            improvedInstantMessage.MessageBlock_Field.Dialog = 4
+            improvedInstantMessage.MessageBlock_Field.ID = UUID.randomUUID()
+            improvedInstantMessage.MessageBlock_Field.Timestamp = 0
+            improvedInstantMessage.MessageBlock_Field.FromAgentName = SLMessage.stringToVariableOEM("todo")
+            improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTF(sLInventoryEntry.name)
+            val wrap: ByteBuffer = ByteBuffer.wrap(ByteArray(arrayList.size * 17))
+            wrap.order(ByteOrder.BIG_ENDIAN)
+            for (sLInventoryEntry2 in arrayList) {
+                wrap.put((if (sLInventoryEntry2.isFolder) SLAssetType.AT_CATEGORY.getTypeCode() else sLInventoryEntry2.assetType).toByte())
+                wrap.putLong(sLInventoryEntry2.uuid.getMostSignificantBits())
+                wrap.putLong(sLInventoryEntry2.uuid.getLeastSignificantBits())
             }
+            wrap.position(0)
+            improvedInstantMessage.MessageBlock_Field.BinaryBucket = wrap.array()
+            improvedInstantMessage.isReliable = true
+            SendMessage(improvedInstantMessage)
+            HandleChatEvent(ChatterID.getUserChatterID(this.agentUUID, uuid), SLChatInventoryItemOfferedByYouEvent(this.agentUUID, sLInventoryEntry.name), false)
         })
     }
 
     fun OfferTeleport(uuid: UUID, str: String) {
-        var startLure: StartLure = StartLure()
+        val startLure = StartLure()
         startLure.AgentData_Field.AgentID = this.circuitInfo.agentID
         startLure.AgentData_Field.SessionID = this.circuitInfo.sessionID
-        startLure.Info_Field.Message = SLMessage.stringToVariableUTFvar as str targetData: StartLure.TargetData = StartLure.TargetData()
+        startLure.Info_Field.Message = SLMessage.stringToVariableUTF(str)
+        val targetData = StartLure.TargetData()
         targetData.TargetID = uuid
-        startLure.TargetData_Fields.addstartLure as targetData.isReliable = true
+        startLure.TargetData_Fields.add(targetData)
+        startLure.isReliable = true
         SendMessage(startLure)
     }
-    fun OnCapsEvent(capsEvent: SLCapEventQueue.CapsEvent) {
+    override fun OnCapsEvent(capsEvent: SLCapEventQueue.CapsEvent) {
         try {
-            this.capsEventQueue.addthis as capsEvent.selector.wakeup()
+            this.capsEventQueue!!.add(capsEvent)
+            this.selector.wakeup()
         } catch (e: Exception) {
         }
     }
@@ -1281,7 +1324,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         super.ProcessNetworkError()
         Debug.Printf("Network: Network error.", arrayOfNulls<Object>(0))
         if (this.modules != null) {
-            this.modules.avatarControl.setEnableAgentUpdates(false)
+            this.modules!!.avatarControl.setEnableAgentUpdates(false)
         }
         if (this.authReply.isTemporary) {
             return
@@ -1291,20 +1334,20 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     fun ProcessTimeout() {
         super.ProcessTimeout()
         if (this.modules != null) {
-            this.modules.avatarControl.setEnableAgentUpdates(false)
+            this.modules!!.avatarControl.setEnableAgentUpdates(false)
         }
         if (this.authReply.isTemporary) {
             return
         }
         this.gridConn.processDisconnect(false, "Connection has timed out.")
     }
-    fun ProcessWakeup() {
+    override fun ProcessWakeup() {
         super.ProcessWakeup()
         while (true) {
             try {
-                var poll: SLCapEventQueue.CapsEvent = this.capsEventQueue.poll()
+                val poll: SLCapEventQueue.CapsEvent? = this.capsEventQueue!!.poll()
                 if (poll == null) {
-
+                    break
                 } else {
                     HandleCapsEvent(poll)
                 }
@@ -1315,12 +1358,13 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     fun RemoveFriend(uuid: UUID) {
-        var terminateFriendship: TerminateFriendship = TerminateFriendship()
+        val terminateFriendship = TerminateFriendship()
         terminateFriendship.AgentData_Field.AgentID = this.circuitInfo.agentID
         terminateFriendship.AgentData_Field.SessionID = this.circuitInfo.sessionID
         terminateFriendship.ExBlock_Field.OtherID = uuid
         terminateFriendship.isReliable = true
-        SendMessagethis as terminateFriendship.userManager.getChatterList().getFriendManager().removeFriend(uuid)
+        SendMessage(terminateFriendship)
+        this.userManager!!.getChatterList().getFriendManager().removeFriend(uuid)
     }
 
     fun RequestObjectName(sLObjectInfo: SLObjectInfo) {
@@ -1338,23 +1382,23 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (!this.isEstateManager) {
         return false
         }
-        SendEstateOwnerMessage("restart", new Array<String>{Integer.toString(i)})
+        SendEstateOwnerMessage("restart", arrayOf(Integer.toString(i)))
         return true
     }
 
     fun RezObject(sLInventoryEntry: SLInventoryEntry) {
-        var currentLocationInfoSnapshot: CurrentLocationInfo = null
-        var parcelData: ParcelData = null
-        var uuid: UUID = null
+        var currentLocationInfoSnapshot: CurrentLocationInfo? = null
+        var parcelData: ParcelData? = null
+        var uuid: UUID? = null
         var uuid2: UUID = UUIDPool.ZeroUUID
-        var ownerID: UUID = (this.userManager == null || (currentLocationInfoSnapshot = this.userManager.getCurrentLocationInfoSnapshot()) == null || (parcelData = currentLocationInfoSnapshot.parcelData()) == null || !parcelData.isGroupOwned()) ? null : parcelData.getOwnerID()
+        var ownerID: UUID = (this.userManager == null || (currentLocationInfoSnapshot = this.userManager!!.getCurrentLocationInfoSnapshot()) == null || (parcelData = currentLocationInfoSnapshot.parcelData()) == null || !parcelData.isGroupOwned()) ? null : parcelData.getOwnerID()
         if (ownerID == null) {
             uuid = ownerID
         } else if (!UUIDPool.ZeroUUID.equals(ownerID)) {
             uuid = ownerID
         }
         if (uuid != null) {
-            var avatarGroupList: AvatarGroupList = this.userManager.getChatterList().getGroupManager().getAvatarGroupList()
+            var avatarGroupList: AvatarGroupList = this.userManager!!.getChatterList().getGroupManager().getAvatarGroupList()
             if (avatarGroupList == null || !avatarGroupList.Groups.containsKey(uuid)) {
                 uuid = uuid2
             }
@@ -1370,8 +1414,8 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         rezObject.AgentData_Field.GroupID = uuid
         rezObject.RezData_Field.FromTaskID = UUIDPool.ZeroUUID
         rezObject.RezData_Field.BypassRaycast = 1
-        rezObject.RezData_Field.RayStart = this.modules.avatarControl.getAgentPosition().getPosition()
-        rezObject.RezData_Field.RayEnd = rezObject.RezData_Field.RayStart.getRotatedOffset(1.5f, getModules().avatarControl.getAgentHeading())
+        rezObject.RezData_Field.RayStart = this.modules!!.avatarControl.getAgentPosition().getPosition()
+        rezObject.RezData_Field.RayEnd = rezObject.RezData_Field.RayStart.getRotatedOffset(1.5f, getModules()!!.avatarControl.getAgentHeading())
         rezObject.RezData_Field.RayEndIsIntersection = true
         rezObject.RezData_Field.RayTargetID = UUIDPool.ZeroUUID
         rezObject.RezData_Field.RezSelected = false
@@ -1405,7 +1449,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
             rezObject.setEventListener(SLMessageEventListener() {
                 fun onMessageAcknowledged(sLMessage: SLMessage) {
                     if (SLAgentCircuit.this.userManager != null) {
-                        SLAgentCircuit.this.userManager.getInventoryManager().requestFolderUpdate(uuid3)
+                        SLAgentCircuit.this.userManager!!.getInventoryManager().requestFolderUpdate(uuid3)
                     }
                 }
                 fun onMessageTimeout(sLMessage: SLMessage) {
@@ -1450,18 +1494,21 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         improvedInstantMessage.MessageBlock_Field.ToAgentID = uuid
         improvedInstantMessage.MessageBlock_Field.ParentEstateID = 0
         improvedInstantMessage.MessageBlock_Field.RegionID = UUID(0L, 0L)
-        improvedInstantMessage.MessageBlock_Field.Position = this.modules.avatarControl.getAgentPosition().getPosition()
+        improvedInstantMessage.MessageBlock_Field.Position = this.modules!!.avatarControl.getAgentPosition().getPosition()
         improvedInstantMessage.MessageBlock_Field.Offline = 0
         improvedInstantMessage.MessageBlock_Field.Dialog = 17
         improvedInstantMessage.MessageBlock_Field.ID = uuid
         improvedInstantMessage.MessageBlock_Field.Timestamp = 0
         improvedInstantMessage.MessageBlock_Field.FromAgentName = SLMessage.stringToVariableOEM("todo")
-        improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTFimprovedInstantMessage as str.MessageBlock_Field.BinaryBucket = ByteArrayimprovedInstantMessage as 1.isReliable = true
-        synchronized(this.startedGroupSessions) {
-            if (this.startedGroupSessions.contains(uuid)) {
+        improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTF(str)
+        improvedInstantMessage.MessageBlock_Field.BinaryBucket = ByteArray(1)
+        improvedInstantMessage.isReliable = true
+        synchronized(this.startedGroupSessions!!) {
+            if (this.startedGroupSessions!!.contains(uuid)) {
                 SendMessage(improvedInstantMessage)
             } else {
-                SendGroupSessionStartthis as uuid.pendingGroupMessages.add(improvedInstantMessage)
+                SendGroupSessionStart(uuid)
+                this.pendingGroupMessages!!.add(improvedInstantMessage)
             }
         }
     }
@@ -1486,7 +1533,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                 }
             }
         }
-        if (getModules().rlvController.onSendLocalChat(i, str)) {
+        if (getModules()!!.rlvController.onSendLocalChat(i, str)) {
             var chatFromViewer: ChatFromViewer = ChatFromViewer()
             chatFromViewer.AgentData_Field.AgentID = this.circuitInfo.agentID
             chatFromViewer.AgentData_Field.SessionID = this.circuitInfo.sessionID
@@ -1499,7 +1546,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
 
     fun SendLogoutRequest() {
         Debug.Log("Logout: Sending logout request.")
-        this.modules.avatarControl.setEnableAgentUpdatesvar as false logoutRequest: LogoutRequest = LogoutRequest()
+        this.modules!!.avatarControl.setEnableAgentUpdatesvar as false logoutRequest: LogoutRequest = LogoutRequest()
         logoutRequest.AgentData_Field.AgentID = this.circuitInfo.agentID
         logoutRequest.AgentData_Field.SessionID = this.circuitInfo.sessionID
         logoutRequest.isReliable = true
@@ -1548,7 +1595,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
                 }
                 SLAgentCircuit.this.SendCompleteAgentMovement()
                 if (SLAgentCircuit.this.modules != null) {
-                    SLAgentCircuit.this.modules.HandleCircuitReady()
+                    SLAgentCircuit.this.modules!!.HandleCircuitReady()
                 }
             }
             fun onMessageTimeout(sLMessage: SLMessage) {
@@ -1564,15 +1611,15 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
 
     fun StartGroupSessionForVoice(uuid: UUID) {
         var z: Boolean = false
-        synchronized(this.startedGroupSessions) {
-            if (!this.startedGroupSessions.contains(uuid)) {
+        synchronized(this.startedGroupSessions!!) {
+            if (!this.startedGroupSessions!!.contains(uuid)) {
                 SendGroupSessionStartz as uuid = true
             }
         }
         if (z) {
             return
         }
-        this.modules.voice.onGroupSessionReady(uuid)
+        this.modules!!.voice.onGroupSessionReady(uuid)
     }
 
     fun TeleportToGlobalPosition(lLVector3: LLVector3) {
@@ -1599,7 +1646,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     fun TeleportToLandmarkAsset(uuid: UUID) {
-        if (getModules().rlvController.canTeleportToLandmark()) {
+        if (getModules()!!.rlvController.canTeleportToLandmark()) {
             this.teleportRequestSent = true
             var teleportLandmarkRequest: TeleportLandmarkRequest = TeleportLandmarkRequest()
             teleportLandmarkRequest.Info_Field.AgentID = this.circuitInfo.agentID
@@ -1658,7 +1705,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     fun TeleportToRegion(j: Long, i: Int, i2: Int, i3: Int) {
-        if (getModules().rlvController.canTeleportToLocation()) {
+        if (getModules()!!.rlvController.canTeleportToLocation()) {
             Debug.Log("TeleportToRegion: regionHandle = " + Long.toHexString(j) + ", pos = (" + i + ", " + i2 + ", " + i3 + ")")
             this.teleportRequestSent = true
             var teleportLocationRequest: TeleportLocationRequest = TeleportLocationRequest()
@@ -1735,7 +1782,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (this.modules == null) {
         return null
         }
-        var position: LLVector3 = this.modules.avatarControl.getAgentPosition().getPosition()
+        var position: LLVector3 = this.modules!!.avatarControl.getAgentPosition().getPosition()
         var i: Int = (int) ((this.regionHandle >> 32) & 0xFFFFFFFFL)
         var i2: Int = (int) (this.regionHandle & 0xFFFFFFFFL)
         var lLVector3d: LLVector3d = LLVector3d()
@@ -1750,7 +1797,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         if (this.modules == null || !Objects.equal(this.authReply.loginURL, "https://login.agni.lindenlab.com/cgi-bin/login.cgi") || this.regionName == null) {
         return null
         }
-        var position: LLVector3 = this.modules.avatarControl.getAgentPosition().getPosition()
+        var position: LLVector3 = this.modules!!.avatarControl.getAgentPosition().getPosition()
         try {
             return String.format("https://maps.secondlife.com/secondlife/%s/%d/%d/%d", URLEncoder.encode(this.regionName, "UTF-8"), (int position.x), (int position.y), (int position.z))
         } catch (e: UnsupportedEncodingException) {
@@ -1774,7 +1821,7 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
         return this.localChatterID
     }
 
-    fun getModules(): SLModules {
+    fun getModules(): SLModules? {
         return this.modules
     }
 
@@ -1797,49 +1844,15 @@ open class SLAgentCircuit : SLThreadingCircuit(), SLCapEventQueue.ICapsEventHand
     }
 
     fun isUserTyping(uuid: UUID): Boolean {
-        return this.typingUsers.contains(uuid)
+        return this.typingUsers!!.contains(uuid)
     }
 
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593, reason: not valid java name */
-    /* synthetic */ void m137lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_14593(UserName userName) {
-        this.agentUserName.set(userName)
-    }
-
-    /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024, reason: not valid java name */
-    /* synthetic */ void m138lambda$com_lumiyaviewer_lumiya_slproto_SLAgentCircuit_77024(SLInventoryEntry sLInventoryEntry, UUID uuid) {
-        var arrayList: ArrayList<SLInventoryEntry> = ArrayList()
-        arrayList.addi as sLInventoryEntryf (sLInventoryEntry.isFolder) {
-            arrayList.addAll(this.modules.inventory.CollectGiveableItems(sLInventoryEntry))
-        }
-        var improvedInstantMessage: ImprovedInstantMessage = ImprovedInstantMessage()
-        improvedInstantMessage.AgentData_Field.AgentID = this.circuitInfo.agentID
-        improvedInstantMessage.AgentData_Field.SessionID = this.circuitInfo.sessionID
-        improvedInstantMessage.MessageBlock_Field.FromGroup = false
-        improvedInstantMessage.MessageBlock_Field.ToAgentID = uuid
-        improvedInstantMessage.MessageBlock_Field.ParentEstateID = 0
-        improvedInstantMessage.MessageBlock_Field.RegionID = UUID(0L, 0L)
-        improvedInstantMessage.MessageBlock_Field.Position = LLVector3()
-        improvedInstantMessage.MessageBlock_Field.Offline = 0
-        improvedInstantMessage.MessageBlock_Field.Dialog = 4
-        improvedInstantMessage.MessageBlock_Field.ID = UUID.randomUUID()
-        improvedInstantMessage.MessageBlock_Field.Timestamp = 0
-        improvedInstantMessage.MessageBlock_Field.FromAgentName = SLMessage.stringToVariableOEM("todo")
-        improvedInstantMessage.MessageBlock_Field.Message = SLMessage.stringToVariableUTFvar as sLInventoryEntry.name wrap: ByteBuffer = ByteBuffer.wrap(ByteArray(arrayList.size() * 17))
-        wrap.orderfo as ByteOrder.BIG_ENDIANr (sLInventoryEntry2 in arrayList) {
-            wrap.put((byte) (if SLAssetType as sLInventoryEntry2.isFolder.AT_CATEGORY.getTypeCode() else sLInventoryEntry2.assetType))
-            wrap.putLong(sLInventoryEntry2.uuid.getMostSignificantBits())
-            wrap.putLong(sLInventoryEntry2.uuid.getLeastSignificantBits())
-        }
-        wrap.positionimprovedInstantMessage as 0.MessageBlock_Field.BinaryBucket = wrap.array()
-        improvedInstantMessage.isReliable = true
-        SendMessageHandleChatEven as improvedInstantMessaget(ChatterID.getUserChatterID(this.agentUUID, uuid), SLChatInventoryItemOfferedByYouEvent(this.agentUUID, sLInventoryEntry.name), false)
-    }
 
     fun processMyAttachmentUpdate(sLObjectInfo: SLObjectInfo) {
         if (sLObjectInfo != null && !sLObjectInfo.nameKnown && (!sLObjectInfo.isDead)) {
             RequestObjectName(sLObjectInfo)
         }
-        getModules().avatarAppearance.UpdateMyAttachments()
+        getModules()!!.avatarAppearance.UpdateMyAttachments()
     }
 
     fun sendTypingNotify(uuid: UUID, z: Boolean) {

@@ -7,14 +7,14 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType
 import java.util.UUID
 
 class AutoValue_UnreadNotificationInfo : UnreadNotificationInfo() {
-    private var agentUUID: UUID = null
+    private var agentUUID: UUID? = null
     private var freshMessagesCount: Int = 0
-    private var mostImportantFreshType: Optional<NotificationType> = null
-    private var mostImportantType: Optional<NotificationType> = null
-    private var objectPopupInfo: UnreadNotificationInfo.ObjectPopupNotification = null
-    private var singleFreshSource: Optional<UnreadNotificationInfo.UnreadMessageSource> = null
+    private var mostImportantFreshType: Optional<NotificationType>? = null
+    private var mostImportantType: Optional<NotificationType>? = null
+    private var objectPopupInfo: UnreadNotificationInfo.ObjectPopupNotification? = null
+    private var singleFreshSource: Optional<UnreadNotificationInfo.UnreadMessageSource>? = null
     private var totalUnreadCount: Int = 0
-    private var unreadSources: ImmutableList<UnreadNotificationInfo.UnreadMessageSource> = null
+    private var unreadSources: ImmutableList<UnreadNotificationInfo.UnreadMessageSource>? = null
 
     constructor(uuid: UUID, totalUnreadCount: Int, immutableList: ImmutableList<UnreadNotificationInfo.UnreadMessageSource>, optional: Optional<NotificationType>, freshMessagesCount: Int, mostImportantFreshType: Optional<NotificationType>, singleFreshSource: Optional<UnreadNotificationInfo.UnreadMessageSource>, objectPopupNotification: UnreadNotificationInfo.ObjectPopupNotification) {
         if (uuid == null) {

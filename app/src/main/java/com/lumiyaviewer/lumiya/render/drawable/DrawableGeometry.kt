@@ -38,14 +38,14 @@ class DrawableGeometry : GLCleanable {
     @Throws(CreateFailureException::class)
     constructor(meshData: MeshData) {
         this.isRiggedMesh = meshData.isRiggedMesh()
-        this.FaceCount = meshData.faceCount
+        this.FaceCount = meshData.getFaceCount()
         var i = 0
         var i2 = 0
         for (j in 0 until FaceCount) {
             val face = meshData.getFace(j)
-            if (face.vertices != null) {
-                i += face.numVertices
-                i2 += face.numIndices
+            if (face.getVertices() != null) {
+                i += face.getNumVertices()
+                i2 += face.getNumIndices()
             }
         }
         this.IndexCount = i2
@@ -67,10 +67,10 @@ class DrawableGeometry : GLCleanable {
         this.facesCombined = false
         for (k in 0 until FaceCount) {
             val face2 = meshData.getFace(k)
-            val vertices = face2.vertices
-            val texCoords = face2.texCoords
-            val numVertices = face2.numVertices
-            if (face2.numVertices == 0 || face2.numIndices == 0) {
+            val vertices = face2.getVertices()
+            val texCoords = face2.getTexCoords()
+            val numVertices = face2.getNumVertices()
+            if (face2.getNumVertices() == 0 || face2.getNumIndices() == 0) {
                 throw CreateFailureException("Empty mesh")
             }
             if (vertices != null) {
@@ -78,27 +78,27 @@ class DrawableGeometry : GLCleanable {
                 if (texCoords != null) {
                     directByteBuffer3.copyFromFloat(i5 * 2, texCoords, 0, numVertices * 2)
                 }
-                val indices = face2.indices
-                val numIndices = face2.numIndices
+                val indices = face2.getIndices()
+                val numIndices = face2.getNumIndices()
                 for (m in 0 until numIndices) {
                     if ((indices.getShort(m) and 65535) >= numVertices) {
                         throw CreateFailureException("Too many vertices")
                     }
                 }
-                directByteBuffer2.copyFromShort(i4, face2.indices, 0, face2.numIndices)
+                directByteBuffer2.copyFromShort(i4, face2.getIndices(), 0, face2.getNumIndices())
             }
             val i10 = i6 + 1
             FaceIndexStartsCounts[i6] = k
             val i11 = i10 + 1
             FaceIndexStartsCounts[i10] = i4
             i6 = i11 + 1
-            FaceIndexStartsCounts[i11] = face2.numIndices
+            FaceIndexStartsCounts[i11] = face2.getNumIndices()
             val i12 = i7 + 1
             FaceVertexStartsCounts[i7] = i5
             i7 = i12 + 1
             FaceVertexStartsCounts[i12] = numVertices
             i5 += numVertices
-            i4 += face2.numIndices
+            i4 += face2.getNumIndices()
         }
         directByteBuffer.position(0)
         directByteBuffer2.position(0)
@@ -210,9 +210,9 @@ class DrawableGeometry : GLCleanable {
     fun GLBindBuffers20(renderContext: RenderContext): GLLoadableBuffer {
         if (!renderContext.hasGL30) {
             if (facesCombined) {
-                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vPosition, 3, 5126, 24, 0)
-                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vNormal, 3, 5126, 24, 12)
-                TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram.vTexCoord, 2, 5126, 8, 0)
+                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vPosition, 3, 5126, 24, 0)
+                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vNormal, 3, 5126, 24, 12)
+                TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vTexCoord, 2, 5126, 8, 0)
             }
             IndexBuffer.BindElements20(renderContext)
             return VertexBuffer
@@ -222,9 +222,9 @@ class DrawableGeometry : GLCleanable {
                 vertexArrayObject = GLVertexArrayObject(renderContext.glResourceManager, 1)
                 renderContext.glResourceManager.addCleanable(this)
                 vertexArrayObject!!.Bind(0)
-                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vPosition, 3, 5126, 24, 0)
-                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vNormal, 3, 5126, 24, 12)
-                TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram.vTexCoord, 2, 5126, 8, 0)
+                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vPosition, 3, 5126, 24, 0)
+                VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vNormal, 3, 5126, 24, 12)
+                TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vTexCoord, 2, 5126, 8, 0)
                 IndexBuffer.BindElements20(renderContext)
                 vertexArrayObject!!.Unbind()
             } else {
@@ -233,9 +233,9 @@ class DrawableGeometry : GLCleanable {
                 var i2 = 0
                 while (i2 < FaceCount) {
                     vertexArrayObject!!.Bind(i2)
-                    VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24)
-                    VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24 + 12)
-                    TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i2 * 2] * 4 * 2)
+                    VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24)
+                    VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24 + 12)
+                    TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i2 * 2] * 4 * 2)
                     if (isRiggedMesh && meshData != null) {
                         meshData.PrepareInfluencesForFace(renderContext, FaceVertexStartsCounts[i2 * 2])
                     }
@@ -261,9 +261,9 @@ class DrawableGeometry : GLCleanable {
         var i2 = 0
         while (i2 < FaceCount) {
             vertexArrayObject!!.Bind(i2)
-            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24)
-            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24 + 12)
-            TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i2 * 2] * 4 * 2)
+            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24)
+            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i2 * 2] * 24 + 12)
+            TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i2 * 2] * 4 * 2)
             meshData.SetupFace30(renderContext, FaceVertexStartsCounts[i2 * 2])
             IndexBuffer.BindElements20(renderContext)
             vertexArrayObject!!.Unbind()
@@ -312,9 +312,9 @@ class DrawableGeometry : GLCleanable {
             return
         }
         if (!facesCombined) {
-            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i * 2] * 24)
-            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i * 2] * 24 + 12)
-            TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i * 2] * 4 * 2)
+            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vPosition, 3, 5126, 24, FaceVertexStartsCounts[i * 2] * 24)
+            VertexBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vNormal, 3, 5126, 24, FaceVertexStartsCounts[i * 2] * 24 + 12)
+            TexCoordsBuffer.Bind20(renderContext, renderContext.curPrimProgram!!.vTexCoord, 2, 5126, 8, FaceVertexStartsCounts[i * 2] * 4 * 2)
             if (isRiggedMesh && meshData != null) {
                 meshData.PrepareInfluencesForFace(renderContext, FaceVertexStartsCounts[i * 2])
             }

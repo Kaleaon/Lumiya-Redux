@@ -25,7 +25,7 @@ open class SLURL : Parcelable {
     private var locationZ: Int = 0
 
     public SLURL(Intent intent) throws Exception {
-        var pathSegments: MutableList<String> = null
+        var pathSegments: MutableList<String>? = null
         this.locationX = 128
         this.locationY = 128
         this.locationZ = 0

@@ -50,7 +50,7 @@ abstract class LLSDNode {
         } catch (e: IOException) {
             var llsdxmlException: LLSDXMLException = LLSDXMLException("I/O error")
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         }
     }
 
@@ -130,7 +130,7 @@ abstract class LLSDNode {
             } catch (e: IOException) {
                 var llsdxmlException: LLSDXMLException = LLSDXMLException(e.getMessage())
                 llsdxmlException.initCause(e)
-                var llsdxmlException: throw = null
+                var llsdxmlException: throw? = null
             }
         }
     }
@@ -141,7 +141,7 @@ abstract class LLSDNode {
         } catch (e: IOException) {
             var llsdxmlException: LLSDXMLException = LLSDXMLException(e.getMessage())
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         }
     }
 
@@ -162,7 +162,7 @@ abstract class LLSDNode {
             e.printStackTrace()
             var llsdxmlException: LLSDXMLException = LLSDXMLException("Malformed XML")
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         }
     }
 

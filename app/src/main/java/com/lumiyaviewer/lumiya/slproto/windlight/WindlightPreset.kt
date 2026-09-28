@@ -9,33 +9,33 @@ import java.io.InputStream
 
 open class WindlightPreset {
     @JvmStatic private var WINDLIGHT_GAMMA: Float = 2.2f
-    var ambient: FloatArray = null
-    var ambientBelowWater: FloatArray = null
-    var blue_density: FloatArray = null
-    var blue_horizon: FloatArray = null
-    var cloud_color: FloatArray = null
-    var cloud_pos_density1: FloatArray = null
-    var cloud_pos_density2: FloatArray = null
-    var cloud_shadow: FloatArray = null
-    private var defaultPresets: Array<String> = null
-    var haze_density: FloatArray = null
-    var haze_horizon: FloatArray = null
-    private var hourTable: FloatArray = null
-    var lightnorm: FloatArray = null
+    var ambient: FloatArray? = null
+    var ambientBelowWater: FloatArray? = null
+    var blue_density: FloatArray? = null
+    var blue_horizon: FloatArray? = null
+    var cloud_color: FloatArray? = null
+    var cloud_pos_density1: FloatArray? = null
+    var cloud_pos_density2: FloatArray? = null
+    var cloud_shadow: FloatArray? = null
+    private var defaultPresets: Array<String>? = null
+    var haze_density: FloatArray? = null
+    var haze_horizon: FloatArray? = null
+    private var hourTable: FloatArray? = null
+    var lightnorm: FloatArray? = null
     var star_brightness: Float = 0.0f
-    var sunlightBelowWater: FloatArray = null
-    var sunlight_color: FloatArray = null
+    var sunlightBelowWater: FloatArray? = null
+    var sunlight_color: FloatArray? = null
 
     constructor() {
-        this.hourTable = new Array<float>{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
-        this.defaultPresets = new Array<String>{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
+        this.hourTable = arrayOf(0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f)
+        this.defaultPresets = arrayOf("A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM")
         this.ambient = FloatArraythis as 4.ambientBelowWater = FloatArraythis as 4.lightnorm = FloatArraythis as 4.sunlight_color = FloatArraythis as 4.sunlightBelowWater = FloatArraythis as 4.blue_density = FloatArraythis as 4.blue_horizon = FloatArraythis as 4.haze_density = FloatArraythis as 4.haze_horizon = FloatArraythis as 4.cloud_color = FloatArraythis as 4.cloud_pos_density1 = FloatArraythis as 4.cloud_pos_density2 = FloatArraythis as 4.cloud_shadow = FloatArray(4)
         reset()
     }
 
     constructor(str: String) {
-        this.hourTable = new Array<float>{0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f}
-        this.defaultPresets = new Array<String>{"A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM"}
+        this.hourTable = arrayOf(0.0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f)
+        this.defaultPresets = arrayOf("A%2D12AM", "A%2D3AM", "A%2D6AM", "A%2D9AM", "A%2D12PM", "A%2D3PM", "A%2D6PM", "A%2D9PM")
         this.ambient = FloatArraythis as 4.ambientBelowWater = FloatArraythis as 4.lightnorm = FloatArraythis as 4.sunlight_color = FloatArraythis as 4.sunlightBelowWater = FloatArraythis as 4.blue_density = FloatArraythis as 4.blue_horizon = FloatArraythis as 4.haze_density = FloatArraythis as 4.haze_horizon = FloatArraythis as 4.cloud_color = FloatArraythis as 4.cloud_pos_density1 = FloatArraythis as 4.cloud_pos_density2 = FloatArraythis as 4.cloud_shadow = FloatArray(4)
         loadFromAssetFile(str)
     }

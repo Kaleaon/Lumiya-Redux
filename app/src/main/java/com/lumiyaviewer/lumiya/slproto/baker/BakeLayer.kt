@@ -13,13 +13,13 @@ import java.util.List
 open class BakeLayer {
 
     var fixedColor: Int = 0
-    var globalColor: SLAvatarGlobalColor = null
+    var globalColor: SLAvatarGlobalColor? = null
     var hasFixedColor: Boolean = false
     var isRenderPassBump: Boolean = false
     var layerName: String = ""
-    var localTexture: AvatarTextureFaceIndex = null
+    var localTexture: AvatarTextureFaceIndex? = null
     var localTextureAlphaOnly: Boolean = false
-    var paramIDs: IntArray = null
+    var paramIDs: IntArray? = null
     var tgaFileIsMask: Boolean = false
     var tgaTexture: String = ""
     var visibilityMask: Boolean = false
@@ -41,8 +41,8 @@ open class BakeLayer {
     }
 
     private fun getColorByParamList(bakeProcess: BakeProcess, ints: IntArray, i: Int, i2: Int): Int {
-        var avatarParam: SLAvatarParams.AvatarParam = null
-        var paramColor: SLAvatarParamColor = null
+        var avatarParam: SLAvatarParams.AvatarParam? = null
+        var paramColor: SLAvatarParamColor? = null
         var colorAdd: Int = 0
         var z: Boolean = false
         if (this.layerName.equals("lipstick")) {

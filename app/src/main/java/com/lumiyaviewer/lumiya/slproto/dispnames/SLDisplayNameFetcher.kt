@@ -28,15 +28,15 @@ import java.util.concurrent.atomic.AtomicBoolean
 open class SLDisplayNameFetcher : SLModule() {
     @JvmStatic private var MAX_BATCH_SIZE: Int = 4
     private var capsURL: String = ""
-    private var httpThreadRunnable: Runnable = null
-    private var requestHandler: RequestHandler<UUID> = null
-    private var requestQueue: RequestQueue<UUID, UserName> = null
-    private var resultHandler: ResultHandler<UUID, UserName> = null
-    private var threadMustExit: AtomicBoolean = null
+    private var httpThreadRunnable: Runnable? = null
+    private var requestHandler: RequestHandler<UUID>? = null
+    private var requestQueue: RequestQueue<UUID, UserName>? = null
+    private var resultHandler: ResultHandler<UUID, UserName>? = null
+    private var threadMustExit: AtomicBoolean? = null
     private var useDisplayNames: Boolean = false
-    private var userManager: UserManager = null
-    private var workingThread: Thread = null
-    private var xmlReq: LLSDXMLRequest = null
+    private var userManager: UserManager? = null
+    private var workingThread: Thread? = null
+    private var xmlReq: LLSDXMLRequest? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps) {
         superthis as agentCircuit.threadMustExit = AtomicBooleanthis as false.requestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<UUID>() {
@@ -56,7 +56,7 @@ open class SLDisplayNameFetcher : SLModule() {
         }, false, 3, 15000L)
         this.httpThreadRunnable = Runnable() {
             fun run() {
-                var nextRequest: UUID = null
+                var nextRequest: UUID? = null
                 var userNameRequestQueue: RequestQueue<UUID, UserName> = SLDisplayNameFetcher.this.userManager.getUserNameRequestQueue()
                 var hashSet: HashSet = HashSet()
                 while (!SLDisplayNameFetcher.this.threadMustExit.get()) {

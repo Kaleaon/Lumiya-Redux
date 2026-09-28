@@ -100,7 +100,7 @@ class DrawableAvatar(
         for (meshIndex in MeshIndex.VALUES) {
             val entry = baseAvatar.getMeshEntry(meshIndex)
             partsMap[meshIndex] = DrawableAvatarPart(
-                avatarUUID, entry.textureFaceIndex,
+                avatarUUID!!, entry.textureFaceIndex,
                 entry.polyMesh, drawableStore.hasGL20
             )
         }
@@ -121,13 +121,13 @@ class DrawableAvatar(
     private fun drawParts(renderContext: RenderContext) {
         val avatarSkeleton = skeleton ?: return
         val pelvisToFoot = if (avatarObject.parentID == 0) {
-            ((-avatarSkeleton.bodySize) / 2.0f) + avatarSkeleton.pelvisToFoot + avatarSkeleton.pelvisOffset
+            ((-avatarSkeleton.getBodySize()) / 2.0f) + avatarSkeleton.getPelvisToFoot() + avatarSkeleton.getPelvisOffset()
         } else {
             0.0f
         }
-        pelvisTranslateX = -avatarSkeleton.rootBone.positionX
-        pelvisTranslateY = -avatarSkeleton.rootBone.positionY
-        pelvisTranslateZ = pelvisToFoot + (-avatarSkeleton.rootBone.positionZ)
+        pelvisTranslateX = -avatarSkeleton.rootBone!!.getPositionX()
+        pelvisTranslateY = -avatarSkeleton.rootBone!!.getPositionY()
+        pelvisTranslateZ = pelvisToFoot + (-avatarSkeleton.rootBone!!.getPositionZ())
         renderContext.glObjWorldTranslatef(pelvisTranslateX, pelvisTranslateY, pelvisTranslateZ)
         renderContext.objWorldMatrix.getMatrix(localAviWorldMatrix, 0)
         glPrepare(renderContext, avatarSkeleton.jointMatrix)
@@ -140,7 +140,7 @@ class DrawableAvatar(
                 else -> null
             }
             if (bone != null) {
-                renderContext.glObjWorldPushAndMultMatrixf(bone.globalMatrix, 0)
+                renderContext.glObjWorldPushAndMultMatrixf(bone.getGlobalMatrix(), 0)
             }
             part.GLDraw(renderContext, avatarSkeleton.jointMatrix, jointMatrixUpdated)
             if (bone != null) {
@@ -150,7 +150,7 @@ class DrawableAvatar(
 
         val headBone = avatarSkeleton.bones[SLSkeletonBoneID.mHead]
         if (headBone != null) {
-            renderContext.glObjWorldPushAndMultMatrixf(headBone.globalMatrix, 0)
+            renderContext.glObjWorldPushAndMultMatrixf(headBone.getGlobalMatrix(), 0)
             val matrixData = renderContext.objWorldMatrix.matrixData
             val offset = renderContext.objWorldMatrix.matrixDataOffset
             val x = matrixData[offset + 12]
@@ -176,7 +176,7 @@ class DrawableAvatar(
             GLES11.glLoadMatrixf(IdentityMatrix.getMatrix(), 0)
             GLES11.glMatrixMode(5888)
         } else {
-            GLES20.glUseProgram(renderContext.avatarProgram!!.handle)
+            GLES20.glUseProgram(renderContext.avatarProgram!!.getHandle())
             GLES20.glUniform1i(renderContext.avatarProgram.sTexture, 0)
             GLES20.glUniform4f(renderContext.avatarProgram.uObjCoordScale, 1.0f, 1.0f, 1.0f, 1.0f)
             renderContext.glModelApplyMatrix(renderContext.avatarProgram.uMVPMatrix)
@@ -214,7 +214,7 @@ class DrawableAvatar(
         val displayedHUD = displayedHUDid.get()
         var hud: DrawableHUD? = null
 
-        var child: LinkedTreeNode<SLObjectInfo>? = avatarObject.treeNode.firstChild
+        var child: LinkedTreeNode<SLObjectInfo>? = avatarObject.treeNode.getFirstChild()
         while (child != null) {
             val attachment = child.dataObject
             if (!attachment.isDead) {
@@ -230,7 +230,7 @@ class DrawableAvatar(
                     }
                 }
             }
-            child = child.nextChild
+            child = child.getNextChild()
         }
 
         val deadEntries: Array<DrawListEntry>?
@@ -256,7 +256,7 @@ class DrawableAvatar(
             for (dead in deadEntries) {
                 drawableAttachments.removeEntry(dead)
                 if (dead is DrawListPrimEntry) {
-                    val drawable = dead.drawableObject
+                    val drawable = dead.getDrawableObject()
                     if (drawable != null) {
                         liveRiggedMeshes.remove(drawable)
                         if (riggedMeshes.remove(drawable)) {
@@ -284,18 +284,18 @@ class DrawableAvatar(
         multimap: Multimap<Int, DrawableObject>,
         attachmentPoint: Int
     ) {
-        val drawListEntry = objectInfo.drawListEntry
+        val drawListEntry = objectInfo.getDrawListEntry()
         drawableAttachments.addEntry(drawListEntry)
         if (drawListEntry is DrawListPrimEntry) {
             multimap.put(attachmentPoint, drawListEntry.getDrawableAttachment(drawableStore, this))
         }
-        var firstChild: LinkedTreeNode<SLObjectInfo>? = objectInfo.treeNode.firstChild
+        var firstChild: LinkedTreeNode<SLObjectInfo>? = objectInfo.treeNode.getFirstChild()
         while (firstChild != null) {
             val dataObject = firstChild.dataObject
             if (dataObject != null) {
                 updateAttachmentParts(dataObject, multimap, attachmentPoint)
             }
-            firstChild = firstChild.nextChild
+            firstChild = firstChild.getNextChild()
         }
     }
 
@@ -468,7 +468,7 @@ class DrawableAvatar(
         val newSkeleton = AvatarSkeleton(params, meshJointTranslations, hasExtended)
         updatedSkeleton.set(newSkeleton)
         for ((meshIndex, part) in parts) {
-            part.setPartMorphParams(newSkeleton.getMorphParams(meshIndex))
+            part.setPartMorphParams(newSkeleton.getMorphParams(meshIndex)!!)
         }
     }
 

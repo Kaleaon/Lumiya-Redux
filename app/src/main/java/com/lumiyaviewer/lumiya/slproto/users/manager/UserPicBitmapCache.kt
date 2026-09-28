@@ -21,7 +21,7 @@ import java.util.concurrent.Future
 open class UserPicBitmapCache : ResourceMemoryCache<UUID, Bitmap>() {
     @JvmStatic private var MAX_USERPIC_HEIGHT: Int = 128
     @JvmStatic private var MAX_USERPIC_WIDTH: Int = 128
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
 
     private open class UserPicBitmapRequest : ResourceRequest<UUID, Bitmap>(), ResourceConsumer {
         private volatile File compressedFile

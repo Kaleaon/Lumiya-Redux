@@ -37,19 +37,19 @@ open class SyncManager {
 
     @JvmStatic private var MAX_MESSAGES_PER_BATCH: Int = 100
 
-    private var chatMessageDao: ChatMessageDao = null
+    private var chatMessageDao: ChatMessageDao? = null
 
-    private var chatterDao: ChatterDao = null
+    private var chatterDao: ChatterDao? = null
 
-    private var context: Context = null
-    private var dateFormat: DateFormat = null
+    private var context: Context? = null
+    private var dateFormat: DateFormat? = null
 
-    private var dbExecutor: Executor = null
+    private var dbExecutor: Executor? = null
 
     private var localChatName: String = ""
-    private var messagesQuery: Query<ChatMessage> = null
+    private var messagesQuery: Query<ChatMessage>? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var syncingEnabled: AtomicBoolean = AtomicBoolean(false)
     private var syncServiceConnection: AtomicReference<CloudSyncServiceConnection> = AtomicReference<>()
     private var syncMessageSent: AtomicBoolean = AtomicBoolean(false)
@@ -57,8 +57,8 @@ open class SyncManager {
     private var flushChatters: MutableMap<ChatterID, ChatterNameRetriever> = ConcurrentHashMap()
     private var flushChatterNames: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
     private var lastConfirmedMessageID: Long = 0
-    private var myNameRetriever: ChatterNameRetriever = null
-    private var chatterNameRetriever: ChatterNameRetriever = null
+    private var myNameRetriever: ChatterNameRetriever? = null
+    private var chatterNameRetriever: ChatterNameRetriever? = null
 
     @SuppressLint({"SimpleDateFormat"})
     constructor(userManager: UserManager) {
@@ -146,8 +146,8 @@ open class SyncManager {
         var zSendMessage: Boolean = false
         var j: Long = 0L
         var i: Int = 0
-        var cloudSyncServiceConnection: CloudSyncServiceConnection = null
-        var chatter: Chatter = null
+        var cloudSyncServiceConnection: CloudSyncServiceConnection? = null
+        var chatter: Chatter? = null
         if (!this.syncMessageSent.getAndSet(true)) {
             if (this.myNameRetriever == null) {
                 this.myNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.userManager.getUserID()), ChatterNameRetriever.OnChatterNameUpdated() {

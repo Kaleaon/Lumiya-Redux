@@ -12,10 +12,10 @@ open class ParcelData : Serializable {
     private var isGroupOwned: Boolean = false
     private var mediaURL: String = ""
     private var name: String = ""
-    private var ownerID: UUID = null
+    private var ownerID: UUID? = null
     private var parcelBitmap: BooleanArray = BooleanArray(4096)
     private var parcelID: Int = 0
-    private var snapshotUUID: UUID = null
+    private var snapshotUUID: UUID? = null
 
     public ParcelData(LLSDNode lsdNode) throws LLSDException {
         this.parcelID = lsdNode.byKey("LocalID").asInt()

@@ -5,10 +5,10 @@ import java.util.Arrays
 
 open class TerrainPatchHeightMap {
     private var hashCode: Int = 0
-    private var heightMap: FloatArray = null
+    private var heightMap: FloatArray? = null
     private var mapHeight: Int = 0
     private var mapWidth: Int = 0
-    private var normalMap: FloatArray = null
+    private var normalMap: FloatArray? = null
     private var waterHeight: Float = 0.0f
 
     constructor(waterHeight: Float, floats: FloatArray, floats2: FloatArray, mapWidth: Int, mapHeight: Int) {

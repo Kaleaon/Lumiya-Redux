@@ -7,7 +7,7 @@ import java.util.Date
 import org.xmlpull.v1.XmlSerializer
 
 open class LLSDDate : LLSDNode() {
-    private var value: Date = null
+    private var value: Date? = null
 
     constructor(str: String) {
         try {

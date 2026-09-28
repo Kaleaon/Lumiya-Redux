@@ -4,9 +4,9 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager
 import java.util.UUID
 
 class AutoValue_GroupManager_GroupMemberRolesQuery : GroupManager.GroupMemberRolesQuery() {
-    private var groupID: UUID = null
-    private var memberID: UUID = null
-    private var requestID: UUID = null
+    private var groupID: UUID? = null
+    private var memberID: UUID? = null
+    private var requestID: UUID? = null
 
     constructor(uuid: UUID, memberID: UUID, requestID: UUID) {
         if (uuid == null) {

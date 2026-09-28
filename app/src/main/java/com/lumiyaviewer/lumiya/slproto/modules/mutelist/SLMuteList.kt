@@ -28,11 +28,11 @@ import java.util.zip.CRC32
 
 open class SLMuteList : SLModule(), SLXfer.SLXferCompletionListener {
     private var cachedCRC: if (Int) = null
-    private var muteListCachedDataDao else MuteListCachedDataDao = null
-    private var muteListData: MuteListData = null
-    private var muteListRequestHandler: RequestHandler<SubscriptionSingleKey> = null
+    private var muteListCachedDataDao: MuteListCachedDataDao? = null
+    private var muteListData: MuteListData? = null
+    private var muteListRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
     private ResultHandler<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListResultHandler
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.muteListData = MuteListData()

@@ -27,11 +27,11 @@ open class BasicPrimProgram(vertexShader: Shader, fragmentShader: Shader) : Shad
         } else {
             GLES20.glUniform3f(
                 LightDiffuseDir,
-                windlightPreset.lightnorm[0],
-                windlightPreset.lightnorm[2],
-                -windlightPreset.lightnorm[1]
+                windlightPreset.lightnorm!![0],
+                windlightPreset.lightnorm!![2],
+                -windlightPreset.lightnorm!![1]
             )
-            if (abs(windlightPreset.lightnorm[1]) > 0.1f) {
+            if (abs(windlightPreset.lightnorm!![1]) > 0.1f) {
                 GLES20.glUniform3fv(
                     LightDiffuseColor,
                     1,

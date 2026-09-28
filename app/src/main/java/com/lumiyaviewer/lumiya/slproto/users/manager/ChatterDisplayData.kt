@@ -9,12 +9,12 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterDisplayInfo
 import com.lumiyaviewer.lumiya.ui.chat.contacts.ChatterItemViewBuilder
 
 open class ChatterDisplayData : ChatterDisplayInfo, Comparable<ChatterDisplayData> {
-    var chatterID: ChatterID = null
+    var chatterID: ChatterID? = null
     var displayName: String = ""
     var distanceToUser: Float = 0.0f
     var isOnline: Boolean = false
 
-    private var lastMessage: SLChatEvent = null
+    private var lastMessage: SLChatEvent? = null
     private var unreadCount: Int = 0
     private var voiceActive: Boolean = false
 

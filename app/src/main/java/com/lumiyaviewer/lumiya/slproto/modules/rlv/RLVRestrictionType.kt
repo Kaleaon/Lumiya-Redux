@@ -22,7 +22,7 @@ enum class RLVRestrictionType {
     redirchat(RLVRuleMatchType.TargetSpecifiesRestriction),
     sendchannel(RLVRuleMatchType.TargetSpecifiesException)
 
-    private var ruleMatchType: RLVRuleMatchType = null
+    private var ruleMatchType: RLVRuleMatchType? = null
 
     enum class RLVRuleMatchType {
         TargetSpecifiesException,

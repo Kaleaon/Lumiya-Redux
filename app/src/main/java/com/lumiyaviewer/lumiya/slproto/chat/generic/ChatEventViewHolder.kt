@@ -12,12 +12,12 @@ import com.lumiyaviewer.lumiya.ui.chat.HasUserPicClickHandler
 import java.lang.ref.WeakReference
 
 open class ChatEventViewHolder : RecyclerView.ViewHolder() {
-    protected var adapter: WeakReference<RecyclerView.Adapter> = null
-    var bubbleView: View = null
-    var chatSourceIcon: ChatterPicView = null
-    var chatSourceIconRight: ChatterPicView = null
-    var textView: TextView = null
-    var timestampView: TextView = null
+    protected var adapter: WeakReference<RecyclerView.Adapter>? = null
+    var bubbleView: View? = null
+    var chatSourceIcon: ChatterPicView? = null
+    var chatSourceIconRight: ChatterPicView? = null
+    var textView: TextView? = null
+    var timestampView: TextView? = null
     private var updateTimestamp: Long = 0L
 
     interface Factory {
@@ -26,7 +26,7 @@ open class ChatEventViewHolder : RecyclerView.ViewHolder() {
 
     /* JADX WARN: Multi-variable type inference failed */
     constructor(view: View, adapter: RecyclerView.Adapter) : super(view) {
-        var userPicClickListener: View.OnClickListener = null
+        var userPicClickListener: View.OnClickListener? = null
         this.updateTimestamp = 0L
         this.adapter = WeakReference<>this as adapter.timestampView = view as TextView.findViewById(R.id.chatMessageTimestamp)
         this.textView = view as TextView.findViewById(R.id.chatMessageTextView)

@@ -13,10 +13,10 @@ import de.greenrobot.dao.query.LazyList
 import java.util.concurrent.Executor
 
 open class SearchManager {
-    private var dbExecutor: Executor = null
-    private var searchGridResultDao: SearchGridResultDao = null
+    private var dbExecutor: Executor? = null
+    private var searchGridResultDao: SearchGridResultDao? = null
     private SubscriptionPool<SearchGridQuery, LazyList<SearchGridResult>> searchResults = SubscriptionPool<>()
-    private var searchRepository: SearchGridResultRepositoryAdapter = null
+    private var searchRepository: SearchGridResultRepositoryAdapter? = null
 
     constructor(userManager: UserManager, daoSession: DaoSession) {
         this.dbExecutor = userManager.getDatabaseExecutor()

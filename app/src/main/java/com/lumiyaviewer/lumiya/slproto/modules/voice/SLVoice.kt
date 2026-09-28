@@ -46,22 +46,22 @@ open class SLVoice : SLModule() {
     private var capURL: String = ""
     private var signalingCapURL: String = ""
     private var chatSessionRequestURL: String = ""
-    private var connectedVoiceChannel: VoiceChannelInfo = null
+    private var connectedVoiceChannel: VoiceChannelInfo? = null
     private var currentParcelID: Int = 0
-    private var currentParcelVoiceChannel: VoiceChannelInfo = null
+    private var currentParcelVoiceChannel: VoiceChannelInfo? = null
     private var parcelVoiceCapURL: String = ""
-    private var parcelVoiceChannelLock: Any = null
-    private var requestedGroupChats: MutableSet<UUID> = null
+    private var parcelVoiceChannelLock: Any? = null
+    private var requestedGroupChats: MutableSet<UUID>? = null
     private var requestedParcelID: Int = 0
     private var shutdown: Boolean = false
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var voiceEnabled: Boolean = false
     private var voiceLoggedIn: Boolean = false
-    private var voiceLoggedInSubscription: SubscriptionData<SubscriptionSingleKey, Boolean> = null
+    private var voiceLoggedInSubscription: SubscriptionData<SubscriptionSingleKey, Boolean>? = null
 
-    private var voiceLoginInfo: VoiceLoginInfo = null
+    private var voiceLoginInfo: VoiceLoginInfo? = null
 
-    private var webRTCVoiceClient: WebRTCVoiceClient = null
+    private var webRTCVoiceClient: WebRTCVoiceClient? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps) {
         superthis as agentCircuit.requestedGroupChats = Collections.synchronizedSet(HashSet())
@@ -124,7 +124,7 @@ open class SLVoice : SLModule() {
     }
 
     fun getCurrentParcelVoiceChannel(): VoiceChannelInfo {
-        var voiceChannelInfo: VoiceChannelInfo = null
+        var voiceChannelInfo: VoiceChannelInfo? = null
         synchronized(this.parcelVoiceChannelLock) {
             voiceChannelInfo = this.currentParcelVoiceChannel
         }
@@ -145,7 +145,7 @@ open class SLVoice : SLModule() {
 
     private fun onParcelVoiceResult(parcelId: Int, lsdNode: LLSDNode) {
         var changed: Boolean = false
-        var voiceChannelInfo: VoiceChannelInfo = null
+        var voiceChannelInfo: VoiceChannelInfo? = null
         this.currentParcelID = parcelId
         if (lsdNode != null) {
             synchronized(this.parcelVoiceChannelLock) {
@@ -173,7 +173,7 @@ open class SLVoice : SLModule() {
     }
 
     private fun onVoiceEnabled() {
-        var serviceInstance: GridConnectionService = null
+        var serviceInstance: GridConnectionService? = null
         this.voiceEnabled = GlobalOptions.getInstance().getVoiceEnabled()
         if (!this.voiceEnabled) {
             var serviceInstance2: GridConnectionService = GridConnectionService.getServiceInstance()

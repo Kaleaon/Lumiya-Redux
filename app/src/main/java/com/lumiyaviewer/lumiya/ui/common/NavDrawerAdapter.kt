@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.AdapterView.OnItemClickListener
+import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.ui.chat.ChatNewActivity
 import com.lumiyaviewer.lumiya.ui.inventory.InventoryActivity
 import com.lumiyaviewer.lumiya.ui.login.LogoutDialog
@@ -23,95 +24,74 @@ import com.lumiyaviewer.lumiya.ui.search.SearchGridActivity
 import com.lumiyaviewer.lumiya.ui.settings.SettingsActivity
 import java.util.UUID
 
-internal open class NavDrawerAdapter : ArrayAdapter<NavDrawerAdapter.NavDrawerItem>(), OnItemClickListener {
-   private static NavDrawerAdapter.NavDrawerItem[] items = new NavDrawerAdapter.NavDrawerItem[]{
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_chat, com.lumiyaviewer.lumiya.R.attr.MenuIconLocalChatThemed, com.lumiyaviewer.lumiya.R.string.nav_chat, ChatNewActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_3d_view, com.lumiyaviewer.lumiya.R.attr.MenuIconWorldViewThemed, com.lumiyaviewer.lumiya.R.string.nav_3d_view, WorldViewActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_objects, com.lumiyaviewer.lumiya.R.attr.MenuIconObjectsThemed, com.lumiyaviewer.lumiya.R.string.nav_objects, ObjectListNewActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_inventory, com.lumiyaviewer.lumiya.R.attr.MenuIconInventoryThemed, com.lumiyaviewer.lumiya.R.string.nav_inventory, InventoryActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_minimap, com.lumiyaviewer.lumiya.R.attr.MenuIconMinimapThemed, com.lumiyaviewer.lumiya.R.string.nav_minimap, MinimapActivity.class),
-      new NavDrawerAdapter.NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_teleport_home, com.lumiyaviewer.lumiya.R.attr.MenuIconHomeThemed, com.lumiyaviewer.lumiya.R.string.nav_teleport_home) {
-         override fun onClick(context: Context) {
-            internal fun if(Activity: context instanceof):  {
-               TeleportHomeDialog.show((Activity)context)
+internal class NavDrawerAdapter(context: Context) :
+    ArrayAdapter<NavDrawerAdapter.NavDrawerItem>(context, R.layout.nav_drawer_list_item, items),
+    OnItemClickListener {
+
+    internal open class NavDrawerItem(val itemId: Int, val iconId: Int, val labelId: Int) {
+        open fun onClick(context: Context) {
+        }
+    }
+
+    private class NavDrawerActivityItem(itemId: Int, iconId: Int, labelId: Int, val activityClass: Class<*>) :
+        NavDrawerItem(itemId, iconId, labelId) {
+
+        override fun onClick(context: Context) {
+            val intent = Intent(context, activityClass)
+            intent.addFlags(131072)
+            if (context is Activity) {
+                val activeAgentID: UUID? = ActivityUtils.getActiveAgentID(context.intent)
+                if (activeAgentID != null) {
+                    intent.putExtra("activeAgentUUID", activeAgentID.toString())
+                }
             }
-         }
-      },
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_my_avatar, com.lumiyaviewer.lumiya.R.attr.MenuIconCardThemed, com.lumiyaviewer.lumiya.R.string.nav_my_avatar, MyAvatarActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_people_search, com.lumiyaviewer.lumiya.R.attr.MenuIconSearchThemed, com.lumiyaviewer.lumiya.R.string.nav_search, SearchGridActivity.class),
-      new NavDrawerAdapter.NavDrawerActivityItem(com.lumiyaviewer.lumiya.R.id.item_settings, com.lumiyaviewer.lumiya.R.attr.MenuIconSettingsThemed, com.lumiyaviewer.lumiya.R.string.nav_settings, SettingsActivity.class),
-      new NavDrawerAdapter.NavDrawerItem(com.lumiyaviewer.lumiya.R.id.item_signout, com.lumiyaviewer.lumiya.R.attr.MenuIconSignOffThemed, com.lumiyaviewer.lumiya.R.string.nav_signout) {
-         override fun onClick(context: Context) {
-            internal fun if(Activity: context instanceof):  {
-               LogoutDialog.show((Activity)context)
+            context.startActivity(intent)
+        }
+    }
+
+    companion object {
+        private val items: Array<NavDrawerItem> = arrayOf(
+            NavDrawerActivityItem(R.id.item_chat, R.attr.MenuIconLocalChatThemed, R.string.nav_chat, ChatNewActivity::class.java),
+            NavDrawerActivityItem(R.id.item_3d_view, R.attr.MenuIconWorldViewThemed, R.string.nav_3d_view, WorldViewActivity::class.java),
+            NavDrawerActivityItem(R.id.item_objects, R.attr.MenuIconObjectsThemed, R.string.nav_objects, ObjectListNewActivity::class.java),
+            NavDrawerActivityItem(R.id.item_inventory, R.attr.MenuIconInventoryThemed, R.string.nav_inventory, InventoryActivity::class.java),
+            NavDrawerActivityItem(R.id.item_minimap, R.attr.MenuIconMinimapThemed, R.string.nav_minimap, MinimapActivity::class.java),
+            object : NavDrawerItem(R.id.item_teleport_home, R.attr.MenuIconHomeThemed, R.string.nav_teleport_home) {
+                override fun onClick(context: Context) {
+                    if (context is Activity) {
+                        TeleportHomeDialog.show(context)
+                    }
+                }
+            },
+            NavDrawerActivityItem(R.id.item_my_avatar, R.attr.MenuIconCardThemed, R.string.nav_my_avatar, MyAvatarActivity::class.java),
+            NavDrawerActivityItem(R.id.item_people_search, R.attr.MenuIconSearchThemed, R.string.nav_search, SearchGridActivity::class.java),
+            NavDrawerActivityItem(R.id.item_settings, R.attr.MenuIconSettingsThemed, R.string.nav_settings, SettingsActivity::class.java),
+            object : NavDrawerItem(R.id.item_signout, R.attr.MenuIconSignOffThemed, R.string.nav_signout) {
+                override fun onClick(context: Context) {
+                    if (context is Activity) {
+                        LogoutDialog.show(context)
+                    }
+                }
             }
-         }
-      }
-   }
+        )
+    }
 
-   internal constructor(context: Context) {
-      super(context, com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, items)
-   }
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val navDrawerItem = getItem(position) ?: return convertView ?: View(context)
+        val view: View = convertView
+            ?: (context.getSystemService("layout_inflater") as LayoutInflater)
+                .inflate(R.layout.nav_drawer_list_item, parent, false)
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(navDrawerItem.iconId, typedValue, true)
+        view.findViewById<TextView>(R.id.navDrawerItemName).text = context.getString(navDrawerItem.labelId)
+        view.findViewById<ImageView>(R.id.navDrawerItemIcon).setImageResource(typedValue.resourceId)
+        return view
+    }
 
-   override fun getView(var1: Int, view2: View, viewGroup: ViewGroup): View {
-      NavDrawerAdapter.NavDrawerItem navDrawerItem = this.getItem(var1)
-      internal fun if(null: navDrawerItem ==):  {
-         return null
-      } else {
-         View view = view2
-         internal fun if(null: view2 ==):  {
-            view = ((LayoutInflater)this.getContext().getSystemService("layout_inflater")).inflate(com.lumiyaviewer.lumiya.R.layout.nav_drawer_list_item, viewGroup, false)
-         }
-
-         TypedValue typedValue = TypedValue()
-         this.getContext().getTheme().resolveAttribute(navDrawerItem.iconId, typedValue, true)
-         view.<TextView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemName).setText(this.getContext().getString(navDrawerItem.labelId))
-         view.<ImageView>findViewById(com.lumiyaviewer.lumiya.R.id.navDrawerItemIcon).setImageResource(typedValue.resourceId)
-         return view
-      }
-   }
-
-   override fun onItemClick(adapterView: AdapterView<?>, view: View, var3: Int, var4: Long) {
-      NavDrawerAdapter.NavDrawerItem navDrawerItem = this.getItem(var3)
-      internal fun if(null: navDrawerItem !=):  {
-         navDrawerItem.onClick(adapterView.getContext())
-      }
-   }
-
-   private class NavDrawerActivityItem : NavDrawerAdapter.NavDrawerItem() {
-      Class<?> activityClass
-
-      internal constructor(var1: Int, var2: Int, var3: Int, activityClass: Class<?>) {
-         super(var1, var2, var3)
-         this.activityClass = activityClass
-      }
-
-      override fun onClick(context: Context) {
-         Intent intent = Intent(context, this.activityClass)
-         intent.addFlags(131072)
-         internal fun if(Activity: context instanceof):  {
-            UUID activeAgentID = ActivityUtils.getActiveAgentID(((Activity)context).getIntent())
-            internal fun if(null: activeAgentID !=):  {
-               intent.putExtra("activeAgentUUID", activeAgentID.toString())
-            }
-         }
-
-         context.startActivity(intent)
-      }
-   }
-
-   internal open class NavDrawerItem {
-      int iconId
-      int itemId
-      int labelId
-
-      internal constructor(itemId: Int, iconId: Int, labelId: Int) {
-         this.itemId = itemId
-         this.iconId = iconId
-         this.labelId = labelId
-      }
-
-      open fun onClick(context: Context) {
-      }
-   }
+    override fun onItemClick(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
+        val navDrawerItem = getItem(position)
+        if (navDrawerItem != null) {
+            navDrawerItem.onClick(adapterView.context)
+        }
+    }
 }

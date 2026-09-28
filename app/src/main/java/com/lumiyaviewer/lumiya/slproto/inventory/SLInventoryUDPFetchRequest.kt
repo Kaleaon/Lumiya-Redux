@@ -11,7 +11,7 @@ import java.util.Set
 import java.util.UUID
 
 open class SLInventoryUDPFetchRequest : SLInventoryFetchRequest() {
-    private var existingChildren: MutableSet<UUID> = null
+    private var existingChildren: MutableSet<UUID>? = null
     private var receivedCount: Int = 0
 
     SLInventoryUDPFetchRequest(SLInventory inventory, UUID uuid) throws SLInventory.NoInventoryItemException {

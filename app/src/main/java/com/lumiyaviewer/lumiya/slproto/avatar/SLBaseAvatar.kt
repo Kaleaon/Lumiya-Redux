@@ -9,7 +9,7 @@ import java.util.EnumMap
 import java.util.Map
 
 open class SLBaseAvatar {
-    private var meshes: MutableMap<MeshIndex, MeshEntry> = null
+    private var meshes: MutableMap<MeshIndex, MeshEntry>? = null
 
     private open class InstanceHolder {
         private SLBaseAvatar Instance = SLBaseAvatar(null)
@@ -53,8 +53,8 @@ open class SLBaseAvatar {
     }
 
     private fun loadMesh(str: String): SLPolyMesh {
-        var dataInputStream: DataInputStream = null
-        var inputStream: InputStream = null
+        var dataInputStream: DataInputStream? = null
+        var inputStream: InputStream? = null
         Debug.Printf("BaseAvatar: loading mesh for " + str, arrayOfNulls<Object>(0))
         try {
             var assetManager: AssetManager = LumiyaApp.getAssetManager()

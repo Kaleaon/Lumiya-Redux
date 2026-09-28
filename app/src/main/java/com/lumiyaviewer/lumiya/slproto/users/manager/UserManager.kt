@@ -67,58 +67,58 @@ import java.util.concurrent.atomic.AtomicReference
 
 open class UserManager {
 
-    private var activeChattersQuery: Query<Chatter> = null
-    private var agentDataUpdates: SLMessageResponseCacher<UUID, AgentDataUpdate> = null
-    private var assetResponseCacher: AssetResponseCacher = null
-    private var avatarGroupLists: SerializableResponseCacher<UUID, AvatarGroupList> = null
-    private var avatarNotes: SLMessageResponseCacher<UUID, AvatarNotesReply> = null
-    private var avatarPickInfos: SLMessageResponseCacher<AvatarPickKey, PickInfoReply> = null
-    private var avatarPicks: SLMessageResponseCacher<UUID, AvatarPicksReply> = null
-    private var avatarProperties: SLMessageResponseCacher<UUID, AvatarPropertiesReply> = null
+    private var activeChattersQuery: Query<Chatter>? = null
+    private var agentDataUpdates: SLMessageResponseCacher<UUID, AgentDataUpdate>? = null
+    private var assetResponseCacher: AssetResponseCacher? = null
+    private var avatarGroupLists: SerializableResponseCacher<UUID, AvatarGroupList>? = null
+    private var avatarNotes: SLMessageResponseCacher<UUID, AvatarNotesReply>? = null
+    private var avatarPickInfos: SLMessageResponseCacher<AvatarPickKey, PickInfoReply>? = null
+    private var avatarPicks: SLMessageResponseCacher<UUID, AvatarPicksReply>? = null
+    private var avatarProperties: SLMessageResponseCacher<UUID, AvatarPropertiesReply>? = null
 
-    private var balanceManager: BalanceManager = null
+    private var balanceManager: BalanceManager? = null
 
-    private var chatMessageDao: ChatMessageDao = null
+    private var chatMessageDao: ChatMessageDao? = null
 
-    private var chatterDao: ChatterDao = null
+    private var chatterDao: ChatterDao? = null
 
-    private var chatterList: ChatterList = null
+    private var chatterList: ChatterList? = null
 
-    private var daoSession: DaoSession = null
+    private var daoSession: DaoSession? = null
 
-    private var findChatterQuery: Query<Chatter> = null
+    private var findChatterQuery: Query<Chatter>? = null
 
-    private var findUserPicQuery: Query<UserPic> = null
+    private var findUserPicQuery: Query<UserPic>? = null
 
-    private var findUserQuery: Query<User> = null
+    private var findUserQuery: Query<User>? = null
 
-    private var friendsQuery: Query<User> = null
-    private var groupProfiles: SLMessageResponseCacher<UUID, GroupProfileReply> = null
-    private var groupRoles: SLMessageResponseCacher<UUID, GroupRoleDataReply> = null
-    private var groupTitles: SLMessageResponseCacher<UUID, GroupTitlesReply> = null
+    private var friendsQuery: Query<User>? = null
+    private var groupProfiles: SLMessageResponseCacher<UUID, GroupProfileReply>? = null
+    private var groupRoles: SLMessageResponseCacher<UUID, GroupRoleDataReply>? = null
+    private var groupTitles: SLMessageResponseCacher<UUID, GroupTitlesReply>? = null
 
-    private var inventoryManager: InventoryManager = null
+    private var inventoryManager: InventoryManager? = null
 
-    private var loadMessageQuery: Query<ChatMessage> = null
+    private var loadMessageQuery: Query<ChatMessage>? = null
 
-    private var notificationManager: UnreadNotificationManager = null
+    private var notificationManager: UnreadNotificationManager? = null
 
-    private var objectPopupsManager: ObjectPopupsManager = null
+    private var objectPopupsManager: ObjectPopupsManager? = null
 
-    private var objectsManager: ObjectsManager = null
-    private var parcelInfoData: SLMessageResponseCacher<UUID, ParcelInfoReply> = null
+    private var objectsManager: ObjectsManager? = null
+    private var parcelInfoData: SLMessageResponseCacher<UUID, ParcelInfoReply>? = null
 
-    private var searchManager: SearchManager = null
+    private var searchManager: SearchManager? = null
 
-    private var syncManager: SyncManager = null
+    private var syncManager: SyncManager? = null
 
-    private var userDao: UserDao = null
+    private var userDao: UserDao? = null
 
-    private var userID: UUID = null
-    private var userPicBitmapCache: UserPicBitmapCache = null
+    private var userID: UUID? = null
+    private var userPicBitmapCache: UserPicBitmapCache? = null
 
-    private var userPicDao: UserPicDao = null
-    private var userPicRepository: UserPicRepositoryAdapter = null
+    private var userPicDao: UserPicDao? = null
+    private var userPicRepository: UserPicRepositoryAdapter? = null
     @JvmStatic private var lock: Any = Object()
     @JvmStatic private var userManagers: MutableMap<UUID, UserManager> = WeakHashMap()
     @JvmStatic private var activeAgentCircuitsPool: SubscriptionDataPool<UUID, SLAgentCircuit> = SubscriptionDataPool().setCanContainNulls(true)
@@ -209,7 +209,7 @@ open class UserManager {
     }
 
     fun getActiveAgentCircuit(uuid: UUID): SLAgentCircuit {
-        var userManager: UserManager = null
+        var userManager: UserManager? = null
         if (uuid == null || (userManager = getUserManager(uuid)) == null) {
         return null
         }
@@ -239,7 +239,7 @@ open class UserManager {
     }
 
     fun getUserManager(uuid: UUID): UserManager {
-        var userManager: UserManager = null
+        var userManager: UserManager? = null
         if (uuid == null) {
         return null
         }

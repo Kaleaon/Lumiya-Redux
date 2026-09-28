@@ -52,10 +52,10 @@ open class LLSDStreamingXMLRequest {
             }
         } catch (e: LLSDXMLException) {
             this.callRef.set(null)
-            var e: throw = null
+            var e: throw? = null
         } catch (e2: IOException) {
             this.callRef.set(null)
-            var e2: throw = null
+            var e2: throw? = null
         } catch (e3: Exception) {
             this.callRef.set(null)
             throw IOException(e3.getMessage(), e3)

@@ -7,7 +7,7 @@ import java.io.IOException
 import org.xmlpull.v1.XmlSerializer
 
 open class LLSDBinary : LLSDNode() {
-    private var value: ByteArray = null
+    private var value: ByteArray? = null
 
     constructor(str: String) {
         this.value = Base64.decode(str)

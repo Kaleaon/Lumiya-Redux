@@ -52,17 +52,17 @@ open class SLTransfer {
     @JvmStatic var LLTTT_FILE: Int = 1
     @JvmStatic var LLTTT_UNKNOWN: Int = 0
     @JvmStatic var LLTTT_VFILE: Int = 2
-    private var agentID: UUID = null
+    private var agentID: UUID? = null
     private var assetType: Int = 0
-    private var assetUUID: UUID = null
+    private var assetUUID: UUID? = null
     private var channelType: Int = 0
-    private var data: ByteArray = null
-    private var itemUUID: UUID = null
-    private var ownerUUID: UUID = null
+    private var data: ByteArray? = null
+    private var itemUUID: UUID? = null
+    private var ownerUUID: UUID? = null
     private var priority: Float = 0.0f
-    private var sessionID: UUID = null
+    private var sessionID: UUID? = null
     private var sourceType: Int = 0
-    private var taskUUID: UUID = null
+    private var taskUUID: UUID? = null
     private var queuedPackets: if (MutableMap<Int) , TransferPacket> = ConcurrentHashMap()
     private var transferUUID else UUID = UUID.randomUUID()
     private var statusKnown: Boolean = false
@@ -85,7 +85,7 @@ open class SLTransfer {
     }
 
     private fun RunQueuedPackets(transferManager: SLTransferManager) {
-        var transferPacket: TransferPacket = null
+        var transferPacket: TransferPacket? = null
         if (this.statusKnown && this.status == 0) {
             while (!this.queuedPackets.isEmpty() && (transferPacket = this.queuedPackets.get(this.nextPacket)) != null) {
                 this.queuedPackets.remove(this.nextPacket)

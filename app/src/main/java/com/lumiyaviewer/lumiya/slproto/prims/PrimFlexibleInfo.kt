@@ -12,18 +12,18 @@ open class PrimFlexibleInfo {
     @JvmStatic private var FLEXIBLE_OBJECT_MAX_INTERNAL_TENSION_FORCE: Float = 0.99f
     @JvmStatic private var MIN_UPDATE_INTERVAL: Long = 200
     private var lastUpdateMillis: Long = 0L
-    private var sectionData: FloatArray = null
-    private var sectionMatrices: FloatArray = null
-    private var sections: Array<FlexibleSection> = null
+    private var sectionData: FloatArray? = null
+    private var sectionMatrices: FloatArray? = null
+    private var sections: Array<FlexibleSection>? = null
     private var NumSections: Int = 0
     private var needVertexBufferUpdate: Boolean = false
-    private var vertexBuffer: GLLoadableBuffer = null
+    private var vertexBuffer: GLLoadableBuffer? = null
 
     private open class FlexibleSection {
-        var Direction: LLVector3 = null
-        var Position: LLVector3 = null
-        var Rotation: LLQuaternion = null
-        var Velocity: LLVector3 = null
+        var Direction: LLVector3? = null
+        var Position: LLVector3? = null
+        var Rotation: LLQuaternion? = null
+        var Velocity: LLVector3? = null
 
         fun FlexibleSection(): private {
         }

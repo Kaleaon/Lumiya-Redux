@@ -20,7 +20,7 @@ enum class SLWearableType {
     WT_TATTOO(14, SLAssetType.AT_CLOTHING, false, "Tattoo"),
     WT_PHYSICS(15, SLAssetType.AT_CLOTHING, false, "Physics")
 
-    private var assetType: SLAssetType = null
+    private var assetType: SLAssetType? = null
     private var isCritical: Boolean = false
     private var name: String = ""
     private var typeCode: Int = 0

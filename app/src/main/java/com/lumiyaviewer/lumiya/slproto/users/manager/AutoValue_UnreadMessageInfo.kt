@@ -3,7 +3,7 @@ package com.lumiyaviewer.lumiya.slproto.users.manager
 import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatEvent
 
 class AutoValue_UnreadMessageInfo : UnreadMessageInfo() {
-    private var lastMessage: SLChatEvent = null
+    private var lastMessage: SLChatEvent? = null
     private var unreadCount: Int = 0
 
     constructor(unreadCount: Int, chatEvent: SLChatEvent) {

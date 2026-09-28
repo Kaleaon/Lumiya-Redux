@@ -11,7 +11,7 @@ open class SLAuthParams {
     @JvmStatic var EXTRA_MFA_TOKEN: String = "mfa_token"
 
     var allowUntrustedCertificates: Boolean = false
-    var clientID: UUID = null
+    var clientID: UUID? = null
     var gridName: String = ""
     var loginName: String = ""
     var loginURL: String = ""

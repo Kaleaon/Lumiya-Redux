@@ -17,9 +17,9 @@ open class AvatarPickKey : Parcelable {
         }
     }
 
-    var avatarID: UUID = null
+    var avatarID: UUID? = null
 
-    var pickID: UUID = null
+    var pickID: UUID? = null
 
     fun AvatarPickKey(parcel: Parcel): protected {
         this.avatarID = UUID.fromString(parcel.readString())

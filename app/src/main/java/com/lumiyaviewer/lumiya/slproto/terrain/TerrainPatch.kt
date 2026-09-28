@@ -9,8 +9,8 @@ open class TerrainPatch {
     var QuantWBits: Int = 0
     var Range: Int = 0
     var WordBits: Int = 0
-    var heightMap: FloatArray = null
-    var patches: IntArray = null
+    var heightMap: FloatArray? = null
+    var patches: IntArray? = null
     @JvmStatic private var DequantizeTable16: FloatArray = FloatArray(256)
     @JvmStatic private var DequantizeTable32: FloatArray = FloatArray(256)
     @JvmStatic private var CosineTable16: FloatArray = FloatArray(256)

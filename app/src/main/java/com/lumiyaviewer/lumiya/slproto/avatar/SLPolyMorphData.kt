@@ -11,13 +11,13 @@ import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
 open class SLPolyMorphData {
-    private var indexBuffer: DirectByteBuffer = null
+    private var indexBuffer: DirectByteBuffer? = null
     private var isMasked: Boolean = false
-    private var mesh: SLPolyMesh = null
-    private var morphID: SLVisualParamID = null
+    private var mesh: SLPolyMesh? = null
+    private var morphID: SLVisualParamID? = null
     private var numVertices: Int = 0
-    private var texCoordsBuffer: DirectByteBuffer = null
-    private var vertexBuffer: DirectByteBuffer = null
+    private var texCoordsBuffer: DirectByteBuffer? = null
+    private var vertexBuffer: DirectByteBuffer? = null
 
     public SLPolyMorphData(SLVisualParamID visualParamID, SLPolyMesh polyMesh, DataInputStream dataInputStream) throws IOException {
         this.morphID = visualParamID
@@ -33,7 +33,7 @@ open class SLPolyMorphData {
     fun applyMorphData(meshData: SLMeshData, f: Float, glTexture: GLTexture) {
         var height: Int = 0
         var width: Int = 0
-        var byteBuffer: ByteBuffer = null
+        var byteBuffer: ByteBuffer? = null
         var i3: Int = 0
         if (this.isMasked && glTexture != null) {
             width = glTexture.getWidth()
@@ -58,7 +58,7 @@ open class SLPolyMorphData {
         var z: Boolean = this.isMasked && glTexture != null
         var i: Int = 0
         var i2: Int = 0
-        var byteBuffer: ByteBuffer = null
+        var byteBuffer: ByteBuffer? = null
         var i3: Int = 0
         if (z) {
             i = glTexture.getWidth()

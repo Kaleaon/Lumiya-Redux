@@ -26,9 +26,9 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
         val indices = DirectByteBuffer(INDEX_SIZE_BYTES).apply { position(0) }
         val waterIndices = DirectByteBuffer(INDEX_SIZE_BYTES).apply { position(0) }
         val normal = LLVector3()
-        val waterHeight = heightMap.waterHeight
-        val heights = heightMap.heightArray
-        val normals = heightMap.normalArray
+        val waterHeight = heightMap.getWaterHeight()
+        val heights = heightMap.getHeightArray()
+        val normals = heightMap.getNormalArray()
 
         var rowOffset = 0
         for (row in 0 until SAMPLES_PER_EDGE) {
@@ -90,22 +90,22 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
     }
 
     private fun drawTerrain20(context: RenderContext, matrix: FloatArray, texture: GLLoadedTexture?) {
-        GLES20.glUseProgram(context.primProgram.getHandle())
-        vertexBuffer.Bind20(context, context.primProgram.vPosition, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 0)
-        vertexBuffer.Bind20(context, context.primProgram.vNormal, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 12)
-        GLES20.glUniformMatrix4fv(context.primProgram.uObjWorldMatrix, 1, false, matrix, 0)
+        GLES20.glUseProgram(context.primProgram!!.getHandle())
+        vertexBuffer.Bind20(context, context.primProgram!!.vPosition, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 0)
+        vertexBuffer.Bind20(context, context.primProgram!!.vNormal, 3, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 12)
+        GLES20.glUniformMatrix4fv(context.primProgram!!.uObjWorldMatrix, 1, false, matrix, 0)
         if (texture != null) {
             texture.GLDraw()
-            vertexBuffer.Bind20(context, context.primProgram.vTexCoord, 2, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 24)
-            GLES20.glUniform4f(context.primProgram.vColor, 1f, 1f, 1f, 1f)
-            context.primProgram.setTextureEnabled(true)
+            vertexBuffer.Bind20(context, context.primProgram!!.vTexCoord, 2, GLES20.GL_FLOAT, FLOATS_PER_VERTEX * 4, 24)
+            GLES20.glUniform4f(context.primProgram!!.vColor, 1f, 1f, 1f, 1f)
+            context.primProgram!!.setTextureEnabled(true)
         } else {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)
-            GLES20.glDisableVertexAttribArray(context.primProgram.vTexCoord)
-            GLES20.glUniform4f(context.primProgram.vColor, 0.1f, 0.5f, 0.1f, 1f)
-            context.primProgram.setTextureEnabled(false)
+            GLES20.glDisableVertexAttribArray(context.primProgram!!.vTexCoord)
+            GLES20.glUniform4f(context.primProgram!!.vColor, 0.1f, 0.5f, 0.1f, 1f)
+            context.primProgram!!.setTextureEnabled(false)
         }
-        GLES20.glUniform1i(context.primProgram.sTexture, 0)
+        GLES20.glUniform1i(context.primProgram!!.sTexture, 0)
         indexBuffer.BindElements20(context)
         indexBuffer.DrawElements20(GLES20.GL_TRIANGLES, indexCount, GLES20.GL_UNSIGNED_SHORT, 0)
     }
@@ -129,9 +129,9 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
 
     private fun drawWater20(context: RenderContext, matrix: FloatArray) {
         GLES20.glDisable(GLES20.GL_CULL_FACE)
-        GLES20.glUseProgram(context.waterProgram.getHandle())
-        GLES20.glUniformMatrix4fv(context.waterProgram.uObjWorldMatrix, 1, false, matrix, 0)
-        waterVertexBuffer.Bind20(context, context.waterProgram.vPosition, 3, GLES20.GL_FLOAT, 0, 0)
+        GLES20.glUseProgram(context.waterProgram!!.getHandle())
+        GLES20.glUniformMatrix4fv(context.waterProgram!!.uObjWorldMatrix, 1, false, matrix, 0)
+        waterVertexBuffer.Bind20(context, context.waterProgram!!.vPosition, 3, GLES20.GL_FLOAT, 0, 0)
         waterIndexBuffer.BindElements20(context)
         waterIndexBuffer.DrawElements20(GLES20.GL_TRIANGLES, waterIndexCount, GLES20.GL_UNSIGNED_SHORT, 0)
         GLES20.glEnable(GLES20.GL_CULL_FACE)
@@ -179,19 +179,19 @@ class TerrainPatchGeometry(heightMap: TerrainPatchHeightMap) {
                 GLES11.glMatrixMode(GLES11.GL_MODELVIEW)
                 return
             }
-            GLES20.glUseProgram(context.primProgram.getHandle())
-            context.glModelApplyMatrix(context.primProgram.uMVPMatrix)
-            context.primProgram.SetupLighting(context, context.windlightPreset)
-            GLES20.glUniform4f(context.primProgram.uObjCoordScale, 1f, 1f, 1f, 1f)
-            GLES20.glUniformMatrix4fv(context.primProgram.uTexMatrix, 1, false, IdentityMatrix.getMatrix(), 0)
-            GLES20.glUseProgram(context.waterProgram.getHandle())
-            GLES20.glUniform4f(context.waterProgram.vColor, 0.4f, 0.4f, 0.6f, 1f)
-            context.glModelApplyMatrix(context.waterProgram.uMVPMatrix)
-            GLES20.glUniform1f(context.waterProgram.uTime, context.waterTime)
-            GLES20.glUniform1fv(context.waterProgram.uFrequency, 4, waterFrequency, 0)
-            GLES20.glUniform1fv(context.waterProgram.uPhase, 4, waterPhase, 0)
-            GLES20.glUniform1fv(context.waterProgram.uAmplitude, 4, waterAmplitude, 0)
-            GLES20.glUniform2fv(context.waterProgram.uDirection, 4, waterDirection, 0)
+            GLES20.glUseProgram(context.primProgram!!.getHandle())
+            context.glModelApplyMatrix(context.primProgram!!.uMVPMatrix)
+            context.primProgram!!.SetupLighting(context, context.windlightPreset)
+            GLES20.glUniform4f(context.primProgram!!.uObjCoordScale, 1f, 1f, 1f, 1f)
+            GLES20.glUniformMatrix4fv(context.primProgram!!.uTexMatrix, 1, false, IdentityMatrix.getMatrix(), 0)
+            GLES20.glUseProgram(context.waterProgram!!.getHandle())
+            GLES20.glUniform4f(context.waterProgram!!.vColor, 0.4f, 0.4f, 0.6f, 1f)
+            context.glModelApplyMatrix(context.waterProgram!!.uMVPMatrix)
+            GLES20.glUniform1f(context.waterProgram!!.uTime, context.waterTime)
+            GLES20.glUniform1fv(context.waterProgram!!.uFrequency, 4, waterFrequency, 0)
+            GLES20.glUniform1fv(context.waterProgram!!.uPhase, 4, waterPhase, 0)
+            GLES20.glUniform1fv(context.waterProgram!!.uAmplitude, 4, waterAmplitude, 0)
+            GLES20.glUniform2fv(context.waterProgram!!.uDirection, 4, waterDirection, 0)
         }
     }
 }

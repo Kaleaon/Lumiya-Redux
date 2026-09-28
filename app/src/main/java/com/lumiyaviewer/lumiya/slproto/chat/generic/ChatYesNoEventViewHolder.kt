@@ -14,19 +14,19 @@ import com.lumiyaviewer.lumiya.slproto.chat.generic.SLChatYesNoEvent
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 
 open class ChatYesNoEventViewHolder : ChatEventViewHolder(), View.OnClickListener {
-    var cardView: CardView = null
+    var cardView: CardView? = null
     private var cardViewDefaultBackground: Int = 0
     private var cardViewDefaultText: Int = 0
     private var cardViewDisabledBackground: Int = 0
     private var cardViewDisabledText: Int = 0
     private var cardViewFaded: Boolean = false
 
-    private var fadeAnimatorSet: AnimatorSet = null
-    var noButton: Button = null
-    var questionMsg: TextView = null
-    var yesButton: Button = null
+    private var fadeAnimatorSet: AnimatorSet? = null
+    var noButton: Button? = null
+    var questionMsg: TextView? = null
+    var yesButton: Button? = null
 
-    private var yesNoEvent: SLChatYesNoEvent = null
+    private var yesNoEvent: SLChatYesNoEvent? = null
 
     constructor(view: View, adapter: RecyclerView.Adapter) : super(view, adapter) {
         var typedValue: TypedValue = TypedValue()

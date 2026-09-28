@@ -21,46 +21,46 @@ import java.util.List
 
 open class SLModules {
 
-    var avatarAppearance: SLAvatarAppearance = null
+    var avatarAppearance: SLAvatarAppearance? = null
 
-    var avatarControl: SLAvatarControl = null
+    var avatarControl: SLAvatarControl? = null
 
-    var displayNameFetcher: SLDisplayNameFetcher = null
+    var displayNameFetcher: SLDisplayNameFetcher? = null
 
-    var drawDistance: SLDrawDistance = null
+    var drawDistance: SLDrawDistance? = null
 
-    var financialInfo: SLFinancialInfo = null
+    var financialInfo: SLFinancialInfo? = null
 
-    var gridSearch: SLSearch = null
+    var gridSearch: SLSearch? = null
 
-    var groupManager: SLGroupManager = null
+    var groupManager: SLGroupManager? = null
 
-    var inventory: SLInventory = null
+    var inventory: SLInventory? = null
 
-    var minimap: SLMinimap = null
+    var minimap: SLMinimap? = null
     private var modules: MutableList<SLModule> = ArrayList()
 
-    var muteList: SLMuteList = null
+    var muteList: SLMuteList? = null
 
-    var rlvController: RLVController = null
+    var rlvController: RLVController? = null
 
-    var taskInventories: SLTaskInventories = null
+    var taskInventories: SLTaskInventories? = null
 
-    var textureFetcher: SLTextureFetcher = null
+    var textureFetcher: SLTextureFetcher? = null
 
-    var textureUploader: SLTextureUploader = null
+    var textureUploader: SLTextureUploader? = null
 
-    var transferManager: SLTransferManager = null
+    var transferManager: SLTransferManager? = null
 
-    var userNameFetcher: SLUserNameFetcher = null
+    var userNameFetcher: SLUserNameFetcher? = null
 
-    var userProfiles: SLUserProfiles = null
+    var userProfiles: SLUserProfiles? = null
 
-    var voice: SLVoice = null
+    var voice: SLVoice? = null
 
-    var worldMap: SLWorldMap = null
+    var worldMap: SLWorldMap? = null
 
-    var xferManager: SLXferManager = null
+    var xferManager: SLXferManager? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps, gridConnection: SLGridConnection) {
         var list: MutableList<SLModule> = this.modules

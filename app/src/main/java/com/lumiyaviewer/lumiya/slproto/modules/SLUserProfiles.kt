@@ -49,21 +49,21 @@ open class SLUserProfiles : SLModule() {
     @JvmStatic var AVATAR_MATURE_PUBLISH: Int = 2
     @JvmStatic var AVATAR_ONLINE: Int = 16
     @JvmStatic var AVATAR_TRANSACTED: Int = 8
-    private var agentDataUpdateRequestHandler: RequestHandler<UUID> = null
-    private var agentDataUpdateResultHandler: ResultHandler<UUID, AgentDataUpdate> = null
-    private var avatarGroupListsResultHandler: ResultHandler<UUID, AvatarGroupList> = null
-    private var avatarNotesRequestHandler: RequestHandler<UUID> = null
-    private var avatarNotesResultHandler: ResultHandler<UUID, AvatarNotesReply> = null
-    private var avatarPickInfosRequestHandler: RequestHandler<AvatarPickKey> = null
-    private var avatarPickInfosResultHandler: ResultHandler<AvatarPickKey, PickInfoReply> = null
-    private var avatarPicksRequestHandler: RequestHandler<UUID> = null
-    private var avatarPicksResultHandler: ResultHandler<UUID, AvatarPicksReply> = null
-    private var avatarPropertiesRequestHandler: RequestHandler<UUID> = null
-    private var avatarPropertiesResultHandler: ResultHandler<UUID, AvatarPropertiesReply> = null
+    private var agentDataUpdateRequestHandler: RequestHandler<UUID>? = null
+    private var agentDataUpdateResultHandler: ResultHandler<UUID, AgentDataUpdate>? = null
+    private var avatarGroupListsResultHandler: ResultHandler<UUID, AvatarGroupList>? = null
+    private var avatarNotesRequestHandler: RequestHandler<UUID>? = null
+    private var avatarNotesResultHandler: ResultHandler<UUID, AvatarNotesReply>? = null
+    private var avatarPickInfosRequestHandler: RequestHandler<AvatarPickKey>? = null
+    private var avatarPickInfosResultHandler: ResultHandler<AvatarPickKey, PickInfoReply>? = null
+    private var avatarPicksRequestHandler: RequestHandler<UUID>? = null
+    private var avatarPicksResultHandler: ResultHandler<UUID, AvatarPicksReply>? = null
+    private var avatarPropertiesRequestHandler: RequestHandler<UUID>? = null
+    private var avatarPropertiesResultHandler: ResultHandler<UUID, AvatarPropertiesReply>? = null
     private var requestedNewGroupData: Boolean = false
 
     private var setHomeLocationCap: String = ""
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps) {
         superthis as agentCircuit.requestedNewGroupData = false
@@ -88,17 +88,17 @@ open class SLUserProfiles : SLModule() {
         }, false, 3, 15000L)
         this.avatarNotesRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<UUID>() {
             fun onRequest(uuid: UUID) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarnotesrequest", new Array<String>{uuid.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarnotesrequest", arrayOf(uuid.toString()))
             }
         }, false, 3, 15000L)
         this.avatarPicksRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<UUID>() {
             fun onRequest(uuid: UUID) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarpicksrequest", new Array<String>{uuid.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("avatarpicksrequest", arrayOf(uuid.toString()))
             }
         }, false, 3, 15000L)
         this.avatarPickInfosRequestHandler = AsyncLimitsRequestHandler(this.agentCircuit, SimpleRequestHandler<AvatarPickKey>() {
             fun onRequest(avatarPickKey: AvatarPickKey) {
-                SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", new Array<String>{avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()})
+                SLUserProfiles.this.agentCircuit.SendGenericMessage("pickinforequest", arrayOf(avatarPickKey.avatarID.toString(), avatarPickKey.pickID.toString()))
             }
         }, false, 3, 15000L)
         this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID)

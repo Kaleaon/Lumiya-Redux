@@ -11,13 +11,13 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 
 open class ChatScriptDialogViewHolder : ChatEventViewHolder(), View.OnClickListener {
     @JvmStatic private var dialogButtonIds: IntArray = {R.id.buttonDialog1, R.id.buttonDialog2, R.id.buttonDialog3, R.id.buttonDialog4, R.id.buttonDialog5, R.id.buttonDialog6, R.id.buttonDialog7, R.id.buttonDialog8, R.id.buttonDialog9, R.id.buttonDialog10, R.id.buttonDialog11, R.id.buttonDialog12}
-    var cardView: CardView = null
-    var dialogButtonIgnore: Button = null
-    var dialogButtons: Array<Button> = null
-    var dialogButtonsLayout: View = null
+    var cardView: CardView? = null
+    var dialogButtonIgnore: Button? = null
+    var dialogButtons: Array<Button>? = null
+    var dialogButtonsLayout: View? = null
 
-    private var dialogEvent: SLChatScriptDialog = null
-    var dialogResultTextView: TextView = null
+    private var dialogEvent: SLChatScriptDialog? = null
+    var dialogResultTextView: TextView? = null
 
     constructor(view: View, adapter: RecyclerView.Adapter) : super(view, adapter) {
         this.dialogResultTextView = view as TextView.findViewById(R.id.dialogResultTextView)

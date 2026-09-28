@@ -19,16 +19,16 @@ abstract class ResourceRequest<ResourceParams, ResourceType>(
 
     open fun cancelRequest() {}
 
-    fun completeRequest(result: ResourceType) {
+    open fun completeRequest(result: ResourceType?) {
         isCompleted = true
         manager.CompleteRequest(params, result, consumers)
     }
 
     abstract fun execute()
 
-    protected fun getParams(): ResourceParams = params
+    internal fun getParams(): ResourceParams = params
 
-    fun intermediateResult(result: ResourceType) {
+    fun intermediateResult(result: ResourceType?) {
         manager.IntermediateResult(params, result, consumers)
     }
 

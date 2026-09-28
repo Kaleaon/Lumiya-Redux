@@ -8,9 +8,9 @@ import java.util.UUID
 
 open class TerrainTextures {
     @JvmStatic private var defaultTerrainTextures: Array<UUID> = {UUID.fromString("0bc58228-74a0-7e83-89bc-5c23464bcec5"), UUID.fromString("63338ede-0037-c4fd-855b-015d77112fc8"), UUID.fromString("303cd381-8560-7579-23f1-f0a880799740"), UUID.fromString("53a2f406-4895-1d13-d541-d2e3b86bc19c")}
-    private var terrainHeightRange: FloatArray = null
-    private var terrainStartHeight: FloatArray = null
-    private var textureIDs: Array<UUID> = null
+    private var terrainHeightRange: FloatArray? = null
+    private var terrainStartHeight: FloatArray? = null
+    private var textureIDs: Array<UUID>? = null
 
     constructor() {
         this.terrainStartHeight = FloatArraythis as 4.terrainHeightRange = FloatArraythis as 4.textureIDs = arrayOfNulls<UUID>System as 4.arraycopy(defaultTerrainTextures, 0, this.textureIDs, 0, 4)

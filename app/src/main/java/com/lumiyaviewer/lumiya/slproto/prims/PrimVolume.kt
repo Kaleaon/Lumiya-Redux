@@ -19,16 +19,16 @@ open class PrimVolume {
     private var Detail: Float = 0.0f
     private var FaceMask: Int = 0
     private var GenerateSingleFace: Boolean = false
-    private var LODScaleBias: LLVector3 = null
-    var Mesh: Vector3Array = null
-    var Path: PrimPath = null
-    var Profile: PrimProfile = null
+    private var LODScaleBias: LLVector3? = null
+    var Mesh: Vector3Array? = null
+    var Path: PrimPath? = null
+    var Profile: PrimProfile? = null
     private var SculptLevel: Int = 0
     private var Unique: Boolean = false
     var VolumeFaces: ArrayList<PrimVolumeFace> = ArrayList<>()
     private var sculptRequestedS: Int = 0
     private var sculptRequestedT: Int = 0
-    var volumeParams: PrimVolumeParams = null
+    var volumeParams: PrimVolumeParams? = null
 
     fun create(primVolumeParams: PrimVolumeParams, f: Float, z: Boolean, z2: Boolean, glTexture: GLTexture): PrimVolume {
         if (primVolumeParams.isSculpt()) {

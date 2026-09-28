@@ -13,11 +13,11 @@ import java.util.UUID
 open class SLXfer {
     private var deleteOnCompletion: Boolean = false
     private var fileName: String = ""
-    private var filePath: ELLPath = null
+    private var filePath: ELLPath? = null
     private var id: Long = 0L
     private var listeners: MutableList<XferListenerInvocation> = LinkedList()
     private var hasCompleted: Boolean = false
-    private var receivedData: ByteArray = null
+    private var receivedData: ByteArray? = null
     private var receivedDataLen: Int = 0
     private var expectedDataLen: Int = 0
     private var expectedPacketNum: Int = 0

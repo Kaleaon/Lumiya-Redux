@@ -21,7 +21,7 @@ import java.util.List
 open class SLNotecard {
     @JvmStatic private var DELIM_ANY: String = " \t\n"
     @JvmStatic private var DELIM_EOL: String = "\n"
-    private var attachments: MutableList<NotecardAttachment> = null
+    private var attachments: MutableList<NotecardAttachment>? = null
     private var isScript: Boolean = false
     private var notecardText: String = ""
 
@@ -81,7 +81,7 @@ open class SLNotecard {
     }
 
     private open class NotecardAttachment {
-        var entry: SLInventoryEntry = null
+        var entry: SLInventoryEntry? = null
         var extCharIndex: Int = 0
 
         fun NotecardAttachment(extCharIndex: Int, inventoryEntry: SLInventoryEntry): public {
@@ -255,7 +255,7 @@ open class SLNotecard {
     }
 
     fun toSpannableString(z: Boolean, onAttachmentClickListener: OnAttachmentClickListener): SpannableStringBuilder {
-        var attachmentClickableSpan: Any = null
+        var attachmentClickableSpan: Any? = null
         var readableTextForLink: String = ""
         var i: Int = 0
         var spannableStringBuilder: SpannableStringBuilder = SpannableStringBuilder()

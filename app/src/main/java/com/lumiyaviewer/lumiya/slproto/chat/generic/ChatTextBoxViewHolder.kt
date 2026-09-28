@@ -11,13 +11,13 @@ import com.lumiyaviewer.lumiya.slproto.chat.SLChatTextBoxDialog
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 
 open class ChatTextBoxViewHolder : ChatEventViewHolder(), View.OnClickListener, View.OnKeyListener, View.OnFocusChangeListener {
-    private var dialogButtonIgnore: Button = null
-    var dialogButtonsLayout: View = null
-    var dialogResultTextView: TextView = null
-    private var textBox: EditText = null
+    private var dialogButtonIgnore: Button? = null
+    var dialogButtonsLayout: View? = null
+    var dialogResultTextView: TextView? = null
+    private var textBox: EditText? = null
 
-    private var textBoxEvent: SLChatTextBoxDialog = null
-    private var textBoxSend: Button = null
+    private var textBoxEvent: SLChatTextBoxDialog? = null
+    private var textBoxSend: Button? = null
 
     constructor(view: View, adapter: RecyclerView.Adapter) : super(view, adapter) {
         this.textBoxEvent = null

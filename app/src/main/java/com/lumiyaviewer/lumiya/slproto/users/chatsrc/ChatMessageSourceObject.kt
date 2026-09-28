@@ -9,7 +9,7 @@ import java.util.UUID
 open class ChatMessageSourceObject : ChatMessageSource() {
     var name: String = ""
 
-    var uuid: UUID = null
+    var uuid: UUID? = null
 
     constructor(chatMessage: ChatMessage) {
         this.uuid = chatMessage.getSenderUUID()

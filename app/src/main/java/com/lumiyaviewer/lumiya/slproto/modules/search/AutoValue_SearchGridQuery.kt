@@ -5,8 +5,8 @@ import java.util.UUID
 
 class AutoValue_SearchGridQuery : SearchGridQuery() {
     private var searchText: String = ""
-    private var searchType: SearchGridQuery.SearchType = null
-    private var searchUUID: UUID = null
+    private var searchType: SearchGridQuery.SearchType? = null
+    private var searchUUID: UUID? = null
 
     constructor(uuid: UUID, searchText: String, searchType: SearchGridQuery.SearchType) {
         if (uuid == null) {

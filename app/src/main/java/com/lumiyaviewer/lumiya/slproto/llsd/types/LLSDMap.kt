@@ -31,11 +31,11 @@ import org.xmlpull.v1.XmlSerializer
 
 open class LLSDMap : LLSDNode() {
 
-    private var items: ImmutableMap<String, LLSDNode> = null
+    private var items: ImmutableMap<String, LLSDNode>? = null
 
     open class LLSDMapEntry {
         var key: String = ""
-        var value: LLSDNode = null
+        var value: LLSDNode? = null
 
         fun LLSDMapEntry(key: String, lsdNode: LLSDNode): public {
             this.key = key

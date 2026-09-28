@@ -13,9 +13,9 @@ import com.lumiyaviewer.lumiya.react.SubscriptionPool
 import java.util.concurrent.Executor
 
 open class AssetResponseCacher : Refreshable<AssetKey> {
-    private var cachedAssetDao: CachedAssetDao = null
+    private var cachedAssetDao: CachedAssetDao? = null
     private var pool: SubscriptionPool<AssetKey, AssetData> = SubscriptionPool<>()
-    private var requestHandler: RateLimitRequestHandler<AssetKey, AssetData> = null
+    private var requestHandler: RateLimitRequestHandler<AssetKey, AssetData>? = null
 
     constructor(daoSession: DaoSession, executor: Executor) {
         this.cachedAssetDao = daoSession.getCachedAssetDao()

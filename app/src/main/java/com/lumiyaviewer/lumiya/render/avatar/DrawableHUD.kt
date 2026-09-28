@@ -35,29 +35,29 @@ class DrawableHUD(
     private fun addObject(drawEntryList: DrawEntryList, objectInfo: SLObjectInfo, matrixStack: MatrixStack, isFirst: Boolean) {
         matrixStack.glPushMatrix()
         processObjectExtents(objectInfo, matrixStack, isFirst)
-        val drawListEntry = objectInfo.drawListEntry
+        val drawListEntry = objectInfo.getDrawListEntry()
         drawEntryList.addEntry(drawListEntry)
         if (drawListEntry is DrawListPrimEntry) {
             hudObjects.add(drawListEntry.getDrawableAttachment(drawableStore, attachedTo))
         }
-        var firstChild = objectInfo.treeNode.firstChild
+        var firstChild = objectInfo.treeNode.getFirstChild()
         while (firstChild != null) {
             val dataObject = firstChild.dataObject
             if (dataObject != null) {
                 addObject(drawEntryList, dataObject, matrixStack, false)
             }
-            firstChild = firstChild.nextChild
+            firstChild = firstChild.getNextChild()
         }
         matrixStack.glPopMatrix()
     }
 
     private fun processObjectExtents(objectInfo: SLObjectInfo, matrixStack: MatrixStack, isFirst: Boolean) {
-        val objectCoords = objectInfo.objectCoords
+        val objectCoords = objectInfo.getObjectCoords()
         val elementOffset = objectCoords.getElementOffset(0)
         val elementOffset2 = objectCoords.getElementOffset(1)
-        val data = objectCoords.data
+        val data = objectCoords.getData()
         matrixStack.glTranslatef(data[elementOffset], data[elementOffset + 1], data[elementOffset + 2])
-        matrixStack.glMultMatrixf(objectInfo.rotation.inverseMatrix, 0)
+        matrixStack.glMultMatrixf(objectInfo.getRotation().getInverseMatrix(), 0)
 
         val floats = floatArrayOf(
             -data[elementOffset2] / 2.0f, -data[elementOffset2 + 1] / 2.0f,

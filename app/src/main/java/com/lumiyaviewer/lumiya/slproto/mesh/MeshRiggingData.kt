@@ -14,12 +14,12 @@ open class MeshRiggingData {
     @JvmStatic private var riggingDataPool: InternPool<MeshRiggingData> = InternPool<>()
     private var hasExtendedBones: Boolean = false
 
-    private var jointMatrices: FloatArray = null
+    private var jointMatrices: FloatArray? = null
 
-    private var joints: IntArray = null
-    private var mappedJointMatrices: FloatArray = null
-    private var mappedJointVectors: FloatArray = null
-    private var glRiggingDataBuffer: GLLoadableBuffer = null
+    private var joints: IntArray? = null
+    private var mappedJointMatrices: FloatArray? = null
+    private var mappedJointVectors: FloatArray? = null
+    private var glRiggingDataBuffer: GLLoadableBuffer? = null
     private var hashCode: Int = calcHashCode()
 
     fun MeshRiggingData(ints: IntArray, floats: FloatArray, hasExtendedBones: Boolean): private {

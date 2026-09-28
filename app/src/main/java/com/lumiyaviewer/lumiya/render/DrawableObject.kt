@@ -41,21 +41,21 @@ class DrawableObject(
     @Volatile
     private var hoverText: HoverText? = null
 
-    private val objCoordsData: FloatArray = objInfo.objectCoords.data
-    private val objCoordsScale: Int = objInfo.objectCoords.getElementOffset(1)
+    private val objCoordsData: FloatArray = objInfo.getObjectCoords().getData()
+    private val objCoordsScale: Int = objInfo.getObjectCoords().getElementOffset(1)
     private var occlusionQuery: GLQuery? = null
     private var isInvisible = false
     private var invisibleCount = 0
     private var invisibleFrames = 0
 
     init {
-        setPrimDrawParams(objInfo.primDrawParams)
-        setHoverText(objInfo.hoverText)
+        setPrimDrawParams(objInfo.getPrimDrawParams())
+        setHoverText(objInfo.getHoverText())
     }
 
     /** Rebuild faces that show the wearer's bakes (Bakes on Mesh) after an appearance change. */
     fun refreshBakesOnMesh() {
-        val primDrawParams = objInfo.primDrawParams
+        val primDrawParams = objInfo.getPrimDrawParams()
         if (attachedTo != null && primDrawParams != null && primDrawParams.usesBakesOnMesh()) {
             setPrimDrawParams(primDrawParams)
         }
@@ -79,7 +79,7 @@ class DrawableObject(
         renderContext.glPushObjectScale(f, f2, f3)
         if (primFlexibleInfo != null) {
             primFlexibleInfo.doFlexibleUpdate(
-                objInfo.primDrawParams.volumeParams.FlexiParams,
+                objInfo.getPrimDrawParams()!!.getVolumeParams()!!.FlexiParams!!,
                 renderContext.objWorldMatrix.matrixData,
                 renderContext.objWorldMatrix.matrixDataOffset,
                 f, f2, f3
@@ -101,9 +101,9 @@ class DrawableObject(
         if (drawableHoverText == null || worldMatrix == null || hoverText == null) {
             return
         }
-        var f2 = objInfo.worldMatrix[12]
-        var f3 = objInfo.worldMatrix[13]
-        var f4 = objInfo.worldMatrix[14]
+        var f2 = worldMatrix[12]
+        var f3 = worldMatrix[13]
+        var f4 = worldMatrix[14]
         val f: Float
         if (z) {
             f = 0.0f
@@ -141,7 +141,7 @@ class DrawableObject(
             renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0)
             if (primFlexibleInfo != null) {
                 primFlexibleInfo.doFlexibleUpdate(
-                    objInfo.primDrawParams.volumeParams.FlexiParams,
+                    objInfo.getPrimDrawParams()!!.getVolumeParams()!!.FlexiParams!!,
                     renderContext.objWorldMatrix.matrixData,
                     renderContext.objWorldMatrix.matrixDataOffset,
                     f, f2, f3
@@ -206,7 +206,7 @@ class DrawableObject(
         } else {
             Matrix.scaleM(floats, 16, renderContext.objWorldMatrix.matrixData, renderContext.objWorldMatrix.matrixDataOffset, f5, f6, f7)
             Matrix.multiplyMM(floats, 0, renderContext.modelViewMatrix.matrixData, renderContext.modelViewMatrix.matrixDataOffset, floats, 16)
-            val activeProjectionMatrix = renderContext.activeProjectionMatrix
+            val activeProjectionMatrix = renderContext.getActiveProjectionMatrix()
             if (activeProjectionMatrix != null) {
                 RenderContext.gluUnProject(f, f4, 0.0f, floats, 0, activeProjectionMatrix.matrixData, activeProjectionMatrix.matrixDataOffset, viewportRect, 0, floats2, 0)
                 RenderContext.gluUnProject(f, f4, 1.0f, floats, 0, activeProjectionMatrix.matrixData, activeProjectionMatrix.matrixDataOffset, viewportRect, 0, floats2, 3)
@@ -245,7 +245,7 @@ class DrawableObject(
             invisibleFrames++
             return
         }
-        val occlusionQueryResult = occlusionQuery!!.occlusionQueryResult
+        val occlusionQueryResult = occlusionQuery!!.getOcclusionQueryResult()
         if (occlusionQueryResult == GLQuery.OcclusionQueryResult.Invisible) {
             invisibleFrames = 0
             if (!isInvisible) {
@@ -272,7 +272,7 @@ class DrawableObject(
                 isInvisible = false
             }
         }
-        if (occlusionQuery!!.isQueryRunning) {
+        if (occlusionQuery!!.isQueryRunning()) {
             return
         }
         val f = objCoordsData[objCoordsScale] * 1.001f
@@ -280,7 +280,7 @@ class DrawableObject(
         val f3 = objCoordsData[objCoordsScale + 2] * 1.001f
         renderContext.glObjWorldPushAndMultMatrixf(worldMatrix, 0)
         renderContext.glPushObjectScale(f, f2, f3)
-        renderContext.boundingBox.OcclusionQuery(renderContext, occlusionQuery!!)
+        renderContext.boundingBox!!.OcclusionQuery(renderContext, occlusionQuery!!)
         renderContext.glPopObjectScale()
         renderContext.glObjWorldPopMatrix()
     }
@@ -312,8 +312,8 @@ class DrawableObject(
         if (attachedTo != null && params != null) {
             params = params.withBakes(attachedTo.avatarBakes)
         }
-        drawableStore.primCache.RequestResource(params, this)
-        if (params!!.volumeParams.isFlexible) {
+        drawableStore.primCache.RequestResource(params!!, this)
+        if (params.getVolumeParams()!!.isFlexible()) {
             flexibleInfo = PrimFlexibleInfo()
         } else {
             flexibleInfo = null

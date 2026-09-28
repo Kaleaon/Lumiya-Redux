@@ -15,13 +15,13 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.Executor
 
 open class ChatterNameRetriever {
-    var chatterID: ChatterID = null
+    var chatterID: ChatterID? = null
 
-    private var executor: Executor = null
-    private var listener: WeakReference<OnChatterNameUpdated> = null
+    private var executor: Executor? = null
+    private var listener: WeakReference<OnChatterNameUpdated>? = null
     private var resolvedName: String = ""
     private var resolvedSecondaryName: String = ""
-    private var subscription: Subscription = null
+    private var subscription: Subscription? = null
 
     interface OnChatterNameUpdated {
         void onChatterNameUpdated(ChatterNameRetriever chatterNameRetriever)

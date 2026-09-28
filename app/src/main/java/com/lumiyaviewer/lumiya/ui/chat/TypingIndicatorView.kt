@@ -6,65 +6,50 @@ import android.graphics.drawable.AnimationDrawable
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.google.common.base.Objects
-import com.lumiyaviewer.lumiya.react.Subscription
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import java.util.UUID
 
-open class TypingIndicatorView : ImageView() {
+class TypingIndicatorView @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : ImageView(context, attributeSet, defStyleAttr, defStyleRes) {
 
-    private ChatterID chatterID
+    private var chatterID: ChatterID? = null
 
-    private Subscription<UUID, Boolean> subscription
+    private var subscription: com.lumiyaviewer.lumiya.react.Subscription<UUID, Boolean>? = null
 
-    constructor(context: Context) {
-        super(context)
-        this.chatterID = null
-        this.subscription = null
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet) {
-        super(context, attributeSet)
-        this.chatterID = null
-        this.subscription = null
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet, i: Int) {
-        super(context, attributeSet, i)
-        this.chatterID = null
-        this.subscription = null
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet, i: Int, i2: Int) {
-        super(context, attributeSet, i, i2)
-        this.chatterID = null
-        this.subscription = null
-    }
-
-    open fun onUserTypingStatus(bool: Boolean) {
-        if (bool == null || this.subscription == null || !(this.chatterID is ChatterID.ChatterIDUser)) {
+    fun onUserTypingStatus(bool: Boolean?) {
+        if (bool == null || this.subscription == null || this.chatterID !is ChatterID.ChatterIDUser) {
             return
         }
-        if (bool.booleanValue() && getVisibility() != 0) {
-            ((AnimationDrawable) getDrawable()).start()
-        } else if (!bool.booleanValue() && getVisibility() == 0) {
-            ((AnimationDrawable) getDrawable()).stop()
+        if (bool && visibility != View.VISIBLE) {
+            (drawable as AnimationDrawable).start()
+        } else if (!bool && visibility == View.VISIBLE) {
+            (drawable as AnimationDrawable).stop()
         }
-        setVisibility(bool.booleanValue() ? View.VISIBLE : View.INVISIBLE)
+        visibility = if (bool) View.VISIBLE else View.INVISIBLE
     }
 
-    open fun setChatterID(chatterID: ChatterID) {
+    fun setChatterID(chatterID: ChatterID?) {
         if (Objects.equal(chatterID, this.chatterID)) {
             return
         }
         this.chatterID = chatterID
-        internal fun if(null: this.subscription !=):  {
-            this.subscription.unsubscribe()
+        if (this.subscription != null) {
+            this.subscription!!.unsubscribe()
             this.subscription = null
         }
-        if ((chatterID is ChatterID.ChatterIDUser) && chatterID.getUserManager() != null) {
-            this.subscription = chatterID.getUserManager().getChatterList().getUserTypingStatus().subscribe(((ChatterID.ChatterIDUser) chatterID).getChatterUUID(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
-                    TypingIndicatorView.this.onUserTypingStatus((Boolean) obj)
-                }
-
-                override fun onData(obj: Any) {
+        val userManager = chatterID?.getUserManager()
+        if (chatterID is ChatterID.ChatterIDUser && userManager != null) {
+            this.subscription = userManager.getChatterList().getUserTypingStatus().subscribe(
+                chatterID.getChatterUUID(), UIThreadExecutor.getInstance()
+            ) { obj -> onUserTypingStatus(obj) }
+        }
+        if (this.subscription == null) {
+            visibility = View.INVISIBLE
+        }
+    }
+}

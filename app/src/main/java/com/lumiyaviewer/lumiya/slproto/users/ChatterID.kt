@@ -18,7 +18,7 @@ import java.util.concurrent.Executor
 
 abstract class ChatterID : Parcelable, Comparable<ChatterID> {
 
-    var agentUUID: UUID = null
+    var agentUUID: UUID? = null
 
     open class ChatterIDGroup : ChatterIDWithUUID() {
         Parcelable.Creator<ChatterIDGroup> CREATOR = Parcelable.Creator<ChatterIDGroup>() {

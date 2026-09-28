@@ -50,7 +50,7 @@ class AvatarSkeleton(
         applyJointTranslations(meshJointTranslations)
         pelvisOffset = meshJointTranslations.pelvisOffset
         for (meshIndex in MeshIndex.VALUES) {
-            val floats = FloatArray(baseAvatar.getMeshEntry(meshIndex).polyMesh.numMorphs)
+            val floats = FloatArray(baseAvatar.getMeshEntry(meshIndex).polyMesh.getNumMorphs())
             Arrays.fill(floats, 0.0f)
             partMorphParams[meshIndex] = floats
         }
@@ -60,7 +60,7 @@ class AvatarSkeleton(
             paramValue.offset.set(0.0f, 0.0f, 0.0f)
             enumMap[skeletonBoneID] = paramValue
         }
-        val paramCount = avatarShapeParams.paramCount
+        val paramCount = avatarShapeParams.getParamCount()
         for (j in 0 until paramCount) {
             val paramSet = SLAvatarParams.paramDefs[j]
             for (avatarParam in paramSet.params) {
@@ -80,7 +80,7 @@ class AvatarSkeleton(
             }
         }
         for (skeletonBoneID2 in SLSkeletonBoneID.VALUES) {
-            bones[skeletonBoneID2].deformHierarchy(enumMap[skeletonBoneID2]!!.offset, enumMap[skeletonBoneID2]!!.scale)
+            bones[skeletonBoneID2]!!.deformHierarchy(enumMap[skeletonBoneID2]!!.offset, enumMap[skeletonBoneID2]!!.scale)
         }
         pelvisToFoot = super.getPelvisToFoot()
         bodySize = super.getBodySize()
@@ -137,18 +137,18 @@ class AvatarSkeleton(
             val attachmentPoint = attachmentPoints[i] ?: continue
             val bone = attachmentPoint.bone
             if (bone != null) {
-                Matrix.translateM(floats, 0, bone.globalMatrix, 0,
-                    attachmentPoint.point.position.x * bone.scaleX,
-                    attachmentPoint.point.position.y * bone.scaleY,
-                    attachmentPoint.point.position.z * bone.scaleZ)
-                Matrix.multiplyMM(attachmentPoint.matrix, 0, floats, 0, attachmentPoint.point.rotation.inverseMatrix, 0)
+                Matrix.translateM(floats, 0, bone.getGlobalMatrix(), 0,
+                    attachmentPoint.point.position.x * bone.getScaleX(),
+                    attachmentPoint.point.position.y * bone.getScaleY(),
+                    attachmentPoint.point.position.z * bone.getScaleZ())
+                Matrix.multiplyMM(attachmentPoint.matrix, 0, floats, 0, attachmentPoint.point.rotation.getInverseMatrix(), 0)
             } else {
                 Matrix.setIdentityM(floats, 0)
-                Matrix.translateM(floats, 0, rootBone.positionX, rootBone.positionY, rootBone.positionZ)
+                Matrix.translateM(floats, 0, rootBone!!.getPositionX(), rootBone!!.getPositionY(), rootBone!!.getPositionZ())
                 Matrix.translateM(floats, 0, attachmentPoint.point.position.x, attachmentPoint.point.position.y, attachmentPoint.point.position.z)
-                Matrix.multiplyMM(attachmentPoint.matrix, 0, floats, 0, attachmentPoint.point.rotation.inverseMatrix, 0)
+                Matrix.multiplyMM(attachmentPoint.matrix, 0, floats, 0, attachmentPoint.point.rotation.getInverseMatrix(), 0)
             }
-            val nonHUDindex = SLAttachmentPoint.attachmentPoints[i].nonHUDindex
+            val nonHUDindex = SLAttachmentPoint.attachmentPoints[i]!!.nonHUDindex
             if (nonHUDindex >= 0) {
                 System.arraycopy(attachmentPoint.matrix, 0, jointWorldMatrix,
                     (nonHUDindex + SLSkeletonBoneID.VALUES.size) * 16, 16)

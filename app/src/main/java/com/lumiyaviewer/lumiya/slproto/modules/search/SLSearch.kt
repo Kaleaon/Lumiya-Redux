@@ -60,12 +60,12 @@ open class SLSearch : SLModule() {
     @JvmStatic private var DFQ_PLACES: Int = 4
     @JvmStatic private var DFQ_PRICE_SORT: Int = 65536
     @JvmStatic private var DFQ_SORT_ASC: Int = 32768
-    private var currentSearchQuery: AtomicReference<SearchGridQuery> = null
-    private var parcelInfoRequestHandler: RequestHandler<UUID> = null
-    private var parcelInfoResultHandler: ResultHandler<UUID, ParcelInfoReply> = null
-    private var searchRequestHandler: RequestHandler<SearchGridQuery> = null
+    private var currentSearchQuery: AtomicReference<SearchGridQuery>? = null
+    private var parcelInfoRequestHandler: RequestHandler<UUID>? = null
+    private var parcelInfoResultHandler: ResultHandler<UUID, ParcelInfoReply>? = null
+    private var searchRequestHandler: RequestHandler<SearchGridQuery>? = null
     private ResultHandler<SearchGridQuery, LazyList<SearchGridResult>> searchResultHandler
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.currentSearchQuery = AtomicReference<>this as null.searchRequestHandler = AsyncRequestHandler(this.agentCircuit, SimpleRequestHandler<SearchGridQuery>() {

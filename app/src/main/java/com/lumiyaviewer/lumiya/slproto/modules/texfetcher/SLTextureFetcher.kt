@@ -24,8 +24,8 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
     private var agentAppearanceService: String = ""
     private var capURL: String = ""
     private var lastCheckForStalls: Long = 0L
-    private var udpQueue: PriorityBinQueue<SLTextureFetchRequest> = null
-    private var udpTransfers: MutableMap<UUID, TextureUDPTransfer> = null
+    private var udpQueue: PriorityBinQueue<SLTextureFetchRequest>? = null
+    private var udpTransfers: MutableMap<UUID, TextureUDPTransfer>? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps, agentAppearanceService: String) {
         superthis as agentCircuit.capURL = null
@@ -39,7 +39,7 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
     }
 
     private fun RunUDPQueue() {
-        var poll: SLTextureFetchRequest = null
+        var poll: SLTextureFetchRequest? = null
         if (this.udpTransfers.size() < 2 && (poll = this.udpQueue.poll()) != null) {
             var textureUDPTransfer: TextureUDPTransfer = TextureUDPTransfer(poll.destFile, poll)
             this.udpTransfers.put(poll.textureID, textureUDPTransfer)
@@ -48,7 +48,7 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
     }
 
     fun BeginFetch(textureFetchRequest2: SLTextureFetchRequest) {
-        var textureFetchRequest: SLTextureFetchRequest = null
+        var textureFetchRequest: SLTextureFetchRequest? = null
         synchronized(this) {
             var file: File = textureFetchRequest2.destFile
             if (file.exists()) {
@@ -76,7 +76,7 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
 
     @SLMessageHandler
     fun HandleImageData(imageData: ImageData) {
-        var textureFetchRequest: SLTextureFetchRequest = null
+        var textureFetchRequest: SLTextureFetchRequest? = null
         synchronized(this) {
             textureFetchRequest = null
             var textureUDPTransfer: TextureUDPTransfer = this.udpTransfers.get(imageData.ImageID_Field.ID)
@@ -97,7 +97,7 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
 
     @SLMessageHandler
     fun HandleImageNotInDatabase(imageNotInDatabase: ImageNotInDatabase) {
-        var textureFetchRequest: SLTextureFetchRequest = null
+        var textureFetchRequest: SLTextureFetchRequest? = null
         synchronized(this) {
             Debug.Log("TextureUDP: Image not in database: " + imageNotInDatabase.ImageID_Field.ID)
             var remove: TextureUDPTransfer = this.udpTransfers.remove(imageNotInDatabase.ImageID_Field.ID)
@@ -111,7 +111,7 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
 
     @SLMessageHandler
     fun HandleImagePacket(imagePacket: ImagePacket) {
-        var textureFetchRequest: SLTextureFetchRequest = null
+        var textureFetchRequest: SLTextureFetchRequest? = null
         synchronized(this) {
             textureFetchRequest = null
             var textureUDPTransfer: TextureUDPTransfer = this.udpTransfers.get(imagePacket.ImageID_Field.ID)
@@ -132,8 +132,8 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
         textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest)
     }
     fun ProcessIdle() {
-        var hashSet: HashSet = null
-        var hashSet2: HashSet = null
+        var hashSet: HashSet? = null
+        var hashSet2: HashSet? = null
         var currentTimeMillis: Long = System.currentTimeMillis()
         if (currentTimeMillis >= this.lastCheckForStalls + 1000) {
             this.lastCheckForStalls = currentTimeMillis

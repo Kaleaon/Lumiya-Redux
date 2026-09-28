@@ -5,15 +5,15 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer
 
 open class SLMeshData {
-    protected var indexBuffer: DirectByteBuffer = null
+    protected var indexBuffer: DirectByteBuffer? = null
     protected var numFaces: Int = 0
     protected var numVertices: Int = 0
-    protected var position: LLVector3 = null
-    protected var referenceData: SLPolyMesh = null
-    protected var rotation: LLQuaternion = null
-    protected var scale: LLVector3 = null
-    protected var texCoordsBuffer: DirectByteBuffer = null
-    protected var vertexBuffer: DirectByteBuffer = null
+    protected var position: LLVector3? = null
+    protected var referenceData: SLPolyMesh? = null
+    protected var rotation: LLQuaternion? = null
+    protected var scale: LLVector3? = null
+    protected var texCoordsBuffer: DirectByteBuffer? = null
+    protected var vertexBuffer: DirectByteBuffer? = null
 
     constructor() {
     }

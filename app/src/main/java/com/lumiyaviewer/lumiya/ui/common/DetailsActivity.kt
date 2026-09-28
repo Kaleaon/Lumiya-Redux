@@ -6,82 +6,89 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.appcompat.app.ActionBar
 import com.lumiyaviewer.lumiya.Debug
 import com.lumiyaviewer.lumiya.R
 import java.lang.ref.SoftReference
 import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
 
 open class DetailsActivity : ConnectedActivity() {
-    public static String DEFAULT_DETAILS_FRAGMENT_TAG = "defaultDetails"
-    private static String DEFAULT_SUBTITLE_TAG = "DetailsActivity:defaultSubTitle"
-    private static String DEFAULT_TITLE_TAG = "DetailsActivity:defaultTitle"
-    private static String DETAILS_STACK_TAG = "DetailsActivity:DetailsStack"
-    private ArrayList<DetailsStackEntry> detailsStack = new ArrayList<>()
+    companion object {
+        const val DEFAULT_DETAILS_FRAGMENT_TAG = "defaultDetails"
+        private const val DEFAULT_SUBTITLE_TAG = "DetailsActivity:defaultSubTitle"
+        private const val DEFAULT_TITLE_TAG = "DetailsActivity:defaultTitle"
+        private const val DETAILS_STACK_TAG = "DetailsActivity:DetailsStack"
 
-    private String defaultTitle = null
+        @JvmStatic
+        fun showDetails(activity: Activity?, fragmentActivityFactory: FragmentActivityFactory, bundle: Bundle) {
+            if (activity == null) return
+            if (showEmbeddedDetails(activity, fragmentActivityFactory.getFragmentClass(), bundle)) {
+                return
+            }
+            activity.startActivity(fragmentActivityFactory.createIntent(activity, bundle))
+        }
 
-    private String defaultSubTitle = null
+        @JvmStatic
+        fun showEmbeddedDetails(activity: Activity, cls: Class<out Fragment>, bundle: Bundle): Boolean {
+            if (activity !is DetailsActivity || !activity.acceptsDetailFragment(cls)) {
+                return false
+            }
+            activity.showDetailsFragment(cls, activity.intent, bundle)
+            return true
+        }
+    }
+
+    private val detailsStack = ArrayList<DetailsStackEntry>()
+
+    private var defaultTitle: String? = null
+
+    private var defaultSubTitle: String? = null
 
     private class DetailsStackEntry : Parcelable {
-        public static Parcelable.Creator<DetailsStackEntry> CREATOR = new Parcelable.Creator<DetailsStackEntry>() {
-            override fun createFromParcel(parcel: Parcel): DetailsStackEntry {
-                return DetailsStackEntry(parcel)
-            }
+        val arguments: Bundle?
+        val className: String
+        val fragment: SoftReference<Fragment>?
+        val savedState: Fragment.SavedState?
 
-            override fun newArray(i: Int): Array<DetailsStackEntry> {
-                return arrayOfNulls<DetailsStackEntry>(i]
-            }
-        }
-        public Bundle arguments
-        public String className
-        public SoftReference<Fragment> fragment
-        public Fragment.SavedState savedState
-
-        protected constructor(parcel: Parcel) {
+        constructor(parcel: Parcel) {
             this.fragment = null
-            this.className = parcel.readString()
-            if (parcel.readByte() != 0) {
-                this.arguments = parcel.readBundle(getClass().getClassLoader())
+            this.className = parcel.readString()!!
+            this.arguments = if (parcel.readByte().toInt() != 0) {
+                parcel.readBundle(javaClass.classLoader)
             } else {
-                this.arguments = null
+                null
             }
-            if (parcel.readByte() != 0) {
-                this.savedState = (Fragment.SavedState) parcel.readBundle(getClass().getClassLoader()).getParcelable("savedState")
+            this.savedState = if (parcel.readByte().toInt() != 0) {
+                parcel.readBundle(javaClass.classLoader)?.getParcelable("savedState")
             } else {
-                this.savedState = null
-            }
-        }
-
-        private constructor(fragment: Fragment) {
-            this.fragment = new SoftReference<>(fragment)
-            this.className = fragment.getClass().getName()
-            this.arguments = fragment.getArguments()
-            FragmentManager fragmentManager = fragment.getFragmentManager()
-            internal fun if(null: fragmentManager !=):  {
-                this.savedState = fragmentManager.saveFragmentInstanceState(fragment)
-            } else {
-                this.savedState = null
+                null
             }
         }
 
-            this(fragment)
+        constructor(fragment: Fragment) {
+            this.fragment = SoftReference(fragment)
+            this.className = fragment.javaClass.name
+            this.arguments = fragment.arguments
+            val fragmentManager = fragment.fragmentManager
+            this.savedState = if (fragmentManager != null) {
+                fragmentManager.saveFragmentInstanceState(fragment)
+            } else {
+                null
+            }
         }
 
         override fun describeContents(): Int {
             return 0
         }
 
-        open fun getFragment(context: Context): Fragment {
-            Fragment fragment = this.fragment.get()
-            internal fun if(null: fragment ==):  {
+        fun getFragment(context: Context): Fragment {
+            var fragment = this.fragment?.get()
+            if (fragment == null) {
                 fragment = Fragment.instantiate(context, this.className, this.arguments)
-                internal fun if(null: this.savedState !=):  {
+                if (this.savedState != null) {
                     fragment.setInitialSavedState(this.savedState)
                 }
             }
@@ -90,109 +97,104 @@ open class DetailsActivity : ConnectedActivity() {
 
         override fun writeToParcel(parcel: Parcel, i: Int) {
             parcel.writeString(this.className)
-            internal fun if(null: this.arguments !=):  {
-                parcel.writeByte((byte) 1)
+            if (this.arguments != null) {
+                parcel.writeByte(1.toByte())
                 parcel.writeBundle(this.arguments)
             } else {
-                parcel.writeByte((byte) 0)
+                parcel.writeByte(0.toByte())
             }
-            internal fun if(null: this.savedState ==):  {
-                parcel.writeByte((byte) 0)
+            if (this.savedState == null) {
+                parcel.writeByte(0.toByte())
                 return
             }
-            parcel.writeByte((byte) 1)
-            Bundle bundle = Bundle()
+            parcel.writeByte(1.toByte())
+            val bundle = Bundle()
             bundle.putParcelable("savedState", this.savedState)
             parcel.writeBundle(bundle)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR = object : Parcelable.Creator<DetailsStackEntry> {
+                override fun createFromParcel(parcel: Parcel): DetailsStackEntry {
+                    return DetailsStackEntry(parcel)
+                }
+
+                override fun newArray(i: Int): Array<DetailsStackEntry?> {
+                    return arrayOfNulls(i)
+                }
+            }
         }
     }
 
     private fun goBack(fragmentManager: FragmentManager): Boolean {
-        Debug.Printf("DetailsActivity: goBack, detailsStack size %d", Integer.valueOf(this.detailsStack.size()))
-        if (this.detailsStack.size() == 0) {
-            boolean onDetailsStackEmpty = onDetailsStackEmpty()
-            Debug.Printf("DetailsActivity: goBack, onDetailsStackEmpty: really empty: %b", Boolean.valueOf(onDetailsStackEmpty))
+        Debug.Printf("DetailsActivity: goBack, detailsStack size %d", this.detailsStack.size)
+        if (this.detailsStack.size == 0) {
+            val onDetailsStackEmpty = onDetailsStackEmpty()
+            Debug.Printf("DetailsActivity: goBack, onDetailsStackEmpty: really empty: %b", onDetailsStackEmpty)
             return !onDetailsStackEmpty
         }
-        DetailsStackEntry remove = this.detailsStack.remove(this.detailsStack.size() - 1)
-        FragmentTransaction beginTransaction = fragmentManager.beginTransaction()
+        val remove = this.detailsStack.removeAt(this.detailsStack.size - 1)
+        val beginTransaction = fragmentManager.beginTransaction()
         beginTransaction.replace(R.id.details, remove.getFragment(this))
         beginTransaction.commit()
         updateTitle()
         return true
     }
 
-    @JvmStatic
-    fun showDetails(activity: Activity, fragmentActivityFactory: FragmentActivityFactory, bundle: Bundle) {
-        if (showEmbeddedDetails(activity, fragmentActivityFactory.getFragmentClass(), bundle)) {
-            return
-        }
-        activity.startActivity(fragmentActivityFactory.createIntent(activity, bundle))
-    }
-
-    @JvmStatic
-    fun showEmbeddedDetails(activity: Activity, cls: Class<? extends Fragment>, bundle: Bundle): Boolean {
-        if (!(activity is DetailsActivity) || !((DetailsActivity) activity).acceptsDetailFragment(cls)) {
-            return false
-        }
-        ((DetailsActivity) activity).showDetailsFragment(cls, activity.getIntent(), bundle)
-        return true
-    }
-
-    protected open fun acceptsDetailFragment(cls: Class<? extends Fragment>): Boolean {
+    protected open fun acceptsDetailFragment(cls: Class<out Fragment>): Boolean {
         return true
     }
 
     protected open fun addDetailsToStack(fragmentManager: FragmentManager) {
-        DetailsStackEntry detailsStackEntry = null
-        Fragment findFragmentById = fragmentManager.findFragmentById(R.id.details)
-        internal fun if(null: findFragmentById !=):  {
-            this.detailsStack.add(DetailsStackEntry(findFragmentById, detailsStackEntry))
+        val findFragmentById = fragmentManager.findFragmentById(R.id.details)
+        if (findFragmentById != null) {
+            this.detailsStack.add(DetailsStackEntry(findFragmentById))
         }
     }
 
-    internal fun clearDetailsStack() {
+    fun clearDetailsStack() {
         this.detailsStack.clear()
     }
 
     open fun closeDetailsFragment(fragment: Fragment): Boolean {
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        if (supportFragmentManager.findFragmentById(R.id.details) == fragment) {
-            fun goBack(supportFragmentManager): return
+        val supportFragmentManager = supportFragmentManager
+        if (supportFragmentManager.findFragmentById(R.id.details) === fragment) {
+            return goBack(supportFragmentManager)
         }
         return false
     }
 
     open fun getCurrentDetailsFragment(): Fragment? {
-        Fragment findFragmentById
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        if (supportFragmentManager != null && (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) != null && findFragmentById.isAdded() && (!findFragmentById.isDetached()) && (!findFragmentById.isHidden())) {
+        val supportFragmentManager = supportFragmentManager
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
+        if (findFragmentById != null && findFragmentById.isAdded && !findFragmentById.isDetached && !findFragmentById.isHidden) {
             return findFragmentById
         }
         return null
     }
 
     override fun handleBackPressed(): Boolean {
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
-        if ((findFragmentById is BackButtonHandler) && findFragmentById.isAdded() && (!findFragmentById.isDetached()) && ((BackButtonHandler) findFragmentById).onBackButtonPressed()) {
+        val supportFragmentManager = supportFragmentManager
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
+        if (findFragmentById is BackButtonHandler && findFragmentById.isAdded && !findFragmentById.isDetached && findFragmentById.onBackButtonPressed()) {
             return true
         }
-        if (supportFragmentManager.getBackStackEntryCount() != 0) {
+        if (supportFragmentManager.backStackEntryCount != 0) {
             return false
         }
-        fun goBack(supportFragmentManager): return
+        return goBack(supportFragmentManager)
     }
 
-    protected open fun isRootDetailsFragment(cls: Class<? extends Fragment>): Boolean {
+    protected open fun isRootDetailsFragment(cls: Class<out Fragment>): Boolean {
         return true
     }
 
-    override protected fun onCreate(bundle: Bundle) {
+    override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        internal fun if(null: bundle !=):  {
-            ArrayList parcelableArrayList = bundle.getParcelableArrayList(DETAILS_STACK_TAG)
-            internal fun if(null: parcelableArrayList !=):  {
+        if (bundle != null) {
+            val parcelableArrayList = bundle.getParcelableArrayList<DetailsStackEntry>(DETAILS_STACK_TAG)
+            if (parcelableArrayList != null) {
                 this.detailsStack.addAll(parcelableArrayList)
             }
             this.defaultTitle = bundle.getString(DEFAULT_TITLE_TAG)
@@ -201,47 +203,41 @@ open class DetailsActivity : ConnectedActivity() {
     }
 
     protected open fun onDetailsStackEmpty(): Boolean {
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
-        internal fun if(null: findFragmentById ==):  {
-            return true
-        }
-        FragmentTransaction beginTransaction = supportFragmentManager.beginTransaction()
+        val supportFragmentManager = supportFragmentManager
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.details) ?: return true
+        val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.remove(findFragmentById)
         beginTransaction.commit()
         updateTitle()
         return false
     }
 
-    open fun onFragmentTitleUpdated() {
+    fun onFragmentTitleUpdated() {
         updateTitle()
     }
 
-    override protected fun onPostCreate(bundle: .annotation.Nullable Bundle) {
+    override fun onPostCreate(bundle: Bundle?) {
         super.onPostCreate(bundle)
         updateTitle()
     }
 
     override fun onRequestPermissionsResult(i: Int, strArr: Array<String>, ints: IntArray) {
         super.onRequestPermissionsResult(i, strArr, ints)
-        List<Fragment> fragments = getSupportFragmentManager().getFragments()
-        internal fun if(null: fragments !=):  {
-            Iterator<?> it = fragments.iterator()
-            while (it.hasNext()) {
-                ((Fragment) it.next()).onRequestPermissionsResult(i, strArr, ints)
-            }
+        val fragments = supportFragmentManager.fragments
+        for (fragment in fragments) {
+            fragment.onRequestPermissionsResult(i, strArr, ints)
         }
     }
 
-    override protected fun onSaveInstanceState(bundle: Bundle) {
+    override fun onSaveInstanceState(bundle: Bundle) {
         bundle.putParcelableArrayList(DETAILS_STACK_TAG, this.detailsStack)
         bundle.putString(DEFAULT_TITLE_TAG, this.defaultTitle)
         bundle.putString(DEFAULT_SUBTITLE_TAG, this.defaultSubTitle)
         super.onSaveInstanceState(bundle)
     }
 
-    protected open fun removeAllDetails() {
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
+    protected fun removeAllDetails() {
+        val supportFragmentManager = supportFragmentManager
         if (supportFragmentManager.findFragmentById(R.id.details) != null) {
             clearDetailsStack()
             goBack(supportFragmentManager)
@@ -249,7 +245,7 @@ open class DetailsActivity : ConnectedActivity() {
     }
 
     protected open fun replaceDetailsFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        FragmentTransaction beginTransaction = fragmentManager.beginTransaction()
+        val beginTransaction = fragmentManager.beginTransaction()
         beginTransaction.setCustomAnimations(R.anim.slide_from_right, 0, 0, R.anim.slide_to_right)
         beginTransaction.replace(R.id.details, fragment)
         beginTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -257,101 +253,96 @@ open class DetailsActivity : ConnectedActivity() {
         updateTitle()
     }
 
-    protected open fun setActivityTitle(str: String, str2: String) {
-        ActionBar supportActionBar = getSupportActionBar()
+    protected fun setActivityTitle(str: String?, str2: String?) {
+        val supportActionBar = supportActionBar
         Debug.Printf("updateTitle: title '%s' actionBar %s", str, supportActionBar)
-        internal fun if(null: supportActionBar !=):  {
-            supportActionBar.setTitle(str)
-            supportActionBar.setSubtitle(str2)
+        if (supportActionBar != null) {
+            supportActionBar.title = str
+            supportActionBar.subtitle = str2
         }
-        setTitle(str)
+        title = str
     }
 
-    open fun setCurrentDetailsArguments(cls: Class<? extends Fragment>, bundle: Bundle): Boolean {
-        Fragment findFragmentById
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        if (supportFragmentManager == null || (findFragmentById = supportFragmentManager.findFragmentById(R.id.details)) == null || !cls.isInstance(findFragmentById) || !(findFragmentById is ReloadableFragment) || findFragmentById.getArguments() == null) {
+    open fun setCurrentDetailsArguments(cls: Class<out Fragment>, bundle: Bundle): Boolean {
+        val supportFragmentManager = supportFragmentManager
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
+        if (findFragmentById == null || !cls.isInstance(findFragmentById) || findFragmentById !is ReloadableFragment || findFragmentById.arguments == null) {
             return false
         }
-        ((ReloadableFragment) findFragmentById).setFragmentArgs(getIntent(), bundle)
+        findFragmentById.setFragmentArgs(intent, bundle)
         return true
     }
 
-    open fun setDefaultTitle(defaultTitle: String, defaultSubTitle: String) {
+    fun setDefaultTitle(defaultTitle: String?, defaultSubTitle: String?) {
         this.defaultTitle = defaultTitle
         this.defaultSubTitle = defaultSubTitle
         updateTitle()
     }
 
-    open fun showDetailsFragment(cls: Class<? extends Fragment>, intent: Intent, bundle: Bundle): Fragment? {
+    open fun showDetailsFragment(cls: Class<out Fragment>, intent: Intent, bundle: Bundle): Fragment? {
         Debug.Printf("DetailsActivity: fragmentClass %s, intent %s, arguments %s", cls.toString(), intent, bundle)
-        FragmentManager supportFragmentManager = getSupportFragmentManager()
-        internal fun if(null: supportFragmentManager ==):  {
-            return null
+        val supportFragmentManager = supportFragmentManager
+        val isRootDetailsFragment = isRootDetailsFragment(cls)
+        var findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
+        Debug.Printf("DetailsActivity: isRootFragment %b existing fragment: %s", isRootDetailsFragment, findFragmentById)
+        if (findFragmentById != null) {
+            Debug.Printf("DetailsActivity: is good instance: %b", cls.isInstance(findFragmentById))
+            Debug.Printf("DetailsActivity: is reloadable: %b", findFragmentById is ReloadableFragment)
+            Debug.Printf("DetailsActivity: has arguments: %s", findFragmentById.arguments)
         }
-        boolean isRootDetailsFragment = isRootDetailsFragment(cls)
-        Fragment findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
-        Debug.Printf("DetailsActivity: isRootFragment %b existing fragment: %s", Boolean.valueOf(isRootDetailsFragment), findFragmentById)
-        internal fun if(null: findFragmentById !=):  {
-            Debug.Printf("DetailsActivity: is good instance: %b", Boolean.valueOf(cls.isInstance(findFragmentById)))
-            Debug.Printf("DetailsActivity: is reloadable: %b", Boolean.valueOf(findFragmentById is ReloadableFragment))
-            Debug.Printf("DetailsActivity: has arguments: %b", findFragmentById.getArguments())
-        }
-        if (findFragmentById != null && findFragmentById.isVisible() && cls.isInstance(findFragmentById) && (findFragmentById is ReloadableFragment) && findFragmentById.getArguments() != null) {
-            ((ReloadableFragment) findFragmentById).setFragmentArgs(intent, bundle)
+        if (findFragmentById != null && findFragmentById.isVisible && cls.isInstance(findFragmentById) && findFragmentById is ReloadableFragment && findFragmentById.arguments != null) {
+            findFragmentById.setFragmentArgs(intent, bundle)
             invalidateOptionsMenu()
             return findFragmentById
         }
-        internal fun if(isRootDetailsFragment):  {
+        if (isRootDetailsFragment) {
             clearDetailsStack()
         } else {
             addDetailsToStack(supportFragmentManager)
         }
         try {
-            Fragment newInstance = cls.newInstance()
-            internal fun if(ReloadableFragment: newInstance instanceof):  {
-                newInstance.setArguments(Bundle())
-                ((ReloadableFragment) newInstance).setFragmentArgs(intent, bundle)
+            val newInstance = cls.getDeclaredConstructor().newInstance()
+            if (newInstance is ReloadableFragment) {
+                newInstance.arguments = Bundle()
+                newInstance.setFragmentArgs(intent, bundle)
             } else {
-                newInstance.setArguments(bundle)
+                newInstance.arguments = bundle
             }
             replaceDetailsFragment(supportFragmentManager, newInstance)
             return newInstance
-        } catch (Exception e) {
+        } catch (e: Exception) {
             Debug.Warning(e)
             return findFragmentById
         }
     }
 
     protected open fun updateTitle() {
-        boolean handled = false
-        FragmentManager fragmentManager = getSupportFragmentManager()
-        internal fun if(null: fragmentManager !=):  {
-            Fragment detailsFragment = fragmentManager.findFragmentById(R.id.details)
-            Debug.Printf("updateTitle: detailsFragment %s", detailsFragment)
-            internal fun if(FragmentHasTitle: detailsFragment instanceof):  {
-                Debug.Printf("updateTitle: detailsFragment added %b hidden %b detached %b",
-                        Boolean.valueOf(detailsFragment.isAdded()),
-                        Boolean.valueOf(detailsFragment.isHidden()),
-                        Boolean.valueOf(detailsFragment.isDetached()))
-                if (detailsFragment.isAdded() && !detailsFragment.isHidden() && !detailsFragment.isDetached()) {
-                    String title = ((FragmentHasTitle) detailsFragment).getTitle()
-                    String subTitle = ((FragmentHasTitle) detailsFragment).getSubTitle()
-                    Debug.Printf("updateTitle: got title '%s', subtitle '%s'", title, subTitle)
-                    internal fun if(null: title !=):  {
-                        setActivityTitle(title, subTitle)
-                        handled = true
-                    }
+        var handled = false
+        val fragmentManager = supportFragmentManager
+        val detailsFragment = fragmentManager.findFragmentById(R.id.details)
+        Debug.Printf("updateTitle: detailsFragment %s", detailsFragment)
+        if (detailsFragment is FragmentHasTitle) {
+            Debug.Printf(
+                "updateTitle: detailsFragment added %b hidden %b detached %b",
+                detailsFragment.isAdded, detailsFragment.isHidden, detailsFragment.isDetached
+            )
+            if (detailsFragment.isAdded && !detailsFragment.isHidden && !detailsFragment.isDetached) {
+                val title = detailsFragment.getTitle()
+                val subTitle = detailsFragment.getSubTitle()
+                Debug.Printf("updateTitle: got title '%s', subtitle '%s'", title, subTitle)
+                if (title != null) {
+                    setActivityTitle(title, subTitle)
+                    handled = true
                 }
             }
         }
-        internal fun if(!handled):  {
+        if (!handled) {
             updateTitleNoDetails()
         }
     }
 
     protected open fun updateTitleNoDetails() {
-        internal fun if(null: this.defaultTitle !=):  {
+        if (this.defaultTitle != null) {
             setActivityTitle(this.defaultTitle, this.defaultSubTitle)
         }
     }
