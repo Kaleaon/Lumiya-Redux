@@ -64,14 +64,6 @@ open class GridList(private val context: Context) {
             editor.putBoolean(str + "_allow_untrusted_certs", this.allowUntrustedCertificates)
         }
 
-        fun setGridName(gridName: String) {
-            this.gridName = gridName
-        }
-
-        fun setLoginURL(loginURL: String?) {
-            this.loginURL = loginURL
-        }
-
         override fun toString(): String {
             return this.gridName
         }
