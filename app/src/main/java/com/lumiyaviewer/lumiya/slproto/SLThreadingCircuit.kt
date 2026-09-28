@@ -41,7 +41,6 @@ open class SLThreadingCircuit @Throws(IOException::class) constructor(
             Debug.Printf("SLThreadingCircuit: working thread exiting.", *arrayOfNulls<Any>(0))
         }
         this.workingThread = Thread(this.workingRunnable, "SLCircuit")
-        this.queue = LinkedBlockingQueue()
         this.workEnabled = true
         this.workingThread.start()
     }

@@ -6,7 +6,7 @@ import com.lumiyaviewer.lumiya.slproto.types.LLVector3
 
 open class SLSkeletonBone(val boneID: SLSkeletonBoneID, vector34: LLVector3, vector35: LLVector3, skeletonBones: Array<SLSkeletonBone>?, collisionVolumes: Array<SLSkeletonBone>?) {
     private val basePosition: LLVector3
-    private val boneIndex: Int = boneID.ordinal()
+    private val boneIndex: Int = boneID.ordinal
     private val childBones: Array<SLSkeletonBone>? = skeletonBones
     private val collisionVolumes: Array<SLSkeletonBone>? = collisionVolumes
     private val defaultBasePosition: LLVector3
