@@ -11,35 +11,30 @@ import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.ui.media.NotificationSounds
 import com.lumiyaviewer.lumiya.utils.LEDAction
 
-open class NotificationSettings {
-    private NotificationType type
-    private boolean notificationEnabled = false
-    private boolean soundEnabled = false
-    private String ringtone = ""
-    private LEDAction blinkAction = LEDAction.None
-    private String blinkColor = "red"
-
-    internal fun NotificationSettings(notificationType: NotificationType): public {
-        this.type = notificationType
-    }
+open class NotificationSettings(private val type: NotificationType) {
+    private var notificationEnabled = false
+    private var soundEnabled = false
+    private var ringtone: String? = ""
+    private var blinkAction = LEDAction.None
+    private var blinkColor = "red"
 
     private fun getPrefColor(str: String): Int {
-        if (str.length() != 6) {
+        if (str.length != 6) {
             return 0
         }
-        try {
-            return Integer.parseInt(str, 16) | 0xFF000000
-        } catch (NumberFormatException e) {
+        return try {
+            (Integer.parseInt(str, 16) or -0x1000000)
+        } catch (e: NumberFormatException) {
             e.printStackTrace()
-            return 0
+            0
         }
     }
 
     private fun getPreferenceValueName(context: Context, str: String, i: Int, i2: Int): String {
-        String[] stringArray = context.getResources().getStringArray(i)
-        String[] stringArray2 = context.getResources().getStringArray(i2)
-        internal fun for(j++: int j = 0; j < stringArray.length;):  {
-            if (stringArray[j] == (str)) {
+        val stringArray = context.resources.getStringArray(i)
+        val stringArray2 = context.resources.getStringArray(i2)
+        for (j in stringArray.indices) {
+            if (stringArray[j] == str) {
                 return stringArray2[j]
             }
         }
@@ -49,10 +44,10 @@ open class NotificationSettings {
     open fun Load(sharedPreferences: SharedPreferences) {
         this.notificationEnabled = sharedPreferences.getBoolean(this.type.getEnableKey(), true)
         this.soundEnabled = sharedPreferences.getBoolean(this.type.getPlaySoundKey(), true)
-        NotificationSounds notificationSounds = NotificationSounds.defaultSounds.get(this.type)
-        this.ringtone = sharedPreferences.getString(this.type.getRingtoneKey(), notificationSounds != null ? notificationSounds.getUri().toString() : null)
+        val notificationSounds = NotificationSounds.defaultSounds[this.type]
+        this.ringtone = sharedPreferences.getString(this.type.getRingtoneKey(), notificationSounds?.getUri()?.toString())
         this.blinkAction = LEDAction.getByPreferenceString(sharedPreferences.getString(this.type.getBlinkKey(), "none"))
-        this.blinkColor = sharedPreferences.getString(this.type.getBlinkColorKey(), "FF0000")
+        this.blinkColor = sharedPreferences.getString(this.type.getBlinkColorKey(), "FF0000") ?: "FF0000"
     }
 
     open fun getLEDAction(): LEDAction {
@@ -60,39 +55,39 @@ open class NotificationSettings {
     }
 
     open fun getLEDColor(): Int {
-        fun getPrefColor(this.blinkColor): return
+        return getPrefColor(this.blinkColor)
     }
 
-    open fun getRingtone(): String {
-        internal fun if(this.soundEnabled):  {
+    open fun getRingtone(): String? {
+        if (this.soundEnabled) {
             return this.ringtone
         }
         return null
     }
 
     internal fun getSummary(context: Context): String {
-        String str
-        internal fun if(null: this.ringtone !=):  {
-            Uri parse = Uri.parse(this.ringtone)
-            NotificationSounds notificationSounds = NotificationSounds.defaultSounds.get(this.type)
-            if (Objects.equal(notificationSounds != null ? notificationSounds.getUri() : null, parse)) {
-                str = "Default"
-            } else if (this.ringtone.isEmpty()) {
-                str = "Silent"
+        val str: String
+        if (this.ringtone != null) {
+            val parse = Uri.parse(this.ringtone)
+            val notificationSounds = NotificationSounds.defaultSounds[this.type]
+            str = if (Objects.equal(notificationSounds?.getUri(), parse)) {
+                "Default"
+            } else if (this.ringtone!!.isEmpty()) {
+                "Silent"
             } else {
-                Ringtone ringtone = RingtoneManager.getRingtone(context, parse)
-                str = ringtone != null ? ringtone.getTitle(context) : "No sound selected"
+                val ringtone: Ringtone? = RingtoneManager.getRingtone(context, parse)
+                ringtone?.getTitle(context) ?: "No sound selected"
             }
         } else {
             str = "Default"
         }
-        String preferenceValueName = getPreferenceValueName(context, this.blinkColor, R.array.pref_led_color_values, R.array.pref_led_color)
-        internal fun if(!this.notificationEnabled):  {
+        val preferenceValueName = getPreferenceValueName(context, this.blinkColor, R.array.pref_led_color_values, R.array.pref_led_color)
+        if (!this.notificationEnabled) {
             return "Do nothing"
         }
-        String str2 = this.soundEnabled ? "Notify, play sound (" + str + ")" : "Notify"
-        internal fun if(LEDAction.None: this.blinkAction !=):  {
-            return str2 + ", blink " + (!Strings.isNullOrEmpty(preferenceValueName) ? preferenceValueName.toLowerCase() + " " : "") + "LED"
+        val str2 = if (this.soundEnabled) "Notify, play sound ($str)" else "Notify"
+        if (LEDAction.None != this.blinkAction) {
+            return str2 + ", blink " + (if (!Strings.isNullOrEmpty(preferenceValueName)) preferenceValueName.lowercase() + " " else "") + "LED"
         }
         return str2
     }
