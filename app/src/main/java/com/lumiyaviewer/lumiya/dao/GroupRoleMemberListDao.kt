@@ -45,9 +45,9 @@ class GroupRoleMemberListDao : AbstractDao<GroupRoleMemberList, UUID> {
     }
 
     override fun readEntity(cursor: Cursor, groupRoleMemberList: GroupRoleMemberList, offset: Int) {
-        groupRoleMemberList.groupID = if (cursor.isNull(offset + 0)) null else UUID.fromString(cursor.getString(offset + 0))
-        groupRoleMemberList.requestID = UUID.fromString(cursor.getString(offset + 1))
-        groupRoleMemberList.mustRevalidate = cursor.getShort(offset + 2).toInt() != 0
+        groupRoleMemberList.setGroupID(if (cursor.isNull(offset + 0)) null else UUID.fromString(cursor.getString(offset + 0)))
+        groupRoleMemberList.setRequestID(UUID.fromString(cursor.getString(offset + 1)))
+        groupRoleMemberList.setMustRevalidate(cursor.getShort(offset + 2).toInt() != 0)
     }
 
     override fun readKey(cursor: Cursor, offset: Int): UUID? {
@@ -55,7 +55,7 @@ class GroupRoleMemberListDao : AbstractDao<GroupRoleMemberList, UUID> {
     }
 
     override fun updateKeyAfterInsert(groupRoleMemberList: GroupRoleMemberList, rowId: Long): UUID? {
-        return groupRoleMemberList.groupID
+        return groupRoleMemberList.getGroupID()
     }
 
     companion object {
