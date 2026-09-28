@@ -40,7 +40,7 @@ class DrawableStore(
         .weakValues()
         .build(object : CacheLoader<SLObjectAvatarInfo, DrawableAvatar>() {
             override fun load(objectAvatarInfo: SLObjectAvatarInfo): DrawableAvatar {
-                return objectAvatarInfo.avatarVisualState.createDrawableAvatar(this@DrawableStore)
+                return objectAvatarInfo.getAvatarVisualState().createDrawableAvatar(this@DrawableStore)
             }
         })
 
@@ -50,7 +50,7 @@ class DrawableStore(
         .weakValues()
         .build(object : CacheLoader<SLObjectAvatarInfo, DrawableAvatarStub>() {
             override fun load(objectAvatarInfo: SLObjectAvatarInfo): DrawableAvatarStub {
-                return objectAvatarInfo.avatarVisualState.createDrawableAvatarStub(this@DrawableStore)
+                return objectAvatarInfo.getAvatarVisualState().createDrawableAvatarStub(this@DrawableStore)
             }
         })
 

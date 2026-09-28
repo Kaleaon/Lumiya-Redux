@@ -16,17 +16,17 @@ class BoundingBox(renderContext: RenderContext) {
         directByteBuffer.loadFromFloatArray(0, cubeVertices, 0, cubeVertices.size)
         vertexBuffer = GLLoadableBuffer(directByteBuffer)
         vertexArrayObject = GLVertexArrayObject(renderContext.glResourceManager, 1)
-        GLES20.glUseProgram(renderContext.boundingBoxProgram.getHandle())
+        GLES20.glUseProgram(renderContext.boundingBoxProgram!!.getHandle())
         vertexArrayObject.Bind(0)
-        vertexBuffer.Bind20(renderContext, renderContext.boundingBoxProgram.vPosition, 3, GLES20.GL_FLOAT, 12, 0)
+        vertexBuffer.Bind20(renderContext, renderContext.boundingBoxProgram!!.vPosition, 3, GLES20.GL_FLOAT, 12, 0)
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0)
         vertexArrayObject.Unbind()
         GLES20.glUseProgram(0)
     }
 
     fun OcclusionQuery(renderContext: RenderContext, glQuery: GLQuery) {
-        renderContext.glObjWorldApplyMatrix(renderContext.boundingBoxProgram.uObjWorldMatrix)
-        renderContext.glObjScaleApplyVector(renderContext.boundingBoxProgram.uObjCoordScale)
+        renderContext.glObjWorldApplyMatrix(renderContext.boundingBoxProgram!!.uObjWorldMatrix)
+        renderContext.glObjScaleApplyVector(renderContext.boundingBoxProgram!!.uObjCoordScale)
         vertexArrayObject.Bind(0)
         glQuery.BeginOcclusionQuery(renderContext)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, cubeVertices.size / 3)
@@ -64,8 +64,8 @@ class BoundingBox(renderContext: RenderContext) {
             GLES30.glDepthMask(false)
             GLES30.glDisable(GLES30.GL_DEPTH_TEST)
             GLES30.glDepthFunc(GLES30.GL_LEQUAL)
-            GLES20.glUseProgram(renderContext.boundingBoxProgram.getHandle())
-            renderContext.glModelApplyMatrix(renderContext.boundingBoxProgram.uMVPMatrix)
+            GLES20.glUseProgram(renderContext.boundingBoxProgram!!.getHandle())
+            renderContext.glModelApplyMatrix(renderContext.boundingBoxProgram!!.uMVPMatrix)
         }
     }
 }

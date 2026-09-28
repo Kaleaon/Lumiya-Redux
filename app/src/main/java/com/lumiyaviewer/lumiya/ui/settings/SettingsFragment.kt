@@ -81,7 +81,7 @@ open class SettingsFragment : PreferenceFragmentCompat(), FragmentHasTitle {
         var selectedIndex = -1
         val availableCacheDirs = GlobalOptions.getInstance().getAvailableCacheDirs()
         val baseCacheDir = GlobalOptions.getInstance().getBaseCacheDir()
-        val strArr = arrayOfNulls<String>(availableCacheDirs.size)
+        val strArr = Array(availableCacheDirs.size) { "" }
         for (i in 0 until availableCacheDirs.size) {
             if (Objects.equal(availableCacheDirs[i], baseCacheDir)) {
                 selectedIndex = i
@@ -99,7 +99,7 @@ open class SettingsFragment : PreferenceFragmentCompat(), FragmentHasTitle {
                 freeBytes / 1.0737418E9f
             )
         }
-        val arrayAdapter = ArrayAdapter(context, android.R.layout.select_dialog_singlechoice, strArr)
+        val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.select_dialog_singlechoice, strArr)
         val builder = AlertDialog.Builder(context)
         builder.setTitle(R.string.select_cache_location)
         builder.setSingleChoiceItems(arrayAdapter, selectedIndex) { dialogInterface, i4 ->

@@ -21,4 +21,9 @@ abstract class ChatterReloadableFragment : ChatterFragment(), ReloadableFragment
             setNewUser(chatterID)
         }
     }
+
+    companion object {
+        @JvmStatic
+        fun makeSelection(chatterID: ChatterID?): Bundle = ChatterFragment.makeSelection(chatterID)
+    }
 }

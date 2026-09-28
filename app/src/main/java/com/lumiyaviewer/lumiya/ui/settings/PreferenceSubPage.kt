@@ -79,7 +79,7 @@ open class PreferenceSubPage : Preference {
             return notificationSummary ?: super.getSummary()
         }
         val notificationSettings = NotificationSettings(this.notificationType!!)
-        notificationSettings.Load(sharedPreferences)
+        notificationSettings.Load(sharedPreferences!!)
         return notificationSettings.getSummary(context)
     }
 }

@@ -41,7 +41,7 @@ class SettingsSelectionFragment : Fragment(), AdapterView.OnItemClickListener {
             return
         }
         DetailsActivity.showEmbeddedDetails(
-            activity,
+            requireActivity(),
             SettingsFragment::class.java,
             SettingsFragment.makeSelection(values[position].getPageResourceId())
         )

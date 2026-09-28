@@ -7,8 +7,8 @@ import com.lumiyaviewer.lumiya.slproto.SLGridConnection
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 
 open class SLModule {
-    protected var agentCircuit: SLAgentCircuit? = null
-    protected var circuitInfo: SLCircuitInfo? = null
+    protected lateinit var agentCircuit: SLAgentCircuit
+    protected lateinit var circuitInfo: SLCircuitInfo
     protected var eventBus: EventBus = EventBus.getInstance()
     protected var gridConn: SLGridConnection? = null
 
@@ -19,13 +19,13 @@ open class SLModule {
         agentCircuit.RegisterMessageHandler(this)
     }
 
-    fun HandleCircuitReady() {
+    open fun HandleCircuitReady() {
     }
 
-    fun HandleCloseCircuit() {
+    open fun HandleCloseCircuit() {
     }
 
-    fun HandleGlobalOptionsChange() {
+    open fun HandleGlobalOptionsChange() {
     }
 
     fun SendMessage(message: SLMessage) {

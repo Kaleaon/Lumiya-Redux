@@ -310,7 +310,10 @@ class DrawableObject(
     fun setPrimDrawParams(primDrawParams: PrimDrawParams?) {
         var params = primDrawParams
         if (attachedTo != null && params != null) {
-            params = params.withBakes(attachedTo.avatarBakes)
+            val bakes = attachedTo.avatarBakes
+            if (bakes != null) {
+                params = params.withBakes(bakes)
+            }
         }
         drawableStore.primCache.RequestResource(params!!, this)
         if (params.getVolumeParams()!!.isFlexible()) {
