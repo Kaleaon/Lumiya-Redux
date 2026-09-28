@@ -184,7 +184,7 @@ open class RLVController(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) 
         Debug.Printf("IM: type %d from '%s' text '%s'", i, stringFromVariableOEM, stringFromVariableUTF)
         if (i == 0) {
             if (stringFromVariableUTF.equals("@version", ignoreCase = true)) {
-                this.agentCircuit.SendInstantMessage(improvedInstantMessage.AgentData_Field.AgentID, RLVCmdVersion.getManualVersionReply())
+                this.agentCircuit.SendInstantMessage(improvedInstantMessage.AgentData_Field.AgentID!!, RLVCmdVersion.getManualVersionReply())
                 return true
             }
         }
