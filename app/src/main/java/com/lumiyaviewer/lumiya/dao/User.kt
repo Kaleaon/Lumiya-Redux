@@ -52,7 +52,7 @@ class User : ChatterDisplayInfo {
     fun getBadUUID(): Boolean = badUUID
 
     override fun getChatterID(userManager: UserManager): ChatterID {
-        return ChatterID.getUserChatterID(userManager.getUserID(), uuid)
+        return ChatterID.getUserChatterID(userManager.getUserID(), uuid!!)
     }
 
     override fun getDisplayName(): String? = displayName
