@@ -27,7 +27,7 @@ internal class TouchableObjectListAdapter(private val context: Context) : BaseAd
     override fun getItemId(i: Int): Long {
         val item = getItem(i)
         if (item != null) {
-            return item.localID
+            return item.localID.toLong()
         }
         return -1L
     }

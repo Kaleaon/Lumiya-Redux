@@ -1,7 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.llsd
 
 import android.util.Xml
-import com.google.common.logging.nano.Vr
 import com.lumiyaviewer.lumiya.Debug
 import com.lumiyaviewer.lumiya.slproto.SLMessage
 import com.lumiyaviewer.lumiya.slproto.https.LLSDContentTypeDetector
@@ -27,7 +26,6 @@ import java.io.OutputStream
 import java.io.StringWriter
 import java.net.URI
 import java.util.Date
-import java.util.HashMap
 import java.util.UUID
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -36,181 +34,51 @@ import org.xmlpull.v1.XmlSerializer
 
 abstract class LLSDNode {
 
-    LLSDNode fromAny(InputStream inputStream, String str) throws LLSDXMLException {
-        try {
-            var bufferedInputStream: BufferedInputStream = BufferedInputStream(inputStream, 65536)
-            switch (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
-                llsdBinary ->
-                    return fromBinary(DataInputStream(bufferedInputStream))
-                llsdXML ->
-                    return parseXML(bufferedInputStream, "UTF-8")
-                else ->
-                    throw LLSDXMLException("Unknown content type")
-            }
-        } catch (e: IOException) {
-            var llsdxmlException: LLSDXMLException = LLSDXMLException("I/O error")
-            llsdxmlException.initCause(e)
-            var llsdxmlException: throw? = null
-        }
-    }
-
-    LLSDNode fromBinary(DataInputStream dataInputStream) throws LLSDXMLException {
-        var i: Int = 0
-        while (true) {
-            try {
-                var readByte: Byte = dataInputStream.readByte()
-                when (readByte) {
-                    10 ->
-
-                    33 ->
-                        return LLSDUndefined()
-                    48 ->
-                        return LLSDBoolean(false)
-                    49 ->
-                        return LLSDBoolean(true)
-                    60 ->
-                        do {
-                        } while (dataInputStream.readByte() != 62)
-                    91 ->
-                        var readInt: Int = dataInputStream.readInt()
-                        var llsdArray: LLSDArray = LLSDArray()
-                        while (i < readInt) {
-                            llsdArray.add(fromBinary(dataInputStream))
-                            i++
-                        }
-                        if (dataInputStream.readByte() != 93) {
-                            throw LLSDXMLException("Array terminator expected")
-                        }
-        return llsdArray
-                    98 ->
-                        var bytes: ByteArray = ByteArray(dataInputStream.readInt())
-                        dataInputStream.readFully(bytes)
-                        return LLSDBinary(bytes)
-                    100 ->
-                        return LLSDDate(Date(Math.round(dataInputStream.readDouble() * 1000.0d)))
-                    105 ->
-                        return LLSDInt(dataInputStream.readInt())
-                    108 ->
-                        var readInt2: Int = dataInputStream.readInt()
-                        if (readInt2 == 0) {
-                            return LLSDURI("")
-                        }
-                        var bytes2: ByteArray = ByteArraydataInputStream as readInt2.readFully(bytes2)
-                        return LLSDURI(SLMessage.stringFromVariableUTF(bytes2))
-                    114 ->
-                        return LLSDDouble(dataInputStream.readDouble())
-                    115 ->
-                        var readInt3: Int = dataInputStream.readInt()
-                        if (readInt3 == 0) {
-                            return LLSDString("")
-                        }
-                        var bytes3: ByteArray = ByteArraydataInputStream as readInt3.readFully(bytes3)
-                        return LLSDString(SLMessage.stringFromVariableUTF(bytes3))
-                    117 ->
-                        return LLSDUUID(UUID(dataInputStream.readLong(), dataInputStream.readLong()))
-                    Vr.VREvent.VrCore.ErrorCode.CONTROLLER_GATT_CHARACTERISTIC_NOT_FOUND /* 123 */ ->
-                        var readInt4: Int = dataInputStream.readInt()
-                        var hashMap: HashMap = HashMap(readInt4)
-                        while (i < readInt4) {
-                            if (dataInputStream.readByte() != 107) {
-                                throw LLSDXMLException("Map key expected")
-                            }
-                            var bytes4: ByteArray = ByteArray(dataInputStream.readInt())
-                            dataInputStream.readFullyhashMap as bytes4.put(SLMessage.stringFromVariableUTF(bytes4), fromBinary(dataInputStream))
-                            i++
-                        }
-                        var llsdMap: LLSDMap = LLSDMap(hashMap)
-                        if (dataInputStream.readByte() != 125) {
-                            throw LLSDXMLException("Map terminator expected")
-                        }
-        return llsdMap
-                    else ->
-                        throw LLSDXMLException("Unknown LLSD element 0x" + Integer.toHexString(readByte))
-                }
-            } catch (e: IOException) {
-                var llsdxmlException: LLSDXMLException = LLSDXMLException(e.getMessage())
-                llsdxmlException.initCause(e)
-                var llsdxmlException: throw? = null
-            }
-        }
-    }
-
-    LLSDNode fromBinaryFile(File file) throws LLSDXMLException {
-        try (DataInputStream dataInputStream = DataInputStream(FileInputStream(file))) {
-            return fromBinary(dataInputStream)
-        } catch (e: IOException) {
-            var llsdxmlException: LLSDXMLException = LLSDXMLException(e.getMessage())
-            llsdxmlException.initCause(e)
-            var llsdxmlException: throw? = null
-        }
-    }
-
-    LLSDNode parseXML(InputStream inputStream, String str) throws LLSDXMLException {
-        try {
-            var newPullParser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
-            newPullParser.setInput(inputStream, str)
-            newPullParser.nextTag()
-            newPullParser.require(2, null, "llsd")
-            newPullParser.nextTag()
-            var parseNode: LLSDNode = LLSDNodeFactory.parseNodenewPullParser as newPullParser.nextTag()
-            newPullParser.require(3, null, "llsd")
-        return parseNode
-        } catch (e: IOException) {
-            throw LLSDXMLException("Input stream error")
-        } catch (e: XmlPullParserException) {
-            Debug.Log("XmlPullParserException: " + e.getMessage())
-            e.printStackTrace()
-            var llsdxmlException: LLSDXMLException = LLSDXMLException("Malformed XML")
-            llsdxmlException.initCause(e)
-            var llsdxmlException: throw? = null
-        }
-    }
-
-    public Array<byte> asBinary() throws LLSDValueTypeException {
+    open fun asBinary(): ByteArray {
         throw LLSDValueTypeException("binary", this)
     }
 
-    public var asBoolean: Boolean() throws LLSDValueTypeException {
+    open fun asBoolean(): Boolean {
         throw LLSDValueTypeException("boolean", this)
     }
 
-    public Date asDate() throws LLSDValueTypeException {
+    open fun asDate(): Date {
         throw LLSDValueTypeException("date", this)
     }
 
-    public var asDouble: Double() throws LLSDValueTypeException {
+    open fun asDouble(): Double {
         throw LLSDValueTypeException("real", this)
     }
 
-    public var asInt: Int() throws LLSDValueTypeException {
+    open fun asInt(): Int {
         throw LLSDValueTypeException("integer", this)
     }
 
-    public var asLong: Long() throws LLSDValueTypeException {
+    open fun asLong(): Long {
         throw LLSDValueTypeException("long", this)
     }
 
-    public var asString: String() throws LLSDValueTypeException {
+    open fun asString(): String {
         throw LLSDValueTypeException("string", this)
     }
 
-    public URI asURI() throws LLSDValueTypeException {
+    open fun asURI(): URI {
         throw LLSDValueTypeException("uri", this)
     }
 
-    public UUID asUUID() throws LLSDValueTypeException {
+    open fun asUUID(): UUID {
         throw LLSDValueTypeException("uuid", this)
     }
 
-    public LLSDNode byIndex(int i) throws LLSDException {
+    open fun byIndex(i: Int): LLSDNode {
         throw LLSDValueTypeException("array", this)
     }
 
-    public LLSDNode byKey(String str) throws LLSDException {
+    open fun byKey(str: String): LLSDNode {
         throw LLSDValueTypeException("map", this)
     }
 
-    public var getCount: Int() throws LLSDException {
+    open fun getCount(): Int {
         throw LLSDValueTypeException("array", this)
     }
 
@@ -250,32 +118,178 @@ abstract class LLSDNode {
         return this is LLSDUUID
     }
 
-    public var keyExists: Boolean(String str) throws LLSDException {
+    open fun keyExists(str: String): Boolean {
         throw LLSDValueTypeException("map", this)
     }
 
-    public var serializeToXML: String() throws IOException {
-        var newSerializer: XmlSerializer = Xml.newSerializer()
-        var stringWriter: StringWriter = StringWriter()
-        newSerializer.setOutputnewSerializer as stringWriter.startTag("", "llsd")
-        toXMLnewSerializer as newSerializer.endTag("", "llsd")
+    fun serializeToXML(): String {
+        val newSerializer: XmlSerializer = Xml.newSerializer()
+        val stringWriter = StringWriter()
+        newSerializer.setOutput(stringWriter)
+        newSerializer.startTag("", "llsd")
+        toXML(newSerializer)
+        newSerializer.endTag("", "llsd")
         newSerializer.endDocument()
         return stringWriter.toString()
     }
 
-    public void serializeToXML(OutputStream outputStream, String str) throws IOException {
-        var newSerializer: XmlSerializer = Xml.newSerializer()
+    fun serializeToXML(outputStream: OutputStream, str: String) {
+        val newSerializer: XmlSerializer = Xml.newSerializer()
         newSerializer.setOutput(outputStream, str)
         newSerializer.startTag("", "llsd")
-        toXMLnewSerializer as newSerializer.endTag("", "llsd")
+        toXML(newSerializer)
+        newSerializer.endTag("", "llsd")
         newSerializer.endDocument()
     }
 
-    public abstract void toBinary(DataOutputStream dataOutputStream) throws IOException
+    abstract fun toBinary(dataOutputStream: DataOutputStream)
 
-    public <T> T toObject(Class<? extends T> cls) throws LLSDException {
-        throw LLSDException("Cannot deserialize " + getClass().getName())
+    open fun <T> toObject(cls: Class<out T>): T {
+        throw LLSDException("Cannot deserialize " + javaClass.name)
     }
 
-    public abstract void toXML(XmlSerializer xmlSerializer) throws IOException
+    abstract fun toXML(xmlSerializer: XmlSerializer)
+
+    companion object {
+        @JvmStatic
+        fun fromAny(inputStream: InputStream, str: String): LLSDNode {
+            try {
+                val bufferedInputStream = BufferedInputStream(inputStream, 65536)
+                return when (LLSDContentTypeDetector.DetectContentType(bufferedInputStream, str)) {
+                    LLSDContentTypeDetector.LLSDContentType.llsdBinary ->
+                        fromBinary(DataInputStream(bufferedInputStream))
+                    LLSDContentTypeDetector.LLSDContentType.llsdXML ->
+                        parseXML(bufferedInputStream, "UTF-8")
+                }
+            } catch (e: IOException) {
+                val llsdxmlException = LLSDXMLException("I/O error")
+                llsdxmlException.initCause(e)
+                throw llsdxmlException
+            }
+        }
+
+        private fun parseArrayBody(dataInputStream: DataInputStream): LLSDNode {
+            val readInt = dataInputStream.readInt()
+            val llsdArray = LLSDArray()
+            var i = 0
+            while (i < readInt) {
+                llsdArray.add(fromBinary(dataInputStream))
+                i++
+            }
+            if (dataInputStream.readByte().toInt() != 93) {
+                throw LLSDXMLException("Array terminator expected")
+            }
+            return llsdArray
+        }
+
+        @JvmStatic
+        fun fromBinary(dataInputStream: DataInputStream): LLSDNode {
+            var i = 0
+            while (true) {
+                try {
+                    val readByte = dataInputStream.readByte()
+                    when (readByte.toInt()) {
+                        10 -> {
+                            // whitespace, continue loop
+                        }
+                        33 -> return LLSDUndefined()
+                        48 -> return LLSDBoolean(false)
+                        49 -> return LLSDBoolean(true)
+                        60 -> {
+                            do {
+                            } while (dataInputStream.readByte().toInt() != 62)
+                            return parseArrayBody(dataInputStream)
+                        }
+                        91 -> return parseArrayBody(dataInputStream)
+                        98 -> {
+                            val bytes = ByteArray(dataInputStream.readInt())
+                            dataInputStream.readFully(bytes)
+                            return LLSDBinary(bytes)
+                        }
+                        100 -> return LLSDDate(Date(Math.round(dataInputStream.readDouble() * 1000.0)))
+                        105 -> return LLSDInt(dataInputStream.readInt())
+                        108 -> {
+                            val readInt2 = dataInputStream.readInt()
+                            if (readInt2 == 0) {
+                                return LLSDURI("")
+                            }
+                            val bytes2 = ByteArray(readInt2)
+                            dataInputStream.readFully(bytes2)
+                            return LLSDURI(SLMessage.stringFromVariableUTF(bytes2))
+                        }
+                        114 -> return LLSDDouble(dataInputStream.readDouble())
+                        115 -> {
+                            val readInt3 = dataInputStream.readInt()
+                            if (readInt3 == 0) {
+                                return LLSDString("")
+                            }
+                            val bytes3 = ByteArray(readInt3)
+                            dataInputStream.readFully(bytes3)
+                            return LLSDString(SLMessage.stringFromVariableUTF(bytes3))
+                        }
+                        117 -> return LLSDUUID(UUID(dataInputStream.readLong(), dataInputStream.readLong()))
+                        123 -> {
+                            val readInt4 = dataInputStream.readInt()
+                            val hashMap = HashMap<String, LLSDNode>(readInt4)
+                            while (i < readInt4) {
+                                if (dataInputStream.readByte().toInt() != 107) {
+                                    throw LLSDXMLException("Map key expected")
+                                }
+                                val bytes4 = ByteArray(dataInputStream.readInt())
+                                dataInputStream.readFully(bytes4)
+                                hashMap[SLMessage.stringFromVariableUTF(bytes4)] = fromBinary(dataInputStream)
+                                i++
+                            }
+                            val llsdMap = LLSDMap(hashMap)
+                            if (dataInputStream.readByte().toInt() != 125) {
+                                throw LLSDXMLException("Map terminator expected")
+                            }
+                            return llsdMap
+                        }
+                        else -> throw LLSDXMLException("Unknown LLSD element 0x" + Integer.toHexString(readByte.toInt()))
+                    }
+                } catch (e: IOException) {
+                    val llsdxmlException = LLSDXMLException(e.message)
+                    llsdxmlException.initCause(e)
+                    throw llsdxmlException
+                }
+            }
+        }
+
+        @JvmStatic
+        fun fromBinaryFile(file: File): LLSDNode {
+            try {
+                DataInputStream(FileInputStream(file)).use { dataInputStream ->
+                    return fromBinary(dataInputStream)
+                }
+            } catch (e: IOException) {
+                val llsdxmlException = LLSDXMLException(e.message)
+                llsdxmlException.initCause(e)
+                throw llsdxmlException
+            }
+        }
+
+        @JvmStatic
+        fun parseXML(inputStream: InputStream, str: String): LLSDNode {
+            try {
+                val newPullParser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
+                newPullParser.setInput(inputStream, str)
+                newPullParser.nextTag()
+                newPullParser.require(2, null, "llsd")
+                newPullParser.nextTag()
+                val parseNode: LLSDNode = LLSDNodeFactory.parseNode(newPullParser)
+                newPullParser.nextTag()
+                newPullParser.require(3, null, "llsd")
+                return parseNode
+            } catch (e: IOException) {
+                throw LLSDXMLException("Input stream error")
+            } catch (e: XmlPullParserException) {
+                Debug.Log("XmlPullParserException: " + e.message)
+                e.printStackTrace()
+                val llsdxmlException = LLSDXMLException("Malformed XML")
+                llsdxmlException.initCause(e)
+                throw llsdxmlException
+            }
+        }
+    }
 }

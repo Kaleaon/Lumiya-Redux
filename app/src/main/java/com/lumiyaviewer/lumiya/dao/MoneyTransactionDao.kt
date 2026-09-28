@@ -29,7 +29,7 @@ class MoneyTransactionDao : AbstractDao<MoneyTransaction, Long> {
         if (id != null) {
             sqLiteStatement.bindLong(1, id)
         }
-        sqLiteStatement.bindLong(2, moneyTransaction.timestamp.time)
+        sqLiteStatement.bindLong(2, moneyTransaction.timestamp!!.time)
         val agentUUID = moneyTransaction.agentUUID
         if (agentUUID != null) {
             sqLiteStatement.bindString(3, agentUUID.toString())

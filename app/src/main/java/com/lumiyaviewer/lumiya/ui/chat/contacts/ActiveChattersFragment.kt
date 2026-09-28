@@ -8,6 +8,6 @@ import com.lumiyaviewer.lumiya.ui.common.UserListFragment
 
 open class ActiveChattersFragment : UserListFragment() {
     override fun createListAdapter(context: Context, loaderManager: LoaderManager, userManager: UserManager): ListAdapter =
-        ActiveChatsListAdapter(activity, userManager)
+        ActiveChatsListAdapter(requireActivity(), userManager)
     override fun itemsMayBeDismissed(): Boolean = true
 }

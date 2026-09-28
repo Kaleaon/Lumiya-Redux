@@ -52,10 +52,6 @@ class DaoMaster(sqLiteDatabase: SQLiteDatabase) : AbstractDaoMaster(sqLiteDataba
             dropAllTables(sqLiteDatabase, true)
             onCreate(sqLiteDatabase)
         }
-
-        open fun onDowngrade(sqLiteDatabase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            onUpgrade(sqLiteDatabase, oldVersion, newVersion)
-        }
     }
 
     companion object {
