@@ -44,13 +44,17 @@ class DaoMaster(sqLiteDatabase: SQLiteDatabase) : AbstractDaoMaster(sqLiteDataba
         }
     }
 
-    class DevOpenHelper(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?) :
+    open class DevOpenHelper(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?) :
         OpenHelper(context, name, factory) {
 
         override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
             Log.i("greenDAO", "Upgrading schema from version $oldVersion to $newVersion by dropping all tables")
             dropAllTables(sqLiteDatabase, true)
             onCreate(sqLiteDatabase)
+        }
+
+        open fun onDowngrade(sqLiteDatabase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+            onUpgrade(sqLiteDatabase, oldVersion, newVersion)
         }
     }
 
