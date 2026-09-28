@@ -37,7 +37,7 @@ open class NearbyPeopleMinimapFragment : Fragment() {
 
     private MinimapUsersBinding binding
 
-    private SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<ChatterListType, ImmutableList<ChatterDisplayData>> chatterList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             NearbyPeopleMinimapFragment.this.onChatterList((ImmutableList) obj)
         }
 

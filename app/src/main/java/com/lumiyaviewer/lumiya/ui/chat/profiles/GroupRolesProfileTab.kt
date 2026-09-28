@@ -29,10 +29,10 @@ import java.util.Map
 import java.util.UUID
 
 open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener {
-    private SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupProfileReply> groupProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.groupProfile, this.groupRoles, this.myGroupList).withOptionalLoadables(this.groupTitles).withDataChangedListener(this)
     private GroupRoleAdapter adapter = null
 
@@ -142,7 +142,7 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
             this.adapter = GroupRoleAdapter()
         }
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setAdapter((ListAdapter) this.adapter)
-        ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setOnItemClickListener(AdapterView.OnItemClickListener() {
                 GroupRolesProfileTab.this.m508x3dfd52a4(adapterView, view, i, j)
             }
 

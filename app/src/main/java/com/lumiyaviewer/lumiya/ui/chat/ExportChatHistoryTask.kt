@@ -33,8 +33,8 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
     private Lock nameReadyLock = ReentrantLock()
     private Condition nameReadyCondition = this.nameReadyLock.newCondition()
     private AtomicBoolean isNameReady = AtomicBoolean()
-    private AtomicReference<String> gotChatterName = new AtomicReference<>()
-    private ChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
+    private AtomicReference<String> gotChatterName = AtomicReference<>()
+    private ChatterNameRetriever.OnChatterNameUpdated onChatterNameUpdated = ChatterNameRetriever.OnChatterNameUpdated() {
             ExportChatHistoryTask.this.m431x863366ea(chatterNameRetriever)
         }
 

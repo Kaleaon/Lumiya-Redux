@@ -128,7 +128,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
     private boolean isResumed = false
     private AtomicBoolean viewDrawPosted = AtomicBoolean(false)
     private boolean voiceEnabled = false
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             CardboardActivity.this.onAgentCircuit((SLAgentCircuit) obj)
         }
 
@@ -137,7 +137,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
             return false
         }
     }
-    private View.OnHoverListener onHoverListener = new View.OnHoverListener() {
+    private View.OnHoverListener onHoverListener = View.OnHoverListener() {
             return CardboardActivity.this.m784xd3567aba(view, motionEvent)
         }
 
@@ -242,7 +242,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
             }
         }
     }
-    private View.OnClickListener onDialogButtonClick = new View.OnClickListener() {
+    private View.OnClickListener onDialogButtonClick = View.OnClickListener() {
         override fun onClick(view: View) {
             if (CardboardActivity.this.activeScriptDialog != null) {
                 int i = 0
@@ -264,7 +264,7 @@ open class CardboardActivity : DetailsActivity(), ObjectPopupsManager.ObjectPopu
         }
     }
     private Object chatEventHandler = AnonymousClass5()
-    private View.OnClickListener onVoiceCallButtonListener = new View.OnClickListener() {
+    private View.OnClickListener onVoiceCallButtonListener = View.OnClickListener() {
             CardboardActivity.this.m785xd399c564(view)
         }
 

@@ -22,7 +22,7 @@ import com.lumiyaviewer.lumiya.ui.common.ConnectedActivity
 import java.util.UUID
 
 open class MinimapActivity : ConnectedActivity() {
-    private SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfo = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             MinimapActivity.this.onCurrentLocationInfo((CurrentLocationInfo) obj)
         }
 

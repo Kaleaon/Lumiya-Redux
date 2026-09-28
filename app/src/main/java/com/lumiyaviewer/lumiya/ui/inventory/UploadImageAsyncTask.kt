@@ -109,16 +109,16 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
                     uploaded = false
                 } else {
                     LLSDNode uploadTicket = LLSDXMLRequest().PerformRequest(capabilityURL, LLSDMap(
-                            new LLSDMap.LLSDMapEntry("asset_type", LLSDString("texture")),
-                            new LLSDMap.LLSDMapEntry("description", LLSDString("(No description)")),
-                            new LLSDMap.LLSDMapEntry("folder_id", LLSDUUID(upload.folderID)),
-                            new LLSDMap.LLSDMapEntry("inventory_type", LLSDString("texture")),
-                            new LLSDMap.LLSDMapEntry("name", LLSDString(upload.name))))
+                            LLSDMap.LLSDMapEntry("asset_type", LLSDString("texture")),
+                            LLSDMap.LLSDMapEntry("description", LLSDString("(No description)")),
+                            LLSDMap.LLSDMapEntry("folder_id", LLSDUUID(upload.folderID)),
+                            LLSDMap.LLSDMapEntry("inventory_type", LLSDString("texture")),
+                            LLSDMap.LLSDMapEntry("name", LLSDString(upload.name))))
                     if (uploadTicket == null) {
                         throw IOException("Upload request refused")
                     }
                     String uploaderURL = uploadTicket.byKey("uploader").asString()
-                    Response response = SLHTTPSConnection.getOkHttpClient().newCall(new Request.Builder()
+                    Response response = SLHTTPSConnection.getOkHttpClient().newCall(Request.Builder()
                             .url(uploaderURL)
                             .header("Accept", "application/llsd+xml")
                             .post(RequestBody.create(MEDIA_TYPE_JP2, encodedFile))
@@ -167,11 +167,11 @@ open class UploadImageAsyncTask : AsyncTask<UploadImageParams, Void, UploadImage
         }
         if (!(uploadImageResult != null ? uploadImageResult.success : false)) {
             String string = uploadImageResult != null ? uploadImageResult.errorMessage : null
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.context)
+            AlertDialog.Builder builder = AlertDialog.Builder(this.context)
             if (string == null) {
                 string = this.context.getString(com.lumiyaviewer.lumiya.R.string.failed_to_upload_picture)
             }
-            builder.setMessage(string).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            builder.setMessage(string).setCancelable(true).setNegativeButton("Dismiss", DialogInterface.OnClickListener() {
                     dialogInterface.cancel()
                 }
 

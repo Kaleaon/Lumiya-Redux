@@ -24,7 +24,7 @@ import java.util.UUID
 
 open class ChatNewActivity : MasterDetailsActivity(), UnreadNotificationManager.NotifyCapture {
     private Subscription<SubscriptionSingleKey, CurrentLocationInfo> currentLocationInfoSubscription
-    private Subscription.OnData<CurrentLocationInfo> onCurrentLocation = new Subscription.OnData() {
+    private Subscription.OnData<CurrentLocationInfo> onCurrentLocation = Subscription.OnData() {
             ChatNewActivity.this.m424lambda$com_lumiyaviewer_lumiya_ui_chat_ChatNewActivity_4384((CurrentLocationInfo) obj)
         }
 

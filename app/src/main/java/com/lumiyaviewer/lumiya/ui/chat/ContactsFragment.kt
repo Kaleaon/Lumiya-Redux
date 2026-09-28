@@ -200,7 +200,7 @@ open class ContactsFragment : Fragment() {
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
         if (userManager != null) {
-            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), new Subscription.OnData() {
+            this.subscription = userManager.getCurrentLocationInfo().subscribe(SubscriptionSingleDataPool.getSingleDataKey(), UIThreadExecutor.getInstance(), Subscription.OnData() {
                     ContactsFragment.this.onCurrentLocation((CurrentLocationInfo) obj)
                 }
 

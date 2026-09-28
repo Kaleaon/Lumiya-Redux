@@ -42,7 +42,7 @@ open class InventoryActivity : MasterDetailsActivity() {
     private boolean activityStarted = false
     private String nameFilter = null
     private String fragmentSearchString = null
-    private SubscriptionData<SubscriptionSingleKey, Boolean> searchProcess = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, Boolean> searchProcess = SubscriptionData<>(UIThreadExecutor.getInstance())
     private FragmentActivityFactory InventoryDetailsFragmentFactory = FragmentActivityFactory() {
         override fun createIntent(context: Context, bundle: Bundle): Intent {
             Intent intent = Intent(context, (Class<?>) InventoryActivity.class)
@@ -119,9 +119,9 @@ open class InventoryActivity : MasterDetailsActivity() {
 
     private fun selectSortOrder() {
         int sortOrder = InventoryFragmentHelper.getSortOrder(this)
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = AlertDialog.Builder(this)
         builder.setTitle(R.string.sort_order_caption)
-        builder.setSingleChoiceItems(arrayOfNulls<CharSequence>(]{"Newest first", "Alphabetical"}, sortOrder, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(arrayOfNulls<CharSequence>(]{"Newest first", "Alphabetical"}, sortOrder, DialogInterface.OnClickListener() {
                 InventoryActivity.this.m599xeedaf4f8(sortOrder, dialogInterface, i)
             }
 
@@ -139,7 +139,7 @@ open class InventoryActivity : MasterDetailsActivity() {
             MenuItemCompat.expandActionView(this.searchMenuItem)
             searchView.setQuery(this.nameFilter, false)
         }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(SearchView.OnQueryTextListener() {
             override fun onQueryTextChange(str: String): Boolean {
                 InventoryActivity.this.nameFilter = str
                 InventoryActivity.this.updateSearchAction()
@@ -150,7 +150,7 @@ open class InventoryActivity : MasterDetailsActivity() {
                 return true
             }
         })
-        MenuItemCompat.setOnActionExpandListener(this.searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(this.searchMenuItem, MenuItemCompat.OnActionExpandListener() {
             override fun onMenuItemActionCollapse(menuItem: MenuItem): Boolean {
                 InventoryActivity.this.searchActive = false
                 InventoryActivity.this.updateSearchAction()

@@ -128,7 +128,7 @@ open class ActiveChatsListAdapter : BaseAdapter(), Closeable, DismissableAdapter
         this.userManager = userManager
         this.inflater = LayoutInflater.from(context)
         this.localChatItem = LocalChatItem(ChatterID.getLocalChatterID(userManager.getUserID()))
-        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), new Subscription.OnData() {
+        this.activeChattersSubscription = userManager.getChatterList().getChatterList().subscribe(ChatterListType.Active, UIThreadExecutor.getInstance(), Subscription.OnData() {
                 ActiveChatsListAdapter.this.m438x73a3bdf5((ImmutableList) obj)
             }
 

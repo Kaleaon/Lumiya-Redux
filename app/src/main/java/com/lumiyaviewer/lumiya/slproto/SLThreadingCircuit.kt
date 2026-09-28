@@ -18,7 +18,7 @@ open class SLThreadingCircuit @Throws(IOException::class) constructor(
         private const val DEFAULT_IDLE_INTERVAL: Int = 1000
     }
 
-    private val queue: BlockingQueue<Runnable>
+    private val queue: BlockingQueue<Runnable> = LinkedBlockingQueue()
     @Volatile
     private var workEnabled: Boolean = false
     private val workingRunnable: Runnable

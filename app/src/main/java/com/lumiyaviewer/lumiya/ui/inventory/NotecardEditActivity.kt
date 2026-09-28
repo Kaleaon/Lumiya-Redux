@@ -57,7 +57,7 @@ open class NotecardEditActivity : ThemedActivity(), SLNotecard.OnAttachmentClick
     private boolean isEditingScript = false
     private UUID taskUUID = null
     private int taskLocalID = 0
-    private SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<AssetKey, AssetData> notecardAssetSubscription = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             NotecardEditActivity.this.onNotecardLoaded((AssetData) obj)
         }
 
@@ -91,7 +91,7 @@ open class NotecardEditActivity : ThemedActivity(), SLNotecard.OnAttachmentClick
                 SLInventory sLInventory = this.agentCircuit.get().getModules().inventory
                 this.isSaving = true
                 updateButtonsForMode()
-                sLInventory.UpdateNotecard(this.noteEntry, this.parentFolderUUID, this.isEditingScript, editable, editable2, bArr, this.taskUUID, this.taskLocalID, new SLInventory.OnNotecardUpdatedListener() {
+                sLInventory.UpdateNotecard(this.noteEntry, this.parentFolderUUID, this.isEditingScript, editable, editable2, bArr, this.taskUUID, this.taskLocalID, SLInventory.OnNotecardUpdatedListener() {
                         NotecardEditActivity.this.m635xf7aea699(sLInventoryEntry, str)
                     }
 

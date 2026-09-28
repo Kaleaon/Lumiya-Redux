@@ -40,7 +40,7 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
     private static String PARCEL_UUID_KEY = "parcelUUID"
 
     private ParcelInfoBinding binding
-    private SubscriptionData<UUID, ParcelInfoReply> parcelInfoReply = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, ParcelInfoReply> parcelInfoReply = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.parcelInfoReply).withDataChangedListener(this)
     private ChatterNameRetriever ownerNameRetriever = null
     private ChatterNameRetriever ownerGroupNameRetriever = null
@@ -150,8 +150,8 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
             return
         }
         LLVector3 lLVector3 = LLVector3(data.Data_Field.GlobalX, data.Data_Field.GlobalY, data.Data_Field.GlobalZ)
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-        builder.setMessage(getActivity().getString(R.string.teleport_parcel_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = AlertDialog.Builder(getActivity())
+        builder.setMessage(getActivity().getString(R.string.teleport_parcel_confirm_title)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 ParcelInfoFragment.this.m858xc965e5a8((UserManager) userManager, (LLVector3) lLVector3, dialogInterface, i)
             }
 

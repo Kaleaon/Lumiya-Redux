@@ -31,7 +31,7 @@ open class SearchGridFragment : FragmentWithTitle(), LoadableMonitor.OnLoadableD
 
     private SearchGridAdapter adapter
     private SearchFragmentBinding binding
-    private SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.searchResults).withDataChangedListener(this)
 
     private fun beginSearch() {
