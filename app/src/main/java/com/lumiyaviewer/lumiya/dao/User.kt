@@ -45,8 +45,8 @@ class User : ChatterDisplayInfo {
     }
 
     override fun buildView(context: Context, chatterItemViewBuilder: ChatterItemViewBuilder, userManager: UserManager) {
-        chatterItemViewBuilder.setLabel(displayName)
-        chatterItemViewBuilder.setThumbnailChatterID(getChatterID(userManager), displayName)
+        chatterItemViewBuilder.setLabel(displayName ?: "")
+        chatterItemViewBuilder.setThumbnailChatterID(getChatterID(userManager), displayName ?: "")
     }
 
     fun getBadUUID(): Boolean = badUUID

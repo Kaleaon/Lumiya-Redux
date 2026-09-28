@@ -249,7 +249,7 @@ abstract class LLSDNode {
                         else -> throw LLSDXMLException("Unknown LLSD element 0x" + Integer.toHexString(readByte.toInt()))
                     }
                 } catch (e: IOException) {
-                    val llsdxmlException = LLSDXMLException(e.message)
+                    val llsdxmlException = LLSDXMLException(e.message ?: "")
                     llsdxmlException.initCause(e)
                     throw llsdxmlException
                 }
@@ -263,7 +263,7 @@ abstract class LLSDNode {
                     return fromBinary(dataInputStream)
                 }
             } catch (e: IOException) {
-                val llsdxmlException = LLSDXMLException(e.message)
+                val llsdxmlException = LLSDXMLException(e.message ?: "")
                 llsdxmlException.initCause(e)
                 throw llsdxmlException
             }
