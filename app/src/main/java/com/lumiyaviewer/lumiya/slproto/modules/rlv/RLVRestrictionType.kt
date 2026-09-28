@@ -1,6 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.modules.rlv
 
-enum class RLVRestrictionType {
+enum class RLVRestrictionType(private val ruleMatchType: RLVRestrictionType.RLVRuleMatchType) {
     detach(RLVRuleMatchType.TargetSpecifiesRestriction),
     sendchat(RLVRuleMatchType.TargetNoExceptions),
     recvchat(RLVRuleMatchType.TargetSpecifiesException),
@@ -20,24 +20,18 @@ enum class RLVRestrictionType {
     remoutfit(RLVRuleMatchType.TargetSpecifiesRestriction),
     addoutfit(RLVRuleMatchType.TargetSpecifiesRestriction),
     redirchat(RLVRuleMatchType.TargetSpecifiesRestriction),
-    sendchannel(RLVRuleMatchType.TargetSpecifiesException)
-
-    private var ruleMatchType: RLVRuleMatchType? = null
+    sendchannel(RLVRuleMatchType.TargetSpecifiesException);
 
     enum class RLVRuleMatchType {
         TargetSpecifiesException,
         TargetSpecifiesRestriction,
         TargetNoExceptions,
-        TargetSpecifiesAllowance
+        TargetSpecifiesAllowance;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         fun valuesCustom(): Array<RLVRuleMatchType> {
             return values()
         }
-    }
-
-    constructor(rlvRuleMatchType: RLVRuleMatchType) {
-        this.ruleMatchType = rlvRuleMatchType
     }
 
     /* renamed from: values, reason: to resolve conflict with enum method */

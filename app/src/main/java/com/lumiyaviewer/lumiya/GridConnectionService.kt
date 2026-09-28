@@ -203,6 +203,7 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
             sharedPreferences.getBoolean("autoresponse", false),
             sharedPreferences.getString("autoresponseText",
                 "(Autoresponse) I have auto-response feature enabled. I will respond shortly.")
+                ?: "(Autoresponse) I have auto-response feature enabled. I will respond shortly."
         )
         Debug.Log("GridConnectionService: prefs: onlineNotify = $onlineNotify")
         Debug.Log("GridConnectionService: prefs: soundOnNotify = $soundOnNotify")
