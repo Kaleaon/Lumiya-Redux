@@ -163,7 +163,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
     ) {
         private val jointAnims = SparseArray<AnimationJointData>()
 
-        internal fun addJointData(index: Int, data: AnimationJointData) {
+        private fun addJointData(index: Int, data: AnimationJointData) {
             jointAnims.put(index, data)
         }
 
