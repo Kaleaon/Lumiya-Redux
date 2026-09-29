@@ -5,24 +5,26 @@ import androidx.fragment.app.FragmentActivity
 import com.lumiyaviewer.lumiya.Debug
 
 open class FragmentWithTitle : StateAwareFragment(), FragmentHasTitle {
-    private static String FRAGMENT_SUBTITLE_TAG = "FragmentWithTitle:fragmentSubTitle"
-    private static String FRAGMENT_TITLE_TAG = "FragmentWithTitle:fragmentTitle"
+    companion object {
+        private const val FRAGMENT_SUBTITLE_TAG = "FragmentWithTitle:fragmentSubTitle"
+        private const val FRAGMENT_TITLE_TAG = "FragmentWithTitle:fragmentTitle"
+    }
 
-    private String fragmentTitle = null
+    private var fragmentTitle: String? = null
 
-    private String fragmentSubTitle = null
+    private var fragmentSubTitle: String? = null
 
     override fun getSubTitle(): String? {
         return this.fragmentSubTitle
     }
 
-    open fun getTitle(): String? {
+    override fun getTitle(): String? {
         return this.fragmentTitle
     }
 
-    override fun onCreate(bundle: .annotation.Nullable Bundle) {
+    override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        internal fun if(null: bundle !=):  {
+        if (bundle != null) {
             this.fragmentTitle = bundle.getString(FRAGMENT_TITLE_TAG)
             this.fragmentSubTitle = bundle.getString(FRAGMENT_SUBTITLE_TAG)
         }
@@ -30,17 +32,17 @@ open class FragmentWithTitle : StateAwareFragment(), FragmentHasTitle {
 
     override fun onDetach() {
         super.onDetach()
-        FragmentActivity activity = getActivity()
-        internal fun if(DetailsActivity: activity instanceof):  {
-            ((DetailsActivity) activity).onFragmentTitleUpdated()
+        val activity: FragmentActivity? = activity
+        if (activity is DetailsActivity) {
+            activity.onFragmentTitleUpdated()
         }
     }
 
     override fun onHiddenChanged(z: Boolean) {
         super.onHiddenChanged(z)
-        FragmentActivity activity = getActivity()
-        internal fun if(DetailsActivity: activity instanceof):  {
-            ((DetailsActivity) activity).onFragmentTitleUpdated()
+        val activity: FragmentActivity? = activity
+        if (activity is DetailsActivity) {
+            activity.onFragmentTitleUpdated()
         }
     }
 
@@ -52,19 +54,19 @@ open class FragmentWithTitle : StateAwareFragment(), FragmentHasTitle {
 
     override fun onStart() {
         super.onStart()
-        FragmentActivity activity = getActivity()
-        internal fun if(DetailsActivity: activity instanceof):  {
-            ((DetailsActivity) activity).onFragmentTitleUpdated()
+        val activity: FragmentActivity? = activity
+        if (activity is DetailsActivity) {
+            activity.onFragmentTitleUpdated()
         }
     }
 
-    open fun setTitle(fragmentTitle: String, fragmentSubTitle: String) {
+    open fun setTitle(fragmentTitle: String?, fragmentSubTitle: String?) {
         this.fragmentTitle = fragmentTitle
         this.fragmentSubTitle = fragmentSubTitle
-        FragmentActivity activity = getActivity()
+        val activity: FragmentActivity? = activity
         Debug.Printf("updateTitle: title '%s', subTitle '%s', activity %s, fragment %s", fragmentTitle, fragmentSubTitle, activity, this)
-        internal fun if(DetailsActivity: activity instanceof):  {
-            ((DetailsActivity) activity).onFragmentTitleUpdated()
+        if (activity is DetailsActivity) {
+            activity.onFragmentTitleUpdated()
         }
     }
 }

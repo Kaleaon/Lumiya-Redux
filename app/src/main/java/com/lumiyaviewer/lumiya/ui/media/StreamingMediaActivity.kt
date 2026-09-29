@@ -30,7 +30,7 @@ class StreamingMediaActivity : AppCompatActivity(), View.OnClickListener {
         if (intent.hasExtra("parcelData")) {
             val parcelData = IntentCompat.getSerializableExtra(intent, "parcelData", ParcelData::class.java)
             if (parcelData != null) {
-                findViewById<TextView>(R.id.locationNameView).text = parcelData.name
+                findViewById<TextView>(R.id.locationNameView).text = parcelData.getName()
             }
         }
         findViewById<View>(R.id.parcel_media_stop_button).setOnClickListener(this)

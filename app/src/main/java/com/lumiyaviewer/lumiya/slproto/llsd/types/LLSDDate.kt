@@ -2,31 +2,35 @@ package com.lumiyaviewer.lumiya.slproto.llsd.types
 
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
 import java.io.DataOutputStream
-import java.io.IOException
 import java.util.Date
 import org.xmlpull.v1.XmlSerializer
 
-open class LLSDDate : LLSDNode() {
-    private var value: Date = null
+@Suppress("DEPRECATION")
+open class LLSDDate : LLSDNode {
+    private var value: Date
 
     constructor(str: String) {
-        try {
-            this.value = Date(str)
+        this.value = try {
+            Date(str)
         } catch (e: Exception) {
-            this.value = Date()
+            Date()
         }
     }
 
     constructor(date: Date) {
         this.value = date
     }
-    fun asDate(): Date {
+
+    override fun asDate(): Date {
         return this.value
     }
-    public void toBinary(DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeBytedataOutputStream as 100.writeDouble(this.value.getTime() / 1000)
+
+    override fun toBinary(dataOutputStream: DataOutputStream) {
+        dataOutputStream.writeByte(100)
+        dataOutputStream.writeDouble((this.value.time / 1000).toDouble())
     }
-    public void toXML(XmlSerializer xmlSerializer) throws IOException {
+
+    override fun toXML(xmlSerializer: XmlSerializer) {
         xmlSerializer.startTag("", "date")
         xmlSerializer.text(this.value.toGMTString())
         xmlSerializer.endTag("", "date")

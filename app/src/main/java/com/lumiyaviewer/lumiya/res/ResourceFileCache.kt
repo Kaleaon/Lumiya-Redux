@@ -24,8 +24,7 @@ abstract class ResourceFileCache<ResourceParams, ResourceType> : ResourceMemoryC
             try {
                 completeRequest(createResourceFromFile(getParams(), file))
             } catch (e: Exception) {
-                @Suppress("UNCHECKED_CAST")
-                completeRequest(null as ResourceType)
+                completeRequest(null)
             }
         }
     }

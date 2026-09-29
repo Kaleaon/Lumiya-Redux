@@ -36,7 +36,7 @@ class SLMissedVoiceCallEvent : SLChatYesNoEvent() {
         return ""
     }
     fun onYesAction(context: Context, userManager: UserManager) {
-        var modules: SLModules = null
+        var modules: SLModules? = null
         super.onYesAction(context, userManager)
         var activeAgentCircuit: SLAgentCircuit = userManager.getActiveAgentCircuit()
         if (activeAgentCircuit == null || (modules = activeAgentCircuit.getModules()) == null) {

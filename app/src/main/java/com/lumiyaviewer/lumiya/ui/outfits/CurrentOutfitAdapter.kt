@@ -26,7 +26,7 @@ internal open class CurrentOutfitAdapter : BaseAdapter(), DismissableAdapter {
 
     override fun canDismiss(i: Int): Boolean {
         SLAvatarAppearance.WornItem item = getItem(i)
-        internal fun if(null: item == null || this.avatarAppearance ==):  {
+        if (item == null || this.avatarAppearance == null) {
             return false
         }
         if (item.getWornOn() == null) {
@@ -83,7 +83,7 @@ internal open class CurrentOutfitAdapter : BaseAdapter(), DismissableAdapter {
 
     override fun onDismiss(i: Int) {
         SLAvatarAppearance.WornItem item = getItem(i)
-        internal fun if(null: item == null || this.avatarAppearance ==):  {
+        if (item == null || this.avatarAppearance == null) {
             return
         }
         if (item.getWornOn() != null) {
@@ -98,7 +98,7 @@ internal open class CurrentOutfitAdapter : BaseAdapter(), DismissableAdapter {
     }
 
     open fun setData(immutableList: ImmutableList<SLAvatarAppearance.WornItem>) {
-        internal fun if(null: immutableList ==):  {
+        if (immutableList == null) {
             immutableList = ImmutableList.of()
         }
         this.wornItems = immutableList

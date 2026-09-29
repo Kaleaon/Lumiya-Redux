@@ -4,8 +4,8 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.GroupManager
 import java.util.UUID
 
 class AutoValue_GroupManager_GroupMembersQuery : GroupManager.GroupMembersQuery() {
-    private var groupID: UUID = null
-    private var requestID: UUID = null
+    private var groupID: UUID? = null
+    private var requestID: UUID? = null
 
     constructor(uuid: UUID, requestID: UUID) {
         if (uuid == null) {

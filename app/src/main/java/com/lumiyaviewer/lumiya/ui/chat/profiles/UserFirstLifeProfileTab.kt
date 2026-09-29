@@ -27,14 +27,14 @@ open class UserFirstLifeProfileTab : ChatterReloadableFragment(), LoadableMonito
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.avatarProperties).withDataChangedListener(this)
 
     protected open fun onAboutEditClicked(view: View) {
-        internal fun if(null: this.chatterID !=):  {
+        if (this.chatterID != null) {
             DetailsActivity.showEmbeddedDetails(getActivity(), UserAboutTextEditFragment.class, UserAboutTextEditFragment.makeSelection(this.chatterID, true))
         }
     }
 
     protected open fun onChangePicClicked(view: View) {
         AvatarPropertiesReply data = this.avatarProperties.getData()
-        internal fun if(null: this.chatterID == null || data ==):  {
+        if (this.chatterID == null || data == null) {
             return
         }
         Bundle bundle = Bundle()
@@ -79,7 +79,7 @@ open class UserFirstLifeProfileTab : ChatterReloadableFragment(), LoadableMonito
         }
         UUID chatterUUID = ((ChatterID.ChatterIDUser) chatterID).getChatterUUID()
         this.avatarProperties.subscribe(this.userManager.getAvatarProperties().getPool(), chatterUUID)
-        internal fun if(null: binding !=):  {
+        if (binding != null) {
             boolean equals = chatterUUID == (this.userManager.getUserID())
             binding.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE)
             binding.changePicButton.setVisibility(equals ? View.VISIBLE : View.GONE)

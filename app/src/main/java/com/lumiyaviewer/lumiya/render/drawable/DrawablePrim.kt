@@ -45,7 +45,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
         this.isRiggedMesh = drawableGeometry.isRiggedMesh
         this.riggingFitsGL20 = if (isRiggedMesh) drawableGeometry.riggingFitsGL20() else false
         this.FaceCount = drawableGeometry.getFaceCount()
-        val textures = primDrawParams.textures
+        val textures = primDrawParams.getTextures()
         if (textures == null) {
             isSingleFace = false
             singleFaceColor = 0
@@ -56,7 +56,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
             FaceUVMatrices = FloatArray(FaceCount * 16)
         } else {
             val textureEntryFace = textures.GetDefaultTexture()
-            if (textures.isSingleFace && isFacesCombined) {
+            if (textures.isSingleFace() && isFacesCombined) {
                 isSingleFace = true
                 singleFaceMatrix = FloatArray(16)
                 val textureEntryFace2 = textures.GetFace(0)
@@ -64,7 +64,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
                     singleFaceColor = textureEntryFace2.getRGBA(textureEntryFace)
                     val textureID = textureEntryFace2.getTextureID(textureEntryFace)
                     singleFaceTexture = if (textureID != null) {
-                        DrawableFaceTexture(faceTextureParams(textureID, primDrawParams.bakes))
+                        DrawableFaceTexture(faceTextureParams(textureID, primDrawParams.getBakes()))
                     } else null
                     initFaceUVMatrix(textureEntryFace, textureEntryFace2, singleFaceMatrix, 0)
                 } else {
@@ -90,7 +90,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
                         FaceColorsIDs[i + 1] = 0
                         val textureID2 = textureEntryFace3.getTextureID(textureEntryFace)
                         if (textureID2 != null) {
-                            FaceTextures[j] = DrawableFaceTexture(faceTextureParams(textureID2, primDrawParams.bakes))
+                            FaceTextures[j] = DrawableFaceTexture(faceTextureParams(textureID2, primDrawParams.getBakes()))
                         }
                         initFaceUVMatrix(textureEntryFace, textureEntryFace3, FaceUVMatrices, j * 16)
                     }
@@ -112,7 +112,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
         var z2 = false
         if (!z) {
             if (renderContext.hasGL20) {
-                GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - (i2 and 255)) / 255.0f, (255 - ((i2 shr 8) and 255)) / 255.0f, (255 - ((i2 shr 16) and 255)) / 255.0f, (255 - ((i2 shr 24) and 255)) / 255.0f)
+                GLES20.glUniform4f(renderContext.curPrimProgram!!.vColor, (255 - (i2 and 255)) / 255.0f, (255 - ((i2 shr 8) and 255)) / 255.0f, (255 - ((i2 shr 16) and 255)) / 255.0f, (255 - ((i2 shr 24) and 255)) / 255.0f)
             } else {
                 GLES10.glColor4f((255 - (i2 and 255)) / 255.0f, (255 - ((i2 shr 8) and 255)) / 255.0f, (255 - ((i2 shr 16) and 255)) / 255.0f, (255 - ((i2 shr 24) and 255)) / 255.0f)
             }
@@ -120,17 +120,17 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
                 z2 = true
             }
         } else if (renderContext.hasGL20) {
-            GLES20.glUniform4f(renderContext.curPrimProgram.vColor, 1.0f, 0.0f, 0.0f, 0.6f)
+            GLES20.glUniform4f(renderContext.curPrimProgram!!.vColor, 1.0f, 0.0f, 0.0f, 0.6f)
         } else {
             GLES10.glColor4f(1.0f, 0.0f, 0.0f, 0.6f)
         }
         if (z2 != drawingTextureEnabled || firstFace) {
             if (renderContext.hasGL20) {
                 if (z2) {
-                    renderContext.curPrimProgram.setTextureEnabled(true)
+                    renderContext.curPrimProgram!!.setTextureEnabled(true)
                 } else {
                     GLES20.glBindTexture(3553, 0)
-                    renderContext.curPrimProgram.setTextureEnabled(false)
+                    renderContext.curPrimProgram!!.setTextureEnabled(false)
                 }
             } else if (z2) {
                 GLES10.glEnable(3553)
@@ -143,7 +143,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
             firstFace = false
         }
         if (renderContext.hasGL20) {
-            GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, floats, i3)
+            GLES20.glUniformMatrix4fv(renderContext.curPrimProgram!!.uTexMatrix, 1, false, floats, i3)
             if (i == -1) {
                 drawableGeometry.GLDrawAll20(renderContext)
             } else {
@@ -173,9 +173,9 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
         if (faceRenderMask and i4 == 0) {
             return faceRenderMask
         }
-        GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - (i2 and 255)) / 255.0f, (255 - ((i2 shr 8) and 255)) / 255.0f, (255 - ((i2 shr 16) and 255)) / 255.0f, (255 - ((i2 shr 24) and 255)) / 255.0f)
+        GLES20.glUniform4f(renderContext.curPrimProgram!!.vColor, (255 - (i2 and 255)) / 255.0f, (255 - ((i2 shr 8) and 255)) / 255.0f, (255 - ((i2 shr 16) and 255)) / 255.0f, (255 - ((i2 shr 24) and 255)) / 255.0f)
         renderContext.bindFaceTexture(drawableFaceTexture)
-        GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, floats, i3)
+        GLES20.glUniformMatrix4fv(renderContext.curPrimProgram!!.uTexMatrix, 1, false, floats, i3)
         if (i == -1) {
             drawableGeometry.GLDrawAll20(renderContext)
         } else {
@@ -215,18 +215,19 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
         firstFace = true
         val glLoadableBuffer: GLLoadableBuffer?
         if (renderContext.hasGL20) {
-            val matrices = primFlexibleInfo?.matrices
-            renderContext.curPrimProgram = when {
+            val matrices = primFlexibleInfo?.getMatrices()
+            val curPrimProgram = when {
                 isRiggedMesh && riggingFitsGL20 -> renderContext.riggedMeshProgram
                 matrices != null -> renderContext.flexiPrimProgram
                 else -> renderContext.primProgram
             }
-            GLES20.glUseProgram(renderContext.curPrimProgram.handle)
-            renderContext.glModelApplyMatrix(renderContext.curPrimProgram.uMVPMatrix)
-            renderContext.glObjWorldApplyMatrix(renderContext.curPrimProgram.uObjWorldMatrix)
-            renderContext.glObjScaleApplyVector(renderContext.curPrimProgram.uObjCoordScale)
-            if (matrices != null && renderContext.curPrimProgram is FlexiPrimProgram) {
-                val flexiPrimProgram = renderContext.curPrimProgram as FlexiPrimProgram
+            renderContext.curPrimProgram = curPrimProgram
+            GLES20.glUseProgram(curPrimProgram!!.getHandle())
+            renderContext.glModelApplyMatrix(curPrimProgram.uMVPMatrix)
+            renderContext.glObjWorldApplyMatrix(curPrimProgram.uObjWorldMatrix)
+            renderContext.glObjScaleApplyVector(curPrimProgram.uObjCoordScale)
+            if (matrices != null && curPrimProgram is FlexiPrimProgram) {
+                val flexiPrimProgram = curPrimProgram
                 GLES20.glUniform1i(flexiPrimProgram.uNumSectionMatrices, matrices.size / 16)
                 GLES20.glUniformMatrix4fv(flexiPrimProgram.uSectionMatrices, matrices.size / 16, false, matrices, 0)
             }
@@ -247,23 +248,23 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
 
     fun DrawFast20(renderContext: RenderContext, z: Boolean, primFlexibleInfo: PrimFlexibleInfo?, i: Int): Int {
         val drawableGeometry = volumeGeometry
-        val matrices = primFlexibleInfo?.matrices
+        val matrices = primFlexibleInfo?.getMatrices()
         val z2 = i == 1
         val primProgram: PrimProgram = when {
-            isRiggedMesh && riggingFitsGL20 -> renderContext.riggedMeshProgram
-            matrices != null -> if (z2) renderContext.flexiPrimOpaqueProgram else renderContext.flexiPrimProgram
-            else -> if (z2) renderContext.primOpaqueProgram else renderContext.primProgram
+            isRiggedMesh && riggingFitsGL20 -> renderContext.riggedMeshProgram!!
+            matrices != null -> if (z2) renderContext.flexiPrimOpaqueProgram!! else renderContext.flexiPrimProgram!!
+            else -> if (z2) renderContext.primOpaqueProgram!! else renderContext.primProgram!!
         }
         if (renderContext.curPrimProgram !== primProgram) {
             renderContext.curPrimProgram = primProgram
-            GLES20.glUseProgram(renderContext.curPrimProgram.handle)
-            renderContext.glModelApplyMatrix(renderContext.curPrimProgram.uMVPMatrix)
+            GLES20.glUseProgram(primProgram.getHandle())
+            renderContext.glModelApplyMatrix(primProgram.uMVPMatrix)
         }
-        renderContext.glObjWorldApplyMatrix(renderContext.curPrimProgram.uObjWorldMatrix)
-        renderContext.glObjScaleApplyVector(renderContext.curPrimProgram.uObjCoordScale)
+        renderContext.glObjWorldApplyMatrix(primProgram.uObjWorldMatrix)
+        renderContext.glObjScaleApplyVector(primProgram.uObjCoordScale)
         if (matrices != null) {
-            GLES20.glUniform1i(renderContext.flexiPrimProgram.uNumSectionMatrices, matrices.size / 16)
-            GLES20.glUniformMatrix4fv(renderContext.flexiPrimProgram.uSectionMatrices, matrices.size / 16, false, matrices, 0)
+            GLES20.glUniform1i(renderContext.flexiPrimProgram!!.uNumSectionMatrices, matrices.size / 16)
+            GLES20.glUniformMatrix4fv(renderContext.flexiPrimProgram!!.uSectionMatrices, matrices.size / 16, false, matrices, 0)
         }
         drawableGeometry.GLBindBuffers20(renderContext)
         if (isSingleFace) {
@@ -290,9 +291,9 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
                     drawableGeometry.GLBindBuffersRigged30(renderContext)
                     z = true
                 }
-                GLES20.glUniform4f(renderContext.curPrimProgram.vColor, (255 - (i4 and 255)) / 255.0f, (255 - ((i4 shr 8) and 255)) / 255.0f, (255 - ((i4 shr 16) and 255)) / 255.0f, (255 - ((i4 shr 24) and 255)) / 255.0f)
+                GLES20.glUniform4f(renderContext.curPrimProgram!!.vColor, (255 - (i4 and 255)) / 255.0f, (255 - ((i4 shr 8) and 255)) / 255.0f, (255 - ((i4 shr 16) and 255)) / 255.0f, (255 - ((i4 shr 24) and 255)) / 255.0f)
                 renderContext.bindFaceTexture(drawableFaceTexture)
-                GLES20.glUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, 1, false, FaceUVMatrices!!, j * 16)
+                GLES20.glUniformMatrix4fv(renderContext.curPrimProgram!!.uTexMatrix, 1, false, FaceUVMatrices!!, j * 16)
                 drawableGeometry.GLDrawRiggedFace30(renderContext, j)
             }
         }
@@ -327,7 +328,7 @@ class DrawablePrim(primDrawParams: PrimDrawParams, drawableGeometry: DrawableGeo
                 if (bakedFace != null) {
                     val bake = bakes.getBake(bakedFace)
                     if (bake != null && bake != UUIDPool.ZeroUUID && bake != AvatarTextures.DEFAULT_AVATAR_TEXTURE) {
-                        return DrawableTextureParams.create(bake, bakedFace, bakes.avatarUUID)
+                        return DrawableTextureParams.create(bake, bakedFace, bakes.getAvatarUUID())
                     }
                 }
             }

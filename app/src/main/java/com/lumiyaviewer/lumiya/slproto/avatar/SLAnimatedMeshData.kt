@@ -14,8 +14,8 @@ open class SLAnimatedMeshData : SLMeshData() {
     @JvmStatic private var BUF_WEIGHTS: Int = 3
     private var VBOLoaded: Boolean = false
     private var animated: Boolean = false
-    private var animatedVertexData: DirectByteBuffer = null
-    private var glBuffers: Array<GLLoadableBuffer> = null
+    private var animatedVertexData: DirectByteBuffer? = null
+    private var glBuffers: Array<GLLoadableBuffer>? = null
     private var texCoordsDirty: Boolean = false
     private var verticesDirty: Boolean = false
 

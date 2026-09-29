@@ -43,11 +43,11 @@ internal open class MuteListAdapter : BaseAdapter() {
     override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
         int i2
         MuteListEntry item = getItem(i)
-        internal fun if(null: item !=):  {
-            internal fun if(null: view ==):  {
+        if (item != null) {
+            if (view == null) {
                 view = this.layoutInflater.inflate(R.layout.mute_list_item, viewGroup, false)
             }
-            internal fun if(null: view !=):  {
+            if (view != null) {
                 ((TextView) view.findViewById(R.id.muteName)).setText(item.name)
                 internal fun switch(item.type):  {
                     AGENT -> {

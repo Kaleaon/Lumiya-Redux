@@ -5,7 +5,7 @@ import com.lumiyaviewer.lumiya.utils.InlineList
 class MyAvatarTreeNode internal constructor(private val spatialTree: SpatialTree) : InlineList<DrawListEntry>() {
 
     fun addDrawables(drawList: DrawList) {
-        var entry = first
+        var entry = getFirst()
         while (entry != null) {
             entry.addToDrawList(drawList)
             entry = entry.getNext()

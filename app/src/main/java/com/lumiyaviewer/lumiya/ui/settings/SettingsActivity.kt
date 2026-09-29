@@ -26,7 +26,7 @@ class SettingsActivity : MasterDetailsActivity() {
         return if (bundle == null) {
             SettingsFragment.makeSelection(SettingsPage.PageConnection.getPageResourceId())
         } else {
-            super.getNewDetailsFragmentArguments(bundle, bundle2)
+            super.getNewDetailsFragmentArguments(bundle, bundle2) ?: Bundle()
         }
     }
 

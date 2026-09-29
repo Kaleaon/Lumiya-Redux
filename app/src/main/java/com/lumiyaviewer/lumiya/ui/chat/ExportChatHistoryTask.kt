@@ -39,7 +39,7 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
         }
 
         override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-            internal fun if(127: charAt >):  {
+            if (charAt > 127) {
                 charAt = '_'
             }
             if (forbiddenChars.indexOf(charAt) < 0) {
@@ -82,12 +82,12 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
                         fileOutputStream = FileOutputStream(file4, false)
                         try {
                             lazyList = userManager.getChatterList().getActiveChattersManager().getMessages(chatterID)
-                            internal fun if(null: lazyList !=):  {
+                            if (lazyList != null) {
                                 try {
                                     Iterator<ChatMessage> it = lazyList.iterator()
                                     while (it.hasNext()) {
                                         SLChatEvent loadFromDatabaseObject = SLChatEvent.loadFromDatabaseObject(it.next(), userManager.getUserID())
-                                        internal fun if(null: loadFromDatabaseObject !=):  {
+                                        if (loadFromDatabaseObject != null) {
                                             fileOutputStream.write(("[" + dateTimeInstance.format(loadFromDatabaseObject.getTimestamp()) + "] " + loadFromDatabaseObject.getPlainTextMessage(this.context, userManager, false).toString() + "\n").getBytes())
                                         }
                                         if (isCancelled()) {
@@ -95,19 +95,19 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
                                         }
                                     }
                                 } catch (Throwable th) {
-                                    internal fun if(null: lazyList !=):  {
+                                    if (lazyList != null) {
                                         lazyList.close()
                                     }
-                                    internal fun if(null: fileOutputStream !=):  {
+                                    if (fileOutputStream != null) {
                                         fileOutputStream.close()
                                     }
                                     throw th
                                 }
                             }
-                            internal fun if(null: lazyList !=):  {
+                            if (lazyList != null) {
                                 lazyList.close()
                             }
-                            internal fun if(null: fileOutputStream !=):  {
+                            if (fileOutputStream != null) {
                                 fileOutputStream.close()
                             }
                             file = file4
@@ -128,17 +128,17 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
                     file = null
                 }
                 if (!isCancelled()) {
-                    internal fun if(null: file !=):  {
+                    if (file != null) {
                         return ExportResult(file, null, null)
                     }
                     String str = sanitizeName(this.gotChatterName.get()) + ".txt"
                     StringBuilder sb = StringBuilder()
                     LazyList<ChatMessage> messages = userManager.getChatterList().getActiveChattersManager().getMessages(chatterID)
-                    internal fun if(null: messages !=):  {
+                    if (messages != null) {
                         Iterator<ChatMessage> iterator = messages.iterator()
                         while (iterator.hasNext()) {
                             SLChatEvent fromDatabaseObject = SLChatEvent.loadFromDatabaseObject(iterator.next(), userManager.getUserID())
-                            internal fun if(null: fromDatabaseObject !=):  {
+                            if (fromDatabaseObject != null) {
                                 sb.append("[").append(dateTimeInstance.format(fromDatabaseObject.getTimestamp())).append("] ").append(fromDatabaseObject.getPlainTextMessage(this.context, userManager, false).toString()).append("\n")
                             }
                             if (isCancelled()) {
@@ -173,20 +173,20 @@ open class ExportChatHistoryTask : AsyncTask<ChatterID, Void, ExportResult>(), D
     }
 
     override protected fun onCancelled() {
-        internal fun if(null: this.progressDialog !=):  {
+        if (this.progressDialog != null) {
             this.progressDialog.dismiss()
         }
     }
 
     override fun onPostExecute(exportResult: ExportResult) {
-        internal fun if(null: this.progressDialog !=):  {
+        if (this.progressDialog != null) {
             this.progressDialog.dismiss()
         }
-        internal fun if(null: exportResult !=):  {
+        if (exportResult != null) {
             Intent intent = Intent()
             intent.setAction("android.intent.action.SEND")
             intent.setType("text/plain")
-            internal fun if(null: exportResult.outputFile !=):  {
+            if (exportResult.outputFile != null) {
                 Debug.Printf("Export: exported as stream %s", exportResult.outputFile)
                 intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(exportResult.outputFile))
             } else {

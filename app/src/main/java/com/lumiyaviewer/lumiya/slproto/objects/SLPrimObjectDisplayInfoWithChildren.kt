@@ -5,7 +5,7 @@ import com.lumiyaviewer.lumiya.slproto.objects.SLObjectDisplayInfo
 
 open class SLPrimObjectDisplayInfoWithChildren : SLPrimObjectDisplayInfo(), SLObjectDisplayInfo.HasChildrenObjects {
 
-    var children: ImmutableList<SLObjectDisplayInfo> = null
+    var children: ImmutableList<SLObjectDisplayInfo>? = null
     private var implicitlyAdded: Boolean = false
 
     constructor(objectInfo: SLObjectInfo, f: Float, immutableList: ImmutableList<SLObjectDisplayInfo>, implicitlyAdded: Boolean) : super(objectInfo, f) {

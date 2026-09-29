@@ -13,7 +13,7 @@ object Debug {
         val className = stackTraceElement.className
         Log.d(
             LOG_TAG,
-            "[${className.substring(className.lastIndexOf('.'.code) + 1)}::${stackTraceElement.methodName}] ${String.format(str, *objArr)}"
+            "[${className.substring(className.lastIndexOf('.') + 1)}::${stackTraceElement.methodName}] ${String.format(str, *objArr)}"
         )
     }
 

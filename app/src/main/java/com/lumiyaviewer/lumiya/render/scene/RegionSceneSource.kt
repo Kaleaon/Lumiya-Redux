@@ -17,13 +17,13 @@ object RegionSceneSource {
         for (y in 0 until SceneDelta.TerrainPatch.PATCHES_PER_EDGE) {
             for (x in 0 until SceneDelta.TerrainPatch.PATCHES_PER_EDGE) {
                 val info = terrainData.getPatchInfo(x, y) ?: continue
-                val heightMap = info.heightMap
-                if (heightMap.mapWidth != SceneDelta.TerrainPatch.SAMPLES_PER_EDGE ||
-                    heightMap.mapHeight != SceneDelta.TerrainPatch.SAMPLES_PER_EDGE
+                val heightMap = info.getHeightMap()
+                if (heightMap.getMapWidth() != SceneDelta.TerrainPatch.SAMPLES_PER_EDGE ||
+                    heightMap.getMapHeight() != SceneDelta.TerrainPatch.SAMPLES_PER_EDGE
                 ) {
                     continue
                 }
-                out.add(SceneDelta.TerrainPatch(x, y, heightMap.heightArray.copyOf(), heightMap.waterHeight))
+                out.add(SceneDelta.TerrainPatch(x, y, heightMap.getHeightArray().copyOf(), heightMap.getWaterHeight()))
             }
         }
         return out
@@ -38,15 +38,15 @@ object RegionSceneSource {
      */
     @JvmStatic
     fun environmentDelta(preset: WindlightPreset): SceneDelta.Environment {
-        val ln = preset.lightnorm
+        val ln = preset.lightnorm!!
         val sun = normalized(floatArrayOf(-ln[0], -ln[2], ln[1]))
         val sunLights = abs(ln[1]) > 0.1f
         return SceneDelta.Environment(
             sunDirection = sun,
-            sunColor = if (sunLights) rgb(preset.sunlight_color) else floatArrayOf(0f, 0f, 0f),
-            ambientColor = rgb(preset.ambient),
-            zenithColor = rgb(preset.blue_density),
-            horizonColor = rgb(preset.blue_horizon),
+            sunColor = if (sunLights) rgb(preset.sunlight_color!!) else floatArrayOf(0f, 0f, 0f),
+            ambientColor = rgb(preset.ambient!!),
+            zenithColor = rgb(preset.blue_density!!),
+            horizonColor = rgb(preset.blue_horizon!!),
         )
     }
 

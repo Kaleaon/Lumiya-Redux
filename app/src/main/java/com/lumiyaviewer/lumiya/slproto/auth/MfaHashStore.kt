@@ -33,7 +33,7 @@ open class MfaHashStore {
     @JvmStatic private var GCM_IV_BYTES: Int = 12
     @JvmStatic private var GCM_TAG_BITS: Int = 128
 
-    private var prefs: SharedPreferences = null
+    private var prefs: SharedPreferences? = null
 
     constructor(context: Context) {
         this(context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE))

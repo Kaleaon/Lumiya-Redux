@@ -11,10 +11,10 @@ import java.util.UUID
 import java.util.concurrent.Executor
 
 open class MultipleChatterNameRetriever : ChatterNameRetriever.OnChatterNameUpdated {
-    private var agentUUID: UUID = null
+    private var agentUUID: UUID? = null
 
-    private var executor: Executor = null
-    private var listener: WeakReference<OnChatterNameUpdated> = null
+    private var executor: Executor? = null
+    private var listener: WeakReference<OnChatterNameUpdated>? = null
     private var lock: Any = Object()
     private var retrievers: MutableMap<UUID, ChatterNameRetriever> = HashMap()
 
@@ -28,8 +28,8 @@ open class MultipleChatterNameRetriever : ChatterNameRetriever.OnChatterNameUpda
     }
 
     fun addChatter(uuid: UUID): String {
-        var chatterNameRetriever: ChatterNameRetriever = null
-        var put: ChatterNameRetriever = null
+        var chatterNameRetriever: ChatterNameRetriever? = null
+        var put: ChatterNameRetriever? = null
         synchronized(this.lock) {
             chatterNameRetriever = this.retrievers.get(uuid)
         }
@@ -47,7 +47,7 @@ open class MultipleChatterNameRetriever : ChatterNameRetriever.OnChatterNameUpda
     }
 
     fun clearChatters() {
-        var hashSet: HashSet = null
+        var hashSet: HashSet? = null
         synchronized(this.lock) {
             Iterator<Map.Entry<UUID, ChatterNameRetriever>> it = this.retrievers.entrySet().iterator()
             while (it.hasNext()) {
@@ -74,7 +74,7 @@ open class MultipleChatterNameRetriever : ChatterNameRetriever.OnChatterNameUpda
     }
 
     fun retainChatters(set: MutableSet<UUID>) {
-        var hashSet: HashSet = null
+        var hashSet: HashSet? = null
         synchronized(this.lock) {
             Iterator<Map.Entry<UUID, ChatterNameRetriever>> it = this.retrievers.entrySet().iterator()
             while (it.hasNext()) {

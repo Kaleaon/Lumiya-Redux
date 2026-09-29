@@ -5,11 +5,9 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVController
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType
 import java.util.UUID
 
-open class RLVCmdSit : RLVCmdGenericRestriction() {
-    public RLVCmdSit() {
-        super(RLVRestrictionType.sit, false)
-    }
-    protected void HandleForce(RLVController rlvController, UUID uuid, String str) {
+open class RLVCmdSit : RLVCmdGenericRestriction(RLVRestrictionType.sit, false) {
+    @Suppress("FunctionName")
+    override fun HandleForce(rlvController: RLVController, uuid: UUID, str: String?) {
         if (str != null) {
             try {
                 rlvController.getModules().avatarControl.ForceSitOnObject(UUID.fromString(str))

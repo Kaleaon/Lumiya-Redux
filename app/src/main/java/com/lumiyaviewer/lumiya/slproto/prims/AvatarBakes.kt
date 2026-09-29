@@ -15,8 +15,8 @@ import javax.annotation.concurrent.Immutable
  */
 @Immutable
 class AvatarBakes {
-    private var avatarUUID: UUID = null
-    private var bakes: MutableMap<AvatarTextureFaceIndex, UUID> = null
+    private var avatarUUID: UUID? = null
+    private var bakes: MutableMap<AvatarTextureFaceIndex, UUID>? = null
 
     constructor(avatarUUID: UUID, bakes: MutableMap<AvatarTextureFaceIndex, UUID>) {
         this.avatarUUID = avatarUUID

@@ -40,7 +40,7 @@ class SubscriptionData<K, T> @JvmOverloads constructor(
                 copyOf = ImmutableList.copyOf(loadableStatusListeners)
             }
             for (listener in copyOf) {
-                listener.onLoadableStatusChange(this, loadableStatus)
+                listener.onLoadableStatusChange(this, getLoadableStatus())
             }
         } while (listenersInvokeAgain.getAndSet(0) != 0)
         inLoadableListeners.set(false)
@@ -80,13 +80,12 @@ class SubscriptionData<K, T> @JvmOverloads constructor(
 
     fun getError(): Throwable? = error
 
-    override val loadableStatus: Loadable.Status
-        get() = when {
-            subscription.get() == null -> Loadable.Status.Idle
-            error != null -> Loadable.Status.Error
-            data != null -> Loadable.Status.Loaded
-            else -> Loadable.Status.Loading
-        }
+    override fun getLoadableStatus(): Loadable.Status = when {
+        subscription.get() == null -> Loadable.Status.Idle
+        error != null -> Loadable.Status.Error
+        data != null -> Loadable.Status.Loaded
+        else -> Loadable.Status.Loading
+    }
 
     fun hasData(): Boolean {
         synchronized(lock) {

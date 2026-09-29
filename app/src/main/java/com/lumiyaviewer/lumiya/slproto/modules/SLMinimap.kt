@@ -55,22 +55,22 @@ open class SLMinimap : SLModule() {
     private var afterTeleport: Boolean = false
     private var chatRangeUsersCount: Int = 0
 
-    private var minimapBitmap: MinimapBitmap = null
+    private var minimapBitmap: MinimapBitmap? = null
     private var myAvatarParcelDataIndex: Int = 0
 
-    private var myAvatarPosition: ImmutableVector = null
+    private var myAvatarPosition: ImmutableVector? = null
     private var nearbyUsersCount: Int = 0
-    private var parcelIDs: IntArray = null
+    private var parcelIDs: IntArray? = null
     private var parcels: if (MutableMap<Int) , ParcelData> = null
-    private var userLocationRequestHandler else RequestHandler<SubscriptionSingleKey> = null
-    private var userLocationsResultHandler: ResultHandler<SubscriptionSingleKey, UserLocations> = null
-    private var userManager: UserManager = null
-    private var userPositions: MutableMap<UUID, UserLocation> = null
+    private var userLocationRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
+    private var userLocationsResultHandler: ResultHandler<SubscriptionSingleKey, UserLocations>? = null
+    private var userManager: UserManager? = null
+    private var userPositions: MutableMap<UUID, UserLocation>? = null
 
     open class MinimapBitmap {
         private var bitmapHeight: Int
         private var bitmapWidth: Int
-        var colors: IntArray = null
+        var colors: IntArray? = null
 
         MinimapBitmap(int bitmapWidth, int bitmapHeight) {
             this.bitmapWidth = bitmapWidth
@@ -197,7 +197,7 @@ open class SLMinimap : SLModule() {
         var parcelData: ParcelData = if (this.myAvatarParcelDataIndex >= 0) this.parcels.get(this.parcelIDs[this.myAvatarParcelDataIndex]) else null
         var hashSet: HashSet = HashSet(coarseLocationUpdate.Location_Fields.size())
         var parcelData2: ParcelData = parcelData
-        var hashSet2: HashSet = null
+        var hashSet2: HashSet? = null
         var z4: Boolean = false
         var z5: Boolean = false
         for (int i = 0; i < coarseLocationUpdate.Location_Fields.size() && i < coarseLocationUpdate.AgentData_Fields.size(); i++) {
@@ -416,7 +416,7 @@ open class SLMinimap : SLModule() {
     }
 
     fun getNearbyAgentLocation(uuid: UUID): LLVector3 {
-        var avatarObject: SLObjectInfo = null
+        var avatarObject: SLObjectInfo? = null
         if (this.gridConn != null && this.gridConn.parcelInfo != null && (avatarObject = this.gridConn.parcelInfo.getAvatarObject(uuid)) != null) {
             return avatarObject.getAbsolutePosition()
         }

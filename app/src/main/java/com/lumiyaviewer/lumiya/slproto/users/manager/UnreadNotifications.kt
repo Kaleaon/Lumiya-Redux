@@ -30,8 +30,8 @@ abstract class UnreadNotifications {
     }
 
     fun merge(): UnreadNotificationInfo {
-        var objectPopupNotification: UnreadNotificationInfo.ObjectPopupNotification = null
-        var builder: ImmutableList.Builder = null
+        var objectPopupNotification: UnreadNotificationInfo.ObjectPopupNotification? = null
+        var builder: ImmutableList.Builder? = null
         var i: Int = 0
         var notificationGroups: ImmutableMap<NotificationType, UnreadNotificationInfo> = notificationGroups()
         if (notificationGroups.isEmpty()) {
@@ -40,13 +40,13 @@ abstract class UnreadNotifications {
         if (notificationGroups.size() == 1) {
             return notificationGroups.entrySet().iterator().next().getValue()
         }
-        var objectPopupNotification2: UnreadNotificationInfo.ObjectPopupNotification = null
-        var notificationType: NotificationType = null
-        var notificationType2: NotificationType = null
-        var unreadMessageSource: UnreadNotificationInfo.UnreadMessageSource = null
+        var objectPopupNotification2: UnreadNotificationInfo.ObjectPopupNotification? = null
+        var notificationType: NotificationType? = null
+        var notificationType2: NotificationType? = null
+        var unreadMessageSource: UnreadNotificationInfo.UnreadMessageSource? = null
         var i2: Int = 0
         var i3: Int = 0
-        var builder2: ImmutableList.Builder = null
+        var builder2: ImmutableList.Builder? = null
         var z: Boolean = false
         var it: Iterator<NotificationType> = NotificationType.VALUES_BY_DESCENDING_PRIORITY.iterator()
         while (true) {

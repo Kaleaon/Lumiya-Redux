@@ -18,91 +18,74 @@ import com.lumiyaviewer.lumiya.ui.common.ReloadableFragment
 import com.lumiyaviewer.lumiya.ui.common.UserFunctionsFragment
 import java.lang.ref.WeakReference
 import java.util.EnumMap
-import java.util.Iterator
-import java.util.Map
 
 open class UserProfileFragment : UserFunctionsFragment() {
-    private Map<ProfileTab, WeakReference<Fragment>> activeFragments = EnumMap(ProfileTab.class)
+    private val activeFragments: MutableMap<ProfileTab, WeakReference<Fragment>> = EnumMap(ProfileTab::class.java)
 
-    private class ProfilePagerAdapter : FragmentStatePagerAdapter() {
-        internal constructor(fragmentManager: FragmentManager) {
-            super(fragmentManager)
-        }
+    private inner class ProfilePagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
         override fun destroyItem(viewGroup: ViewGroup, i: Int, obj: Any) {
-            ProfileTab profileTab = ProfileTab.values()[i]
-            internal fun if(null: profileTab !=):  {
-                UserProfileFragment.this.activeFragments.remove(profileTab)
+            val profileTab = ProfileTab.values().getOrNull(i)
+            if (profileTab != null) {
+                this@UserProfileFragment.activeFragments.remove(profileTab)
             }
             super.destroyItem(viewGroup, i, obj)
         }
 
         override fun getCount(): Int {
-            return ProfileTab.values().length
+            return ProfileTab.values().size
         }
 
         override fun getItem(i: Int): Fragment {
-            ProfileTab profileTab = ProfileTab.values()[i]
-            try {
-                Fragment fragment = (Fragment) profileTab.tabClass.newInstance()
-                fragment.setArguments(UserProfileFragment.makeSelection(UserProfileFragment.this.chatterID))
-                UserProfileFragment.this.activeFragments.put(profileTab, WeakReference(fragment))
-                return fragment
-            } catch (ReflectiveOperationException e) {
-                return null
-            }
+            val profileTab = ProfileTab.values()[i]
+            val fragment = profileTab.tabClass.getDeclaredConstructor().newInstance()
+            fragment.arguments = UserProfileFragment.makeSelection(this@UserProfileFragment.chatterID)
+            this@UserProfileFragment.activeFragments[profileTab] = WeakReference(fragment)
+            return fragment
         }
 
         override fun getPageTitle(i: Int): CharSequence {
-            return UserProfileFragment.this.getString(ProfileTab.values()[i].tabCaption)
+            return this@UserProfileFragment.getString(ProfileTab.values()[i].tabCaption)
         }
 
-        override fun saveState(): Parcelable {
+        override fun saveState(): Parcelable? {
             return null
         }
     }
 
-    private enum class ProfileTab {
-        MainProfile(R.string.profile_tab_caption, UserMainProfileTab.class),
-        Picks(R.string.profile_picks_caption, UserPicksProfileTab.class),
-        Groups(R.string.profile_groups_caption, UserGroupsProfileTab.class),
-        FirstLife(R.string.profile_1st_caption, UserFirstLifeProfileTab.class)
-
-        private int tabCaption
-        private Class<? extends Fragment> tabClass
-
-        internal constructor(tabCaption: Int, cls: Class) {
-            this.tabCaption = tabCaption
-            this.tabClass = cls
-        }
-
+    private enum class ProfileTab(val tabCaption: Int, val tabClass: Class<out Fragment>) {
+        MainProfile(R.string.profile_tab_caption, UserMainProfileTab::class.java),
+        Picks(R.string.profile_picks_caption, UserPicksProfileTab::class.java),
+        Groups(R.string.profile_groups_caption, UserGroupsProfileTab::class.java),
+        FirstLife(R.string.profile_1st_caption, UserFirstLifeProfileTab::class.java)
     }
 
-    @JvmStatic
-    fun makeSelection(chatterID: ChatterID): Bundle {
-        return UserFunctionsFragment.makeSelection(chatterID)
-    }
-
-    override fun onCreate(bundle: Bundle) {
+    override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
     }
 
-    override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup, bundle: Bundle): View {
+    override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?): View {
         super.onCreateView(layoutInflater, viewGroup, bundle)
-        View inflate = layoutInflater.inflate(R.layout.user_profile_new, viewGroup, false)
-        ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.user_profile_pager)
-        viewPager.setAdapter(ProfilePagerAdapter(getChildFragmentManager()))
-        ((TabLayout) inflate.findViewById(R.id.user_profile_tabs)).setupWithViewPager(viewPager)
+        val inflate = layoutInflater.inflate(R.layout.user_profile_new, viewGroup, false)
+        val viewPager = inflate.findViewById<ViewPager>(R.id.user_profile_pager)
+        viewPager.adapter = ProfilePagerAdapter(childFragmentManager)
+        inflate.findViewById<TabLayout>(R.id.user_profile_tabs).setupWithViewPager(viewPager)
         return inflate
     }
 
-    override protected fun onShowUser(chatterID: ChatterID) {
-        Iterator<?> it = this.activeFragments.values().iterator()
-        while (it.hasNext()) {
-            ComponentCallbacks componentCallbacks = (Fragment) ((WeakReference) it.next()).get()
-            internal fun if(ReloadableFragment: componentCallbacks instanceof):  {
-                ((ReloadableFragment) componentCallbacks).setFragmentArgs(getActivity() != null ? getActivity().getIntent() : null, ChatterReloadableFragment.makeSelection(chatterID))
+    override fun onShowUser(chatterID: ChatterID?) {
+        for (weakRef in this.activeFragments.values) {
+            val componentCallbacks: ComponentCallbacks? = weakRef.get()
+            if (componentCallbacks is ReloadableFragment) {
+                componentCallbacks.setFragmentArgs(activity?.intent, ChatterReloadableFragment.makeSelection(chatterID))
             }
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun makeSelection(chatterID: ChatterID?): Bundle {
+            return UserFunctionsFragment.makeSelection(chatterID)
         }
     }
 }

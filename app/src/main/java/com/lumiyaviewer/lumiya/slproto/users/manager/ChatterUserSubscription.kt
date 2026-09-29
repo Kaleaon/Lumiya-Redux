@@ -11,11 +11,11 @@ import javax.annotation.concurrent.NotThreadSafe
 @NotThreadSafe
 open class ChatterUserSubscription : ChatterSubscription() {
 
-    private var distanceSubscription: Subscription<UUID, Float> = null
+    private var distanceSubscription: Subscription<UUID, Float>? = null
 
-    private var nameSubscription: Subscription<UUID, UserName> = null
+    private var nameSubscription: Subscription<UUID, UserName>? = null
 
-    private var onlineStatusSubscription: Subscription<UUID, Boolean> = null
+    private var onlineStatusSubscription: Subscription<UUID, Boolean>? = null
 
     constructor(sortedChatterList: SortedChatterList, chatterIDUser: ChatterID.ChatterIDUser, userManager: UserManager) : super(sortedChatterList, chatterIDUser, userManager) {
         this.nameSubscription = userManager.getUserNames().subscribe(chatterIDUser.getChatterUUID(), Subscription.OnData() {

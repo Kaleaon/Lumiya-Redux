@@ -62,9 +62,9 @@ class AnimationCache private constructor() : ResourceMemoryCache<UUID, Animation
                     assetManager.open("anims/$assetName").use { input ->
                         animationData = AnimationData(getParams(), input)
                         val data = animationData
-                        if (data != null && data.priority >= 6) {
+                        if (data != null && data.getPriority() >= 6) {
                             Debug.Printf("Animation: priority %d loaded from asset %s",
-                                data.priority, assetName)
+                                data.getPriority(), assetName)
                         }
                     }
                 } catch (e: IOException) {

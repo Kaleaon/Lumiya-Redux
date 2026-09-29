@@ -63,10 +63,10 @@ open class ActiveChatsListAdapter : BaseAdapter(), Closeable, DismissableAdapter
         override fun buildView(context: Context, chatterItemViewBuilder: ChatterItemViewBuilder, userManager: UserManager) {
             boolean z = false
             StringBuilder sb = StringBuilder(context.getString(R.string.local_chat_item_title))
-            internal fun if(null: ActiveChatsListAdapter.this.currentLocationInfo !=):  {
+            if (ActiveChatsListAdapter.this.currentLocationInfo != null) {
                 sb.append(": ")
                 int inChatRangeUsers = ActiveChatsListAdapter.this.currentLocationInfo.inChatRangeUsers()
-                internal fun if(0: inChatRangeUsers !=):  {
+                if (inChatRangeUsers != 0) {
                     sb.append(context.getString(R.string.someone_in_chat_range, Integer.valueOf(inChatRangeUsers)))
                 } else {
                     sb.append(context.getString(R.string.no_one_in_chat_range))
@@ -78,7 +78,7 @@ open class ActiveChatsListAdapter : BaseAdapter(), Closeable, DismissableAdapter
             chatterItemViewBuilder.setThumbnailChatterID(this.chatterID, null)
             SLChatEvent lastMessage = this.unreadMessageInfo != null ? this.unreadMessageInfo.lastMessage() : null
             chatterItemViewBuilder.setLastMessage(lastMessage != null ? lastMessage.getPlainTextMessage(context, userManager, false).toString() : null)
-            internal fun if(VoiceChatInfo.VoiceChatState.None: this.voiceChatInfo != null && this.voiceChatInfo.state !=):  {
+            if (this.voiceChatInfo != null && this.voiceChatInfo.state != VoiceChatInfo.VoiceChatState.None) {
                 z = true
             }
             chatterItemViewBuilder.setVoiceActive(z)
@@ -111,7 +111,7 @@ open class ActiveChatsListAdapter : BaseAdapter(), Closeable, DismissableAdapter
             if (view != null && view.getId() == i) {
                 view2 = view
             }
-            internal fun if(null: view2 ==):  {
+            if (view2 == null) {
                 view2 = layoutInflater.inflate(i2, viewGroup, false)
             }
             ((TextView) view2.findViewById(i)).setText(this.isAnyoneOnline ? R.string.friends_online_caption : R.string.no_friends_online_caption)

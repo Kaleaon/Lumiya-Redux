@@ -13,7 +13,7 @@ open class ChatMessageSourceUser : ChatMessageSource() {
 
     private var legacyName: String = ""
 
-    var uuid: UUID = null
+    var uuid: UUID? = null
 
     constructor(chatMessage: ChatMessage) {
         this.uuid = chatMessage.getSenderUUID()

@@ -37,19 +37,19 @@ import java.util.Map
 import java.util.UUID
 
 open class BakeProcess : SLTextureUploadRequest.TextureUploadCompleteListener {
-    private var avatarAppearance: SLAvatarAppearance = null
-    private var bakingThread: Thread = null
-    private var eventBus: EventBus = null
+    private var avatarAppearance: SLAvatarAppearance? = null
+    private var bakingThread: Thread? = null
+    private var eventBus: EventBus? = null
     private var paramValues: if (MutableMap<Int) , Float> = null
-    private var uploader else SLTextureUploader = null
-    private var wornWearables: Table<SLWearableType, UUID, SLWearable> = null
+    private var uploader: SLTextureUploader? = null
+    private var wornWearables: Table<SLWearableType, UUID, SLWearable>? = null
     private Map<SLWearable, List<WearableTextureData>> wearables = IdentityHashMap()
     private var textureReadyLock: Any = Object()
     private var bakedImages: MutableMap<BakedTextureIndex, BakedImage> = EnumMap(BakedTextureIndex.class)
 
     private open class BakedImageUploadRequest : SLTextureUploadRequest() {
-        var bakedImage: BakedImage = null
-        var bakedIndex: BakedTextureIndex = null
+        var bakedImage: BakedImage? = null
+        var bakedIndex: BakedTextureIndex? = null
 
         BakedImageUploadRequest(BakedImage bakedImage, BakedTextureIndex bakedTextureIndex, File file) {
             super(file, bakedTextureIndex.ordinal())
@@ -125,7 +125,7 @@ open class BakeProcess : SLTextureUploadRequest.TextureUploadCompleteListener {
     }
 
     private fun PrepareAvatarTextureEntry(): SLTextureEntry {
-        var uploadedID: UUID = null
+        var uploadedID: UUID? = null
         var create: SLTextureEntryFace = SLTextureEntryFace.create(MutableSLTextureEntryFace(-1))
         var textureEntryFaces: Array<SLTextureEntryFace> = arrayOfNulls<SLTextureEntryFace>(32)
         for (bakedTextureIndex in BakedTextureIndex.values()) {
@@ -313,10 +313,10 @@ open class BakeProcess : SLTextureUploadRequest.TextureUploadCompleteListener {
     }
 
     List<OpenJPEG> getLocalTexture(AvatarTextureFaceIndex avatarTextureFaceIndex) throws DefaultTextureException {
-        var textureData: OpenJPEG = null
+        var textureData: OpenJPEG? = null
         Iterator<List<WearableTextureData>> it = this.wearables.values().iterator()
         var z: Boolean = false
-        var linkedList: LinkedList = null
+        var linkedList: LinkedList? = null
         while (it.hasNext()) {
             for (wearableTextureData in it.next()) {
                 if (wearableTextureData.getTexture().layer == avatarTextureFaceIndex.ordinal()) {

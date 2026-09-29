@@ -35,7 +35,7 @@ open class TeleportSLURLActivity : AppCompatActivity(), View.OnClickListener {
                         z = true
                     }
                 }
-                internal fun if(!z):  {
+                if (!z) {
                     new AlertDialog.Builder(this).setMessage(R.string.teleport_unable).setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             TeleportSLURLActivity.this.m648xe44220a6(dialogInterface, i)
                         }

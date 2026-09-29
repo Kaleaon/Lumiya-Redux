@@ -11,12 +11,12 @@ import java.nio.ByteOrder
 import java.nio.ShortBuffer
 
 open class MeshFace {
-    private var indexBuffer: DirectByteBuffer = null
+    private var indexBuffer: DirectByteBuffer? = null
     private var numIndices: Int = 0
     private var numVertices: Int = 0
-    private var texCoordsBuffer: DirectByteBuffer = null
-    private var vertexBuffer: DirectByteBuffer = null
-    private var weightBuffer: DirectByteBuffer = null
+    private var texCoordsBuffer: DirectByteBuffer? = null
+    private var vertexBuffer: DirectByteBuffer? = null
+    private var weightBuffer: DirectByteBuffer? = null
 
     MeshFace(LLSDNode lsdNode) throws LLSDException {
         if (lsdNode.keyExists("NoGeometry") || (!lsdNode.keyExists("Position")) || (!lsdNode.keyExists("TriangleList"))) {
@@ -45,8 +45,8 @@ open class MeshFace {
                 vector33.set(byKey2 as float.byIndex(0).asDouble(), byKey2 as float.byIndex(1).asDouble(), byKey2 as float.byIndex(2).asDouble())
             }
         }
-        var vector2: LLVector2 = null
-        var vector23: LLVector2 = null
+        var vector2: LLVector2? = null
+        var vector23: LLVector2? = null
         if (bytes2 != null) {
             vector2 = LLVector2(0.0f, 0.0f)
             vector23 = LLVector2(0.0f, 0.0f)

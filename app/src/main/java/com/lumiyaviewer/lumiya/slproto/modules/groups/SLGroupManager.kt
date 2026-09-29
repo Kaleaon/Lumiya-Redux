@@ -69,22 +69,22 @@ open class SLGroupManager : SLModule() {
     @JvmStatic private var Role_Update_All: Int = 3
     @JvmStatic private var Role_Update_Create: Int = 4
     @JvmStatic private var Role_Update_Delete: Int = 5
-    private var activeGroupID: UUID = null
-    private var groupMemberDao: GroupMemberDao = null
+    private var activeGroupID: UUID? = null
+    private var groupMemberDao: GroupMemberDao? = null
     private var groupMemberDataURL: String = ""
-    private var groupMemberListHTTPRequestHandler: RequestHandler<UUID> = null
-    private var groupMemberListRequestHandler: RequestHandler<UUID> = null
-    private var groupMemberListResultHandler: ResultHandler<UUID, UUID> = null
-    private var groupProfileRequestHandler: RequestHandler<UUID> = null
-    private var groupProfileResultHandler: ResultHandler<UUID, GroupProfileReply> = null
-    private var groupRoleMemberDao: GroupRoleMemberDao = null
-    private var groupRoleMemberListRequestHandler: RequestHandler<UUID> = null
-    private var groupRoleMemberListResultHandler: ResultHandler<UUID, UUID> = null
-    private var groupRolesRequestHandler: RequestHandler<UUID> = null
-    private var groupRolesResultHandler: ResultHandler<UUID, GroupRoleDataReply> = null
-    private var groupTitlesRequestHandler: RequestHandler<UUID> = null
-    private var groupTitlesResultHandler: ResultHandler<UUID, GroupTitlesReply> = null
-    private var userManager: UserManager = null
+    private var groupMemberListHTTPRequestHandler: RequestHandler<UUID>? = null
+    private var groupMemberListRequestHandler: RequestHandler<UUID>? = null
+    private var groupMemberListResultHandler: ResultHandler<UUID, UUID>? = null
+    private var groupProfileRequestHandler: RequestHandler<UUID>? = null
+    private var groupProfileResultHandler: ResultHandler<UUID, GroupProfileReply>? = null
+    private var groupRoleMemberDao: GroupRoleMemberDao? = null
+    private var groupRoleMemberListRequestHandler: RequestHandler<UUID>? = null
+    private var groupRoleMemberListResultHandler: ResultHandler<UUID, UUID>? = null
+    private var groupRolesRequestHandler: RequestHandler<UUID>? = null
+    private var groupRolesResultHandler: ResultHandler<UUID, GroupRoleDataReply>? = null
+    private var groupTitlesRequestHandler: RequestHandler<UUID>? = null
+    private var groupTitlesResultHandler: ResultHandler<UUID, GroupTitlesReply>? = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.activeGroupID = null

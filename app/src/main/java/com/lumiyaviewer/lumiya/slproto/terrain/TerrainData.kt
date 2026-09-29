@@ -104,7 +104,7 @@ open class TerrainData {
     }
 
     fun ProcessLayerData(bytes: ByteArray) {
-        var DecompressPatch: TerrainPatch = null
+        var DecompressPatch: TerrainPatch? = null
         var bitBuffer: BitBuffer = BitBuffer(bytes)
         var bits: Int = bitBuffer.getBits(16)
         var bits2: Int = bitBuffer.getBitsDebug as 8.Log(String.format("Terrain: ProcessLayerData: stride 0x%x patchSize 0x%x type 0x%x", bits, bits2, bitBuffer.getBits(8)))

@@ -51,12 +51,12 @@ open class UserMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnL
     override protected fun onShowUser(chatterID: ChatterID) {
         View view = getView()
         this.loadableMonitor.unsubscribeAll()
-        internal fun if(null: this.partnerNameRetriever !=):  {
+        if (this.partnerNameRetriever != null) {
             this.partnerNameRetriever.dispose()
             this.partnerNameRetriever = null
         }
         if (this.userManager == null || !(chatterID is ChatterID.ChatterIDUser)) {
-            internal fun if(null: view !=):  {
+            if (view != null) {
                 binding.textProfileAgentKey.setText("")
                 binding.aboutEditButton.setVisibility(View.GONE)
                 binding.changePicButton.setVisibility(View.GONE)
@@ -68,7 +68,7 @@ open class UserMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnL
         this.avatarProperties.subscribe(this.userManager.getAvatarProperties().getPool(), chatterUUID)
         this.onlineStatus.subscribe(this.userManager.getChatterList().getFriendManager().getOnlineStatus(), chatterUUID)
         this.avatarNotes.subscribe(this.userManager.getAvatarNotes().getPool(), chatterUUID)
-        internal fun if(null: view !=):  {
+        if (view != null) {
             binding.textProfileAgentKey.setText(chatterUUID.toString())
             boolean equals = chatterUUID == (this.userManager.getUserID())
             binding.aboutEditButton.setVisibility(equals ? View.VISIBLE : View.GONE)
@@ -77,7 +77,7 @@ open class UserMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnL
     }
 
     protected open fun onViewProfileClicked(view: View) {
-        internal fun if(null: this.chatterID !=):  {
+        if (this.chatterID != null) {
             try {
                 UUID uuid = this.avatarProperties.get().PropertiesData_Field.PartnerID
                 if (uuid == null || !(!uuid == (UUIDPool.ZeroUUID)) || this.chatterID == null) {

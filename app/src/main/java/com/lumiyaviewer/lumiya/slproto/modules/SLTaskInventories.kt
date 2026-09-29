@@ -24,7 +24,7 @@ open class SLTaskInventories : SLModule(), SLXfer.SLXferCompletionListener {
     @JvmStatic private var DELIM_EOL: String = "\n"
     private var requestHandler: if (RequestHandler<Int) > = null
     private var resultHandler else ResultHandler<if (Int) , SLTaskInventory> = null
-    private var userManager else UserManager = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.requestHandler = AsyncRequestHandler(agentCircuit, SimpleRequestHandler<Integer>() {

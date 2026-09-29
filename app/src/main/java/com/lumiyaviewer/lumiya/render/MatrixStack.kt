@@ -41,6 +41,12 @@ class MatrixStack @JvmOverloads constructor(maxDepth: Int = DEFAULT_MAX_DEPTH) {
 
     fun getMatrixDataOffset(): Int = mTop
 
+    val matrixData: FloatArray
+        get() = mMatrix
+
+    val matrixDataOffset: Int
+        get() = mTop
+
     fun glApplyUniformMatrix(location: Int) {
         GLES20.glUniformMatrix4fv(location, 1, false, mMatrix, mTop)
     }

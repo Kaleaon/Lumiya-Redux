@@ -47,15 +47,15 @@ class CloudSyncServiceConnection(
                         when (MessageType.valueOf(bundle.getString("messageType")!!)) {
                             MessageType.LogMessagesCompleted ->
                                 this@CloudSyncServiceConnection.onLogMessagesCompleted(
-                                    LogMessagesCompleted(bundle.getBundle("message"))
+                                    LogMessagesCompleted(bundle.getBundle("message")!!)
                                 )
                             MessageType.LogMessagesFlushed ->
                                 this@CloudSyncServiceConnection.onLogMessagesFlushed(
-                                    LogMessagesFlushed(bundle.getBundle("message"))
+                                    LogMessagesFlushed(bundle.getBundle("message")!!)
                                 )
                             MessageType.LogSyncStatus ->
                                 this@CloudSyncServiceConnection.onLogSyncStatus(
-                                    LogSyncStatus(bundle.getBundle("message"))
+                                    LogSyncStatus(bundle.getBundle("message")!!)
                                 )
                             else -> { /* other message types ignored */ }
                         }
@@ -75,14 +75,14 @@ class CloudSyncServiceConnection(
             logMessagesCompleted.agentUUID
         )
         if (userManager.getUserID() == logMessagesCompleted.agentUUID) {
-            userManager.syncManager.onMessagesWritten(logMessagesCompleted.lastWrittenMessageID)
+            userManager.getSyncManager().onMessagesWritten(logMessagesCompleted.lastWrittenMessageID)
         }
     }
 
     fun onLogMessagesFlushed(logMessagesFlushed: LogMessagesFlushed) {
         Debug.Printf("LumiyaCloud: flushed some messages for agent %s", logMessagesFlushed.agentUUID)
         if (userManager.getUserID() == logMessagesFlushed.agentUUID) {
-            userManager.syncManager.onMessagesFlushed(logMessagesFlushed.messageIDs)
+            userManager.getSyncManager().onMessagesFlushed(logMessagesFlushed.messageIDs)
         }
     }
 
@@ -126,7 +126,7 @@ class CloudSyncServiceConnection(
                         )
                     } else {
                         syncingStarted.set(true)
-                        userManager.syncManager.startSyncing(this)
+                        userManager.getSyncManager().startSyncing(this)
                     }
                 }
                 else -> { /* other statuses ignored */ }
@@ -186,7 +186,7 @@ class CloudSyncServiceConnection(
         if (!syncingStarted.getAndSet(false)) {
             disconnect()
         } else if (toPluginMessenger != null) {
-            userManager.syncManager.stopSyncing()
+            userManager.getSyncManager().stopSyncing()
         }
     }
 

@@ -49,7 +49,7 @@ class SpatialTree(
                 bins[newBin] = spatialTreeNode
             }
             spatialTreeNode.depthBin = newBin
-            if (spatialTreeNode.first != null) {
+            if (spatialTreeNode.getFirst() != null) {
                 setDrawListChanged()
             }
         }
@@ -77,7 +77,7 @@ class SpatialTree(
     }
 
     fun removeObject(drawListEntry: DrawListEntry) {
-        val list = drawListEntry.list
+        val list = drawListEntry.getList()
         list?.removeEntry(drawListEntry)
     }
 
@@ -100,7 +100,7 @@ class SpatialTree(
 
     fun updateObject(drawListEntry: DrawListEntry) {
         val nodeForObject = getNodeForObject(drawListEntry)
-        val list = drawListEntry.list
+        val list = drawListEntry.getList()
         if (nodeForObject !== list && list != null) {
             list.removeEntry(drawListEntry)
         }

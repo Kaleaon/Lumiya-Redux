@@ -8,7 +8,7 @@ enum class BakedTextureIndex {
     BAKED_SKIRT(AvatarTextureFaceIndex.TEX_SKIRT_BAKED),
     BAKED_HAIR(AvatarTextureFaceIndex.TEX_HAIR_BAKED)
 
-    private var faceIndex: AvatarTextureFaceIndex = null
+    private var faceIndex: AvatarTextureFaceIndex? = null
 
     constructor(avatarTextureFaceIndex: AvatarTextureFaceIndex) {
         this.faceIndex = avatarTextureFaceIndex

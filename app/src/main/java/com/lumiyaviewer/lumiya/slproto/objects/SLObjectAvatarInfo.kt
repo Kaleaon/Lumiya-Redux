@@ -10,7 +10,7 @@ import java.util.UUID
 
 open class SLObjectAvatarInfo : SLObjectInfo() {
 
-    private var avatarVisualState: AvatarVisualState = null
+    private var avatarVisualState: AvatarVisualState? = null
     private var isMyAvatar: Boolean = false
 
     constructor(uuid: UUID, uuid2: UUID, isMyAvatar: Boolean) {

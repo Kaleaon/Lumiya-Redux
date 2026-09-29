@@ -13,7 +13,7 @@ class AutoValue_SLTextureEntryFace : SLTextureEntryFace() {
     private var repeatV: Float = 0.0f
     private var rgba: Int = 0
     private var rotation: Float = 0.0f
-    private var textureID: UUID = null
+    private var textureID: UUID? = null
 
     constructor(uuid: UUID, rgba: Int, repeatU: Float, repeatV: Float, offsetU: Float, offsetV: Float, rotation: Float, glow: Float, materialb: Byte, mediab: Byte, hasAttribute: Int) {
         this.textureID = uuid

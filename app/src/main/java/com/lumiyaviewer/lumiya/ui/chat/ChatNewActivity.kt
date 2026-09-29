@@ -33,7 +33,7 @@ open class ChatNewActivity : MasterDetailsActivity(), UnreadNotificationManager.
     }
 
     override protected fun onStop() {
-        internal fun if(null: this.currentLocationInfoSubscription !=):  {
+        if (this.currentLocationInfoSubscription != null) {
             this.currentLocationInfoSubscription.unsubscribe()
             this.currentLocationInfoSubscription = null
         }

@@ -94,7 +94,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
 
     private fun showPermissions(i: Int, i2: Int, i3: Int, i4: Int) {
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             TextView textView = (TextView) view.findViewById(i2)
             TextView viewById = (TextView) view.findViewById(i3)
             TextView viewById2 = (TextView) view.findViewById(i4)
@@ -126,7 +126,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
 
     private fun showUserInfo(uuid: UUID, chatterNameRetriever: ChatterNameRetriever, i: Int, i2: Int, i3: Int) {
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             if (uuid == null || Objects.equal(uuid, UUIDPool.ZeroUUID) || chatterNameRetriever == null) {
                 view.findViewById(i).setVisibility(View.GONE)
                 return
@@ -147,7 +147,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
     }
 
     private fun updateMenuItems() {
-        internal fun if(null: this.menuItemCopy == null || this.menuItemCut == null || this.menuItemShare == null || this.menuItemRename == null || this.menuItemDelete ==):  {
+        if (this.menuItemCopy == null || this.menuItemCut == null || this.menuItemShare == null || this.menuItemRename == null || this.menuItemDelete == null) {
             return
         }
         try {
@@ -180,7 +180,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
 
     override fun onClick(view: View) {
         SLInventoryEntry data = this.entrySubscription.getData()
-        internal fun if(null: data !=):  {
+        if (data != null) {
             when (view.getId()) {
                 R.id.asset_action_button -> {
                     int actionDescriptionResId = data.getActionDescriptionResId()
@@ -263,7 +263,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
         try {
             showEntryInfo(this.entrySubscription.get())
-            internal fun if(null: userManager !=):  {
+            if (userManager != null) {
                 this.creatorNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(userManager.getUserID(), this.entrySubscription.get().creatorUUID), this.onNameUpdated, UIThreadExecutor.getInstance())
                 this.ownerNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(userManager.getUserID(), this.entrySubscription.get().ownerUUID), this.onNameUpdated, UIThreadExecutor.getInstance())
                 this.lastOwnerNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(userManager.getUserID(), this.entrySubscription.get().lastOwnerUUID), this.onNameUpdated, UIThreadExecutor.getInstance())
@@ -275,7 +275,7 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             try {
                 SLInventoryEntry inventoryEntry = this.entrySubscription.get()
                 when (menuItem.getItemId()) {

@@ -14,12 +14,12 @@ class SkyCloudsProgram : SkyProgram(Shader.SkyFragmentShader) {
         val windlightPreset = renderContext.windlightPreset
         GLES20.glUniform3f(
             cloudColor,
-            windlightPreset.cloud_color[0],
-            windlightPreset.cloud_color[1],
-            windlightPreset.cloud_color[2]
+            windlightPreset.cloud_color!![0],
+            windlightPreset.cloud_color!![1],
+            windlightPreset.cloud_color!![2]
         )
-        GLES20.glUniform1f(cloudGamma, windlightPreset.cloud_pos_density1[2])
-        GLES20.glUniform1f(cloudAdd, windlightPreset.cloud_shadow[0] - 0.5f)
+        GLES20.glUniform1f(cloudGamma, windlightPreset.cloud_pos_density1!![2])
+        GLES20.glUniform1f(cloudAdd, windlightPreset.cloud_shadow!![0] - 0.5f)
         GLES20.glUniform1i(textureSampler, 0)
     }
 

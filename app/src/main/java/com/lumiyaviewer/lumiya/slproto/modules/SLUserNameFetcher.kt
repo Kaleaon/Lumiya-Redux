@@ -25,18 +25,18 @@ import java.util.concurrent.locks.ReentrantLock
 open class SLUserNameFetcher : SLModule(), RequestListener {
     @JvmStatic private var MAX_BATCH_SIZE: Int = 4
     @JvmStatic private var REPLY_TIMEOUT: Long = 10000
-    private var caps: SLCaps = null
-    private var hasNamesToFetch: Condition = null
+    private var caps: SLCaps? = null
+    private var hasNamesToFetch: Condition? = null
     private var isWaitingReply: Boolean = false
-    private var lock: Lock = null
+    private var lock: Lock? = null
     private var threadMustExit: Boolean = false
-    private var threadRunnable: Runnable = null
-    private var udpLock: Any = null
-    private var userManager: UserManager = null
-    private var userNameRequests: WeakPriorityRequestSet<UUID> = null
+    private var threadRunnable: Runnable? = null
+    private var udpLock: Any? = null
+    private var userManager: UserManager? = null
+    private var userNameRequests: WeakPriorityRequestSet<UUID>? = null
     private var waitingReplySince: Long = 0L
-    private var workingThread: Thread = null
-    private var xmlReq: LLSDXMLRequest = null
+    private var workingThread: Thread? = null
+    private var xmlReq: LLSDXMLRequest? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps) {
         superthis as agentCircuit.lock = ReentrantLock()
@@ -82,7 +82,7 @@ open class SLUserNameFetcher : SLModule(), RequestListener {
 
     fun FetchSomeNamesOverHTTP(): Boolean {
         var str: String = ""
-        var lsdNode: LLSDNode = null
+        var lsdNode: LLSDNode? = null
         var uuiDsToFetch: MutableList<UUID> = getUUIDsToFetch(4)
         if (uuiDsToFetch.isEmpty()) {
         return false
@@ -158,7 +158,7 @@ open class SLUserNameFetcher : SLModule(), RequestListener {
     }
 
     private fun getUUIDsToFetch(i: Int): MutableList<UUID> {
-        var request: UUID = null
+        var request: UUID? = null
         var arrayList: ArrayList = ArrayList(i)
         if (this.userNameRequests != null) {
             while (arrayList.size() < i && (request = this.userNameRequests.getRequest()) != null) {

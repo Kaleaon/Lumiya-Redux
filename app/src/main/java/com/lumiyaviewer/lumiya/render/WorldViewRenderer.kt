@@ -123,7 +123,7 @@ class WorldViewRenderer(
     private val extTextureResultVector = FloatArray(4)
 
     init {
-        agentCircuit.subscribe(UserManager.agentCircuits(), userManager.userID)
+        agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID())
     }
 
     private fun handleHUDTouch(
@@ -164,12 +164,12 @@ class WorldViewRenderer(
         }
         Debug.Printf("WorldViewRenderer: got new agentCircuit.")
         initialUpdateDone = false
-        avatarControl = agentCircuit.modules.avatarControl
-        parcelInfo = agentCircuit.gridConnection.parcelInfo
+        avatarControl = agentCircuit.getModules()!!.avatarControl
+        parcelInfo = agentCircuit.getGridConnection().parcelInfo
         initialUpdateDone = false
         val rc = renderContext.get()
         if (rc != null) {
-            rc.setMeshCapURL(agentCircuit.caps.meshFetchURL)
+            rc.setMeshCapURL(agentCircuit.getCaps()!!.getMeshFetchURL())
             if (parcelInfo != null) {
                 PrimComputeExecutor.getInstance().execute(initSpatialIndexRunnable)
             }
@@ -312,7 +312,7 @@ class WorldViewRenderer(
         GLES20.glDisable(2929)
         GLES20.glDisable(2884)
         GLES20.glEnable(3042)
-        rc.renderBackend.useProgram(rc.rawShaderProgram!!.handle)
+        rc.renderBackend.useProgram(rc.rawShaderProgram!!.getHandle())
         GLES20.glActiveTexture(33984)
         rc.crosshairTexture.GLDraw()
         rc.renderBackend.setUniform1i(rc.rawShaderProgram.textureSampler, 0)
@@ -343,7 +343,7 @@ class WorldViewRenderer(
         GLES20.glDisable(2929)
         GLES20.glDisable(2884)
         GLES20.glEnable(3042)
-        rc.renderBackend.useProgram(rc.extTextureProgram.handle)
+        rc.renderBackend.useProgram(rc.extTextureProgram!!.getHandle())
         GLES20.glActiveTexture(33984)
         glExternalTexture.bind()
         rc.renderBackend.setUniform1i(rc.extTextureProgram.textureSampler, 0)
@@ -473,7 +473,7 @@ class WorldViewRenderer(
                 else { GLES10.glDisable(3042); GLES10.glDisable(3008) }
 
                 val objects = drawList.objects
-                val renderPasses = drawList.renderPasses
+                val renderPasses = drawList.renderPasses!!
                 val size = objects.size
                 rc.clearFaceTexture()
                 for (j in 0 until size) {
@@ -497,7 +497,7 @@ class WorldViewRenderer(
                 }
 
                 if (rc.hasGL20) {
-                    rc.windlightSky?.GLDraw(rc, cameraParams.heading, cameraParams.tilt)
+                    rc.windlightSky?.GLDraw(rc, cameraParams.getHeading(), cameraParams.getTilt())
                 }
 
                 rc.curPrimProgram = null
@@ -521,9 +521,10 @@ class WorldViewRenderer(
                     screenshotHandler = null
                 }
 
-                if (drawPickedObject != null && !drawPickedObject!!.isAvatar) {
+                val pickedObject = drawPickedObject
+                if (pickedObject != null && !pickedObject.isAvatar()) {
                     for (obj in drawList.objects) {
-                        obj.DrawIfPicked(rc, drawPickedObject)
+                        obj.DrawIfPicked(rc, pickedObject)
                     }
                 }
 
@@ -609,7 +610,7 @@ class WorldViewRenderer(
             }
             GLES20.glDisable(2929)
             GLES20.glDisable(3042)
-            rc.renderBackend.useProgram(rc.fxaaProgram!!.handle)
+            rc.renderBackend.useProgram(rc.fxaaProgram!!.getHandle())
             GLES20.glBindTexture(3553, colorbuffers!![0])
             GLES20.glActiveTexture(33985)
             GLES20.glBindTexture(3553, colorbuffers!![1])
@@ -682,29 +683,29 @@ class WorldViewRenderer(
                 setIsFlinging(avatarCtrl.getAgentAndCameraPosition(rc.myAviPosition, cameraParams))
             }
         }
-        rc.frameCamera.set(cameraParams.position)
+        rc.frameCamera.set(cameraParams.getPosition())
         if (headTransform != null) {
             rc.glModelMultMatrixf(headTransform.headTransformMatrix, 0)
             rc.glModelRotatef((-headTransform.viewExtraYaw) + 90.0f, 0.0f, 1.0f, 0.0f)
             rc.glModelRotatef(-90.0f, 1.0f, 0.0f, 0.0f)
         } else {
             rc.glModelRotatef(-90.0f, 1.0f, 0.0f, 0.0f)
-            val tilt = cameraParams.tilt
+            val tilt = cameraParams.getTilt()
             if (tilt != 0.0f) rc.glModelRotatef(tilt, 1.0f, 0.0f, 0.0f)
-            rc.glModelRotatef((-cameraParams.heading) + 90.0f, 0.0f, 0.0f, 1.0f)
+            rc.glModelRotatef((-cameraParams.getHeading()) + 90.0f, 0.0f, 0.0f, 1.0f)
         }
         rc.glModelTranslatef(-rc.frameCamera.x, -rc.frameCamera.y, -rc.frameCamera.z)
 
         val frustrumInfo = if (rc.hasGL20) {
             FrustrumInfo(
                 rc.frameCamera.x, rc.frameCamera.y, rc.frameCamera.z,
-                drawDistance,
+                drawDistance.toFloat(),
                 rc.modelViewMatrix.matrixData, rc.modelViewMatrix.matrixDataOffset
             )
         } else {
             FrustrumInfo(
                 rc.frameCamera.x, rc.frameCamera.y, rc.frameCamera.z,
-                drawDistance,
+                drawDistance.toFloat(),
                 rc.modelViewMatrix.matrixData, rc.modelViewMatrix.matrixDataOffset,
                 rc.projectionMatrix.matrixData, rc.projectionMatrix.matrixDataOffset
             )
@@ -736,7 +737,7 @@ class WorldViewRenderer(
                 }
             }
         }
-        currentDrawList = rc.drawableStore.spatialObjectIndex.objectsInFrustrum
+        currentDrawList = rc.drawableStore.spatialObjectIndex.getObjectsInFrustrum()
         val drawList = currentDrawList
         if (drawList != null) {
             for (avatar in drawList.avatars) {
@@ -807,7 +808,7 @@ class WorldViewRenderer(
                 GLES20.glBindTexture(3553, colorbuffers!![0])
                 GLES20.glFramebufferRenderbuffer(36160, 36096, 36161, renderbuffers!![0])
                 GLES20.glFramebufferTexture2D(36160, 36064, 3553, colorbuffers!![0], 0)
-                rc.renderBackend.useProgram(rc.fxaaProgram!!.handle)
+                rc.renderBackend.useProgram(rc.fxaaProgram!!.getHandle())
                 GLES20.glUniform1i(rc.fxaaProgram.textureSampler, 0)
                 GLES20.glUniform1i(rc.fxaaProgram.noAAtextureSampler, 1)
                 GLES20.glUniform2f(rc.fxaaProgram.texcoordOffset, 1.0f / width, 1.0f / height)
@@ -876,7 +877,7 @@ class WorldViewRenderer(
                 stateHandler.sendEmptyMessage(MSG_SHADER_COMPILE_ERROR)
                 drawingEnabled.set(false)
             }
-            Debug.Printf("Renderer: Basic geometry program = %d", rc.primProgram!!.handle)
+            Debug.Printf("Renderer: Basic geometry program = %d", rc.primProgram!!.getHandle())
             GLES20.glClearColor(0.1f, 0.1f, 0.5f, 1.0f)
             if (rc.useFXAA) {
                 framebuffers = IntArray(1)
@@ -890,9 +891,9 @@ class WorldViewRenderer(
             GLES10.glEnableClientState(32884)
             GLES10.glClearColor(0.1f, 0.1f, 0.5f, 1.0f)
         }
-        val currentCircuit = agentCircuit.data
+        val currentCircuit = agentCircuit.getData()
         if (currentCircuit != null) {
-            rc.setMeshCapURL(currentCircuit.caps.meshFetchURL)
+            rc.setMeshCapURL(currentCircuit.getCaps()!!.getMeshFetchURL())
         }
         renderContext.set(rc)
         hoverTextEnableHUDs = GlobalOptions.getInstance().hoverTextEnableHUDs

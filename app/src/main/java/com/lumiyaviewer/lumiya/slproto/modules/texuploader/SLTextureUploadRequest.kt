@@ -18,9 +18,9 @@ import okhttp3.Response
 open class SLTextureUploadRequest : Runnable {
     @JvmStatic private var MEDIA_TYPE_JP2: MediaType = MediaType.parse("image/x-j2c")
     private var capURL: String = ""
-    var onUploadComplete: TextureUploadCompleteListener = null
-    private var sourceFile: File = null
-    private var textureID: UUID = null
+    var onUploadComplete: TextureUploadCompleteListener? = null
+    private var sourceFile: File? = null
+    private var textureID: UUID? = null
     private var textureLayer: Int = 0
 
     interface TextureUploadCompleteListener {

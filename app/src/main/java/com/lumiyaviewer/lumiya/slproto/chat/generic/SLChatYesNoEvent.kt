@@ -16,7 +16,7 @@ import java.util.UUID
 
 abstract class SLChatYesNoEvent : SLChatTextEvent() {
 
-    private var eventState: EventState = null
+    private var eventState: EventState? = null
 
     enum class EventState {
         EventNew,

@@ -16,9 +16,9 @@ import java.nio.ByteOrder
 import java.util.UUID
 
 class SLChatGroupInvitationEvent : SLChatYesNoEvent() {
-    private var groupID: UUID = null
+    private var groupID: UUID? = null
     private var joinFee: Int = 0
-    private var sessionID: UUID = null
+    private var sessionID: UUID? = null
 
     constructor(chatMessage: ChatMessage, uuid: UUID) : super(chatMessage, uuid) {
         this.joinFee = chatMessage.getTransactionAmount()
@@ -39,7 +39,7 @@ class SLChatGroupInvitationEvent : SLChatYesNoEvent() {
     }
 
     private fun DoAcceptGroupInvite(uuid: UUID, uuid2: UUID, z: Boolean) {
-        var activeAgentCircuit: SLAgentCircuit = null
+        var activeAgentCircuit: SLAgentCircuit? = null
         var userManager: UserManager = UserManager.getUserManager(this.agentUUID)
         if (userManager == null || (activeAgentCircuit = userManager.getActiveAgentCircuit()) == null) {
             return

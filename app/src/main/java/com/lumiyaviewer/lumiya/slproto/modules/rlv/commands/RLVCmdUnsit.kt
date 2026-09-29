@@ -6,7 +6,7 @@ import java.util.UUID
 
 open class RLVCmdUnsit : RLVCmdGenericRestriction(RLVRestrictionType.unsit, false) {
     @Suppress("FunctionName")
-    override fun HandleForce(controller: RLVController, objectId: UUID, parameter: String) {
-        controller.modules.avatarControl.ForceStand()
+    override fun HandleForce(rlvController: RLVController, uuid: UUID, str: String?) {
+        rlvController.getModules().avatarControl.ForceStand()
     }
 }

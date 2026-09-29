@@ -33,7 +33,7 @@ open class MinimapActivity : ConnectedActivity() {
 
     private fun setActivityTitle(str: String, str2: String) {
         ActionBar supportActionBar = getSupportActionBar()
-        internal fun if(null: supportActionBar !=):  {
+        if (supportActionBar != null) {
             supportActionBar.setTitle(str)
             supportActionBar.setSubtitle(str2)
         }
@@ -76,7 +76,7 @@ open class MinimapActivity : ConnectedActivity() {
         }
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getIntent())
         FragmentManager supportFragmentManager = getSupportFragmentManager()
-        internal fun if(null: supportFragmentManager == null || activeAgentID ==):  {
+        if (supportFragmentManager == null || activeAgentID == null) {
             finish()
             return
         }
@@ -93,7 +93,7 @@ open class MinimapActivity : ConnectedActivity() {
     override protected fun onStart() {
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getIntent())
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             this.currentLocationInfo.subscribe(userManager.getCurrentLocationInfo(), SubscriptionSingleKey.Value)
         } else {
             this.currentLocationInfo.unsubscribe()

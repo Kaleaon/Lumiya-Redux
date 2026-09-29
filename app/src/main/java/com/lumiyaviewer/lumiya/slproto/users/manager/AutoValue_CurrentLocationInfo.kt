@@ -6,8 +6,8 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChannelInfo
 class AutoValue_CurrentLocationInfo : CurrentLocationInfo() {
     private var inChatRangeUsers: Int = 0
     private var nearbyUsers: Int = 0
-    private var parcelData: ParcelData = null
-    private var parcelVoiceChannel: VoiceChannelInfo = null
+    private var parcelData: ParcelData? = null
+    private var parcelVoiceChannel: VoiceChannelInfo? = null
 
     constructor(parcelData: ParcelData, nearbyUsers: Int, inChatRangeUsers: Int, voiceChannelInfo: VoiceChannelInfo) {
         this.parcelData = parcelData

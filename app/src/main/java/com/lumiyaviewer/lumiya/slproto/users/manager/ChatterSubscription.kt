@@ -6,13 +6,13 @@ import com.lumiyaviewer.lumiya.voice.common.model.VoiceChatInfo
 
 open class ChatterSubscription {
 
-    private var chatterList: SortedChatterList = null
+    private var chatterList: SortedChatterList? = null
 
-    var displayData: ChatterDisplayData = null
+    var displayData: ChatterDisplayData? = null
 
-    private var unreadCountSubscription: Subscription<ChatterID, UnreadMessageInfo> = null
+    private var unreadCountSubscription: Subscription<ChatterID, UnreadMessageInfo>? = null
 
-    private var voiceChatInfoSubscription: Subscription<ChatterID, VoiceChatInfo> = null
+    private var voiceChatInfoSubscription: Subscription<ChatterID, VoiceChatInfo>? = null
     private var onVoiceStatusChanged: Subscription.OnData<VoiceChatInfo> = Subscription.OnData() {
         private /* synthetic */ void $m$0(Object obj) {
             ChatterSubscription.this.onVoiceChatInfoChanged(obj as VoiceChatInfo)

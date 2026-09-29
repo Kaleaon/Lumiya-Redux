@@ -46,7 +46,7 @@ open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataCha
         SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
             override fun canDismiss(listView2: ListView, i: Int): Boolean {
                 ListAdapter adapter = listView2.getAdapter()
-                internal fun if(DismissableAdapter: adapter instanceof):  {
+                if (adapter instanceof DismissableAdapter) {
                     return ((DismissableAdapter) adapter).canDismiss(i)
                 }
                 return false
@@ -54,7 +54,7 @@ open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataCha
 
             override fun onDismiss(listView2: ListView, i: Int) {
                 ListAdapter adapter = listView2.getAdapter()
-                internal fun if(DismissableAdapter: adapter instanceof):  {
+                if (adapter instanceof DismissableAdapter) {
                     ((DismissableAdapter) adapter).onDismiss(i)
                 }
             }
@@ -74,7 +74,7 @@ open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataCha
     }
 
     override fun onLoadableDataChanged() {
-        internal fun if(null: this.listAdapter !=):  {
+        if (this.listAdapter != null) {
             SLAgentCircuit data = this.agentCircuit.getData()
             this.listAdapter.setAvatarAppearance(data != null ? data.getModules().avatarAppearance : null)
             this.listAdapter.setData(this.wornItems.getData())
@@ -84,7 +84,7 @@ open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataCha
     override fun onStart() {
         super.onStart()
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
-        internal fun if(null: userManager ==):  {
+        if (userManager == null) {
             this.loadableMonitor.unsubscribeAll()
         } else {
             this.agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID())

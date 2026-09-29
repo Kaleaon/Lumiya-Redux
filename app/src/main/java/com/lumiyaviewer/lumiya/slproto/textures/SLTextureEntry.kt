@@ -18,8 +18,8 @@ open class SLTextureEntry {
     @JvmStatic var MAX_FACES: Int = 45
     @JvmStatic private var emptyFaces: Array<SLTextureEntryFace> = arrayOfNulls<SLTextureEntryFace>(0)
     @JvmStatic private var pool: InternPool<SLTextureEntry> = InternPool<>()
-    private var DefaultTexture: SLTextureEntryFace = null
-    private var FaceTextures: Array<SLTextureEntryFace> = null
+    private var DefaultTexture: SLTextureEntryFace? = null
+    private var FaceTextures: Array<SLTextureEntryFace>? = null
     private var faceMask: Long = 0L
     private var hashValue: Int = 0
 

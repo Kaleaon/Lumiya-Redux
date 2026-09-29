@@ -55,7 +55,7 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
 
     private fun showParcelInfo(uuid: UUID) {
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
-        internal fun if(null: userManager == null || uuid ==):  {
+        if (userManager == null || uuid == null) {
             return
         }
         Debug.Printf("ParcelInfo: subscribing for UUID %s", uuid)
@@ -95,14 +95,14 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
         ParcelInfoReply data = this.parcelInfoReply.getData()
         Debug.Printf("ParcelInfo: loadable data %s", data)
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments())
-        internal fun if(null: this.binding == null || data == null || activeAgentID ==):  {
+        if (this.binding == null || data == null || activeAgentID == null) {
             return
         }
-        internal fun if(null: this.ownerNameRetriever !=):  {
+        if (this.ownerNameRetriever != null) {
             this.ownerNameRetriever.dispose()
             this.ownerNameRetriever = null
         }
-        internal fun if(null: this.ownerGroupNameRetriever !=):  {
+        if (this.ownerGroupNameRetriever != null) {
             this.ownerGroupNameRetriever.dispose()
             this.ownerGroupNameRetriever = null
         }
@@ -131,7 +131,7 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
     open fun onParcelOwnerProfileClick() {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments())
         ParcelInfoReply data = this.parcelInfoReply.getData()
-        internal fun if(null: activeAgentID == null || data ==):  {
+        if (activeAgentID == null || data == null) {
             return
         }
         if (this.ownerGroupNameRetriever != null && this.ownerGroupNameRetriever.getResolvedName() != null) {
@@ -146,7 +146,7 @@ open class ParcelInfoFragment : FragmentWithTitle(), ReloadableFragment, Loadabl
     open fun onParcelTeleportButton() {
         UserManager userManager = ActivityUtils.getUserManager(getArguments())
         ParcelInfoReply data = this.parcelInfoReply.getData()
-        internal fun if(null: data == null || userManager ==):  {
+        if (data == null || userManager == null) {
             return
         }
         LLVector3 lLVector3 = LLVector3(data.Data_Field.GlobalX, data.Data_Field.GlobalY, data.Data_Field.GlobalZ)

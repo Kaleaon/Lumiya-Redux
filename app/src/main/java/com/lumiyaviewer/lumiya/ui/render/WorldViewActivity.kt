@@ -144,7 +144,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         override fun onData(obj: Any) {
             long uptimeMillis = (WorldViewActivity.this.lastObjectActivityTime + WorldViewActivity.OBJECT_DESELECT_TIMEOUT_MILLIS) - SystemClock.uptimeMillis()
             Debug.Printf("ObjectDeselect: remaining %d", Long.valueOf(uptimeMillis))
-            internal fun if(0: uptimeMillis <=):  {
+            if (uptimeMillis <= 0) {
                 WorldViewActivity.this.handlePickedObject(null)
             } else {
                 WorldViewActivity.this.objectDeselectTimerStarted = true
@@ -162,7 +162,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 long uptimeMillis = (WorldViewActivity.this.lastActivityTime + WorldViewActivity.BUTTONS_FADE_TIMEOUT_MILLIS) - SystemClock.uptimeMillis()
                 Debug.Printf("ButtonsFade: remaining %d", Long.valueOf(uptimeMillis))
-                internal fun if(0: uptimeMillis <=):  {
+                if (uptimeMillis <= 0) {
                     WorldViewActivity.this.startFadingButtons()
                 } else {
                     WorldViewActivity.this.buttonsFadeTimerStarted = true
@@ -173,7 +173,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     }
     private Runnable buttonsRestoreTask = Runnable() {
         override fun run() {
-            internal fun if(null: WorldViewActivity.this.buttonsFadeAnimator !=):  {
+            if (WorldViewActivity.this.buttonsFadeAnimator != null) {
                 WorldViewActivity.this.buttonsFadeAnimator.cancel()
             }
             WorldViewActivity.this.binding.insetsBackground.setAlpha(1.0f)
@@ -214,7 +214,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             }
             float height = (f * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight()
             float height2 = ((-f2) * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight()
-            internal fun if(null: WorldViewActivity.this.avatarControl ==):  {
+            if (WorldViewActivity.this.avatarControl == null) {
                 return true
             }
             WorldViewActivity.this.avatarControl.processCameraFling(height / 1.5f, height2 / 2.5f)
@@ -224,7 +224,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         override fun onLongPress(motionEvent: MotionEvent) {
             float rawX = motionEvent.getRawX()
             float rawY = motionEvent.getRawY()
-            internal fun if(WorldViewActivity.this.isDragging):  {
+            if (WorldViewActivity.this.isDragging) {
                 WorldViewActivity.this.dragSelectorSetRawPosition((int) rawX, (int) rawY)
             } else {
                 if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling)) {
@@ -237,9 +237,9 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         }
 
         override fun onScroll(motionEvent: MotionEvent, motionEvent2: MotionEvent, f: Float, f2: Float): Boolean {
-            internal fun if(WorldViewActivity.this.isDragging):  {
+            if (WorldViewActivity.this.isDragging) {
                 AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) WorldViewActivity.this.binding.dragPointerView.getLayoutParams()
-                internal fun if(null: layoutParams !=):  {
+                if (layoutParams != null) {
                     layoutParams.x = Math.max(Math.min((int) (layoutParams.x - f), WorldViewActivity.this.binding.dragPointerLayout.getWidth() - WorldViewActivity.this.binding.dragPointerView.getWidth()), 0)
                     layoutParams.y = Math.max(Math.min((int) (layoutParams.y - f2), WorldViewActivity.this.binding.dragPointerLayout.getHeight() - WorldViewActivity.this.binding.dragPointerView.getHeight()), 0)
                     WorldViewActivity.this.binding.dragPointerView.setLayoutParams(layoutParams)
@@ -250,14 +250,14 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling)) {
                 return false
             }
-            internal fun if(0: WorldViewActivity.this.displayedHUDid !=):  {
+            if (WorldViewActivity.this.displayedHUDid != 0) {
                 WorldViewActivity.this.hudOffsetX += (f / WorldViewActivity.this.binding.worldViewHolder.getHeight()) / 2.0f
                 WorldViewActivity.this.hudOffsetY += (f2 / WorldViewActivity.this.binding.worldViewHolder.getHeight()) / 2.0f
                 WorldViewActivity.this.mGLView.setHUDOffset(WorldViewActivity.this.hudOffsetX, WorldViewActivity.this.hudOffsetY)
             } else {
                 float height = ((-f) * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight()
                 float height2 = (f2 * 60.0f) / WorldViewActivity.this.binding.worldViewHolder.getHeight()
-                internal fun if(null: WorldViewActivity.this.avatarControl !=):  {
+                if (WorldViewActivity.this.avatarControl != null) {
                     WorldViewActivity.this.avatarControl.processCameraRotate(height, height2)
                 }
             }
@@ -265,7 +265,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         }
 
         override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
-            internal fun if(WorldViewActivity.this.isDragging):  {
+            if (WorldViewActivity.this.isDragging) {
                 WorldViewActivity.this.dragSelectorSetRawPosition((int) motionEvent.getRawX(), (int) motionEvent.getRawY())
             } else if (WorldViewActivity.this.displayedHUDid != 0) {
                 int[] location = arrayOfNulls<int>(2]
@@ -280,7 +280,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     private ScaleGestureDetector.OnScaleGestureListener scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
             Debug.Printf("Gesture: scale factor: %f", Float.valueOf(scaleGestureDetector.getScaleFactor()))
-            internal fun if(0: WorldViewActivity.this.displayedHUDid !=):  {
+            if (WorldViewActivity.this.displayedHUDid != 0) {
                 WorldViewActivity.this.hudScaleFactor = Math.max(0.1f, Math.min(WorldViewActivity.this.hudScaleFactor * scaleGestureDetector.getScaleFactor(), 10.0f))
                 WorldViewActivity.this.mGLView.setHUDScaleFactor(WorldViewActivity.this.hudScaleFactor)
             } else {
@@ -294,7 +294,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 float f4 = (focusY - WorldViewActivity.this.oldScaleFocusY) / height
                 WorldViewActivity.this.oldScaleFocusX = focusX
                 WorldViewActivity.this.oldScaleFocusY = focusY
-                internal fun if(null: WorldViewActivity.this.avatarControl !=):  {
+                if (WorldViewActivity.this.avatarControl != null) {
                     WorldViewActivity.this.avatarControl.processCameraZoom(scaleGestureDetector.getScaleFactor(), (-f) * 2.0f, (-f2) * 2.0f, f3, f4)
                 }
             }
@@ -339,9 +339,9 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     }
 
     private fun beginCountingObjectDeselect() {
-        internal fun if(null: this.pickedObject !=):  {
+        if (this.pickedObject != null) {
             this.lastObjectActivityTime = SystemClock.uptimeMillis()
-            internal fun if(this.objectDeselectTimerStarted):  {
+            if (this.objectDeselectTimerStarted) {
                 return
             }
             this.objectDeselectTimerStarted = true
@@ -386,7 +386,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         }
         this.mGLView.setHUDScaleFactor(this.hudScaleFactor)
         this.mGLView.setHUDOffset(this.hudOffsetX, this.hudOffsetY)
-        internal fun if(0: this.displayedHUDid !=):  {
+        if (this.displayedHUDid != 0) {
             handlePickedObject(null)
         }
         updateObjectPanel()
@@ -398,7 +398,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         int width = i - (binding.dragPointerView.getWidth() / 2)
         int height = i2 - (binding.dragPointerView.getHeight() / 2)
         AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) binding.dragPointerView.getLayoutParams()
-        internal fun if(null: layoutParams !=):  {
+        if (layoutParams != null) {
             layoutParams.x = Math.max(Math.min(width - ints[0], binding.dragPointerLayout.getWidth() - binding.dragPointerView.getWidth()), 0)
             layoutParams.y = Math.max(Math.min(height - ints[1], binding.dragPointerLayout.getHeight() - binding.dragPointerView.getHeight()), 0)
             binding.dragPointerView.setLayoutParams(layoutParams)
@@ -458,7 +458,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         binding.worldViewTouchReceiver.setOnTouchListener(this.worldViewTouchListener)
         binding.objectControlsPanel.setVisibility(View.GONE)
         View findViewById = findViewById(R.id.offline_notify_status_layout)
-        internal fun if(null: findViewById !=):  {
+        if (findViewById != null) {
             findViewById.setBackgroundColor(Color.argb(128, 0, 0, 0))
             int applyDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, getResources().getDisplayMetrics())
             findViewById.setPadding(applyDimension, applyDimension, applyDimension, applyDimension)
@@ -466,13 +466,13 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     }
 
     open fun onAgentCircuit(agentCircuit: SLAgentCircuit) {
-        internal fun if(null: agentCircuit !=):  {
+        if (agentCircuit != null) {
             this.avatarControl = agentCircuit.getModules().avatarControl
             this.drawDistance = agentCircuit.getModules().drawDistance
-            internal fun if(this.localDrawingEnabled):  {
+            if (this.localDrawingEnabled) {
                 this.drawDistance.Enable3DView(this.prefDrawDistance)
             }
-            internal fun if(this.camButtonEnabled):  {
+            if (this.camButtonEnabled) {
                 this.manualCamMode = this.avatarControl.getIsManualCamming()
             }
         } else {
@@ -489,7 +489,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     open fun onCurrentLocation(currentLocationInfo: CurrentLocationInfo) {
         ParcelData parcelData = currentLocationInfo != null ? currentLocationInfo.parcelData() : null
         String name = parcelData != null ? parcelData.getName() : null
-        internal fun if(null: name ==):  {
+        if (name == null) {
             name = getString(R.string.name_loading_title)
         }
         setDefaultTitle(name, null)
@@ -508,7 +508,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     open fun onSelectedObjectProfile(objectProfileData: SLObjectProfileData) {
         Debug.Printf("got selected object profile: %s", objectProfileData)
         updateObjectPanel()
-        internal fun if(null: objectProfileData !=):  {
+        if (objectProfileData != null) {
             SLAgentCircuit data = this.agentCircuit.getData()
             if (objectProfileData.isPayable() && objectProfileData.payInfo() == null && data != null) {
                 data.DoRequestPayPrice(objectProfileData.objectUUID())
@@ -517,10 +517,10 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     }
 
     open fun onVoiceActiveChatter(chatterID: ChatterID) {
-        internal fun if(null: binding.voiceStatusView3d !=):  {
+        if (binding.voiceStatusView3d != null) {
             binding.voiceStatusView3d.setChatterID(chatterID)
         }
-        internal fun if(null: chatterID == null || this.userManager ==):  {
+        if (chatterID == null || this.userManager == null) {
             this.voiceChatInfo.unsubscribe()
         } else {
             this.voiceChatInfo.subscribe(this.userManager.getVoiceChatInfo(), chatterID)
@@ -545,11 +545,11 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         SLAttachmentPoint attachmentPoint
         ArrayList arrayList = ArrayList()
         SLAgentCircuit data = this.agentCircuit.getData()
-        internal fun if(null: data !=):  {
+        if (data != null) {
             SLObjectAvatarInfo agentAvatar = data.getGridConnection().parcelInfo.getAgentAvatar()
-            internal fun if(null: agentAvatar !=):  {
+            if (agentAvatar != null) {
                 try {
-                    internal fun for(agentAvatar.treeNode: SLObjectInfo objectInfo :):  {
+                    for (objectInfo in agentAvatar.treeNode) {
                         if (!Strings.nullToEmpty(objectInfo.getName()).startsWith("#") && (attachmentID = objectInfo.attachmentID) >= 0 && attachmentID < 56 && (attachmentPoint = SLAttachmentPoint.attachmentPoints[attachmentID]) != null && attachmentPoint.isHUD) {
                             arrayList.add(SelectableAttachment(objectInfo.localID, objectInfo.name))
                         }
@@ -581,7 +581,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 }
             20 -> {
-                internal fun if(null: this.avatarControl !=):  {
+                if (this.avatarControl != null) {
                     if (keyEvent.getAction() != 0) {
                         if (keyEvent.getAction() == 1) {
                             this.avatarControl.StopAgentMotion()
@@ -595,7 +595,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 }
             21 -> {
-                internal fun if(null: this.avatarControl !=):  {
+                if (this.avatarControl != null) {
                     if (keyEvent.getAction() != 0) {
                         if (keyEvent.getAction() == 1) {
                             this.avatarControl.stopTurning()
@@ -608,7 +608,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 }
             22 -> {
-                internal fun if(null: this.avatarControl !=):  {
+                if (this.avatarControl != null) {
                     if (keyEvent.getAction() != 0) {
                         if (keyEvent.getAction() == 1) {
                             this.avatarControl.stopTurning()
@@ -621,7 +621,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 }
             92 -> {
-                internal fun if(null: this.avatarControl !=):  {
+                if (this.avatarControl != null) {
                     if (keyEvent.getAction() != 0) {
                         if (keyEvent.getAction() == 1) {
                             this.avatarControl.StopAgentMotion()
@@ -635,7 +635,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 }
                 }
             93 -> {
-                internal fun if(null: this.avatarControl !=):  {
+                if (this.avatarControl != null) {
                     if (keyEvent.getAction() != 0) {
                         if (keyEvent.getAction() == 1) {
                             this.avatarControl.StopAgentMotion()
@@ -654,7 +654,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
 
     @EventHandler
     open fun handleBakingProgressEvent(bakingProgressEvent: SLBakingProgressEvent) {
-        internal fun if(bakingProgressEvent.first):  {
+        if (bakingProgressEvent.first) {
             Toast.makeText(this, "Updating avatar appearance...", Toast.LENGTH_SHORT).show()
         }
     }
@@ -669,11 +669,11 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     open fun handlePickedObject(objectIntersectInfo: ObjectIntersectInfo) {
         this.pickedIntersectInfo = objectIntersectInfo
         this.pickedObject = objectIntersectInfo != null ? objectIntersectInfo.objInfo : null
-        internal fun if(null: this.pickedObject !=):  {
+        if (this.pickedObject != null) {
             if (this.pickedObject.isAvatar()) {
                 ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(this.userManager.getUserID(), this.pickedObject.getId())
                 if (!Objects.equal(this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.chatterID : null, userChatterID)) {
-                    internal fun if(null: this.pickedAvatarNameRetriever !=):  {
+                    if (this.pickedAvatarNameRetriever != null) {
                         this.pickedAvatarNameRetriever.dispose()
                         this.pickedAvatarNameRetriever = null
                     }

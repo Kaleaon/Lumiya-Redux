@@ -5,8 +5,8 @@ import com.lumiyaviewer.lumiya.ui.settings.NotificationType
 import java.util.UUID
 
 class AutoValue_UnreadNotifications : UnreadNotifications() {
-    private var agentUUID: UUID = null
-    private var notificationGroups: ImmutableMap<NotificationType, UnreadNotificationInfo> = null
+    private var agentUUID: UUID? = null
+    private var notificationGroups: ImmutableMap<NotificationType, UnreadNotificationInfo>? = null
 
     constructor(uuid: UUID, immutableMap: ImmutableMap<NotificationType, UnreadNotificationInfo>) {
         if (uuid == null) {

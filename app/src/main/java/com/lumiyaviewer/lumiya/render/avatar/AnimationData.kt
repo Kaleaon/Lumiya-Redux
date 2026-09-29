@@ -80,7 +80,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
                 val posFactor = floats2[index] * factor
                 animateArray(animLength, time, vector3, posKeyframes)
                 if (skeletonBone != null && skeletonBone.boneID != SLSkeletonBoneID.mPelvis) {
-                    vector3.sub(skeletonBone.basePosition)
+                    vector3.sub(skeletonBone.getBasePosition())
                 }
                 vector3s[index].addMul(vector3, posFactor)
                 floats2[index] = floats2[index] - posFactor
@@ -163,7 +163,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
     ) {
         private val jointAnims = SparseArray<AnimationJointData>()
 
-        internal fun addJointData(index: Int, data: AnimationJointData) {
+        private fun addJointData(index: Int, data: AnimationJointData) {
             jointAnims.put(index, data)
         }
 
@@ -215,7 +215,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
         private val position: LLVector3
     ) : AnimationKeyframe<LLVector3>(time) {
 
-        override fun getTransform(): LLVector3 = position
+        public override fun getTransform(): LLVector3 = position
 
         override fun setInterpolated(target: LLVector3, weight1: Float, other: AnimationKeyframe<LLVector3>, weight2: Float) {
             target.setLerp(position, weight1, other.getTransform(), weight2)
@@ -233,7 +233,7 @@ class AnimationData(val animationUUID: UUID, inputStream: InputStream) {
         private val quaternion: LLQuaternion
     ) : AnimationKeyframe<LLQuaternion>(time) {
 
-        override fun getTransform(): LLQuaternion = quaternion
+        public override fun getTransform(): LLQuaternion = quaternion
 
         override fun setInterpolated(target: LLQuaternion, weight1: Float, other: AnimationKeyframe<LLQuaternion>, weight2: Float) {
             target.setLerp(quaternion, weight1, other.getTransform(), weight2)

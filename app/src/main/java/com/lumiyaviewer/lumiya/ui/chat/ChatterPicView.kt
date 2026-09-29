@@ -14,129 +14,80 @@ import com.google.common.base.Objects
 import com.lumiyaviewer.lumiya.Debug
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import com.lumiyaviewer.lumiya.slproto.users.chatsrc.ChatMessageSource
-import java.util.UUID
 
-open class ChatterPicView : View() {
+class ChatterPicView @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : View(context, attributeSet, defStyleAttr, defStyleRes) {
 
-    private ChatMessageSource attachedMessageSource
-    private Rect bitmapDestRect
-    private Paint bitmapPaint
-    private Rect bitmapSrcRect
+    private var attachedMessageSource: ChatMessageSource? = null
+    private val bitmapDestRect: Rect = Rect()
+    private val bitmapPaint: Paint = Paint()
+    private val bitmapSrcRect: Rect = Rect()
 
-    private ChatterID chatterID
+    private var chatterID: ChatterID? = null
 
-    private String chatterName
+    private var chatterName: String? = null
 
-    private Drawable defaultIconDrawable
+    private var defaultIconDrawable: Drawable? = null
 
-    private Drawable forceIcon
+    private var forceIcon: Drawable? = null
 
-    private ChatterThumbnailData thumbnailData
-    private int thumbnailDefaultIcon
+    private var thumbnailData: ChatterThumbnailData? = null
+    private var thumbnailDefaultIcon: Int = -1
 
-    constructor(context: Context) {
-        super(context)
-        this.thumbnailData = null
-        this.chatterID = null
-        this.attachedMessageSource = null
-        this.chatterName = null
-        this.thumbnailDefaultIcon = -1
-        this.defaultIconDrawable = null
-        this.forceIcon = null
-        this.bitmapPaint = Paint()
-        this.bitmapSrcRect = Rect()
-        this.bitmapDestRect = Rect()
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet) {
-        super(context, attributeSet)
-        this.thumbnailData = null
-        this.chatterID = null
-        this.attachedMessageSource = null
-        this.chatterName = null
-        this.thumbnailDefaultIcon = -1
-        this.defaultIconDrawable = null
-        this.forceIcon = null
-        this.bitmapPaint = Paint()
-        this.bitmapSrcRect = Rect()
-        this.bitmapDestRect = Rect()
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet, i: Int) {
-        super(context, attributeSet, i)
-        this.thumbnailData = null
-        this.chatterID = null
-        this.attachedMessageSource = null
-        this.chatterName = null
-        this.thumbnailDefaultIcon = -1
-        this.defaultIconDrawable = null
-        this.forceIcon = null
-        this.bitmapPaint = Paint()
-        this.bitmapSrcRect = Rect()
-        this.bitmapDestRect = Rect()
-    }
-
-    constructor(context: Context, attributeSet: AttributeSet, i: Int, i2: Int) {
-        super(context, attributeSet, i, i2)
-        this.thumbnailData = null
-        this.chatterID = null
-        this.attachedMessageSource = null
-        this.chatterName = null
-        this.thumbnailDefaultIcon = -1
-        this.defaultIconDrawable = null
-        this.forceIcon = null
-        this.bitmapPaint = Paint()
-        this.bitmapSrcRect = Rect()
-        this.bitmapDestRect = Rect()
-    }
-
-    open fun getAttachedMessageSource(): ChatMessageSource? {
+    fun getAttachedMessageSource(): ChatMessageSource? {
         return this.attachedMessageSource
     }
 
-    override protected fun onAttachedToWindow() {
+    override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        internal fun if(null: this.thumbnailData != null || this.chatterID ==):  {
+        val chatterID = this.chatterID
+        if (this.thumbnailData != null || chatterID == null) {
             return
         }
-        this.thumbnailData = ChatterThumbnailData(this.chatterID, this)
+        this.thumbnailData = ChatterThumbnailData(chatterID, this)
     }
 
-    override protected fun onDetachedFromWindow() {
+    override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        internal fun if(null: this.thumbnailData !=):  {
-            this.thumbnailData.dispose()
+        if (this.thumbnailData != null) {
+            this.thumbnailData!!.dispose()
             this.thumbnailData = null
         }
     }
 
-    override protected fun onDraw(canvas: Canvas) {
-        int i
-        String str
-        int i2 = 192
-        int i3 = 64
-        int width = getWidth()
-        int height = getHeight()
-        this.bitmapPaint.setStyle(Paint.Style.STROKE)
+    override fun onDraw(canvas: Canvas) {
+        var i: Int
+        var str: String?
+        var i2 = 192
+        var i3 = 64
+        val width = width
+        val height = height
+        this.bitmapPaint.style = Paint.Style.STROKE
         this.bitmapPaint.setARGB(255, 255, 255, 255)
-        this.bitmapPaint.setTextAlign(Paint.Align.CENTER)
-        this.bitmapPaint.setTextSize(height / 2.0f)
-        this.bitmapPaint.setAntiAlias(true)
-        internal fun if(null: this.forceIcon !=):  {
-            this.forceIcon.setBounds(0, 0, width, height)
-            this.forceIcon.draw(canvas)
+        this.bitmapPaint.textAlign = Paint.Align.CENTER
+        this.bitmapPaint.textSize = height / 2.0f
+        this.bitmapPaint.isAntiAlias = true
+        val forceIcon = this.forceIcon
+        if (forceIcon != null) {
+            forceIcon.setBounds(0, 0, width, height)
+            forceIcon.draw(canvas)
             return
         }
-        internal fun if(null: this.thumbnailData ==):  {
+        val thumbnailData = this.thumbnailData
+        if (thumbnailData == null) {
             canvas.drawRGB(64, 64, 64)
             return
         }
-        Bitmap bitmapData = this.thumbnailData.getBitmapData()
-        internal fun if(null: bitmapData !=):  {
+        val bitmapData = thumbnailData.getBitmapData()
+        if (bitmapData != null) {
             this.bitmapSrcRect.left = 0
             this.bitmapSrcRect.top = 0
-            this.bitmapSrcRect.right = bitmapData.getWidth()
-            this.bitmapSrcRect.bottom = bitmapData.getHeight()
+            this.bitmapSrcRect.right = bitmapData.width
+            this.bitmapSrcRect.bottom = bitmapData.height
             this.bitmapDestRect.left = 0
             this.bitmapDestRect.top = 0
             this.bitmapDestRect.right = width
@@ -144,18 +95,19 @@ open class ChatterPicView : View() {
             canvas.drawBitmap(bitmapData, this.bitmapSrcRect, this.bitmapDestRect, this.bitmapPaint)
             return
         }
-        internal fun if(null: this.defaultIconDrawable !=):  {
-            this.defaultIconDrawable.setBounds(0, 0, width, height)
-            this.defaultIconDrawable.draw(canvas)
+        val defaultIconDrawable = this.defaultIconDrawable
+        if (defaultIconDrawable != null) {
+            defaultIconDrawable.setBounds(0, 0, width, height)
+            defaultIconDrawable.draw(canvas)
             return
         }
-        UUID optionalChatterUUID = this.chatterID != null ? this.chatterID.getOptionalChatterUUID() : null
-        internal fun if(null: optionalChatterUUID !=):  {
-            int abs = Math.abs(optionalChatterUUID.hashCode()) % 6
-            internal fun if(3: abs <):  {
-                int i4 = abs == 0 ? 192 : 32
-                int i5 = abs == 1 ? 192 : 32
-                internal fun if(2: abs ==):  {
+        val optionalChatterUUID = this.chatterID?.getOptionalChatterUUID()
+        if (optionalChatterUUID != null) {
+            val abs = Math.abs(optionalChatterUUID.hashCode()) % 6
+            if (abs < 3) {
+                val i4 = if (abs == 0) 192 else 32
+                val i5 = if (abs == 1) 192 else 32
+                if (abs == 2) {
                     i = i5
                     i3 = i4
                 } else {
@@ -164,9 +116,9 @@ open class ChatterPicView : View() {
                     i3 = i4
                 }
             } else {
-                int i6 = abs != 3 ? 192 : 32
-                int i7 = abs != 4 ? 192 : 32
-                internal fun if(5: abs !=):  {
+                val i6 = if (abs != 3) 192 else 32
+                val i7 = if (abs != 4) 192 else 32
+                if (abs != 5) {
                     i = i7
                     i3 = i6
                 } else {
@@ -175,50 +127,46 @@ open class ChatterPicView : View() {
                     i3 = i6
                 }
             }
-            Debug.Printf("colorize: uuid %s, hash %x, comp %d, rgb %d, %d, %d", optionalChatterUUID.toString(), Integer.valueOf(optionalChatterUUID.hashCode()), Integer.valueOf(abs), Integer.valueOf(i3), Integer.valueOf(i), Integer.valueOf(i2))
+            Debug.Printf("colorize: uuid %s, hash %x, comp %d, rgb %d, %d, %d", optionalChatterUUID.toString(), optionalChatterUUID.hashCode(), abs, i3, i, i2)
         } else {
             i2 = 64
             i = 64
         }
         canvas.drawRGB(i3, i, i2)
-        internal fun if(null: this.chatterName !=):  {
-            int i8 = 0
-            internal fun while(true):  {
-                if (i8 >= this.chatterName.length()) {
-                    str = null
-                    }
-                }
-                char charAt = this.chatterName.charAt(i8)
+        val chatterName = this.chatterName
+        if (chatterName != null) {
+            str = null
+            for (i8 in chatterName.indices) {
+                val charAt = chatterName[i8]
                 if (Character.isLetter(charAt)) {
-                    str = String.valueOf(charAt)
-                    }
+                    str = charAt.toString()
+                    break
                 }
-                i8++
             }
-            internal fun if(null: str !=):  {
-                canvas.drawText(str.toUpperCase(), width / 2.0f, (height / 2.0f) - ((this.bitmapPaint.descent() + this.bitmapPaint.ascent()) / 2.0f), this.bitmapPaint)
+            if (str != null) {
+                canvas.drawText(str.uppercase(), width / 2.0f, (height / 2.0f) - ((this.bitmapPaint.descent() + this.bitmapPaint.ascent()) / 2.0f), this.bitmapPaint)
             }
         }
     }
 
-    open fun setAttachedMessageSource(chatMessageSource: ChatMessageSource) {
+    fun setAttachedMessageSource(chatMessageSource: ChatMessageSource?) {
         this.attachedMessageSource = chatMessageSource
     }
 
-    open fun setChatterID(chatterID: ChatterID, chatterName: String) {
-        boolean z = true
-        boolean z2 = false
-        internal fun if(null: this.forceIcon != null && chatterID !=):  {
+    fun setChatterID(chatterID: ChatterID?, chatterName: String?) {
+        var z = true
+        var z2 = false
+        if (this.forceIcon != null && chatterID != null) {
             this.forceIcon = null
             z2 = true
         }
         if (!Objects.equal(this.chatterID, chatterID)) {
             this.chatterID = chatterID
-            internal fun if(null: chatterID !=):  {
+            if (chatterID != null) {
                 this.thumbnailData = ChatterThumbnailData(chatterID, this)
             } else {
-                internal fun if(null: this.thumbnailData !=):  {
-                    this.thumbnailData.dispose()
+                if (this.thumbnailData != null) {
+                    this.thumbnailData!!.dispose()
                 }
                 this.thumbnailData = null
             }
@@ -229,33 +177,33 @@ open class ChatterPicView : View() {
         } else {
             this.chatterName = chatterName
         }
-        internal fun if(z):  {
+        if (z) {
             postInvalidate()
         }
     }
 
-    open fun setDefaultIcon(thumbnailDefaultIcon: Int, z: Boolean) {
-        internal fun if(thumbnailDefaultIcon: this.thumbnailDefaultIcon !=):  {
+    fun setDefaultIcon(thumbnailDefaultIcon: Int, z: Boolean) {
+        if (this.thumbnailDefaultIcon != thumbnailDefaultIcon) {
             this.thumbnailDefaultIcon = thumbnailDefaultIcon
-            internal fun if(-1: this.thumbnailDefaultIcon ==):  {
+            if (this.thumbnailDefaultIcon == -1) {
                 this.defaultIconDrawable = null
             } else if (z) {
-                this.defaultIconDrawable = ContextCompat.getDrawable(getContext(), thumbnailDefaultIcon)
+                this.defaultIconDrawable = ContextCompat.getDrawable(context, thumbnailDefaultIcon)
             } else {
-                TypedValue typedValue = TypedValue()
-                getContext().getTheme().resolveAttribute(thumbnailDefaultIcon, typedValue, true)
-                this.defaultIconDrawable = ContextCompat.getDrawable(getContext(), typedValue.resourceId)
+                val typedValue = TypedValue()
+                context.theme.resolveAttribute(thumbnailDefaultIcon, typedValue, true)
+                this.defaultIconDrawable = ContextCompat.getDrawable(context, typedValue.resourceId)
             }
             postInvalidate()
         }
     }
 
-    open fun setForceIcon(forceIcon: Int) {
-        internal fun if(-1: forceIcon ==):  {
+    fun setForceIcon(forceIcon: Int) {
+        if (forceIcon == -1) {
             this.forceIcon = null
             postInvalidate()
         } else {
-            this.forceIcon = ContextCompat.getDrawable(getContext(), forceIcon)
+            this.forceIcon = ContextCompat.getDrawable(context, forceIcon)
             setChatterID(null, null)
             postInvalidate()
         }

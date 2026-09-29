@@ -24,11 +24,11 @@ import java.util.UUID
 
 open class SLTransferManager : SLModule() {
     @JvmStatic private var DEFAULT_PRIORITY: Float = 10000.0f
-    private var activeTransferIds: BiMap<AssetKey, UUID> = null
-    private var activeTransfers: MutableMap<UUID, SLTransfer> = null
-    private var assetRequestHandler: RequestHandler<AssetKey> = null
-    private var assetResultHandler: ResultHandler<AssetKey, AssetData> = null
-    private var userManager: UserManager = null
+    private var activeTransferIds: BiMap<AssetKey, UUID>? = null
+    private var activeTransfers: MutableMap<UUID, SLTransfer>? = null
+    private var assetRequestHandler: RequestHandler<AssetKey>? = null
+    private var assetResultHandler: ResultHandler<AssetKey, AssetData>? = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.activeTransfers = Collections.synchronizedMap(HashMap())
@@ -43,7 +43,7 @@ open class SLTransferManager : SLModule() {
 
             /* JADX WARN: Multi-variable type inference failed */
             fun onRequestCancelled(assetKey: AssetKey) {
-                var sLTransfer: SLTransfer = null
+                var sLTransfer: SLTransfer? = null
                 var uuid: UUID = SLTransferManager as UUID.this.activeTransferIds.remove(assetKey)
                 if (uuid == null || (sLTransfer = SLTransferManager as SLTransfer.this.activeTransfers.get(uuid)) == null) {
                     return

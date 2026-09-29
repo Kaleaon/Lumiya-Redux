@@ -15,7 +15,7 @@ open class SubscribableList<T> : AbstractList<T>() {
     private var backingList: MutableList<T> = ArrayList()
     private Map<List<T>, Optional<Executor>> targets = WeakHashMap()
     fun add(i: final int, t: T) {
-        var copyOf: ImmutableList<Map.Entry> = null
+        var copyOf: ImmutableList<Map.Entry>? = null
         synchronized(this.lock) {
             this.backingList.add(i, t)
             copyOf = ImmutableList.copyOf(this as Collection.targets.entrySet())
@@ -39,7 +39,7 @@ open class SubscribableList<T> : AbstractList<T>() {
     }
 
     fun addSubscription(list: MutableList<T>, optional: Optional<Executor>): MutableList<T> {
-        var copyOf: ImmutableList = null
+        var copyOf: ImmutableList? = null
         synchronized(this.lock) {
             this.targets.put(list, optional)
             copyOf = ImmutableList.copyOf(this as Collection.backingList)
@@ -47,7 +47,7 @@ open class SubscribableList<T> : AbstractList<T>() {
         return copyOf
     }
     fun clear() {
-        var copyOf: ImmutableList<Map.Entry> = null
+        var copyOf: ImmutableList<Map.Entry>? = null
         synchronized(this.lock) {
             this.backingList.clear()
             copyOf = ImmutableList.copyOf(this as Collection.targets.entrySet())
@@ -71,15 +71,15 @@ open class SubscribableList<T> : AbstractList<T>() {
         }
     }
     fun get(i: Int): T {
-        var t: T = null
+        var t: T? = null
         synchronized(this.lock) {
             t = this.backingList.get(i)
         }
         return t
     }
     fun remove(i: final int): T {
-        var remove: T = null
-        var copyOf: ImmutableList<Map.Entry> = null
+        var remove: T? = null
+        var copyOf: ImmutableList<Map.Entry>? = null
         synchronized(this.lock) {
             remove = this.backingList.remove(i)
             copyOf = ImmutableList.copyOf(this as Collection.targets.entrySet())
@@ -109,8 +109,8 @@ open class SubscribableList<T> : AbstractList<T>() {
         }
     }
     fun set(i: final int, t: T): T {
-        var t2: T = null
-        var copyOf: ImmutableList<Map.Entry> = null
+        var t2: T? = null
+        var copyOf: ImmutableList<Map.Entry>? = null
         synchronized(this.lock) {
             t2 = this.backingList.set(i, t)
             copyOf = ImmutableList.copyOf(this as Collection.targets.entrySet())

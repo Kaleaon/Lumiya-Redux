@@ -29,9 +29,9 @@ import java.util.concurrent.atomic.AtomicReference
 open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
     private var capURL: String = ""
     private AtomicReference<Future<?>> futureRef
-    private var httpRequest: Runnable = null
-    private var isCancelled: AtomicBoolean = null
-    private var streamingXmlReqRef: AtomicReference<LLSDStreamingXMLRequest> = null
+    private var httpRequest: Runnable? = null
+    private var isCancelled: AtomicBoolean? = null
+    private var streamingXmlReqRef: AtomicReference<LLSDStreamingXMLRequest>? = null
 
     private class DatabaseCommitThread : Thread() {
         private volatile boolean aborted
@@ -60,8 +60,8 @@ open class SLInventoryHTTPFetchRequest : SLInventoryFetchRequest() {
          */
         fun run() {
             var retainedChildren: MutableSet<UUID> = HashSet<>()
-            var insertStatement: SQLiteStatement = null
-            var updateStatement: SQLiteStatement = null
+            var insertStatement: SQLiteStatement? = null
+            var updateStatement: SQLiteStatement? = null
             var inTransaction: Boolean = false
             var uncommittedCount: Int = 0
             var success: Boolean = false

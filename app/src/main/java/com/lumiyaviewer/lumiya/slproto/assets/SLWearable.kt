@@ -11,16 +11,16 @@ import java.util.concurrent.Executor
 
 open class SLWearable : Subscription.OnData<AssetData>, Subscription.OnError {
 
-    var assetID: UUID = null
-    private var assetSubscription: Subscription<AssetKey, AssetData> = null
+    var assetID: UUID? = null
+    private var assetSubscription: Subscription<AssetKey, AssetData>? = null
     private var inventoryName: String = ""
     private var isFailed: Boolean = false
 
-    var itemID: UUID = null
+    var itemID: UUID? = null
 
-    private var statusChangeListener: OnWearableStatusChangeListener = null
+    private var statusChangeListener: OnWearableStatusChangeListener? = null
 
-    private var wearableData: SLWearableData = null
+    private var wearableData: SLWearableData? = null
 
     interface OnWearableStatusChangeListener {
         void onWearableStatusChanged(SLWearable wearable)

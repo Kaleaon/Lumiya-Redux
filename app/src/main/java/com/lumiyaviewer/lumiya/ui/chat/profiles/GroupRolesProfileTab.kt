@@ -51,7 +51,7 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         override fun getCount(): Int {
-            internal fun if(null: this.data !=):  {
+            if (this.data != null) {
                 return this.data.RoleData_Fields.size()
             }
             return 0
@@ -72,11 +72,11 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
             boolean z
             boolean z2
             GroupTitlesReply.GroupData groupData
-            internal fun if(null: view ==):  {
+            if (view == null) {
                 view = LayoutInflater.from(GroupRolesProfileTab.this.getContext()).inflate(R.layout.group_profile_role_list_item, viewGroup, false)
             }
             GroupRoleDataReply.RoleData item = getItem(i)
-            internal fun if(null: item !=):  {
+            if (item != null) {
                 int i2 = (!item.RoleID == (UUIDPool.ZeroUUID) || this.groupProfile == null) ? item.Members : this.groupProfile.GroupData_Field.GroupMembershipCount
                 ((TextView) view.findViewById(R.id.role_name)).setText(SLMessage.stringFromVariableOEM(item.Name))
                 ((TextView) view.findViewById(R.id.role_member_count)).setText(GroupRolesProfileTab.this.getResources().getQuantityString(R.plurals.members, i2, Integer.valueOf(i2)))
@@ -99,9 +99,9 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
 
         open fun setData(groupRoleDataReply: GroupRoleDataReply, groupTitlesReply: GroupTitlesReply, groupProfileReply: GroupProfileReply) {
             this.data = groupRoleDataReply
-            internal fun if(null: groupTitlesReply !=):  {
+            if (groupTitlesReply != null) {
                 this.titlesByRole = HashMap()
-                internal fun for(groupTitlesReply.GroupData_Fields: GroupTitlesReply.GroupData groupData :):  {
+                for (groupData in groupTitlesReply.GroupData_Fields) {
                     this.titlesByRole.put(groupData.RoleID, groupData)
                 }
             } else {
@@ -122,7 +122,7 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
 
     private fun getMyGroupPowers(): Long {
         AvatarGroupList.AvatarGroupEntry myGroupEntry = getMyGroupEntry()
-        internal fun if(null: myGroupEntry !=):  {
+        if (myGroupEntry != null) {
             return myGroupEntry.GroupPowers
         }
         return 0L
@@ -138,7 +138,7 @@ open class GroupRolesProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
     override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup, bundle: Bundle): View? {
         GroupRoleAdapter groupRoleAdapter = null
         View inflate = layoutInflater.inflate(R.layout.group_profile_tab_roles, viewGroup, false)
-        internal fun if(null: this.adapter ==):  {
+        if (this.adapter == null) {
             this.adapter = GroupRoleAdapter()
         }
         ((ListView) inflate.findViewById(R.id.group_profile_roles_list)).setAdapter((ListAdapter) this.adapter)

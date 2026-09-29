@@ -14,7 +14,7 @@ open class LLSDXMLAsyncRequest {
     constructor(str: final String, lLSDNode: LLSDNode, lLSDXMLResultListener: LLSDXMLResultListener) {
         Thread(Runnable() {
             fun run() {
-                var lLSDNode2: LLSDNode = null
+                var lLSDNode2: LLSDNode? = null
                 try {
                     lLSDNode2 = LLSDXMLRequest().PerformRequest(str, lLSDNode)
                 } catch (e: LLSDXMLException) {

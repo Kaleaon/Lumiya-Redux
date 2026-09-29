@@ -15,11 +15,11 @@ import java.util.UUID
 
 open class FriendManager {
 
-    private var chatterList: ChatterList = null
+    private var chatterList: ChatterList? = null
 
-    private var friendDao: FriendDao = null
+    private var friendDao: FriendDao? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var onlineStatus: SubscriptionPool<UUID, Boolean> = SubscriptionPool<>()
     private var onFriendListUpdated: OnListUpdated = OnListUpdated() {
         fun onListUpdated() {

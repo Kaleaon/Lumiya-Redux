@@ -130,7 +130,7 @@ open class MinimapView : View() {
         float x = immutableVector.getX()
         float width = rect.left + ((x / 256.0f) * rect.width())
         float y = rect.top + (((256.0f - immutableVector.getY()) / 256.0f) * rect.width())
-        internal fun if(z):  {
+        if (z) {
             paint.setARGB(255, 255, 255, 0)
         } else {
             paint.setARGB(255, 0, 255, 0)
@@ -153,7 +153,7 @@ open class MinimapView : View() {
             canvas.drawLine(width + cos, y - sin, cos2 + width, y - cos3, paint)
             canvas.drawLine(width + cos, y - sin, width + cos4, y - cos5, paint)
         }
-        internal fun if(z2):  {
+        if (z2) {
             paint.setStrokeWidth(2.0f)
             paint.setARGB(255, 255, 255, 0)
             canvas.drawCircle(width, y, 10.0f, paint)
@@ -163,13 +163,13 @@ open class MinimapView : View() {
     private fun handleTouch(f: Float, f2: Float) {
         UUID uuid
         UUID uuid2 = null
-        internal fun if(null: this.userLocations == null || this.lastDrawRect ==):  {
+        if (this.userLocations == null || this.lastDrawRect == null) {
             return
         }
         float applyDimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, USER_MARK_TOUCH_SLACK, getResources().getDisplayMetrics())
         float f3 = 0.0f
         Iterator<?> it = this.userLocations.userPositions.entrySet().iterator()
-        internal fun while(true):  {
+        while (true) {
             uuid = uuid2
             float f4 = f3
             if (!it.hasNext()) {
@@ -182,8 +182,8 @@ open class MinimapView : View() {
             float abs = Math.abs(x - f)
             float abs2 = Math.abs(y - f2)
             f3 = (float) Math.sqrt((abs2 * abs2) + (abs * abs))
-            internal fun if(applyDimension: f3 <):  {
-                internal fun if(null: uuid ==):  {
+            if (f3 < applyDimension) {
+                if (uuid == null) {
                     uuid2 = (UUID) entry.getKey()
                 } else if (f3 < f4) {
                     uuid2 = (UUID) entry.getKey()
@@ -193,57 +193,57 @@ open class MinimapView : View() {
             f3 = f4
         }
         setSelectedUser(uuid)
-        internal fun if(null: this.onUserClickListener !=):  {
+        if (this.onUserClickListener != null) {
             this.onUserClickListener.onUserClick(uuid)
         }
     }
 
     override protected fun onDraw(canvas: Canvas) {
-        internal fun if(null: this.minimapBitmap !=):  {
+        if (this.minimapBitmap != null) {
             int width = getWidth()
             int height = getHeight()
             int round = Math.round(Math.min(width, height) * this.actualZoomFactor)
             int i = width / 2
             int i2 = height / 2
-            internal fun if(width: round <=):  {
+            if (round <= width) {
                 this.mapOffsetX = 0.0f
             }
-            internal fun if(height: round <=):  {
+            if (round <= height) {
                 this.mapOffsetY = 0.0f
             }
             int i3 = (i - (round / 2)) + ((int) this.mapOffsetX)
-            internal fun if(width: i3 > 0 && round >):  {
+            if (i3 > 0 && round > width) {
                 this.mapOffsetX = (round / 2) - i
                 i3 = (i - (round / 2)) + ((int) this.mapOffsetX)
             }
-            internal fun if(width: i3 + round <= width && round >):  {
+            if (i3 + round <= width && round > width) {
                 this.mapOffsetX = ((width - round) - i) + (round / 2)
                 i3 = (i - (round / 2)) + ((int) this.mapOffsetX)
             }
             int i4 = (i2 - (round / 2)) + ((int) this.mapOffsetY)
-            internal fun if(height: i4 > 0 && round >):  {
+            if (i4 > 0 && round > height) {
                 this.mapOffsetY = (round / 2) - i2
                 i4 = (i2 - (round / 2)) + ((int) this.mapOffsetY)
             }
-            internal fun if(height: i4 + round <= height && round >):  {
+            if (i4 + round <= height && round > height) {
                 this.mapOffsetY = ((height - round) - i2) + (round / 2)
                 i4 = (i2 - (round / 2)) + ((int) this.mapOffsetY)
             }
             this.bitmapDstRect.set(i3, i4, i3 + round, round + i4)
             this.bitmapSrcRect.set(0, 0, this.minimapBitmap.getWidth(), this.minimapBitmap.getHeight())
             canvas.drawBitmap(this.minimapBitmap, this.bitmapSrcRect, this.bitmapDstRect, this.bitmapPaint)
-            internal fun if(null: this.userLocations !=):  {
+            if (this.userLocations != null) {
                 Iterator<?> it = this.userLocations.userPositions.entrySet().iterator()
                 while (it.hasNext()) {
                     Map.Entry entry = (Map.Entry) it.next()
                     drawUserMark(((SLMinimap.UserLocation) entry.getValue()).location, canvas, this.userMarkPaint, this.bitmapDstRect, false, Float.NaN, Objects.equal(this.selectedUser, entry.getKey()))
                 }
                 ImmutableVector immutableVector = this.userLocations.myAvatarPosition
-                internal fun if(null: immutableVector !=):  {
+                if (immutableVector != null) {
                     drawUserMark(immutableVector, canvas, this.userMarkPaint, this.bitmapDstRect, true, this.userLocations.myAvatarHeading, false)
                 }
             }
-            internal fun if(null: this.lastDrawRect ==):  {
+            if (this.lastDrawRect == null) {
                 this.lastDrawRect = Rect(this.bitmapDstRect)
             } else {
                 this.lastDrawRect.set(this.bitmapDstRect)
@@ -317,8 +317,8 @@ open class MinimapView : View() {
     }
 
     internal fun setMinimapBitmap(minimapBitmap: SLMinimap.MinimapBitmap) {
-        internal fun if(null: minimapBitmap ==):  {
-            internal fun if(null: this.minimapBitmap !=):  {
+        if (minimapBitmap == null) {
+            if (this.minimapBitmap != null) {
                 this.minimapBitmap.recycle()
                 this.minimapBitmap = null
             }

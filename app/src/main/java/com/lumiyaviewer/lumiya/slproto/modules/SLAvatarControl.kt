@@ -54,13 +54,13 @@ open class SLAvatarControl : SLModule() {
     private var AgentMotionMask: Int = 0
     private var AgentWantStand: Boolean = false
     private var agentHeading: Float = 0.0f
-    private var agentPosition: AgentPosition = null
-    private var agentUpdateCameraCenter: LLVector3 = null
-    private var agentUpdateScheduleLock: Any = null
-    private var agentUpdateTask: AgentUpdateTimerTask = null
-    private var avatarStateRequestHandler: RequestHandler<SubscriptionSingleKey> = null
-    private var cameraParams: CameraParams = null
-    private var cammingLock: Any = null
+    private var agentPosition: AgentPosition? = null
+    private var agentUpdateCameraCenter: LLVector3? = null
+    private var agentUpdateScheduleLock: Any? = null
+    private var agentUpdateTask: AgentUpdateTimerTask? = null
+    private var avatarStateRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
+    private var cameraParams: CameraParams? = null
+    private var cammingLock: Any? = null
     private var enableAgentUpdates: Boolean = false
     private var initialAnimCount: Int = 0
     private var isCamming: Boolean = false
@@ -68,14 +68,14 @@ open class SLAvatarControl : SLModule() {
     private var isManualCamming: Boolean = false
     private var isTurning: Boolean = false
     private var lastTurnedAngle: Float = 0.0f
-    private var myAvatarStateResultHandler: ResultHandler<SubscriptionSingleKey, MyAvatarState> = null
+    private var myAvatarStateResultHandler: ResultHandler<SubscriptionSingleKey, MyAvatarState>? = null
     private var needClearAnims: Boolean = false
     private var needFastUpdates: Int = 0
-    private var parcelInfo: SLParcelInfo = null
-    private var turningLock: Any = null
+    private var parcelInfo: SLParcelInfo? = null
+    private var turningLock: Any? = null
     private var turningSpeed: Float = 0.0f
     private var turningStartTime: Long = 0L
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     @JvmStatic private var animUUID_PreJump: UUID = UUID.fromString("7a4e87fe-de39-6fcb-6223-024b00893244")
     @JvmStatic private var animUUID_Softland: UUID = UUID.fromString("f4f00d6e-b9fe-9292-f4cb-0ae06ea58d57")
     @JvmStatic private var animUUID_Falldown: UUID = UUID.fromString("666307d9-a860-572d-6fd4-c3ab8865c094")
@@ -245,7 +245,7 @@ open class SLAvatarControl : SLModule() {
         var z2: Boolean = false
         var z3: Boolean = false
         var attachmentID: Int = 0
-        var attachmentPoint: SLAttachmentPoint = null
+        var attachmentPoint: SLAttachmentPoint? = null
         var z4: Boolean = false
         var isFlying: Boolean = getIsFlying()
         var agentAvatar: SLObjectAvatarInfo = this.parcelInfo.getAgentAvatar()
@@ -287,8 +287,8 @@ open class SLAvatarControl : SLModule() {
     }
 
     private fun processStopAvatarAnimations() {
-        var agentAvatar: SLObjectAvatarInfo = null
-        var set: MutableSet<UUID> = null
+        var agentAvatar: SLObjectAvatarInfo? = null
+        var set: MutableSet<UUID>? = null
         var agentAnimation: AgentAnimation = AgentAnimation()
         agentAnimation.AgentData_Field.AgentID = this.circuitInfo.agentID
         agentAnimation.AgentData_Field.SessionID = this.circuitInfo.sessionID
@@ -352,8 +352,8 @@ open class SLAvatarControl : SLModule() {
     }
 
     private fun scheduleAgentUpdate(i: Int, i2: Int) {
-        var gridConnection: SLGridConnection = null
-        var timer: Timer = null
+        var gridConnection: SLGridConnection? = null
+        var timer: Timer? = null
         if (this.agentCircuit == null || (gridConnection = this.agentCircuit.getGridConnection()) == null || (timer = gridConnection.getTimer()) == null) {
             return
         }

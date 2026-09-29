@@ -51,7 +51,7 @@ class ChatMessageDao : AbstractDao<ChatMessage, Long> {
 
     override fun bindValues(sqLiteStatement: SQLiteStatement, chatMessage: ChatMessage) {
         sqLiteStatement.clearBindings()
-        val id = chatMessage.id
+        val id = chatMessage.getId()
         if (id != null) {
             sqLiteStatement.bindLong(1, id)
         }
@@ -159,7 +159,7 @@ class ChatMessageDao : AbstractDao<ChatMessage, Long> {
     }
 
     override fun getKey(chatMessage: ChatMessage?): Long? {
-        return chatMessage?.id
+        return chatMessage?.getId()
     }
 
     override fun isEntityUpdateable(): Boolean = true

@@ -4,10 +4,10 @@ import java.util.Arrays
 
 open class TerrainPatchInfo {
     private var hashCode: Int = getHashCode()
-    private var heightMap: TerrainPatchHeightMap = null
+    private var heightMap: TerrainPatchHeightMap? = null
     private var layerMask: Int = 0
-    private var textureHeightMap: FloatArray = null
-    private var textures: TerrainTextures = null
+    private var textureHeightMap: FloatArray? = null
+    private var textures: TerrainTextures? = null
 
     constructor(terrainPatchHeightMap: TerrainPatchHeightMap, terrainTextures: TerrainTextures, f: Float, f2: Float, f3: Float, f4: Float) {
         this.heightMap = terrainPatchHeightMap

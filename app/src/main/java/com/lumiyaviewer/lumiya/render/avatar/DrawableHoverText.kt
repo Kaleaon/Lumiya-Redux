@@ -67,20 +67,20 @@ class DrawableHoverText(
         val width = (texture.width * 2.0f) / renderContext.viewportRect[2]
         val height = (texture.height * 2.0f) / renderContext.viewportRect[3]
         if (renderContext.hasGL20) {
-            GLES20.glUniform3f(renderContext.quadProgram.uPreTranslate, x, y, z)
-            GLES20.glUniform3f(renderContext.quadProgram.uScale, width, height, 1.0f)
-            GLES20.glUniform3f(renderContext.quadProgram.uPostTranslate, 0.0f, texture.baselineOffset, 0.0f)
+            GLES20.glUniform3f(renderContext.quadProgram!!.uPreTranslate, x, y, z)
+            GLES20.glUniform3f(renderContext.quadProgram!!.uScale, width, height, 1.0f)
+            GLES20.glUniform3f(renderContext.quadProgram!!.uPostTranslate, 0.0f, texture.baselineOffset, 0.0f)
             texture.GLDraw()
             if (colorize) {
-                GLES20.glUniform4f(renderContext.quadProgram.uColor,
+                GLES20.glUniform4f(renderContext.quadProgram!!.uColor,
                     ((color shr 0) and 255) / 255.0f,
                     ((color shr 8) and 255) / 255.0f,
                     ((color shr 16) and 255) / 255.0f,
                     (255 - ((color shr 24) and 255)) / 255.0f)
-                GLES20.glUniform1i(renderContext.quadProgram.uColorize, 1)
+                GLES20.glUniform1i(renderContext.quadProgram!!.uColorize, 1)
             } else {
-                GLES20.glUniform4f(renderContext.quadProgram.uColor, 1.0f, 1.0f, 1.0f, 1.0f)
-                GLES20.glUniform1i(renderContext.quadProgram.uColorize, 0)
+                GLES20.glUniform4f(renderContext.quadProgram!!.uColor, 1.0f, 1.0f, 1.0f, 1.0f)
+                GLES20.glUniform1i(renderContext.quadProgram!!.uColorize, 0)
             }
         } else {
             GLES10.glLoadIdentity()

@@ -4,12 +4,12 @@ import java.util.UUID
 
 class AutoValue_AssetKey : AssetKey() {
     private var assetType: Int = 0
-    private var assetUUID: UUID = null
+    private var assetUUID: UUID? = null
     private var channelType: Int = 0
-    private var itemUUID: UUID = null
-    private var ownerUUID: UUID = null
+    private var itemUUID: UUID? = null
+    private var ownerUUID: UUID? = null
     private var sourceType: Int = 0
-    private var taskUUID: UUID = null
+    private var taskUUID: UUID? = null
 
     constructor(channelType: Int, sourceType: Int, uuid: UUID, assetType: Int, ownerUUID: UUID, itemUUID: UUID, taskUUID: UUID) {
         this.channelType = channelType

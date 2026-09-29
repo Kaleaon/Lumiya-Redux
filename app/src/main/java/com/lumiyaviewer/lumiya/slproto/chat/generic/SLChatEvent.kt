@@ -113,14 +113,14 @@ abstract class SLChatEvent : View.OnLongClickListener {
     @JvmStatic var IM_TYPING_START: Int = 41
     @JvmStatic var IM_TYPING_STOP: Int = 42
 
-    protected var agentUUID: UUID = null
+    protected var agentUUID: UUID? = null
 
-    protected var dbMessage: ChatMessage = null
+    protected var dbMessage: ChatMessage? = null
     private var isOffline: Boolean = false
-    private var originalTimestamp: Date = null
+    private var originalTimestamp: Date? = null
 
-    protected var source: ChatMessageSource = null
-    private var timestamp: Date = null
+    protected var source: ChatMessageSource? = null
+    private var timestamp: Date? = null
 
     enum class ChatMessageType {
         Text,

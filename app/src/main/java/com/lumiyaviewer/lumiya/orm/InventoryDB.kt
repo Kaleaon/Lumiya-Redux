@@ -76,7 +76,7 @@ class InventoryDB(private val db: SQLiteDatabase) {
     }
 
     fun resolveLink(entry: SLInventoryEntry?): SLInventoryEntry? {
-        return if (entry == null || !entry.isLink()) entry else findEntry(entry.assetUUID)
+        return if (entry == null || !entry.isLink()) entry else entry.assetUUID?.let { findEntry(it) }
     }
 
     fun retainChildren(parentId: Long, retainSet: Set<UUID>) {

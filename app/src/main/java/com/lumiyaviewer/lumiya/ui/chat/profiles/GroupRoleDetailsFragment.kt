@@ -81,7 +81,7 @@ open class GroupRoleDetailsFragment : ChatterFragment(), LoadableMonitor.OnLoada
 
     private fun askForSavingChanges(runnable: Runnable) {
         View view = getView()
-        internal fun if(null: view ==):  {
+        if (view == null) {
             runnable.run()
             return
         }

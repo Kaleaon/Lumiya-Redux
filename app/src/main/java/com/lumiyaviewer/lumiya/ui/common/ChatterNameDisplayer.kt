@@ -11,39 +11,39 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView
 
 open class ChatterNameDisplayer : ChatterNameRetriever.OnChatterNameUpdated {
 
-    private ChatterNameRetriever nameRetriever = null
+    private var nameRetriever: ChatterNameRetriever? = null
 
-    private ChatterID chatterID = null
+    private var chatterID: ChatterID? = null
 
-    private TextView nameTextView = null
+    private var nameTextView: TextView? = null
 
-    private ChatterPicView picView = null
-    private boolean alreadyUpdated = false
+    private var picView: ChatterPicView? = null
+    private var alreadyUpdated = false
 
     private fun clearViews() {
-        internal fun if(null: this.nameTextView !=):  {
-            this.nameTextView.setText("")
+        if (this.nameTextView != null) {
+            this.nameTextView!!.text = ""
         }
-        internal fun if(null: this.picView !=):  {
-            this.picView.setChatterID(null, null)
+        if (this.picView != null) {
+            this.picView!!.setChatterID(null, null)
         }
     }
 
     private fun updateViews() {
-        internal fun if(null: this.chatterID == null || this.nameRetriever ==):  {
+        if (this.chatterID == null || this.nameRetriever == null) {
             clearViews()
             return
         }
-        String resolvedName = this.nameRetriever.getResolvedName()
-        internal fun if(null: this.nameTextView !=):  {
-            this.nameTextView.setText(resolvedName != null ? resolvedName : this.nameTextView.getContext().getString(R.string.name_loading_title))
+        val resolvedName = this.nameRetriever!!.getResolvedName()
+        if (this.nameTextView != null) {
+            this.nameTextView!!.text = resolvedName ?: this.nameTextView!!.context.getString(R.string.name_loading_title)
         }
-        internal fun if(null: this.picView !=):  {
-            this.picView.setChatterID(this.chatterID, resolvedName)
+        if (this.picView != null) {
+            this.picView!!.setChatterID(this.chatterID, resolvedName)
         }
     }
 
-    open fun bindViews(textView: TextView, chatterPicView: ChatterPicView) {
+    open fun bindViews(textView: TextView?, chatterPicView: ChatterPicView?) {
         this.nameTextView = textView
         this.picView = chatterPicView
         updateViews()
@@ -54,41 +54,41 @@ open class ChatterNameDisplayer : ChatterNameRetriever.OnChatterNameUpdated {
     }
 
     open fun getResolvedName(context: Context): String {
-        String resolvedName = this.nameRetriever != null ? this.nameRetriever.getResolvedName() : null
-        return resolvedName != null ? resolvedName : context.getString(R.string.name_loading_title)
+        val resolvedName = this.nameRetriever?.getResolvedName()
+        return resolvedName ?: context.getString(R.string.name_loading_title)
     }
 
     override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-        if (chatterNameRetriever == this.nameRetriever) {
+        if (chatterNameRetriever === this.nameRetriever) {
             this.alreadyUpdated = true
             updateViews()
         }
     }
 
-    open fun setChatterID(chatterID: ChatterID) {
+    open fun setChatterID(chatterID: ChatterID?) {
         if (Objects.equal(chatterID, this.chatterID)) {
             return
         }
-        internal fun if(null: this.nameRetriever !=):  {
-            this.nameRetriever.dispose()
+        if (this.nameRetriever != null) {
+            this.nameRetriever!!.dispose()
             this.nameRetriever = null
         }
         this.chatterID = chatterID
-        internal fun if(null: chatterID ==):  {
+        if (chatterID == null) {
             clearViews()
             return
         }
         this.alreadyUpdated = false
         this.nameRetriever = ChatterNameRetriever(chatterID, this, UIThreadExecutor.getInstance(), false)
-        this.nameRetriever.subscribe()
-        internal fun if(this.alreadyUpdated):  {
+        this.nameRetriever!!.subscribe()
+        if (this.alreadyUpdated) {
             return
         }
-        internal fun if(null: this.nameTextView !=):  {
-            this.nameTextView.setText(R.string.name_loading_title)
+        if (this.nameTextView != null) {
+            this.nameTextView!!.setText(R.string.name_loading_title)
         }
-        internal fun if(null: this.picView !=):  {
-            this.picView.setChatterID(null, null)
+        if (this.picView != null) {
+            this.picView!!.setChatterID(null, null)
         }
     }
 

@@ -81,31 +81,31 @@ open class SLInventory : SLModule() {
 
     @SuppressLint({"UseSparseArrays"})
     private var callbacks: if (MutableMap<Int) , OnInventoryCallbackListener> = null
-    private var caps else SLCaps = null
-    private var db: InventoryDB = null
-    private var dbExecutor: Executor = null
-    private var executor: ExecutorService = null
+    private var caps: SLCaps? = null
+    private var db: InventoryDB? = null
+    private var dbExecutor: Executor? = null
+    private var executor: ExecutorService? = null
 
     private var fetchCap: String = ""
-    private var fetchEntireInventoryRequested: AtomicBoolean = null
-    private var fetchRequests: MutableMap<UUID, SLInventoryFetchRequest> = null
-    private var folderEntryResultHandler: ResultHandler<UUID, SLInventoryEntry> = null
-    private var folderLoadingRequestHandler: RequestHandler<UUID> = null
-    private var folderLoadingResultHandler: ResultHandler<UUID, Boolean> = null
-    private var folderRequestHandler: RequestHandler<UUID> = null
-    private var nextCallbackID: AtomicInteger = null
-    private var nextFolderSubscription: SubscriptionData<UUID, SLInventoryEntry> = null
-    private var reloadEvent: SLMessageEventListener = null
-    var rootFolder: SLInventoryEntry = null
+    private var fetchEntireInventoryRequested: AtomicBoolean? = null
+    private var fetchRequests: MutableMap<UUID, SLInventoryFetchRequest>? = null
+    private var folderEntryResultHandler: ResultHandler<UUID, SLInventoryEntry>? = null
+    private var folderLoadingRequestHandler: RequestHandler<UUID>? = null
+    private var folderLoadingResultHandler: ResultHandler<UUID, Boolean>? = null
+    private var folderRequestHandler: RequestHandler<UUID>? = null
+    private var nextCallbackID: AtomicInteger? = null
+    private var nextFolderSubscription: SubscriptionData<UUID, SLInventoryEntry>? = null
+    private var reloadEvent: SLMessageEventListener? = null
+    var rootFolder: SLInventoryEntry? = null
     private var rootFolderFetchNeeded: Boolean = false
-    private var rootFolderSubscription: SubscriptionData<UUID, SLInventoryEntry> = null
-    private var seachRunningResultHandler: ResultHandler<SubscriptionSingleKey, Boolean> = null
-    private var searchProcessResultHandler: ResultHandler<SubscriptionSingleKey, Boolean> = null
-    private var searchRequestHandler: RequestHandler<SubscriptionSingleKey> = null
-    private var searchRunningRequestHandler: RequestHandler<SubscriptionSingleKey> = null
-    private var udpFetchPendingRequests: MutableMap<UUID, SLInventoryUDPFetchRequest> = null
-    private var udpFetchRequests: MutableMap<UUID, SLInventoryUDPFetchRequest> = null
-    private var userManager: UserManager = null
+    private var rootFolderSubscription: SubscriptionData<UUID, SLInventoryEntry>? = null
+    private var seachRunningResultHandler: ResultHandler<SubscriptionSingleKey, Boolean>? = null
+    private var searchProcessResultHandler: ResultHandler<SubscriptionSingleKey, Boolean>? = null
+    private var searchRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
+    private var searchRunningRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
+    private var udpFetchPendingRequests: MutableMap<UUID, SLInventoryUDPFetchRequest>? = null
+    private var udpFetchRequests: MutableMap<UUID, SLInventoryUDPFetchRequest>? = null
+    private var userManager: UserManager? = null
 
     open class InventoryFetchException : IOException() {
         fun InventoryFetchException(str: String): public {
@@ -364,7 +364,7 @@ open class SLInventory : SLModule() {
         var capabilityOrThrow: String = ""
         var z2: Boolean = false
         var i: Int = 0
-        var str: String = null
+        var str: String? = null
         try {
             var lLSDXMLRequest: LLSDXMLRequest = LLSDXMLRequest()
             if (z) {
@@ -453,7 +453,7 @@ open class SLInventory : SLModule() {
         }
         var uuid: UUID = this.circuitInfo.sessionID
         try {
-            var query: Cursor = this.db.getDatabase().query(InventoryEntryDBObject.tableName, new Array<String>{"uuid_high", "uuid_low"}, "isFolder AND (sessionID_high != ? OR sessionID_low != ?)", new Array<String>{Long.toString(uuid.getMostSignificantBits()), Long.toString(uuid.getLeastSignificantBits())}, null, null, null, "1")
+            var query: Cursor = this.db.getDatabase().query(InventoryEntryDBObject.tableName, arrayOf("uuid_high", "uuid_low"), "isFolder AND (sessionID_high != ? OR sessionID_low != ?)", arrayOf(Long.toString(uuid.getMostSignificantBits()), Long.toString(uuid.getLeastSignificantBits())), null, null, null, "1")
             if (query.moveToFirst()) {
                 var uuid2: UUID = UUIDPool.getUUID(query.getLong(0), query.getLong(1))
                 Debug.Printf("InventorySearch: fetching next folder: %s", uuid2)
@@ -510,7 +510,7 @@ open class SLInventory : SLModule() {
 
     fun CollectGiveableItems(sLInventoryEntry: SLInventoryEntry): MutableCollection<SLInventoryEntry> {
         var arrayList: ArrayList = ArrayList()
-        var query: Cursor = SLInventoryEntry.query(this.db.getDatabase(), "parent_id = ?", new Array<String>{Long.toString(sLInventoryEntry.getId())}, null as String)
+        var query: Cursor = SLInventoryEntry.query(this.db.getDatabase(), "parent_id = ?", arrayOf(Long.toString(sLInventoryEntry.getId())), null as String)
         if (query != null) {
             while (query.moveToNext()) {
                 var sLInventoryEntry2: SLInventoryEntry = SLInventoryEntry(query)
@@ -693,7 +693,7 @@ open class SLInventory : SLModule() {
                     var asUUID: UUID = byIndex.byKey("FolderID").asUUID()
                     if (asUUID.getLeastSignificantBits() != 0 || asUUID.getMostSignificantBits() != 0) {
                         Debug.Printf("Inventory: BulkUpdateInventory got folder %s", asUUID.toString())
-                        var onInventoryCallbackListener: OnInventoryCallbackListener = null
+                        var onInventoryCallbackListener: OnInventoryCallbackListener? = null
                         if (byIndex.keyExists("CallbackID")) {
                             Debug.Printf("Inventory: got callback id %d", byIndex.byKey("CallbackID".asInt()))
                             onInventoryCallbackListener = this.callbacks.remove(byIndex.byKey("CallbackID".asInt()))
@@ -731,7 +731,7 @@ open class SLInventory : SLModule() {
                     if (asUUID3.getLeastSignificantBits() != 0 || asUUID3.getMostSignificantBits() != 0) {
                         Debug.Printf("Inventory: BulkUpdateInventory got item %s", asUUID3.toString())
                         var asUUID4: UUID = byIndex2.byKey("FolderID").asUUID()
-                        var onInventoryCallbackListener2: OnInventoryCallbackListener = null
+                        var onInventoryCallbackListener2: OnInventoryCallbackListener? = null
                         if (byIndex2.keyExists("CallbackID")) {
                             Debug.Printf("Inventory: got callback id %d", byIndex2.byKey("CallbackID".asInt()))
                             onInventoryCallbackListener2 = this.callbacks.remove(byIndex2.byKey("CallbackID".asInt()))
@@ -1077,7 +1077,7 @@ open class SLInventory : SLModule() {
     }
 
     fun getCallingCardsFolderUUID(): UUID {
-        var findSpecialFolder: SLInventoryEntry = null
+        var findSpecialFolder: SLInventoryEntry? = null
         if (this.rootFolder == null || (findSpecialFolder = this.db.findSpecialFolder(this.rootFolder.getId(), 2)) == null) {
         return null
         }

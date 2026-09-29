@@ -15,8 +15,8 @@ import de.greenrobot.dao.query.LazyList
 import java.util.concurrent.atomic.AtomicReference
 
 open class BalanceManager {
-    private var moneyTransactionDao: MoneyTransactionDao = null
-    private var userManager: UserManager = null
+    private var moneyTransactionDao: MoneyTransactionDao? = null
+    private var userManager: UserManager? = null
     private var financialInfo: AtomicReference<SLFinancialInfo> = AtomicReference<>(null)
     private SubscriptionPool<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactionPool = SubscriptionPool<>()
     private var balanceRequestHandler: SimpleRequestHandler<SubscriptionSingleKey> = SimpleRequestHandler<SubscriptionSingleKey>() {

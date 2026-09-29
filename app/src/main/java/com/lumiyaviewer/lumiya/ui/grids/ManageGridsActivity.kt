@@ -36,13 +36,13 @@ open class ManageGridsActivity : ThemedActivity(), GridEditDialog.OnGridEditResu
 
         override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
             LayoutInflater from = LayoutInflater.from(getContext())
-            internal fun if(null: view ==):  {
+            if (view == null) {
                 view = from.inflate(R.layout.grid_list_item, viewGroup, false)
             }
             TextView textView = (TextView) view.findViewById(R.id.gridNameTextView)
             TextView viewById = (TextView) view.findViewById(R.id.gridURLTextView)
             GridList.GridInfo item = getItem(i)
-            internal fun if(null: item !=):  {
+            if (item != null) {
                 GridList.GridInfo gridInfo = item
                 textView.setText(gridInfo.getGridName())
                 viewById.setText(gridInfo.getLoginURL())
@@ -71,7 +71,7 @@ open class ManageGridsActivity : ThemedActivity(), GridEditDialog.OnGridEditResu
 
     override fun onContextItemSelected(menuItem: MenuItem): Boolean {
         GridList.GridInfo item = this.adapter.getItem(((AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo()).position)
-        internal fun if(null: item !=):  {
+        if (item != null) {
             GridList.GridInfo gridInfo = item
             when (menuItem.getItemId()) {
                 R.id.item_grid_edit -> {

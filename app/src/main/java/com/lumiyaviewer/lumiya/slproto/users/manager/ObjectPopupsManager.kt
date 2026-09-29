@@ -15,17 +15,17 @@ import java.util.concurrent.atomic.AtomicInteger
 open class ObjectPopupsManager {
     @JvmStatic private var MAX_POPUPS: Int = 99
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var objectPopups: SubscribableList<SLChatEvent> = SubscribableList<>()
     private var listenerLock: Any = Object()
 
-    private var objectPopupListener: WeakReference<ObjectPopupListener> = null
+    private var objectPopupListener: WeakReference<ObjectPopupListener>? = null
 
-    private var objectPopupListenerExecutor: Executor = null
+    private var objectPopupListenerExecutor: Executor? = null
 
-    private var displayedPopupEvent: SLChatEvent = null
+    private var displayedPopupEvent: SLChatEvent? = null
 
-    private var lastEvent: SLChatEvent = null
+    private var lastEvent: SLChatEvent? = null
     private var popupAnimated: Boolean = false
     private var freshPopupsCount: AtomicInteger = AtomicInteger(0)
     private var unreadPopupCount: AtomicInteger = AtomicInteger(0)
@@ -58,8 +58,8 @@ open class ObjectPopupsManager {
     }
 
     private fun notifyCountUpdated() {
-        var executor: Executor = null
-        var objectPopupListener: ObjectPopupListener = null
+        var executor: Executor? = null
+        var objectPopupListener: ObjectPopupListener? = null
         synchronized(this.listenerLock) {
             if (this.objectPopupListener != null) {
                 objectPopupListener = this.objectPopupListener.get()
@@ -87,9 +87,9 @@ open class ObjectPopupsManager {
     }
 
     fun addObjectPopup(sLChatEvent: final SLChatEvent) {
-        var executor: Executor = null
+        var executor: Executor? = null
         var z: Boolean = false
-        var objectPopupListener: ObjectPopupListener = null
+        var objectPopupListener: ObjectPopupListener? = null
         synchronized(this.listenerLock) {
             if (this.objectPopupListener != null) {
                 objectPopupListener = this.objectPopupListener.get()
@@ -155,8 +155,8 @@ open class ObjectPopupsManager {
         To view partially-correct add '--show-bad-code' argument
     */
     fun cancelObjectPopup(sLChatEvent: SLChatEvent) {
-        var listener: ObjectPopupListener = null
-        var executor: Executor = null
+        var listener: ObjectPopupListener? = null
+        var executor: Executor? = null
         synchronized(this.listenerLock) {
             if (sLChatEvent != null) {
                 if (sLChatEvent == this.displayedPopupEvent) {
@@ -191,8 +191,8 @@ open class ObjectPopupsManager {
     }
 
     fun clearObjectPopups() {
-        var objectPopupListener: ObjectPopupListener = null
-        var executor: Executor = null
+        var objectPopupListener: ObjectPopupListener? = null
+        var executor: Executor? = null
         synchronized(this.listenerLock) {
             this.displayedPopupEvent = null
             objectPopupListener = if (this.objectPopupListener != null) this.objectPopupListener.get() else null
@@ -237,7 +237,7 @@ open class ObjectPopupsManager {
     }
 
     fun getDisplayedObjectPopup(): SLChatEvent {
-        var sLChatEvent: SLChatEvent = null
+        var sLChatEvent: SLChatEvent? = null
         synchronized(this.listenerLock) {
             sLChatEvent = this.displayedPopupEvent
         }
@@ -245,7 +245,7 @@ open class ObjectPopupsManager {
     }
 
     fun getNotification(z: Boolean): UnreadNotificationInfo.ObjectPopupNotification {
-        var create: UnreadNotificationInfo.ObjectPopupNotification = null
+        var create: UnreadNotificationInfo.ObjectPopupNotification? = null
         synchronized(this.listenerLock) {
             create = UnreadNotificationInfo.ObjectPopupNotification.create(if this as z.freshPopupsCount.getAndSet(0) else 0, this.unreadPopupCount.get(), this.lastEvent is if UnreadNotificationInfo as SLChatTextEvent.ObjectPopupMessage.create(this.lastEvent.getSource().getSourceName(this.userManager), (this as SLChatTextEvent.lastEvent).getRawText()) else null)
         }

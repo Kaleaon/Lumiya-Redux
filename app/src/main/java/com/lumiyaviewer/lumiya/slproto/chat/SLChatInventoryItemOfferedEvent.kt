@@ -18,11 +18,11 @@ import java.nio.ByteOrder
 import java.util.UUID
 
 open class SLChatInventoryItemOfferedEvent : SLChatYesNoEvent() {
-    private var assetType: SLAssetType = null
-    private var itemID: UUID = null
+    private var assetType: SLAssetType? = null
+    private var itemID: UUID? = null
     private var itemName: String = ""
     private var origIMType: Int = 0
-    private var sessionID: UUID = null
+    private var sessionID: UUID? = null
 
     constructor(chatMessage: ChatMessage, uuid: UUID) : super(chatMessage, uuid) {
         this.origIMType = chatMessage.getOrigIMType()

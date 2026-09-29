@@ -43,7 +43,7 @@ open class InventoryFragmentHelper {
     private fun ViewTexture(uuid: UUID) {
         UserManager userManager = getUserManager()
         FragmentActivity activity = this.fragment.getActivity()
-        internal fun if(null: activity == null || userManager ==):  {
+        if (activity == null || userManager == null) {
             return
         }
         DetailsActivity.showEmbeddedDetails(activity, TextureViewFragment.class, TextureViewFragment.makeArguments(userManager.getUserID(), uuid))
@@ -51,7 +51,7 @@ open class InventoryFragmentHelper {
 
     private fun getActiveAgentCircuit(): SLAgentCircuit? {
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             return userManager.getActiveAgentCircuit()
         }
         return null
@@ -63,7 +63,7 @@ open class InventoryFragmentHelper {
 
     @JvmStatic
     fun getSortOrder(context: Context): Int {
-        internal fun if(null: context !=):  {
+        if (context != null) {
             return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()).getInt(SORT_ORDER_KEY, 0)
         }
         return 0
@@ -71,11 +71,11 @@ open class InventoryFragmentHelper {
 
     private fun getUserManager(): UserManager? {
         UserManager userManager = UserManager.getUserManager(ActivityUtils.getActiveAgentID(this.fragment.getArguments()))
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             return userManager
         }
         FragmentActivity activity = this.fragment.getActivity()
-        internal fun if(null: activity !=):  {
+        if (activity != null) {
             return UserManager.getUserManager(ActivityUtils.getActiveAgentID(activity.getIntent()))
         }
         return null

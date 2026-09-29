@@ -74,27 +74,27 @@ abstract class SLObjectInfo : Identifiable<UUID> {
     @JvmStatic var PAY_HIDE: Int = -1
     var UpdateFlags: Int = 0
 
-    private var drawListEntry: WeakReference<DrawListObjectEntry> = null
+    private var drawListEntry: WeakReference<DrawListObjectEntry>? = null
     var localID: Int = 0
     var objRadius: Float = 0.0f
 
-    private var payInfo: PayInfo = null
-    private var primDrawParams: PrimDrawParams = null
-    private var rotation: LLQuaternion = null
+    private var payInfo: PayInfo? = null
+    private var primDrawParams: PrimDrawParams? = null
+    private var rotation: LLQuaternion? = null
     var salePrice: Int = 0
-    protected var uuid: UUID = null
-    var worldMatrix: FloatArray = null
+    protected var uuid: UUID? = null
+    var worldMatrix: FloatArray? = null
     var parentID: Int = 0
     var name: String = "(loading)"
     var description: String = ""
     var touchName: String = ""
-    var attachedToUUID: UUID = null
-    var ownerUUID: UUID = null
-    var creatorUUID: UUID = null
+    var attachedToUUID: UUID? = null
+    var ownerUUID: UUID? = null
+    var creatorUUID: UUID? = null
     var saleType: Byte = 0
     var attachmentID: Int = 0
     private var objectCoords: Vector3Array = Vector3Array(4)
-    private var hoverText: HoverText = null
+    private var hoverText: HoverText? = null
     var isDead: Boolean = false
     var isAttachment: Boolean = false
     var nameKnown: Boolean = false
@@ -222,7 +222,7 @@ abstract class SLObjectInfo : Identifiable<UUID> {
     }
 
     private fun updateAttachments() {
-        var drawableAvatar: DrawableAvatar = null
+        var drawableAvatar: DrawableAvatar? = null
         if (!isAvatar() || (drawableAvatar = SpatialIndex.getInstance().getDrawableAvatar(this)) == null) {
             return
         }
@@ -303,7 +303,7 @@ abstract class SLObjectInfo : Identifiable<UUID> {
         To view partially-correct add '--show-bad-code' argument
     */
     public void ApplyObjectUpdate(ObjectUpdateCompressed.ObjectData objectData) throws UnsupportedObjectTypeException {
-        var textureEntry: SLTextureEntry = null
+        var textureEntry: SLTextureEntry? = null
         var str: String = ""
         this.UpdateFlags = objectData.UpdateFlags
         var byteBuffer: ByteBuffer = ByteBuffer.wrap(objectData.Data)
@@ -441,7 +441,7 @@ abstract class SLObjectInfo : Identifiable<UUID> {
     }
 
     fun addChild(objectInfo: SLObjectInfo) {
-        var attachedTo: SLObjectInfo = null
+        var attachedTo: SLObjectInfo? = null
         this.treeNode.addChild(objectInfo.treeNode)
         if (objectInfo.isAttachment && (attachedTo = objectInfo.getAttachedTo()) != null) {
             attachedTo.updateAttachments()
@@ -645,7 +645,7 @@ abstract class SLObjectInfo : Identifiable<UUID> {
     }
 
     fun removeChild(objectInfo: SLObjectInfo) {
-        var attachedTo: SLObjectInfo = null
+        var attachedTo: SLObjectInfo? = null
         if (objectInfo.isAttachment && (attachedTo = objectInfo.getAttachedTo()) != null) {
             attachedTo.updateAttachments()
         }

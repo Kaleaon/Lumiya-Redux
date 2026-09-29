@@ -60,7 +60,7 @@ open class GroupMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
 
     open fun onAgentCircuit(agentCircuit: SLAgentCircuit) {
         View view = getView()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             internal fun for(int[]{R.id.show_in_profile_checkbox: int i : new, R.id.active_group_checkbox, R.id.group_profile_contribution_button, R.id.group_join_button, R.id.group_leave_button, R.id.group_invite_button, R.id.group_change_role_button}):  {
                 view.findViewById(i).setEnabled(this.agentCircuit.hasData())
             }
@@ -90,7 +90,7 @@ open class GroupMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
 
                     override fun onClick(dialogInterface: DialogInterface, i: Int) {
                         GroupTitlesReply.GroupData groupData = (GroupTitlesReply.GroupData) it.next()
-                        internal fun if(groupData.Selected):  {
+                        if (groupData.Selected) {
                             str = SLMessage.stringFromVariableOEM(groupData.Title)
                             }
                         }
@@ -112,14 +112,14 @@ open class GroupMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
         this.loadableMonitor.unsubscribeAll()
         this.agentCircuit.unsubscribe()
         if (this.userManager == null || !(chatterID is ChatterID.ChatterIDGroup)) {
-            internal fun if(null: view !=):  {
+            if (view != null) {
                 ((TextView) view.findViewById(R.id.text_profile_group_key)).setText("")
                 return
             }
             return
         }
         UUID chatterUUID = ((ChatterID.ChatterIDGroup) chatterID).getChatterUUID()
-        internal fun if(null: view !=):  {
+        if (view != null) {
             ((TextView) view.findViewById(R.id.text_profile_group_key)).setText(chatterUUID.toString())
         }
         this.agentCircuit.subscribe(UserManager.agentCircuits(), chatterID.agentUUID)

@@ -21,19 +21,19 @@ class CachedResponseDao : AbstractDao<CachedResponse, String> {
 
     override fun bindValues(sqLiteStatement: SQLiteStatement, cachedResponse: CachedResponse) {
         sqLiteStatement.clearBindings()
-        val key = cachedResponse.key
+        val key = cachedResponse.getKey()
         if (key != null) {
             sqLiteStatement.bindString(1, key)
         }
-        val data = cachedResponse.data
+        val data = cachedResponse.getData()
         if (data != null) {
             sqLiteStatement.bindBlob(2, data)
         }
-        sqLiteStatement.bindLong(3, if (cachedResponse.mustRevalidate) 1L else 0L)
+        sqLiteStatement.bindLong(3, if (cachedResponse.getMustRevalidate()) 1L else 0L)
     }
 
     override fun getKey(cachedResponse: CachedResponse?): String? {
-        return cachedResponse?.key
+        return cachedResponse?.getKey()
     }
 
     override fun isEntityUpdateable(): Boolean = true
@@ -47,9 +47,9 @@ class CachedResponseDao : AbstractDao<CachedResponse, String> {
     }
 
     override fun readEntity(cursor: Cursor, cachedResponse: CachedResponse, offset: Int) {
-        cachedResponse.key = if (cursor.isNull(offset + 0)) null else cursor.getString(offset + 0)
-        cachedResponse.data = if (cursor.isNull(offset + 1)) null else cursor.getBlob(offset + 1)
-        cachedResponse.mustRevalidate = cursor.getShort(offset + 2).toInt() != 0
+        cachedResponse.setKey(if (cursor.isNull(offset + 0)) null else cursor.getString(offset + 0))
+        cachedResponse.setData(if (cursor.isNull(offset + 1)) null else cursor.getBlob(offset + 1))
+        cachedResponse.setMustRevalidate(cursor.getShort(offset + 2).toInt() != 0)
     }
 
     override fun readKey(cursor: Cursor, offset: Int): String? {
@@ -57,7 +57,7 @@ class CachedResponseDao : AbstractDao<CachedResponse, String> {
     }
 
     override fun updateKeyAfterInsert(cachedResponse: CachedResponse, rowId: Long): String? {
-        return cachedResponse.key
+        return cachedResponse.getKey()
     }
 
     companion object {

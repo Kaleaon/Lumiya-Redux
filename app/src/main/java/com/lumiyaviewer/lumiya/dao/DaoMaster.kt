@@ -44,7 +44,7 @@ class DaoMaster(sqLiteDatabase: SQLiteDatabase) : AbstractDaoMaster(sqLiteDataba
         }
     }
 
-    class DevOpenHelper(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?) :
+    open class DevOpenHelper(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?) :
         OpenHelper(context, name, factory) {
 
         override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -7,9 +7,9 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
 
 class AutoValue_UnreadNotificationInfo_UnreadMessageSource : UnreadNotificationInfo.UnreadMessageSource() {
-    private var chatterID: ChatterID = null
-    private var chatterName: Optional<String> = null
-    private var unreadMessages: ImmutableList<SLChatEvent> = null
+    private var chatterID: ChatterID? = null
+    private var chatterName: Optional<String>? = null
+    private var unreadMessages: ImmutableList<SLChatEvent>? = null
     private var unreadMessagesCount: Int = 0
 
     constructor(chatterID: ChatterID, optional: Optional<String>, immutableList: ImmutableList<SLChatEvent>, unreadMessagesCount: Int) {

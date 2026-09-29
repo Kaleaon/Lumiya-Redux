@@ -6,9 +6,9 @@ import com.lumiyaviewer.lumiya.slproto.textures.SLTextureEntryFace
 
 open class PrimDrawParams {
     /** Wearer's bakes for Bakes on Mesh faces; null except on attachments that use them. */
-    private var bakes: AvatarBakes = null
-    private var textures: SLTextureEntry = null
-    private var volumeParams: PrimVolumeParams = null
+    private var bakes: AvatarBakes? = null
+    private var textures: SLTextureEntry? = null
+    private var volumeParams: PrimVolumeParams? = null
 
     constructor(primVolumeParams: PrimVolumeParams, textureEntry: SLTextureEntry) {
         this(primVolumeParams, textureEntry, null)

@@ -14,15 +14,15 @@ import java.util.UUID
 
 open class ChatterList {
 
-    private var activeChattersManager: ActiveChattersManager = null
+    private var activeChattersManager: ActiveChattersManager? = null
 
-    private var daoSession: DaoSession = null
+    private var daoSession: DaoSession? = null
 
-    private var friendManager: FriendManager = null
+    private var friendManager: FriendManager? = null
 
-    private var groupManager: GroupManager = null
+    private var groupManager: GroupManager? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private SubscriptionPool<ChatterListType, ImmutableList<ChatterDisplayData>> chatterListPool = SubscriptionPool<>()
     private var chatterLists: MutableMap<ChatterListType, ChatterDisplayDataList> = Collections.synchronizedMap(EnumMap(ChatterListType.class))
     private var nearbyDistancePool: SubscriptionPool<UUID, Float> = SubscriptionPool<>()
@@ -44,7 +44,7 @@ open class ChatterList {
         this.activeChattersManager = ActiveChattersManager(userManager, this.daoSession, this)
         RequestFinalProcessor<UUID, Float>(this.nearbyDistancePool, userManager.getDatabaseExecutor()) {
             public Float processRequest(UUID uuid) throws Throwable {
-                var modules: SLModules = null
+                var modules: SLModules? = null
                 var activeAgentCircuit: SLAgentCircuit = userManager.getActiveAgentCircuit()
                 if (activeAgentCircuit == null || (modules = activeAgentCircuit.getModules()) == null) {
         return null

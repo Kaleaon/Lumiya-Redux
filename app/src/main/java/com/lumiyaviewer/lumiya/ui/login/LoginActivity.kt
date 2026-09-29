@@ -68,7 +68,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
 
     private fun CheckTOSAndLogin() {
         View currentFocus = getCurrentFocus()
-        internal fun if(null: currentFocus !=):  {
+        if (currentFocus != null) {
             ((InputMethodManager) getSystemService("input_method")).hideSoftInputFromWindow(currentFocus.getWindowToken(), 0)
         }
         SharedPreferences preferences = getPreferences(0)
@@ -97,7 +97,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         } else {
             z = false
         }
-        internal fun if(z):  {
+        if (z) {
             AccountList.AccountInfo findAccount = this.accountList.findAccount(editable, selectedGrid.getGridUUID())
             if (findAccount != null && !findAccount.getPasswordHash() == ("")) {
                 str3 = findAccount.getPasswordHash()
@@ -110,7 +110,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
             str = passwordHash
         }
         this.enableAutoClear = false
-        internal fun if(isChecked):  {
+        if (isChecked) {
             ((EditText) findViewById(R.id.editPassword)).setTransformationMethod(SingleLineTransformationMethod.getInstance())
             ((EditText) findViewById(R.id.editPassword)).setText(R.string.saved_password)
         } else {
@@ -136,7 +136,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         }
         edit.putString(KEY_SELECTED_GRID, selectedGrid.getGridUUID().toString())
         edit.apply()
-        internal fun if(saveUserName):  {
+        if (saveUserName) {
             this.accountList.findOrAddAccount(editable, z2 ? str : "", selectedGrid.getGridUUID())
         }
         try {
@@ -175,7 +175,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
      */
     private fun showMfaPrompt(message: String) {
         Intent loginIntent = this.lastLoginIntent
-        internal fun if(null: loginIntent ==):  {
+        if (loginIntent == null) {
             return
         }
         View view = getLayoutInflater().inflate(R.layout.mfa_token_dialog, null)
@@ -207,11 +207,11 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
     private fun checkIfGridAvailable() {
         Debug.Log("LoginActivity: checking if grid is available")
         SLGridConnection gridConnection = GridConnectionService.getGridConnection()
-        internal fun if(null: gridConnection !=):  {
+        if (gridConnection != null) {
             SLGridConnection.ConnectionState connectionState = gridConnection.getConnectionState()
             UUID activeAgentUUID = gridConnection.getActiveAgentUUID()
             Debug.Log("LoginActivity: connectionState = " + connectionState.toString())
-            internal fun if(null: connectionState == SLGridConnection.ConnectionState.Connected && activeAgentUUID !=):  {
+            if (connectionState == SLGridConnection.ConnectionState.Connected && activeAgentUUID != null) {
                 Debug.Log("LoginActivity: grid available and connected")
                 startChatActivity(activeAgentUUID)
                 finish()
@@ -266,7 +266,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
             ((Spinner) findViewById(R.id.spinnerGrid)).setSelection(gridIndex)
             this.lastSelectedGrid = gridIndex
             Object selectedItem = ((Spinner) findViewById(R.id.spinnerGrid)).getSelectedItem()
-            internal fun if(GridList.GridInfo: selectedItem instanceof):  {
+            if (selectedItem instanceof GridList.GridInfo) {
                 this.lastSelectedGridUUID = ((GridList.GridInfo) selectedItem).getGridUUID()
             }
         } catch (Exception e) {
@@ -276,7 +276,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
     private fun showProgressView(z: Boolean) {
         View findViewById = findViewById(R.id.login_progress_layout)
         View viewById = findViewById(R.id.login_root_view)
-        internal fun if(null: findViewById != null && viewById !=):  {
+        if (findViewById != null && viewById != null) {
             findViewById(R.id.login_progress_layout).setVisibility(z ? View.VISIBLE : View.GONE)
             findViewById(R.id.login_root_view).setVisibility(z ? View.GONE : View.VISIBLE)
         }
@@ -303,7 +303,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
                 loggingIn = true
             }
         }
-        internal fun if(loggingIn):  {
+        if (loggingIn) {
             return
         }
         showProgressView(false)
@@ -321,7 +321,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
     }
 
     override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {
-        internal fun if(this.enableAutoClear):  {
+        if (this.enableAutoClear) {
             EditText editText = (EditText) findViewById(R.id.editPassword)
             if (editText.getText().toString() == (getString(R.string.saved_password))) {
                 this.enableAutoClear = false
@@ -340,7 +340,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
     open fun handleLoginResult(loginResultEvent: SLLoginResultEvent) {
         this.loggingIn = false
         Debug.Printf("LoginProgressActivity: result.success = %b", Boolean.valueOf(loginResultEvent.success))
-        internal fun if(loginResultEvent.success):  {
+        if (loginResultEvent.success) {
             startChatActivity(loginResultEvent.activeAgentUUID)
             finish()
             return
@@ -371,7 +371,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         super.onActivityResult(i, i2, intent)
         AccountList.AccountInfo accountInfo
         Debug.Log("LoginActivity: onActivityResult: requestCode = " + i + ", resultCode = " + i2)
-        internal fun if(null: intent !=):  {
+        if (intent != null) {
             Debug.Log("LoginActivity: onActivityResult: data = " + intent.getDataString() + ", " + intent.toString())
         } else {
             Debug.Log("LoginActivity: onActivityResult: data = null")
@@ -396,7 +396,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
                         ((Spinner) findViewById(R.id.spinnerGrid)).setSelection(gridIndex)
                         this.lastSelectedGrid = gridIndex
                         Object selectedItem = ((Spinner) findViewById(R.id.spinnerGrid)).getSelectedItem()
-                        internal fun if(GridList.GridInfo: selectedItem instanceof):  {
+                        if (selectedItem instanceof GridList.GridInfo) {
                             this.lastSelectedGridUUID = ((GridList.GridInfo) selectedItem).getGridUUID()
                         }
                     }
@@ -412,7 +412,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
                 }
                 }
             5 -> {
-                internal fun if(-1: i2 ==):  {
+                if (i2 == -1) {
                     SharedPreferences.Editor editor = getPreferences(0).edit()
                     editor.putBoolean(KEY_TOS_ACCEPTED, true)
                     editor.apply()
@@ -434,7 +434,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
             R.id.loginCancelButton -> {
                 this.loggingIn = false
                 SLGridConnection gridConnection = GridConnectionService.getGridConnection()
-                internal fun if(null: gridConnection !=):  {
+                if (gridConnection != null) {
                     gridConnection.CancelConnect()
                 }
                 showProgressView(false)
@@ -445,11 +445,11 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
     override fun onCreate(bundle: Bundle) {
         super.onCreate(bundle)
         SLGridConnection gridConnection = GridConnectionService.getGridConnection()
-        internal fun if(null: gridConnection !=):  {
+        if (gridConnection != null) {
             SLGridConnection.ConnectionState connectionState = gridConnection.getConnectionState()
             UUID activeAgentUUID = gridConnection.getActiveAgentUUID()
             Debug.Log("LoginActivity: connectionState = " + connectionState.toString())
-            internal fun if(null: connectionState == SLGridConnection.ConnectionState.Connected && activeAgentUUID !=):  {
+            if (connectionState == SLGridConnection.ConnectionState.Connected && activeAgentUUID != null) {
                 startChatActivity(activeAgentUUID)
                 finish()
                 return
@@ -475,9 +475,9 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         setSelectedGrid()
         ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             override fun onItemSelected(adapterView: AdapterView<?>, view: View, lastSelectedGrid: Int, j: Long) {
-                internal fun if(LoginActivity.this.lastSelectedGrid: lastSelectedGrid !=):  {
+                if (lastSelectedGrid != LoginActivity.this.lastSelectedGrid) {
                     Object item = adapterView.getAdapter().getItem(lastSelectedGrid)
-                    internal fun if(GridList.GridInfo: item instanceof):  {
+                    if (item instanceof GridList.GridInfo) {
                         GridList.GridInfo gridInfo = (GridList.GridInfo) item
                         if (gridInfo.getLoginURL() == null) {
                             GridEditDialog gridEditDialog = GridEditDialog(LoginActivity.this, LoginActivity.this.gridList, null)

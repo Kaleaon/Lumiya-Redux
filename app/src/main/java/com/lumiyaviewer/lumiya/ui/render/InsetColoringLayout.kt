@@ -77,16 +77,16 @@ open class InsetColoringLayout : FrameLayout() {
         int width = getWidth()
         int height = getHeight()
         this.backgroundPaint.setColor(this.backgroundColor)
-        internal fun if(0: this.childPaddingTop !=):  {
+        if (this.childPaddingTop != 0) {
             canvas.drawRect(0.0f, 0.0f, width, this.childPaddingTop, this.backgroundPaint)
         }
-        internal fun if(0: this.childPaddingBottom !=):  {
+        if (this.childPaddingBottom != 0) {
             canvas.drawRect(0.0f, height - this.childPaddingBottom, 0.0f, height, this.backgroundPaint)
         }
-        internal fun if(0: this.childPaddingLeft !=):  {
+        if (this.childPaddingLeft != 0) {
             canvas.drawRect(0.0f, 0.0f, this.childPaddingLeft, height, this.backgroundPaint)
         }
-        internal fun if(0: this.childPaddingRight !=):  {
+        if (this.childPaddingRight != 0) {
             canvas.drawRect(width - this.childPaddingRight, 0.0f, width, height, this.backgroundPaint)
         }
     }

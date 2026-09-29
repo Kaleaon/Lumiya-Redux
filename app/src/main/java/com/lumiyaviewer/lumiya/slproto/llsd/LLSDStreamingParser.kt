@@ -68,7 +68,7 @@ open class LLSDStreamingParser {
         } catch (e: IOException) {
             var llsdxmlException: LLSDXMLException = LLSDXMLException("I/O error")
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         }
     }
 
@@ -78,15 +78,15 @@ open class LLSDStreamingParser {
         } catch (e: LLSDValueTypeException) {
             var llsdxmlException: LLSDXMLException = LLSDXMLException("Invalid value type")
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         } catch (e2: IOException) {
             var llsdxmlException2: LLSDXMLException = LLSDXMLException("I/O error")
             llsdxmlException2.initCause(e2)
-            var llsdxmlException2: throw = null
+            var llsdxmlException2: throw? = null
         } catch (e3: InterruptedException) {
             var llsdxmlException3: LLSDXMLException = LLSDXMLException("Interrupted")
             llsdxmlException3.initCause(e3)
-            var llsdxmlException3: throw = null
+            var llsdxmlException3: throw? = null
         }
     }
 
@@ -206,20 +206,20 @@ open class LLSDStreamingParser {
             e.printStackTrace()
             var llsdxmlException: LLSDXMLException = LLSDXMLException("Malformed XML")
             llsdxmlException.initCause(e)
-            var llsdxmlException: throw = null
+            var llsdxmlException: throw? = null
         } catch (e2: IOException) {
             throw LLSDXMLException("Input stream error")
         } catch (e3: InterruptedException) {
             e3.printStackTrace()
             var llsdxmlException2: LLSDXMLException = LLSDXMLException("Interrupted")
             llsdxmlException2.initCause(e3)
-            var llsdxmlException2: throw = null
+            var llsdxmlException2: throw? = null
         } catch (e4: XmlPullParserException) {
             Debug.Log("XmlPullParserException: " + e4.getMessage())
             e4.printStackTrace()
             var llsdxmlException3: LLSDXMLException = LLSDXMLException("Malformed XML")
             llsdxmlException3.initCause(e4)
-            var llsdxmlException3: throw = null
+            var llsdxmlException3: throw? = null
         }
     }
 

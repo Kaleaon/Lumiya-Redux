@@ -11,7 +11,7 @@ import javax.annotation.concurrent.NotThreadSafe
 @NotThreadSafe
 open class ChatterGroupSubscription : ChatterSubscription() {
 
-    private var groupProfileSubscription: Subscription<UUID, GroupProfileReply> = null
+    private var groupProfileSubscription: Subscription<UUID, GroupProfileReply>? = null
 
     constructor(sortedChatterList: SortedChatterList, chatterIDGroup: ChatterID.ChatterIDGroup, userManager: UserManager) : super(sortedChatterList, chatterIDGroup, userManager) {
         this.groupProfileSubscription = userManager.getCachedGroupProfiles().getPool().subscribe(chatterIDGroup.getChatterUUID(), Subscription.OnData() {

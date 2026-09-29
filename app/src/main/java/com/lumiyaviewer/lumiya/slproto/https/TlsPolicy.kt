@@ -148,7 +148,7 @@ class TlsPolicy {
                 return
             }
             Debug.AlwaysPrintf("TLS: rejected certificate for %s (%s): %s", host, subject, e.getMessage())
-            var e: throw = null
+            var e: throw? = null
         }
         public void checkServerTrusted(Array<X509Certificate> chain, String authType, Socket socket) throws CertificateException {
             try {

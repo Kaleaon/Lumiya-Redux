@@ -39,11 +39,11 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 open class SLParcelInfo {
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var drawDistance: Float = 0.0f
     var terrainData: TerrainData = TerrainData()
     private var agentAvatarLock: Any = Object()
-    private var agentAvatar: SLObjectAvatarInfo = null
+    private var agentAvatar: SLObjectAvatarInfo? = null
     private var simSunHourLock: Any = Object()
     private var simSunHour: Float = 0.5f
     private var simSunHourDirty: Boolean = true
@@ -64,9 +64,9 @@ open class SLParcelInfo {
     }
 
     private fun addDisplayObjects(iterable: Iterable<SLObjectInfo>, objectFilterInfo: SLObjectFilterInfo, immutableVector: ImmutableVector, z: Boolean, multipleChatterNameRetriever: MultipleChatterNameRetriever, set: MutableSet<UUID>, z2: Boolean): ArrayList<SLObjectDisplayInfo> {
-        var arrayList: ArrayList<SLObjectDisplayInfo> = null
+        var arrayList: ArrayList<SLObjectDisplayInfo>? = null
         var z3: Boolean = false
-        var objectDisplayInfos: ArrayList<SLObjectDisplayInfo> = null
+        var objectDisplayInfos: ArrayList<SLObjectDisplayInfo>? = null
         var it: Iterator<SLObjectInfo> = iterable.iterator()
         while (true) {
             var objectDisplayInfos2: ArrayList<SLObjectDisplayInfo> = objectDisplayInfos
@@ -191,7 +191,7 @@ open class SLParcelInfo {
     }
 
     fun getAgentAvatar(): SLObjectAvatarInfo {
-        var agentAvatar: SLObjectAvatarInfo = null
+        var agentAvatar: SLObjectAvatarInfo? = null
         synchronized(this.agentAvatarLock) {
             agentAvatar = this.agentAvatar
         }
@@ -203,7 +203,7 @@ open class SLParcelInfo {
     }
 
     fun getDisplayObjects(immutableVector: ImmutableVector, objectFilterInfo: SLObjectFilterInfo, multipleChatterNameRetriever: MultipleChatterNameRetriever): ObjectsManager.ObjectDisplayList {
-        var addDisplayObjects: ArrayList<SLObjectDisplayInfo> = null
+        var addDisplayObjects: ArrayList<SLObjectDisplayInfo>? = null
         var size: Int = 0
         var hashSet: HashSet = HashSet()
         synchronized(this) {
@@ -245,7 +245,7 @@ open class SLParcelInfo {
     }
 
     fun getObjectUUID(i: Int): UUID {
-        var uuid: UUID = null
+        var uuid: UUID? = null
         synchronized(this) {
             uuid = this.uuidsNearby.get(i)
         }
@@ -329,8 +329,8 @@ open class SLParcelInfo {
         var z2: Boolean = false
         var z3: Boolean = false
         var z4: Boolean = false
-        var linkedList: LinkedList = null
-        var objectInfos: LinkedList<SLObjectInfo> = null
+        var linkedList: LinkedList? = null
+        var objectInfos: LinkedList<SLObjectInfo>? = null
         synchronized(this) {
             var uuidRemove: UUID = this.uuidsNearby.remove(i)
             if (uuidRemove != null) {

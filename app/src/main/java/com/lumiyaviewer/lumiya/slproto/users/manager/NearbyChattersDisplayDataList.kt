@@ -24,8 +24,8 @@ open class NearbyChattersDisplayDataList : ChatterDisplayDataList() {
         return if (compare != 0) compare else chatterDisplayData.compareTo(chatterDisplayData2)
     }
     protected fun getChatters(): MutableList<ChatterID> {
-        var modules: SLModules = null
-        var list: MutableList<ChatterID> = null
+        var modules: SLModules? = null
+        var list: MutableList<ChatterID>? = null
         var activeAgentCircuit: SLAgentCircuit = this.userManager.getActiveAgentCircuit()
         if (activeAgentCircuit != null && (modules = activeAgentCircuit.getModules()) != null) {
             list = modules.minimap.getNearbyChatterList()

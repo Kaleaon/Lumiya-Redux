@@ -156,7 +156,7 @@ open class CameraParams {
     }
 
     fun getPosition(): LLVector3 {
-        var position: LLVector3 = null
+        var position: LLVector3? = null
         synchronized(this.lock) {
             position = this.position
         }

@@ -12,7 +12,7 @@ import com.lumiyaviewer.lumiya.render.RenderContext
 import java.io.IOException
 import javax.annotation.Nullable
 
-class GLLoadedTexture : GLResourceTexture {
+open class GLLoadedTexture : GLResourceTexture {
 
     val hasAlphaLayer: Boolean
     val height: Int
@@ -27,7 +27,7 @@ class GLLoadedTexture : GLResourceTexture {
         hasAlphaLayer = bitmap.hasAlpha()
         width = bitmap.width
         height = bitmap.height
-        renderContext.KeepTexture(bitmap)
+        renderContext.keepTexture(bitmap)
         GLUtils.texImage2D(3553, 0, bitmap, 0)
         if (renderContext.hasGL20) {
             GLES20.glTexParameteri(3553, 10240, 9729)
@@ -47,7 +47,7 @@ class GLLoadedTexture : GLResourceTexture {
         }
     }
 
-    constructor(renderContext: RenderContext, openJPEG: OpenJPEG) : super(renderContext.glResourceManager, openJPEG.loadedSize) {
+    constructor(renderContext: RenderContext, openJPEG: OpenJPEG) : super(renderContext.glResourceManager, openJPEG.getLoadedSize()) {
         if (renderContext.hasGL20) {
             GLES20.glBindTexture(3553, handle)
         } else {
@@ -56,7 +56,7 @@ class GLLoadedTexture : GLResourceTexture {
         hasAlphaLayer = openJPEG.hasAlphaLayer()
         width = openJPEG.width
         height = openJPEG.height
-        renderContext.KeepTexture(openJPEG)
+        renderContext.keepTexture(openJPEG)
         if (renderContext.hasGL30) {
             openJPEG.SetAsImmutableTexture()
         } else {

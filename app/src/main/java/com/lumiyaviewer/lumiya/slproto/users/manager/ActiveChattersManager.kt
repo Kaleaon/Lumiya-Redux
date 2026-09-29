@@ -43,20 +43,20 @@ import java.util.concurrent.Executor
 open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesResolvedListener {
     @JvmStatic private var CHAT_LOG_CHUNK_SIZE: Int = 100
 
-    private var chatMessageDao: ChatMessageDao = null
+    private var chatMessageDao: ChatMessageDao? = null
 
-    private var chatterDao: ChatterDao = null
+    private var chatterDao: ChatterDao? = null
 
-    private var chatterList: ChatterList = null
+    private var chatterList: ChatterList? = null
 
-    private var findChatterQuery: Query<Chatter> = null
+    private var findChatterQuery: Query<Chatter>? = null
 
-    private var findChatterQueryNullUUID: Query<Chatter> = null
+    private var findChatterQueryNullUUID: Query<Chatter>? = null
 
-    private var localChatterID: ChatterID = null
-    private var messageSourceNameResolver: MessageSourceNameResolver = null
+    private var localChatterID: ChatterID? = null
+    private var messageSourceNameResolver: MessageSourceNameResolver? = null
 
-    private var userManager: UserManager = null
+    private var userManager: UserManager? = null
     private var chatEventLock: Any = Object()
     private var messageLoadersLock: Any = Object()
     private Map<ChatterID, List<WeakReference<ChatMessageLoader>>> messageLoaders = HashMap()
@@ -95,7 +95,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
         this.messageSourceNameResolver = MessageSourceNameResolver(userManager, this)
         RequestFinalProcessor<ChatterID, UnreadMessageInfo>(this.unreadCountsPool, userManager.getDatabaseExecutor()) {
             public UnreadMessageInfo processRequest(ChatterID chatterID) throws Throwable {
-                var load: ChatMessage = null
+                var load: ChatMessage? = null
                 var chatter: Chatter = ActiveChattersManager.this.getChatter(chatterID)
                 if (chatter != null) {
                     return UnreadMessageInfo.create(chatter.getUnreadCount(), (chatter.getLastMessageID() == null || (load = ActiveChattersManager.this.chatMessageDao.load(chatter.getLastMessageID())) == null) ? null : SLChatEvent.loadFromDatabaseObject(load, userManager.getUserID()))
@@ -106,7 +106,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     fun clearChatHistoryInternal(chatterID: ChatterID) {
-        var chatter: Chatter = null
+        var chatter: Chatter? = null
         synchronized(this.chatEventLock) {
             chatter = getChatter(chatterID)
             if (chatter != null) {
@@ -127,7 +127,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     fun clearUnreadCount(chatterID: ChatterID) {
-        var chatter: Chatter = null
+        var chatter: Chatter? = null
         var z: Boolean = false
         synchronized(this.chatEventLock) {
             if (this.displayedChatters.contains(chatterID) && (chatter = getChatter(chatterID)) != null && chatter.getUnreadCount() != 0) {
@@ -141,7 +141,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     private fun getLoaders(chatterID: ChatterID): MutableList<ChatMessageLoader> {
-        var linkedList: LinkedList = null
+        var linkedList: LinkedList? = null
         synchronized(this.messageLoadersLock) {
             List<WeakReference<ChatMessageLoader>> list = this.messageLoaders.get(chatterID)
             if (list != null) {
@@ -170,14 +170,14 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
         To view partially-correct add '--show-bad-code' argument
     */
     fun handleChatEventInternal(chatterID: ChatterID, sLChatEvent: SLChatEvent, z: Boolean) {
-        var sourceUUID: UUID = null
-        var chatter: Chatter = null
-        var chatter2: Chatter = null
-        var databaseObject: ChatMessage = null
+        var sourceUUID: UUID? = null
+        var chatter: Chatter? = null
+        var chatter2: Chatter? = null
+        var databaseObject: ChatMessage? = null
         var z2: Boolean = false
         var z3: Boolean = false
         var z4: Boolean = false
-        var immutableListCopyOf: ImmutableList<Map.Entry> = null
+        var immutableListCopyOf: ImmutableList<Map.Entry>? = null
         if (sLChatEvent.isObjectPopup()) {
             this.userManager.getObjectPopupsManager().addObjectPopup(sLChatEvent)
         } else {
@@ -331,8 +331,8 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     private fun makeSessionMark(chatterID: ChatterID, j: Long) {
-        var chatMessage: ChatMessage = null
-        var chatMessage2: ChatMessage = null
+        var chatMessage: ChatMessage? = null
+        var chatMessage2: ChatMessage? = null
         var z: Boolean = false
         synchronized(this.chatEventLock) {
             var list: MutableList<ChatMessage> = this.chatMessageDao.queryBuilder().where(ChatMessageDao.Properties.ChatterID.eq(j), arrayOfNulls<WhereCondition>(0)).orderDesc(ChatMessageDao.Properties.Id).limit(1).list()
@@ -410,7 +410,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     fun notifyChatEventUpdatedInternal(sLChatEvent: SLChatEvent) {
-        var databaseObject: ChatMessage = null
+        var databaseObject: ChatMessage? = null
         synchronized(this.chatEventLock) {
             databaseObject = sLChatEvent.getDatabaseObject()
             this.chatMessageDao.update(databaseObject)
@@ -505,7 +505,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     fun getChatMessage(j: Long): ChatMessage {
-        var load: ChatMessage = null
+        var load: ChatMessage? = null
         synchronized(this.chatEventLock) {
             load = this.chatMessageDao.load(j)
         }
@@ -517,8 +517,8 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
     }
 
     fun getChatter(chatterID: final ChatterID, z: Boolean): Chatter {
-        var forCurrentThread: Query<Chatter> = null
-        var unique: Chatter = null
+        var forCurrentThread: Query<Chatter>? = null
+        var unique: Chatter? = null
         var z2: Boolean = false
         var activeAgentCircuit: SLAgentCircuit = this.userManager.getActiveAgentCircuit()
         var sessionID: UUID = if (activeAgentCircuit != null) activeAgentCircuit.getSessionID() else null
@@ -654,7 +654,7 @@ open class ActiveChattersManager : MessageSourceNameResolver.OnMessageSourcesRes
         })
     }
     fun onMessageSourcesResolved(set: MutableSet<Long>, userName: UserName) {
-        var load: ChatMessage = null
+        var load: ChatMessage? = null
         for (l in set) {
             if (l != null && (load = this.chatMessageDao.load(l)) != null) {
                 load.setSenderName(userName.getDisplayName())

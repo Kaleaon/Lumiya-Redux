@@ -7,9 +7,9 @@ import java.io.IOException
 import java.util.UUID
 
 open class BakedImage {
-    private var layerSet: BakeLayerSet = null
-    private var resultImage: OpenJPEG = null
-    private var uploadedID: UUID = null
+    private var layerSet: BakeLayerSet? = null
+    private var resultImage: OpenJPEG? = null
+    private var uploadedID: UUID? = null
 
     constructor(bakeLayerSet: BakeLayerSet) {
         this.layerSet = bakeLayerSet

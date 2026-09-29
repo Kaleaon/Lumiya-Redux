@@ -9,14 +9,14 @@ import java.util.UUID
 
 open class SLTextureFetchRequest : HasPriority {
 
-    var avatarFaceIndex: AvatarTextureFaceIndex = null
-    var avatarUUID: UUID = null
-    var destFile: File = null
-    var textureClass: TextureClass = null
-    var textureID: UUID = null
+    var avatarFaceIndex: AvatarTextureFaceIndex? = null
+    var avatarUUID: UUID? = null
+    var destFile: File? = null
+    var textureClass: TextureClass? = null
+    var textureID: UUID? = null
     var textureLayer: Int = 0
-    var onFetchComplete: TextureFetchCompleteListener = null
-    var outputFile: File = null
+    var onFetchComplete: TextureFetchCompleteListener? = null
+    var outputFile: File? = null
     private var visibleRangeCategory: Int = -1
 
     interface TextureFetchCompleteListener {

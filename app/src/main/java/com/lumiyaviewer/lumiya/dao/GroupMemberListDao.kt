@@ -21,15 +21,15 @@ class GroupMemberListDao : AbstractDao<GroupMemberList, UUID> {
 
     override fun bindValues(sqLiteStatement: SQLiteStatement, groupMemberList: GroupMemberList) {
         sqLiteStatement.clearBindings()
-        val groupID = groupMemberList.groupID
+        val groupID = groupMemberList.getGroupID()
         if (groupID != null) {
             sqLiteStatement.bindString(1, groupID.toString())
         }
-        sqLiteStatement.bindString(2, groupMemberList.requestID.toString())
+        sqLiteStatement.bindString(2, groupMemberList.getRequestID().toString())
     }
 
     override fun getKey(groupMemberList: GroupMemberList?): UUID? {
-        return groupMemberList?.groupID
+        return groupMemberList?.getGroupID()
     }
 
     override fun isEntityUpdateable(): Boolean = true
@@ -42,8 +42,8 @@ class GroupMemberListDao : AbstractDao<GroupMemberList, UUID> {
     }
 
     override fun readEntity(cursor: Cursor, groupMemberList: GroupMemberList, offset: Int) {
-        groupMemberList.groupID = if (cursor.isNull(offset + 0)) null else UUID.fromString(cursor.getString(offset + 0))
-        groupMemberList.requestID = UUID.fromString(cursor.getString(offset + 1))
+        groupMemberList.setGroupID(if (cursor.isNull(offset + 0)) null else UUID.fromString(cursor.getString(offset + 0)))
+        groupMemberList.setRequestID(UUID.fromString(cursor.getString(offset + 1)))
     }
 
     override fun readKey(cursor: Cursor, offset: Int): UUID? {
@@ -51,7 +51,7 @@ class GroupMemberListDao : AbstractDao<GroupMemberList, UUID> {
     }
 
     override fun updateKeyAfterInsert(groupMemberList: GroupMemberList, rowId: Long): UUID? {
-        return groupMemberList.groupID
+        return groupMemberList.getGroupID()
     }
 
     companion object {

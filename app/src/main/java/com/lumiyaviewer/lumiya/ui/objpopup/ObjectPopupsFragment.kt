@@ -28,7 +28,7 @@ open class ObjectPopupsFragment : Fragment() {
                 return
             }
             int adapterPosition = viewHolder.getAdapterPosition()
-            internal fun if(ObjectPopupsAdapter: adapter instanceof):  {
+            if (adapter instanceof ObjectPopupsAdapter) {
                 userManager.getObjectPopupsManager().cancelObjectPopup(((ObjectPopupsAdapter) adapter).getObject(adapterPosition))
             }
         }

@@ -43,10 +43,10 @@ class Quad {
 
     fun PrepareDrawQuads(renderContext: RenderContext) {
         if (renderContext.hasGL20) {
-            GLES20.glUseProgram(renderContext.quadProgram.getHandle())
-            vertexBuffer.Bind20(renderContext, renderContext.quadProgram.vPosition, 3, GLES20.GL_FLOAT, 20, 0)
-            vertexBuffer.Bind20(renderContext, renderContext.quadProgram.vTexCoord, 2, GLES20.GL_FLOAT, 20, 12)
-            GLES20.glUniform1i(renderContext.quadProgram.sTexture, 0)
+            GLES20.glUseProgram(renderContext.quadProgram!!.getHandle())
+            vertexBuffer.Bind20(renderContext, renderContext.quadProgram!!.vPosition, 3, GLES20.GL_FLOAT, 20, 0)
+            vertexBuffer.Bind20(renderContext, renderContext.quadProgram!!.vTexCoord, 2, GLES20.GL_FLOAT, 20, 12)
+            GLES20.glUniform1i(renderContext.quadProgram!!.sTexture, 0)
             indexBuffer.BindElements20(renderContext)
             return
         }

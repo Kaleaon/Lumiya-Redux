@@ -8,15 +8,16 @@ import java.util.HashSet
 import java.util.UUID
 
 open class RLVCmdClear : RLVCommand {
-    fun Handle(rlvController: RLVController, uuid: UUID, rlvCommands: RLVCommands, str: String, str2: String) {
-        var hashSet: HashSet = HashSet()
+    @Suppress("FunctionName")
+    override fun Handle(controller: RLVController, objectId: UUID, commands: RLVCommands, option: String, parameter: String?) {
+        val hashSet = HashSet<RLVRestrictionType>()
         for (rlvRestrictionType in RLVRestrictionType.values()) {
-            if (str == "") {
+            if (option == "") {
                 hashSet.add(rlvRestrictionType)
-            } else if (rlvRestrictionType.toString().contains(str)) {
+            } else if (rlvRestrictionType.toString().contains(option)) {
                 hashSet.add(rlvRestrictionType)
             }
         }
-        rlvController.getRestrictions().removeRestrictions(uuid, hashSet)
+        controller.getRestrictions().removeRestrictions(objectId, hashSet)
     }
 }

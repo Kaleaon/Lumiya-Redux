@@ -15,10 +15,10 @@ import java.util.Map
 
 open class SLPolyMesh : SLMeshData() {
     protected var hasWeights: Boolean = false
-    var jointMap: IntArray = null
+    var jointMap: IntArray? = null
     private var morphIndices: MutableMap<SLVisualParamID, if (Int) > = EnumMap(SLVisualParamID.class)
-    private var morphs else Array<SLPolyMorphData> = null
-    protected var weightsBuffer: DirectByteBuffer = null
+    private var morphs: Array<SLPolyMorphData>? = null
+    protected var weightsBuffer: DirectByteBuffer? = null
 
     public SLPolyMesh(DataInputStream dataInputStream, DataInputStream dataInputStream2) throws IOException {
         this.position = LLVector3(dataInputStream.readFloat(), dataInputStream.readFloat(), dataInputStream.readFloat())
@@ -67,7 +67,7 @@ open class SLPolyMesh : SLMeshData() {
     }
 
     fun applySkeleton(animatedMeshData: SLAnimatedMeshData, floats: FloatArray) {
-        var animatedVertexData: DirectByteBuffer = null
+        var animatedVertexData: DirectByteBuffer? = null
         if (!this.hasWeights || this.jointMap == null || (animatedVertexData = animatedMeshData.getAnimatedVertexData()) == null) {
             return
         }
@@ -75,7 +75,7 @@ open class SLPolyMesh : SLMeshData() {
     }
 
     fun applySkeletonSlow(animatedMeshData: SLAnimatedMeshData, floats3: FloatArray) {
-        var animatedVertexData: DirectByteBuffer = null
+        var animatedVertexData: DirectByteBuffer? = null
         var d: Double = 0.0
         if (!this.hasWeights || this.jointMap == null || (animatedVertexData = animatedMeshData.getAnimatedVertexData()) == null) {
             return
@@ -129,7 +129,7 @@ open class SLPolyMesh : SLMeshData() {
         if (num == null) {
             return -1
         }
-        var num else return = null
+        var num: return? = null
     }
 
     fun getNumMorphs(): Int {

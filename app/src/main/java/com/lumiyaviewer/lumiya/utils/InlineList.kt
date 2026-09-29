@@ -4,32 +4,32 @@ open class InlineList<T : InlineListEntry<T>> {
     private var first: T? = null
 
     open fun addEntry(t: T) {
-        val list = t.list
+        val list = t.getList()
         if (list !== this) {
             list?.removeEntry(t)
-            t.next = this.first
-            t.prev = null
-            this.first?.prev = t
+            t.setNext(this.first)
+            t.setPrev(null)
+            this.first?.setPrev(t)
             this.first = t
-            t.list = this
+            t.setList(this)
         }
     }
 
     fun getFirst(): T? = first
 
-    fun removeEntry(t: T) {
-        if (t.list === this) {
-            val next = t.next
-            val prev = t.prev
+    open fun removeEntry(t: T) {
+        if (t.getList() === this) {
+            val next = t.getNext()
+            val prev = t.getPrev()
             if (prev != null) {
-                prev.next = next
+                prev.setNext(next)
             } else {
                 this.first = next
             }
-            next?.prev = prev
-            t.prev = null
-            t.next = null
-            t.list = null
+            next?.setPrev(prev)
+            t.setPrev(null)
+            t.setNext(null)
+            t.setList(null)
         }
     }
 

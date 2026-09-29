@@ -23,7 +23,7 @@ import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 
 open class SLAuth {
-    private var mfaHashStore: MfaHashStore = null
+    private var mfaHashStore: MfaHashStore? = null
 
     constructor() {
         if (this(LumiyaApp.getContext() != null) MfaHashStore(LumiyaApp.getContext()) else null)
@@ -128,7 +128,7 @@ open class SLAuth {
         fields.add(LoginRequestField("mfa_hash", mfaHash, null))
         var loginURL: String = authParams.loginURL
         var methodName: String = "login_to_simulator"
-        var reply: SLAuthReply = null
+        var reply: SLAuthReply? = null
         for (int redirect = 0; redirect < 5; redirect++) {
             var request: StringBuilder = StringBuilder()
             request.append("<?xml version=\"1.0\"?>\n")

@@ -11,7 +11,7 @@ open class AgentPosition {
     private var lastAgentDataMillis: Long = 0
 
     fun getImmutablePosition(): ImmutableVector {
-        var immutableVector: ImmutableVector = null
+        var immutableVector: ImmutableVector? = null
         synchronized(this.lock) {
             immutableVector = if (this.isValid) ImmutableVector(this.position) else null
         }

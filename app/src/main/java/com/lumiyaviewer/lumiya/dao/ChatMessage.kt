@@ -4,7 +4,7 @@ import com.lumiyaviewer.lumiya.utils.Identifiable
 import java.util.Date
 import java.util.UUID
 
-class ChatMessage : Identifiable<Long> {
+class ChatMessage : Identifiable<Long?> {
 
     var accepted: Boolean? = null
     var assetType: Int? = null

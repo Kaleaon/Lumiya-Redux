@@ -10,10 +10,10 @@ import javax.annotation.concurrent.ThreadSafe
 
 /* @ThreadSafe */
 open class SortedChatterList {
-    private var chatters: SortedSet<ChatterDisplayData> = null
-    private var onListUpdatedListener: OnListUpdated = null
+    private var chatters: SortedSet<ChatterDisplayData>? = null
+    private var onListUpdatedListener: OnListUpdated? = null
     private var lock: Any = Object()
-    private var sortedList: ImmutableList<ChatterDisplayData> = null
+    private var sortedList: ImmutableList<ChatterDisplayData>? = null
 
     constructor(onListUpdated: OnListUpdated, comparator: Comparator<? super ChatterDisplayData>) {
         this.chatters = TreeSetthis as comparator.onListUpdatedListener = onListUpdated
@@ -35,7 +35,7 @@ open class SortedChatterList {
     }
 
     fun getChatterList(): ImmutableList<ChatterDisplayData> {
-        var immutableList: ImmutableList<ChatterDisplayData> = null
+        var immutableList: ImmutableList<ChatterDisplayData>? = null
         synchronized(this.lock) {
             if (this.sortedList == null) {
                 Debug.Printf("FriendList: creating new list instance", arrayOfNulls<Object>(0))

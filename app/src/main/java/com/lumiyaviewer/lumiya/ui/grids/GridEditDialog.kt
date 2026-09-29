@@ -35,7 +35,7 @@ open class GridEditDialog : AppCompatDialog(), View.OnClickListener {
     }
 
     private fun prepare() {
-        internal fun if(null: this.editGrid !=):  {
+        if (this.editGrid != null) {
             ((TextView) findViewById(R.id.gridNameText)).setText(this.editGrid.getGridName())
             ((TextView) findViewById(R.id.gridLoginURIText)).setText(this.editGrid.getLoginURL())
             ((CheckBox) findViewById(R.id.gridAllowUntrustedCerts)).setChecked(this.editGrid.getAllowUntrustedCertificates())
@@ -68,9 +68,9 @@ open class GridEditDialog : AppCompatDialog(), View.OnClickListener {
                             }
                         } else {
                             dismiss()
-                            internal fun if(null: this.onGridEditResultListener !=):  {
+                            if (this.onGridEditResultListener != null) {
                                 GridList.GridInfo gridInfo = this.editGrid
-                                internal fun if(null: gridInfo ==):  {
+                                if (gridInfo == null) {
                                     gridInfo = new GridList.GridInfo(charSequence, text, false, UUID.randomUUID())
                                     z = true
                                 } else {
@@ -93,14 +93,14 @@ open class GridEditDialog : AppCompatDialog(), View.OnClickListener {
                 }
             R.id.cancelButton -> {
                 dismiss()
-                internal fun if(null: this.onGridEditResultListener !=):  {
+                if (this.onGridEditResultListener != null) {
                     this.onGridEditResultListener.onGridEditCancelled()
                     }
                 }
                 }
             R.id.deleteButton -> {
                 dismiss()
-                internal fun if(null: this.onGridEditResultListener != null && this.editGrid !=):  {
+                if (this.onGridEditResultListener != null && this.editGrid != null) {
                     this.onGridEditResultListener.onGridDeleted(this.editGrid)
                     }
                 }

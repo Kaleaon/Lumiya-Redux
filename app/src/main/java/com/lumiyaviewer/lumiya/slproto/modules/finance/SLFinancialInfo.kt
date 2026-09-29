@@ -24,10 +24,10 @@ open class SLFinancialInfo : SLModule() {
     @JvmStatic private var DEFAULT_UPLOAD_COST: Int = 10
     private var balance: Int = 0
     private var balanceKnown: Boolean = false
-    private var balanceLock: Any = null
-    private var moneyTransactionDao: MoneyTransactionDao = null
-    private var uploadCost: AtomicInteger = null
-    private var userManager: UserManager = null
+    private var balanceLock: Any? = null
+    private var moneyTransactionDao: MoneyTransactionDao? = null
+    private var uploadCost: AtomicInteger? = null
+    private var userManager: UserManager? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.balanceLock = Object()
@@ -118,7 +118,7 @@ open class SLFinancialInfo : SLModule() {
     @SLMessageHandler
     fun HandleMoneyBalanceReply(moneyBalanceReply: MoneyBalanceReply) {
         var i: Int = 0
-        var uuid: UUID = null
+        var uuid: UUID? = null
         var balanceChangedEvent: SLBalanceChangedEvent = SLBalanceChangedEvent(this.balanceKnown, this.balance, moneyBalanceReply.MoneyData_Field.MoneyBalance)
         setKnownBalance(moneyBalanceReply.MoneyData_Field.MoneyBalance)
         if (balanceChangedEvent.oldBalanceValid && balanceChangedEvent.oldBalance != balanceChangedEvent.newBalance) {

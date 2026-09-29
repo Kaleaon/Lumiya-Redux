@@ -13,9 +13,9 @@ import java.util.Timer
 
 open class SLConnection : Runnable {
     @JvmStatic private var DEFAULT_IDLE_INTERVAL: Int = 1000
-    private var selector: Selector = null
-    private var timer: Timer = null
-    private var workingThread: Thread = null
+    private var selector: Selector? = null
+    private var timer: Timer? = null
+    private var workingThread: Thread? = null
 
     constructor() {
         System.setProperty("java.net.preferIPv4Stack", "true")
@@ -43,7 +43,7 @@ open class SLConnection : Runnable {
     }
 
     fun getTimer(): Timer {
-        var timer: Timer = null
+        var timer: Timer? = null
         synchronized(this) {
             if (this.timer == null) {
                 this.timer = Timer("SLConnectionTimer", true)

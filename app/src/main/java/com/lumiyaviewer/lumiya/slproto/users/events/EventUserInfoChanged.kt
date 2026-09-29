@@ -5,9 +5,9 @@ import java.util.UUID
 open class EventUserInfoChanged {
     @JvmStatic var CHANGED_NAME: Int = 2
     @JvmStatic var CHANGED_PROFILE: Int = 4
-    var agentUUID: UUID = null
+    var agentUUID: UUID? = null
     var changedMask: Int = 0
-    var userUUID: UUID = null
+    var userUUID: UUID? = null
 
     constructor(uuid: UUID, userUUID: UUID, changedMask: Int) {
         this.agentUUID = uuid

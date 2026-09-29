@@ -61,7 +61,7 @@ abstract class ResourceManager<ResourceParams, ResourceType> {
     }
 
     @Suppress("FunctionName")
-    open fun CompleteRequest(params: ResourceParams, result: ResourceType, consumers: Set<ResourceConsumer>) {
+    open fun CompleteRequest(params: ResourceParams, result: ResourceType?, consumers: Set<ResourceConsumer>) {
         val consumerList: ArrayList<ResourceConsumer>
         synchronized(lock) {
             requestMap.invalidate(params)
@@ -85,7 +85,7 @@ abstract class ResourceManager<ResourceParams, ResourceType> {
     ): ResourceRequest<ResourceParams, ResourceType>
 
     @Suppress("FunctionName")
-    open fun IntermediateResult(params: ResourceParams, result: ResourceType, consumers: Set<ResourceConsumer>) {
+    open fun IntermediateResult(params: ResourceParams, result: ResourceType?, consumers: Set<ResourceConsumer>) {
         val consumerList: ArrayList<ResourceConsumer>
         synchronized(lock) {
             consumerList = ArrayList(consumers.size)

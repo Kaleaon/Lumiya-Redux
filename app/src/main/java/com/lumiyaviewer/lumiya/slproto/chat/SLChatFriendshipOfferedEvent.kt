@@ -12,7 +12,7 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 import java.util.UUID
 
 class SLChatFriendshipOfferedEvent : SLChatYesNoEvent() {
-    var sessionID: UUID = null
+    var sessionID: UUID? = null
 
     constructor(chatMessage: ChatMessage, uuid: UUID) : super(chatMessage, uuid) {
         this.sessionID = chatMessage.getSessionID()

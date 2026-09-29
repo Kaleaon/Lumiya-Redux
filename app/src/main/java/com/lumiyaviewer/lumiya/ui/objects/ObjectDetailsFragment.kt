@@ -90,20 +90,20 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
                 view.findViewById(R.id.buy_object_card_view).setVisibility(sLObjectProfileData.saleType() != 0 ? View.VISIBLE : View.GONE)
                 ((TextView) view.findViewById(R.id.object_buy_details)).setText(getString(R.string.object_buy_price_format, Integer.valueOf(sLObjectProfileData.salePrice())))
                 Integer data2 = this.balanceSubscription.getData()
-                internal fun if(null: data2 !=):  {
+                if (data2 != null) {
                     ((TextView) view.findViewById(R.id.object_buy_details_balance)).setText(getString(R.string.object_balance_format, data2))
                 } else {
                     ((TextView) view.findViewById(R.id.object_buy_details_balance)).setText("")
                 }
                 PayInfo payInfo = sLObjectProfileData.isPayable() ? sLObjectProfileData.payInfo() : null
-                internal fun if(null: payInfo !=):  {
+                if (payInfo != null) {
                     ImmutableList<Integer> payPrices = payInfo.payPrices()
-                    internal fun if(null: payPrices !=):  {
+                    if (payPrices != null) {
                         int i = 0
                         for (int i2 = 0; i2 < objectPayButtons.length && i2 < payPrices.size(); i2++) {
                             int intValue = payPrices.get(i2).intValue()
                             int defaultPayPrice = intValue == -2 ? payInfo.defaultPayPrice() : intValue
-                            internal fun if(0: defaultPayPrice <=):  {
+                            if (defaultPayPrice <= 0) {
                                 view.findViewById(objectPayButtons[i2]).setVisibility(View.GONE)
                                 view.findViewById(objectPayButtons[i2]).setTag(R.id.object_pay_price_tag, 0)
                             } else {
@@ -139,12 +139,12 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
             if (sLObjectProfileData.isPayable() && sLObjectProfileData.payInfo() == null) {
                 UUID objectUUID = sLObjectProfileData.objectUUID()
                 SLAgentCircuit activeAgentCircuit2 = userManager.getActiveAgentCircuit()
-                internal fun if(null: activeAgentCircuit2 != null && objectUUID !=):  {
+                if (activeAgentCircuit2 != null && objectUUID != null) {
                     activeAgentCircuit2.DoRequestPayPrice(objectUUID)
                 }
             }
             UUID ownerUUID = sLObjectProfileData.ownerUUID()
-            internal fun if(null: ownerUUID !=):  {
+            if (ownerUUID != null) {
                 this.ownerNameDisplayer.setChatterID(ChatterID.getUserChatterID(userManager.getUserID(), ownerUUID))
             }
         }
@@ -186,7 +186,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
         boolean z3
         boolean z4
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager == null || this.objectProfileData ==):  {
+        if (userManager == null || this.objectProfileData == null) {
             z = false
             z2 = false
             z3 = false
@@ -202,16 +202,16 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
             z3 = false
             z4 = false
         }
-        internal fun if(null: this.menuItemObjectTake !=):  {
+        if (this.menuItemObjectTake != null) {
             this.menuItemObjectTake.setVisible(z3)
         }
-        internal fun if(null: this.menuItemObjectTakeCopy !=):  {
+        if (this.menuItemObjectTakeCopy != null) {
             this.menuItemObjectTakeCopy.setVisible(z2)
         }
-        internal fun if(null: this.menuItemObjectDelete !=):  {
+        if (this.menuItemObjectDelete != null) {
             this.menuItemObjectDelete.setVisible(z)
         }
-        internal fun if(null: this.menuItemObjectBlock !=):  {
+        if (this.menuItemObjectBlock != null) {
             this.menuItemObjectBlock.setVisible(z4)
         }
     }
@@ -219,8 +219,8 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
 
     override fun onClick(view: View) {
         int id = view.getId()
-        internal fun for(i++: int i = 0; i < objectPayButtons.length;):  {
-            internal fun if(id: objectPayButtons[i] ==):  {
+        for (i in 0 until objectPayButtons.length) {
+            if (objectPayButtons[i] == id) {
                 payObjectQuick(i)
             }
         }
@@ -246,7 +246,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
             R.id.object_pay_button -> {
                 try {
                     View view2 = getView()
-                    internal fun if(null: view2 !=):  {
+                    if (view2 != null) {
                         payObject(Integer.parseInt(((EditText) view2.findViewById(R.id.object_pay_amount)).getText().toString()))
                         }
                     }
@@ -288,7 +288,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
         inflate.findViewById(R.id.object_button_buy).setOnClickListener(this)
         inflate.findViewById(R.id.object_pay_button).setOnClickListener(this)
         inflate.findViewById(R.id.object_contents_button).setOnClickListener(this)
-        internal fun for(objectPayButtons: int i :):  {
+        for (i in objectPayButtons) {
             inflate.findViewById(i).setOnClickListener(this)
         }
         Button button = (Button) inflate.findViewById(R.id.object_pay_button)
@@ -319,7 +319,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
     override fun onLoadableDataChanged() {
         Throwable error = this.objectProfile.getError()
         SLObjectProfileData data = this.objectProfile.getData()
-        internal fun if(ObjectsManager.ObjectDoesNotExistException: error instanceof):  {
+        if (error instanceof ObjectsManager.ObjectDoesNotExistException) {
             showDeadObject()
         } else if (error != null || data == null) {
             showObjectNotLoaded()
@@ -331,7 +331,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         UserManager userManager = getUserManager()
         int i = getArguments().getInt(LOCAL_ID_KEY)
-        internal fun if(0: userManager != null && this.objectLocalID !=):  {
+        if (userManager != null && this.objectLocalID != 0) {
             when (menuItem.getItemId()) {
                 R.id.item_object_take -> {
                     ObjectDerezDialog.askForObjectDerez(getContext(), ObjectDerezDialog.DerezAction.Take, userManager.getUserID(), i)
@@ -346,7 +346,7 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
                     SLAgentCircuit activeAgentCircuit = userManager.getActiveAgentCircuit()
                     SLObjectProfileData data = this.objectProfile.getData()
                     String orNull = data != null ? data.name().orNull() : null
-                    internal fun if(null: activeAgentCircuit != null && data != null && orNull !=):  {
+                    if (activeAgentCircuit != null && data != null && orNull != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                         builder.setMessage(R.string.object_block_question)
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

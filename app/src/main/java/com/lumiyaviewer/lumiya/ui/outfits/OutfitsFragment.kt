@@ -76,7 +76,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     fun makeSelection(uuid: UUID, uuid2: UUID): Bundle {
         Bundle bundle = Bundle()
         ActivityUtils.setActiveAgentID(bundle, uuid)
-        internal fun if(null: uuid2 !=):  {
+        if (uuid2 != null) {
             bundle.putString(FOLDER_ID_KEY, uuid2.toString())
         }
         return bundle
@@ -88,7 +88,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     }
 
     open fun onAgentCircuit(agentCircuit: SLAgentCircuit) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setAvatarAppearance(agentCircuit != null ? agentCircuit.getModules().avatarAppearance : null)
         }
     }
@@ -96,7 +96,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     open fun onInventoryEntryList(inventoryEntryList: InventoryEntryList) {
         Debug.Printf("InventoryFragment (%s): onInventoryEntryList: %d entries", this, Integer.valueOf(inventoryEntryList.size()))
         setTitle(inventoryEntryList.getTitle(), null)
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setData(inventoryEntryList)
         }
         updateLoadingStatus()
@@ -107,9 +107,9 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     }
 
     open fun onRootFolderEntryList(inventoryEntryList: InventoryEntryList) {
-        internal fun if(null: inventoryEntryList !=):  {
-            internal fun for(inventoryEntryList: SLInventoryEntry inventoryEntry :):  {
-                internal fun if(48: inventoryEntry.isFolder && inventoryEntry.typeDefault ==):  {
+        if (inventoryEntryList != null) {
+            for (inventoryEntry in inventoryEntryList) {
+                if (inventoryEntry.isFolder && inventoryEntry.typeDefault == 48) {
                     this.myOutfitsFolderUUID = inventoryEntry.uuid
                     this.rootFolderEntryList.unsubscribe()
                     if (getFolderUUID() == null) {
@@ -123,19 +123,19 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     }
 
     open fun onWornAttachmentsChanged(immutableMap: ImmutableMap<UUID, String>) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setWornAttachments(immutableMap)
         }
     }
 
     open fun onWornOutfitFolder(uuid: UUID) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setWornOutfitFolder(uuid)
         }
     }
 
     open fun onWornWearablesChanged(table: Table<SLWearableType, UUID, SLWearable>) {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             this.adapter.setWornWearables(table)
         }
     }
@@ -149,19 +149,19 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
         this.folderLoading.unsubscribe()
         this.rootFolderEntryList.unsubscribe()
         UserManager userManager = getUserManager()
-        internal fun if(null: userManager !=):  {
+        if (userManager != null) {
             InventoryDB database = userManager.getInventoryManager().getDatabase()
             this.wornAttachments.subscribe(userManager.getWornAttachmentsPool(), SubscriptionSingleKey.Value)
             this.wornWearables.subscribe(userManager.getWornWearablesPool(), SubscriptionSingleKey.Value)
             this.wornOutfitFolder.subscribe(userManager.wornOutfitLink(), SubscriptionSingleKey.Value)
             this.agentCircuit.subscribe(UserManager.agentCircuits(), userManager.getUserID())
-            internal fun if(null: uuid ==):  {
+            if (uuid == null) {
                 uuid = this.myOutfitsFolderUUID
             }
             Debug.Printf("After checking myoutfits: %s", uuid)
             if (uuid == null && (rootFolder = userManager.getInventoryManager().getRootFolder()) != null) {
                 SLInventoryEntry findSpecialFolder = database.findSpecialFolder(rootFolder, 48)
-                internal fun if(null: findSpecialFolder !=):  {
+                if (findSpecialFolder != null) {
                     this.myOutfitsFolderUUID = findSpecialFolder.uuid
                     uuid = findSpecialFolder.uuid
                     Debug.Printf("Found special folder: %s", uuid)
@@ -169,10 +169,10 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
                     Debug.Printf("Special folder not found", arrayOfNulls<Object>(0])
                 }
             }
-            internal fun if(null: uuid !=):  {
+            if (uuid != null) {
                 this.folderLoading.subscribe(userManager.getInventoryManager().getFolderLoading(), uuid)
                 this.entryList.subscribe(userManager.getInventoryManager().getInventoryEntries(), getInventoryQuery(uuid))
-                internal fun if(null: view != null && this.listHeader !=):  {
+                if (view != null && this.listHeader != null) {
                     if (Objects.equal(uuid, this.myOutfitsFolderUUID)) {
                         ((TextView) this.listHeader.findViewById(R.id.itemNameTextView)).setText(R.string.current_outfit)
                         ((ImageView) this.listHeader.findViewById(R.id.itemTypeIconView)).setImageResource(R.drawable.inv_folder)
@@ -187,14 +187,14 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
                 }
             } else {
                 this.rootFolderEntryList.subscribe(userManager.getInventoryManager().getInventoryEntries(), InventoryQuery.create((UUID) null, (String) null, true, false, false, (SLAssetType) null))
-                internal fun if(null: this.listHeader !=):  {
+                if (this.listHeader != null) {
                     this.listHeader.setVisibility(View.GONE)
                 }
-                internal fun if(null: view !=):  {
+                if (view != null) {
                     view.findViewById(R.id.wear_buttons_layout).setVisibility(View.GONE)
                 }
             }
-            internal fun if(null: this.adapter !=):  {
+            if (this.adapter != null) {
                 this.adapter.setDatabase(database)
             }
         } else {
@@ -210,7 +210,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     private fun updateLoadingStatus() {
         boolean z
         Context context = getContext()
-        internal fun if(null: context !=):  {
+        if (context != null) {
             if (this.folderLoading.isSubscribed()) {
                 Boolean data = this.folderLoading.getData()
                 z = data != null ? data.booleanValue() : false
@@ -220,7 +220,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
             boolean isEmpty = this.adapter != null ? this.adapter.isEmpty() : true
             this.loadableMonitor.setExtraLoading(isEmpty ? z : false)
             LoadableMonitor loadableMonitor = this.loadableMonitor
-            internal fun if(isEmpty):  {
+            if (isEmpty) {
                 z = false
             }
             loadableMonitor.setButteryProgressBar(z)
@@ -266,7 +266,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
         SLInventoryEntry resolveLink
         UserManager userManager = getUserManager()
         SLAgentCircuit data = this.agentCircuit.getData()
-        internal fun if(null: data == null || userManager ==):  {
+        if (data == null || userManager == null) {
             return
         }
         SLAvatarAppearance avatarAppearance = data.getModules().avatarAppearance
@@ -304,7 +304,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
 
     override fun setFragmentArgs(intent: Intent, bundle: Bundle) {
         Debug.Printf("InventoryFragment: setFragmentArgs '%s'", bundle)
-        internal fun if(null: bundle !=):  {
+        if (bundle != null) {
             getArguments().putAll(bundle)
         }
         if (isFragmentStarted()) {

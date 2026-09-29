@@ -13,7 +13,7 @@ open class SLChatSessionMarkEvent : SLChatEvent() {
 
     private var description: String = ""
 
-    private var sessionMarkType: SessionMarkType = null
+    private var sessionMarkType: SessionMarkType? = null
 
     enum class SessionMarkType {
         NewSession,

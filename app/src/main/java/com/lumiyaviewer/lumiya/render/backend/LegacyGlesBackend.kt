@@ -40,7 +40,7 @@ open class LegacyGlesBackend : RenderBackend {
         val b = if (selected) 0.0f else (255 - ((rgba shr 16) and 255)) / 255.0f
         val a = if (selected) 0.6f else (255 - ((rgba shr 24) and 255)) / 255.0f
         if (renderContext.hasGL20) {
-            setUniform4f(renderContext.curPrimProgram.vColor, r, g, b, a)
+            setUniform4f(renderContext.curPrimProgram!!.vColor, r, g, b, a)
         } else {
             GLES10.glColor4f(r, g, b, a)
         }
@@ -64,7 +64,7 @@ open class LegacyGlesBackend : RenderBackend {
         texMatrixOffset: Int,
     ) {
         if (renderContext.hasGL20) {
-            setUniformMatrix4fv(renderContext.curPrimProgram.uTexMatrix, texMatrix, texMatrixOffset)
+            setUniformMatrix4fv(renderContext.curPrimProgram!!.uTexMatrix, texMatrix, texMatrixOffset)
             if (faceIndex == -1) drawableGeometry.GLDrawAll20(renderContext)
             else drawableGeometry.GLDrawFace20(renderContext, faceIndex)
             return

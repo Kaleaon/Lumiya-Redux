@@ -306,7 +306,7 @@ class RenderContext(
     }
 
     private fun initPrimProgram(primProgram: PrimProgram, useWindlight: Boolean) {
-        renderBackend.useProgram(primProgram.handle)
+        renderBackend.useProgram(primProgram.getHandle())
         renderBackend.setUniform1i(primProgram.sTexture, 0)
         primProgram.SetupLighting(this, if (useWindlight) windlightPreset else null)
     }
@@ -581,7 +581,7 @@ class RenderContext(
         clearRiggingMeshData()
         clearFaceTexture()
         curPrimProgram = currentRiggedMeshProgram
-        renderBackend.useProgram(currentRiggedMeshProgram!!.handle)
+        renderBackend.useProgram(currentRiggedMeshProgram!!.getHandle())
         glModelApplyMatrix(currentRiggedMeshProgram!!.uMVPMatrix)
         glObjWorldApplyMatrix(currentRiggedMeshProgram!!.uObjWorldMatrix)
         glObjScaleApplyVector(currentRiggedMeshProgram!!.uObjCoordScale)

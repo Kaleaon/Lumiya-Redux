@@ -8,7 +8,7 @@ import java.util.concurrent.Executors
 
 open class SLTextureUploader : SLModule() {
     private var capURL: String = ""
-    private var executor: ExecutorService = null
+    private var executor: ExecutorService? = null
 
     constructor(agentCircuit: SLAgentCircuit, caps: SLCaps) {
         superthis as agentCircuit.capURL = caps.getCapability(SLCaps.SLCapability.UploadBakedTexture)

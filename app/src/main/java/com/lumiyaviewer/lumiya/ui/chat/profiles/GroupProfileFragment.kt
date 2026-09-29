@@ -59,14 +59,14 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         override fun getCount(): Int {
-            internal fun if(null: this.tabs !=):  {
+            if (this.tabs != null) {
                 return this.tabs.size()
             }
             return 0
         }
 
         override fun getItem(i: Int): Fragment {
-            internal fun if(null: this.tabs ==):  {
+            if (this.tabs == null) {
                 return null
             }
             ProfileTab profileTab = this.tabs.get(i)
@@ -81,7 +81,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         override fun getPageTitle(i: Int): CharSequence {
-            internal fun if(null: this.tabs ==):  {
+            if (this.tabs == null) {
                 return null
             }
             return GroupProfileFragment.this.getString(this.tabs.get(i).tabCaption)
@@ -96,7 +96,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         internal fun setTabs(immutableList: ImmutableList<ProfileTab>) {
-            internal fun if(immutableList: this.tabs !=):  {
+            if (this.tabs != immutableList) {
                 this.tabs = immutableList
                 notifyDataSetChanged()
             }
@@ -124,7 +124,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
 
     override fun onCreateView(layoutInflater: LayoutInflater, viewGroup: ViewGroup, bundle: Bundle): View {
         super.onCreateView(layoutInflater, viewGroup, bundle)
-        internal fun if(null: bundle !=):  {
+        if (bundle != null) {
             if (bundle.containsKey("lastSelectedTab")) {
                 this.lastSelectedTab = ProfileTab.values()[bundle.getInt("lastSelectedTab")]
             }
@@ -161,14 +161,14 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         int i = 0
         try {
             ImmutableList<ProfileTab> immutableList = (this.chatterID is ChatterID.ChatterIDGroup ? this.myGroupList.get().Groups.get(((ChatterID.ChatterIDGroup) this.chatterID).getChatterUUID()) : null) != null ? this.myGroupTabs : this.generalGroupTabs
-            internal fun if(null: this.adapter !=):  {
+            if (this.adapter != null) {
                 this.adapter.setTabs(immutableList)
             }
             View view = getView()
             if (!Objects.equal(this.lastSelectedChatterID, this.chatterID) || this.lastSelectedTab == null || view == null) {
                 return
             }
-            internal fun while(true):  {
+            while (true) {
                 if (i >= immutableList.size()) {
                     i = -1
                     }
@@ -179,7 +179,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
                 }
             }
             Debug.Printf("GroupProfile tabs: new tabIndex %d", Integer.valueOf(i))
-            internal fun if(-1: i !=):  {
+            if (i != -1) {
                 ((ViewPager) view.findViewById(R.id.user_profile_pager)).setCurrentItem(i)
             }
         } catch (SubscriptionData.DataNotReadyException e) {
@@ -190,10 +190,10 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
         Debug.Printf("GroupProfile tabs: saving lastSelectedTab %s, lastSelectedChatterID %s", this.lastSelectedTab, this.lastSelectedChatterID)
-        internal fun if(null: this.lastSelectedTab !=):  {
+        if (this.lastSelectedTab != null) {
             bundle.putInt("lastSelectedTab", this.lastSelectedTab.ordinal())
         }
-        internal fun if(null: this.lastSelectedChatterID !=):  {
+        if (this.lastSelectedChatterID != null) {
             bundle.putParcelable("lastSelectedChatterID", this.lastSelectedChatterID)
         }
     }
@@ -208,7 +208,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         Iterator<?> it = this.activeFragments.values().iterator()
         while (it.hasNext()) {
             ComponentCallbacks componentCallbacks = (Fragment) ((WeakReference) it.next()).get()
-            internal fun if(ReloadableFragment: componentCallbacks instanceof):  {
+            if (componentCallbacks instanceof ReloadableFragment) {
                 ((ReloadableFragment) componentCallbacks).setFragmentArgs(getActivity() != null ? getActivity().getIntent() : null, ChatterReloadableFragment.makeSelection(chatterID))
             }
         }

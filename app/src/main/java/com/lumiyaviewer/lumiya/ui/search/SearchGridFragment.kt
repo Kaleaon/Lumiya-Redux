@@ -85,7 +85,7 @@ open class SearchGridFragment : FragmentWithTitle(), LoadableMonitor.OnLoadableD
     }
 
     override fun onLoadableDataChanged() {
-        internal fun if(null: this.adapter !=):  {
+        if (this.adapter != null) {
             LazyList<SearchGridResult> data = this.searchResults.getData()
             this.adapter.setData(data)
             this.loadableMonitor.setEmptyMessage(data != null ? data.isEmpty() : false, getString(R.string.nothing_found))
@@ -98,7 +98,7 @@ open class SearchGridFragment : FragmentWithTitle(), LoadableMonitor.OnLoadableD
 
     override fun onSearchResultClicked(searchGridResult: SearchGridResult) {
         UUID activeAgentID = ActivityUtils.getActiveAgentID(getArguments())
-        internal fun if(null: searchGridResult == null || activeAgentID ==):  {
+        if (searchGridResult == null || activeAgentID == null) {
             return
         }
         when (SearchGridQuery.SearchType.values()[searchGridResult.getItemType()]) {

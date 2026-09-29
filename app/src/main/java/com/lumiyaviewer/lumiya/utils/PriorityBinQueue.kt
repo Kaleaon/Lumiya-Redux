@@ -222,14 +222,6 @@ class PriorityBinQueue<T>(private val numBins: Int) : BlockingQueue<T> {
         }
     }
 
-    override fun toArray(): Array<Any?> {
-        throw UnsupportedOperationException()
-    }
-
-    override fun <T : Any?> toArray(a: Array<out T>): Array<T> {
-        throw UnsupportedOperationException()
-    }
-
     fun updatePriority(t: T) {
         lock.lock()
         try {

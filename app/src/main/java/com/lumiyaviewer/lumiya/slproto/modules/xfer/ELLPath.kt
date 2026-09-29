@@ -1,6 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.modules.xfer
 
-enum class ELLPath {
+enum class ELLPath(private val code: Int) {
     LL_PATH_NONE(0),
     LL_PATH_USER_SETTINGS(1),
     LL_PATH_APP_SETTINGS(2),
@@ -18,13 +18,7 @@ enum class ELLPath {
     LL_PATH_LOCAL_ASSETS(15),
     LL_PATH_EXECUTABLE(16),
     LL_PATH_DEFAULT_SKIN(17),
-    LL_PATH_FONTS(18)
-
-    private var code: Int = 0
-
-    constructor(code: Int) {
-        this.code = code
-    }
+    LL_PATH_FONTS(18);
 
     /* renamed from: values, reason: to resolve conflict with enum method */
     fun valuesCustom(): Array<ELLPath> {

@@ -140,13 +140,13 @@ class GlobalOptions private constructor() : SharedPreferences.OnSharedPreference
         sharedPreferences: SharedPreferences,
         notificationType: NotificationType
     ) {
-        if (sharedPreferences.contains(notificationType.ringtoneKey)) return
+        if (sharedPreferences.contains(notificationType.getRingtoneKey())) return
         val notificationSounds = NotificationSounds.defaultSounds[notificationType] ?: return
-        val uri: Uri = notificationSounds.uri
+        val uri: Uri = notificationSounds.getUri()
         val edit = sharedPreferences.edit()
-        edit.putString(notificationType.ringtoneKey, uri.toString())
+        edit.putString(notificationType.getRingtoneKey(), uri.toString())
         edit.apply()
-        Debug.Printf("NotificationSounds: Updated %s preference to %s", notificationType.ringtoneKey, uri)
+        Debug.Printf("NotificationSounds: Updated %s preference to %s", notificationType.getRingtoneKey(), uri)
     }
 
     fun enableVoice() {

@@ -5,7 +5,7 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UnreadNotificationInfo
 
 class AutoValue_UnreadNotificationInfo_ObjectPopupNotification : UnreadNotificationInfo.ObjectPopupNotification() {
     private var freshObjectPopupsCount: Int = 0
-    private var lastObjectPopup: Optional<UnreadNotificationInfo.ObjectPopupMessage> = null
+    private var lastObjectPopup: Optional<UnreadNotificationInfo.ObjectPopupMessage>? = null
     private var objectPopupsCount: Int = 0
 
     constructor(freshObjectPopupsCount: Int, objectPopupsCount: Int, optional: Optional<UnreadNotificationInfo.ObjectPopupMessage>) {

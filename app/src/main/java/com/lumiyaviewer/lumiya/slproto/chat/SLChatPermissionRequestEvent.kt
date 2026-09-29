@@ -14,7 +14,7 @@ import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 import java.util.UUID
 
 class SLChatPermissionRequestEvent : SLChatYesNoEvent() {
-    private var ItemID: UUID = null
+    private var ItemID: UUID? = null
     private var ObjectOwner: String = ""
     private var Questions: Int = 0
 

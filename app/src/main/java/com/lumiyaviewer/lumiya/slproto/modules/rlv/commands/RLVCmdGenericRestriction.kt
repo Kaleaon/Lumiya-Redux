@@ -8,17 +8,13 @@ import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictionType
 import com.lumiyaviewer.lumiya.slproto.modules.rlv.RLVRestrictions
 import java.util.UUID
 
-open class RLVCmdGenericRestriction : RLVCommand {
-    private var canHaveExceptions: Boolean = false
-    private var restrictionType: RLVRestrictionType = null
+open class RLVCmdGenericRestriction(private val restrictionType: RLVRestrictionType, private val canHaveExceptions: Boolean) : RLVCommand {
 
-    constructor(rlvRestrictionType: RLVRestrictionType, canHaveExceptions: Boolean) {
-        this.restrictionType = rlvRestrictionType
-        this.canHaveExceptions = canHaveExceptions
-    }
-    fun Handle(rlvController: RLVController, uuid: UUID, rlvCommands: RLVCommands, str: String, str2: String) {
-        var str3: String = ""
-        var str4: String = ""
+    @Suppress("FunctionName")
+    override fun Handle(controller: RLVController, objectId: UUID, commands: RLVCommands, option: String, parameter: String?) {
+        var str2 = parameter
+        val str3: String
+        val str4: String
         if (str2 == null) {
             str2 = ""
         }
@@ -29,30 +25,31 @@ open class RLVCmdGenericRestriction : RLVCommand {
             str3 = "n"
             str4 = "y"
         }
-        if (str.equals(str3) || str.equals("add")) {
-            var restrictions: RLVRestrictions = rlvController.getRestrictions()
-            var restrictionType: RLVRestrictionType = this.restrictionType
+        if (option == str3 || option == "add") {
+            val restrictions: RLVRestrictions = controller.getRestrictions()
+            val restrictionType: RLVRestrictionType = this.restrictionType
             if (!this.canHaveExceptions) {
                 str2 = ""
             }
-            restrictions.addRestriction(restrictionType, uuid, str2)
+            restrictions.addRestriction(restrictionType, objectId, str2)
             return
         }
-        if (!str.equals(str4) && !str.equals("rem")) {
-            if (str.equals("force")) {
-                HandleForce(rlvController, uuid, str2)
+        if (!(option == str4) && option != "rem") {
+            if (option == "force") {
+                HandleForce(controller, objectId, str2)
             }
         } else {
-            var restrictions2: RLVRestrictions = rlvController.getRestrictions()
-            var restrictionType2: RLVRestrictionType = this.restrictionType
+            val restrictions2: RLVRestrictions = controller.getRestrictions()
+            val restrictionType2: RLVRestrictionType = this.restrictionType
             if (!this.canHaveExceptions) {
                 str2 = ""
             }
-            restrictions2.removeRestriction(restrictionType2, uuid, str2)
+            restrictions2.removeRestriction(restrictionType2, objectId, str2)
         }
     }
 
-    protected fun HandleForce(rlvController: RLVController, uuid: UUID, str: String) {
+    @Suppress("FunctionName")
+    protected open fun HandleForce(rlvController: RLVController, uuid: UUID, str: String?) {
         Debug.Printf("RLV: force option not supported for restriction '%s'", this.restrictionType.toString())
     }
 }

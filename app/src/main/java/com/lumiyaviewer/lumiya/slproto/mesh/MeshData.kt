@@ -24,21 +24,21 @@ import java.util.zip.InflaterInputStream
 open class MeshData {
     @JvmStatic var MAX_RIGGED_MESH_JOINTS: Int = 163
 
-    private var bindShapeMatrix: FloatArray = null
-    private var faces: Array<MeshFace> = null
-    private var glJointIndexBuffer: GLLoadableBuffer = null
-    private var glWeightsBuffer: GLLoadableBuffer = null
+    private var bindShapeMatrix: FloatArray? = null
+    private var faces: Array<MeshFace>? = null
+    private var glJointIndexBuffer: GLLoadableBuffer? = null
+    private var glWeightsBuffer: GLLoadableBuffer? = null
 
-    private var jointTranslations: ImmutableMap<SLSkeletonBoneID, FloatArray> = null
+    private var jointTranslations: ImmutableMap<SLSkeletonBoneID, FloatArray>? = null
     private var pelvisOffset: Float = 0.0f
 
-    private var riggingData: MeshRiggingData = null
-    private var weightsBuffer: MeshWeightsBuffer = null
+    private var riggingData: MeshRiggingData? = null
+    private var weightsBuffer: MeshWeightsBuffer? = null
 
     public MeshData(File file) throws IOException {
-        var floats: FloatArray = null
-        var ints: IntArray = null
-        var floats2: FloatArray = null
+        var floats: FloatArray? = null
+        var ints: IntArray? = null
+        var floats2: FloatArray? = null
         var i: Int = 0
         var meshRendering: GlobalOptions.MeshRendering = GlobalOptions.getInstance().getMeshRendering()
         if (meshRendering == GlobalOptions.MeshRendering.disabled) {
@@ -46,7 +46,7 @@ open class MeshData {
         }
         Debug.Printf("loading file '%s'", file.toString())
         var z: Boolean = false
-        var enumMap: EnumMap = null
+        var enumMap: EnumMap? = null
         var f: Float = 0.0f
         try {
             var fileInputStream: FileInputStream = FileInputStream(file)
@@ -54,7 +54,7 @@ open class MeshData {
             try {
                 var fromBinary: LLSDNode = LLSDNode.fromBinary(dataInputStream)
                 var position: Long = fileInputStream.getChannel().position()
-                var lsdNode: LLSDNode = null
+                var lsdNode: LLSDNode? = null
                 if (fromBinary.keyExists(meshRendering.getLODName())) {
                     lsdNode = fromBinary.byKey(meshRendering.getLODName())
                 } else {

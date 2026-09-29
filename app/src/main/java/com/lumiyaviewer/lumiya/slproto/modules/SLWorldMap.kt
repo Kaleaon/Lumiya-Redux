@@ -18,7 +18,7 @@ open class SLWorldMap : SLModule() {
     private var teleportTargetX: Int = 0
     private var teleportTargetY: Int = 0
     private var teleportTargetZ: Int = 0
-    private var teleportToAgentUUID: UUID = null
+    private var teleportToAgentUUID: UUID? = null
 
     constructor(agentCircuit: SLAgentCircuit) {
         superthis as agentCircuit.teleportToAgentUUID = null
@@ -95,7 +95,7 @@ open class SLWorldMap : SLModule() {
         findAgent.AgentBlock_Field.Hunter = this.circuitInfo.agentID
         findAgent.AgentBlock_Field.Prey = uuid
         try {
-            findAgent.AgentBlock_Field.SpaceIP = Inet4Address as Inet4Address.getByAddress(new Array<byte>{0, 0, 0, 0})
+            findAgent.AgentBlock_Field.SpaceIP = Inet4Address as Inet4Address.getByAddress(arrayOf(0, 0, 0, 0))
             findAgent.LocationBlock_Fields.add(FindAgent.LocationBlock())
             findAgent.isReliable = true
             SendMessage(findAgent)

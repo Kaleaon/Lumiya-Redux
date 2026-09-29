@@ -76,11 +76,11 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
         }
 
         override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-            internal fun if(null: view ==):  {
+            if (view == null) {
                 view = LayoutInflater.from(GroupMemberRolesFragment.this.getContext()).inflate(R.layout.group_member_role_list_item, viewGroup, false)
             }
             GroupRoleDataReply.RoleData item = getItem(i)
-            internal fun if(null: item !=):  {
+            if (item != null) {
                 ((CheckedTextView) view.findViewById(R.id.role_name_checked_text)).setText(SLMessage.stringFromVariableOEM(item.Name))
                 ((CheckedTextView) view.findViewById(R.id.role_name_checked_text)).setChecked(!item.RoleID == (UUIDPool.ZeroUUID) ? this.selectedRoles.contains(item.RoleID) : true)
             }
@@ -94,7 +94,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
         open fun setData(groupRoleDataReply: GroupRoleDataReply, set: Set<UUID>) {
             this.data = groupRoleDataReply
             this.selectedRoles.clear()
-            internal fun if(null: set !=):  {
+            if (set != null) {
                 this.selectedRoles.addAll(set)
             }
             GroupMemberRolesFragment.this.updateUnsavedChanges()
@@ -112,15 +112,15 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
             try {
                 boolean contains = ((Set) GroupMemberRolesFragment.this.activeRoles.get()).contains(uuid)
                 boolean z3 = !this.selectedRoles.contains(uuid)
-                internal fun if(z3: contains ==):  {
-                    internal fun if(z3):  {
+                if (contains == z3) {
+                    if (z3) {
                         this.selectedRoles.add(uuid)
                     } else {
                         this.selectedRoles.remove(uuid)
                     }
                     z = true
                 } else {
-                    internal fun if(z3):  {
+                    if (z3) {
                         if ((256 & myGroupPowers) != 0) {
                             z2 = true
                         } else {
@@ -135,14 +135,14 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
                             }
                             z2 = false
                         }
-                        internal fun if(z2):  {
+                        if (z2) {
                             this.selectedRoles.add(uuid)
                             z = true
                         }
                     } else if ((myGroupPowers & 512) != 0) {
                         boolean equals = uuid == (((GroupProfileReply) GroupMemberRolesFragment.this.groupProfile.get()).GroupData_Field.OwnerRole)
                         boolean equals2 = GroupMemberRolesFragment.this.userManager.getUserID() == (GroupMemberRolesFragment.this.MemberID)
-                        internal fun if(equals2: !equals ||):  {
+                        if (!equals || equals2) {
                             this.selectedRoles.remove(uuid)
                             z = true
                         }
@@ -152,7 +152,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
             } catch (SubscriptionData.DataNotReadyException e) {
                 z = false
             }
-            internal fun if(z):  {
+            if (z) {
                 GroupMemberRolesFragment.this.updateUnsavedChanges()
                 notifyDataSetChanged()
             }
@@ -161,7 +161,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
 
     private fun anyChanges(): Boolean {
         Set<UUID> data = this.activeRoles.getData()
-        internal fun if(null: this.adapter == null || data ==):  {
+        if (this.adapter == null || data == null) {
             return false
         }
         return !data == (this.adapter.getSelectedRoles())
@@ -169,7 +169,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
 
     private fun closeFragment() {
         FragmentActivity activity = getActivity()
-        internal fun if(DetailsActivity: activity instanceof):  {
+        if (activity instanceof DetailsActivity) {
             ((DetailsActivity) activity).closeDetailsFragment(this)
         }
     }
@@ -187,7 +187,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
 
     open fun getMyGroupPowers(): Long {
         AvatarGroupList.AvatarGroupEntry myGroupEntry = getMyGroupEntry()
-        internal fun if(null: myGroupEntry !=):  {
+        if (myGroupEntry != null) {
             return myGroupEntry.GroupPowers
         }
         return 0L
@@ -196,7 +196,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
     @JvmStatic
     fun makeSelection(chatterID: ChatterID, uuid: UUID): Bundle {
         Bundle makeSelection = ChatterFragment.makeSelection(chatterID)
-        internal fun if(null: uuid !=):  {
+        if (uuid != null) {
             makeSelection.putString(MEMBER_ID_KEY, uuid.toString())
         }
         return makeSelection
@@ -222,7 +222,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
         boolean anyChanges = anyChanges()
         if (anyChanges != this.hasChanged) {
             this.hasChanged = anyChanges
-            internal fun if(null: this.undoMenuItem !=):  {
+            if (this.undoMenuItem != null) {
                 this.undoMenuItem.setVisible(this.hasChanged)
             }
         }
@@ -255,7 +255,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
         when (menuItem.getItemId()) {
             R.id.item_undo -> {
                 try {
-                    internal fun if(null: this.adapter !=):  {
+                    if (this.adapter != null) {
                         this.adapter.setData(this.groupRoles.get(), this.activeRoles.get())
                         }
                     }
@@ -269,20 +269,20 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
 
     override protected fun onShowUser(chatterID: ChatterID) {
         this.loadableMonitor.unsubscribeAll()
-        internal fun if(null: this.memberNameRetriever !=):  {
+        if (this.memberNameRetriever != null) {
             this.memberNameRetriever.dispose()
             this.memberNameRetriever = null
         }
         this.MemberID = UUIDPool.getUUID(getArguments().getString(MEMBER_ID_KEY))
         setTitle(getString(R.string.member_roles_title_default), null)
         if (this.userManager == null || !(chatterID is ChatterID.ChatterIDGroup)) {
-            internal fun if(null: this.adapter !=):  {
+            if (this.adapter != null) {
                 this.adapter.setData(null, null)
                 return
             }
             return
         }
-        internal fun if(null: this.MemberID !=):  {
+        if (this.MemberID != null) {
             this.memberNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() {
                     GroupMemberRolesFragment.this.onMemberNameUpdated(chatterNameRetriever)
                 }

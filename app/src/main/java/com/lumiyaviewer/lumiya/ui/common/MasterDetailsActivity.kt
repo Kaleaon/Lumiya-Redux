@@ -1,176 +1,190 @@
 package com.lumiyaviewer.lumiya.ui.common
 
 import com.lumiyaviewer.lumiya.LumiyaApp
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.lumiyaviewer.lumiya.Debug
 import com.lumiyaviewer.lumiya.R
 
 abstract class MasterDetailsActivity : DetailsActivity() {
-    protected static String FROM_SAME_ACTIVITY = "fromSameActivity"
-    private static String IMPLICIT_DETAILS_TAG = "MasterDetailsActivityIsImplicitDetails"
-    public static String INTENT_SELECTION_KEY = "selection"
-    public static String WEAK_SELECTION_KEY = "weakSelection"
-    private boolean isSplitScreen = false
+    companion object {
+        const val FROM_SAME_ACTIVITY = "fromSameActivity"
+        private const val IMPLICIT_DETAILS_TAG = "MasterDetailsActivityIsImplicitDetails"
+        const val INTENT_SELECTION_KEY = "selection"
+        const val WEAK_SELECTION_KEY = "weakSelection"
+    }
 
-    protected abstract FragmentActivityFactory getDetailsFragmentFactory()
+    private var isSplitScreen = false
 
-    protected open fun getNewDetailsFragmentArguments(bundle: Bundle, bundle2: Bundle): Bundle {
+    protected abstract fun getDetailsFragmentFactory(): FragmentActivityFactory
+
+    protected open fun getNewDetailsFragmentArguments(bundle: Bundle?, bundle2: Bundle?): Bundle? {
         return bundle2
     }
 
-    protected open fun isAlwaysImplicitFragment(cls: Class<? extends Fragment>): Boolean {
+    protected open fun isAlwaysImplicitFragment(cls: Class<out Fragment>): Boolean {
         return false
     }
 
-    override protected fun isRootDetailsFragment(cls: Class<? extends Fragment>): Boolean {
+    override fun isRootDetailsFragment(cls: Class<out Fragment>): Boolean {
         return getDetailsFragmentFactory().getFragmentClass().isAssignableFrom(cls)
     }
 
-    open fun isSplitScreen(): Boolean {
+    fun isSplitScreen(): Boolean {
         return this.isSplitScreen
     }
 
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    protected open fun onCreate(bundle: Bundle) {
-        boolean z = false
-        Bundle bundleExtra
-        boolean z2
-        Bundle bundleExtra3
-        Bundle arguments = null
-        Bundle bundle3
-        Bundle bundleExtra2
-        Bundle arguments3
+    override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         this.isSplitScreen = LumiyaApp.isSplitScreenNeeded(this)
-        internal fun if(this.isSplitScreen):  {
+        if (this.isSplitScreen) {
             setContentView(R.layout.split_two_panels)
         } else {
             setContentView(R.layout.split_one_panel)
         }
-        Object[] objArr = arrayOfNulls<Object>(4]
-        objArr[0] = Boolean.valueOf(findViewById(R.id.selector) != null)
-        objArr[1] = Boolean.valueOf(getSupportFragmentManager().findFragmentById(R.id.selector) != null)
-        objArr[2] = Boolean.valueOf(findViewById(R.id.details) != null)
-        objArr[3] = Boolean.valueOf(getSupportFragmentManager().findFragmentById(R.id.details) != null)
-        Debug.Printf("MasterDetailsActivity: hasSelectorView = %b, sel fragment %b, hasDetailsView = %b, details fragment %b", objArr)
-        Debug.Printf("MasterDetailsActivity: intent = %s", getIntent())
-        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction()
-        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.selector)
-        Fragment fragmentById2 = getSupportFragmentManager().findFragmentById(R.id.details)
-        if (fragmentById2 == null || (arguments3 = fragmentById2.getArguments()) == null) {
-            z = false
+        Debug.Printf(
+            "MasterDetailsActivity: hasSelectorView = %b, sel fragment %b, hasDetailsView = %b, details fragment %b",
+            findViewById<android.view.View>(R.id.selector) != null,
+            supportFragmentManager.findFragmentById(R.id.selector) != null,
+            findViewById<android.view.View>(R.id.details) != null,
+            supportFragmentManager.findFragmentById(R.id.details) != null
+        )
+        Debug.Printf("MasterDetailsActivity: intent = %s", intent)
+        val beginTransaction = supportFragmentManager.beginTransaction()
+        val fragmentById = supportFragmentManager.findFragmentById(R.id.selector)
+        val fragmentById2 = supportFragmentManager.findFragmentById(R.id.details)
+
+        var hasExplicitDetails: Boolean
+        val arguments3 = fragmentById2?.arguments
+        if (fragmentById2 == null || arguments3 == null) {
+            hasExplicitDetails = false
         } else {
-            Debug.Printf("MasterDetailsActivity: implicit details tag = %b", Boolean.valueOf(arguments3.getBoolean(IMPLICIT_DETAILS_TAG, false)))
-            if (!arguments3.getBoolean(IMPLICIT_DETAILS_TAG, false)) {
-                z = true
+            Debug.Printf("MasterDetailsActivity: implicit details tag = %b", arguments3.getBoolean(IMPLICIT_DETAILS_TAG, false))
+            hasExplicitDetails = !arguments3.getBoolean(IMPLICIT_DETAILS_TAG, false)
+        }
+        Debug.Printf("MasterDetailsActivity: hasExplicitDetails = %b", hasExplicitDetails)
+
+        var strongSelection: Bundle? = null
+        if (!hasExplicitDetails && bundle == null) {
+            val extra = intent.getBundleExtra(INTENT_SELECTION_KEY)
+            if (extra != null) {
+                strongSelection = extra
+                hasExplicitDetails = true
             }
         }
-        Debug.Printf("MasterDetailsActivity: hasExplicitDetails = %b", Boolean.valueOf(z))
-        if (z || bundle != null || (bundleExtra = getIntent().getBundleExtra(INTENT_SELECTION_KEY)) == null) {
-            bundleExtra = null
+
+        var hasSelection: Boolean
+        var selectionArgs: Bundle?
+        if (hasExplicitDetails || bundle != null || !this.isSplitScreen) {
+            hasSelection = hasExplicitDetails
+            selectionArgs = strongSelection
         } else {
-            z = true
+            val weakExtra = intent.getBundleExtra(WEAK_SELECTION_KEY)
+            if (weakExtra == null) {
+                hasSelection = hasExplicitDetails
+                selectionArgs = strongSelection
+            } else {
+                selectionArgs = weakExtra
+                hasSelection = true
+            }
         }
-        if (z || bundle != null || !this.isSplitScreen || (bundleExtra2 = getIntent().getBundleExtra(WEAK_SELECTION_KEY)) == null) {
-            z2 = z
-            bundleExtra3 = bundleExtra
-        } else {
-            bundleExtra3 = bundleExtra2
-            z2 = true
-        }
-        boolean z3 = !this.isSplitScreen ? !z2 : true
-        internal fun if(z3):  {
-            Object[] objArr2 = arrayOfNulls<Object>(1]
-            objArr2[0] = fragmentById != null ? fragmentById.toString() : "null"
-            Debug.Printf("MasterDetailsActivity: existing fragment %s", objArr2)
-            internal fun if(null: fragmentById !=):  {
-                Object[] objArr3 = arrayOfNulls<Object>(1]
-                objArr3[0] = fragmentById.isVisible() ? "visible" : "not visible"
-                Debug.Printf("MasterDetailsActivity: existing fragment is %s", objArr3)
-                if (fragmentById.isDetached()) {
+
+        val selectorVisible = if (!this.isSplitScreen) !hasSelection else true
+        if (selectorVisible) {
+            Debug.Printf("MasterDetailsActivity: existing fragment %s", fragmentById?.toString() ?: "null")
+            if (fragmentById != null) {
+                Debug.Printf("MasterDetailsActivity: existing fragment is %s", if (fragmentById.isVisible) "visible" else "not visible")
+                if (fragmentById.isDetached) {
                     beginTransaction.attach(fragmentById)
-                } else if (fragmentById.isHidden()) {
+                } else if (fragmentById.isHidden) {
                     beginTransaction.show(fragmentById)
                 }
             } else {
-                beginTransaction.add(R.id.selector, onCreateMasterFragment(getIntent(), bundleExtra3))
+                beginTransaction.add(R.id.selector, onCreateMasterFragment(intent, selectionArgs))
             }
-        } else if (fragmentById != null && !fragmentById.isDetached()) {
+        } else if (fragmentById != null && !fragmentById.isDetached) {
             beginTransaction.detach(fragmentById)
         }
-        boolean z4 = !this.isSplitScreen ? z2 : true
-        Debug.Printf("MasterDetailsActivity: selectorVisible %b, detailsVisible %b, hasExplicitDetails %b", Boolean.valueOf(z3), Boolean.valueOf(z4), Boolean.valueOf(z2))
-        internal fun if(z4):  {
-            internal fun if(null: fragmentById2 ==):  {
-                Debug.Printf("MasterDetailsActivity: creating new details fragment", arrayOfNulls<Object>(0])
+
+        val detailsVisible = if (!this.isSplitScreen) hasSelection else true
+        Debug.Printf(
+            "MasterDetailsActivity: selectorVisible %b, detailsVisible %b, hasExplicitDetails %b",
+            selectorVisible, detailsVisible, hasSelection
+        )
+        if (detailsVisible) {
+            if (fragmentById2 == null) {
+                Debug.Printf("MasterDetailsActivity: creating new details fragment")
                 // 3.4.2 guards the whole creation: a details fragment that cannot
                 // be created is logged and the activity continues without it.
                 try {
-                    Bundle masterArguments = fragmentById != null ? fragmentById.getArguments() : null
-                    Bundle newDetailsFragmentArguments = getNewDetailsFragmentArguments(masterArguments, bundleExtra3)
-                    Fragment fragment = getDetailsFragmentFactory().getFragmentClass().newInstance()
-                    internal fun if(ReloadableFragment: fragment instanceof):  {
-                        fragment.setArguments(Bundle())
-                        ((ReloadableFragment) fragment).setFragmentArgs(getIntent(), newDetailsFragmentArguments)
+                    val masterArguments = fragmentById?.arguments
+                    val newDetailsFragmentArguments = getNewDetailsFragmentArguments(masterArguments, selectionArgs)
+                    val fragment = getDetailsFragmentFactory().getFragmentClass().getDeclaredConstructor().newInstance()
+                    if (fragment is ReloadableFragment) {
+                        fragment.arguments = Bundle()
+                        fragment.setFragmentArgs(intent, newDetailsFragmentArguments)
                     } else {
-                        fragment.setArguments(newDetailsFragmentArguments)
+                        fragment.arguments = newDetailsFragmentArguments
                     }
-                    Bundle detailsArguments
-                    if (!z2 && (detailsArguments = fragment.getArguments()) != null) {
-                        detailsArguments.putBoolean(IMPLICIT_DETAILS_TAG, true)
+                    if (!hasSelection) {
+                        val detailsArguments = fragment.arguments
+                        if (detailsArguments != null) {
+                            detailsArguments.putBoolean(IMPLICIT_DETAILS_TAG, true)
+                        }
                     }
                     Debug.Printf("MasterDetailsActivity: adding new details fragment: %s", fragment)
-                    beginTransaction.add(R.id.details, fragment, DetailsActivity.DEFAULT_DETAILS_FRAGMENT_TAG)
-                } catch (Exception e) {
+                    beginTransaction.add(R.id.details, fragment, DEFAULT_DETAILS_FRAGMENT_TAG)
+                } catch (e: Exception) {
                     Debug.Warning(e)
                 }
             } else {
-                Debug.Printf("MasterDetailsActivity: not creating new details fragment. existing is detached: %b (%s)", Boolean.valueOf(fragmentById2.isDetached()), fragmentById2)
-                if (fragmentById2.isDetached()) {
+                Debug.Printf("MasterDetailsActivity: not creating new details fragment. existing is detached: %b (%s)", fragmentById2.isDetached, fragmentById2)
+                if (fragmentById2.isDetached) {
                     beginTransaction.attach(fragmentById2)
                 }
             }
-        } else if (fragmentById2 != null && !fragmentById2.isDetached()) {
+        } else if (fragmentById2 != null && !fragmentById2.isDetached) {
             beginTransaction.remove(fragmentById2)
         }
-        if (beginTransaction.isEmpty()) {
+
+        if (beginTransaction.isEmpty) {
             return
         }
         beginTransaction.commit()
     }
 
-    protected abstract Fragment onCreateMasterFragment(Intent intent, @Nullable Bundle bundle)
+    protected abstract fun onCreateMasterFragment(intent: Intent, bundle: Bundle?): Fragment
 
-    override protected fun onDetailsStackEmpty(): Boolean {
-        FragmentManager supportFragmentManager
-        Fragment findFragmentById
-        if (this.isSplitScreen || (findFragmentById = (supportFragmentManager = getSupportFragmentManager()).findFragmentById(R.id.details)) == null || !(!findFragmentById.isDetached())) {
+    override fun onDetailsStackEmpty(): Boolean {
+        if (this.isSplitScreen) {
             return true
         }
-        Debug.Printf("MasterDetailsFragment: onDetailsStackEmpty has detailsFragment (%s), detached: %b", findFragmentById, Boolean.valueOf(findFragmentById.isDetached()))
-        FragmentTransaction beginTransaction = supportFragmentManager.beginTransaction()
+        val supportFragmentManager = supportFragmentManager
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.details)
+        if (findFragmentById == null || findFragmentById.isDetached) {
+            return true
+        }
+        Debug.Printf("MasterDetailsFragment: onDetailsStackEmpty has detailsFragment (%s), detached: %b", findFragmentById, findFragmentById.isDetached)
+        val beginTransaction = supportFragmentManager.beginTransaction()
         beginTransaction.setCustomAnimations(android.R.anim.fade_in, R.anim.slide_to_right, 0, android.R.anim.fade_out)
         beginTransaction.remove(findFragmentById)
-        Fragment fragmentById = supportFragmentManager.findFragmentById(R.id.selector)
-        Object[] objArr = arrayOfNulls<Object>(3]
-        objArr[0] = Boolean.valueOf(fragmentById != null)
-        objArr[1] = Boolean.valueOf(fragmentById != null ? fragmentById.isDetached() : false)
-        objArr[2] = Boolean.valueOf(fragmentById != null ? fragmentById.isHidden() : false)
-        Debug.Printf("MasterDetailsFragment: existing selector %b, detached %b, hidden %b", objArr)
-        internal fun if(null: fragmentById ==):  {
-            beginTransaction.add(R.id.selector, onCreateMasterFragment(getIntent(), null))
+        val fragmentById = supportFragmentManager.findFragmentById(R.id.selector)
+        Debug.Printf(
+            "MasterDetailsFragment: existing selector %b, detached %b, hidden %b",
+            fragmentById != null,
+            fragmentById?.isDetached ?: false,
+            fragmentById?.isHidden ?: false
+        )
+        if (fragmentById == null) {
+            beginTransaction.add(R.id.selector, onCreateMasterFragment(intent, null))
         } else {
-            if (fragmentById.isDetached()) {
+            if (fragmentById.isDetached) {
                 beginTransaction.attach(fragmentById)
             }
-            if (fragmentById.isHidden()) {
+            if (fragmentById.isHidden) {
                 beginTransaction.show(fragmentById)
             }
         }
@@ -179,70 +193,69 @@ abstract class MasterDetailsActivity : DetailsActivity() {
         return false
     }
 
-    override protected fun onNewIntent(intent: Intent) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Debug.Printf("MasterDetailsActivity: onNewIntent, intent = %s", intent)
-        Bundle bundle = intent.hasExtra(INTENT_SELECTION_KEY) ? intent.getBundleExtra(INTENT_SELECTION_KEY) : null
-        Bundle bundle2 = intent.hasExtra(WEAK_SELECTION_KEY) ? intent.getBundleExtra(WEAK_SELECTION_KEY) : null
-        internal fun if(null: bundle !=):  {
-            showDetails(this, getDetailsFragmentFactory(), bundle)
+        val bundle = if (intent.hasExtra(INTENT_SELECTION_KEY)) intent.getBundleExtra(INTENT_SELECTION_KEY) else null
+        val bundle2 = if (intent.hasExtra(WEAK_SELECTION_KEY)) intent.getBundleExtra(WEAK_SELECTION_KEY) else null
+        if (bundle != null) {
+            DetailsActivity.showDetails(this, getDetailsFragmentFactory(), bundle)
             return
         }
-        internal fun if(null: this.isSplitScreen && bundle2 !=):  {
-            showDetails(this, getDetailsFragmentFactory(), bundle2)
+        if (this.isSplitScreen && bundle2 != null) {
+            DetailsActivity.showDetails(this, getDetailsFragmentFactory(), bundle2)
             return
         }
-        internal fun if(this.isSplitScreen):  {
+        if (this.isSplitScreen) {
             return
         }
-        if (getSupportFragmentManager().findFragmentById(R.id.details) == null && bundle2 != null && intent.getBooleanExtra(FROM_SAME_ACTIVITY, false)) {
-            showDetails(this, getDetailsFragmentFactory(), bundle2)
+        if (supportFragmentManager.findFragmentById(R.id.details) == null && bundle2 != null && intent.getBooleanExtra(FROM_SAME_ACTIVITY, false)) {
+            DetailsActivity.showDetails(this, getDetailsFragmentFactory(), bundle2)
         } else {
             clearDetailsStack()
             onDetailsStackEmpty()
         }
     }
 
-    override protected fun onSaveInstanceState(bundle: Bundle) {
+    override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
     }
 
-    override protected fun replaceDetailsFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        Fragment findFragmentById
-        FragmentTransaction beginTransaction = fragmentManager.beginTransaction()
+    override fun replaceDetailsFragment(fragmentManager: FragmentManager, fragment: Fragment) {
+        val beginTransaction = fragmentManager.beginTransaction()
         beginTransaction.setCustomAnimations(R.anim.slide_from_right, android.R.anim.fade_out, 0, android.R.anim.fade_out)
-        if (!this.isSplitScreen && (findFragmentById = fragmentManager.findFragmentById(R.id.selector)) != null && findFragmentById.isVisible()) {
-            beginTransaction.hide(findFragmentById)
+        if (!this.isSplitScreen) {
+            val findFragmentById = fragmentManager.findFragmentById(R.id.selector)
+            if (findFragmentById != null && findFragmentById.isVisible) {
+                beginTransaction.hide(findFragmentById)
+            }
         }
         beginTransaction.replace(R.id.details, fragment)
         beginTransaction.commit()
         updateTitle()
     }
 
-    override fun showDetailsFragment(cls: Class<? extends Fragment>, intent: Intent, bundle: Bundle): Fragment {
-        Bundle arguments
-        Fragment showDetailsFragment = super.showDetailsFragment(cls, intent, bundle)
-        if (showDetailsFragment != null && (arguments = showDetailsFragment.getArguments()) != null) {
+    override fun showDetailsFragment(cls: Class<out Fragment>, intent: Intent, bundle: Bundle): Fragment? {
+        val showDetailsFragment = super.showDetailsFragment(cls, intent, bundle)
+        val arguments = showDetailsFragment?.arguments
+        if (showDetailsFragment != null && arguments != null) {
             arguments.putBoolean(IMPLICIT_DETAILS_TAG, isAlwaysImplicitFragment(cls))
         }
         return showDetailsFragment
     }
 
-    override protected fun updateTitleNoDetails() {
-        boolean handled = false
-        Fragment findFragmentById = getSupportFragmentManager().findFragmentById(R.id.selector)
-        if (findFragmentById != null
-                && (findFragmentById is FragmentHasTitle)
-                && findFragmentById.isAdded()
-                && !findFragmentById.isDetached()) {
-            String title = ((FragmentHasTitle) findFragmentById).getTitle()
-            String subTitle = ((FragmentHasTitle) findFragmentById).getSubTitle()
-            internal fun if(null: title !=):  {
+    override fun updateTitleNoDetails() {
+        var handled = false
+        val findFragmentById = supportFragmentManager.findFragmentById(R.id.selector)
+        if (findFragmentById != null && findFragmentById is FragmentHasTitle && findFragmentById.isAdded && !findFragmentById.isDetached) {
+            val title = findFragmentById.getTitle()
+            val subTitle = findFragmentById.getSubTitle()
+            if (title != null) {
                 setActivityTitle(title, subTitle)
                 handled = true
             }
         }
-        internal fun if(!handled):  {
+        if (!handled) {
             super.updateTitleNoDetails()
         }
     }
