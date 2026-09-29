@@ -84,7 +84,7 @@ internal open class ObjectListAdapter : BaseExpandableListAdapter() {
         }
         if (viewGroup instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) viewGroup
-            View.OnClickListener onClickListener = new View.OnClickListener() {
+            View.OnClickListener onClickListener = View.OnClickListener() {
                 override fun onClick(view3: View) {
                     if (view3.getVisibility() == 0) {
                         when (view3.getId()) {
@@ -111,7 +111,7 @@ internal open class ObjectListAdapter : BaseExpandableListAdapter() {
         if (view == null) {
             view = LayoutInflater.from(this.context).inflate(R.layout.object_list_item, viewGroup, false)
         }
-        view.findViewById(R.id.object_hierarchy_padding).setLayoutParams(new LinearLayout.LayoutParams((int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, this.context.getResources().getDisplayMetrics()) * objectDisplayInfo.hierarchyLevel), -1))
+        view.findViewById(R.id.object_hierarchy_padding).setLayoutParams(LinearLayout.LayoutParams((int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, this.context.getResources().getDisplayMetrics()) * objectDisplayInfo.hierarchyLevel), -1))
         view.findViewById(R.id.avatarIconView).setVisibility(objectDisplayInfo is SLAvatarObjectDisplayInfo ? View.VISIBLE : View.GONE)
         if (objectDisplayInfo.name != null) {
             ((TextView) view.findViewById(R.id.objectNameTextView)).setText(objectDisplayInfo.name)

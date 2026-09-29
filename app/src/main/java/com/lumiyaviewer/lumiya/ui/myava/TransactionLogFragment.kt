@@ -33,7 +33,7 @@ import java.util.UUID
 open class TransactionLogFragment : FragmentWithTitle(), LoadableMonitor.OnLoadableDataChangedListener, TransactionLogAdapter.OnTransactionClickListener {
     private TransactionLogAdapter adapter
     private TransactionLogBinding binding
-    private SubscriptionData<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactions = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, LazyList<MoneyTransaction>> moneyTransactions = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.moneyTransactions).withDataChangedListener(this)
     private boolean scrollToBottomRunnablePosted = false
     private Handler mHandler = Handler(Looper.getMainLooper())
@@ -57,8 +57,8 @@ open class TransactionLogFragment : FragmentWithTitle(), LoadableMonitor.OnLoada
     }
 
     private fun clearTransactionLog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-        builder.setMessage(R.string.clear_transaction_log_message).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = AlertDialog.Builder(getActivity())
+        builder.setMessage(R.string.clear_transaction_log_message).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 TransactionLogFragment.this.m675xf57d8a84(dialogInterface, i)
             }
 

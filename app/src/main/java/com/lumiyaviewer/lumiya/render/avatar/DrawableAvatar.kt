@@ -303,7 +303,7 @@ class DrawableAvatar(
         PrimComputeExecutor.getInstance().execute(shapeParamsUpdate)
     }
 
-    fun animationRemove(uuid: UUID) {
+    fun AnimationRemove(uuid: UUID) {
         val removed: Boolean
         synchronized(animationLock) {
             removed = animations.remove(uuid) != null
@@ -311,7 +311,7 @@ class DrawableAvatar(
         if (removed) updateRunningAnimations()
     }
 
-    fun animationUpdate(animationSequenceInfo: AnimationSequenceInfo) {
+    fun AnimationUpdate(animationSequenceInfo: AnimationSequenceInfo) {
         val uuid = animationSequenceInfo.animationID
         synchronized(animationLock) {
             val existing = animations[uuid]
@@ -345,7 +345,7 @@ class DrawableAvatar(
         }
     }
 
-    fun isAnimationStopped(uuid: UUID): Boolean {
+    fun IsAnimationStopped(uuid: UUID): Boolean {
         synchronized(animationLock) {
             val state = animations[uuid]
             return state?.hasStopped() ?: false
@@ -438,12 +438,12 @@ class DrawableAvatar(
         jointMatrixUpdated = true
     }
 
-    fun updateShapeParams(avatarShapeParams: AvatarShapeParams) {
+    fun UpdateShapeParams(avatarShapeParams: AvatarShapeParams) {
         shapeParams = avatarShapeParams
         PrimComputeExecutor.getInstance().execute(shapeParamsUpdate)
     }
 
-    fun updateTextures(avatarTextures: AvatarTextures) {
+    fun UpdateTextures(avatarTextures: AvatarTextures) {
         for ((meshIndex, part) in parts) {
             part.setTexture(drawableStore.glTextureCache, avatarTextures.getTexture(part.faceIndex))
         }

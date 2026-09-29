@@ -35,7 +35,7 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool
 import java.util.UUID
 
 open class UserPicksProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener {
-    private SubscriptionData<UUID, AvatarPicksReply> avatarPicks = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarPicksReply> avatarPicks = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.avatarPicks).withDataChangedListener(this)
     private PicksAdapter picksAdapter
 
@@ -101,9 +101,9 @@ open class UserPicksProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
             return
         }
         int count = this.picksAdapter != null ? this.picksAdapter.getCount() : 0
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+        AlertDialog.Builder builder = AlertDialog.Builder(getContext())
         String str = (String) Optional.fromNullable(Strings.emptyToNull(parcelData.getName())).or(getString(com.lumiyaviewer.lumiya.R.string.name_loading_title))
-        builder.setMessage(getString(com.lumiyaviewer.lumiya.R.string.create_pick_question, str)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(com.lumiyaviewer.lumiya.R.string.create_pick_question, str)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 UserPicksProfileTab.this.m532xd71354a5((SLAgentCircuit) activeAgentCircuit, (String) str, (ParcelData) parcelData, count, dialogInterface, i)
             }
 

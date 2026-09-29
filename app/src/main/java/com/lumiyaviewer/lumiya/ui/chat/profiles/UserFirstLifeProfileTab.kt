@@ -23,7 +23,7 @@ open class UserFirstLifeProfileTab : ChatterReloadableFragment(), LoadableMonito
 
     private UserProfileTabFirstBinding binding
 
-    private SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.avatarProperties).withDataChangedListener(this)
 
     protected open fun onAboutEditClicked(view: View) {

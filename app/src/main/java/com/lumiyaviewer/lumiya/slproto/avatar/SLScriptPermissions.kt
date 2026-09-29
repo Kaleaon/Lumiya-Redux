@@ -1,6 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.avatar
 
-enum class SLScriptPermissions {
+enum class SLScriptPermissions(private val permMask: Int, private val message: String) {
     SCRIPT_PERMISSION_DEBIT(2, "take Linden dollars (L$) from you"),
     SCRIPT_PERMISSION_TAKE_CONTROLS(4, "act on your control inputs"),
     SCRIPT_PERMISSION_REMAP_CONTROLS(8, "remap your control inputs"),
@@ -11,15 +11,7 @@ enum class SLScriptPermissions {
     SCRIPT_PERMISSION_CHANGE_JOINTS(256, "add and remove joints with other objects"),
     SCRIPT_PERMISSION_CHANGE_PERMISSIONS(512, "change its permissions"),
     SCRIPT_PERMISSION_TRACK_CAMERA(1024, "track your camera"),
-    SCRIPT_PERMISSION_CONTROL_CAMERA(2048, "control your camera")
-
-    private var message: String = ""
-    private var permMask: Int = 0
-
-    constructor(permMask: Int, message: String) {
-        this.permMask = permMask
-        this.message = message
-    }
+    SCRIPT_PERMISSION_CONTROL_CAMERA(2048, "control your camera");
 
     /* renamed from: values, reason: to resolve conflict with enum method */
     fun valuesCustom(): Array<SLScriptPermissions> {

@@ -40,7 +40,7 @@ open class OnlineNotificationInfo {
 
     @JvmStatic
     private fun createBuilder(context: Context): NotificationCompat.Builder {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
+        NotificationCompat.Builder builder = NotificationCompat.Builder(context,
                 NotificationChannels.getInstance().getChannelName(NotificationChannels.Channel.OnlineStatus))
         return builder.setSmallIcon(R.drawable.ic_online_notify)
                 .setDefaults(0)

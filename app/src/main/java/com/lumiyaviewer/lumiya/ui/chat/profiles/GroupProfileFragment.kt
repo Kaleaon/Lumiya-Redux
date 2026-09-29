@@ -35,7 +35,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
     private Map<ProfileTab, WeakReference<Fragment>> activeFragments = EnumMap(ProfileTab.class)
     private ImmutableList<ProfileTab> generalGroupTabs = ImmutableList.of(ProfileTab.MainProfile, ProfileTab.Members)
     private ImmutableList<ProfileTab> myGroupTabs = ImmutableList.of(ProfileTab.MainProfile, ProfileTab.Roles, ProfileTab.Members)
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.myGroupList).withDataChangedListener(this)
 
     private ProfileTab lastSelectedTab = null
@@ -136,7 +136,7 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
         ViewPager viewPager = (ViewPager) inflate.findViewById(R.id.user_profile_pager)
         this.adapter = ProfilePagerAdapter(getChildFragmentManager())
         viewPager.setAdapter(this.adapter)
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(ViewPager.OnPageChangeListener() {
             override fun onPageScrollStateChanged(i: Int) {
             }
 

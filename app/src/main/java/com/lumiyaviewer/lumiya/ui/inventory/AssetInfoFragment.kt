@@ -56,21 +56,21 @@ open class AssetInfoFragment : FragmentWithTitle(), ReloadableFragment, View.OnC
     private MenuItem menuItemRename
     private MenuItem menuItemShare
     private InventoryFragmentHelper inventoryFragmentHelper = InventoryFragmentHelper(this)
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, SLInventoryEntry> entrySubscription = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, ImmutableSet<UUID>> runningAnimations = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, SLInventoryEntry> entrySubscription = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, ImmutableMap<UUID, String>> wornAttachments = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, Table<SLWearableType, UUID, SLWearable>> wornWearables = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, ImmutableSet<UUID>> runningAnimations = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.entrySubscription).withOptionalLoadables(this.wornAttachments, this.wornWearables, this.agentCircuit, this.runningAnimations).withDataChangedListener(this)
     private ChatterNameRetriever ownerNameRetriever = null
     private ChatterNameRetriever creatorNameRetriever = null
     private ChatterNameRetriever lastOwnerNameRetriever = null
-    private ChatterNameRetriever.OnChatterNameUpdated onNameUpdated = new ChatterNameRetriever.OnChatterNameUpdated() {
+    private ChatterNameRetriever.OnChatterNameUpdated onNameUpdated = ChatterNameRetriever.OnChatterNameUpdated() {
             AssetInfoFragment.this.m593xc7278eda(chatterNameRetriever)
         }
 
         override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            dialog.findViewById(R.id.cancelButton).setOnClickListener(View.OnClickListener() {
                     ((Dialog) dialog).dismiss()
                 }
 

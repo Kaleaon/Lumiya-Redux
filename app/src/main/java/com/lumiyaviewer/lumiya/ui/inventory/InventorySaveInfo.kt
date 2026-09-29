@@ -6,7 +6,7 @@ import com.lumiyaviewer.lumiya.slproto.inventory.SLAssetType
 import java.util.UUID
 
 open class InventorySaveInfo : Parcelable {
-    public static Parcelable.Creator<InventorySaveInfo> CREATOR = new Parcelable.Creator<InventorySaveInfo>() {
+    public static Parcelable.Creator<InventorySaveInfo> CREATOR = Parcelable.Creator<InventorySaveInfo>() {
         override fun createFromParcel(parcel: Parcel): InventorySaveInfo {
             return InventorySaveInfo(parcel)
         }

@@ -71,7 +71,7 @@ open class GridEditDialog : AppCompatDialog(), View.OnClickListener {
                             if (this.onGridEditResultListener != null) {
                                 GridList.GridInfo gridInfo = this.editGrid
                                 if (gridInfo == null) {
-                                    gridInfo = new GridList.GridInfo(charSequence, text, false, UUID.randomUUID())
+                                    gridInfo = GridList.GridInfo(charSequence, text, false, UUID.randomUUID())
                                     z = true
                                 } else {
                                     gridInfo.setGridName(charSequence)

@@ -41,12 +41,12 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
 open class GroupMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener {
-    private SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AgentDataUpdate> agentDataUpdate = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, GroupProfileReply> groupProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AgentDataUpdate> agentDataUpdate = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             GroupMainProfileTab.this.onAgentCircuit((SLAgentCircuit) obj)
         }
 
@@ -81,8 +81,8 @@ open class GroupMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.On
                 i2 = i3
             }
             AtomicInteger atomicInteger = AtomicInteger(i2)
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-            builder.setTitle(R.string.select_group_role_title).setSingleChoiceItems(charSequenceArr, i2, new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = AlertDialog.Builder(getActivity())
+            builder.setTitle(R.string.select_group_role_title).setSingleChoiceItems(charSequenceArr, i2, DialogInterface.OnClickListener() {
                     ((AtomicInteger) atomicInteger).set(i4)
                 }
 

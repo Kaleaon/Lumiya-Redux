@@ -30,7 +30,7 @@ open class MyAvatarFragment : FragmentWithTitle(), AdapterView.OnItemClickListen
 
     private MyAvatarBinding binding
     private ChatterNameRetriever myAvatarNameRetriever = null
-    private SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, Integer> myBalance = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             MyAvatarFragment.this.onMyBalance((Integer) obj)
         }
 

@@ -80,8 +80,8 @@ open class ManageGridsActivity : ThemedActivity(), GridEditDialog.OnGridEditResu
                     gridEditDialog.show()
                     return true
                 R.id.item_grid_delete -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    builder.setMessage(getString(R.string.grid_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = AlertDialog.Builder(this)
+                    builder.setMessage(getString(R.string.grid_delete_confirm_title)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                             ManageGridsActivity.this.m591x6c23f39d((GridList.GridInfo) gridInfo, dialogInterface, i)
                         }
 

@@ -50,7 +50,7 @@ open class OutfitsFragment : FragmentWithTitle(), ReloadableFragment, View.OnCli
     private ViewGroup listHeader
     private InventoryFolderAdapter adapter = null
     private UUID myOutfitsFolderUUID = null
-    private SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<InventoryQuery, InventoryEntryList> entryList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             OutfitsFragment.this.onInventoryEntryList((InventoryEntryList) obj)
         }
 

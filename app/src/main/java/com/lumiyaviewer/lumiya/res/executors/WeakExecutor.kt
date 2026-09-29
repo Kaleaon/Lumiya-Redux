@@ -35,11 +35,11 @@ open class WeakExecutor : ThreadPoolExecutor {
         }
 
         constructor(runnable: Runnable, result: T) : super(WeakRunnable(runnable), result) {
-            priority = if (runnable is HasPriority) runnable.getPriority() else 0
+            priority = if (runnable is HasPriority) runnable.priority else 0
         }
 
         constructor(callable: Callable<T>) : super(WeakCallable(callable)) {
-            priority = if (callable is HasPriority) callable.getPriority() else 0
+            priority = if (callable is HasPriority) callable.priority else 0
         }
 
         override fun compareTo(other: ComparableFutureTask<T>): Int {

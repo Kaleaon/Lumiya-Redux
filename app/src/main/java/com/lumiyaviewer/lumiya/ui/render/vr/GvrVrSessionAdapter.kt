@@ -24,7 +24,7 @@ internal class GvrVrSessionAdapter : VrSession {
         this.gvrView = GvrView(activity)
         this.gvrView.setDistortionCorrectionEnabled(true)
         this.gvrView.setAsyncReprojectionEnabled(asyncReprojectionEnabled)
-        this.controllerManager = ControllerManager(activity, new ControllerManager.EventListener() {
+        this.controllerManager = ControllerManager(activity, ControllerManager.EventListener() {
             override fun onApiStatusChanged(i: Int) {
                 listener.onApiStatusChanged(i)
             }
@@ -35,7 +35,7 @@ internal class GvrVrSessionAdapter : VrSession {
         })
         this.controller = this.controllerManager.getController()
         if (this.controller != null) {
-            this.controller.setEventListener(new Controller.EventListener() {
+            this.controller.setEventListener(Controller.EventListener() {
                 override fun onConnectionStateChanged(i: Int) {
                     super.onConnectionStateChanged(i)
                     GvrVrSessionAdapter.this.controllerConnectionState = i
@@ -65,7 +65,7 @@ internal class GvrVrSessionAdapter : VrSession {
     }
 
     override fun setRenderer(renderer: Renderer) {
-        this.gvrView.setRenderer(new GvrView.StereoRenderer() {
+        this.gvrView.setRenderer(GvrView.StereoRenderer() {
             override fun onNewFrame(headTransform: HeadTransform) {
                 renderer.onNewFrame(VrPose() {
                     override fun getQuaternion(out: FloatArray, offset: Int) {

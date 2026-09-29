@@ -63,9 +63,9 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
 
     private MenuItem menuItemObjectBlock = null
     private int objectLocalID = 0
-    private SubscriptionData<Integer, SLObjectProfileData> objectProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, Integer> balanceSubscription = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<Integer, SLObjectProfileData> objectProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, Integer> balanceSubscription = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, MyAvatarState> myAvatarState = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.objectProfile).withOptionalLoadables(this.balanceSubscription, this.myAvatarState).withDataChangedListener(this)
     private ChatterNameDisplayer ownerNameDisplayer = ChatterNameDisplayer()
     private OnChatEventListener chatEventListener = OnChatEventListener() {
@@ -347,9 +347,9 @@ open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View
                     SLObjectProfileData data = this.objectProfile.getData()
                     String orNull = data != null ? data.name().orNull() : null
                     if (activeAgentCircuit != null && data != null && orNull != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        AlertDialog.Builder builder = AlertDialog.Builder(getContext())
                         builder.setMessage(R.string.object_block_question)
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton("Yes", DialogInterface.OnClickListener() {
                                 ObjectDetailsFragment.m679x1ba25a88((SLAgentCircuit) activeAgentCircuit, (SLObjectProfileData) data, (String) orNull, dialogInterface, i2)
                             }
 
