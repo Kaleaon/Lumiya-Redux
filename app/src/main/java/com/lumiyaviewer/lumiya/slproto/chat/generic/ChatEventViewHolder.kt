@@ -11,41 +11,37 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView
 import com.lumiyaviewer.lumiya.ui.chat.HasUserPicClickHandler
 import java.lang.ref.WeakReference
 
-open class ChatEventViewHolder : RecyclerView.ViewHolder() {
-    protected var adapter: WeakReference<RecyclerView.Adapter>? = null
-    var bubbleView: View? = null
-    var chatSourceIcon: ChatterPicView? = null
-    var chatSourceIconRight: ChatterPicView? = null
-    var textView: TextView? = null
-    var timestampView: TextView? = null
+open class ChatEventViewHolder(view: View, adapter: RecyclerView.Adapter<*>) : RecyclerView.ViewHolder(view) {
+    protected val adapter: WeakReference<RecyclerView.Adapter<*>>
+    val bubbleView: View?
+    val chatSourceIcon: ChatterPicView?
+    val chatSourceIconRight: ChatterPicView?
+    val textView: TextView?
+    val timestampView: TextView?
     private var updateTimestamp: Long = 0L
 
-    interface Factory {
-        ChatEventViewHolder createViewHolder(View view, RecyclerView.Adapter adapter)
+    fun interface Factory {
+        fun createViewHolder(view: View, adapter: RecyclerView.Adapter<*>): ChatEventViewHolder
     }
 
-    /* JADX WARN: Multi-variable type inference failed */
-    constructor(view: View, adapter: RecyclerView.Adapter) : super(view) {
-        var userPicClickListener: View.OnClickListener? = null
+    init {
         this.updateTimestamp = 0L
-        this.adapter = WeakReference<>this as adapter.timestampView = view as TextView.findViewById(R.id.chatMessageTimestamp)
-        this.textView = view as TextView.findViewById(R.id.chatMessageTextView)
+        this.adapter = WeakReference(adapter)
+        this.timestampView = view.findViewById(R.id.chatMessageTimestamp)
+        this.textView = view.findViewById(R.id.chatMessageTextView)
         this.bubbleView = view.findViewById(R.id.chatMessageBubble)
-        this.chatSourceIcon = view as ChatterPicView.findViewById(R.id.chatMessageSourceIcon)
-        this.chatSourceIconRight = view as ChatterPicView.findViewById(R.id.chatMessageSourceIconRight)
-        if (!(adapter is HasUserPicClickHandler) || (userPicClickListener = (adapter as HasUserPicClickHandler).getUserPicClickListener()) == null) {
-            return
-        }
-        if (this.chatSourceIcon != null) {
-            this.chatSourceIcon.setOnClickListener(userPicClickListener)
-        }
-        if (this.chatSourceIconRight != null) {
-            this.chatSourceIconRight.setOnClickListener(userPicClickListener)
+        this.chatSourceIcon = view.findViewById(R.id.chatMessageSourceIcon)
+        this.chatSourceIconRight = view.findViewById(R.id.chatMessageSourceIconRight)
+        val userPicClickListener: View.OnClickListener? =
+            (adapter as? HasUserPicClickHandler)?.getUserPicClickListener()
+        if (userPicClickListener != null) {
+            this.chatSourceIcon?.setOnClickListener(userPicClickListener)
+            this.chatSourceIconRight?.setOnClickListener(userPicClickListener)
         }
     }
 
     fun requestAdapterUpdate() {
-        var adapter: RecyclerView.Adapter = this.adapter.get()
+        val adapter = this.adapter.get()
         if (adapter != null) {
             adapter.notifyItemChanged(getAdapterPosition())
         }
@@ -58,13 +54,16 @@ open class ChatEventViewHolder : RecyclerView.ViewHolder() {
 
     fun updateTimestamp(context: Context) {
         if (this.timestampView != null) {
-            if (this.updateTimestamp == 0) {
-                this.timestampView.setVisibility(View.GONE)
+            if (this.updateTimestamp == 0L) {
+                this.timestampView.visibility = View.GONE
                 return
             }
-            var currentTimeMillis: Long = System.currentTimeMillis()
-            this.timestampView.setText(currentTimeMillis < this.updateTimestamp + if (AnimationSequenceInfo.MAX_ANIMATION_LENGTH) context.getString(R.string.now) else DateUtils.getRelativeTimeSpanString(this.updateTimestamp, currentTimeMillis, AnimationSequenceInfo.MAX_ANIMATION_LENGTH, 262144))
-            this.timestampView.setVisibility(View.VISIBLE)
+            val currentTimeMillis = System.currentTimeMillis()
+            this.timestampView.text = if (currentTimeMillis < this.updateTimestamp + AnimationSequenceInfo.MAX_ANIMATION_LENGTH)
+                context.getString(R.string.now)
+            else
+                DateUtils.getRelativeTimeSpanString(this.updateTimestamp, currentTimeMillis, AnimationSequenceInfo.MAX_ANIMATION_LENGTH, 262144)
+            this.timestampView.visibility = View.VISIBLE
         }
     }
 }
