@@ -12,18 +12,17 @@ import com.lumiyaviewer.lumiya.slproto.users.ChatterNameRetriever
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo
 import com.lumiyaviewer.lumiya.ui.login.LoginActivity
 
-class OnlineNotificationInfo(
-    showNotification: Boolean,
-    context: Context,
-    userName: String,
-    connection: SLGridConnection?,
-    nameRetriever: ChatterNameRetriever?,
-    currentLocation: CurrentLocationInfo?
-) {
-    private val contentText: String?
-    private val hasProgress: Boolean
-    private val titleText: String?
-    private val visible: Boolean
+    @JvmStatic
+    private fun createBuilder(context: Context): NotificationCompat.Builder {
+        NotificationCompat.Builder builder = NotificationCompat.Builder(context,
+                NotificationChannels.getInstance().getChannelName(NotificationChannels.Channel.OnlineStatus))
+        return builder.setSmallIcon(R.drawable.ic_online_notify)
+                .setDefaults(0)
+                .setOngoing(true)
+                .setContentIntent(PlatformCompat.getActivity(context, 0,
+                        Intent(context, (Class<?>) LoginActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setOnlyAlertOnce(true)
+    }
 
     init {
         when {
