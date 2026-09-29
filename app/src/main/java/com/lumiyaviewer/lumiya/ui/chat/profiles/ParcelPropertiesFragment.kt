@@ -52,7 +52,7 @@ open class ParcelPropertiesFragment : FragmentWithTitle() {
     private Future<?> setHomeFuture
     private ProgressDialog setHomeProgressDialog
     private AtomicInteger setHomeGeneration = AtomicInteger()
-    private SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, Boolean> isPlayingMedia = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             ParcelPropertiesFragment.this.onIsPlayingMedia((Boolean) obj)
         }
 
@@ -83,7 +83,7 @@ open class ParcelPropertiesFragment : FragmentWithTitle() {
 
     open fun onSetHomeButton() {
         if (this.agentCircuit.getData() != null) {
-            new AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder(getContext()).setMessage(R.string.set_home_confirm_title).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                     ParcelPropertiesFragment.this.m515x74bdcccf(dialogInterface, i)
                 }
 

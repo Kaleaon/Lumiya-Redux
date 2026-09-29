@@ -64,7 +64,7 @@ open class MinimapView : View() {
         this.bitmapPaint = Paint()
         this.bitmapSrcRect = Rect()
         this.bitmapDstRect = Rect()
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        this.scaleGestureListener = ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f)
                 MinimapView.this.invalidate()
@@ -90,7 +90,7 @@ open class MinimapView : View() {
         this.bitmapPaint = Paint()
         this.bitmapSrcRect = Rect()
         this.bitmapDstRect = Rect()
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        this.scaleGestureListener = ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f)
                 MinimapView.this.invalidate()
@@ -116,7 +116,7 @@ open class MinimapView : View() {
         this.bitmapPaint = Paint()
         this.bitmapSrcRect = Rect()
         this.bitmapDstRect = Rect()
-        this.scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        this.scaleGestureListener = ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
                 MinimapView.this.actualZoomFactor = Math.min(Math.max(MinimapView.this.actualZoomFactor * scaleGestureDetector.getScaleFactor(), 1.0f), 5.0f)
                 MinimapView.this.invalidate()

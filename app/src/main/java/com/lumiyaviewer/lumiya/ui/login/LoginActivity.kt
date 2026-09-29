@@ -181,7 +181,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         View view = getLayoutInflater().inflate(R.layout.mfa_token_dialog, null)
         EditText tokenText = (EditText) view.findViewById(R.id.mfaTokenText)
         ((TextView) view.findViewById(R.id.mfaTokenMessage)).setText(Strings.isNullOrEmpty(message) ? getString(R.string.mfa_prompt_default_message) : message)
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.mfa_prompt_title)
                 .setView(view)
                 .setPositiveButton(R.string.mfa_prompt_continue, null)
@@ -352,7 +352,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         }
         if (!isFinishing() && progressViewVisible()) {
             String str = Strings.isNullOrEmpty(loginResultEvent.message) ? "Login to Second Life has failed." : loginResultEvent.message
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+            AlertDialog.Builder builder = AlertDialog.Builder(this)
             builder.setTitle("Login failed")
             builder.setMessage(str)
             builder.setCancelable(true)
@@ -470,10 +470,10 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
         ((TextView) findViewById(R.id.whatsnewText)).setText(spannableStringBuilder, TextView.BufferType.SPANNABLE)
         findViewById(R.id.whatsnewText).setClickable(true)
         findViewById(R.id.whatsnewText).setOnClickListener(this)
-        this.gridDisplayAdapter = new GridList.GridArrayAdapter(this, this.gridDisplayList)
+        this.gridDisplayAdapter = GridList.GridArrayAdapter(this, this.gridDisplayList)
         ((Spinner) findViewById(R.id.spinnerGrid)).setAdapter((SpinnerAdapter) this.gridDisplayAdapter)
         setSelectedGrid()
-        ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ((Spinner) findViewById(R.id.spinnerGrid)).setOnItemSelectedListener(AdapterView.OnItemSelectedListener() {
             override fun onItemSelected(adapterView: AdapterView<?>, view: View, lastSelectedGrid: Int, j: Long) {
                 if (lastSelectedGrid != LoginActivity.this.lastSelectedGrid) {
                     Object item = adapterView.getAdapter().getItem(lastSelectedGrid)
@@ -494,7 +494,7 @@ open class LoginActivity : ThemedActivity(), View.OnClickListener, TextWatcher, 
             override fun onNothingSelected(adapterView: AdapterView<?>) {
             }
         })
-        findViewById(R.id.whatsnewText).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        findViewById(R.id.whatsnewText).getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener() {
                 LoginActivity.this.m646lambda$com_lumiyaviewer_lumiya_ui_login_LoginActivity_5985()
             }
 

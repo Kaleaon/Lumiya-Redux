@@ -52,7 +52,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
     private SearchView searchView
     private Subscription<SubscriptionSingleKey, ObjectsManager.ObjectDisplayList> subscription
     private SLObjectFilterInfo filterInfo = SLObjectFilterInfo.create()
-    private Subscription.OnError onObjectListError = new Subscription.OnError() {
+    private Subscription.OnError onObjectListError = Subscription.OnError() {
             ObjectSelectorFragment.this.m692x47832f4(th)
         }
 
@@ -105,7 +105,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
         super.onCreateOptionsMenu(menu, menuInflater)
         menuInflater.inflate(R.menu.menu_object_selector, menu)
         this.searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search))
-        this.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        this.searchView.setOnQueryTextListener(SearchView.OnQueryTextListener() {
             override fun onQueryTextChange(str: String): Boolean {
                 Debug.Printf("searchview: textchange", arrayOfNulls<Object>(0])
                 ObjectSelectorFragment.this.updateFilter()
@@ -116,7 +116,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
                 return true
             }
         })
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), MenuItemCompat.OnActionExpandListener() {
             override fun onMenuItemActionCollapse(menuItem: MenuItem): Boolean {
                 View view = ObjectSelectorFragment.this.getView()
                 if (view != null) {
@@ -155,7 +155,7 @@ open class ObjectSelectorFragment : Fragment(), SeekBar.OnSeekBarChangeListener,
         ((CheckBox) inflate.findViewById(R.id.includeNonTouchable)).setOnCheckedChangeListener(this)
         ButteryProgressBar butteryProgressBar = ButteryProgressBar(layoutInflater.getContext())
         butteryProgressBar.setId(R.id.object_progress_bar)
-        ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, new FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())))
+        ((FrameLayout) inflate.findViewById(R.id.object_list_root_layout)).addView(butteryProgressBar, FrameLayout.LayoutParams(-1, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4.0f, layoutInflater.getContext().getResources().getDisplayMetrics())))
         return inflate
     }
 

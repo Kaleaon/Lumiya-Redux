@@ -48,7 +48,7 @@ open class TaskInventoryFragment : FragmentWithTitle() {
     private Subscription<Integer, SLTaskInventory> taskInventorySubscription
 
     private SLObjectProfileData objectProfileData = null
-    private Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = new Subscription.OnData<SLTaskInventory>() {
+    private Subscription.OnData<SLTaskInventory> onTaskInventoryReceived = Subscription.OnData<SLTaskInventory>() {
         override fun onData(taskInventory: SLTaskInventory) {
             TaskInventoryFragment.this.taskInventory = taskInventory
             View view = TaskInventoryFragment.this.getView()
@@ -62,7 +62,7 @@ open class TaskInventoryFragment : FragmentWithTitle() {
             }
         }
     }
-    private Subscription.OnData<SLObjectProfileData> onObjectProfileData = new Subscription.OnData() {
+    private Subscription.OnData<SLObjectProfileData> onObjectProfileData = Subscription.OnData() {
             TaskInventoryFragment.this.m699x1db91107((SLObjectProfileData) obj)
         }
 
@@ -117,8 +117,8 @@ open class TaskInventoryFragment : FragmentWithTitle() {
                 }
             }
             if (z2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = AlertDialog.Builder(getActivity())
+                builder.setMessage(R.string.object_contents_has_no_copy).setPositiveButton(R.string.object_contents_yes_move, DialogInterface.OnClickListener() {
                         TaskInventoryFragment.this.m697x992e5209(dialogInterface, i)
                     }
 

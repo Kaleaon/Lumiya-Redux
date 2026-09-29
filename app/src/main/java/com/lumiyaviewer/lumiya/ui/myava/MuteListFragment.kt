@@ -32,7 +32,7 @@ import java.util.UUID
 open class MuteListFragment : FragmentWithTitle() {
     private MuteListAdapter adapter
     private MuteListBinding binding
-    private SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, ImmutableList<MuteListEntry>> muteListData = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             MuteListFragment.this.onMuteList((ImmutableList) obj)
         }
 
@@ -44,7 +44,7 @@ open class MuteListFragment : FragmentWithTitle() {
         })
         binding.muteList.setOnTouchListener(swipeDismissListViewTouchListener)
         binding.muteList.setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener())
-        binding.muteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        binding.muteList.setOnItemClickListener(AdapterView.OnItemClickListener() {
                 MuteListFragment.this.m660lambda$com_lumiyaviewer_lumiya_ui_myava_MuteListFragment_3737(adapterView, view, i, j)
             }
 

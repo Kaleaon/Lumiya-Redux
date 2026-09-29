@@ -50,7 +50,10 @@ class AvatarVisualState(
     @Synchronized
     private fun updateAvatarShape() {
         val drawableAvatar = SpatialIndex.getInstance().getDrawableAvatar(avatarObject)
-        drawableAvatar?.UpdateShapeParams(avatarShapeParams)
+        val shapeParams = avatarShapeParams
+        if (drawableAvatar != null && shapeParams != null) {
+            drawableAvatar.UpdateShapeParams(shapeParams)
+        }
     }
 
     @Synchronized
@@ -67,7 +70,7 @@ class AvatarVisualState(
         val drawableAvatar = SpatialIndex.getInstance().getDrawableAvatar(avatarObject)
 
         for (animationList in avatarAnimation.AnimationList_Fields) {
-            val uuid = animationList.AnimID
+            val uuid = animationList.AnimID ?: continue
             activeSet.add(uuid)
             toStop.remove(uuid)
             startAnimation(uuid, animationList.AnimSequenceID, currentTimeMillis, drawableAvatar)
@@ -150,7 +153,10 @@ class AvatarVisualState(
     @Synchronized
     fun createDrawableAvatar(drawableStore: DrawableStore): DrawableAvatar {
         val drawableAvatar = DrawableAvatar(drawableStore, agentUUID, avatarObject, avatarUUID, animations)
-        drawableAvatar.UpdateShapeParams(avatarShapeParams)
+        val shapeParams = avatarShapeParams
+        if (shapeParams != null) {
+            drawableAvatar.UpdateShapeParams(shapeParams)
+        }
         drawableAvatar.UpdateTextures(textures)
         return drawableAvatar
     }

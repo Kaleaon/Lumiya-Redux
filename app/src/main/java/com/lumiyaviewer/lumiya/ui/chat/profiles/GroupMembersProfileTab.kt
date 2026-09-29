@@ -42,7 +42,7 @@ import java.util.UUID
 
 open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener {
     private static String ROLE_TO_ADD_KEY = "roleToAdd"
-    private SubscriptionData<UUID, UUID> groupMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, UUID> groupMemberList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             GroupMembersProfileTab.this.onGroupMemberList((UUID) obj)
         }
 
@@ -214,7 +214,7 @@ open class GroupMembersProfileTab : ChatterReloadableFragment(), LoadableMonitor
     open fun addGroupRoleMember(chatterIDUser: ChatterID.ChatterIDUser) {
         UUID uuid = UUIDPool.getUUID(getArguments().getString(ROLE_TO_ADD_KEY))
         if (uuid != null) {
-            new AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, new DialogInterface.OnClickListener() {
+            AlertDialog.Builder(getContext()).setTitle(R.string.add_role_member_confirm).setPositiveButton(R.string.yes_add_button, DialogInterface.OnClickListener() {
                     GroupMembersProfileTab.this.m484xf9973c0c((UUID) uuid, (ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i)
                 }
 

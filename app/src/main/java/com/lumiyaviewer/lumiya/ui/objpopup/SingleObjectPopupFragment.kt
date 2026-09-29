@@ -18,7 +18,7 @@ import com.lumiyaviewer.lumiya.ui.common.SwipeDismissAdvancedBehavior
 import java.util.UUID
 
 open class SingleObjectPopupFragment : Fragment() {
-    private View.OnClickListener frameClickListener = new View.OnClickListener() {
+    private View.OnClickListener frameClickListener = View.OnClickListener() {
             SingleObjectPopupFragment.this.m704x1a9dd8df(view)
         }
 

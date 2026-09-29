@@ -47,10 +47,6 @@ class TextureCompressedCache : ResourceManager<DrawableTextureParams, File>() {
         @Volatile
         private var fetchTask: Future<*>? = null
 
-        companion object {
-            private const val MAX_RETRIES = 2
-        }
-
         @Suppress("FunctionName")
         override fun OnTextureFetchComplete(request: SLTextureFetchRequest) {
             completeRequest(request.outputFile)

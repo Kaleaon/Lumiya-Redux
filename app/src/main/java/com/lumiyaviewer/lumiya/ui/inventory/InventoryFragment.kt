@@ -78,7 +78,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
     private InventorySaveInfo saveInfo = null
 
     private ImmutableMap<Integer, MenuItem> folderActionMenuItems = ImmutableMap.of()
-    private SubscriptionData<InventoryQuery, InventoryEntryList> entryList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<InventoryQuery, InventoryEntryList> entryList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             InventoryFragment.this.onInventoryEntryList((InventoryEntryList) obj)
         }
 
@@ -297,7 +297,7 @@ open class InventoryFragment : FragmentWithTitle(), ReloadableFragment {
         Intent intent
         String str = null
         if ((sLInventoryEntry.baseMask & sLInventoryEntry.ownerMask & 8192) == 0) {
-            new AlertDialog.Builder(getContext()).setMessage(getString(R.string.item_is_no_transfer)).setCancelable(true).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder(getContext()).setMessage(getString(R.string.item_is_no_transfer)).setCancelable(true).setNegativeButton("Dismiss", DialogInterface.OnClickListener() {
                     dialogInterface.cancel()
                 }
 

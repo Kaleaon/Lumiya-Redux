@@ -22,12 +22,12 @@ open class ObjectPayDialog {
     fun show(context: Context, userManager: UserManager, sLObjectProfileData: SLObjectProfileData) {
         PayInfo payInfo = sLObjectProfileData.payInfo()
         if (payInfo != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context)
+            AlertDialog.Builder builder = AlertDialog.Builder(context)
             builder.setTitle(context.getString(R.string.object_pay_dialog_caption, sLObjectProfileData.name().or(context.getString(R.string.name_loading_title))))
             builder.setCancelable(true)
             builder.setView(R.layout.object_pay_dialog)
             AlertDialog create = builder.create()
-            create.setOnShowListener(new DialogInterface.OnShowListener() {
+            create.setOnShowListener(DialogInterface.OnShowListener() {
                     ObjectPayDialog.m687lambda$com_lumiyaviewer_lumiya_ui_objects_ObjectPayDialog_1356((AlertDialog) create, (PayInfo) payInfo, (Context) context, (UserManager) userManager, (SLObjectProfileData) sLObjectProfileData, dialogInterface)
                 }
 

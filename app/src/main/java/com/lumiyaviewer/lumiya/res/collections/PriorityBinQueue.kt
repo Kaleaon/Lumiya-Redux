@@ -22,7 +22,7 @@ class PriorityBinQueue<T>(
     private val notEmpty = lock.newCondition()
 
     private fun getPriority(obj: Any?): Int {
-        return if (obj is HasPriority) obj.getPriority() else 0
+        return if (obj is HasPriority) obj.priority else 0
     }
 
     override fun add(element: T): Boolean {
@@ -264,53 +264,4 @@ class PriorityBinQueue<T>(
         }
     }
 
-    override fun toArray(): Array<Any?> {
-        lock.lock()
-        try {
-            val arrays = ArrayList<Array<Any?>>()
-            var total = 0
-            for (queue in queues.values) {
-                val arr = queue.toArray()
-                total += arr.size
-                arrays.add(arr)
-            }
-            val result = arrayOfNulls<Any>(total)
-            var offset = 0
-            for (arr in arrays) {
-                System.arraycopy(arr, 0, result, offset, arr.size)
-                offset += arr.size
-            }
-            return result
-        } finally {
-            lock.unlock()
-        }
-    }
-
-    override fun <T1> toArray(a: Array<T1>): Array<T1> {
-        lock.lock()
-        try {
-            val arrays = ArrayList<Array<Any?>>()
-            var total = 0
-            for (queue in queues.values) {
-                val arr = queue.toArray()
-                total += arr.size
-                arrays.add(arr)
-            }
-            @Suppress("UNCHECKED_CAST")
-            val result = if (a.size >= total) {
-                java.util.Arrays.fill(a, null)
-                a
-            } else {
-                java.lang.reflect.Array.newInstance(a.javaClass.componentType, total) as Array<T1>
-            }
-            var offset = 0
-            for (arr in arrays) {
-                System.arraycopy(arr, 0, result, offset, arr.size)
-                offset += arr.size
-            }
-            return result
-        } finally {
-            lock.unlock()
-        }
-    }
 }

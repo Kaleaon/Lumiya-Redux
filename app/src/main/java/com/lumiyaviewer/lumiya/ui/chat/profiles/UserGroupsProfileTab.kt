@@ -27,7 +27,7 @@ import java.util.UUID
 
 open class UserGroupsProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener {
     private GroupsAdapter groupsAdapter
-    private SubscriptionData<UUID, AvatarGroupList> avatarGroups = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> avatarGroups = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.avatarGroups).withDataChangedListener(this)
 
     private class GroupsAdapter : BaseAdapter() {
@@ -76,7 +76,7 @@ open class UserGroupsProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
         }
 
         internal fun setData(avatarGroupList: AvatarGroupList) {
-            ImmutableList.Builder builder = new ImmutableList.Builder()
+            ImmutableList.Builder builder = ImmutableList.Builder()
             builder.addAll((Iterable) avatarGroupList.Groups.values())
             this.avatarGroupList = builder.build()
             notifyDataSetChanged()
@@ -88,7 +88,7 @@ open class UserGroupsProfileTab : ChatterReloadableFragment(), LoadableMonitor.O
         View inflate = layoutInflater.inflate(com.lumiyaviewer.lumiya.R.layout.user_profile_tab_groups, viewGroup, false)
         this.groupsAdapter = GroupsAdapter(layoutInflater.getContext(), null)
         ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setAdapter((ListAdapter) this.groupsAdapter)
-        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ((ListView) inflate.findViewById(com.lumiyaviewer.lumiya.R.id.groups_list_view)).setOnItemClickListener(AdapterView.OnItemClickListener() {
                 UserGroupsProfileTab.this.m518x4b4ac4f6(adapterView, view, i, j)
             }
 

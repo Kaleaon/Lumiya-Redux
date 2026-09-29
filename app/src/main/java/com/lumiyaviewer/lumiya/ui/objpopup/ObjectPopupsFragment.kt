@@ -14,7 +14,7 @@ import java.util.UUID
 
 open class ObjectPopupsFragment : Fragment() {
     private static String AGENT_UUID_KEY = "agentUUID"
-    private ItemTouchHelper.Callback itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, 12) {
+    private ItemTouchHelper.Callback itemTouchCallback = ItemTouchHelper.SimpleCallback(0, 12) {
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder2: RecyclerView.ViewHolder): Boolean {
             return false
         }

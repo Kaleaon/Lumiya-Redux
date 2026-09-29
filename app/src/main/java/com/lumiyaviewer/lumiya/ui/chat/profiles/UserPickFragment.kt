@@ -39,7 +39,7 @@ open class UserPickFragment : FragmentWithTitle() {
 
     private UserPickBinding binding
 
-    private SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<AvatarPickKey, PickInfoReply> pickInfo = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             UserPickFragment.this.onPickInfo((PickInfoReply) obj)
         }
 

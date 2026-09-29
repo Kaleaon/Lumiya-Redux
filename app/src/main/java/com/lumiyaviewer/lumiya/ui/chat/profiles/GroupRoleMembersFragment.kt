@@ -40,11 +40,11 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
     private static String ROLE_ID_KEY = "role_id"
 
     private UUID RoleID
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupProfileReply> groupProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, UUID> groupRoleMemberList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             GroupRoleMembersFragment.this.onGroupRoleMemberList((UUID) obj)
         }
 
@@ -185,7 +185,7 @@ open class GroupRoleMembersFragment : ChatterFragment(), LoadableMonitor.OnLoada
     }
 
     open fun removeMemberFromRole(chatterIDUser: ChatterID.ChatterIDUser) {
-        new AlertDialog.Builder(getContext()).setTitle(R.string.remove_member_from_role_confirm).setPositiveButton(R.string.yes_remove, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder(getContext()).setTitle(R.string.remove_member_from_role_confirm).setPositiveButton(R.string.yes_remove, DialogInterface.OnClickListener() {
                 GroupRoleMembersFragment.this.m505xdf854965((ChatterID.ChatterIDUser) chatterIDUser, dialogInterface, i)
             }
 
