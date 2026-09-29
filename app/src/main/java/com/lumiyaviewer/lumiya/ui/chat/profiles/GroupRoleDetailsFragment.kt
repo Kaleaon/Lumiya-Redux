@@ -46,10 +46,10 @@ open class GroupRoleDetailsFragment : ChatterFragment(), LoadableMonitor.OnLoada
     private UUID RoleID
     private MenuItem deleteMenuItem
     private MenuItem undoMenuItem
-    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupProfileReply> groupProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.groupRoles, this.groupProfile, this.myGroupList).withOptionalLoadables(this.agentCircuit).withDataChangedListener(this)
     private boolean hasChanged = false
     private TextWatcher textChangedListener = TextWatcher() {
@@ -63,7 +63,7 @@ open class GroupRoleDetailsFragment : ChatterFragment(), LoadableMonitor.OnLoada
         override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {
         }
     }
-    private View.OnClickListener permCheckboxClickListener = new View.OnClickListener() {
+    private View.OnClickListener permCheckboxClickListener = View.OnClickListener() {
             GroupRoleDetailsFragment.this.m496x4277c5d5(view)
         }
 
@@ -91,8 +91,8 @@ open class GroupRoleDetailsFragment : ChatterFragment(), LoadableMonitor.OnLoada
         String charSequence2 = ((TextView) view.findViewById(R.id.role_title_edit)).getText().toString()
         String charSequence3 = ((TextView) view.findViewById(R.id.role_description_edit)).getText().toString()
         long selectedPowers = getSelectedPowers(defaultPowers, (ViewGroup) view.findViewById(R.id.role_permission_list_layout))
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = AlertDialog.Builder(getContext())
+        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 GroupRoleDetailsFragment.this.m499x4287a0c8((String) charSequence, (String) charSequence2, (String) charSequence3, selectedPowers, (Runnable) runnable, dialogInterface, i)
             }
 

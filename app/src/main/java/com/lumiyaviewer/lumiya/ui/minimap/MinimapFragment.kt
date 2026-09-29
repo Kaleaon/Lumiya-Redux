@@ -18,7 +18,7 @@ import com.lumiyaviewer.lumiya.ui.minimap.MinimapView
 import java.util.UUID
 
 open class MinimapFragment : Fragment(), MinimapView.OnUserClickListener {
-    private SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, SLMinimap.MinimapBitmap> minimapBitmap = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             MinimapFragment.this.onMinimapBitmap((SLMinimap.MinimapBitmap) obj)
         }
 

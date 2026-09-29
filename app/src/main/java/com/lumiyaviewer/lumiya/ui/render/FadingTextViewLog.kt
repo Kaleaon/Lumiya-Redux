@@ -85,7 +85,7 @@ open class FadingTextViewLog {
                 int applyDimension2 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, displayMetrics)
                 int applyDimension3 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, displayMetrics)
                 int applyDimension4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, displayMetrics)
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-2, -2)
+                LinearLayout.LayoutParams layoutParams = LinearLayout.LayoutParams(-2, -2)
                 layoutParams.setMargins(applyDimension, applyDimension2, applyDimension, applyDimension2)
                 textView = TextView(this.context)
                 textView.setBackgroundColor(this.logBackgroundColor)

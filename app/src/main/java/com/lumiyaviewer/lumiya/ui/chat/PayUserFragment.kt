@@ -25,7 +25,7 @@ import com.lumiyaviewer.lumiya.ui.common.DetailsActivity
 
 open class PayUserFragment : ChatterFragment() {
     private ChatterNameDisplayer chatterNameDisplayer = ChatterNameDisplayer()
-    private SubscriptionData<SubscriptionSingleKey, Integer> myBalance = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<SubscriptionSingleKey, Integer> myBalance = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             PayUserFragment.this.onMyBalance((Integer) obj)
         }
 
@@ -40,8 +40,8 @@ open class PayUserFragment : ChatterFragment() {
         ChatterID chatterID = this.chatterID
         if (chatterID instanceof ChatterID.ChatterIDUser) {
             String resolvedName = this.chatterNameDisplayer.getResolvedName(getContext())
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-            builder.setMessage(String.format(getString(R.string.user_pay_confirm), resolvedName, Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = AlertDialog.Builder(getActivity())
+            builder.setMessage(String.format(getString(R.string.user_pay_confirm), resolvedName, Integer.valueOf(i))).setCancelable(false).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                     PayUserFragment.this.m434lambda$com_lumiyaviewer_lumiya_ui_chat_PayUserFragment_3721((ChatterID) chatterID, i, (String) str, dialogInterface, i2)
                 }
 

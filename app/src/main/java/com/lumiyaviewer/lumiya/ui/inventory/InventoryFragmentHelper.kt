@@ -92,8 +92,8 @@ open class InventoryFragmentHelper {
     }
 
     private fun showRezDialog(sLInventoryEntry: SLInventoryEntry) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-        builder.setMessage(getContext().getString(R.string.rez_confirm_title)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = AlertDialog.Builder(getContext())
+        builder.setMessage(getContext().getString(R.string.rez_confirm_title)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 InventoryFragmentHelper.this.m629x89731ef0((SLInventoryEntry) sLInventoryEntry, dialogInterface, i)
             }
 

@@ -137,7 +137,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     private boolean wasInScaling = false
     private boolean isInteracting = false
     private boolean isDragging = false
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             WorldViewActivity.this.onAgentCircuit((SLAgentCircuit) obj)
         }
 
@@ -179,7 +179,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             WorldViewActivity.this.binding.insetsBackground.setAlpha(1.0f)
         }
     }
-    private View.OnTouchListener worldViewTouchListener = new View.OnTouchListener() {
+    private View.OnTouchListener worldViewTouchListener = View.OnTouchListener() {
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             boolean z
             boolean isInteracting = WorldViewActivity.this.isInteracting
@@ -207,7 +207,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             return onTouchEvent
         }
     }
-    private GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
+    private GestureDetector.OnGestureListener gestureListener = GestureDetector.SimpleOnGestureListener() {
         override fun onFling(motionEvent: MotionEvent, motionEvent2: MotionEvent, f: Float, f2: Float): Boolean {
             if (WorldViewActivity.this.isInScaling || !(!WorldViewActivity.this.wasInScaling) || !(!WorldViewActivity.this.isDragging)) {
                 return false
@@ -277,7 +277,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             return true
         }
     }
-    private ScaleGestureDetector.OnScaleGestureListener scaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    private ScaleGestureDetector.OnScaleGestureListener scaleGestureListener = ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
             Debug.Printf("Gesture: scale factor: %f", Float.valueOf(scaleGestureDetector.getScaleFactor()))
             if (WorldViewActivity.this.displayedHUDid != 0) {
@@ -566,9 +566,9 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                 return
             }
             ArrayAdapter arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList)
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+            AlertDialog.Builder builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.select_hud_title)
-            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            builder.setAdapter(arrayAdapter, DialogInterface.OnClickListener() {
                     WorldViewActivity.this.m855x5cf6cbb8((List) arrayList, dialogInterface, i2)
                 }
 
@@ -677,7 +677,7 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
                         this.pickedAvatarNameRetriever.dispose()
                         this.pickedAvatarNameRetriever = null
                     }
-                    this.pickedAvatarNameRetriever = ChatterNameRetriever(userChatterID, new ChatterNameRetriever.OnChatterNameUpdated() {
+                    this.pickedAvatarNameRetriever = ChatterNameRetriever(userChatterID, ChatterNameRetriever.OnChatterNameUpdated() {
                             WorldViewActivity.this.onPickedAvatarNameUpdated(chatterNameRetriever)
                         }
 

@@ -47,12 +47,12 @@ import java.util.UUID
 open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonitor.OnLoadableDataChangedListener, BackButtonHandler {
     private static String MEMBER_ID_KEY = "memberID"
     private MenuItem undoMenuItem
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupProfileReply> groupProfile = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarGroupList> myGroupList = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, UUID> groupRoleMemberList = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupProfileReply> groupProfile = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupRoleDataReply> groupRoles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarGroupList> myGroupList = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, GroupTitlesReply> groupTitles = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, UUID> groupRoleMemberList = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             GroupMemberRolesFragment.this.onGroupRoleMemberList((UUID) obj)
         }
 
@@ -235,8 +235,8 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
         if (!anyChanges()) {
             return false
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = AlertDialog.Builder(getContext())
+        builder.setMessage(getString(R.string.save_changes_question)).setCancelable(true).setPositiveButton("Yes", DialogInterface.OnClickListener() {
                 GroupMemberRolesFragment.this.m473x6c93268c(dialogInterface, i)
             }
 
@@ -283,7 +283,7 @@ open class GroupMemberRolesFragment : ChatterReloadableFragment(), LoadableMonit
             return
         }
         if (this.MemberID != null) {
-            this.memberNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), new ChatterNameRetriever.OnChatterNameUpdated() {
+            this.memberNameRetriever = ChatterNameRetriever(ChatterID.getUserChatterID(this.userManager.getUserID(), this.MemberID), ChatterNameRetriever.OnChatterNameUpdated() {
                     GroupMemberRolesFragment.this.onMemberNameUpdated(chatterNameRetriever)
                 }
 

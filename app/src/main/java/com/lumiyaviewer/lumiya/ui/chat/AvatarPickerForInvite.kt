@@ -125,7 +125,7 @@ open class AvatarPickerForInvite : AvatarPickerFragment() {
                 z2 = false
             }
         }
-        ImmutableList.Builder builder = new ImmutableList.Builder()
+        ImmutableList.Builder builder = ImmutableList.Builder()
         if (groupRoleDataReply != null && groupProfileReply != null) {
             for (roleData in groupRoleDataReply.RoleData_Fields) {
                 if ((z || (z3 && (roleData.RoleID == (groupProfileReply.GroupData_Field.OwnerRole) ^ true)) || roleData.RoleID == (UUIDPool.ZeroUUID)) ? true : z2 ? hashSet.contains(roleData.RoleID) : false) {

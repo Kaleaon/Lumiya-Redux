@@ -24,8 +24,8 @@ import java.util.UUID
 
 open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataChangedListener, AdapterView.OnItemClickListener {
     private CurrentOutfitAdapter listAdapter
-    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<SubscriptionSingleKey, ImmutableList<SLAvatarAppearance.WornItem>> wornItems = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, SLAgentCircuit> agentCircuit = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<SubscriptionSingleKey, ImmutableList<SLAvatarAppearance.WornItem>> wornItems = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.wornItems).withOptionalLoadables(this.agentCircuit).withDataChangedListener(this)
 
     @JvmStatic
@@ -43,7 +43,7 @@ open class CurrentOutfitFragment : Fragment(), LoadableMonitor.OnLoadableDataCha
         listView.setAdapter((ListAdapter) this.listAdapter)
         listView.setOnItemClickListener(this)
         listView.setEmptyView(inflate.findViewById(android.R.id.empty))
-        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = SwipeDismissListViewTouchListener(listView, new SwipeDismissListViewTouchListener.DismissCallbacks() {
+        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener = SwipeDismissListViewTouchListener(listView, SwipeDismissListViewTouchListener.DismissCallbacks() {
             override fun canDismiss(listView2: ListView, i: Int): Boolean {
                 ListAdapter adapter = listView2.getAdapter()
                 if (adapter instanceof DismissableAdapter) {

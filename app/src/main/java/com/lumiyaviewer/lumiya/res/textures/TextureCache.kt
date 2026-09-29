@@ -116,17 +116,18 @@ class TextureCache private constructor() : ResourceMemoryCache<DrawableTexturePa
             textureCompressedCache.RequestResource(getParams(), this as ResourceConsumer)
         }
 
-        override fun getPriority(): Int {
-            val params = getParams()
-            if (canBeLowQuality(params) && lowQualityDone) {
-                return 4
+        override val priority: Int
+            get() {
+                val params = getParams()
+                if (canBeLowQuality(params) && lowQualityDone) {
+                    return 4
+                }
+                return when (params.textureClass()) {
+                    TextureClass.Baked -> 2
+                    TextureClass.Sculpt -> 1
+                    else -> 3
+                }
             }
-            return when (params.textureClass()) {
-                TextureClass.Baked -> 2
-                TextureClass.Sculpt -> 1
-                else -> 3
-            }
-        }
 
         override fun run() {
             val params = getParams()

@@ -23,7 +23,7 @@ import java.util.UUID
 open class TouchableObjectsFragment : Fragment(), AdapterView.OnItemClickListener {
     private static String OBJECT_UUID_KEY = "objectUUID"
     private TouchableObjectListAdapter listAdapter
-    private SubscriptionData<UUID, ImmutableList<SLObjectInfo>> touchableObjects = new SubscriptionData<>(UIThreadExecutor.getInstance(), new Subscription.OnData() {
+    private SubscriptionData<UUID, ImmutableList<SLObjectInfo>> touchableObjects = SubscriptionData<>(UIThreadExecutor.getInstance(), Subscription.OnData() {
             TouchableObjectsFragment.this.onTouchableObjects((ImmutableList) obj)
         }
 

@@ -1,6 +1,6 @@
 package com.lumiyaviewer.lumiya.slproto.avatar
 
-enum class AvatarTextureFaceIndex {
+enum class AvatarTextureFaceIndex(private val bakedTextureName: String) {
     TEX_HEAD_BODYPAINT("head"),
     TEX_UPPER_SHIRT("upper"),
     TEX_LOWER_PANTS("lower"),
@@ -49,13 +49,7 @@ enum class AvatarTextureFaceIndex {
     TEX_LEFT_LEG_BAKED("leftleg"),
     TEX_AUX1_BAKED("aux1"),
     TEX_AUX2_BAKED("aux2"),
-    TEX_AUX3_BAKED("aux3")
-
-    private var bakedTextureName: String = ""
-
-    constructor(bakedTextureName: String) {
-        this.bakedTextureName = bakedTextureName
-    }
+    TEX_AUX3_BAKED("aux3");
 
     /* renamed from: values, reason: to resolve conflict with enum method */
     fun valuesCustom(): Array<AvatarTextureFaceIndex> {

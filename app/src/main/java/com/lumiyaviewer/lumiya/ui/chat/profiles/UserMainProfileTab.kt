@@ -33,12 +33,12 @@ open class UserMainProfileTab : ChatterReloadableFragment(), LoadableMonitor.OnL
 
     private UserProfileTabMainBinding binding
 
-    private SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, AvatarNotesReply> avatarNotes = new SubscriptionData<>(UIThreadExecutor.getInstance())
-    private SubscriptionData<UUID, Boolean> onlineStatus = new SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarPropertiesReply> avatarProperties = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, AvatarNotesReply> avatarNotes = SubscriptionData<>(UIThreadExecutor.getInstance())
+    private SubscriptionData<UUID, Boolean> onlineStatus = SubscriptionData<>(UIThreadExecutor.getInstance())
     private LoadableMonitor loadableMonitor = LoadableMonitor(this.avatarProperties, this.avatarNotes, this.onlineStatus).withDataChangedListener(this)
     private ChatterNameRetriever partnerNameRetriever = null
-    private ChatterNameRetriever.OnChatterNameUpdated onPartnerNameReady = new ChatterNameRetriever.OnChatterNameUpdated() {
+    private ChatterNameRetriever.OnChatterNameUpdated onPartnerNameReady = ChatterNameRetriever.OnChatterNameUpdated() {
             UserMainProfileTab.this.m519x9d89034f(chatterNameRetriever)
         }
 
