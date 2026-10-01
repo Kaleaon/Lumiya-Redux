@@ -263,6 +263,23 @@ tasks.register('rejectUndecompiledMethods') {
     }
 }
 
+tasks.register('enforceViewerProductionKotlin') {
+    group = 'verification'
+    description = 'Prevents viewer-owned production Java from returning after the Kotlin migration.'
+
+    doLast {
+        def offenders = fileTree("$projectDir/src/main/java/com/lumiyaviewer/lumiya") {
+            include '**/*.java'
+        }.files.sort()
+        if (!offenders.isEmpty()) {
+            throw new GradleException(
+                "Viewer production sources must be Kotlin. Compatibility Java is allowed only " +
+                    "under the bundled com/google and rawbuffers namespaces. Found: ${offenders*.absolutePath}"
+            )
+        }
+    }
+}
+
 tasks.register('verifyNoLegacySupportDependencies') {
     group = 'verification'
     description = 'Fails if a runtime graph regresses to android.support artifacts that require Jetifier.'
@@ -285,6 +302,7 @@ tasks.register('verifyNoLegacySupportDependencies') {
 
 tasks.named('check').configure {
     dependsOn(tasks.named('enforceKotlinFirstPackages'))
+    dependsOn(tasks.named('enforceViewerProductionKotlin'))
     dependsOn(tasks.named('rejectUndecompiledMethods'))
     dependsOn(tasks.named('verifyNoLegacySupportDependencies'))
 }
@@ -396,6 +414,10 @@ dependencies {
 
     // ── Filament (stage F0: debug-only world view, see above) ──
     debugImplementation "com.google.android.filament:filament-android:${filamentVersion}"
+    // gltfio owns glTF/GLB geometry, PBR materials and embedded texture upload.
+    // Keep it on the same exact version as the engine; Filament's native ABI is
+    // not compatible across releases.
+    debugImplementation "com.google.android.filament:gltfio-android:${filamentVersion}"
     matc "com.google.android.filament:matc:${filamentVersion}:${matcClassifier}@exe"
 
     testImplementation 'junit:junit:4.13.2'
