@@ -1,4 +1,4 @@
-# Kotlin Migration Plan (Gradual / Opportunistic)
+# Kotlin Migration Plan (Production Migration Complete)
 
 ## Decision
 
@@ -13,6 +13,13 @@ would discard the bytecode-parity recovery work.
 This is a source-language migration, not an instruction to rewrite stable Java.
 Java remains supported at interoperability boundaries and for recovered code
 that has not yet passed focused behavior tests.
+
+All viewer-owned production sources below `com/lumiyaviewer/lumiya` are now
+Kotlin. The remaining Java sources are bundled compatibility implementations
+of Google VR/protobuf and the JNI-facing raw-buffer library; changing their
+language would change third-party/reflection/native ABI rather than modernize
+viewer code. `enforceViewerProductionKotlin` prevents viewer Java from being
+reintroduced while those isolated compatibility namespaces remain intact.
 
 ## Goals
 - Enable Kotlin in the Android app without mass conversion.
@@ -65,6 +72,8 @@ Kotlin-first package roots:
 ## Enforcement
 - Gradle `check` runs `enforceKotlinFirstPackages`, which rejects **new** `.java`
   files in Kotlin-first roots.
+- Gradle `check` also runs `enforceViewerProductionKotlin`, which rejects any
+  production `.java` file in the viewer-owned namespace.
 - Existing tracked Java files are grandfathered until they are deliberately
   converted, keeping the migration incremental and reviewable.
 - The first production conversions preserve their Java ABI: `HasPriority` is

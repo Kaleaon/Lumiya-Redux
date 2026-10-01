@@ -11,7 +11,6 @@ import com.google.android.filament.Camera
 import com.google.android.filament.ColorGrading
 import com.google.android.filament.Engine
 import com.google.android.filament.EntityManager
-import com.google.android.filament.Filament
 import com.google.android.filament.IndexBuffer
 import com.google.android.filament.IndirectLight
 import com.google.android.filament.LightManager
@@ -27,6 +26,8 @@ import com.google.android.filament.View
 import com.google.android.filament.Viewport
 import com.google.android.filament.android.DisplayHelper
 import com.google.android.filament.android.UiHelper
+import com.google.android.filament.gltfio.Gltfio
+import com.google.android.filament.gltfio.FilamentAsset
 import com.lumiyaviewer.lumiya.render.scene.MeshData
 import com.lumiyaviewer.lumiya.render.scene.SceneDelta
 import com.lumiyaviewer.lumiya.render.scene.SceneDeltaQueue
@@ -74,6 +75,7 @@ class FilamentWorldRenderer(context: Context, private val surfaceView: SurfaceVi
     private var sky: GpuMesh? = null
     private var sunEntity = 0
     private var indirectLight: IndirectLight? = null
+    private lateinit var glbAssets: FilamentGlbAssets
     private val terrain = HashMap<Int, TerrainEntry>()
     private var width = 1
     private var height = 1
@@ -149,6 +151,16 @@ class FilamentWorldRenderer(context: Context, private val surfaceView: SurfaceVi
         Choreographer.getInstance().removeFrameCallback(frameCallback)
     }
 
+    /** Loads a self-contained glTF 2.0 binary and its embedded textures. */
+    fun loadGlb(source: ByteBuffer): FilamentAsset {
+        var result: FilamentAsset? = null
+        runOnEngine { result = glbAssets.load(source) }
+        return checkNotNull(result)
+    }
+
+    /** Removes an asset previously returned by [loadGlb]. */
+    fun unloadGlb(asset: FilamentAsset) = runOnEngine { glbAssets.remove(asset) }
+
     /** Releases every Filament object, the engine and the engine thread. Call from the UI thread. */
     fun destroy() {
         // Detaching triggers onDetachedFromSurface, which destroys the swap chain.
@@ -191,7 +203,8 @@ class FilamentWorldRenderer(context: Context, private val surfaceView: SurfaceVi
     }
 
     private fun createEngine() {
-        Filament.init()
+        // Gltfio initializes both its native loader and the core Filament JNI.
+        Gltfio.init()
         engine = Engine.create()
         renderer = engine.createRenderer()
         scene = engine.createScene()
@@ -205,6 +218,7 @@ class FilamentWorldRenderer(context: Context, private val surfaceView: SurfaceVi
         colorGrading = ColorGrading.Builder().toneMapper(ToneMapper.Linear()).build(engine)
         view.colorGrading = colorGrading
         displayHelper = DisplayHelper(appContext, handler)
+        glbAssets = FilamentGlbAssets(engine, scene)
         renderer.clearOptions = renderer.clearOptions.apply {
             clear = true
             clearColor = doubleArrayOf(0.0, 0.0, 0.0, 1.0)
@@ -237,6 +251,7 @@ class FilamentWorldRenderer(context: Context, private val surfaceView: SurfaceVi
     }
 
     private fun destroyEngine() {
+        glbAssets.destroy()
         for (entry in terrain.values) {
             destroyMesh(entry.mesh)
         }
