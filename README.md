@@ -4,6 +4,13 @@ Reconstruction of the Lumiya Second Life Android viewer. The original source
 tree was lost along with the designer's laptop; this repo starts from the
 shipped `lumiya3.4.2.apk` and rebuilds from there.
 
+## Linkpoint Design & Ktheme Alignment
+
+`Lumiya-Redux` aligns its theme resources with the universal **[Linkpoint Design](https://github.com/Kaleaon/linkpoint-design)** reference frame (`docs/DESIGN_LANGUAGE.md`). Android themes in `GlobalOptions` and `ThemeMapper` map directly to Linkpoint Design Ktheme palette families:
+- `Theme_Lumiya_Light` → **Daylight Family** (`Frutiger Aero` / `Calm Clinical`)
+- `Theme_Lumiya` (Dark) → **Terminal & Neon Family** (`Ink Terminal` / `Slate Cyan`)
+- `Theme_Lumiya_Pink` → **Metal & Jewel Family** (`Burgundy Rose Gold` / `Rose Gold`)
+
 ## Layout
 
 | Path | What it is |
