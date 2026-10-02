@@ -55,16 +55,18 @@ class VoiceStatusView @JvmOverloads constructor(
         UIThreadExecutor.getInstance()
     ) { onVoiceChatInfo(it as VoiceChatInfo) }
 
-    private val onActiveSpeakerNameUpdated = ChatterNameRetriever.OnChatterNameUpdated { retriever ->
-        Debug.Printf("Voice: chatter name updated: %s", retriever.resolvedName)
-        updateVoiceState()
+    private val onActiveSpeakerNameUpdated = object : ChatterNameRetriever.OnChatterNameUpdated {
+        override fun onChatterNameUpdated(retriever: ChatterNameRetriever) {
+            Debug.Printf("Voice: chatter name updated: %s", retriever.getResolvedName())
+            updateVoiceState()
+        }
     }
 
     private val volumeChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (fromUser && !updatingAudioVolume) {
                 val volume = progress.toFloat() / seekBar.max
-                val client = GridConnectionService.getServiceInstance()?.webRTCVoiceClient ?: return
+                val client = GridConnectionService.getServiceInstance()?.getWebRTCVoiceClient() ?: return
                 client.setSpeakerVolume(volume)
             }
         }
@@ -100,7 +102,7 @@ class VoiceStatusView @JvmOverloads constructor(
         updateVoiceState(info)
     }
 
-    private fun updateVoiceState(data: VoiceChatInfo? = voiceChatInfo.data) {
+    private fun updateVoiceState(data: VoiceChatInfo? = voiceChatInfo.getData()) {
         Debug.Printf("VoiceStatusView: voice state %s", data)
 
         var newActiveChatterID: ChatterID.ChatterIDUser? = null
@@ -143,9 +145,9 @@ class VoiceStatusView @JvmOverloads constructor(
                     (binding.voiceSpeakIndicatorRight.drawable as? AnimationDrawable)?.start()
                 }
                 if (data.numActiveSpeakers == 1 && data.activeSpeakerID != null && chatterID != null) {
-                    newActiveChatterID = ChatterID.getUserChatterID(chatterID!!.agentUUID, data.activeSpeakerID)
+                    newActiveChatterID = ChatterID.getUserChatterID(chatterID!!.agentUUID, data.activeSpeakerID!!)
                     statusText = if (speakerNameRetriever != null && Objects.equal(newActiveChatterID, speakerNameRetriever!!.chatterID)) {
-                        speakerNameRetriever!!.resolvedName
+                        speakerNameRetriever!!.getResolvedName()
                     } else null
                 }
                 Debug.Printf("Voice: numActiveSpeakers %d, speakerName %s, activeChatterID %s (view chatterID %s)",
@@ -172,7 +174,7 @@ class VoiceStatusView @JvmOverloads constructor(
                 }
             }
 
-            val resolvedName = if (showActiveChatterName) activeChatterNameRetriever?.resolvedName else null
+            val resolvedName = if (showActiveChatterName) activeChatterNameRetriever?.getResolvedName() else null
             if (resolvedName != null) {
                 binding.voiceStatusSmallText.visibility = VISIBLE
                 binding.voiceStatusText.text = resolvedName
@@ -203,7 +205,7 @@ class VoiceStatusView @JvmOverloads constructor(
             }
         }
 
-        val audioProps = voiceAudioProperties.data
+        val audioProps = voiceAudioProperties.getData()
         if (audioProps != null) {
             val compoundDrawables = binding.voiceBluetoothButton.compoundDrawables
             val btUnderline = when (audioProps.bluetoothState) {
@@ -226,7 +228,7 @@ class VoiceStatusView @JvmOverloads constructor(
     }
 
     fun disableMic() {
-        val data = voiceChatInfo.data ?: return
+        val data = voiceChatInfo.getData() ?: return
         if (chatterID == null || data.state != VoiceChatInfo.VoiceChatState.Active) return
         GridConnectionService.getServiceInstance()?.enableVoiceMic(false)
     }
@@ -262,15 +264,15 @@ class VoiceStatusView @JvmOverloads constructor(
     }
 
     private fun onLoudspeakerButton() {
-        val data = voiceAudioProperties.data ?: return
-        val client = GridConnectionService.getServiceInstance()?.webRTCVoiceClient ?: return
+        val data = voiceAudioProperties.getData() ?: return
+        val client = GridConnectionService.getServiceInstance()?.getWebRTCVoiceClient() ?: return
         client.setAudioDevice(
             if (data.speakerphoneOn) VoiceAudioDevice.Default else VoiceAudioDevice.Loudspeaker
         )
     }
 
     private fun onVoiceAnswerButton() {
-        val data = voiceChatInfo.data
+        val data = voiceChatInfo.getData()
         if (onCallButtonListener != null && (chatterID == null || data == null || data.state == VoiceChatInfo.VoiceChatState.None)) {
             onCallButtonListener!!.onClick(binding.voiceAnswerButton)
         }
@@ -279,8 +281,8 @@ class VoiceStatusView @JvmOverloads constructor(
     }
 
     private fun onVoiceBluetoothButton() {
-        val data = voiceAudioProperties.data ?: return
-        val client = GridConnectionService.getServiceInstance()?.webRTCVoiceClient ?: return
+        val data = voiceAudioProperties.getData() ?: return
+        val client = GridConnectionService.getServiceInstance()?.getWebRTCVoiceClient() ?: return
         client.setAudioDevice(
             if (data.bluetoothState == VoiceBluetoothState.Active) VoiceAudioDevice.Default else VoiceAudioDevice.Bluetooth
         )
@@ -317,7 +319,7 @@ class VoiceStatusView @JvmOverloads constructor(
     fun setChatterID(chatterID: ChatterID?) {
         this.chatterID = chatterID
         if (chatterID != null) {
-            val userManager = chatterID.userManager
+            val userManager = chatterID.getUserManager()
             if (userManager != null) {
                 voiceAudioProperties.subscribe(userManager.voiceAudioProperties, SubscriptionSingleKey.Value)
                 voiceChatInfo.subscribe(userManager.voiceChatInfo, chatterID)

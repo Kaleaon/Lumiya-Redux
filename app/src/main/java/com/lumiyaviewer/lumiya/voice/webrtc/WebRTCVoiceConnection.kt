@@ -186,10 +186,9 @@ class WebRTCVoiceConnection(
 
         val body = LLSDMap(*bodyEntries.toTypedArray())
 
-        LLSDXMLAsyncRequest(provisionCapURL, body,
-            LLSDXMLAsyncRequest.LLSDXMLResultListener { result ->
-                onProvisionResult(result)
-            })
+        LLSDXMLAsyncRequest(provisionCapURL, body) { result ->
+            onProvisionResult(result)
+        }
     }
 
     private fun onProvisionResult(result: LLSDNode?) {
@@ -260,10 +259,9 @@ class WebRTCVoiceConnection(
 
         val body = LLSDMap(*bodyEntries.toTypedArray())
 
-        LLSDXMLAsyncRequest(url, body,
-            LLSDXMLAsyncRequest.LLSDXMLResultListener { _ ->
-                Debug.Printf("WebRTCVoice: ICE candidates sent")
-            })
+        LLSDXMLAsyncRequest(url, body) { _ ->
+            Debug.Printf("WebRTCVoice: ICE candidates sent")
+        }
     }
 
     private val peerConnectionObserver = object : PeerConnection.Observer {

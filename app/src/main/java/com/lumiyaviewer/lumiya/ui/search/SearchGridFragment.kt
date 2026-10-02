@@ -26,10 +26,10 @@ open class SearchGridFragment : FragmentWithTitle(),
     LoadableMonitor.OnLoadableDataChangedListener,
     SearchGridAdapter.OnSearchResultClickListener {
 
-    private SearchGridAdapter adapter
-    private SearchFragmentBinding binding
-    private SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>> searchResults = SubscriptionData<>(UIThreadExecutor.getInstance())
-    private LoadableMonitor loadableMonitor = LoadableMonitor(this.searchResults).withDataChangedListener(this)
+    private var adapter: SearchGridAdapter? = null
+    private var binding: SearchFragmentBinding? = null
+    private val searchResults = SubscriptionData<SearchGridQuery, LazyList<SearchGridResult>>(UIThreadExecutor.getInstance())
+    private val loadableMonitor = LoadableMonitor(this.searchResults).withDataChangedListener(this)
 
     private fun beginSearch() {
         val userManager = ActivityUtils.getUserManager(arguments) ?: return
@@ -78,7 +78,7 @@ open class SearchGridFragment : FragmentWithTitle(),
     override fun onLoadableDataChanged() {
         val data = searchResults.getData() ?: return
         adapter?.setData(data)
-        loadableMonitor.setEmptyMessage(data.isEmpty(), getString(R.string.nothing_found))
+        loadableMonitor.setEmptyMessage(data.size == 0, getString(R.string.nothing_found))
     }
 
     open fun onSearchButtonClicked() = beginSearch()

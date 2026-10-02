@@ -5,27 +5,26 @@ import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDXMLException
 import java.io.IOException
 
-open class LLSDXMLAsyncRequest {
-
-    interface LLSDXMLResultListener {
-        void onLLSDXMLResult(LLSDNode lLSDNode)
+open class LLSDXMLAsyncRequest(
+    url: String,
+    requestNode: LLSDNode,
+    listener: LLSDXMLResultListener
+) {
+    fun interface LLSDXMLResultListener {
+        fun onLLSDXMLResult(result: LLSDNode?)
     }
 
-    constructor(str: final String, lLSDNode: LLSDNode, lLSDXMLResultListener: LLSDXMLResultListener) {
-        Thread(Runnable() {
-            fun run() {
-                var lLSDNode2: LLSDNode? = null
-                try {
-                    lLSDNode2 = LLSDXMLRequest().PerformRequest(str, lLSDNode)
-                } catch (e: LLSDXMLException) {
-                    Debug.Warning(e)
-                    lLSDNode2 = null
-                } catch (e2: IOException) {
-                    Debug.Warning(e2)
-                    lLSDNode2 = null
-                }
-                lLSDXMLResultListener.onLLSDXMLResult(lLSDNode2)
+    init {
+        Thread {
+            var result: LLSDNode? = null
+            try {
+                result = LLSDXMLRequest().PerformRequest(url, requestNode)
+            } catch (e: LLSDXMLException) {
+                Debug.Warning(e)
+            } catch (e: IOException) {
+                Debug.Warning(e)
             }
-        }).start()
+            listener.onLLSDXMLResult(result)
+        }.start()
     }
 }

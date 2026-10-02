@@ -28,5 +28,5 @@ class SearchGridActivity : MasterDetailsActivity() {
             cls == ParcelInfoFragment::class.java
 
     override fun onCreateMasterFragment(intent: Intent, bundle: Bundle?): Fragment =
-        SearchGridFragment.newInstance(ActivityUtils.getActiveAgentID(intent))
+        SearchGridFragment.newInstance(ActivityUtils.getActiveAgentID(intent) ?: error("Agent ID required"))
 }

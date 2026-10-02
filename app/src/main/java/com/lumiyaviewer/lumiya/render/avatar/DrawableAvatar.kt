@@ -18,6 +18,7 @@ import com.lumiyaviewer.lumiya.render.spatial.DrawEntryList
 import com.lumiyaviewer.lumiya.render.spatial.DrawListEntry
 import com.lumiyaviewer.lumiya.render.spatial.DrawListObjectEntry
 import com.lumiyaviewer.lumiya.render.spatial.DrawListPrimEntry
+import com.lumiyaviewer.lumiya.render.spatial.FrustrumPlanes
 import com.lumiyaviewer.lumiya.res.executors.PrimComputeExecutor
 import com.lumiyaviewer.lumiya.slproto.avatar.MeshIndex
 import com.lumiyaviewer.lumiya.slproto.avatar.SLAttachmentPoint
@@ -48,6 +49,12 @@ class DrawableAvatar(
 ) : DrawableAvatarStub(drawableStore, uuid, objectAvatarInfo),
     IntersectPickable,
     DrawEntryList.EntryRemovalListener {
+
+    @Volatile
+    var isFocalAvatar: Boolean = false
+
+    private var lastAnimationUpdateTimeMs: Long = 0L
+    private var wasOffscreen: Boolean = true
 
     private val animationLock = Any()
 
@@ -425,6 +432,82 @@ class DrawableAvatar(
         }
         renderContext.glObjWorldPopMatrix()
         return result
+    }
+
+    fun getBoundingBox(renderContext: RenderContext, outBox: FloatArray) {
+        val worldMatrix = getWorldMatrix(renderContext)
+        if (worldMatrix == null) {
+            outBox[0] = 0f; outBox[1] = 0f; outBox[2] = 0f
+            outBox[3] = 0f; outBox[4] = 0f; outBox[5] = 0f
+            return
+        }
+        val wx = worldMatrix[12]
+        val wy = worldMatrix[13]
+        val wz = worldMatrix[14]
+
+        val halfWidth = 1.0f
+        val height = skeleton?.getBodySize() ?: 2.0f
+        val halfHeight = height / 2.0f
+
+        outBox[0] = wx - halfWidth
+        outBox[1] = wy - halfWidth
+        outBox[2] = wz - halfHeight
+        outBox[3] = wx + halfWidth
+        outBox[4] = wy + halfWidth
+        outBox[5] = wz + halfHeight
+    }
+
+    fun RunAnimationsThrottled(
+        renderContext: RenderContext,
+        frustrumPlanes: FrustrumPlanes?,
+        cameraX: Float,
+        cameraY: Float,
+        cameraZ: Float,
+        isFocal: Boolean
+    ) {
+        val avatarBox = FloatArray(6)
+        getBoundingBox(renderContext, avatarBox)
+
+        val isOffscreen = if (frustrumPlanes != null) {
+            frustrumPlanes.testBoundingBox(avatarBox, null) == FrustrumPlanes.OUTSIDE
+        } else {
+            false
+        }
+
+        if (isOffscreen) {
+            wasOffscreen = true
+            return
+        }
+
+        val skel = skeleton
+        if (wasOffscreen) {
+            wasOffscreen = false
+            skel?.setForceAnimate()
+        }
+
+        val worldMatrix = getWorldMatrix(renderContext)
+        val wx = worldMatrix?.get(12) ?: 0f
+        val wy = worldMatrix?.get(13) ?: 0f
+        val wz = worldMatrix?.get(14) ?: 0f
+
+        val dx = wx - cameraX
+        val dy = wy - cameraY
+        val dz = wz - cameraZ
+        val distSq = dx * dx + dy * dy + dz * dz
+
+        val effectiveFocal = isFocal || isFocalAvatar || avatarObject.isMyAvatar
+        val minIntervalMs = if (effectiveFocal || distSq <= 400.0f) 16L else 66L
+
+        val now = System.currentTimeMillis()
+        val force = skel?.needForceAnimate() == true
+        val elapsed = now - lastAnimationUpdateTimeMs
+
+        if (!force && elapsed < minIntervalMs) {
+            return
+        }
+
+        lastAnimationUpdateTimeMs = now
+        RunAnimations()
     }
 
     fun RunAnimations() {

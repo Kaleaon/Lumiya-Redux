@@ -660,25 +660,27 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
     }
 
     open fun handleChatEvent(chatMessageEvent: ActiveChattersManager.ChatMessageEvent) {
-        if (!this.chatOver3D || detailsVisible() || this.userManager == null || binding.chatsOverlayLayout == null || this.fadingTextViewLog == null) {
-            return
-        }
-        this.fadingTextViewLog.handleChatEvent(chatMessageEvent)
+        val mgr = this.userManager ?: return
+        val log = this.fadingTextViewLog ?: return
+        if (!this.chatOver3D || detailsVisible()) return
+        log.handleChatEvent(chatMessageEvent)
     }
 
-    open fun handlePickedObject(objectIntersectInfo: ObjectIntersectInfo) {
+    open fun handlePickedObject(objectIntersectInfo: ObjectIntersectInfo?) {
         this.pickedIntersectInfo = objectIntersectInfo
-        this.pickedObject = objectIntersectInfo != null ? objectIntersectInfo.objInfo : null
-        if (this.pickedObject != null) {
-            if (this.pickedObject.isAvatar()) {
-                ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(this.userManager.getUserID(), this.pickedObject.getId())
-                if (!Objects.equal(this.pickedAvatarNameRetriever != null ? this.pickedAvatarNameRetriever.chatterID : null, userChatterID)) {
-                    if (this.pickedAvatarNameRetriever != null) {
-                        this.pickedAvatarNameRetriever.dispose()
-                        this.pickedAvatarNameRetriever = null
-                    }
-                    this.pickedAvatarNameRetriever = ChatterNameRetriever(userChatterID, ChatterNameRetriever.OnChatterNameUpdated() {
-                            WorldViewActivity.this.onPickedAvatarNameUpdated(chatterNameRetriever)
-                        }
-
-                        override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
+        val obj = objectIntersectInfo?.objInfo
+        this.pickedObject = obj
+        val mgr = this.userManager
+        if (obj != null && mgr != null && obj.isAvatar) {
+            val userChatterID = ChatterID.getUserChatterID(mgr.getUserID(), obj.getId())
+            if (!Objects.equal(this.pickedAvatarNameRetriever?.chatterID, userChatterID)) {
+                this.pickedAvatarNameRetriever?.dispose()
+                this.pickedAvatarNameRetriever = ChatterNameRetriever(
+                    userChatterID,
+                    { retriever -> onPickedAvatarNameUpdated(retriever) },
+                    UIThreadExecutor.getInstance()
+                )
+            }
+        }
+    }
+}

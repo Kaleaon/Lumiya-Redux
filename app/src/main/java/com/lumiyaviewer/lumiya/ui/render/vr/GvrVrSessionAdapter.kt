@@ -11,63 +11,69 @@ import com.google.vr.sdk.controller.ControllerManager
 import com.lumiyaviewer.lumiya.Debug
 import javax.microedition.khronos.egl.EGLConfig
 
-internal class GvrVrSessionAdapter : VrSession {
-    private String runtimeId
-    private GvrView gvrView
-    private ControllerManager controllerManager
-    private Controller controller
-    private VrSession.InputListener inputListener
-    private volatile int controllerConnectionState
+internal class GvrVrSessionAdapter(
+    activity: Activity,
+    private val runtimeId: String,
+    listener: VrSession.Listener,
+    asyncReprojectionEnabled: Boolean
+) : VrSession {
 
-    internal constructor(activity: Activity, runtimeId: String, listener: VrSession.Listener, asyncReprojectionEnabled: Boolean) {
-        this.runtimeId = runtimeId
-        this.gvrView = GvrView(activity)
-        this.gvrView.setDistortionCorrectionEnabled(true)
-        this.gvrView.setAsyncReprojectionEnabled(asyncReprojectionEnabled)
-        this.controllerManager = ControllerManager(activity, ControllerManager.EventListener() {
-            override fun onApiStatusChanged(i: Int) {
-                listener.onApiStatusChanged(i)
+    private val gvrView: GvrView = GvrView(activity)
+    private val controllerManager: ControllerManager
+    private val controller: Controller?
+    private var inputListener: VrSession.InputListener? = null
+    @Volatile
+    private var controllerConnectionState: Int = 0
+
+    init {
+        gvrView.setDistortionCorrectionEnabled(true)
+        gvrView.setAsyncReprojectionEnabled(asyncReprojectionEnabled)
+
+        controllerManager = ControllerManager(activity, object : ControllerManager.EventListener {
+            override fun onApiStatusChanged(status: Int) {
+                listener.onApiStatusChanged(status)
             }
 
             override fun onRecentered() {
                 listener.onRecentered()
             }
         })
-        this.controller = this.controllerManager.getController()
-        if (this.controller != null) {
-            this.controller.setEventListener(Controller.EventListener() {
-                override fun onConnectionStateChanged(i: Int) {
-                    super.onConnectionStateChanged(i)
-                    GvrVrSessionAdapter.this.controllerConnectionState = i
-                    if (GvrVrSessionAdapter.this.inputListener != null) {
-                        GvrVrSessionAdapter.this.inputListener.onConnectionStateChanged(i)
-                    }
+
+        controller = controllerManager.controller
+        if (controller != null) {
+            controller.setEventListener(object : Controller.EventListener() {
+                override fun onConnectionStateChanged(state: Int) {
+                    super.onConnectionStateChanged(state)
+                    controllerConnectionState = state
+                    inputListener?.onConnectionStateChanged(state)
                 }
 
                 override fun onUpdate() {
                     super.onUpdate()
-                    if (GvrVrSessionAdapter.this.controller == null) {
-                        return
-                    }
-                    GvrVrSessionAdapter.this.controller.update()
-                    if (GvrVrSessionAdapter.this.inputListener != null) {
-                        GvrVrSessionAdapter.this.inputListener.onInputUpdated(VrInputState(GvrVrSessionAdapter.this.controller.appButtonState, GvrVrSessionAdapter.this.controller.isTouching, GvrVrSessionAdapter.this.controller.touch.x, GvrVrSessionAdapter.this.controller.touch.y, GvrVrSessionAdapter.this.controllerConnectionState))
-                    }
+                    val ctrl = controller ?: return
+                    ctrl.update()
+                    inputListener?.onInputUpdated(
+                        VrInputState(
+                            ctrl.appButtonState,
+                            ctrl.isTouching,
+                            ctrl.touch.x,
+                            ctrl.touch.y,
+                            controllerConnectionState
+                        )
+                    )
                 }
             })
-            return
+        } else {
+            Debug.Printf("VR runtime: %s controller manager returned null controller", runtimeId)
         }
-        Debug.Printf("VR runtime: %s controller manager returned null controller", runtimeId)
     }
 
-    override fun getView(): View {
-        return this.gvrView
-    }
+    override fun getView(): View = gvrView
 
-    override fun setRenderer(renderer: Renderer) {
-        this.gvrView.setRenderer(GvrView.StereoRenderer() {
+    override fun setRenderer(renderer: VrSession.Renderer) {
+        gvrView.setRenderer(object : GvrView.StereoRenderer {
             override fun onNewFrame(headTransform: HeadTransform) {
-                renderer.onNewFrame(VrPose() {
+                renderer.onNewFrame(object : VrPose {
                     override fun getQuaternion(out: FloatArray, offset: Int) {
                         headTransform.getQuaternion(out, offset)
                     }
@@ -91,13 +97,13 @@ internal class GvrVrSessionAdapter : VrSession {
             }
 
             override fun onDrawEye(eye: Eye) {
-                renderer.onDrawEye(VrEye() {
+                renderer.onDrawEye(object : VrEye {
                     override fun getType(): Int {
-                        return eye.getType() == 1 ? TYPE_LEFT : TYPE_RIGHT
+                        return if (eye.type == 1) VrEye.TYPE_LEFT else VrEye.TYPE_RIGHT
                     }
 
                     override fun getViewport(out: IntArray, offset: Int) {
-                        eye.getViewport().getAsArray(out, offset)
+                        eye.viewport.getAsArray(out, offset)
                     }
 
                     override fun getPerspective(near: Float, far: Float): FloatArray {
@@ -105,7 +111,7 @@ internal class GvrVrSessionAdapter : VrSession {
                     }
 
                     override fun isProjectionChanged(): Boolean {
-                        return eye.getProjectionChanged()
+                        return eye.projectionChanged
                     }
                 })
             }
@@ -129,47 +135,47 @@ internal class GvrVrSessionAdapter : VrSession {
     }
 
     override fun setOnTriggerListener(runnable: Runnable) {
-        this.gvrView.setOnCardboardTriggerListener(runnable)
+        gvrView.setOnCardboardTriggerListener(runnable)
     }
 
     override fun setOnTouchListener(listener: View.OnTouchListener) {
-        this.gvrView.setOnTouchListener(listener)
+        gvrView.setOnTouchListener(listener)
     }
 
-    override fun setInputListener(listener: InputListener) {
-        this.inputListener = listener
+    override fun setInputListener(listener: VrSession.InputListener) {
+        inputListener = listener
     }
 
     override fun onStart() {
-        this.controllerManager.start()
+        controllerManager.start()
     }
 
     override fun onStop() {
-        this.controllerManager.stop()
+        controllerManager.stop()
     }
 
     override fun onResume() {
-        this.gvrView.onResume()
+        gvrView.onResume()
     }
 
     override fun onPause() {
-        this.gvrView.onPause()
+        gvrView.onPause()
     }
 
     override fun onDestroy() {
-        this.gvrView.setOnCardboardTriggerListener(null)
-        this.gvrView.shutdown()
+        gvrView.setOnCardboardTriggerListener(null)
+        gvrView.shutdown()
     }
 
     override fun recenterHeadTracker() {
-        this.gvrView.recenterHeadTracker()
+        gvrView.recenterHeadTracker()
     }
 
     override fun getInterpupillaryDistance(): Float {
-        return this.gvrView.getInterpupillaryDistance()
+        return gvrView.interpupillaryDistance
     }
 
     override fun hasMagnet(): Boolean {
-        return this.gvrView.getGvrViewerParams().getHasMagnet()
+        return gvrView.gvrViewerParams.hasMagnet
     }
 }

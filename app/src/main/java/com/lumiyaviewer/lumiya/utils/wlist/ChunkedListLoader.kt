@@ -139,9 +139,9 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
         var addedAtEnd = false
         while (true) {
             val removed = addedElements.poll() ?: break
-            val lastId = if (items.size > 0) items[items.size - 1].id else -1L
-            Debug.Printf("ChatView: added element: id %d, lastId %d, hasBelow %b", removed.id, lastId, hasBelow)
-            if (!hasBelow && removed.id > lastId) {
+            val lastId = if (items.size > 0) items[items.size - 1].getId() else -1L
+            Debug.Printf("ChatView: added element: id %d, lastId %d, hasBelow %b", removed.getId(), lastId, hasBelow)
+            if (!hasBelow && removed.getId() > lastId) {
                 items.addElement(removed, windowSize, this@ChunkedListLoader)
                 addedBelow++
                 addedAtEnd = true
@@ -173,7 +173,7 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
     }
 
     private val chatMessageComparator = Comparator<E> { a, b ->
-        java.lang.Long.signum(a.id - b.id)
+        java.lang.Long.signum(a.getId() - b.getId())
     }
 
     private var items: ChunkedList<E> = ChunkedList()
@@ -205,7 +205,7 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
     }
 
     fun addElement(e: E) {
-        Debug.Printf("ChatView: addElement: adding element with id %d", e.id)
+        Debug.Printf("ChatView: addElement: adding element with id %d", e.getId())
         addedElements.add(e)
         postUpdate()
     }
@@ -240,7 +240,7 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
             if (first <= 0 && hasAbove) {
                 synchronized(lock) {
                     if (!loadAboveWanted && loadAboveResult == null) {
-                        loadAboveTopmostId = items[0].id
+                        loadAboveTopmostId = items[0].getId()
                         loadAboveWanted = true
                         Debug.Printf("ChatView: requesting load above id %d", loadAboveTopmostId)
                         shouldLoad = true
@@ -260,7 +260,7 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
             if (last >= items.size - 1 && hasBelow) {
                 synchronized(lock) {
                     if (!loadBelowWanted && loadBelowResult == null) {
-                        loadBelowLastId = items[items.size - 1].id
+                        loadBelowLastId = items[items.size - 1].getId()
                         loadBelowWanted = true
                         Debug.Printf("ChatView: requesting load below id %d", loadBelowLastId)
                         shouldLoad = true
@@ -315,9 +315,9 @@ open class ChunkedListLoader<E : Identifiable<Long>>(
     override val size: Int get() = items.size
 
     fun updateElement(e: E) {
-        Debug.Printf("ChatView: addElement: updated element with id %d", e.id)
+        Debug.Printf("ChatView: addElement: updated element with id %d", e.getId())
         synchronized(lock) {
-            updatedElements[e.id] = e
+            updatedElements[e.getId()] = e
         }
         postUpdate()
     }
