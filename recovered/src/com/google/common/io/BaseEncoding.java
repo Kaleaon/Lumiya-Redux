@@ -423,7 +423,7 @@ public abstract class BaseEncoding {
                 }
 
                 /* JADX WARN: Code restructure failed: missing block: B:18:0x00a8, code lost:
-                
+
                     throw new com.google.common.io.BaseEncoding.DecodingException("Padding cannot start at index " + r5.readChars);
                  */
                 @Override // java.io.InputStream

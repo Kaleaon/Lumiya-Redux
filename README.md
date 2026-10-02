@@ -41,6 +41,27 @@ tools/verify/verify_against_apk.sh      /path/to/Lumiya_3.4.2.apk
 ./gradlew :app:compileDebugJavaWithJavac
 ```
 
+## Developer Onboarding & Workstation Setup
+
+To set up your local workstation and automatically install `pre-commit` hooks for code formatting and linter checks:
+
+```bash
+./scripts/setup_dev_environment.sh
+```
+
+Alternatively, install `pre-commit` manually and register the hooks into your local repository:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+To run formatting (`black`) and linter checks (`ruff`, `check-yaml`, etc.) manually across all files:
+
+```bash
+pre-commit run --all-files
+```
+
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) to navigate the code and
 [`BUILD_STATUS.md`](BUILD_STATUS.md) for the last-mile cleanup list.
 

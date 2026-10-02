@@ -36,41 +36,41 @@ public class AnimatorInflater {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:35:0x0012, code lost:
-    
+
         if (r12 != null) goto L35;
      */
     /* JADX WARN: Code restructure failed: missing block: B:36:0x0014, code lost:
-    
+
         return r1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:37:0x009f, code lost:
-    
+
         if (r2 == null) goto L8;
      */
     /* JADX WARN: Code restructure failed: missing block: B:38:0x00a1, code lost:
-    
+
         r3 = new com.nineoldandroids.animation.Animator[r2.size()];
         r4 = r2.iterator();
      */
     /* JADX WARN: Code restructure failed: missing block: B:40:0x00af, code lost:
-    
+
         if (r4.hasNext() != false) goto L41;
      */
     /* JADX WARN: Code restructure failed: missing block: B:41:0x00b8, code lost:
-    
+
         r3[r5] = (com.nineoldandroids.animation.Animator) r4.next();
         r5 = r5 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:43:0x00b1, code lost:
-    
+
         if (r13 == 0) goto L42;
      */
     /* JADX WARN: Code restructure failed: missing block: B:44:0x00b3, code lost:
-    
+
         r12.playSequentially(r3);
      */
     /* JADX WARN: Code restructure failed: missing block: B:45:0x00c4, code lost:
-    
+
         r12.playTogether(r3);
      */
     /*

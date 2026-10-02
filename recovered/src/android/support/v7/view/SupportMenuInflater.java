@@ -285,149 +285,149 @@ public class SupportMenuInflater extends MenuInflater {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:10:0x004b, code lost:
-    
+
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:12:0x004c, code lost:
-    
+
         r9 = r3;
         r3 = r11.next();
         r5 = r9;
      */
     /* JADX WARN: Code restructure failed: missing block: B:13:0x0054, code lost:
-    
+
         if (r5 != false) goto L26;
      */
     /* JADX WARN: Code restructure failed: missing block: B:14:0x0056, code lost:
-    
+
         r3 = r11.getName();
      */
     /* JADX WARN: Code restructure failed: missing block: B:15:0x0061, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_GROUP) != false) goto L27;
      */
     /* JADX WARN: Code restructure failed: missing block: B:17:0x006a, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_ITEM) != false) goto L28;
      */
     /* JADX WARN: Code restructure failed: missing block: B:19:0x0073, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_MENU) != false) goto L29;
      */
     /* JADX WARN: Code restructure failed: missing block: B:20:0x0075, code lost:
-    
+
         r2 = r3;
         r3 = true;
      */
     /* JADX WARN: Code restructure failed: missing block: B:22:0x0084, code lost:
-    
+
         parseMenu(r11, r12, r7.addSubMenuItem());
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:24:0x007f, code lost:
-    
+
         r7.readItem(r12);
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:26:0x007a, code lost:
-    
+
         r7.readGroup(r12);
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:28:0x0078, code lost:
-    
+
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:30:0x008d, code lost:
-    
+
         r3 = r11.getName();
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x0091, code lost:
-    
+
         if (r5 != false) goto L39;
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x009a, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_GROUP) != false) goto L42;
      */
     /* JADX WARN: Code restructure failed: missing block: B:35:0x00a3, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_ITEM) != false) goto L43;
      */
     /* JADX WARN: Code restructure failed: missing block: B:37:0x00ac, code lost:
-    
+
         if (r3.equals(android.support.v7.view.SupportMenuInflater.XML_MENU) != false) goto L52;
      */
     /* JADX WARN: Code restructure failed: missing block: B:38:0x00ae, code lost:
-    
+
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:40:0x00de, code lost:
-    
+
         r0 = true;
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:43:0x00c2, code lost:
-    
+
         if (r7.hasAddedItem() == false) goto L46;
      */
     /* JADX WARN: Code restructure failed: missing block: B:44:0x00c4, code lost:
-    
+
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:47:0x00c8, code lost:
-    
+
         if (r7.itemActionProvider != null) goto L49;
      */
     /* JADX WARN: Code restructure failed: missing block: B:48:0x00ca, code lost:
-    
+
         r7.addItem();
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:51:0x00d6, code lost:
-    
+
         if (r7.itemActionProvider.hasSubMenu() == false) goto L48;
      */
     /* JADX WARN: Code restructure failed: missing block: B:52:0x00d8, code lost:
-    
+
         r7.addSubMenuItem();
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:54:0x00b9, code lost:
-    
+
         r7.resetGroup();
         r3 = r5;
      */
     /* JADX WARN: Code restructure failed: missing block: B:57:0x00b4, code lost:
-    
+
         if (r3.equals(r2) == false) goto L32;
      */
     /* JADX WARN: Code restructure failed: missing block: B:58:0x00b6, code lost:
-    
+
         r2 = null;
         r3 = false;
      */
     /* JADX WARN: Code restructure failed: missing block: B:62:0x00ea, code lost:
-    
+
         throw new java.lang.RuntimeException("Unexpected end of document");
      */
     /* JADX WARN: Code restructure failed: missing block: B:65:0x001b, code lost:
-    
+
         return;
      */
     /* JADX WARN: Code restructure failed: missing block: B:7:0x0015, code lost:
-    
+
         r2 = null;
         r5 = false;
         r3 = r0;
         r0 = false;
      */
     /* JADX WARN: Code restructure failed: missing block: B:8:0x0019, code lost:
-    
+
         if (r0 == false) goto L15;
      */
     /* JADX WARN: Code restructure failed: missing block: B:9:0x0048, code lost:
-    
+
         switch(r3) {
             case 1: goto L58;
             case 2: goto L18;

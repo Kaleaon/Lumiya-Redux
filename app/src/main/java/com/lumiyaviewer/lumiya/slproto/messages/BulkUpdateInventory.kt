@@ -164,4 +164,3 @@ open class BulkUpdateInventory : SLMessage() {
         }
     }
 }
-

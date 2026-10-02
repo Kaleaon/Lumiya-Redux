@@ -2,4 +2,3 @@
 package android.support.v4.internal;
 
 import android.support.annotation.RestrictTo;
-

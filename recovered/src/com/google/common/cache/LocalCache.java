@@ -1634,7 +1634,7 @@ class LocalCache<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V> 
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:24:0x0090, code lost:
-        
+
             if ((r4 - r2.getWriteTime() >= r10.map.refreshNanos) == false) goto L16;
          */
         @javax.annotation.Nullable
@@ -3443,11 +3443,11 @@ class LocalCache<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V> 
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:29:0x0028, code lost:
-    
+
         if (r8 == r12) goto L30;
      */
     /* JADX WARN: Code restructure failed: missing block: B:32:0x0016, code lost:
-    
+
         return false;
      */
     @Override // java.util.AbstractMap, java.util.Map

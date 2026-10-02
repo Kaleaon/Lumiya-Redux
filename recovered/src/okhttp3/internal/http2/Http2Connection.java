@@ -748,7 +748,7 @@ public final class Http2Connection implements Closeable {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:24:0x004e, code lost:
-    
+
         r3 = java.lang.Math.min((int) java.lang.Math.min(r14, r10.bytesLeftInWriteWindow), r10.writer.maxDataLength());
         r10.bytesLeftInWriteWindow -= r3;
      */

@@ -5204,7 +5204,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:10:0x000b, code lost:
-    
+
         return null;
      */
     @android.support.annotation.Nullable

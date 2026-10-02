@@ -18,9 +18,9 @@ For the APK, there is a major constraint: the base APK declares `requiredSplitTy
 - `SLConnection` owns a Java NIO `Selector` and runs one worker thread (`SLConnection`), multiplexing many circuits with nonblocking I/O and a timer facility. It repeatedly:
   - asks each circuit for wakeup/idle work,
   - processes readable/writable keys,
-  - applies per-circuit idle intervals to select timeout.  
-- `SLCircuit` is the core per-simulator transport instance. It creates a nonblocking `DatagramChannel`, connects it to the simulator socket (`simAddress:simPort` from login), and registers it with the selector.  
-- `SLGridConnection.startCircuit()` wires login output into transport: obtains caps, creates `SLAgentCircuit` (subclass of `SLCircuit`), starts CAPS EventQueue, registers circuit with `SLConnection`, and sends `UseCircuitCode` to bind session/circuit identity.  
+  - applies per-circuit idle intervals to select timeout.
+- `SLCircuit` is the core per-simulator transport instance. It creates a nonblocking `DatagramChannel`, connects it to the simulator socket (`simAddress:simPort` from login), and registers it with the selector.
+- `SLGridConnection.startCircuit()` wires login output into transport: obtains caps, creates `SLAgentCircuit` (subclass of `SLCircuit`), starts CAPS EventQueue, registers circuit with `SLConnection`, and sends `UseCircuitCode` to bind session/circuit identity.
 
 **Implication:** packet flow is not “one blocking socket thread per connection”; it is selector-driven UDP circuits with queued messages and explicit reliability on top of UDP.
 
@@ -180,4 +180,3 @@ To complete protocol-level decompilation (packet framing, ACK semantics, UDP cod
 
 - **Repo (`recovered/src`)**: explicit Java LLUDP stack with custom packet framing, sequence ACK/retry, zero-coding, and LLSD caps polling over HTTP.
 - **2026 APK (base only)**: Java layer is mostly shell/integration; strings suggest transport abstraction with gRPC + WebSocket + optional UDP extensions + event queue style message handling, but definitive packet codec logic sits in missing native split.
-

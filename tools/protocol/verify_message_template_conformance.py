@@ -58,7 +58,9 @@ def parse_message_template(path: Path) -> dict[str, MessageSpec]:
                 break
             if cur == "{":
                 i += 1
-                while i < len(lines) and (not lines[i].strip() or lines[i].strip().startswith("//")):
+                while i < len(lines) and (
+                    not lines[i].strip() or lines[i].strip().startswith("//")
+                ):
                     i += 1
                 block_header = lines[i].strip().split()
                 block_name = block_header[0]
@@ -73,7 +75,9 @@ def parse_message_template(path: Path) -> dict[str, MessageSpec]:
                         blocks.append(BlockSpec(block_name, fields))
                         break
                     if inner.startswith("{"):
-                        cleaned = inner.split("//", 1)[0].replace("{", " ").replace("}", " ").strip()
+                        cleaned = (
+                            inner.split("//", 1)[0].replace("{", " ").replace("}", " ").strip()
+                        )
                         parts = cleaned.split()
                         if parts:
                             fields.append(parts[0])
@@ -97,7 +101,11 @@ def parse_java_message(path: Path) -> MessageSpec:
 
     blocks: list[BlockSpec] = []
     for name in block_names:
-        m = re.search(rf"public\s+static\s+class\s+{re.escape(name)}\s*\{{(.*?)\n\s*\}}", text, re.S)
+        m = re.search(
+            r"public\s+static\s+class\s+" + re.escape(name) + r"\s*\{(.*?)\n\s*\}",
+            text,
+            re.DOTALL,
+        )
         fields: list[str] = []
         if m:
             for inner in m.group(1).splitlines():
@@ -117,15 +125,13 @@ def parse_kotlin_message(path: Path) -> MessageSpec:
         if single and single.group(1) == single.group(2):
             block_names.append(single.group(1))
             continue
-        repeated = re.search(
-            r"@JvmField\s+val\s+(\w+)_Fields\s*=\s*ArrayList<\s*(\w+)\s*>", line
-        )
+        repeated = re.search(r"@JvmField\s+val\s+(\w+)_Fields\s*=\s*ArrayList<\s*(\w+)\s*>", line)
         if repeated and repeated.group(1) == repeated.group(2):
             block_names.append(repeated.group(1))
 
     blocks: list[BlockSpec] = []
     for name in block_names:
-        declaration = re.search(rf"(?:open\s+)?class\s+{re.escape(name)}\s*\{{", text)
+        declaration = re.search(r"(?:open\s+)?class\s+" + re.escape(name) + r"\s*\{", text)
         fields: list[str] = []
         if declaration:
             start = declaration.end()
@@ -166,8 +172,16 @@ def collect_mismatches(template: dict[str, MessageSpec], messages_dir: Path) -> 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--template", default="recovered/reference/message_template.msg", type=Path)
-    ap.add_argument("--messages-dir", default="app/src/main/java/com/lumiyaviewer/lumiya/slproto/messages", type=Path)
-    ap.add_argument("--baseline", default="tools/protocol/message_template_mismatches.txt", type=Path)
+    ap.add_argument(
+        "--messages-dir",
+        default="app/src/main/java/com/lumiyaviewer/lumiya/slproto/messages",
+        type=Path,
+    )
+    ap.add_argument(
+        "--baseline",
+        default="tools/protocol/message_template_mismatches.txt",
+        type=Path,
+    )
     ap.add_argument("--write-baseline", action="store_true")
     args = ap.parse_args()
 
@@ -180,7 +194,9 @@ def main() -> int:
     if not args.baseline.exists():
         print(f"Missing baseline file: {args.baseline}", file=sys.stderr)
         return 1
-    baseline = [ln.strip() for ln in args.baseline.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    baseline = [
+        ln.strip() for ln in args.baseline.read_text(encoding="utf-8").splitlines() if ln.strip()
+    ]
     bset = set(baseline)
     mset = set(mismatches)
 

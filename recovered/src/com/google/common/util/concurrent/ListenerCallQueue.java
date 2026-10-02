@@ -69,15 +69,15 @@ final class ListenerCallQueue<L> implements Runnable {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:13:0x0019, code lost:
-    
+
         r3 = move-exception;
      */
     /* JADX WARN: Code restructure failed: missing block: B:14:0x001a, code lost:
-    
+
         com.google.common.util.concurrent.ListenerCallQueue.logger.log(java.util.logging.Level.SEVERE, "Exception while executing callback: " + r8.listener + "." + ((com.google.common.util.concurrent.ListenerCallQueue.Callback) r0).methodCall, (java.lang.Throwable) r3);
      */
     /* JADX WARN: Code restructure failed: missing block: B:9:0x0013, code lost:
-    
+
         r0.call(r8.listener);
      */
     /* JADX WARN: Unreachable blocks removed: 2, instructions: 2 */

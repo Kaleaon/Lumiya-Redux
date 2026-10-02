@@ -138,4 +138,3 @@ open class UpdateAttachment : SLMessage() {
         this.InventoryData_Field.CRC = unpackInt(byteBuffer)
     }
 }
-

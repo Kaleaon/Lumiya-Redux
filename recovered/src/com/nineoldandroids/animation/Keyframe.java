@@ -145,7 +145,7 @@ public abstract class Keyframe implements Cloneable {
         return new ObjectKeyframe(f, obj);
     }
 
-    @Override // 
+    @Override //
     /* renamed from: clone */
     public abstract Keyframe mo920clone();
 

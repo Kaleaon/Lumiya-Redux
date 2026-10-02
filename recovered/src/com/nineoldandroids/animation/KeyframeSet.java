@@ -98,7 +98,7 @@ class KeyframeSet {
         return new KeyframeSet(objectKeyframeArr);
     }
 
-    @Override // 
+    @Override //
     /* renamed from: clone */
     public KeyframeSet mo919clone() {
         ArrayList<Keyframe> arrayList = this.mKeyframes;

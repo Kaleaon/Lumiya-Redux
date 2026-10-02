@@ -30,7 +30,7 @@ and incomplete CAP call-site coverage. Phase 2 is the bulk catch-up pass.
   3. **Deprecated**: explicitly listed in a
      `DeprecatedMessages.kt` table with the upstream removal commit
      ID if available.
-  
+
   No silent absences.
 - **Automation**: Port Lumiya's
   `tools/protocol/verify_message_template_conformance.py` to a

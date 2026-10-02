@@ -134,7 +134,7 @@ world-third — with Compose-native navigation and gesture affordances.
 
 - **Input**: `AvatarPickerSearch`, `SearchStatRequest`,
   `FindExperienceByName`, `ParcelDirectory` CAPs.
-- **Output**: Tabbed search (People / Places / Events / Groups / 
+- **Output**: Tabbed search (People / Places / Events / Groups /
   Classifieds) hitting the respective caps.
 - **Acceptance**: Search for a known-public place name returns the
   correct region.

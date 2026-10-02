@@ -382,7 +382,7 @@ public class PropertyValuesHolder implements Cloneable {
         this.mAnimatedValue = this.mKeyframeSet.getValue(f);
     }
 
-    @Override // 
+    @Override //
     /* renamed from: clone */
     public PropertyValuesHolder mo921clone() {
         try {

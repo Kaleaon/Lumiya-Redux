@@ -688,7 +688,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:6:0x000f, code lost:
-    
+
         if ((r7 > 0.0f) == false) goto L8;
      */
     /*

@@ -10,12 +10,13 @@ baksmali tree of the built APK.
 Usage: linkcheck.py NEW_SMALI [--prefix com/lumiyaviewer/ ...]
 Exit status 1 if any reference is unresolved.
 """
+
 import argparse
 import os
 import re
 import sys
 
-REF_RE = re.compile(r'(L[^;\s]+;)->([^\s(:]+)(\([^)]*\)\S+|:\S+)')
+REF_RE = re.compile(r"(L[^;\s]+;)->([^\s(:]+)(\([^)]*\)\S+|:\S+)")
 
 
 def load(root):
@@ -23,23 +24,23 @@ def load(root):
     refs = []
     for dp, _, fns in os.walk(root):
         for fn in fns:
-            if not fn.endswith('.smali'):
+            if not fn.endswith(".smali"):
                 continue
             cls, sup, ifaces, members = None, None, [], set()
-            for line in open(os.path.join(dp, fn), encoding='utf-8', errors='replace'):
+            for line in open(os.path.join(dp, fn), encoding="utf-8", errors="replace"):
                 s = line.strip()
-                if s.startswith('.class'):
+                if s.startswith(".class"):
                     cls = s.split()[-1]
-                elif s.startswith('.super'):
+                elif s.startswith(".super"):
                     sup = s.split()[-1]
-                elif s.startswith('.implements'):
+                elif s.startswith(".implements"):
                     ifaces.append(s.split()[-1])
-                elif s.startswith('.method'):
+                elif s.startswith(".method"):
                     members.add(s.split()[-1])
-                elif s.startswith('.field'):
-                    decl = s.split(' = ')[0].split()[-1]
+                elif s.startswith(".field"):
+                    decl = s.split(" = ")[0].split()[-1]
                     members.add(decl)
-                elif s.startswith(('invoke-', 'iget', 'iput', 'sget', 'sput')):
+                elif s.startswith(("invoke-", "iget", "iput", "sget", "sput")):
                     m = REF_RE.search(s)
                     if m:
                         refs.append((cls, m.group(1), m.group(2) + m.group(3)))
@@ -68,10 +69,13 @@ def resolves(classes, owner, member, seen=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('smali')
-    ap.add_argument('--prefix', action='append', default=None)
+    ap.add_argument("smali")
+    ap.add_argument("--prefix", action="append", default=None)
     a = ap.parse_args()
-    prefixes = tuple('L' + p for p in (a.prefix or ['com/lumiyaviewer/', 'com/google/vr/', 'com/google/vrtoolkit/']))
+    prefixes = tuple(
+        "L" + p
+        for p in (a.prefix or ["com/lumiyaviewer/", "com/google/vr/", "com/google/vrtoolkit/"])
+    )
     classes, refs = load(a.smali)
     bad = set()
     for src, owner, member in refs:
@@ -81,10 +85,10 @@ def main():
         if resolves(classes, owner, member) is False:
             bad.add((src, owner, member))
     for b in sorted(bad):
-        print('UNRESOLVED %s -> %s->%s' % b)
-    print('linkcheck: %d unresolved references' % len(bad), file=sys.stderr)
+        print("UNRESOLVED %s -> %s->%s" % b)
+    print("linkcheck: %d unresolved references" % len(bad), file=sys.stderr)
     return 1 if bad else 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

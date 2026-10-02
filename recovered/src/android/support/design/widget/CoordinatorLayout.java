@@ -1186,7 +1186,7 @@ public class CoordinatorLayout extends ViewGroup implements NestedScrollingParen
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:25:0x004d, code lost:
-    
+
         if (r3.bottom < r4.top) goto L16;
      */
     /*

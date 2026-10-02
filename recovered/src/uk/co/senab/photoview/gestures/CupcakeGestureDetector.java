@@ -42,7 +42,7 @@ public class CupcakeGestureDetector implements GestureDetector {
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:3:0x000a, code lost:
-    
+
         return true;
      */
     @Override // uk.co.senab.photoview.gestures.GestureDetector

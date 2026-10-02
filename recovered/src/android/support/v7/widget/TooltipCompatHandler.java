@@ -89,7 +89,7 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:7:0x0021, code lost:
-    
+
         return false;
      */
     @Override // android.view.View.OnHoverListener

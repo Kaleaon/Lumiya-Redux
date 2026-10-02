@@ -205,4 +205,3 @@ open class ParcelProperties : SLMessage() {
         this.AgeVerificationBlock_Field.RegionDenyAgeUnverified = unpackBoolean(byteBuffer)
     }
 }
-

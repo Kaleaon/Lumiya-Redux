@@ -27,7 +27,7 @@ public abstract class Animator implements Cloneable {
     public void cancel() {
     }
 
-    @Override // 
+    @Override //
     /* renamed from: clone, reason: merged with bridge method [inline-methods] */
     public Animator mo917clone() {
         try {

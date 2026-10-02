@@ -104,7 +104,7 @@ Linkpoint/
 
 13 test files. Strong in: `NetworkExceptionUtilsTest` (46 tests),
 `ChatManagerTest`, `ConnectionDiagnosticTest`, `NetworkQualityTest`.
-Minimal in: `LLSDParserTest` (2 tests), `LLSDMapTest` (3), 
+Minimal in: `LLSDParserTest` (2 tests), `LLSDMapTest` (3),
 `RegionHandshakeParserTest` (1), `TerrainPatchTest` (1).
 Integration: `ConnectionIntegrationTest` can do real login with test
 credentials.

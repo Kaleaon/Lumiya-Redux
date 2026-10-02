@@ -13,6 +13,7 @@ label_messages.py for the "Viewer reference" line of each message class.
 The checked-in JSON was generated from secondlife/viewer
 c179f76c01a93fe6a46318be0e1c23a9d3089ddb.
 """
+
 import glob
 import json
 import os
@@ -22,22 +23,29 @@ import sys
 
 def main():
     root = sys.argv[1]
-    sources = glob.glob(os.path.join(root, 'indra/**/*.cpp'), recursive=True)
+    sources = glob.glob(os.path.join(root, "indra/**/*.cpp"), recursive=True)
     registrations, definitions = {}, {}
     for path in sources:
-        text = open(path, errors='replace').read()
+        text = open(path, errors="replace").read()
         rel = os.path.relpath(path, root)
-        for m in re.finditer(r'setHandlerFunc(?:Fast)?\(\s*(?:_PREHASH_(\w+)|"(\w+)")\s*,\s*&?([\w:]+)', text):
+        for m in re.finditer(
+            r'setHandlerFunc(?:Fast)?\(\s*(?:_PREHASH_(\w+)|"(\w+)")\s*,\s*&?([\w:]+)',
+            text,
+        ):
             registrations.setdefault(m.group(1) or m.group(2), (m.group(3), rel))
-        for m in re.finditer(r'^\s*(?:static\s+)?void\s+([\w:]+)\s*\(\s*LLMessageSystem\s*\*', text, re.M):
+        for m in re.finditer(
+            r"^\s*(?:static\s+)?void\s+([\w:]+)\s*\(\s*LLMessageSystem\s*\*", text, re.MULTILINE
+        ):
             definitions.setdefault(m.group(1), rel)
     out = {}
     for name, (fn, where) in sorted(registrations.items()):
-        out[name] = {'handler': fn,
-                     'defined_in': definitions.get(fn) or definitions.get(fn.split('::')[-1]),
-                     'registered_in': where}
+        out[name] = {
+            "handler": fn,
+            "defined_in": definitions.get(fn) or definitions.get(fn.split("::")[-1]),
+            "registered_in": where,
+        }
     json.dump(out, sys.stdout, indent=1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

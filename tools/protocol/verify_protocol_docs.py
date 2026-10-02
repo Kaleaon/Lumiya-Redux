@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Ensure protocol modernization docs keep required upstream mapping anchors."""
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 DOC = Path("docs/protocol_migration_conformance.md")
 REQUIRED_SNIPPETS = [

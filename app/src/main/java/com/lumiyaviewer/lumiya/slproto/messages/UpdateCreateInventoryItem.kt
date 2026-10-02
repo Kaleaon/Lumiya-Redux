@@ -136,4 +136,3 @@ open class UpdateCreateInventoryItem : SLMessage() {
         }
     }
 }
-
