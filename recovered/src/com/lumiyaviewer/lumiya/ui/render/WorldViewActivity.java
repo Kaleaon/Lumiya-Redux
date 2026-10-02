@@ -859,11 +859,11 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:165:0x00af, code lost:
-    
+
         if ((!(!r12.camButtonEnabled ? r12.manualCamMode : false)) != false) goto L49;
      */
     /* JADX WARN: Code restructure failed: missing block: B:172:0x0092, code lost:
-    
+
         if ((!(r12.camButtonEnabled ? r12.manualCamMode : false)) == false) goto L33;
      */
     /* JADX WARN: Removed duplicated region for block: B:151:0x017b  */
@@ -1458,7 +1458,7 @@ public class WorldViewActivity extends DetailsActivity implements View.OnTouchLi
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:3:0x000e, code lost:
-    
+
         return false;
      */
     @Override // android.view.View.OnTouchListener

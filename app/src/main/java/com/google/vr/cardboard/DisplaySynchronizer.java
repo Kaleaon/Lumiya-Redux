@@ -40,7 +40,7 @@ public class DisplaySynchronizer implements Choreographer.FrameCallback {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:17:0x0034, code lost:
-    
+
         if ((r8 - r7.lastDisplayRotationUpdateTimeNanos <= com.google.vr.cardboard.DisplaySynchronizer.DISPLAY_ROTATION_REFRESH_INTERVAL_NANOS) == false) goto L4;
      */
     @Override

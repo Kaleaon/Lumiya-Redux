@@ -122,7 +122,7 @@ public final class HttpUrl {
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:20:0x0027, code lost:
-        
+
             return null;
          */
         /* JADX WARN: Removed duplicated region for block: B:10:0x0062  */
@@ -556,41 +556,41 @@ public final class HttpUrl {
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:30:0x0142, code lost:
-        
+
             r0 = portColonOffset(r15, r1, r10);
          */
         /* JADX WARN: Code restructure failed: missing block: B:31:0x0148, code lost:
-        
+
             if ((r0 + 1) < r10) goto L54;
          */
         /* JADX WARN: Code restructure failed: missing block: B:32:0x014a, code lost:
-        
+
             r13.host = canonicalizeHost(r15, r1, r0);
             r13.port = okhttp3.HttpUrl.defaultPort(r13.scheme);
          */
         /* JADX WARN: Code restructure failed: missing block: B:34:0x015a, code lost:
-        
+
             if (r13.host == null) goto L58;
          */
         /* JADX WARN: Code restructure failed: missing block: B:35:0x015c, code lost:
-        
+
             r2 = r10;
          */
         /* JADX WARN: Code restructure failed: missing block: B:49:0x0177, code lost:
-        
+
             return okhttp3.HttpUrl.Builder.ParseResult.INVALID_HOST;
          */
         /* JADX WARN: Code restructure failed: missing block: B:50:0x015f, code lost:
-        
+
             r13.host = canonicalizeHost(r15, r1, r0);
             r13.port = parsePort(r15, r0 + 1, r10);
          */
         /* JADX WARN: Code restructure failed: missing block: B:51:0x0170, code lost:
-        
+
             if (r13.port != (-1)) goto L51;
          */
         /* JADX WARN: Code restructure failed: missing block: B:53:0x0174, code lost:
-        
+
             return okhttp3.HttpUrl.Builder.ParseResult.INVALID_PORT;
          */
         /*

@@ -168,4 +168,3 @@ open class RegionHandshake : SLMessage() {
         }
     }
 }
-

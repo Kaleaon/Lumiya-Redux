@@ -583,7 +583,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, OnGe
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:33:0x0073, code lost:
-    
+
         if ((r9 >= 1.0f) == false) goto L22;
      */
     @Override // uk.co.senab.photoview.gestures.OnGestureListener

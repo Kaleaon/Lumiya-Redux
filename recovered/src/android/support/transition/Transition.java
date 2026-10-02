@@ -652,7 +652,7 @@ public abstract class Transition implements Cloneable {
         }
     }
 
-    @Override // 
+    @Override //
     /* renamed from: clone, reason: merged with bridge method [inline-methods] */
     public Transition mo0clone() {
         try {

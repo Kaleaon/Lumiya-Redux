@@ -228,20 +228,20 @@ public final class Buffer implements BufferedSource, BufferedSink, Cloneable {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:29:0x005e, code lost:
-    
+
         if (r3 == r5.limit) goto L35;
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x0062, code lost:
-    
+
         if (r2 == r4.limit) goto L36;
      */
     /* JADX WARN: Code restructure failed: missing block: B:32:0x006b, code lost:
-    
+
         r4 = r4.next;
         r2 = r4.pos;
      */
     /* JADX WARN: Code restructure failed: missing block: B:36:0x0066, code lost:
-    
+
         r5 = r5.next;
         r3 = r5.pos;
      */

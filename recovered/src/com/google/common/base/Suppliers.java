@@ -28,7 +28,7 @@ public final class Suppliers {
         }
 
         /* JADX WARN: Code restructure failed: missing block: B:6:0x0013, code lost:
-        
+
             if ((r4 - r2 < 0) == false) goto L8;
          */
         @Override // com.google.common.base.Supplier

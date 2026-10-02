@@ -144,7 +144,7 @@ public class LLQuaternion {
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:3:0x004a, code lost:
-    
+
         return r4;
      */
     /*

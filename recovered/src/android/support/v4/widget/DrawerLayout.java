@@ -1447,7 +1447,7 @@ public class DrawerLayout extends ViewGroup {
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:3:0x0015, code lost:
-    
+
         return android.support.v4.widget.DrawerLayout.CHILDREN_DISALLOW_INTERCEPT;
      */
     @Override // android.view.View

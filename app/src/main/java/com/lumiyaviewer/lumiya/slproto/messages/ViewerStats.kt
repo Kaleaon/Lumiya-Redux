@@ -166,4 +166,3 @@ open class ViewerStats : SLMessage() {
         }
     }
 }
-

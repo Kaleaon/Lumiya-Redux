@@ -162,4 +162,3 @@ open class RezObject : SLMessage() {
         this.InventoryData_Field.CRC = unpackInt(byteBuffer)
     }
 }
-

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Verify migrated protocol model mapping guardrails remain documented."""
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 MAPPING_DOC = Path("docs/protocol_model_mapping.md")
 MODEL_FILE = Path("app/src/main/java/com/lumiyaviewer/lumiya/orm/InventoryEntryDBObject.kt")

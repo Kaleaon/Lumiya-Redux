@@ -169,4 +169,3 @@ open class InventoryDescendents : SLMessage() {
         }
     }
 }
-

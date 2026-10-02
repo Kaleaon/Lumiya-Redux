@@ -143,4 +143,3 @@ open class RegionInfo : SLMessage() {
         }
     }
 }
-

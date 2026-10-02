@@ -151,4 +151,3 @@ open class ObjectAdd : SLMessage() {
         this.ObjectData_Field.State = unpackByte(byteBuffer) & 0xFF
     }
 }
-

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Verify LLSD edge-case conformance documentation guardrails."""
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 DOC = Path("docs/llsd_edge_case_conformance.md")
 REQUIRED_SNIPPETS = [

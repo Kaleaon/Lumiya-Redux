@@ -115,7 +115,7 @@ public class PagerTabStrip extends PagerTitleStrip {
 
     /* JADX WARN: Can't fix incorrect switch cases order, some code will duplicate */
     /* JADX WARN: Code restructure failed: missing block: B:5:0x0013, code lost:
-    
+
         return true;
      */
     @Override // android.view.View

@@ -502,114 +502,114 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:101:0x0167, code lost:
-    
+
         r3 = r3 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:104:0x0152, code lost:
-    
+
         r2 = r1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:29:0x002a, code lost:
-    
+
         assignSpans(r14, r15, r4, r5, r6);
         r5 = 0;
         r3 = 0.0f;
         r1 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:30:0x0036, code lost:
-    
+
         if (r5 < r4) goto L51;
      */
     /* JADX WARN: Code restructure failed: missing block: B:31:0x00f6, code lost:
-    
+
         r9 = r13.mSet[r5];
      */
     /* JADX WARN: Code restructure failed: missing block: B:32:0x00fe, code lost:
-    
+
         if (r16.mScrapList == null) goto L61;
      */
     /* JADX WARN: Code restructure failed: missing block: B:33:0x0100, code lost:
-    
+
         if (r6 != false) goto L64;
      */
     /* JADX WARN: Code restructure failed: missing block: B:34:0x0102, code lost:
-    
+
         addDisappearingView(r9, 0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:35:0x0106, code lost:
-    
+
         calculateItemDecorationsForChild(r9, r13.mDecorInsets);
         measureChild(r9, r11, false);
         r2 = r13.mOrientationHelper.getDecoratedMeasurement(r9);
      */
     /* JADX WARN: Code restructure failed: missing block: B:36:0x0115, code lost:
-    
+
         if (r2 > r1) goto L58;
      */
     /* JADX WARN: Code restructure failed: missing block: B:37:0x0117, code lost:
-    
+
         r2 = r1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:38:0x0118, code lost:
-    
+
         r1 = (r13.mOrientationHelper.getDecoratedMeasurementInOther(r9) * 1.0f) / ((android.support.v7.widget.GridLayoutManager.LayoutParams) r9.getLayoutParams()).mSpanSize;
      */
     /* JADX WARN: Code restructure failed: missing block: B:39:0x012f, code lost:
-    
+
         if (r1 <= r3) goto L65;
      */
     /* JADX WARN: Code restructure failed: missing block: B:40:0x0147, code lost:
-    
+
         r1 = r3;
      */
     /* JADX WARN: Code restructure failed: missing block: B:42:0x0131, code lost:
-    
+
         r5 = r5 + 1;
         r3 = r1;
         r1 = r2;
      */
     /* JADX WARN: Code restructure failed: missing block: B:44:0x0143, code lost:
-    
+
         addDisappearingView(r9);
      */
     /* JADX WARN: Code restructure failed: missing block: B:45:0x0138, code lost:
-    
+
         if (r6 != false) goto L63;
      */
     /* JADX WARN: Code restructure failed: missing block: B:46:0x013a, code lost:
-    
+
         addView(r9, 0);
      */
     /* JADX WARN: Code restructure failed: missing block: B:47:0x013f, code lost:
-    
+
         addView(r9);
      */
     /* JADX WARN: Code restructure failed: missing block: B:49:0x0038, code lost:
-    
+
         if (r7 != false) goto L66;
      */
     /* JADX WARN: Code restructure failed: missing block: B:50:0x003a, code lost:
-    
+
         r2 = r1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:51:0x003b, code lost:
-    
+
         r5 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:52:0x003d, code lost:
-    
+
         if (r5 < r4) goto L73;
      */
     /* JADX WARN: Code restructure failed: missing block: B:53:0x016d, code lost:
-    
+
         r6 = r13.mSet[r5];
      */
     /* JADX WARN: Code restructure failed: missing block: B:54:0x0177, code lost:
-    
+
         if (r13.mOrientationHelper.getDecoratedMeasurement(r6) != r2) goto L76;
      */
     /* JADX WARN: Code restructure failed: missing block: B:55:0x017e, code lost:
-    
+
         r1 = (android.support.v7.widget.GridLayoutManager.LayoutParams) r6.getLayoutParams();
         r3 = r1.mDecorInsets;
         r7 = ((r3.top + r3.bottom) + r1.topMargin) + r1.bottomMargin;
@@ -617,49 +617,49 @@ public class GridLayoutManager extends LinearLayoutManager {
         r8 = getSpaceForSpanRange(r1.mSpanIndex, r1.mSpanSize);
      */
     /* JADX WARN: Code restructure failed: missing block: B:56:0x01a7, code lost:
-    
+
         if (r13.mOrientation == 1) goto L80;
      */
     /* JADX WARN: Code restructure failed: missing block: B:57:0x01a9, code lost:
-    
+
         r3 = android.view.View.MeasureSpec.makeMeasureSpec(r2 - r3, 1073741824);
         r1 = getChildMeasureSpec(r8, 1073741824, r7, r1.height, false);
      */
     /* JADX WARN: Code restructure failed: missing block: B:58:0x01ba, code lost:
-    
+
         measureChildWithDecorationsAndMargin(r6, r3, r1, true);
      */
     /* JADX WARN: Code restructure failed: missing block: B:60:0x0179, code lost:
-    
+
         r5 = r5 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:61:0x01bf, code lost:
-    
+
         r3 = getChildMeasureSpec(r8, 1073741824, r3, r1.width, false);
         r1 = android.view.View.MeasureSpec.makeMeasureSpec(r2 - r7, 1073741824);
      */
     /* JADX WARN: Code restructure failed: missing block: B:64:0x003f, code lost:
-    
+
         r17.mConsumed = r2;
         r1 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:65:0x004a, code lost:
-    
+
         if (r13.mOrientation == 1) goto L81;
      */
     /* JADX WARN: Code restructure failed: missing block: B:67:0x0051, code lost:
-    
+
         if (r16.mLayoutDirection == (-1)) goto L85;
      */
     /* JADX WARN: Code restructure failed: missing block: B:68:0x0053, code lost:
-    
+
         r3 = r16.mOffset;
         r2 = r2 + r3;
         r5 = r3;
         r3 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:69:0x005b, code lost:
-    
+
         r10 = r1;
         r9 = r2;
         r8 = r3;
@@ -667,68 +667,68 @@ public class GridLayoutManager extends LinearLayoutManager {
         r2 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:70:0x0061, code lost:
-    
+
         if (r2 < r4) goto L86;
      */
     /* JADX WARN: Code restructure failed: missing block: B:71:0x01fb, code lost:
-    
+
         r6 = r13.mSet[r2];
         r1 = (android.support.v7.widget.GridLayoutManager.LayoutParams) r6.getLayoutParams();
      */
     /* JADX WARN: Code restructure failed: missing block: B:72:0x0208, code lost:
-    
+
         if (r13.mOrientation == 1) goto L93;
      */
     /* JADX WARN: Code restructure failed: missing block: B:73:0x020a, code lost:
-    
+
         r8 = getPaddingTop() + r13.mCachedBorders[r1.mSpanIndex];
         r10 = r8 + r13.mOrientationHelper.getDecoratedMeasurementInOther(r6);
      */
     /* JADX WARN: Code restructure failed: missing block: B:74:0x021e, code lost:
-    
+
         layoutDecoratedWithMargins(r6, r7, r8, r9, r10);
      */
     /* JADX WARN: Code restructure failed: missing block: B:75:0x0226, code lost:
-    
+
         if (r1.isItemRemoved() == false) goto L97;
      */
     /* JADX WARN: Code restructure failed: missing block: B:76:0x0228, code lost:
-    
+
         r17.mIgnoreConsumed = true;
      */
     /* JADX WARN: Code restructure failed: missing block: B:78:0x022d, code lost:
-    
+
         r17.mFocusable |= r6.hasFocusable();
         r2 = r2 + 1;
      */
     /* JADX WARN: Code restructure failed: missing block: B:80:0x0276, code lost:
-    
+
         if (r1.isItemChanged() != false) goto L91;
      */
     /* JADX WARN: Code restructure failed: missing block: B:83:0x0243, code lost:
-    
+
         if (isLayoutRTL() != false) goto L96;
      */
     /* JADX WARN: Code restructure failed: missing block: B:84:0x0245, code lost:
-    
+
         r7 = getPaddingLeft() + r13.mCachedBorders[r1.mSpanIndex];
         r9 = r7 + r13.mOrientationHelper.getDecoratedMeasurementInOther(r6);
      */
     /* JADX WARN: Code restructure failed: missing block: B:85:0x025a, code lost:
-    
+
         r9 = getPaddingLeft() + r13.mCachedBorders[r13.mSpanCount - r1.mSpanIndex];
         r7 = r9 - r13.mOrientationHelper.getDecoratedMeasurementInOther(r6);
      */
     /* JADX WARN: Code restructure failed: missing block: B:87:0x0063, code lost:
-    
+
         java.util.Arrays.fill(r13.mSet, (java.lang.Object) null);
      */
     /* JADX WARN: Code restructure failed: missing block: B:88:0x0069, code lost:
-    
+
         return;
      */
     /* JADX WARN: Code restructure failed: missing block: B:90:0x01ef, code lost:
-    
+
         r3 = r16.mOffset;
         r2 = r3 - r2;
         r3 = 0;
@@ -736,11 +736,11 @@ public class GridLayoutManager extends LinearLayoutManager {
         r2 = r3;
      */
     /* JADX WARN: Code restructure failed: missing block: B:92:0x01d6, code lost:
-    
+
         if (r16.mLayoutDirection == (-1)) goto L84;
      */
     /* JADX WARN: Code restructure failed: missing block: B:93:0x01d8, code lost:
-    
+
         r5 = r16.mOffset;
         r1 = r5 + r2;
         r2 = 0;
@@ -748,7 +748,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         r5 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:94:0x01e3, code lost:
-    
+
         r1 = r16.mOffset;
         r2 = r1 - r2;
         r5 = 0;
@@ -756,27 +756,27 @@ public class GridLayoutManager extends LinearLayoutManager {
         r3 = r2;
      */
     /* JADX WARN: Code restructure failed: missing block: B:95:0x0149, code lost:
-    
+
         guessMeasurement(r3, r8);
         r3 = 0;
         r1 = 0;
      */
     /* JADX WARN: Code restructure failed: missing block: B:96:0x0150, code lost:
-    
+
         if (r3 < r4) goto L69;
      */
     /* JADX WARN: Code restructure failed: missing block: B:97:0x0155, code lost:
-    
+
         r2 = r13.mSet[r3];
         measureChild(r2, 1073741824, true);
         r2 = r13.mOrientationHelper.getDecoratedMeasurement(r2);
      */
     /* JADX WARN: Code restructure failed: missing block: B:98:0x0165, code lost:
-    
+
         if (r2 > r1) goto L72;
      */
     /* JADX WARN: Code restructure failed: missing block: B:99:0x016b, code lost:
-    
+
         r1 = r2;
      */
     @Override // android.support.v7.widget.LinearLayoutManager

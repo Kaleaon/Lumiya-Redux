@@ -300,7 +300,7 @@ public class JsonReader implements Closeable {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:12:0x0037, code lost:
-    
+
         r1 = r0;
      */
     /*
@@ -439,7 +439,7 @@ public class JsonReader implements Closeable {
     }
 
     /* JADX WARN: Code restructure failed: missing block: B:41:0x00b4, code lost:
-    
+
         if (r2 == false) goto L72;
      */
     /*

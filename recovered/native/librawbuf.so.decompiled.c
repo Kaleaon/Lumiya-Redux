@@ -31,7 +31,7 @@ void * malloc(size_t __size)
 
 {
   void *pvVar1;
-  
+
   pvVar1 = malloc(__size);
   return pvVar1;
 }
@@ -46,7 +46,7 @@ void * memcpy(void *__dest,void *__src,size_t __n)
 
 {
   void *pvVar1;
-  
+
   pvVar1 = memcpy(__dest,__src,__n);
   return pvVar1;
 }
@@ -61,7 +61,7 @@ void * memset(void *__s,int __c,size_t __n)
 
 {
   void *pvVar1;
-  
+
   pvVar1 = memset(__s,__c,__n);
   return pvVar1;
 }
@@ -123,7 +123,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_allocate
 
 {
   void *pvVar1;
-  
+
   pvVar1 = malloc((long)param_3);
   if (pvVar1 != (void *)0x0) {
                     /* WARNING: Could not recover jumptable at 0x0010097c. Too many branches */
@@ -143,7 +143,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_release
 
 {
   void *__ptr;
-  
+
   __ptr = (void *)(**(code **)(*param_1 + 0x730))(param_1,param_3);
   if (__ptr != (void *)0x0) {
     free(__ptr);
@@ -163,7 +163,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_copyPart
 {
   long lVar1;
   long lVar2;
-  
+
   lVar1 = (**(code **)(*param_1 + 0x730))(param_1,param_3);
   lVar2 = (**(code **)(*param_1 + 0x730))(param_1,param_4);
   if ((lVar1 != 0) && (lVar2 != 0)) {
@@ -187,7 +187,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_copyByteArray
   int iVar3;
   void *__dest;
   long lVar4;
-  
+
   __dest = (void *)(**(code **)(*param_1 + 0x730))(param_1,param_3);
   iVar2 = (**(code **)(*param_1 + 0x738))(param_1,param_3);
   lVar4 = (**(code **)(*param_1 + 0x5c0))(param_1,param_5,0);
@@ -221,7 +221,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_copyFloatArray
   int iVar3;
   long lVar4;
   long lVar5;
-  
+
   lVar4 = (**(code **)(*param_1 + 0x730))(param_1,param_3);
   uVar1 = (param_4 & 0xffffffff) << 2;
   iVar2 = (**(code **)(*param_1 + 0x738))(param_1,param_3);
@@ -257,7 +257,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_copyShortArray
   int iVar3;
   long lVar4;
   long lVar5;
-  
+
   lVar4 = (**(code **)(*param_1 + 0x730))(param_1,param_3);
   uVar1 = (param_4 & 0xffffffff) << 1;
   iVar2 = (**(code **)(*param_1 + 0x738))(param_1,param_3);
@@ -301,7 +301,7 @@ void Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_copyShortArrayOffset
   undefined8 uVar10;
   undefined8 uVar11;
   undefined8 uVar12;
-  
+
   lVar4 = (**(code **)(*param_1 + 0x730))(param_1,param_3);
   uVar1 = (param_4 & 0xffffffff) << 1;
   uVar8 = -((param_4 & 0xffffffff) >> 0x1f) & 0xfffffffe00000000 | uVar1;
@@ -390,7 +390,7 @@ int Java_com_lumiyaviewer_rawbuffers_DirectByteBuffer_zeroDecodeArray
   uint uVar9;
   ulong uVar10;
   ulong uVar11;
-  
+
   lVar7 = (**(code **)(*param_1 + 0x5c0))(param_1,param_6,0);
   uVar5 = (**(code **)(*param_1 + 0x558))(param_1,param_6);
   lVar8 = (**(code **)(*param_1 + 0x5c0))(param_1,param_3,0);
@@ -527,6 +527,3 @@ void __cxa_atexit(void)
                     /* WARNING: Bad instruction - Truncating control flow here */
   halt_baddata();
 }
-
-
-

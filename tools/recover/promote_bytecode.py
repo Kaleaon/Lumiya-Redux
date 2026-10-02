@@ -15,6 +15,7 @@ Usage:
   promote_bytecode.py --apk APK --work DIR [--candidate NAME=DIR ...] [--only CLASS ...]
 With no --candidate, the in-tree .java files are tried as they are.
 """
+
 import argparse
 import json
 import os
@@ -24,24 +25,26 @@ import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SRC = ROOT / 'app/src/main/java'
-LIST = ROOT / 'tools/recover/bytecode_classes.txt'
-sys.path.insert(0, str(ROOT / 'tools/recover'))
+SRC = ROOT / "app/src/main/java"
+LIST = ROOT / "tools/recover/bytecode_classes.txt"
+sys.path.insert(0, str(ROOT / "tools/recover"))
 import fixers  # noqa: E402
 import swap_candidates as sc  # noqa: E402
 
-GOOD = ('OK', 'ADDED_ONLY', 'ACCEPTED')
+GOOD = ("OK", "ADDED_ONLY", "ACCEPTED")
 
 
 def read_list():
     head, classes = [], []
     for line in LIST.read_text().splitlines():
-        (head if line.startswith('#') or not line.strip() else classes).append(line.strip() if not line.startswith('#') else line)
+        (head if line.startswith("#") or not line.strip() else classes).append(
+            line.strip() if not line.startswith("#") else line
+        )
     return [h for h in head if h], classes
 
 
 def write_list(head, classes):
-    LIST.write_text('\n'.join(head + sorted(set(classes))) + '\n')
+    LIST.write_text("\n".join(head + sorted(set(classes))) + "\n")
 
 
 def run(cmd, **kw):
@@ -49,52 +52,65 @@ def run(cmd, **kw):
 
 
 def build_jar(apk, work):
-    r = run([str(ROOT / 'tools/recover/legacy/build_legacy_jar.sh'), apk, os.path.join(work, 'legacy')])
+    r = run(
+        [
+            str(ROOT / "tools/recover/legacy/build_legacy_jar.sh"),
+            apk,
+            os.path.join(work, "legacy"),
+        ]
+    )
     if r.returncode != 0:
         sys.stderr.write(r.stdout[-2000:] + r.stderr[-2000:])
-        raise SystemExit('jar build failed')
+        raise SystemExit("jar build failed")
 
 
 def verify(apk, work):
-    path = os.path.join(work, 'report.json')
+    path = os.path.join(work, "report.json")
     if os.path.exists(path):
         os.remove(path)
-    run([str(ROOT / 'tools/verify/verify_against_apk.sh'), apk, work])
-    path = os.path.join(work, 'report.json')
+    run([str(ROOT / "tools/verify/verify_against_apk.sh"), apk, work])
+    path = os.path.join(work, "report.json")
     if not os.path.exists(path):
-        raise SystemExit('verify produced no report')
+        raise SystemExit("verify produced no report")
     return json.load(open(path))
 
 
 def status(report, rel):
-    e = report.get('L' + rel + ';')
-    return e['status'] if e else 'MISSING'
+    e = report.get("L" + rel + ";")
+    return e["status"] if e else "MISSING"
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--apk', required=True)
-    ap.add_argument('--work', required=True)
-    ap.add_argument('--candidate', action='append', default=[])
-    ap.add_argument('--only', action='append', default=None)
+    ap.add_argument("--apk", required=True)
+    ap.add_argument("--work", required=True)
+    ap.add_argument("--candidate", action="append", default=[])
+    ap.add_argument("--only", action="append", default=None)
     a = ap.parse_args()
-    log = open(os.path.join(a.work, 'promote-log.txt'), 'a')
-    rounds = [('in-tree', None)] + [tuple(c.split('=', 1)) for c in a.candidate]
+    log = open(os.path.join(a.work, "promote-log.txt"), "a")
+    rounds = [("in-tree", None)] + [tuple(c.split("=", 1)) for c in a.candidate]
     for name, cdir in rounds:
         head, bytecode = read_list()
         trial = [c for c in bytecode if (a.only is None or c in a.only)]
         if cdir:
-            trial = [c for c in trial if (pathlib.Path(cdir) / (c + '.java')).exists()]
+            trial = [c for c in trial if (pathlib.Path(cdir) / (c + ".java")).exists()]
         if not trial:
             continue
-        backups = {c: (SRC / (c + '.java')).read_text(encoding='utf-8') if (SRC / (c + '.java')).exists() else None for c in trial}
+        backups = {
+            c: (
+                (SRC / (c + ".java")).read_text(encoding="utf-8")
+                if (SRC / (c + ".java")).exists()
+                else None
+            )
+            for c in trial
+        }
         if cdir:
             for c in trial:
-                text = (pathlib.Path(cdir) / (c + '.java')).read_text(encoding='utf-8')
-                (SRC / (c + '.java')).write_text(fixers.apply_all(text), encoding='utf-8')
+                text = (pathlib.Path(cdir) / (c + ".java")).read_text(encoding="utf-8")
+                (SRC / (c + ".java")).write_text(fixers.apply_all(text), encoding="utf-8")
         write_list(head, [c for c in bytecode if c not in trial])
         build_jar(a.apk, a.work)
-        print('[%s] trying %d classes' % (name, len(trial)), flush=True)
+        print("[%s] trying %d classes" % (name, len(trial)), flush=True)
 
         pending = set(trial)
         attempts = {}
@@ -103,8 +119,8 @@ def main():
             pending.discard(c)
             old = backups[c]
             if old is not None:
-                (SRC / (c + '.java')).write_text(old, encoding='utf-8')
-            log.write('%s BACK %s (%s)\n' % (name, c, why[:300]))
+                (SRC / (c + ".java")).write_text(old, encoding="utf-8")
+            log.write("%s BACK %s (%s)\n" % (name, c, why[:300]))
 
         for it in range(25):
             errs = sc.compile_errors()
@@ -118,41 +134,51 @@ def main():
                     if attempts[c] <= 4 and sc.repair(SRC / rel, msgs):
                         touched = True
                         continue
-                    give_up(c, 'compile: ' + msgs[0])
+                    give_up(c, "compile: " + msgs[0])
                     touched = True
             if not touched:
                 # Errors only in files we did not touch: a trial class changed
                 # an API they use. Blame trial classes named in those files.
-                ctx = ' '.join((SRC / f).read_text(encoding='utf-8') for f in errs if (SRC / f).exists())
-                blamed = [c for c in pending if re.search(r'\b%s\b' % re.escape(c.rsplit('/', 1)[1]), ctx)] or list(pending)
+                ctx = " ".join(
+                    (SRC / f).read_text(encoding="utf-8") for f in errs if (SRC / f).exists()
+                )
+                blamed = [
+                    c for c in pending if re.search(r"\b%s\b" % re.escape(c.rsplit("/", 1)[1]), ctx)
+                ] or list(pending)
                 for c in blamed:
-                    give_up(c, 'broke dependents')
+                    give_up(c, "broke dependents")
             # Classes given up on go back to bytecode before the next compile.
             write_list(head, [c for c in bytecode if c not in pending])
             build_jar(a.apk, a.work)
-            print('  round %d: %d files with errors, %d still trying' % (it, len(errs), len(pending)), flush=True)
+            print(
+                "  round %d: %d files with errors, %d still trying" % (it, len(errs), len(pending)),
+                flush=True,
+            )
         else:
             for c in list(pending):
-                give_up(c, 'compile rounds exhausted')
+                give_up(c, "compile rounds exhausted")
             write_list(head, [c for c in bytecode if c not in pending])
             build_jar(a.apk, a.work)
 
         report = verify(a.apk, a.work)
         failed = [c for c in pending if status(report, c) not in GOOD]
         for c in failed:
-            give_up(c, 'verify: %s' % status(report, c))
+            give_up(c, "verify: %s" % status(report, c))
         for c in pending:
-            log.write('%s PROMOTED %s (%s)\n' % (name, c, status(report, c)))
+            log.write("%s PROMOTED %s (%s)\n" % (name, c, status(report, c)))
         write_list(head, [c for c in bytecode if c not in pending])
         build_jar(a.apk, a.work)
         report = verify(a.apk, a.work)
-        bad = [k for k, e in report.items() if e['status'] not in GOOD]
-        print('[%s] promoted %d, back to bytecode %d, damaged after round: %d %s'
-              % (name, len(pending), len(trial) - len(pending), len(bad), bad[:5]), flush=True)
+        bad = [k for k, e in report.items() if e["status"] not in GOOD]
+        print(
+            "[%s] promoted %d, back to bytecode %d, damaged after round: %d %s"
+            % (name, len(pending), len(trial) - len(pending), len(bad), bad[:5]),
+            flush=True,
+        )
         log.flush()
         if bad:
-            raise SystemExit('regression after round %s: %s' % (name, bad))
+            raise SystemExit("regression after round %s: %s" % (name, bad))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

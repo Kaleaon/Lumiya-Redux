@@ -2,4 +2,3 @@
 package android.support.v7.preference.internal;
 
 import android.support.annotation.RestrictTo;
-

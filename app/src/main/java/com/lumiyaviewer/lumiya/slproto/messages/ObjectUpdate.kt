@@ -208,4 +208,3 @@ open class ObjectUpdate : SLMessage() {
         }
     }
 }
-

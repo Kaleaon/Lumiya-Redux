@@ -92,8 +92,8 @@
 00100a04  blr      blr x8
 00100a08  cbz      cbz x22,0x00100a34
 00100a0c  cbz      cbz x0,0x00100a34
-00100a10  add      add x8,x22,w21, SXTW 
-00100a14  add      add x1,x0,w20, SXTW 
+00100a10  add      add x8,x22,w21, SXTW
+00100a14  add      add x1,x0,w20, SXTW
 00100a18  sxtw     sxtw x2,w19
 00100a1c  ldp      ldp x29,x30,[sp, #0x30]
 00100a20  ldp      ldp x20,x19,[sp, #0x20]
@@ -147,7 +147,7 @@
 00100ae0  csel     csel w9,w9,w19,lt
 00100ae4  cmp      cmp w9,w8
 00100ae8  csel     csel w8,w8,w9,gt
-00100aec  add      add x1,x26,w20, SXTW 
+00100aec  add      add x1,x26,w20, SXTW
 00100af0  sxtw     sxtw x2,w8
 00100af4  mov      mov x0,x25
 00100af8  bl       bl 0x001008c0
@@ -441,7 +441,7 @@
 00100f78  sub      sub w8,w27,w26
 00100f7c  cmp      cmp w25,w8
 00100f80  b.hi     b.hi 0x00100fe4
-00100f84  add      add x0,x24,w26, UXTW 
+00100f84  add      add x0,x24,w26, UXTW
 00100f88  mov      mov w1,wzr
 00100f8c  mov      mov x2,x25
 00100f90  bl       bl 0x001008d0

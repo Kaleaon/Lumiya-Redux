@@ -5,10 +5,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import sys
 from collections import Counter
 from pathlib import Path
-import sys
-
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = ROOT / "app/src/main/java"
@@ -24,10 +23,7 @@ def rust_mapping_rows() -> list[dict[str, str]]:
 
 
 def rust_mappings() -> dict[str, str]:
-    return {
-        row["jvm_source"]: f"rust-mirror/{row['rust_source']}"
-        for row in rust_mapping_rows()
-    }
+    return {row["jvm_source"]: f"rust-mirror/{row['rust_source']}" for row in rust_mapping_rows()}
 
 
 def source_rows() -> list[dict[str, str]]:
@@ -63,7 +59,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", action="store_true", help="emit one row per source")
     parser.add_argument(
-        "--fail-if-empty", action="store_true", help="fail when no JVM sources are found"
+        "--fail-if-empty",
+        action="store_true",
+        help="fail when no JVM sources are found",
     )
     parser.add_argument(
         "--check", action="store_true", help="validate that Rust mappings are not stale"
