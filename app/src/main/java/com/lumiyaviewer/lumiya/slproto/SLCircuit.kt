@@ -51,14 +51,18 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
     private var timedOut: Boolean = false
     private var txBuffer: ByteBuffer
     private var unackedQueue: ConcurrentLinkedQueue<SLMessage>
+    @Volatile var isBackgroundState: Boolean = false
 
     companion object {
         private const val DEFAULT_IDLE_INTERVAL = 1000
         private const val FAST_IDLE_INTERVAL = 100
+        private const val BACKGROUND_IDLE_INTERVAL = 10000
         private const val MESSAGE_MAX_RETRIES = 3
         private const val MESSAGE_TIMEOUT_MILLIS = 5000
         private const val NEED_PING_TIMEOUT = 10000L
         private const val PING_INTERVAL = 5000L
+        private const val BACKGROUND_NEED_PING_TIMEOUT = 120000L
+        private const val BACKGROUND_PING_INTERVAL = 120000L
         private const val TRACK_HANDLED_PACKETS = 1024
         private const val UNANSWERED_PINGS = 3
     }
@@ -363,9 +367,23 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
         this.selector.wakeup()
     }
 
+    open fun setBackgroundState(inBackground: Boolean) {
+        if (this.isBackgroundState != inBackground) {
+            this.isBackgroundState = inBackground
+            Debug.Printf("SLCircuit: background state changed to %b", inBackground)
+            if (!inBackground) {
+                this.lastPingSent = SystemClock.elapsedRealtime()
+                this.selector.wakeup()
+            }
+        }
+    }
+
     fun TryProcessIdle() {
         val nowMillis = SystemClock.elapsedRealtime()
-        if (nowMillis >= this.lastReceivedPacketMillis + 10000L && nowMillis >= this.lastPingSent + 5000L) {
+        val needPingTimeout = if (isBackgroundState) BACKGROUND_NEED_PING_TIMEOUT else NEED_PING_TIMEOUT
+        val pingInterval = if (isBackgroundState) BACKGROUND_PING_INTERVAL else PING_INTERVAL
+
+        if (nowMillis >= this.lastReceivedPacketMillis + needPingTimeout && nowMillis >= this.lastPingSent + pingInterval) {
             if (this.pingSentCount >= 3) {
                 if (!this.timedOut) {
                     this.timedOut = true
@@ -429,6 +447,6 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
 
     open fun getIdleInterval(): Int {
         synchronized(this) {}
-        return 1000
+        return if (isBackgroundState) BACKGROUND_IDLE_INTERVAL else DEFAULT_IDLE_INTERVAL
     }
 }

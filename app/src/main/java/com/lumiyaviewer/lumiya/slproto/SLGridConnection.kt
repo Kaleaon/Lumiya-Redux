@@ -350,6 +350,14 @@ class SLGridConnection : SLConnection() {
     }
 
     @Synchronized
+    fun setBackgroundState(inBackground: Boolean) {
+        agentCircuit?.setBackgroundState(inBackground)
+        for (tempCircuit in tempCircuits.values) {
+            tempCircuit.setBackgroundState(inBackground)
+        }
+    }
+
+    @Synchronized
     fun removeTempCircuit(tempCircuit: SLTempCircuit) {
         val it = tempCircuits.entries.iterator()
         while (it.hasNext()) {
