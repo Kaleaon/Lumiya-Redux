@@ -2,11 +2,12 @@ package com.lumiyaviewer.lumiya.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.lumiyaviewer.lumiya.R
 import com.lumiyaviewer.lumiya.dao.SearchGridResult
 import com.lumiyaviewer.lumiya.react.UIThreadExecutor
 import com.lumiyaviewer.lumiya.slproto.modules.search.SearchGridQuery
@@ -16,125 +17,117 @@ import com.lumiyaviewer.lumiya.ui.chat.ChatterPicView
 import de.greenrobot.dao.query.LazyList
 import java.util.UUID
 
-internal open class SearchGridAdapter : RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder>() {
-    private UUID agentUUID
-    private Context context
+internal open class SearchGridAdapter(
+    private val context: Context,
+    private val agentUUID: UUID,
+    private val onSearchResultClickListener: OnSearchResultClickListener?
+) : RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder>() {
 
-    private LazyList<SearchGridResult> data
-    private LayoutInflater inflater
-    private OnSearchResultClickListener onSearchResultClickListener
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var data: LazyList<SearchGridResult>? = null
+
+    init {
+        setHasStableIds(true)
+    }
 
     internal interface OnSearchResultClickListener {
         fun onSearchResultClicked(searchGridResult: SearchGridResult)
     }
 
-    internal open class SearchViewHolder : RecyclerView.ViewHolder(), ChatterNameRetriever.OnChatterNameUpdated, View.OnClickListener {
-        private ChatterNameRetriever chatterNameRetriever
-        TextView resultItemName
-        TextView resultMemberCount
-        private SearchGridResult searchGridResult
-        ChatterPicView userPicView
+    internal inner class SearchViewHolder(view: View) :
+        RecyclerView.ViewHolder(view),
+        ChatterNameRetriever.OnChatterNameUpdated,
+        View.OnClickListener {
 
-        internal constructor(view: View) {
-            super(view)
-            this.chatterNameRetriever = null
-            this.resultItemName = view.findViewById(com.lumiyaviewer.lumiya.R.id.result_item_name)
-            this.userPicView = view.findViewById(com.lumiyaviewer.lumiya.R.id.userPicView)
-            this.resultMemberCount = view.findViewById(com.lumiyaviewer.lumiya.R.id.result_member_count)
+        private var chatterNameRetriever: ChatterNameRetriever? = null
+        val resultItemName: TextView = view.findViewById(R.id.result_item_name)
+        val resultMemberCount: TextView = view.findViewById(R.id.result_member_count)
+        val userPicView: ChatterPicView = view.findViewById(R.id.userPicView)
+        private var searchGridResult: SearchGridResult? = null
+
+        init {
             view.setOnClickListener(this)
         }
 
-        @SuppressLint({"DefaultLocale", "SetTextI18n"})
+        @SuppressLint("DefaultLocale", "SetTextI18n")
         internal fun bindToData(searchGridResult: SearchGridResult) {
             this.searchGridResult = searchGridResult
-            this.resultItemName.setText(searchGridResult.getItemName())
-            if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
-                Integer memberCount = searchGridResult.getMemberCount()
-                this.resultMemberCount.setVisibility(View.VISIBLE)
-                this.resultMemberCount.setText(Integer.toString(memberCount != null ? memberCount.intValue() : 0))
+            val itemName = searchGridResult.itemName
+            this.resultItemName.text = itemName
+            if (searchGridResult.itemType == SearchGridQuery.SearchType.Groups.ordinal) {
+                val memberCount = searchGridResult.memberCount
+                this.resultMemberCount.visibility = View.VISIBLE
+                this.resultMemberCount.text = (memberCount ?: 0).toString()
             } else {
-                this.resultMemberCount.setVisibility(View.GONE)
+                this.resultMemberCount.visibility = View.GONE
             }
-            if (this.chatterNameRetriever != null) {
-                this.chatterNameRetriever.dispose()
-                this.chatterNameRetriever = null
-            }
-            if (searchGridResult.getItemType() == SearchGridQuery.SearchType.Groups.ordinal()) {
-                this.userPicView.setChatterID(ChatterID.getGroupChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID()), searchGridResult.getItemName())
-                this.userPicView.setVisibility(View.VISIBLE)
-            } else {
-                if (searchGridResult.getItemType() != SearchGridQuery.SearchType.People.ordinal()) {
-                    this.userPicView.setVisibility(View.GONE)
-                    return
+
+            chatterNameRetriever?.dispose()
+            chatterNameRetriever = null
+
+            val itemUUID = searchGridResult.itemUUID
+            if (itemUUID != null) {
+                if (searchGridResult.itemType == SearchGridQuery.SearchType.Groups.ordinal) {
+                    this.userPicView.setChatterID(ChatterID.getGroupChatterID(agentUUID, itemUUID), itemName)
+                    this.userPicView.visibility = View.VISIBLE
+                } else if (searchGridResult.itemType == SearchGridQuery.SearchType.People.ordinal) {
+                    val userChatterID = ChatterID.getUserChatterID(agentUUID, itemUUID)
+                    this.userPicView.setChatterID(userChatterID, itemName)
+                    this.userPicView.visibility = View.VISIBLE
+                    val retriever = ChatterNameRetriever(userChatterID, this, UIThreadExecutor.getInstance(), false)
+                    this.chatterNameRetriever = retriever
+                    retriever.subscribe()
+                } else {
+                    this.userPicView.visibility = View.GONE
                 }
-                ChatterID.ChatterIDUser userChatterID = ChatterID.getUserChatterID(SearchGridAdapter.this.agentUUID, searchGridResult.getItemUUID())
-                this.userPicView.setChatterID(userChatterID, searchGridResult.getItemName())
-                this.userPicView.setVisibility(View.VISIBLE)
-                this.chatterNameRetriever = ChatterNameRetriever(userChatterID, this, UIThreadExecutor.getInstance(), false)
-                this.chatterNameRetriever.subscribe()
+            } else {
+                this.userPicView.visibility = View.GONE
             }
         }
 
         override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
-            String resolvedName
-            if (chatterNameRetriever != this.chatterNameRetriever || (resolvedName = chatterNameRetriever.getResolvedName()) == null) {
-                return
-            }
-            this.resultItemName.setText(resolvedName)
+            if (chatterNameRetriever != this.chatterNameRetriever) return
+            val resolvedName = chatterNameRetriever.getResolvedName() ?: return
+            this.resultItemName.text = resolvedName
         }
 
         override fun onClick(view: View) {
-            if (SearchGridAdapter.this.onSearchResultClickListener == null || this.searchGridResult == null) {
-                return
-            }
-            SearchGridAdapter.this.onSearchResultClickListener.onSearchResultClicked(this.searchGridResult)
+            val result = this.searchGridResult ?: return
+            onSearchResultClickListener?.onSearchResultClicked(result)
         }
 
         internal fun onRecycled() {
             this.userPicView.setChatterID(null, null)
-            if (this.chatterNameRetriever != null) {
-                this.chatterNameRetriever.dispose()
-                this.chatterNameRetriever = null
-            }
+            this.chatterNameRetriever?.dispose()
+            this.chatterNameRetriever = null
             this.searchGridResult = null
         }
     }
 
-    internal constructor(context: Context, uuid: UUID, onSearchResultClickListener: OnSearchResultClickListener) {
-        this.context = context
-        this.agentUUID = uuid
-        this.inflater = LayoutInflater.from(context)
-        this.onSearchResultClickListener = onSearchResultClickListener
-        setHasStableIds(true)
-    }
+    override fun getItemCount(): Int = data?.size ?: 0
 
-    override fun getItemCount(): Int {
-        if (this.data != null) {
-            return this.data.size()
-        }
-        return 0
-    }
-
-    override fun getItemId(i: Int): Long {
-        if (this.data == null || i < 0 || i >= this.data.size()) {
+    override fun getItemId(position: Int): Long {
+        val currentData = data
+        if (currentData == null || position < 0 || position >= currentData.size) {
             return -1L
         }
-        return this.data.get(i).getId().longValue()
+        return currentData[position].id ?: -1L
     }
 
-    override fun onBindViewHolder(searchViewHolder: SearchViewHolder, i: Int) {
-        if (this.data == null || i < 0 || i >= this.data.size()) {
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+        val currentData = data
+        if (currentData == null || position < 0 || position >= currentData.size) {
             return
         }
-        searchViewHolder.bindToData(this.data.get(i))
+        holder.bindToData(currentData[position])
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): SearchViewHolder {
-        return SearchViewHolder(this.inflater.inflate(com.lumiyaviewer.lumiya.R.layout.search_result_item, viewGroup, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+        return SearchViewHolder(inflater.inflate(R.layout.search_result_item, parent, false))
     }
 
-    override fun onViewRecycled(searchViewHolder: SearchViewHolder) {
-        searchViewHolder.onRecycled()
+    override fun onViewRecycled(holder: SearchViewHolder) {
+        holder.onRecycled()
     }
 
     open fun setData(lazyList: LazyList<SearchGridResult>) {

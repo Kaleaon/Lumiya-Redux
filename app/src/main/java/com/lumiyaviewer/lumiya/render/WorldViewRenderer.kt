@@ -55,6 +55,7 @@ class WorldViewRenderer(
 ) : GLSurfaceView.Renderer, GLSurfaceView.EGLContextFactory {
 
     private var currentFrustrumInfo: FrustrumInfo? = null
+    private var currentFrustrumPlanes: FrustrumPlanes? = null
     private var firstFrameTime: Long = 0
     private var lastFrameTime: Long = 0
 
@@ -712,9 +713,11 @@ class WorldViewRenderer(
         }
         if (!Objects.equal(currentFrustrumInfo, frustrumInfo)) {
             currentFrustrumInfo = frustrumInfo
+            val planes = FrustrumPlanes(currentFrustrumInfo!!.mvpMatrix)
+            currentFrustrumPlanes = planes
             rc.drawableStore.spatialObjectIndex.setViewport(
                 currentFrustrumInfo!!,
-                FrustrumPlanes(currentFrustrumInfo!!.mvpMatrix)
+                planes
             )
         }
         if (!isResponsiveMode) rc.runLoadQueue()
@@ -740,9 +743,22 @@ class WorldViewRenderer(
         currentDrawList = rc.drawableStore.spatialObjectIndex.getObjectsInFrustrum()
         val drawList = currentDrawList
         if (drawList != null) {
+            val camera = rc.frameCamera
+            val planes = currentFrustrumPlanes ?: currentFrustrumInfo?.let { FrustrumPlanes(it.mvpMatrix) }
+            val pickedObj = drawPickedObject
             for (avatar in drawList.avatars) {
                 val isHidden = avatar == drawList.myAvatar && ownAvatarHidden
-                if (!isHidden) avatar.RunAnimations()
+                if (!isHidden) {
+                    val isPickedFocal = pickedObj != null && avatar.avatarObject == pickedObj
+                    avatar.RunAnimationsThrottled(
+                        rc,
+                        planes,
+                        camera.x,
+                        camera.y,
+                        camera.z,
+                        isPickedFocal
+                    )
+                }
             }
         }
         processObjectPick()

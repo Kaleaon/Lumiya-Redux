@@ -519,9 +519,7 @@ open class UserManager {
         return this.muteListPool
     }
 
-    public SLMessageResponseCacher<UUID, ParcelInfoReply> parcelInfoData() {
-        return this.parcelInfoData
-    }
+    fun parcelInfoData(): SLMessageResponseCacher<UUID, ParcelInfoReply>? = this.parcelInfoData
 
     fun setActiveAgentCircuit(agentCircuit: SLAgentCircuit) {
         this.activeAgentCircuit.set(agentCircuit)

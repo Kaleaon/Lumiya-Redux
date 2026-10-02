@@ -333,16 +333,21 @@ abstract class ChatterID : Parcelable, Comparable<ChatterID> {
         }
     }
 
-    fun getGroupChatterID(uuid: UUID, uuid2: UUID): ChatterID {
-        return ChatterIDGroup(uuid, uuid2, null)
-    }
+    companion object {
+        @JvmStatic
+        fun getGroupChatterID(uuid: UUID, uuid2: UUID): ChatterIDGroup {
+            return ChatterIDGroup(uuid, uuid2, null)
+        }
 
-    fun getLocalChatterID(uuid: UUID): ChatterID {
-        return ChatterIDLocal(uuid, null as ChatterIDLocal)
-    }
+        @JvmStatic
+        fun getLocalChatterID(uuid: UUID): ChatterIDLocal {
+            return ChatterIDLocal(uuid, null)
+        }
 
-    fun getUserChatterID(uuid: UUID, uuid2: UUID): ChatterIDUser {
-        return ChatterIDUser(uuid, uuid2, null)
+        @JvmStatic
+        fun getUserChatterID(uuid: UUID, uuid2: UUID): ChatterIDUser {
+            return ChatterIDUser(uuid, uuid2, null)
+        }
     }
     fun compareTo(chatterID: ChatterID): Int {
         var compareTo: Int = this.agentUUID.compareTo(chatterID.agentUUID)
