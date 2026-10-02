@@ -29,7 +29,8 @@ open class SLThreadingCircuit @Throws(IOException::class) constructor(
             Debug.Printf("SLThreadingCircuit: working thread started.", *arrayOfNulls<Any>(0))
             while (this.workEnabled) {
                 try {
-                    val runnable: Runnable? = this.queue.poll(1000L, TimeUnit.MILLISECONDS)
+                    val idleTimeout = getIdleInterval().toLong()
+                    val runnable: Runnable? = this.queue.poll(idleTimeout, TimeUnit.MILLISECONDS)
                     if (runnable != null) {
                         runnable.run()
                     } else {

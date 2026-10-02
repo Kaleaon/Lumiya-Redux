@@ -1771,10 +1771,38 @@ open class SLAgentCircuit @Throws(IOException::class) constructor(
         }
     }
 
+    override fun setBackgroundState(inBackground: Boolean) {
+        super.setBackgroundState(inBackground)
+        if (inBackground) {
+            if (!this.agentPaused) {
+                DoAgentPause()
+            }
+        } else {
+            UnpauseAgent()
+        }
+    }
+
+    fun SynchronizeChatHistory() {
+        try {
+            val retrieveIMs = RetrieveInstantMessages()
+            retrieveIMs.AgentData_Field.AgentID = this.circuitInfo.agentID
+            retrieveIMs.AgentData_Field.SessionID = this.circuitInfo.sessionID
+            retrieveIMs.isReliable = true
+            SendMessage(retrieveIMs)
+            Debug.Log("SynchronizeChatHistory: Sent RetrieveInstantMessages request on foreground resumption")
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+    }
+
     fun UnpauseAgent() {
         this.lastVisibleActivities = System.currentTimeMillis()
         if (this.agentPaused) {
             DoAgentResume()
+        }
+        if (this.isBackgroundState) {
+            super.setBackgroundState(false)
+            SynchronizeChatHistory()
         }
     }
 

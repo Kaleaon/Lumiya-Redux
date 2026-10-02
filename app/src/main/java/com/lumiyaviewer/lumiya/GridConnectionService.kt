@@ -13,6 +13,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.PowerManager
 import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.Handler
@@ -88,6 +89,24 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
     private val shownNotificationIds: MutableSet<Int> = Collections.newSetFromMap(Collections.synchronizedMap(HashMap()))
     private var onlineNotificationInfo = OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, connectedAgentNameRetriever, null)
     private var wifiLock: WifiManager.WifiLock? = null
+    private var partialWakeLock: PowerManager.WakeLock? = null
+    private var screenOn = true
+    private var isBackgroundState = false
+
+    private val screenReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                Intent.ACTION_SCREEN_OFF -> {
+                    screenOn = false
+                    updateBackgroundState()
+                }
+                Intent.ACTION_SCREEN_ON -> {
+                    screenOn = true
+                    updateBackgroundState()
+                }
+            }
+        }
+    }
     private val mBinder: IBinder = GridServiceBinder()
 
     private val licenseCheckHandler = object : Handler(Looper.getMainLooper()) {
@@ -129,7 +148,7 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
     }
 
     private var cloudSyncServiceConnection: CloudSyncServiceConnection? = null
-    private var webRTCVoiceClient: WebRTCVoiceClient? = null
+    var webRTCVoiceClient: WebRTCVoiceClient? = null
 
     private val onActiveAgentNameUpdated = ChatterNameRetriever.OnChatterNameUpdated { _ ->
         updateOnlineNotification()
@@ -616,16 +635,75 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
 
     override fun onBind(intent: Intent): IBinder = mBinder
 
+    fun updateBackgroundState() {
+        val inBackground = !screenOn || visibleActivities.isEmpty()
+        if (this.isBackgroundState != inBackground) {
+            this.isBackgroundState = inBackground
+            Debug.Printf("GridConnectionService: background state updated to %b (screenOn=%b, visibleActivities=%d)",
+                inBackground, screenOn, visibleActivities.size)
+
+            if (inBackground) {
+                releaseWakeLocks()
+                gridConnection?.setBackgroundState(true)
+            } else {
+                gridConnection?.setBackgroundState(false)
+                updateOnlineNotification()
+            }
+        }
+    }
+
+    private fun releaseWakeLocks() {
+        wifiLock?.let {
+            if (it.isHeld) {
+                it.release()
+                Debug.Log("GridConnectionService: Released WifiLock for background idle")
+            }
+        }
+        wifiLock = null
+
+        partialWakeLock?.let {
+            if (it.isHeld) {
+                it.release()
+                Debug.Log("GridConnectionService: Released PartialWakeLock for background idle")
+            }
+        }
+        partialWakeLock = null
+    }
+
+    fun acquirePartialWakeLock(timeoutMs: Long = 5000L) {
+        if (!isBackgroundState) {
+            if (partialWakeLock == null) {
+                val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+                partialWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Lumiya:PartialWakeLock")
+                partialWakeLock?.setReferenceCounted(false)
+            }
+            if (partialWakeLock != null && !partialWakeLock!!.isHeld) {
+                partialWakeLock!!.acquire(timeoutMs)
+            }
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         serviceInstance = WeakReference(this)
         prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         prefs!!.registerOnSharedPreferenceChangeListener(this)
         readPreferences(prefs!!)
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        }
+        registerReceiver(screenReceiver, filter)
         updateOnlineNotification()
     }
 
     override fun onDestroy() {
+        try {
+            unregisterReceiver(screenReceiver)
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+        releaseWakeLocks()
         prefs?.unregisterOnSharedPreferenceChangeListener(this)
         prefs = null
         onlineNotificationInfo = OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, connectedAgentNameRetriever, null)
@@ -718,6 +796,7 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
         @JvmStatic
         fun setActivityVisible(activity: Activity, visible: Boolean) {
             if (visible) visibleActivities.add(activity) else visibleActivities.remove(activity)
+            getServiceInstance()?.updateBackgroundState()
             if (visibleActivities.isEmpty() || gridConnection == null) return
             try {
                 if (gridConnection!!.connectionState == SLGridConnection.ConnectionState.Connected) {
