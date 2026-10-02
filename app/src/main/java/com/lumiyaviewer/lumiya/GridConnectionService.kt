@@ -12,6 +12,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.PowerManager
 import android.net.wifi.WifiManager
@@ -108,6 +111,71 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
         }
     }
     private val mBinder: IBinder = GridServiceBinder()
+
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    private var currentActiveNetwork: Network? = null
+
+    fun getCurrentActiveNetwork(): Network? = currentActiveNetwork
+
+    private fun registerNetworkCallback() {
+        if (networkCallback != null) return
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                Debug.Printf("GridConnectionService: Network onAvailable: %s", network)
+                handleNetworkRebind(cm, network)
+            }
+
+            override fun onLost(network: Network) {
+                Debug.Printf("GridConnectionService: Network onLost: %s", network)
+                if (currentActiveNetwork == network) {
+                    currentActiveNetwork = null
+                    gridConnection?.onNetworkLost()
+                }
+            }
+
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                val hasInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                Debug.Printf("GridConnectionService: Network capabilities changed: %s (hasInternet=%b)", network, hasInternet)
+                if (hasInternet && currentActiveNetwork != network) {
+                    handleNetworkRebind(cm, network)
+                }
+            }
+        }
+        networkCallback = callback
+        try {
+            cm.registerDefaultNetworkCallback(callback)
+            Debug.Printf("GridConnectionService: Default network callback registered")
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+    }
+
+    private fun handleNetworkRebind(cm: ConnectivityManager, network: Network) {
+        if (currentActiveNetwork == network) return
+        currentActiveNetwork = network
+        try {
+            cm.bindProcessToNetwork(network)
+            Debug.Printf("GridConnectionService: Process bound to network %s", network)
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+        gridConnection?.onNetworkRebound(network)
+    }
+
+    private fun unregisterNetworkCallback() {
+        val callback = networkCallback ?: return
+        networkCallback = null
+        currentActiveNetwork = null
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
+        try {
+            cm.bindProcessToNetwork(null)
+            cm.unregisterNetworkCallback(callback)
+            Debug.Printf("GridConnectionService: Default network callback unregistered")
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+    }
 
     private val licenseCheckHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(message: Message) {
@@ -694,6 +762,7 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
             addAction(Intent.ACTION_SCREEN_ON)
         }
         registerReceiver(screenReceiver, filter)
+        registerNetworkCallback()
         updateOnlineNotification()
     }
 
@@ -704,6 +773,7 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
             Debug.Warning(e)
         }
         releaseWakeLocks()
+        unregisterNetworkCallback()
         prefs?.unregisterOnSharedPreferenceChangeListener(this)
         prefs = null
         onlineNotificationInfo = OnlineNotificationInfo(onlineNotify, this, gridName, gridConnection, connectedAgentNameRetriever, null)

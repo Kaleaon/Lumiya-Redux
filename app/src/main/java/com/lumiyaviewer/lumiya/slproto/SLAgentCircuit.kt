@@ -1320,6 +1320,10 @@ open class SLAgentCircuit @Throws(IOException::class) constructor(
             this.objectPropertiesRateLimiter.firePending()
         }
     }
+    fun onNetworkRebound() {
+        Debug.Printf("SLAgentCircuit: Network rebound event received.")
+    }
+
     fun ProcessNetworkError() {
         super.ProcessNetworkError()
         Debug.Printf("Network: Network error.", arrayOfNulls<Object>(0))
