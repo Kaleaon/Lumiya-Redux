@@ -511,6 +511,26 @@ pub struct SpatialTreeMarker {
     _private: (),
 }
 
+/// Mobile VRAM hard ceiling limit (512 MB).
+pub const VRAM_HARD_CEILING_BYTES: u64 = 512 * 1024 * 1024;
+
+/// Mobile active GPU texture footprint limit (384 MB).
+pub const VRAM_TARGET_LIMIT_BYTES: u64 = 384 * 1024 * 1024;
+
+/// Calculates LOD level based on camera distance in meters:
+/// - < 10m: Full resolution (LOD 0)
+/// - 10m - 35m: Mid resolution (LOD 1)
+/// - > 35m: Low resolution (LOD 2)
+pub fn get_lod_for_distance(distance_meters: f32) -> u32 {
+    if distance_meters < 10.0 {
+        0
+    } else if distance_meters <= 35.0 {
+        1
+    } else {
+        2
+    }
+}
+
 // ===========================================================================
 // Tests
 // ===========================================================================
@@ -778,5 +798,15 @@ mod tests {
     fn test_render_pass_all() {
         assert_eq!(RENDER_PASS_ALL, 3);
         assert_eq!(RENDER_PASS_OPAQUE | RENDER_PASS_TRANSPARENT, RENDER_PASS_ALL);
+    }
+
+    #[test]
+    fn test_vram_limits_and_lod_distance() {
+        assert_eq!(VRAM_HARD_CEILING_BYTES, 536870912);
+        assert_eq!(VRAM_TARGET_LIMIT_BYTES, 402653184);
+
+        assert_eq!(get_lod_for_distance(5.0), 0);
+        assert_eq!(get_lod_for_distance(20.0), 1);
+        assert_eq!(get_lod_for_distance(50.0), 2);
     }
 }

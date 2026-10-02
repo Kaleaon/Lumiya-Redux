@@ -19,7 +19,7 @@ object TextureMemoryTracker {
     private val textureMemoryUsed = AtomicInteger(0)
     private val openJpegMemoryUsed = AtomicInteger(0)
     private val openJpegMemoryMmapped = AtomicInteger(0)
-    private val textureMemoryLimit = AtomicInteger(67108864) // SLMoveEvents.AGENT_CONTROL_TURN_RIGHT
+    private val textureMemoryLimit = AtomicInteger(536870912) // 512MB VRAM hard ceiling
     private val inflightLowMemory = AtomicBoolean(false)
     private val bufMemory = AtomicInteger(0)
     private val delayedRelease = Array(RELEASE_DELAY_FRAMES) { AtomicInteger(0) }
