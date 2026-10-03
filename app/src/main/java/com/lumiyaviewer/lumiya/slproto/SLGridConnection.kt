@@ -349,6 +349,41 @@ class SLGridConnection : SLConnection() {
         }
     }
 
+    @Volatile
+    private var lastReboundNetwork: Any? = null
+
+    fun getActiveNetwork(): Any? = lastReboundNetwork
+
+    @Synchronized
+    fun onNetworkRebound(network: Any?) {
+        lastReboundNetwork = network
+        Debug.Log("SLGridConnection: onNetworkRebound called with network: $network, connectionState = $_connectionState, userWantsConnected = $userWantsConnected")
+        when (_connectionState) {
+            ConnectionState.Connected -> {
+                try {
+                    agentCircuit?.onNetworkRebound()
+                } catch (e: Exception) {
+                    Debug.Warning(e)
+                }
+            }
+            ConnectionState.Idle -> {
+                if (userWantsConnected && authParams != null) {
+                    Debug.Log("SLGridConnection: Network rebound while user wants connected, triggering auto-reconnect")
+                    reconnectAttempts = 0
+                    Reconnect()
+                }
+            }
+            ConnectionState.Connecting -> {
+                // Connecting thread will automatically use newly bound process network
+            }
+        }
+    }
+
+    @Synchronized
+    fun onNetworkLost() {
+        Debug.Log("SLGridConnection: onNetworkLost called, connectionState = $_connectionState")
+    }
+
     @Synchronized
     fun setBackgroundState(inBackground: Boolean) {
         agentCircuit?.setBackgroundState(inBackground)
