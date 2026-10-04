@@ -1,87 +1,70 @@
 package com.lumiyaviewer.lumiya.media
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.os.Build
 import android.os.Handler
 import com.lumiyaviewer.lumiya.Debug
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
 
-class AudioManagerWrapper(context: Context) : InvocationHandler {
+class AudioManagerWrapper(context: Context) : AudioManager.OnAudioFocusChangeListener {
 
-    private var audioFocusHandler: Any? = null
     private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    private var hasAudioFocusAPI: Boolean = false
     private var mHandler: Handler? = null
     private var msgCode: Int = 0
+    private var audioFocusRequest: AudioFocusRequest? = null
 
-    init {
-        try {
-            val declaredClasses = audioManager.javaClass.declaredClasses
-            var listenerClass: Class<*>? = null
-            for (cls in declaredClasses) {
-                if (cls.simpleName == "OnAudioFocusChangeListener") {
-                    listenerClass = cls
-                    break
-                }
-            }
-            if (listenerClass == null) {
-                throw Exception("Failed to get OnAudioFocusChangeListener interface")
-            }
-            mRequestAudioFocus = AudioManager::class.java.getMethod(
-                "requestAudioFocus", listenerClass, Integer.TYPE, Integer.TYPE
-            )
-            mAbandonAudioFocus = AudioManager::class.java.getMethod(
-                "abandonAudioFocus", listenerClass
-            )
-            audioFocusHandler = Proxy.newProxyInstance(
-                listenerClass.classLoader, arrayOf(listenerClass), this
-            )
-            hasAudioFocusAPI = true
-        } catch (e: Exception) {
-            // 3.4.2 falls back to no audio-focus handling on any failure here
-            // (hidden API missing, proxy creation refused, ...).
-            hasAudioFocusAPI = false
-            Debug.Log("AudioManagerWrapper: audio focus api not found")
-            e.printStackTrace()
-        }
-        Debug.Log("AudioManagerWrapper: has audio focus api = $hasAudioFocusAPI")
-    }
-
-    private fun onAudioFocusChange(i: Int) {
-        mHandler?.sendMessage(mHandler!!.obtainMessage(msgCode, i, 0))
+    override fun onAudioFocusChange(focusChange: Int) {
+        mHandler?.sendMessage(mHandler!!.obtainMessage(msgCode, focusChange, 0))
     }
 
     fun abandonAudioFocus() {
         Debug.Log("AudioManagerWrapper: abandoning audio focus")
-        if (hasAudioFocusAPI) {
-            try {
-                mAbandonAudioFocus?.invoke(audioManager, audioFocusHandler)
-            } catch (_: Exception) {
-            }
-        }
-    }
-
-    override fun invoke(obj: Any?, method: Method?, objArr: Array<out Any?>?): Any? {
         try {
-            if (method?.name.equals("onAudioFocusChange", ignoreCase = true) &&
-                objArr != null && objArr.isNotEmpty() && objArr[0] is Int
-            ) {
-                onAudioFocusChange(objArr[0] as Int)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                audioFocusRequest?.let { request ->
+                    audioManager.abandonAudioFocusRequest(request)
+                    audioFocusRequest = null
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                audioManager.abandonAudioFocus(this)
             }
-            return null
-        } catch (_: Exception) {
-            return null
+        } catch (e: Exception) {
+            Debug.Log("AudioManagerWrapper: error abandoning audio focus: ${e.message}")
         }
     }
 
     fun requestAudioFocus(): Boolean {
         Debug.Log("AudioManagerWrapper: requesting audio focus")
-        if (!hasAudioFocusAPI) return true
         return try {
-            (mRequestAudioFocus?.invoke(audioManager, audioFocusHandler, 3, 1) as Int) == 1
-        } catch (_: Exception) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val audioAttributes = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+
+                val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAudioAttributes(audioAttributes)
+                    .setAcceptsDelayedFocusGain(false)
+                    .setOnAudioFocusChangeListener(this)
+                    .build()
+
+                this.audioFocusRequest = focusRequest
+                val res = audioManager.requestAudioFocus(focusRequest)
+                res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+            } else {
+                @Suppress("DEPRECATION")
+                val res = audioManager.requestAudioFocus(
+                    this,
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN
+                )
+                res == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+            }
+        } catch (e: Exception) {
+            Debug.Log("AudioManagerWrapper: error requesting audio focus: ${e.message}")
             true
         }
     }
@@ -92,16 +75,13 @@ class AudioManagerWrapper(context: Context) : InvocationHandler {
     }
 
     companion object {
-        const val AUDIOFOCUS_GAIN = 1
-        const val AUDIOFOCUS_GAIN_TRANSIENT = 2
-        const val AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK = 3
-        const val AUDIOFOCUS_LOSS = -1
-        const val AUDIOFOCUS_LOSS_TRANSIENT = -2
-        const val AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK = -3
-        const val AUDIOFOCUS_REQUEST_FAILED = 0
-        const val AUDIOFOCUS_REQUEST_GRANTED = 1
-
-        private var mAbandonAudioFocus: Method? = null
-        private var mRequestAudioFocus: Method? = null
+        const val AUDIOFOCUS_GAIN = AudioManager.AUDIOFOCUS_GAIN
+        const val AUDIOFOCUS_GAIN_TRANSIENT = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+        const val AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+        const val AUDIOFOCUS_LOSS = AudioManager.AUDIOFOCUS_LOSS
+        const val AUDIOFOCUS_LOSS_TRANSIENT = AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
+        const val AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK = AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+        const val AUDIOFOCUS_REQUEST_FAILED = AudioManager.AUDIOFOCUS_REQUEST_FAILED
+        const val AUDIOFOCUS_REQUEST_GRANTED = AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 }
