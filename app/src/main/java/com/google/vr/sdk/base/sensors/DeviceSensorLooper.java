@@ -14,14 +14,26 @@ import java.util.Iterator;
 
 public class DeviceSensorLooper implements SensorEventProvider {
     private static final String LOG_TAG = DeviceSensorLooper.class.getSimpleName();
+    public static final int DEFAULT_SAMPLING_PERIOD_US = SensorManager.SENSOR_DELAY_GAME;
+
     private boolean isRunning;
     private final ArrayList<SensorEventListener> registeredListeners = new ArrayList<>();
     private SensorEventListener sensorEventListener;
     private Looper sensorLooper;
     private SensorManager sensorManager;
+    private final int customSensorDelay;
 
     public DeviceSensorLooper(SensorManager sensorManager) {
+        this(sensorManager, DEFAULT_SAMPLING_PERIOD_US);
+    }
+
+    public DeviceSensorLooper(SensorManager sensorManager, int customSensorDelay) {
         this.sensorManager = sensorManager;
+        this.customSensorDelay = customSensorDelay;
+    }
+
+    public int getCustomSensorDelay() {
+        return this.customSensorDelay;
     }
 
     public Sensor getUncalibratedGyro() {
@@ -68,13 +80,13 @@ public class DeviceSensorLooper implements SensorEventProvider {
             @Override
             protected void onLooperPrepared() {
                 Handler handler = new Handler(Looper.myLooper());
-                DeviceSensorLooper.this.sensorManager.registerListener(DeviceSensorLooper.this.sensorEventListener, DeviceSensorLooper.this.sensorManager.getDefaultSensor(1), 0, handler);
+                DeviceSensorLooper.this.sensorManager.registerListener(DeviceSensorLooper.this.sensorEventListener, DeviceSensorLooper.this.sensorManager.getDefaultSensor(1), DeviceSensorLooper.this.customSensorDelay, handler);
                 Sensor uncalibratedGyro = DeviceSensorLooper.this.getUncalibratedGyro();
                 if (uncalibratedGyro == null) {
                     Log.i(DeviceSensorLooper.LOG_TAG, "Uncalibrated gyroscope unavailable, default to regular gyroscope.");
                     uncalibratedGyro = DeviceSensorLooper.this.sensorManager.getDefaultSensor(4);
                 }
-                DeviceSensorLooper.this.sensorManager.registerListener(DeviceSensorLooper.this.sensorEventListener, uncalibratedGyro, 0, handler);
+                DeviceSensorLooper.this.sensorManager.registerListener(DeviceSensorLooper.this.sensorEventListener, uncalibratedGyro, DeviceSensorLooper.this.customSensorDelay, handler);
             }
         };
         handlerThread.start();
