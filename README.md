@@ -72,27 +72,22 @@ pre-commit run --all-files
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) to navigate the code and
 [`BUILD_STATUS.md`](BUILD_STATUS.md) for the last-mile cleanup list.
 
-## Pull-request verification
+## CI/CD Pipeline & Itemized Verification Tasks
 
-Every pull request runs the Android CI workflow. It installs the pinned API 34
-SDK, validates the Gradle wrapper, builds a debug APK, and runs the complete
-Gradle `check` lifecycle (including JVM tests, Android lint, and the repository's
-source-policy checks). Successful runs retain the installable debug APK for 14
-days; lint and unit-test reports are uploaded even when verification fails.
+The unified CI workflow (`.github/workflows/ci.yml`) runs on pull requests and pushes to `main`/`master`, enforcing three itemized verification tasks:
 
-Run the same verification locally with:
-
-```bash
-./gradlew --no-daemon :app:assembleDebug :app:check
-```
-
-## Protocol conformance checks
-
-```bash
-tools/protocol/run_conformance.sh
-```
-
-Run this before protocol modernization changes and rely on CI to enforce it for touched protocol packages.
+1. **Task 1 - Pre-Commit Guardrails**: Code formatting and linter checks
+   ```bash
+   pre-commit run --all-files
+   ```
+2. **Task 2 - Android Build & Quality Verification**: Compile debug APK, run JVM tests, and Android lint
+   ```bash
+   ./gradlew --no-daemon :app:assembleDebug :app:check
+   ```
+3. **Task 3 - Protocol Conformance Verification**: Verify protocol definitions and ORM mapping conformance
+   ```bash
+   tools/protocol/run_conformance.sh
+   ```
 ## Android support window
 
 - **Minimum supported Android version:** 8.0 (API 26)
