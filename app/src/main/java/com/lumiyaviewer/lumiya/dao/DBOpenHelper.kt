@@ -8,6 +8,15 @@ import com.lumiyaviewer.lumiya.Debug
 class DBOpenHelper(context: Context, name: String?, cursorFactory: SQLiteDatabase.CursorFactory?) :
     DaoMaster.DevOpenHelper(context, name, cursorFactory) {
 
+    override fun onConfigure(sqLiteDatabase: SQLiteDatabase) {
+        super.onConfigure(sqLiteDatabase)
+        try {
+            sqLiteDatabase.enableWriteAheadLogging()
+        } catch (e: Exception) {
+            Debug.Warning(e)
+        }
+    }
+
     private fun tryUpgradeTo71(sqLiteDatabase: SQLiteDatabase, fromVersion: Int): Boolean {
         if (!shouldAttemptTargetedUpgradeTo71(fromVersion, 71)) {
             return false
