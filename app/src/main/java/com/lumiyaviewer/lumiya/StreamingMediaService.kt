@@ -7,6 +7,9 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
+import android.media.AudioManager
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Message
@@ -38,6 +41,7 @@ class StreamingMediaService : Service() {
     private var lastLocationDesc = ""
     private var lastActiveAgentUUID: UUID? = null
     private var lastParcelData: ParcelData? = null
+    private var isPausedForTransientLoss = false
     private val mHandler = AudioFocusChangeHandler(this)
 
     private class AudioFocusChangeHandler(service: StreamingMediaService) : Handler() {
@@ -51,28 +55,50 @@ class StreamingMediaService : Service() {
 
     fun handleAudioFocusChange(focusChange: Int) {
         Debug.Log("StreamingMediaService: focusChange = $focusChange")
-        if (focusChange == -1) {
-            isPlayingMedia.setData(SubscriptionSingleKey.Value, false)
-            mediaWrapper.stop()
-            audioManagerWrapper?.abandonAudioFocus()
-            safeUnregisterReceiver()
-            stopForeground(true)
-            notify = null
-            stopSelf()
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                mediaWrapper.setVolume(1.0f)
+                if (isPausedForTransientLoss) {
+                    mediaWrapper.resume()
+                    isPausedForTransientLoss = false
+                }
+            }
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                isPausedForTransientLoss = false
+                isPlayingMedia.setData(SubscriptionSingleKey.Value, false)
+                mediaWrapper.stop()
+                audioManagerWrapper?.abandonAudioFocus()
+                safeUnregisterReceiver()
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                notify = null
+                stopSelf()
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                isPausedForTransientLoss = true
+                mediaWrapper.pause()
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                mediaWrapper.setVolume(0.2f)
+            }
         }
+    }
+
+    private fun stopServiceAndMedia() {
+        isPausedForTransientLoss = false
+        isPlayingMedia.setData(SubscriptionSingleKey.Value, false)
+        mediaWrapper.stop()
+        audioManagerWrapper?.abandonAudioFocus()
+        safeUnregisterReceiver()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        notify = null
+        stopSelf()
     }
 
     private fun handleStartService(intent: Intent?) {
         if (intent == null) return
         val action = intent.action ?: ""
         if (action != "com.lumiyaviewer.lumiya.ACTION_PLAY_MEDIA") {
-            isPlayingMedia.setData(SubscriptionSingleKey.Value, false)
-            mediaWrapper.stop()
-            audioManagerWrapper?.abandonAudioFocus()
-            safeUnregisterReceiver()
-            stopForeground(true)
-            notify = null
-            stopSelf()
+            stopServiceAndMedia()
             return
         }
         val url = intent.getStringExtra(MEDIA_URL_KEY) ?: ""
@@ -105,7 +131,7 @@ class StreamingMediaService : Service() {
         try {
             unregisterReceiver(noisyReceiver)
         } catch (_: Exception) {
-            Debug.Log("StreamingMediaService: Failed to un register noisy receiver")
+            Debug.Log("StreamingMediaService: Failed to unregister noisy receiver")
         }
     }
 
@@ -130,7 +156,12 @@ class StreamingMediaService : Service() {
             .addAction(R.drawable.icon_material_stop, "Stop", stopIntent)
             .setDeleteIntent(stopIntent)
             .setOnlyAlertOnce(true)
-        startForeground(R.id.media_notify_id, builder.build())
+        val notification = builder.build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(R.id.media_notify_id, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        } else {
+            startForeground(R.id.media_notify_id, notification)
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -145,7 +176,7 @@ class StreamingMediaService : Service() {
         mediaWrapper.release()
         audioManagerWrapper?.abandonAudioFocus()
         safeUnregisterReceiver()
-        stopForeground(true)
+        stopForeground(STOP_FOREGROUND_REMOVE)
         notify = null
         isPlayingMedia.setData(SubscriptionSingleKey.Value, false)
     }

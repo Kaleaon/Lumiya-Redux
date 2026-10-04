@@ -1,6 +1,9 @@
 package com.lumiyaviewer.lumiya.media
 
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
 import com.lumiyaviewer.lumiya.Debug
 
 class MediaPlayerWrapper :
@@ -21,6 +24,12 @@ class MediaPlayerWrapper :
     @Volatile
     private var mediaURL: String = ""
 
+    @Volatile
+    private var currentVolume: Float = 1.0f
+
+    @Volatile
+    private var isPaused: Boolean = false
+
     override fun onError(mediaPlayer: MediaPlayer, what: Int, extra: Int): Boolean {
         Debug.Log("MediaPlayerWrapper: onError: what = $what, extra = $extra")
         return false
@@ -31,9 +40,16 @@ class MediaPlayerWrapper :
         return false
     }
 
-    override fun onPrepared(mediaPlayer: MediaPlayer) {
-        Debug.Log("MediaPlayerWrapper: prepared, starting playback")
-        mediaPlayer.start()
+    override fun onPrepared(mp: MediaPlayer) {
+        Debug.Log("MediaPlayerWrapper: prepared, starting playback with volume $currentVolume")
+        try {
+            mp.setVolume(currentVolume, currentVolume)
+            if (!isPaused) {
+                mp.start()
+            }
+        } catch (e: Exception) {
+            Debug.Log("MediaPlayerWrapper: Error starting onPrepared: ${e.message}")
+        }
     }
 
     fun play(str: String) {
@@ -41,6 +57,8 @@ class MediaPlayerWrapper :
             if (mustExit) return
             mustPlay = true
             mustExit = false
+            isPaused = false
+            currentVolume = 1.0f
             var trim = str.trim()
             if (trim.lowercase().startsWith("http://")) {
                 trim = "http://" + trim.substring(7)
@@ -56,10 +74,51 @@ class MediaPlayerWrapper :
         }
     }
 
+    fun pause() {
+        synchronized(this) {
+            isPaused = true
+            try {
+                if (mediaPlayer?.isPlaying == true) {
+                    mediaPlayer?.pause()
+                    Debug.Log("MediaPlayerWrapper: paused playback")
+                }
+            } catch (e: Exception) {
+                Debug.Log("MediaPlayerWrapper: Error pausing playback: ${e.message}")
+            }
+        }
+    }
+
+    fun resume() {
+        synchronized(this) {
+            isPaused = false
+            try {
+                if (mediaPlayer != null && !mediaPlayer!!.isPlaying) {
+                    mediaPlayer?.start()
+                    Debug.Log("MediaPlayerWrapper: resumed playback")
+                }
+            } catch (e: Exception) {
+                Debug.Log("MediaPlayerWrapper: Error resuming playback: ${e.message}")
+            }
+        }
+    }
+
+    fun setVolume(vol: Float) {
+        synchronized(this) {
+            currentVolume = vol.coerceIn(0.0f, 1.0f)
+            try {
+                mediaPlayer?.setVolume(currentVolume, currentVolume)
+                Debug.Log("MediaPlayerWrapper: setVolume to $currentVolume")
+            } catch (e: Exception) {
+                Debug.Log("MediaPlayerWrapper: Error setting volume: ${e.message}")
+            }
+        }
+    }
+
     fun release() {
         synchronized(this) {
             mustPlay = false
             mustExit = true
+            isPaused = false
             mediaURL = ""
             workingThread = null
             (this as Object).notify()
@@ -73,9 +132,18 @@ class MediaPlayerWrapper :
                 Debug.Log("MediaPlayerWrapper: working thread must play, URL = $mediaURL")
                 mediaPlayer?.release()
                 mediaPlayer = null
-                @Suppress("DEPRECATION")
                 val mp = MediaPlayer().also {
-                    it.setAudioStreamType(3)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.21) {
+                        it.setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+                    } else {
+                        @Suppress("DEPRECATION")
+                        it.setAudioStreamType(AudioManager.STREAM_MUSIC)
+                    }
                     it.setOnErrorListener(this)
                     it.setOnInfoListener(this)
                     it.setOnPreparedListener(this)
@@ -119,6 +187,7 @@ class MediaPlayerWrapper :
         synchronized(this) {
             if (mustExit) return
             mustPlay = false
+            isPaused = false
             mediaURL = ""
             (this as Object).notify()
         }
