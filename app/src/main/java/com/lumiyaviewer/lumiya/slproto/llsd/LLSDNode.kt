@@ -10,6 +10,7 @@ import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDBoolean
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDate
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDouble
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDInt
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDLong
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDString
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDURI
@@ -103,7 +104,7 @@ abstract class LLSDNode {
     }
 
     fun isLong(): Boolean {
-        return this is LLSDInt
+        return this is LLSDInt || this is LLSDLong
     }
 
     fun isString(): Boolean {
@@ -160,11 +161,264 @@ abstract class LLSDNode {
                         fromBinary(DataInputStream(bufferedInputStream))
                     LLSDContentTypeDetector.LLSDContentType.llsdXML ->
                         parseXML(bufferedInputStream, "UTF-8")
+                    LLSDContentTypeDetector.LLSDContentType.llsdNotation ->
+                        fromNotation(bufferedInputStream)
                 }
             } catch (e: IOException) {
                 val llsdxmlException = LLSDXMLException("I/O error")
                 llsdxmlException.initCause(e)
                 throw llsdxmlException
+            }
+        }
+
+        @JvmStatic
+        fun fromNotation(inputStream: InputStream): LLSDNode {
+            val text = inputStream.bufferedReader(Charsets.UTF_8).readText()
+            return fromNotation(text)
+        }
+
+        @JvmStatic
+        fun fromNotation(rawText: String): LLSDNode {
+            var text = rawText
+            if (text.startsWith("<?llsd/notation?>") || text.startsWith("<? llsd/notation ?>")) {
+                val nl = text.indexOf('\n')
+                if (nl >= 0) text = text.substring(nl + 1)
+            }
+            return NotationParser(text).parse()
+        }
+
+        private class NotationParser(private val text: String) {
+            private var pos = 0
+
+            fun parse(): LLSDNode {
+                skipWs()
+                return parseValue()
+            }
+
+            private fun skipWs() {
+                while (pos < text.length && text[pos].isWhitespace()) pos++
+            }
+
+            private fun peek(): Char = if (pos < text.length) text[pos] else '\u0000'
+            private fun consume(): Char = text[pos++]
+
+            fun parseValue(): LLSDNode {
+                skipWs()
+                val c = peek()
+                return when (c) {
+                    '!' -> { consume(); LLSDUndefined() }
+                    'T', 't' -> parseBoolWord(true)
+                    'F', 'f' -> parseBoolWord(false)
+                    '1' -> { consume(); LLSDBoolean(true) }
+                    '0' -> { consume(); LLSDBoolean(false) }
+                    'i' -> {
+                        if (text.startsWith("i64", pos)) {
+                            pos += 3
+                            LLSDLong(parseNumberWord().toLongOrNull() ?: 0L)
+                        } else {
+                            consume()
+                            LLSDInt(parseNumberWord().toIntOrNull() ?: 0)
+                        }
+                    }
+                    'r' -> { consume(); LLSDDouble(parseNumberWord().toDoubleOrNull() ?: 0.0) }
+                    'u' -> { consume(); LLSDUUID(parseUuidLiteral()) }
+                    'd' -> { consume(); LLSDDate(parseQuotedAfterTag()) }
+                    'l' -> { consume(); LLSDURI(parseQuotedAfterTag()) }
+                    'b' -> parseBinaryNotation()
+                    's' -> parseSizedString()
+                    '\'' -> LLSDString(parseSingleQuoted())
+                    '"' -> LLSDString(parseDoubleQuoted())
+                    '{' -> parseMap()
+                    '[' -> parseArray()
+                    else -> {
+                        if (c != '\u0000') consume()
+                        LLSDUndefined()
+                    }
+                }
+            }
+
+            private fun parseBoolWord(value: Boolean): LLSDNode {
+                val word = if (value) "true" else "false"
+                if (text.regionMatches(pos, word, 0, word.length, ignoreCase = true)) {
+                    pos += word.length
+                } else {
+                    consume()
+                }
+                return LLSDBoolean(value)
+            }
+
+            private fun parseNumberWord(): String {
+                val start = pos
+                while (pos < text.length) {
+                    val c = text[pos]
+                    if (c.isWhitespace() || c in ",}]") break
+                    pos++
+                }
+                return text.substring(start, pos)
+            }
+
+            private fun parseUuidLiteral(): String {
+                val start = pos
+                val end = (start + 36).coerceAtMost(text.length)
+                pos = end
+                return text.substring(start, end)
+            }
+
+            private fun parseQuotedAfterTag(): String {
+                skipWs()
+                return when (peek()) {
+                    '"' -> parseDoubleQuoted()
+                    '\'' -> parseSingleQuoted()
+                    else -> ""
+                }
+            }
+
+            private fun parseDoubleQuoted(): String {
+                consume()
+                val sb = StringBuilder()
+                while (pos < text.length) {
+                    val c = consume()
+                    if (c == '"') break
+                    if (c == '\\' && pos < text.length) {
+                        val esc = consume()
+                        when (esc) {
+                            'a' -> sb.append('\u0007')
+                            'b' -> sb.append('\b')
+                            'f' -> sb.append('\u000C')
+                            'n' -> sb.append('\n')
+                            'r' -> sb.append('\r')
+                            't' -> sb.append('\t')
+                            'v' -> sb.append('\u000B')
+                            else -> sb.append(esc)
+                        }
+                    } else {
+                        sb.append(c)
+                    }
+                }
+                return sb.toString()
+            }
+
+            private fun parseSingleQuoted(): String {
+                consume()
+                val sb = StringBuilder()
+                while (pos < text.length) {
+                    val c = consume()
+                    if (c == '\'') break
+                    if (c == '\\' && pos < text.length) {
+                        val esc = consume()
+                        when (esc) {
+                            'a' -> sb.append('\u0007')
+                            'b' -> sb.append('\b')
+                            'f' -> sb.append('\u000C')
+                            'n' -> sb.append('\n')
+                            'r' -> sb.append('\r')
+                            't' -> sb.append('\t')
+                            'v' -> sb.append('\u000B')
+                            else -> sb.append(esc)
+                        }
+                    } else {
+                        sb.append(c)
+                    }
+                }
+                return sb.toString()
+            }
+
+            private fun parseSizedString(): LLSDNode {
+                consume()
+                skipWs()
+                if (peek() == '(') {
+                    consume()
+                    val lenStr = StringBuilder()
+                    while (pos < text.length && peek().isDigit()) lenStr.append(consume())
+                    if (peek() == ')') consume()
+                    val len = lenStr.toString().toIntOrNull() ?: 0
+                    skipWs()
+                    val quote = consume()
+                    val start = pos
+                    pos = (start + len).coerceAtMost(text.length)
+                    val str = text.substring(start, pos)
+                    if (pos < text.length && peek() == quote) consume()
+                    return LLSDString(str)
+                } else {
+                    return LLSDString(parseQuotedAfterTag())
+                }
+            }
+
+            private fun parseBinaryNotation(): LLSDNode {
+                consume()
+                if (text.startsWith("64", pos)) {
+                    pos += 2
+                    val str = parseQuotedAfterTag()
+                    val bytes = try { android.util.Base64.decode(str, android.util.Base64.DEFAULT) } catch (_: Exception) { ByteArray(0) }
+                    return LLSDBinary(bytes)
+                }
+                if (text.startsWith("16", pos)) {
+                    pos += 2
+                    val str = parseQuotedAfterTag()
+                    val bytes = hexDecode(str)
+                    return LLSDBinary(bytes)
+                }
+                skipWs()
+                if (peek() == '(') {
+                    consume()
+                    val lenStr = StringBuilder()
+                    while (pos < text.length && peek().isDigit()) lenStr.append(consume())
+                    if (peek() == ')') consume()
+                    val len = lenStr.toString().toIntOrNull() ?: 0
+                    skipWs()
+                    val quote = consume()
+                    val bytes = ByteArray(len)
+                    var count = 0
+                    while (pos < text.length && count < len) {
+                        val c = consume()
+                        if (c == quote) break
+                        bytes[count++] = c.code.toByte()
+                    }
+                    return LLSDBinary(bytes)
+                }
+                return LLSDBinary(ByteArray(0))
+            }
+
+            private fun hexDecode(hex: String): ByteArray {
+                val clean = hex.replace(" ", "")
+                val len = clean.length / 2
+                val bytes = ByteArray(len)
+                for (i in 0 until len) {
+                    bytes[i] = clean.substring(i * 2, i * 2 + 2).toInt(16).toByte()
+                }
+                return bytes
+            }
+
+            private fun parseMap(): LLSDNode {
+                consume()
+                val map = HashMap<String, LLSDNode>()
+                skipWs()
+                while (pos < text.length && peek() != '}') {
+                    val key = parseQuotedAfterTag().ifEmpty { parseNumberWord() }
+                    skipWs()
+                    if (peek() == ':' || peek() == '=') consume()
+                    skipWs()
+                    map[key] = parseValue()
+                    skipWs()
+                    if (peek() == ',') consume()
+                    skipWs()
+                }
+                if (pos < text.length && peek() == '}') consume()
+                return LLSDMap(map)
+            }
+
+            private fun parseArray(): LLSDNode {
+                consume()
+                val arr = LLSDArray()
+                skipWs()
+                while (pos < text.length && peek() != ']') {
+                    arr.add(parseValue())
+                    skipWs()
+                    if (peek() == ',') consume()
+                    skipWs()
+                }
+                if (pos < text.length && peek() == ']') consume()
+                return arr
             }
         }
 
@@ -200,6 +454,7 @@ abstract class LLSDNode {
                             } while (dataInputStream.readByte().toInt() != 62)
                             return parseArrayBody(dataInputStream)
                         }
+                        73 -> return LLSDLong(dataInputStream.readLong())
                         91 -> return parseArrayBody(dataInputStream)
                         98 -> {
                             val bytes = ByteArray(dataInputStream.readInt())
@@ -232,7 +487,8 @@ abstract class LLSDNode {
                             val readInt4 = dataInputStream.readInt()
                             val hashMap = HashMap<String, LLSDNode>(readInt4)
                             while (i < readInt4) {
-                                if (dataInputStream.readByte().toInt() != 107) {
+                                val keyTag = dataInputStream.readByte().toInt()
+                                if (keyTag != 107 && keyTag != 115) {
                                     throw LLSDXMLException("Map key expected")
                                 }
                                 val bytes4 = ByteArray(dataInputStream.readInt())
