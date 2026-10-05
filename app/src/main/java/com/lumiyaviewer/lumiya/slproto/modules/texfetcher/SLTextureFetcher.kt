@@ -14,156 +14,196 @@ import com.lumiyaviewer.lumiya.utils.PriorityBinQueue
 import java.io.File
 import java.util.ConcurrentModificationException
 import java.util.HashSet
-import java.util.Iterator
-import java.util.Map
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-open class SLTextureFetcher : SLModule(), SLIdleHandler {
-    @JvmStatic private var MAX_UDP_TRANSFERS: Int = 2
-    private var agentAppearanceService: String = ""
-    private var capURL: String = ""
-    private var lastCheckForStalls: Long = 0L
-    private var udpQueue: PriorityBinQueue<SLTextureFetchRequest>? = null
-    private var udpTransfers: MutableMap<UUID, TextureUDPTransfer>? = null
+open class SLTextureFetcher : SLModule, SLIdleHandler, TextureQueueController {
+    companion object {
+        private const val MAX_UDP_TRANSFERS: Int = 2
 
-    constructor(agentCircuit: SLAgentCircuit, caps: SLCaps, agentAppearanceService: String) {
-        superthis as agentCircuit.capURL = null
-        this.agentAppearanceService = null
-        this.udpTransfers = ConcurrentHashMap()
-        this.udpQueue = PriorityBinQueue<>(TexturePriority.values().length)
-        this.lastCheckForStalls = 0L
+        @Volatile
+        @JvmStatic
+        var shared: SLTextureFetcher? = null
+    }
+
+    private var agentAppearanceService: String? = null
+    private var capURL: String? = null
+    private var lastCheckForStalls: Long = 0L
+    private var udpQueue: PriorityBinQueue<SLTextureFetchRequest> = PriorityBinQueue(TexturePriority.values().size)
+    private var udpTransfers: MutableMap<UUID, TextureUDPTransfer> = ConcurrentHashMap()
+
+    @Volatile
+    private var isPausedState: Boolean = false
+
+    constructor(agentCircuit: SLAgentCircuit, caps: SLCaps, agentAppearanceService: String?) : super(agentCircuit) {
         this.agentAppearanceService = agentAppearanceService
         this.capURL = caps.getTextureFetchURL()
+        this.lastCheckForStalls = 0L
+        shared = this
         Debug.Log("TextureFetcher: capURL = " + this.capURL)
     }
 
-    private fun RunUDPQueue() {
-        var poll: SLTextureFetchRequest? = null
-        if (this.udpTransfers.size() < 2 && (poll = this.udpQueue.poll()) != null) {
-            var textureUDPTransfer: TextureUDPTransfer = TextureUDPTransfer(poll.destFile, poll)
-            this.udpTransfers.put(poll.textureID, textureUDPTransfer)
+    override val isFetchingPaused: Boolean
+        get() = isPausedState
+
+    @Synchronized
+    override fun pauseFetching() {
+        if (isPausedState) return
+        isPausedState = true
+        Debug.Log("SLTextureFetcher: pauseFetching called - clearing active transfers and retaining pending queue descriptors")
+
+        for (transfer in udpTransfers.values) {
+            val req = transfer.fetchReq
+            if (req != null) {
+                udpQueue.add(req)
+            }
+        }
+        udpTransfers.clear()
+    }
+
+    @Synchronized
+    override fun resumeFetching() {
+        if (!isPausedState) return
+        isPausedState = false
+        Debug.Log("SLTextureFetcher: resumeFetching called - restarting RunUDPQueue")
+        RunUDPQueue()
+    }
+
+    private synchronized fun RunUDPQueue() {
+        if (isPausedState) return
+
+        var poll: SLTextureFetchRequest?
+        if (this.udpTransfers.size < MAX_UDP_TRANSFERS && (this.udpQueue.poll().also { poll = it }) != null) {
+            val request = poll!!
+            val textureUDPTransfer = TextureUDPTransfer(request.destFile, request)
+            this.udpTransfers[request.textureID] = textureUDPTransfer
             textureUDPTransfer.StartTransfer(this.agentCircuit, this.circuitInfo)
         }
     }
 
-    fun BeginFetch(textureFetchRequest2: SLTextureFetchRequest) {
-        var textureFetchRequest: SLTextureFetchRequest? = null
+    fun BeginFetch(textureFetchRequest: SLTextureFetchRequest) {
+        var completedReq: SLTextureFetchRequest? = null
         synchronized(this) {
-            var file: File = textureFetchRequest2.destFile
-            if (file.exists()) {
-                textureFetchRequest2.outputFile = file
-                textureFetchRequest = textureFetchRequest2
+            val file: File? = textureFetchRequest.destFile
+            if (file != null && file.exists()) {
+                textureFetchRequest.outputFile = file
+                completedReq = textureFetchRequest
             } else {
-                this.udpQueue.add(textureFetchRequest2)
-                RunUDPQueue()
+                this.udpQueue.add(textureFetchRequest)
+                if (!isPausedState) {
+                    RunUDPQueue()
+                }
             }
         }
-        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
-            return
+        if (completedReq?.onFetchComplete != null) {
+            completedReq?.onFetchComplete?.OnTextureFetchComplete(textureFetchRequest)
         }
-        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest2)
     }
 
+    @Synchronized
     fun CancelFetch(textureFetchRequest: SLTextureFetchRequest) {
-        this.udpQueue.removethis as textureFetchRequest.udpTransfers.remove(textureFetchRequest.textureID)
-        RunUDPQueue()
+        this.udpQueue.remove(textureFetchRequest)
+        this.udpTransfers.remove(textureFetchRequest.textureID)
+        if (!isPausedState) {
+            RunUDPQueue()
+        }
     }
-    fun HandleCloseCircuit() {
+
+    override fun HandleCloseCircuit() {
         StopFetching()
         super.HandleCloseCircuit()
     }
 
     @SLMessageHandler
     fun HandleImageData(imageData: ImageData) {
-        var textureFetchRequest: SLTextureFetchRequest? = null
+        var completedReq: SLTextureFetchRequest? = null
         synchronized(this) {
-            textureFetchRequest = null
-            var textureUDPTransfer: TextureUDPTransfer = this.udpTransfers.get(imageData.ImageID_Field.ID)
+            val textureUDPTransfer = this.udpTransfers[imageData.ImageID_Field.ID]
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImageData(imageData)
                 if (textureUDPTransfer.isCompleted()) {
                     this.udpTransfers.remove(imageData.ImageID_Field.ID)
-                    textureFetchRequest = textureUDPTransfer.fetchReq
-                    RunUDPQueue()
+                    completedReq = textureUDPTransfer.fetchReq
+                    if (!isPausedState) {
+                        RunUDPQueue()
+                    }
                 }
             }
         }
-        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
-            return
+        if (completedReq?.onFetchComplete != null) {
+            completedReq?.onFetchComplete?.OnTextureFetchComplete(completedReq!!)
         }
-        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest)
     }
 
     @SLMessageHandler
     fun HandleImageNotInDatabase(imageNotInDatabase: ImageNotInDatabase) {
-        var textureFetchRequest: SLTextureFetchRequest? = null
+        var completedReq: SLTextureFetchRequest? = null
         synchronized(this) {
             Debug.Log("TextureUDP: Image not in database: " + imageNotInDatabase.ImageID_Field.ID)
-            var remove: TextureUDPTransfer = this.udpTransfers.remove(imageNotInDatabase.ImageID_Field.ID)
-            textureFetchRequest = if (remove != null) remove.fetchReq else null
+            val remove = this.udpTransfers.remove(imageNotInDatabase.ImageID_Field.ID)
+            completedReq = remove?.fetchReq
         }
-        if (textureFetchRequest != null && textureFetchRequest.onFetchComplete != null) {
-            textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest)
+        if (completedReq?.onFetchComplete != null) {
+            completedReq?.onFetchComplete?.OnTextureFetchComplete(completedReq!!)
         }
-        RunUDPQueue()
+        if (!isPausedState) {
+            RunUDPQueue()
+        }
     }
 
     @SLMessageHandler
     fun HandleImagePacket(imagePacket: ImagePacket) {
-        var textureFetchRequest: SLTextureFetchRequest? = null
+        var completedReq: SLTextureFetchRequest? = null
         synchronized(this) {
-            textureFetchRequest = null
-            var textureUDPTransfer: TextureUDPTransfer = this.udpTransfers.get(imagePacket.ImageID_Field.ID)
+            val textureUDPTransfer = this.udpTransfers[imagePacket.ImageID_Field.ID]
             if (textureUDPTransfer != null) {
                 textureUDPTransfer.HandleImagePacket(imagePacket)
                 if (textureUDPTransfer.isCompleted()) {
                     this.udpTransfers.remove(imagePacket.ImageID_Field.ID)
-                    var fetchReq: SLTextureFetchRequest = textureUDPTransfer.fetchReq
-                    fetchReq.outputFile = textureUDPTransfer.getOutputFile()
-                    RunUDPQueue()
-                    textureFetchRequest = fetchReq
+                    val fetchReq = textureUDPTransfer.fetchReq
+                    fetchReq?.outputFile = textureUDPTransfer.getOutputFile()
+                    if (!isPausedState) {
+                        RunUDPQueue()
+                    }
+                    completedReq = fetchReq
                 }
             }
         }
-        if (textureFetchRequest == null || textureFetchRequest.onFetchComplete == null) {
-            return
+        if (completedReq?.onFetchComplete != null) {
+            completedReq?.onFetchComplete?.OnTextureFetchComplete(completedReq!!)
         }
-        textureFetchRequest.onFetchComplete.OnTextureFetchComplete(textureFetchRequest)
     }
-    fun ProcessIdle() {
-        var hashSet: HashSet? = null
-        var hashSet2: HashSet? = null
-        var currentTimeMillis: Long = System.currentTimeMillis()
+
+    override fun ProcessIdle() {
+        var stalledUuids: HashSet<UUID>? = null
+        val currentTimeMillis = System.currentTimeMillis()
         if (currentTimeMillis >= this.lastCheckForStalls + 1000) {
             this.lastCheckForStalls = currentTimeMillis
             try {
-                Iterator<Map.Entry<UUID, TextureUDPTransfer>> it = this.udpTransfers.entrySet().iterator()
-                while (it.hasNext()) {
-                    var entry: Map.Entry<UUID, TextureUDPTransfer> = it.next()
-                    if (!entry.getValue().hasStalled() || entry.getValue().RetryTransfer(this.agentCircuit, this.circuitInfo)) {
-                        hashSet = hashSet2
+                for (entry in this.udpTransfers.entries) {
+                    val transfer = entry.value
+                    if (!transfer.hasStalled() || transfer.RetryTransfer(this.agentCircuit, this.circuitInfo)) {
+                        // transfer ongoing or retried
                     } else {
-                        Debug.Printf("Cannot retry texture %s", entry.getKey().toString())
-                        var hashSet3: HashSet = if (hashSet2 == null) HashSet() else hashSet2
-                        hashSet3.add(entry.getKey())
-                        hashSet = hashSet3
+                        Debug.Printf("Cannot retry texture %s", entry.key.toString())
+                        if (stalledUuids == null) stalledUuids = HashSet()
+                        stalledUuids.add(entry.key)
                     }
-                    hashSet2 = hashSet
                 }
-                if (hashSet2 != null) {
-                    var iterator: Iterator = hashSet2.iterator()
-                    while (iterator.hasNext()) {
-                        var remove: TextureUDPTransfer = this.udpTransfers.remove(iterator as UUID.next())
+                if (stalledUuids != null) {
+                    for (uuid in stalledUuids) {
+                        val remove = this.udpTransfers.remove(uuid)
                         if (remove != null) {
-                            var fetchReq: SLTextureFetchRequest = remove.fetchReq
-                            fetchReq.outputFile = null
-                            if (fetchReq.onFetchComplete != null) {
-                                fetchReq.onFetchComplete.OnTextureFetchComplete(fetchReq)
+                            val fetchReq = remove.fetchReq
+                            if (fetchReq != null) {
+                                fetchReq.outputFile = null
+                                fetchReq.onFetchComplete?.OnTextureFetchComplete(fetchReq)
                             }
                         }
                     }
-                    RunUDPQueue()
+                    if (!isPausedState) {
+                        RunUDPQueue()
+                    }
                 }
             } catch (e: ConcurrentModificationException) {
                 Debug.Warning(e)
@@ -173,17 +213,18 @@ open class SLTextureFetcher : SLModule(), SLIdleHandler {
 
     fun StopFetching() {
         this.udpQueue.clear()
+        this.udpTransfers.clear()
     }
 
     fun UpdatePriority(textureFetchRequest: SLTextureFetchRequest) {
         this.udpQueue.updatePriority(textureFetchRequest)
     }
 
-    fun getAgentAppearanceService(): String {
+    fun getAgentAppearanceService(): String? {
         return this.agentAppearanceService
     }
 
-    fun getCapURL(): String {
+    fun getCapURL(): String? {
         return this.capURL
     }
 }

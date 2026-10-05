@@ -6,6 +6,7 @@ import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDBoolean
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDate
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDDouble
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDInt
+import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDLong
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDMap
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDString
 import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDURI
@@ -28,6 +29,7 @@ object LLSDNodeFactory {
     }
     private val createBoolean = LLSDNodeConstructor { xmlPullParser -> LLSDBoolean(xmlPullParser.nextText()) }
     private val createInt = LLSDNodeConstructor { xmlPullParser -> LLSDInt(xmlPullParser.nextText()) }
+    private val createLong = LLSDNodeConstructor { xmlPullParser -> LLSDLong(xmlPullParser.nextText()) }
     private val createDouble = LLSDNodeConstructor { xmlPullParser -> LLSDDouble(xmlPullParser.nextText()) }
     private val createUUID = LLSDNodeConstructor { xmlPullParser -> LLSDUUID(xmlPullParser.nextText()) }
     private val createString = LLSDNodeConstructor { xmlPullParser -> LLSDString(xmlPullParser.nextText()) }
@@ -43,6 +45,8 @@ object LLSDNodeFactory {
         tagMap["undef"] = createUndef
         tagMap["boolean"] = createBoolean
         tagMap["integer"] = createInt
+        tagMap["integer64"] = createLong
+        tagMap["i64"] = createLong
         tagMap["real"] = createDouble
         tagMap["uuid"] = createUUID
         tagMap["string"] = createString

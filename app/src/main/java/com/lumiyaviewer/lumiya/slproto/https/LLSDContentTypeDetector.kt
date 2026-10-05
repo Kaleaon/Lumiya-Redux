@@ -9,7 +9,8 @@ object LLSDContentTypeDetector {
 
     enum class LLSDContentType {
         llsdXML,
-        llsdBinary;
+        llsdBinary,
+        llsdNotation;
 
         /* renamed from: values, reason: to resolve conflict with enum method */
         fun valuesCustom(): Array<LLSDContentType> {
@@ -44,24 +45,35 @@ object LLSDContentTypeDetector {
 
         var isXml = false
         var isBinary = false
+        var isNotation = false
         if (firstString.startsWith("<llsd>") || firstString.startsWith("<?xml")) {
             isXml = true
+        } else if (firstString.startsWith("<?llsd/notation") || firstString.startsWith("<? llsd/notation")
+                || firstString.startsWith("!") || firstString.startsWith("[") || firstString.startsWith("{")) {
+            isNotation = true
         } else if (firstString.startsWith("<? LLSD/Binary ?>")
-                || firstString.startsWith("{")
                 || firstString.startsWith("<?llsd/binary")) {
             isBinary = true
         }
         Debug.Printf(
-            "LLSD: contentType '%s', detected binary %s, xml %s, skipBytes %d, firstString '%s'",
+            "LLSD: contentType '%s', detected binary %s, xml %s, notation %s, skipBytes %d, firstString '%s'",
             contentType,
             if (isBinary) "true" else "false",
             if (isXml) "true" else "false",
+            if (isNotation) "true" else "false",
             skipBytes,
             firstString
         )
-        if (!isBinary && !isXml && contentType != null
-                && contentType.equals("application/llsd+binary", ignoreCase = true)) {
-            isBinary = true
+        if (!isBinary && !isXml && !isNotation && contentType != null) {
+            if (contentType.equals("application/llsd+binary", ignoreCase = true)) {
+                isBinary = true
+            } else if (contentType.equals("application/llsd+notation", ignoreCase = true)) {
+                isNotation = true
+            }
+        }
+        if (isNotation) {
+            Debug.Printf("LLSD: using notation parser")
+            return LLSDContentType.llsdNotation
         }
         if (isBinary) {
             Debug.Printf("LLSD: using binary parser")

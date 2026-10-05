@@ -1,14 +1,19 @@
 package com.lumiyaviewer.lumiya.slproto.caps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.lumiyaviewer.lumiya.slproto.caps.SLCaps.SLCapability;
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.junit.Test;
 
-/** Asset fetch URL selection: ViewerAsset first, then the legacy per-asset caps. */
+/** Tests for SLCaps capability negotiation, enum coverage, and URL fallback behavior. */
 public class SLCapsTest {
     private static final String VIEWER_ASSET = "https://sim.example/cap/viewer-asset";
     private static final String GET_TEXTURE = "https://sim.example/cap/get-texture";
@@ -25,6 +30,50 @@ public class SLCapsTest {
             map.put((SLCapability) capabilityUrlPairs[i], (String) capabilityUrlPairs[i + 1]);
         }
         return caps;
+    }
+
+    @Test
+    public void capabilityEnumIncludesUpstreamCanonicalSet() {
+        SLCapability[] values = SLCapability.values();
+        assertTrue("SLCapability should contain at least 96 canonical capabilities", values.length >= 96);
+
+        Set<String> capNames = new HashSet<>();
+        for (SLCapability cap : values) {
+            capNames.add(cap.name());
+        }
+
+        // Verify key canonical capabilities from Second Life 2026, AIS v3, and OpenSim
+        assertTrue("Missing InventoryAPIv3", capNames.contains("InventoryAPIv3"));
+        assertTrue("Missing LibraryAPIv3", capNames.contains("LibraryAPIv3"));
+        assertTrue("Missing ViewerAsset", capNames.contains("ViewerAsset"));
+        assertTrue("Missing AgentPreferences", capNames.contains("AgentPreferences"));
+        assertTrue("Missing SimulatorFeatures", capNames.contains("SimulatorFeatures"));
+        assertTrue("Missing UpdateAvatarAppearance", capNames.contains("UpdateAvatarAppearance"));
+        assertTrue("Missing DispatchOpenRegionSettings", capNames.contains("DispatchOpenRegionSettings"));
+        assertTrue("Missing EventQueueGet", capNames.contains("EventQueueGet"));
+        assertTrue("Missing RenderMaterials", capNames.contains("RenderMaterials"));
+    }
+
+    @Test
+    public void unsupportedCapabilityReturnsNullWithoutException() throws Exception {
+        SLCaps caps = capsWith(SLCapability.GetTexture, GET_TEXTURE);
+        assertNull(caps.getCapability(SLCapability.AgentPreferences));
+        assertNull(caps.getCapability(SLCapability.SimulatorFeatures));
+        assertNull(caps.getCapability(SLCapability.InventoryAPIv3));
+    }
+
+    @Test
+    public void getCapabilityOrThrowBehavior() throws Exception {
+        SLCaps caps = capsWith(SLCapability.GetTexture, GET_TEXTURE);
+        assertEquals(GET_TEXTURE, caps.getCapabilityOrThrow(SLCapability.GetTexture));
+
+        try {
+            caps.getCapabilityOrThrow(SLCapability.AgentPreferences);
+            fail("Expected NoSuchCapabilityException for missing capability");
+        } catch (SLCaps.NoSuchCapabilityException e) {
+            assertNotNull(e.getMessage());
+            assertTrue(e.getMessage().contains("AgentPreferences"));
+        }
     }
 
     @Test

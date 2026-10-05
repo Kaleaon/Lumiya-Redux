@@ -84,7 +84,8 @@ open class SLDisplayNameFetcher : SLModule() {
         }
         this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID)
         this.requestQueue = if (this.userManager != null) this.userManager.getUserNameRequestQueue() else null
-        if (caps.getCapability(SLCaps.SLCapability.GetDisplayNames) == null) {
+        val capURL = caps.getCapability(SLCaps.SLCapability.GetDisplayNames)
+        if (capURL == null) {
             this.capsURL = null
             this.workingThread = null
             this.xmlReq = null
@@ -92,7 +93,7 @@ open class SLDisplayNameFetcher : SLModule() {
             this.resultHandler = if (this.requestQueue != null) this.requestQueue.attachRequestHandler(this.requestHandler) else null
             return
         }
-        this.capsURL = caps.getCapability(SLCaps.SLCapability.GetDisplayNames)
+        this.capsURL = capURL
         this.useDisplayNames = true
         this.resultHandler = if (this.requestQueue != null) this.requestQueue.getResultHandler() else null
         this.xmlReq = LLSDXMLRequest()
