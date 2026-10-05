@@ -957,7 +957,7 @@ object SLMessageFactory {
             65297 ->
                 return ViewerEffect()
             else ->
-                return null
+                return com.lumiyaviewer.lumiya.slproto.DynamicMessageCatalog.getDynamicMessage(i)
         }
     }
 }
