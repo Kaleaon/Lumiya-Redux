@@ -22,7 +22,7 @@ import java.util.Map
 import java.util.zip.InflaterInputStream
 
 open class MeshData {
-    @JvmStatic var MAX_RIGGED_MESH_JOINTS: Int = 163
+    @JvmStatic var MAX_RIGGED_MESH_JOINTS: Int = 256
 
     private var bindShapeMatrix: FloatArray? = null
     private var faces: Array<MeshFace>? = null
