@@ -369,9 +369,9 @@ open class SLInventory : SLModule() {
             var lLSDXMLRequest: LLSDXMLRequest = LLSDXMLRequest()
             if (z) {
                 z2 = true
-                capabilityOrThrow = getCaps().getCapabilityOrThrow(if (uuid == null) SLCaps.SLCapability.UpdateScriptAgent else SLCaps.SLCapability.UpdateScriptTask)
+                capabilityOrThrow = getCaps()?.getCapabilityOrThrow(if (uuid == null) SLCaps.SLCapability.UpdateScriptAgent else SLCaps.SLCapability.UpdateScriptTask) ?: throw SLCaps.NoSuchCapabilityException(if (uuid == null) SLCaps.SLCapability.UpdateScriptAgent else SLCaps.SLCapability.UpdateScriptTask)
             } else {
-                capabilityOrThrow = getCaps().getCapabilityOrThrow(if (uuid == null) SLCaps.SLCapability.UpdateNotecardAgentInventory else SLCaps.SLCapability.UpdateNotecardTaskInventory)
+                capabilityOrThrow = getCaps()?.getCapabilityOrThrow(if (uuid == null) SLCaps.SLCapability.UpdateNotecardAgentInventory else SLCaps.SLCapability.UpdateNotecardTaskInventory) ?: throw SLCaps.NoSuchCapabilityException(if (uuid == null) SLCaps.SLCapability.UpdateNotecardAgentInventory else SLCaps.SLCapability.UpdateNotecardTaskInventory)
                 z2 = false
             }
             var builder: ImmutableMap.Builder = ImmutableMap.builder()
@@ -1084,7 +1084,7 @@ open class SLInventory : SLModule() {
         return findSpecialFolder.uuid
     }
 
-    fun getCaps(): SLCaps {
+    fun getCaps(): SLCaps? {
         return this.caps
     }
 
@@ -1159,7 +1159,7 @@ open class SLInventory : SLModule() {
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_51539, reason: not valid java name */
     /* synthetic */ void m193x829dc330(UUID uuid, UUID uuid2, UUID uuid3, Runnable runnable) {
         try {
-            LLSDXMLRequest().PerformRequest(getCaps().getCapabilityOrThrow(SLCaps.SLCapability.CopyInventoryFromNotecard), LLSDMap(LLSDMap.LLSDMapEntry("notecard-id", LLSDUUID(uuid)), LLSDMap.LLSDMapEntry("object-id", LLSDUUID()), LLSDMap.LLSDMapEntry("item-id", LLSDUUID(uuid2)), LLSDMap.LLSDMapEntry("folder-id", LLSDUUID(uuid3)), LLSDMap.LLSDMapEntry("callback-id", LLSDInt(0))))
+            LLSDXMLRequest().PerformRequest(getCaps()?.getCapabilityOrThrow(SLCaps.SLCapability.CopyInventoryFromNotecard), LLSDMap(LLSDMap.LLSDMapEntry("notecard-id", LLSDUUID(uuid)), LLSDMap.LLSDMapEntry("object-id", LLSDUUID()), LLSDMap.LLSDMapEntry("item-id", LLSDUUID(uuid2)), LLSDMap.LLSDMapEntry("folder-id", LLSDUUID(uuid3)), LLSDMap.LLSDMapEntry("callback-id", LLSDInt(0))))
         } catch (e: SLCaps.NoSuchCapabilityException) {
             Debug.Warning(e)
         } catch (e2: LLSDException) {

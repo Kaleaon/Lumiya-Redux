@@ -197,7 +197,7 @@ open class SLGroupManager : SLModule() {
                 }
             }
         })
-        this.groupMemberDataURL = agentCircuit.getCaps().getCapability(SLCaps.SLCapability.GroupMemberData)
+        this.groupMemberDataURL = agentCircuit.getCaps()?.getCapability(SLCaps.SLCapability.GroupMemberData)
         this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID)
         if (this.userManager != null) {
             this.groupMemberDao = this.userManager.getDaoSession().getGroupMemberDao()
