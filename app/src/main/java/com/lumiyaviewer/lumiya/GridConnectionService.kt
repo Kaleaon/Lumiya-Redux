@@ -12,6 +12,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -650,7 +652,11 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
         onlineNotificationInfo = newInfo
         val notification = newInfo.getNotification(this)
         if (notification != null) {
-            startForeground(R.id.online_notify_id, notification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(R.id.online_notify_id, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING)
+            } else {
+                startForeground(R.id.online_notify_id, notification)
+            }
         } else {
             stopForeground(true)
         }
@@ -795,7 +801,12 @@ class GridConnectionService : Service(), SharedPreferences.OnSharedPreferenceCha
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(R.id.online_notify_id, OnlineNotificationInfo.getStartingNotification(this, gridName))
+        val startingNotification = OnlineNotificationInfo.getStartingNotification(this, gridName)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(R.id.online_notify_id, startingNotification, ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING)
+        } else {
+            startForeground(R.id.online_notify_id, startingNotification)
+        }
         startingNotificationVisible = true
         Debug.Printf("onStartCommand: intent is %s, flags %08x",
             if (intent != null) "not null" else "null", flags)
