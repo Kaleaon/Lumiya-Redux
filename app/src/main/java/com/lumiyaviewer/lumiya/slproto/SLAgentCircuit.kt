@@ -1841,7 +1841,7 @@ open class SLAgentCircuit @Throws(IOException::class) constructor(
         return this.agentUUID
     }
 
-    fun getCaps(): SLCaps {
+    fun getCaps(): SLCaps? {
         return this.caps
     }
 
