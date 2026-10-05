@@ -9,23 +9,17 @@ import com.lumiyaviewer.lumiya.slproto.llsd.types.LLSDString
 import java.io.IOException
 import java.net.URL
 import java.util.EnumMap
-import java.util.Map
 
 open class SLCaps {
-    private var caps: MutableMap<SLCapability, String> = EnumMap(SLCapability.class)
+    private val caps: MutableMap<SLCapability, String> = EnumMap(SLCapability::class.java)
 
-    open class NoSuchCapabilityException : Exception() {
-        private long serialVersionUID = 1
-
-        fun NoSuchCapabilityException(capability: SLCapability): public {
-            super("No such capability: " + capability.name())
-        }
-    }
+    open class NoSuchCapabilityException(capability: SLCapability) :
+        Exception("No such capability: ${capability.name}")
 
     enum class SLCapability {
         // Caps actively used by Lumiya call sites. Preserve the order of
         // the original set so that any serialized form keyed by ordinal
-        // (none today, but defensively) stays stable.
+        // stays stable.
         EventQueueGet,
         GetTexture,
         UploadBakedTexture,
@@ -69,6 +63,7 @@ open class SLCaps {
         DeclineFriendship,
         DeclineGroupInvite,
         DirectDelivery,
+        DispatchOpenRegionSettings,
         DispatchRegionInfo,
         EnvironmentSettings,
         EstateAccess,
@@ -154,71 +149,64 @@ open class SLCaps {
 
         // Legacy mesh fetch cap still offered by OpenSimulator grids that
         // predate ViewerAsset. See getMeshFetchURL().
-        GetMesh2
+        GetMesh2;
 
-        /* renamed from: values, reason: to resolve conflict with enum method */
-        fun valuesCustom(): Array<SLCapability> {
-            return values()
+        companion object {
+            @JvmStatic
+            fun valuesCustom(): Array<SLCapability> = values()
         }
     }
 
-    private void GetCapabilitesOnce(String str, String str2) throws LLSDException, IOException {
-        var z: Boolean = false
+    @Throws(LLSDException::class, IOException::class)
+    private fun GetCapabilitesOnce(seedURL: String, capURL: String) {
+        var isAgni = false
         try {
-            z = URL(str).getHost().equals("login.agni.lindenlab.com")
+            isAgni = URL(seedURL).host == "login.agni.lindenlab.com"
         } catch (e: Exception) {
             Debug.Warning(e)
-            z = false
+            isAgni = false
         }
-        var repairCapabilityURL: String = repairCapabilityURL(z, str2)
-        var llsdxmlRequest: LLSDXMLRequest = LLSDXMLRequest()
-        var llsdArray: LLSDArray = LLSDArray()
+        val repairedCapURL = repairCapabilityURL(isAgni, capURL)
+        val request = LLSDXMLRequest()
+        val capArray = LLSDArray()
         for (capability in SLCapability.values()) {
-            llsdArray.add(LLSDString(capability.name()))
+            capArray.add(LLSDString(capability.name))
         }
-        var PerformRequest: LLSDNode = llsdxmlRequest.PerformRequest(repairCapabilityURL, llsdArray)
-        for (capability2 in SLCapability.values()) {
-            if (PerformRequest.keyExists(capability2.name())) {
-                var repairCapabilityURL2: String = repairCapabilityURL(z, PerformRequest.byKey(capability2.name()).asString())
-                this.caps.put(capability2, repairCapabilityURL2)
-                Debug.Log("GetCapabilities: " + capability2.name() + " = " + repairCapabilityURL2)
+        val response = request.PerformRequest(repairedCapURL, capArray)
+        for (capability in SLCapability.values()) {
+            if (response.keyExists(capability.name)) {
+                val repaired = repairCapabilityURL(isAgni, response.byKey(capability.name).asString())
+                this.caps[capability] = repaired
+                Debug.Log("GetCapabilities: ${capability.name} = $repaired")
             } else {
-                Debug.Log("GetCapabilities: " + capability2.name() + " not supported")
+                Debug.Log("GetCapabilities: ${capability.name} not supported")
             }
         }
     }
 
-    private fun repairCapabilityURL(z: Boolean, str: String): String {
-        if (!z) {
-        return str
+    private fun repairCapabilityURL(isAgni: Boolean, url: String): String {
+        if (!isAgni) {
+            return url
         }
-        try {
-            var host: String = URL(str).getHost()
+        return try {
+            val host = URL(url).host
             if (host.contains(".") || !host.startsWith("sim")) {
-        return str
+                url
+            } else {
+                val repaired = url.replace(host, "$host.agni.lindenlab.com")
+                Debug.Printf("Repaired capability URL to %s", repaired)
+                repaired
             }
-            str = str.replace(host, host + ".agni.lindenlab.com")
-            Debug.Printf("Repaired capability URL to %s", str)
-        return str
         } catch (e: Exception) {
             Debug.Warning(e)
-        return str
+            url
         }
     }
 
-    fun repairURL(str: String, str2: String): String {
-        try {
-            return URL(str).getHost().if (endsWith(".lindenlab.com")) repairCapabilityURL(true, str2) else str2
-        } catch (e: Exception) {
-            Debug.Warning(e)
-        return str2
-        }
-    }
-
-    fun GetCapabilites(str: String, str2: String) {
-        for (int i = 0; i < 1; i++) {
+    open fun GetCapabilites(seedURL: String, capURL: String) {
+        for (i in 0 until 1) {
             try {
-                GetCapabilitesOnce(str, str2)
+                GetCapabilitesOnce(seedURL, capURL)
                 return
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -226,45 +214,73 @@ open class SLCaps {
         }
     }
 
-    fun getCapability(capability: SLCapability): String {
-        return this.caps.get(capability)
+    open fun getCapability(capability: SLCapability): String? {
+        return this.caps[capability]
     }
 
     /**
-     * Base URL for HTTP texture fetches (<code>?texture_id=</code>).
+     * Base URL for HTTP texture fetches (`?texture_id=`).
      *
-     * <p>Beyond 3.4.2, which only knew GetTexture: current Second Life
+     * Beyond 3.4.2, which only knew GetTexture: current Second Life
      * viewers fetch every asset through the ViewerAsset capability (the
      * viewer's LLViewerRegion::getViewerAssetUrl(), used by lltexturefetch.cpp)
-     * and the grid has retired the per-asset GetTexture/GetMesh caps, which
-     * left 3.4.2 on the slow UDP ImageData path. ViewerAsset takes the same
-     * query parameter. GetTexture is kept for OpenSimulator grids that
-     * predate ViewerAsset.</p>
+     * and the grid has retired the per-asset GetTexture/GetMesh caps.
+     * GetTexture is kept for OpenSimulator grids that predate ViewerAsset.
      */
-    fun getTextureFetchURL(): String {
-        var url: String = this.caps.get(SLCapability.ViewerAsset)
-        return if (url != null) url else this.caps.get(SLCapability.GetTexture)
+    open fun getTextureFetchURL(): String? {
+        val url = this.caps[SLCapability.ViewerAsset]
+        return url ?: this.caps[SLCapability.GetTexture]
     }
 
     /**
-     * Base URL for HTTP mesh fetches (<code>?mesh_id=</code>): ViewerAsset,
-     * as in the viewer's LLMeshRepository, then the legacy GetMesh2 and
-     * GetMesh caps. Beyond 3.4.2, which only knew GetMesh and so could not
-     * load mesh on current Second Life regions.
+     * Base URL for HTTP mesh fetches (`?mesh_id=`).
      */
-    fun getMeshFetchURL(): String {
-        var url: String = this.caps.get(SLCapability.ViewerAsset)
+    open fun getMeshFetchURL(): String? {
+        var url = this.caps[SLCapability.ViewerAsset]
         if (url == null) {
-            url = this.caps.get(SLCapability.GetMesh2)
+            url = this.caps[SLCapability.GetMesh2]
         }
-        return if (url != null) url else this.caps.get(SLCapability.GetMesh)
+        return url ?: this.caps[SLCapability.GetMesh]
     }
 
-    public var getCapabilityOrThrow: String(SLCapability capability) throws NoSuchCapabilityException {
-        var str: String = this.caps.get(capability)
-        if (str == null) {
-            throw NoSuchCapabilityException(capability)
+    @Throws(NoSuchCapabilityException::class)
+    open fun getCapabilityOrThrow(capability: SLCapability): String {
+        return this.caps[capability] ?: throw NoSuchCapabilityException(capability)
+    }
+
+    companion object {
+        @JvmStatic
+        fun repairURL(seedURL: String, url: String): String {
+            return try {
+                if (URL(seedURL).host.endsWith(".lindenlab.com")) {
+                    repairCapabilityURLStatic(true, url)
+                } else {
+                    url
+                }
+            } catch (e: Exception) {
+                Debug.Warning(e)
+                url
+            }
         }
-        return str
+
+        @JvmStatic
+        private fun repairCapabilityURLStatic(isAgni: Boolean, url: String): String {
+            if (!isAgni) {
+                return url
+            }
+            return try {
+                val host = URL(url).host
+                if (host.contains(".") || !host.startsWith("sim")) {
+                    url
+                } else {
+                    val repaired = url.replace(host, "$host.agni.lindenlab.com")
+                    Debug.Printf("Repaired capability URL to %s", repaired)
+                    repaired
+                }
+            } catch (e: Exception) {
+                Debug.Warning(e)
+                url
+            }
+        }
     }
 }

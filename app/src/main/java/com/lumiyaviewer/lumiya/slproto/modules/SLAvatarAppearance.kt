@@ -244,7 +244,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
 
     private fun ForceUpdateAppearance(z: Boolean) {
         this.needUpdateAppearance = true
-        if (this.caps.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
+        if (this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
             this.eventBus.publish(SLBakingProgressEvent(true, false, 0))
         } else if (z) {
             this.lastCofUpdatedVersion = 0
@@ -262,7 +262,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
 
     private fun RequestServerRebake() {
         var folder: SLInventoryEntry? = null
-        var capability: String = this.caps.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance)
+        var capability: String? = this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance)
         var data: InventoryEntryList = this.currentOutfitFolder.getData()
         if (capability == null || data == null || (folder = data.getFolder()) == null) {
             return
@@ -310,7 +310,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
 
     private fun SendAvatarSetAppearance() {
         UpdateCOFContents()
-        if (this.caps.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
+        if (this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
             var agentAvatar: SLObjectAvatarInfo = if (this.parcelInfo != null) this.parcelInfo.getAgentAvatar() else null
             if (this.agentBakedTextures != null && agentAvatar != null) {
                 agentAvatar.ApplyAvatarTextures(this.agentBakedTextures, true)
@@ -831,7 +831,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
             SendAvatarSetAppearance()
             if (!this.needUpdateAppearance) {
                 UpdateCOFContents()
-            } else if (this.caps.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
+            } else if (this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
                 startBaking()
             }
         }
