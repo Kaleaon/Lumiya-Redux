@@ -55,7 +55,32 @@ public class DirectByteBuffer {
         throw new IndexOutOfBoundsException("zeroDecode: out of dest buffer, destStart " + Integer.toString(i) + " destMaxLen " + Integer.toString(i2));
     }
 
-    private static native int zeroDecodeArray(byte[] bytes, int i, int i2, byte[] bytes2, int i3, int i4);
+    private static int zeroDecodeArray(byte[] dest, int destStart, int destMaxLen, byte[] src, int srcStart, int srcLen) {
+        int srcEnd = srcStart + srcLen;
+        int destPos = destStart;
+        int destLimit = destStart + destMaxLen;
+        boolean inZeroSequence = false;
+
+        for (int srcPos = srcStart; srcPos < srcEnd; srcPos++) {
+            byte b = src[srcPos];
+            if (b == 0) {
+                if (destPos >= destLimit) return -1;
+                dest[destPos++] = 0;
+                inZeroSequence = true;
+            } else if (inZeroSequence) {
+                int extraZeros = (b & 0xFF) - 1;
+                if (destPos + extraZeros > destLimit) return -1;
+                for (int k = 0; k < extraZeros; k++) {
+                    dest[destPos++] = 0;
+                }
+                inZeroSequence = false;
+            } else {
+                if (destPos >= destLimit) return -1;
+                dest[destPos++] = b;
+            }
+        }
+        return destPos - destStart;
+    }
 
     public ByteBuffer asByteBuffer() {
         return this.buf;

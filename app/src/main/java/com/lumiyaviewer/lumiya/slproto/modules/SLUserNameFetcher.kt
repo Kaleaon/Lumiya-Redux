@@ -87,7 +87,7 @@ open class SLUserNameFetcher : SLModule(), RequestListener {
         if (uuiDsToFetch.isEmpty()) {
         return false
         }
-        var str2: String = this.caps.getCapability(SLCaps.SLCapability.GetDisplayNames) + "/"
+        var str2: String = this.caps?.getCapability(SLCaps.SLCapability.GetDisplayNames) + "/"
         var it: Iterator<UUID> = uuiDsToFetch.iterator()
         var z: Boolean = true
         while (true) {
