@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import android.app.Application;
+import android.content.Intent;
+import android.net.Uri;
+import com.lumiyaviewer.lumiya.slproto.SLURL;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -127,5 +130,22 @@ public class TlsPolicyTest {
             fail("check without a host must not be bypassed");
         } catch (CertificateException expected) {
         }
+    }
+
+    @Test
+    public void slurlParsesHttpAndHttpsSchemes() throws Exception {
+        Intent httpIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.secondlife.com/secondlife/Ahern/128/128/20"));
+        SLURL httpUrl = new SLURL(httpIntent);
+        assertEquals("Ahern", httpUrl.getLocationName());
+        assertEquals(128, httpUrl.getLocationX());
+        assertEquals(128, httpUrl.getLocationY());
+        assertEquals(20, httpUrl.getLocationZ());
+
+        Intent httpsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.secondlife.com/secondlife/Ahern/128/128/20"));
+        SLURL httpsUrl = new SLURL(httpsIntent);
+        assertEquals("Ahern", httpsUrl.getLocationName());
+        assertEquals(128, httpsUrl.getLocationX());
+        assertEquals(128, httpsUrl.getLocationY());
+        assertEquals(20, httpsUrl.getLocationZ());
     }
 }
