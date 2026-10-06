@@ -29,60 +29,63 @@ import com.lumiyaviewer.lumiya.utils.UUIDPool
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.HashSet
-import java.util.Iterator
-import java.util.List
-import java.util.Map
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-open class SLMinimap : SLModule() {
-    /** Parcel overlay cells per region: 64 x 64 cells of 4 m (256 m region). */
-    @JvmStatic private var PARCEL_OVERLAY_CELLS: Int = 4096
-    @JvmStatic var CHAT_RANGE: Float = 20.0f
-    @JvmStatic private var parcelBitmapSize: Int = 256
-    @JvmStatic var parcelDataSize: Int = 64
-    @JvmStatic private var parcelOverlayFlagBorderSouth: Byte = Byte.MIN_VALUE
-    @JvmStatic private var parcelOverlayFlagBorderWest: Byte = 64
-    @JvmStatic private var parcelOverlayFlagPrivate: Byte = 32
-    @JvmStatic private var parcelOverlayTypeAuction: Byte = 5
-    @JvmStatic private var parcelOverlayTypeForSale: Byte = 4
-    @JvmStatic private var parcelOverlayTypeMask: Byte = 15
-    @JvmStatic private var parcelOverlayTypeOwnedByGroup: Byte = 2
-    @JvmStatic private var parcelOverlayTypeOwnedByOther: Byte = 1
-    @JvmStatic private var parcelOverlayTypeOwnedBySelf: Byte = 3
-    @JvmStatic private var parcelOverlayTypePublic: Byte = 0
-    @JvmStatic private var parcelUpsampleFactor: Int = 4
+open class SLMinimap(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) {
+
+    companion object {
+        /** Parcel overlay cells per region: 64 x 64 cells of 4 m (256 m region). */
+        const val PARCEL_OVERLAY_CELLS: Int = 4096
+        const val CHAT_RANGE: Float = 20.0f
+        const val parcelBitmapSize: Int = 256
+        const val parcelDataSize: Int = 64
+        private const val parcelOverlayFlagBorderSouth: Byte = (-128).toByte()
+        private const val parcelOverlayFlagBorderWest: Byte = 64
+        private const val parcelOverlayFlagPrivate: Byte = 32
+        private const val parcelOverlayTypeAuction: Byte = 5
+        private const val parcelOverlayTypeForSale: Byte = 4
+        private const val parcelOverlayTypeMask: Byte = 15
+        private const val parcelOverlayTypeOwnedByGroup: Byte = 2
+        private const val parcelOverlayTypeOwnedByOther: Byte = 1
+        private const val parcelOverlayTypeOwnedBySelf: Byte = 3
+        private const val parcelOverlayTypePublic: Byte = 0
+        private const val parcelUpsampleFactor: Int = 4
+    }
+
     private var afterTeleport: Boolean = false
     private var chatRangeUsersCount: Int = 0
 
-    private var minimapBitmap: MinimapBitmap? = null
-    private var myAvatarParcelDataIndex: Int = 0
+    @Volatile
+    private var minimapBitmap: MinimapBitmap = MinimapBitmap(256, 256)
+    private var myAvatarParcelDataIndex: Int = -1
 
+    @Volatile
     private var myAvatarPosition: ImmutableVector? = null
     private var nearbyUsersCount: Int = 0
-    private var parcelIDs: IntArray? = null
-    private var parcels: if (MutableMap<Int) , ParcelData> = null
-    private var userLocationRequestHandler: RequestHandler<SubscriptionSingleKey>? = null
-    private var userLocationsResultHandler: ResultHandler<SubscriptionSingleKey, UserLocations>? = null
-    private var userManager: UserManager? = null
-    private var userPositions: MutableMap<UUID, UserLocation>? = null
+    private val parcelIDs: IntArray = IntArray(PARCEL_OVERLAY_CELLS)
+    private val parcels: MutableMap<Int, ParcelData> = ConcurrentHashMap()
+    private val userLocationRequestHandler: RequestHandler<SubscriptionSingleKey>
+    private val userLocationsResultHandler: ResultHandler<SubscriptionSingleKey, UserLocations>?
+    private val userManager: UserManager?
+    private val userPositions: MutableMap<UUID, UserLocation> = ConcurrentHashMap(1, 0.75f, 2)
 
     open class MinimapBitmap {
-        private var bitmapHeight: Int
-        private var bitmapWidth: Int
-        var colors: IntArray? = null
+        val bitmapWidth: Int
+        val bitmapHeight: Int
+        val colors: IntArray
 
-        MinimapBitmap(int bitmapWidth, int bitmapHeight) {
+        constructor(bitmapWidth: Int, bitmapHeight: Int) {
             this.bitmapWidth = bitmapWidth
             this.bitmapHeight = bitmapHeight
             this.colors = IntArray(bitmapWidth * bitmapHeight)
         }
 
-        MinimapBitmap(MinimapBitmap minimapBitmap, int i, int i2, Array<int> ints) {
+        constructor(minimapBitmap: MinimapBitmap, xOffset: Int, yOffset: Int, patchColors: IntArray) {
             this.bitmapWidth = minimapBitmap.bitmapWidth
             this.bitmapHeight = minimapBitmap.bitmapHeight
-            this.colors = Arrays.copyOf(minimapBitmap.colors, minimapBitmap.colors.length)
-            System.arraycopy(ints, 0, this.colors, (this.bitmapHeight * i2) + i, ints.length)
+            this.colors = Arrays.copyOf(minimapBitmap.colors, minimapBitmap.colors.size)
+            System.arraycopy(patchColors, 0, this.colors, (this.bitmapHeight * yOffset) + xOffset, patchColors.size)
         }
 
         fun makeBitmap(): Bitmap {
@@ -94,355 +97,349 @@ open class SLMinimap : SLModule() {
         }
     }
 
-    open class UserLocation {
-
-        public ChatterID chatterID
-        public volatile float distance = Float.NaN
-
-        public volatile ImmutableVector location
-
-        UserLocation(ChatterID chatterID, ImmutableVector immutableVector) {
-            this.chatterID = chatterID
-            this.location = immutableVector
-        }
+    open class UserLocation(
+        val chatterID: ChatterID,
+        @Volatile var location: ImmutableVector
+    ) {
+        @Volatile var distance: Float = Float.NaN
     }
 
-    open class UserLocations {
-        public var myAvatarHeading: Float
+    open class UserLocations(
+        val myAvatarPosition: ImmutableVector?,
+        val myAvatarHeading: Float,
+        val userPositions: Map<UUID, UserLocation>
+    )
 
-        public ImmutableVector myAvatarPosition
-        public Map<UUID, UserLocation> userPositions
-
-        UserLocations(ImmutableVector immutableVector, float myAvatarHeading, Map<UUID, UserLocation> map) {
-            this.myAvatarPosition = immutableVector
-            this.myAvatarHeading = myAvatarHeading
-            this.userPositions = map
-        }
-    }
-
-    constructor(agentCircuit: SLAgentCircuit) {
-        superthis as agentCircuit.minimapBitmap = MinimapBitmap(256, 256)
-        this.parcelIDs = IntArraythis as 4096.parcels = ConcurrentHashMap()
+    init {
         this.nearbyUsersCount = 0
         this.chatRangeUsersCount = 0
-        this.userPositions = ConcurrentHashMap(1, 0.75f, 2)
         this.myAvatarPosition = null
         this.afterTeleport = false
         this.myAvatarParcelDataIndex = -1
-        this.userLocationRequestHandler = SimpleRequestHandler<SubscriptionSingleKey>() {
-            fun onRequest(subscriptionSingleKey: SubscriptionSingleKey) {
-                if (SLMinimap.this.userLocationsResultHandler != null) {
-                    SLMinimap.this.userLocationsResultHandler.onResultData(subscriptionSingleKey, UserLocations(SLMinimap.this.myAvatarPosition, SLMinimap.this.getMyAvatarHeading(), SLMinimap.this.userPositions))
-                }
-            }
+
+        this.userLocationRequestHandler = SimpleRequestHandler<SubscriptionSingleKey> { key ->
+            userLocationsResultHandler?.onResultData(
+                key,
+                UserLocations(myAvatarPosition, getMyAvatarHeading(), userPositions)
+            )
         }
-        this.userManager = UserManager.getUserManager(this.agentCircuit.circuitInfo.agentID)
-        if (this.userManager != null) {
-            this.userLocationsResultHandler = this.userManager.getUserLocationsPool().attachRequestHandler(this.userLocationRequestHandler)
-        } else {
-            this.userLocationsResultHandler = null
-        }
-        this.afterTeleport = agentCircuit.getAuthReply().if (fromTeleport) !agentCircuit.getAuthReply().isTemporary else false
+
+        this.userManager = UserManager.getUserManager(agentCircuit.circuitInfo.agentID)
+        this.userLocationsResultHandler = this.userManager?.getUserLocationsPool()?.attachRequestHandler(userLocationRequestHandler)
+
+        val authReply = agentCircuit.getAuthReply()
+        this.afterTeleport = if (authReply != null && authReply.fromTeleport) !authReply.isTemporary else false
     }
 
     fun getMyAvatarHeading(): Float {
-        return (this.agentCircuit.getModules().avatarControl.getAgentHeading() * 3.1415927f) / 180.0f
+        return (agentCircuit.getModules().avatarControl.getAgentHeading() * Math.PI.toFloat()) / 180.0f
     }
 
     private fun getParcelDataIndex(immutableVector: ImmutableVector): Int {
-        var floor: Int = Math as int.floor((immutableVector.getX() * 64.0f) / 256.0f)
-        var floor2: Int = Math as int.floor((immutableVector.getY() * 64.0f) / 256.0f)
-        if (floor < 0) {
-            floor = 0
-        } else if (floor >= 64) {
-            floor = 63
+        var floorX = Math.floor((immutableVector.getX() * 64.0) / 256.0).toInt()
+        var floorY = Math.floor((immutableVector.getY() * 64.0) / 256.0).toInt()
+        if (floorX < 0) {
+            floorX = 0
+        } else if (floorX >= 64) {
+            floorX = 63
         }
-        return ((floor2 >= if (0) if (floor2 >= 64) 63 else floor2 else 0) * 64) + floor
+        if (floorY < 0) {
+            floorY = 0
+        } else if (floorY >= 64) {
+            floorY = 63
+        }
+        return (floorY * 64) + floorX
     }
 
     fun updateAvatarParcelData() {
-        var parcelData: ParcelData = if (this.myAvatarParcelDataIndex >= 0) this.parcels.get(this.parcelIDs[this.myAvatarParcelDataIndex]) else null
-        if (parcelData != null && this.afterTeleport) {
-            this.afterTeleport = false
-            this.userManager.getChatterList().getActiveChattersManager().notifyTeleportComplete(parcelData.getName())
+        val parcelData: ParcelData? = if (myAvatarParcelDataIndex >= 0 && myAvatarParcelDataIndex < parcelIDs.size) {
+            parcels[parcelIDs[myAvatarParcelDataIndex]]
+        } else null
+
+        if (parcelData != null && afterTeleport) {
+            afterTeleport = false
+            userManager?.getChatterList()?.getActiveChattersManager()?.notifyTeleportComplete(parcelData.getName())
         }
-        var voice: SLVoice = this.agentCircuit.getModules().voice
+
+        val voice: SLVoice = agentCircuit.getModules().voice
         if (parcelData != null) {
             voice.setCurrentParcel(parcelData.getParcelID())
         }
-        this.userManager.setCurrentLocationInfo(CurrentLocationInfo.create(parcelData, this.nearbyUsersCount, this.chatRangeUsersCount, voice.getCurrentParcelVoiceChannel()))
+
+        userManager?.setCurrentLocationInfo(
+            CurrentLocationInfo.create(
+                parcelData,
+                nearbyUsersCount,
+                chatRangeUsersCount,
+                voice.getCurrentParcelVoiceChannel()
+            )
+        )
     }
-    fun HandleCloseCircuit() {
-        if (this.userManager != null) {
-            this.userManager.getUserLocationsPool().detachRequestHandler(this.userLocationRequestHandler)
+
+    override fun HandleCloseCircuit() {
+        if (userManager != null) {
+            userManager.getUserLocationsPool().detachRequestHandler(userLocationRequestHandler)
         }
         super.HandleCloseCircuit()
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:66:0x019a  */
-    /* JADX WARN: Removed duplicated region for block: B:68:0x01a7  */
-    /* JADX WARN: Removed duplicated region for block: B:75:0x01c0  */
-    /* JADX WARN: Removed duplicated region for block: B:85:0x013c  */
-    /* JADX WARN: Removed duplicated region for block: B:95:0x017b  */
-    /* JADX WARN: Removed duplicated region for block: B:98:0x0188  */
-    @com.lumiyaviewer.lumiya.slproto.handler.SLMessageHandler
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
+    @SLMessageHandler
     fun HandleCoarseLocationUpdate(coarseLocationUpdate: CoarseLocationUpdate) {
-        var z: Boolean = false
-        var z2: Boolean = false
-        var z3: Boolean = false
-        var parcelData: ParcelData = if (this.myAvatarParcelDataIndex >= 0) this.parcels.get(this.parcelIDs[this.myAvatarParcelDataIndex]) else null
-        var hashSet: HashSet = HashSet(coarseLocationUpdate.Location_Fields.size())
-        var parcelData2: ParcelData = parcelData
-        var hashSet2: HashSet? = null
-        var z4: Boolean = false
-        var z5: Boolean = false
-        for (int i = 0; i < coarseLocationUpdate.Location_Fields.size() && i < coarseLocationUpdate.AgentData_Fields.size(); i++) {
-            var location: CoarseLocationUpdate.Location = coarseLocationUpdate.Location_Fields.get(i)
-            var immutableVector: ImmutableVector = ImmutableVector(location.X, location.Y, location.Z * 4)
-            if (i != coarseLocationUpdate.Index_Field.You) {
-                var uuid: UUID = coarseLocationUpdate.AgentData_Fields.get(i).AgentID
-                if (!UUIDPool.ZeroUUID.equals(uuid)) {
-                    var userLocation: UserLocation = this.userPositions.get(uuid)
-                    if (userLocation == null) {
-                        this.userPositions.put(uuid, UserLocation(ChatterID.getUserChatterID(this.userManager.getUserID(), uuid), immutableVector))
-                        z2 = true
-                        z5 = true
-                    } else if (immutableVector.equals(userLocation.location)) {
-                        z2 = false
-                    } else {
-                        userLocation.location = immutableVector
-                        z2 = true
-                    }
-                    if (z2) {
-                        if (hashSet2 == null) {
-                            hashSet2 = HashSet()
+        var myPositionChanged = false
+        var userListChanged = false
+
+        val initialParcelData: ParcelData? = if (myAvatarParcelDataIndex >= 0 && myAvatarParcelDataIndex < parcelIDs.size) {
+            parcels[parcelIDs[myAvatarParcelDataIndex]]
+        } else null
+
+        val seenAgentUUIDs = HashSet<UUID>(coarseLocationUpdate.Location_Fields.size)
+        var currentParcelData: ParcelData? = initialParcelData
+        var modifiedAgentUUIDs: MutableSet<UUID>? = null
+
+        val locSize = coarseLocationUpdate.Location_Fields.size
+        val agentSize = coarseLocationUpdate.AgentData_Fields.size
+        val limit = Math.min(locSize, agentSize)
+
+        for (i in 0 until limit) {
+            val location = coarseLocationUpdate.Location_Fields[i]
+            val newPos = ImmutableVector(location.X.toFloat(), location.Y.toFloat(), (location.Z * 4).toFloat())
+
+            if (i == coarseLocationUpdate.Index_Field.You) {
+                if (!Objects.equal(newPos, myAvatarPosition)) {
+                    myAvatarPosition = newPos
+                    val newParcelIndex = getParcelDataIndex(myAvatarPosition!!)
+                    if (newParcelIndex != myAvatarParcelDataIndex) {
+                        myAvatarParcelDataIndex = newParcelIndex
+                        if (myAvatarParcelDataIndex >= 0 && myAvatarParcelDataIndex < parcelIDs.size) {
+                            currentParcelData = parcels[parcelIDs[myAvatarParcelDataIndex]]
                         }
-                        hashSet2.add(uuid)
+                        myPositionChanged = true
+                    } else {
+                        myPositionChanged = true
                     }
-                    hashSet.add(uuid)
                 }
-            } else if (!Objects.equal(immutableVector, this.myAvatarPosition)) {
-                this.myAvatarPosition = immutableVector
-                var parcelDataIndex: Int = getParcelDataIndex(this.myAvatarPosition)
-                if (parcelDataIndex != this.myAvatarParcelDataIndex) {
-                    this.myAvatarParcelDataIndex = parcelDataIndex
-                    parcelData2 = this.parcels.get(this.parcelIDs[this.myAvatarParcelDataIndex])
-                    z4 = true
-                } else {
-                    z4 = true
+            } else {
+                val agentData = coarseLocationUpdate.AgentData_Fields[i]
+                val agentID = agentData.AgentID
+                if (agentID != null && !UUIDPool.ZeroUUID.equals(agentID)) {
+                    val existingLoc = userPositions[agentID]
+                    var posChanged = false
+                    if (existingLoc != null) {
+                        if (!newPos.equals(existingLoc.location)) {
+                            existingLoc.location = newPos
+                            posChanged = true
+                        }
+                    } else {
+                        val userID = userManager?.getUserID() ?: UUIDPool.ZeroUUID
+                        val chatterID = ChatterID.getUserChatterID(userID, agentID)
+                        userPositions[agentID] = UserLocation(chatterID, newPos)
+                        posChanged = true
+                        userListChanged = true
+                    }
+
+                    if (posChanged) {
+                        if (modifiedAgentUUIDs == null) {
+                            modifiedAgentUUIDs = HashSet()
+                        }
+                        modifiedAgentUUIDs.add(agentID)
+                    }
+                    seenAgentUUIDs.add(agentID)
                 }
             }
         }
-        var it: Iterator<UUID> = this.userPositions.keySet().iterator()
+
+        val it = userPositions.keys.iterator()
         while (it.hasNext()) {
-            var next: UUID = it.next()
-            if (!hashSet.contains(next)) {
+            val uuid = it.next()
+            if (!seenAgentUUIDs.contains(uuid)) {
                 it.remove()
-                if (hashSet2 == null) {
-                    hashSet2 = HashSet()
+                if (modifiedAgentUUIDs == null) {
+                    modifiedAgentUUIDs = HashSet()
                 }
-                hashSet2.add(next)
-                z5 = true
+                modifiedAgentUUIDs.add(uuid)
+                userListChanged = true
             }
         }
-        if (this.myAvatarPosition == null) {
-            z = false
-        } else if (z4) {
-            for (userLocation2 in this.userPositions.values()) {
-                userLocation2.distance = this.myAvatarPosition.distanceTo(userLocation2.location)
+
+        var distancesUpdated = false
+        val myPos = myAvatarPosition
+        if (myPos != null) {
+            if (myPositionChanged) {
+                for (userLoc in userPositions.values) {
+                    userLoc.distance = myPos.distanceTo(userLoc.location)
+                }
+                distancesUpdated = true
+            } else if (modifiedAgentUUIDs != null) {
+                for (uuid in modifiedAgentUUIDs) {
+                    val userLoc = userPositions[uuid]
+                    if (userLoc != null) {
+                        userLoc.distance = myPos.distanceTo(userLoc.location)
+                    }
+                }
+                distancesUpdated = true
             }
-            z = true
-        } else if (hashSet2 != null) {
-            var iterator: Iterator = hashSet2.iterator()
-            while (iterator.hasNext()) {
-                var userLocation3: UserLocation = this.userPositions.get(iterator as UUID.next())
-                if (userLocation3 != null) {
-                    userLocation3.distance = this.myAvatarPosition.distanceTo(userLocation3.location)
+        }
+
+        var countChanged = false
+        if (distancesUpdated || userListChanged) {
+            var chatRangeCount = 0
+            for (userLoc in userPositions.values) {
+                if (userLoc.distance <= CHAT_RANGE) {
+                    chatRangeCount++
                 }
             }
-            z = true
-        }
-        if (z || z5) {
-            var iterator2: Iterator<UserLocation> = this.userPositions.values().iterator()
-            var i2: Int = 0
-            while (iterator2.hasNext()) {
-                i2 = (iterator2 as UserLocation.next()).distance <= if (20.0f) i2 + 1 else i2
+            if (chatRangeCount != chatRangeUsersCount) {
+                chatRangeUsersCount = chatRangeCount
+                countChanged = true
             }
-            if (i2 != this.chatRangeUsersCount) {
-                this.chatRangeUsersCount = i2
-                z3 = true
-            }
-            if (this.nearbyUsersCount != this.userPositions.size()) {
-                this.nearbyUsersCount = this.userPositions.size()
-                z3 = true
+            if (nearbyUsersCount != userPositions.size) {
+                nearbyUsersCount = userPositions.size
+                countChanged = true
             }
         }
-        if (parcelData2 != parcelData || z3) {
+
+        if (currentParcelData != initialParcelData || countChanged) {
             requestUpdateAvatarParcelData()
         }
-        if (z5) {
-            this.userManager.getChatterList().updateList(ChatterListType.Nearby)
+
+        val chatterList = userManager?.getChatterList()
+        if (userListChanged) {
+            chatterList?.updateList(ChatterListType.Nearby)
         }
-        if (z4) {
-            this.userManager.getChatterList().updateDistanceToAllUsers()
-        } else if (hashSet2 != null) {
-            var iterator3: Iterator = hashSet2.iterator()
-            while (iterator3.hasNext()) {
-                this.userManager.getChatterList().updateDistanceToUser(iterator3 as UUID.next())
+
+        if (myPositionChanged) {
+            chatterList?.updateDistanceToAllUsers()
+        } else if (modifiedAgentUUIDs != null) {
+            for (uuid in modifiedAgentUUIDs) {
+                chatterList?.updateDistanceToUser(uuid)
             }
         }
-        if (z4 || hashSet2 != null) {
-            this.userManager.getUserLocationsPool().requestUpdate(SubscriptionSingleKey.Value)
+
+        if (myPositionChanged || modifiedAgentUUIDs != null) {
+            userManager?.getUserLocationsPool()?.requestUpdate(SubscriptionSingleKey.Value)
         }
     }
 
     @SLMessageHandler
     fun HandleParcelOverlay(parcelOverlay: ParcelOverlay) {
-        var i: Int = 0
         Debug.Log("ParcelOverlay: SequenceID = " + parcelOverlay.ParcelData_Field.SequenceID)
-        var bArr: ByteArray = parcelOverlay.ParcelData_Field.Data
-        var length: Int = bArr.length / 64
-        var ints: IntArray = IntArray(length * 4 * 64 * 4)
-        var i2: Int = 0
-        for (int j = 0; j < length; j++) {
-            var i4: Int = j + (parcelOverlay.ParcelData_Field.SequenceID * 16)
-            for (int k = 0; k < 64; k++) {
-                    i = i2
-                    var i7: Int = 0
-                    switch ((byte) (bArr[i] & 15)) {
-                        0 ->
-                            i7 = Color.rgb(0, 192, 0)
-
-                        1 ->
-                            i7 = Color.rgb(32, 128, 32)
-
-                        2 ->
-                            i7 = Color.rgb(0, 128, 128)
-
-                        3 ->
-                            i7 = Color.rgb(0, 255, 255)
-
-                        4 ->
-                            i7 = Color.rgb(128, 128, 0)
-
-                        5 ->
-                            i7 = Color.rgb(255, 255, 0)
-
+        val bArr = parcelOverlay.ParcelData_Field.Data
+        val length = bArr.size / 64
+        val ints = IntArray(length * 4 * 64 * 4)
+        var i2 = 0
+        for (j in 0 until length) {
+            val i4 = j + (parcelOverlay.ParcelData_Field.SequenceID * 16)
+            for (k in 0 until 64) {
+                val i = i2
+                var i7 = 0
+                when (bArr[i].toInt() and 15) {
+                    0 -> i7 = Color.rgb(0, 192, 0)
+                    1 -> i7 = Color.rgb(32, 128, 32)
+                    2 -> i7 = Color.rgb(0, 128, 128)
+                    3 -> i7 = Color.rgb(0, 255, 255)
+                    4 -> i7 = Color.rgb(128, 128, 0)
+                    5 -> i7 = Color.rgb(255, 255, 0)
+                }
+                if ((bArr[i].toInt() and 32) != 0) {
+                    var red = Color.red(i7)
+                    var green = Color.green(i7)
+                    var blue = Color.blue(i7)
+                    var i8 = red + 64
+                    if (i8 >= 255) {
+                        val i9 = i8 - 255
+                        i8 -= i9
+                        green -= i9
+                        blue -= i9
+                        if (green < 0) green = 0
+                        if (blue < 0) blue = 0
                     }
-                    if ((bArr[i] & 32) != 0) {
-                        var red: Int = Color.red(i7)
-                        var green: Int = Color.green(i7)
-                        var blue: Int = Color.blue(i7)
-                        var i8: Int = red + 64
-                        if (i8 >= 255) {
-                            var i9: Int = i8 - 255
-                            i8 -= i9
-                            green -= i9
-                            blue -= i9
-                            if (green < 0) {
-                                green = 0
-                            }
-                            if (blue < 0) {
-                                blue = 0
-                            }
-                        }
-                        i7 = Color.rgb(i8, green, blue)
+                    i7 = Color.rgb(i8, green, blue)
+                }
+                for (pixelY in 0 until 4) {
+                    val rowOffset = ((((length * 4) - 1) - ((j * 4) + pixelY)) * 256) + (k * 4)
+                    for (pixelX in 0 until 4) {
+                        val hideBorder = (pixelY != 0 || i4 == 0 || (bArr[i].toInt() and 0x80) == 0) &&
+                                         (pixelX != 0 || k == 0 || (bArr[i].toInt() and 64) == 0)
+                        ints[rowOffset + pixelX] = if (hideBorder) i7 else -1
                     }
-                    for (int pixelY = 0; pixelY < 4; pixelY++) {
-                        var rowOffset: Int = ((((length * 4) - 1) - ((j * 4) + pixelY)) * 256) + (k * 4)
-                        for (int pixelX = 0; pixelX < 4; pixelX++) {
-                            ints[rowOffset + pixelX] = ((pixelY != 0 || i4 == 0 || (bArr[i] & Byte.MIN_VALUE) == 0) && (pixelX != 0 || k == 0 || (bArr[i] & 64) == 0)) ? i7 : -1
-                        }
-                    }
-                    i2 = i + 1
+                }
+                i2 = i + 1
             }
         }
-        this.minimapBitmap = MinimapBitmap(this.minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, ints)
-        if (this.userManager != null) {
-            this.userManager.getMinimapBitmapPool().setData(SubscriptionSingleKey.Value, this.minimapBitmap)
-        }
+        minimapBitmap = MinimapBitmap(minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, ints)
+        userManager?.getMinimapBitmapPool()?.setData(SubscriptionSingleKey.Value, minimapBitmap)
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:36:0x0051  */
-    /* JADX WARN: Removed duplicated region for block: B:39:? A[RETURN, SYNTHETIC] */
-    @com.lumiyaviewer.lumiya.slproto.handler.SLEventQueueMessageHandler(eventName = com.lumiyaviewer.lumiya.slproto.caps.SLCapEventQueue.CapsEventType.ParcelProperties)
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
+    @SLEventQueueMessageHandler(eventName = SLCapEventQueue.CapsEventType.ParcelProperties)
     fun HandleParcelProperties(event: LLSDNode) {
-        var avatarParcelChanged: Boolean = false
+        var avatarParcelChanged = false
         try {
-            var parcelData: LLSDNode = event.byKey("ParcelData")
-            for (int parcelIndex = 0; parcelIndex < parcelData.getCount(); parcelIndex++) {
-                var parcelNode: LLSDNode = parcelData.byIndex(parcelIndex)
+            val parcelDataArray = event.byKey("ParcelData")
+            val count = parcelDataArray.count
+            for (i in 0 until count) {
+                val parcelNode = parcelDataArray.byIndex(i)
                 try {
-                    var parcel: ParcelData = ParcelData(parcelNode)
-                    var parcelId: Int = parcel.getParcelID()
-                    this.parcels.put(parcelId, parcel)
-                    // ParcelProperties.Bitmap: one bit per 4 m x 4 m cell of the region.
-                    var bitmap: BooleanArray = parcel.getParcelBitmap()
-                    for (int cell = 0; cell < PARCEL_OVERLAY_CELLS; cell++) {
-                        if (bitmap[cell]) {
-                            this.parcelIDs[cell] = parcelId
-                            if (cell == this.myAvatarParcelDataIndex) {
-                                avatarParcelChanged = true
+                    val parcelData = ParcelData(parcelNode)
+                    val parcelID = parcelData.getParcelID()
+                    parcels[parcelID] = parcelData
+                    val bitmap = parcelData.getParcelBitmap()
+                    if (bitmap != null) {
+                        val len = Math.min(bitmap.size, parcelIDs.size)
+                        for (cell in 0 until len) {
+                            if (bitmap[cell]) {
+                                parcelIDs[cell] = parcelID
+                                if (cell == myAvatarParcelDataIndex) {
+                                    avatarParcelChanged = true
+                                }
                             }
                         }
                     }
                 } catch (e: LLSDException) {
-                    // A malformed parcel is skipped; the others are still applied.
                     Debug.Warning(e)
                 }
             }
         } catch (e: LLSDException) {
-            e.printStackTrace()
+            Debug.Warning(e)
         }
+
         if (avatarParcelChanged) {
             requestUpdateAvatarParcelData()
         }
     }
 
-    fun getDistanceToUser(uuid: UUID): Float {
+    fun getDistanceToUser(uuid: UUID?): Float? {
         if (uuid == null) {
-        return null
+            return null
         }
-        var userLocation: UserLocation = this.userPositions.get(uuid)
-        return if (userLocation != null) userLocation.distance else Float.NaN
+        val userLocation = userPositions[uuid]
+        return userLocation?.distance ?: Float.NaN
     }
 
-    fun getNearbyAgentLocation(uuid: UUID): LLVector3 {
+    fun getNearbyAgentLocation(uuid: UUID?): LLVector3? {
         var avatarObject: SLObjectInfo? = null
-        if (this.gridConn != null && this.gridConn.parcelInfo != null && (avatarObject = this.gridConn.parcelInfo.getAvatarObject(uuid)) != null) {
-            return avatarObject.getAbsolutePosition()
+        if (gridConn != null && gridConn?.parcelInfo != null) {
+            avatarObject = gridConn?.parcelInfo?.getAvatarObject(uuid)
+            if (avatarObject != null) {
+                return avatarObject.getAbsolutePosition()
+            }
         }
-        if (!Objects.equal(uuid, this.circuitInfo.agentID) || this.myAvatarPosition == null) {
-        return null
+        if (!Objects.equal(uuid, circuitInfo.agentID) || myAvatarPosition == null) {
+            return null
         }
-        return LLVector3(this.myAvatarPosition.getX(), this.myAvatarPosition.getY(), this.myAvatarPosition.getZ())
+        return LLVector3(myAvatarPosition!!.getX(), myAvatarPosition!!.getY(), myAvatarPosition!!.getZ())
     }
 
     fun getNearbyChatterList(): MutableList<ChatterID> {
-        var arrayList: ArrayList = ArrayList(this.userPositions.size())
-        var it: Iterator<?> = this.userPositions.values().iterator()
-        while (it.hasNext()) {
-            arrayList.add((it as UserLocation.next()).chatterID)
+        val arrayList = ArrayList<ChatterID>(userPositions.size)
+        for (userLocation in userPositions.values) {
+            arrayList.add(userLocation.chatterID)
         }
         return arrayList
     }
 
     fun requestUpdateAvatarParcelData() {
-        this.agentCircuit.execute(Runnable() {
-            private /* synthetic */ void $m$0() {
-                SLMinimap.this.updateAvatarParcelData()
-            }
-            fun run() {
-                $m$0()
-            }
+        agentCircuit.execute(Runnable {
+            updateAvatarParcelData()
         })
     }
 }

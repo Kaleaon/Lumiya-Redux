@@ -9,7 +9,12 @@ import com.lumiyaviewer.lumiya.react.ResultHandler;
 import com.lumiyaviewer.lumiya.react.SimpleRequestHandler;
 import com.lumiyaviewer.lumiya.react.SubscriptionSingleKey;
 import com.lumiyaviewer.lumiya.slproto.SLAgentCircuit;
+import com.lumiyaviewer.lumiya.slproto.caps.SLCapEventQueue;
+import com.lumiyaviewer.lumiya.slproto.handler.SLEventQueueMessageHandler;
 import com.lumiyaviewer.lumiya.slproto.handler.SLMessageHandler;
+import com.lumiyaviewer.lumiya.slproto.llsd.LLSDException;
+import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode;
+import com.lumiyaviewer.lumiya.slproto.messages.CoarseLocationUpdate;
 import com.lumiyaviewer.lumiya.slproto.messages.ParcelOverlay;
 import com.lumiyaviewer.lumiya.slproto.modules.voice.SLVoice;
 import com.lumiyaviewer.lumiya.slproto.objects.SLObjectInfo;
@@ -17,13 +22,17 @@ import com.lumiyaviewer.lumiya.slproto.types.ImmutableVector;
 import com.lumiyaviewer.lumiya.slproto.types.LLVector3;
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID;
 import com.lumiyaviewer.lumiya.slproto.users.ParcelData;
+import com.lumiyaviewer.lumiya.slproto.users.manager.ChatterListType;
 import com.lumiyaviewer.lumiya.slproto.users.manager.CurrentLocationInfo;
 import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager;
+import com.lumiyaviewer.lumiya.utils.UUIDPool;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -185,23 +194,139 @@ public class SLMinimap extends SLModule {
         super.HandleCloseCircuit();
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:66:0x019a  */
-    /* JADX WARN: Removed duplicated region for block: B:68:0x01a7  */
-    /* JADX WARN: Removed duplicated region for block: B:75:0x01c0  */
-    /* JADX WARN: Removed duplicated region for block: B:85:0x013c  */
-    /* JADX WARN: Removed duplicated region for block: B:95:0x017b  */
-    /* JADX WARN: Removed duplicated region for block: B:98:0x0188  */
-    @com.lumiyaviewer.lumiya.slproto.handler.SLMessageHandler
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public void HandleCoarseLocationUpdate(com.lumiyaviewer.lumiya.slproto.messages.CoarseLocationUpdate r14) {
-        /*
-            Method dump skipped, instructions count: 491
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.modules.SLMinimap.HandleCoarseLocationUpdate(com.lumiyaviewer.lumiya.slproto.messages.CoarseLocationUpdate):void");
+    @SLMessageHandler
+    public void HandleCoarseLocationUpdate(CoarseLocationUpdate coarseLocationUpdate) {
+        boolean myPositionChanged = false;
+        boolean userListChanged = false;
+
+        ParcelData initialParcelData = (myAvatarParcelDataIndex >= 0 && myAvatarParcelDataIndex < parcelIDs.length)
+                ? parcels.get(Integer.valueOf(parcelIDs[myAvatarParcelDataIndex]))
+                : null;
+
+        HashSet<UUID> seenAgentUUIDs = new HashSet<>(coarseLocationUpdate.Location_Fields.size());
+        ParcelData currentParcelData = initialParcelData;
+        Set<UUID> modifiedAgentUUIDs = null;
+
+        int limit = Math.min(coarseLocationUpdate.Location_Fields.size(), coarseLocationUpdate.AgentData_Fields.size());
+
+        for (int i = 0; i < limit; i++) {
+            CoarseLocationUpdate.Location location = coarseLocationUpdate.Location_Fields.get(i);
+            ImmutableVector newPos = new ImmutableVector(location.X, location.Y, location.Z * 4.0f);
+
+            if (i == coarseLocationUpdate.Index_Field.You) {
+                if (!Objects.equal(newPos, myAvatarPosition)) {
+                    myAvatarPosition = newPos;
+                    int newParcelIndex = getParcelDataIndex(myAvatarPosition);
+                    if (newParcelIndex != myAvatarParcelDataIndex) {
+                        myAvatarParcelDataIndex = newParcelIndex;
+                        if (myAvatarParcelDataIndex >= 0 && myAvatarParcelDataIndex < parcelIDs.length) {
+                            currentParcelData = parcels.get(Integer.valueOf(parcelIDs[myAvatarParcelDataIndex]));
+                        }
+                        myPositionChanged = true;
+                    } else {
+                        myPositionChanged = true;
+                    }
+                }
+            } else {
+                CoarseLocationUpdate.AgentData agentData = coarseLocationUpdate.AgentData_Fields.get(i);
+                UUID agentID = agentData.AgentID;
+                if (agentID != null && !UUIDPool.ZeroUUID.equals(agentID)) {
+                    UserLocation existingLoc = userPositions.get(agentID);
+                    boolean posChanged = false;
+                    if (existingLoc != null) {
+                        if (!newPos.equals(existingLoc.location)) {
+                            existingLoc.location = newPos;
+                            posChanged = true;
+                        }
+                    } else {
+                        UUID userID = userManager != null ? userManager.getUserID() : UUIDPool.ZeroUUID;
+                        ChatterID chatterID = ChatterID.getUserChatterID(userID, agentID);
+                        userPositions.put(agentID, new UserLocation(chatterID, newPos));
+                        posChanged = true;
+                        userListChanged = true;
+                    }
+
+                    if (posChanged) {
+                        if (modifiedAgentUUIDs == null) {
+                            modifiedAgentUUIDs = new HashSet<>();
+                        }
+                        modifiedAgentUUIDs.add(agentID);
+                    }
+                    seenAgentUUIDs.add(agentID);
+                }
+            }
+        }
+
+        Iterator<UUID> it = userPositions.keySet().iterator();
+        while (it.hasNext()) {
+            UUID uuid = it.next();
+            if (!seenAgentUUIDs.contains(uuid)) {
+                it.remove();
+                if (modifiedAgentUUIDs == null) {
+                    modifiedAgentUUIDs = new HashSet<>();
+                }
+                modifiedAgentUUIDs.add(uuid);
+                userListChanged = true;
+            }
+        }
+
+        boolean distancesUpdated = false;
+        if (myAvatarPosition != null) {
+            if (myPositionChanged) {
+                for (UserLocation userLoc : userPositions.values()) {
+                    userLoc.distance = myAvatarPosition.distanceTo(userLoc.location);
+                }
+                distancesUpdated = true;
+            } else if (modifiedAgentUUIDs != null) {
+                for (UUID uuid : modifiedAgentUUIDs) {
+                    UserLocation userLoc = userPositions.get(uuid);
+                    if (userLoc != null) {
+                        userLoc.distance = myAvatarPosition.distanceTo(userLoc.location);
+                    }
+                }
+                distancesUpdated = true;
+            }
+        }
+
+        boolean countChanged = false;
+        if (distancesUpdated || userListChanged) {
+            int chatRangeCount = 0;
+            for (UserLocation userLoc : userPositions.values()) {
+                if (userLoc.distance <= CHAT_RANGE) {
+                    chatRangeCount++;
+                }
+            }
+            if (chatRangeCount != chatRangeUsersCount) {
+                chatRangeUsersCount = chatRangeCount;
+                countChanged = true;
+            }
+            if (nearbyUsersCount != userPositions.size()) {
+                nearbyUsersCount = userPositions.size();
+                countChanged = true;
+            }
+        }
+
+        if (currentParcelData != initialParcelData || countChanged) {
+            requestUpdateAvatarParcelData();
+        }
+
+        if (userManager != null) {
+            if (userListChanged) {
+                userManager.getChatterList().updateList(ChatterListType.Nearby);
+            }
+
+            if (myPositionChanged) {
+                userManager.getChatterList().updateDistanceToAllUsers();
+            } else if (modifiedAgentUUIDs != null) {
+                for (UUID uuid : modifiedAgentUUIDs) {
+                    userManager.getChatterList().updateDistanceToUser(uuid);
+                }
+            }
+
+            if (myPositionChanged || modifiedAgentUUIDs != null) {
+                userManager.getUserLocationsPool().requestUpdate(SubscriptionSingleKey.Value);
+            }
+        }
     }
 
     @SLMessageHandler
@@ -289,78 +414,41 @@ public class SLMinimap extends SLModule {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:36:0x0051  */
-    /* JADX WARN: Removed duplicated region for block: B:39:? A[RETURN, SYNTHETIC] */
-    @com.lumiyaviewer.lumiya.slproto.handler.SLEventQueueMessageHandler(eventName = com.lumiyaviewer.lumiya.slproto.caps.SLCapEventQueue.CapsEventType.ParcelProperties)
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public void HandleParcelProperties(com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode r10) {
-        /*
-            r9 = this;
-            r2 = 0
-            java.lang.String r0 = "ParcelData"
-            com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode r4 = r10.byKey(r0)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L4a
-            r3 = r2
-            r1 = r2
-        La:
-            int r0 = r4.getCount()     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L55
-            if (r3 >= r0) goto L4f
-            com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode r0 = r4.byIndex(r3)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L55
-            com.lumiyaviewer.lumiya.slproto.users.ParcelData r5 = new com.lumiyaviewer.lumiya.slproto.users.ParcelData     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            r5.<init>(r0)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            int r6 = r5.getParcelID()     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            java.util.Map<java.lang.Integer, com.lumiyaviewer.lumiya.slproto.users.ParcelData> r0 = r9.parcels     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r6)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            r0.put(r7, r5)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            boolean[] r5 = r5.getParcelBitmap()     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L40
-            r0 = r1
-            r1 = r2
-        L2c:
-            r7 = 4096(0x1000, float:5.74E-42)
-            if (r1 >= r7) goto L45
-            boolean r7 = r5[r1]     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L57
-            if (r7 == 0) goto L3d
-            int[] r7 = r9.parcelIDs     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L57
-            r7[r1] = r6     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L57
-            int r7 = r9.myAvatarParcelDataIndex     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L57
-            if (r1 != r7) goto L3d
-            r0 = 1
-        L3d:
-            int r1 = r1 + 1
-            goto L2c
-        L40:
-            r0 = move-exception
-        L41:
-            com.lumiyaviewer.lumiya.Debug.Warning(r0)     // Catch: com.lumiyaviewer.lumiya.slproto.llsd.LLSDException -> L55
-            r0 = r1
-        L45:
-            int r1 = r3 + 1
-            r3 = r1
-            r1 = r0
-            goto La
-        L4a:
-            r0 = move-exception
-            r1 = r2
-        L4c:
-            r0.printStackTrace()
-        L4f:
-            if (r1 == 0) goto L54
-            r9.requestUpdateAvatarParcelData()
-        L54:
-            return
-        L55:
-            r0 = move-exception
-            goto L4c
-        L57:
-            r1 = move-exception
-            r8 = r1
-            r1 = r0
-            r0 = r8
-            goto L41
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.lumiyaviewer.lumiya.slproto.modules.SLMinimap.HandleParcelProperties(com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode):void");
+    @SLEventQueueMessageHandler(eventName = SLCapEventQueue.CapsEventType.ParcelProperties)
+    public void HandleParcelProperties(LLSDNode event) {
+        boolean avatarParcelChanged = false;
+        try {
+            LLSDNode parcelDataArray = event.byKey("ParcelData");
+            int count = parcelDataArray.getCount();
+            for (int i = 0; i < count; i++) {
+                LLSDNode parcelNode = parcelDataArray.byIndex(i);
+                try {
+                    ParcelData parcelData = new ParcelData(parcelNode);
+                    int parcelID = parcelData.getParcelID();
+                    parcels.put(Integer.valueOf(parcelID), parcelData);
+                    boolean[] bitmap = parcelData.getParcelBitmap();
+                    if (bitmap != null) {
+                        int len = Math.min(bitmap.length, parcelIDs.length);
+                        for (int cell = 0; cell < len; cell++) {
+                            if (bitmap[cell]) {
+                                parcelIDs[cell] = parcelID;
+                                if (cell == myAvatarParcelDataIndex) {
+                                    avatarParcelChanged = true;
+                                }
+                            }
+                        }
+                    }
+                } catch (LLSDException e) {
+                    Debug.Warning(e);
+                }
+            }
+        } catch (LLSDException e) {
+            e.printStackTrace();
+        }
+
+        if (avatarParcelChanged) {
+            requestUpdateAvatarParcelData();
+        }
     }
 
     public Float getDistanceToUser(@Nullable UUID uuid) {
