@@ -47,12 +47,16 @@ open class RLVRestrictions {
          * @param objectID  object the action concerns (TargetSpecifiesRestriction)
          * @param sourceID  object asking, for "secure" behaviours (TargetNoExceptions)
          */
-        fun isAllowed(matchType: RLVRestrictionType.RLVRuleMatchType, option: String, objectID: UUID?, sourceID: UUID?): Boolean {
+        fun isAllowed(matchType: RLVRestrictionType.RLVRuleMatchType?, option: String?, objectID: UUID?, sourceID: UUID?): Boolean {
+            if (matchType == null) {
+                return true
+            }
+            val target = option ?: ""
             if (matchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance) {
                 if (this.restMap.containsKey("")) {
                     return true
                 }
-                return option != "" && this.restMap.containsKey(option)
+                return target.isNotEmpty() && this.restMap.containsKey(target)
             }
             if (this.restMap.isEmpty()) {
                 return true
@@ -79,12 +83,12 @@ open class RLVRestrictions {
                     if (!this.restMap.containsKey("")) {
                         return true
                     }
-                    option != "" && this.restMap.containsKey(option)
+                    target.isNotEmpty() && this.restMap.containsKey(target)
                 }
                 RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesRestriction -> {
                     // An option restricts that target; "" restricts all but the
                     // objects that set it.
-                    if (this.restMap.containsKey(option)) {
+                    if (target.isNotEmpty() && this.restMap.containsKey(target)) {
                         return false
                     }
                     if (!this.restMap.containsKey("")) {
@@ -93,7 +97,7 @@ open class RLVRestrictions {
                     if (objectID == null) {
                         return false
                     }
-                    !(this.restMap[""]?.contains(objectID) ?: false)
+                    this.restMap[""]?.contains(objectID) ?: false
                 }
                 else -> true
             }
