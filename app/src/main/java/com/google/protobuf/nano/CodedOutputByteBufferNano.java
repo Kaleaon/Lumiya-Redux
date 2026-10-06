@@ -1,7 +1,6 @@
 package com.google.protobuf.nano;
 
 import com.google.common.logging.nano.Vr;
-import com.lumiyaviewer.lumiya.slproto.users.SLGroupInfo;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -411,7 +410,7 @@ public final class CodedOutputByteBufferNano {
         if (length2 >= length) {
             return length2;
         }
-        throw new IllegalArgumentException("UTF-8 length does not fit in int: " + (length2 + SLGroupInfo.GP_LAND_ADMIN));
+        throw new IllegalArgumentException("UTF-8 length does not fit in int: " + (length2 + 4294967296L));
     }
 
     private static int encodedLengthGeneral(CharSequence charSequence, int i) {
