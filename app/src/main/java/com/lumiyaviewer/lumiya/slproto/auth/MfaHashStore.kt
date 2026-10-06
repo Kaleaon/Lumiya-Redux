@@ -26,98 +26,95 @@ import javax.crypto.spec.GCMParameterSpec
  * unavailable the hash is not kept and the user is asked for a code again.
  */
 open class MfaHashStore {
-    @JvmStatic private var KEY_ALIAS: String = "lumiya_mfa_hash"
-    @JvmStatic private var PREFS_NAME: String = "mfa_hashes"
-    @JvmStatic private var KEYSTORE: String = "AndroidKeyStore"
-    @JvmStatic private var TRANSFORMATION: String = "AES/GCM/NoPadding"
-    @JvmStatic private var GCM_IV_BYTES: Int = 12
-    @JvmStatic private var GCM_TAG_BITS: Int = 128
+    companion object {
+        private const val KEY_ALIAS = "lumiya_mfa_hash"
+        private const val PREFS_NAME = "mfa_hashes"
+        private const val KEYSTORE = "AndroidKeyStore"
+        private const val TRANSFORMATION = "AES/GCM/NoPadding"
+        private const val GCM_IV_BYTES = 12
+        private const val GCM_TAG_BITS = 128
+
+        @JvmStatic
+        fun accountKey(gridName: String?, loginName: String?): String {
+            var name = if (loginName == null) "" else loginName.trim().lowercase(Locale.US).replace('.', ' ').replace('_', ' ')
+            name = name.replace("\\s+".toRegex(), " ")
+            if (!name.contains(" ")) {
+                name = "$name resident"
+            }
+            val grid = gridName ?: ""
+            return try {
+                val digest = MessageDigest.getInstance("SHA-256").digest("$grid\n$name".toByteArray(StandardCharsets.UTF_8))
+                val hex = StringBuilder()
+                for (b in digest) {
+                    hex.append(String.format(Locale.US, "%02x", b))
+                }
+                hex.toString()
+            } catch (e: Exception) {
+                throw IllegalStateException(e)
+            }
+        }
+    }
 
     private var prefs: SharedPreferences? = null
 
-    constructor(context: Context) {
-        this(context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE))
-    }
+    constructor(context: Context) : this(context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE))
 
-    constructor(prefs: SharedPreferences) {
+    constructor(prefs: SharedPreferences?) {
         this.prefs = prefs
     }
 
-    /**
-     * Preference key for one account on one grid. "First Last", "first.last"
-     * and "first_last" name the same account, so they share a key. Hashed so
-     * the account list is not readable from the preferences file.
-     */
-    fun accountKey(gridName: String, loginName: String): String {
-        var name: String = if (loginName == null) "" else loginName.trim().toLowerCase(Locale.US).replace('.', ' ').replace('_', ' ')
-        name = name.replaceAll("\\s+", " ")
-        if (!name.contains(" ")) {
-            name = name + " resident"
-        }
-        var grid: String = if (gridName == null) "" else gridName
-        try {
-            var digest: ByteArray = MessageDigest.getInstance("SHA-256").digest((grid + "\n" + name).getBytes(StandardCharsets.UTF_8))
-            var hex: StringBuilder = StringBuilder()
-            for (b in digest) {
-                hex.append(String.format(Locale.US, "%02x", b))
-            }
-            return hex.toString()
+    open fun get(gridName: String, loginName: String): String {
+        val prefs = this.prefs ?: return ""
+        val stored = prefs.getString(accountKey(gridName, loginName), null) ?: return ""
+        return try {
+            val blob = Base64.decode(stored, Base64.NO_WRAP)
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            cipher.init(Cipher.DECRYPT_MODE, getOrCreateKey(), GCMParameterSpec(GCM_TAG_BITS, blob, 0, GCM_IV_BYTES))
+            val plain = cipher.doFinal(blob, GCM_IV_BYTES, blob.size - GCM_IV_BYTES)
+            String(plain, StandardCharsets.UTF_8)
         } catch (e: Exception) {
-            throw IllegalStateException(e)
-        }
-    }
-
-    /** The stored hash, or "" when there is none (the login field is then empty, as in the viewer). */
-    fun get(gridName: String, loginName: String): String {
-        var stored: String = this.prefs.getString(accountKey(gridName, loginName), null)
-        if (stored == null) {
-            return ""
-        }
-        try {
-            var blob: ByteArray = Base64.decode(stored, Base64.NO_WRAP)
-            var cipher: Cipher = Cipher.getInstancecipher as TRANSFORMATION.init(Cipher.DECRYPT_MODE, getOrCreateKey(), GCMParameterSpec(GCM_TAG_BITS, blob, 0, GCM_IV_BYTES))
-            var plain: ByteArray = cipher.doFinal(blob, GCM_IV_BYTES, blob.length - GCM_IV_BYTES)
-            return String(plain, StandardCharsets.UTF_8)
-        } catch (e: Exception) {
-            Debug.Printf("MFA: stored hash unreadable, discarding: %s", e.getMessage())
+            Debug.Printf("MFA: stored hash unreadable, discarding: %s", e.message)
             remove(gridName, loginName)
-            return ""
+            ""
         }
     }
 
-    fun put(gridName: String, loginName: String, mfaHash: String) {
-        if (mfaHash == null || mfaHash.isEmpty()) {
-            return
-        }
+    open fun put(gridName: String, loginName: String, mfaHash: String?) {
+        if (mfaHash.isNullOrEmpty()) return
+        val prefs = this.prefs ?: return
         try {
-            var cipher: Cipher = Cipher.getInstancecipher as TRANSFORMATION.init(Cipher.ENCRYPT_MODE, getOrCreateKey())
-            var iv: ByteArray = cipher.getIV()
-            var encrypted: ByteArray = cipher.doFinal(mfaHash.getBytes(StandardCharsets.UTF_8))
-            var blob: ByteArray = ByteArray(iv.length + encrypted.length)
-            System.arraycopy(iv, 0, blob, 0, iv.length)
-            System.arraycopy(encrypted, 0, blob, iv.length, encrypted.length)
-            this.prefs.edit().putString(accountKey(gridName, loginName), Base64.encodeToString(blob, Base64.NO_WRAP)).apply()
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            cipher.init(Cipher.ENCRYPT_MODE, getOrCreateKey())
+            val iv = cipher.iv
+            val encrypted = cipher.doFinal(mfaHash.toByteArray(StandardCharsets.UTF_8))
+            val blob = ByteArray(iv.size + encrypted.size)
+            System.arraycopy(iv, 0, blob, 0, iv.size)
+            System.arraycopy(encrypted, 0, blob, iv.size, encrypted.size)
+            prefs.edit().putString(accountKey(gridName, loginName), Base64.encodeToString(blob, Base64.NO_WRAP)).apply()
         } catch (e: Exception) {
-            Debug.Printf("MFA: cannot store hash (keystore unavailable): %s", e.getMessage())
+            Debug.Printf("MFA: cannot store hash (keystore unavailable): %s", e.message)
         }
     }
 
-    fun remove(gridName: String, loginName: String) {
-        this.prefs.edit().remove(accountKey(gridName, loginName)).apply()
+    open fun remove(gridName: String, loginName: String) {
+        prefs?.edit()?.remove(accountKey(gridName, loginName))?.apply()
     }
 
-    private SecretKey getOrCreateKey() throws Exception {
-        var keyStore: KeyStore = KeyStore.getInstancekeyStore as KEYSTORE.load(null)
-        var entry: KeyStore.Entry = keyStore.getEntry(KEY_ALIAS, null)
+    private fun getOrCreateKey(): SecretKey {
+        val keyStore = KeyStore.getInstance(KEYSTORE)
+        keyStore.load(null)
+        val entry = keyStore.getEntry(KEY_ALIAS, null)
         if (entry is KeyStore.SecretKeyEntry) {
-            return ((KeyStore.SecretKeyEntry) entry).getSecretKey()
+            return entry.secretKey
         }
-        var generator: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEYSTORE)
-        generator.init(KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+        val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KEYSTORE)
+        generator.init(
+            KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256)
-                .build())
+                .build()
+        )
         return generator.generateKey()
     }
 }
