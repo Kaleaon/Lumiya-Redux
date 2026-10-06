@@ -15,6 +15,7 @@ pub mod migration_batch4_dao;
 pub mod migration_batch4_ui;
 pub mod migration_batch4_utils;
 pub mod migration_batch4_render;
+pub mod packet_offload;
 pub mod protocol_messages;
 pub mod slproto_types;
 pub mod utils;
