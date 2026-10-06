@@ -568,86 +568,88 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
             ArrayAdapter arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList)
             AlertDialog.Builder builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.select_hud_title)
-            builder.setAdapter(arrayAdapter, DialogInterface.OnClickListener() {
-                    WorldViewActivity.this.m855x5cf6cbb8((List) arrayList, dialogInterface, i2)
-                }
+            builder.setAdapter(arrayAdapter) { dialogInterface, i2 ->
+                displayHUD(arrayList[i2].localID)
+            }
+            builder.show()
+        }
+    }
 
-                override fun onClick(dialogInterface: DialogInterface, i2: Int) {
+    override fun dispatchKeyEvent(keyEvent: KeyEvent): Boolean {
+        if (this.detailsContainer.visibility == View.VISIBLE) {
+            return super.dispatchKeyEvent(keyEvent)
+        }
+        when (keyEvent.keyCode) {
+            19 -> {
+                if (this.avatarControl != null) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
+                            this.avatarControl.StopAgentMotion()
+                        }
                     } else {
                         this.avatarControl.stopCamming()
                         this.avatarControl.StartAgentMotion(2)
-                        }
                     }
                 }
-                }
+            }
             20 -> {
                 if (this.avatarControl != null) {
-                    if (keyEvent.getAction() != 0) {
-                        if (keyEvent.getAction() == 1) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
                             this.avatarControl.StopAgentMotion()
-                            }
                         }
                     } else {
                         this.avatarControl.stopCamming()
                         this.avatarControl.StartAgentMotion(4)
-                        }
                     }
                 }
-                }
+            }
             21 -> {
                 if (this.avatarControl != null) {
-                    if (keyEvent.getAction() != 0) {
-                        if (keyEvent.getAction() == 1) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
                             this.avatarControl.stopTurning()
-                            }
                         }
                     } else {
                         this.avatarControl.startTurning(TURNING_SPEED)
-                        }
                     }
                 }
-                }
+            }
             22 -> {
                 if (this.avatarControl != null) {
-                    if (keyEvent.getAction() != 0) {
-                        if (keyEvent.getAction() == 1) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
                             this.avatarControl.stopTurning()
-                            }
                         }
                     } else {
                         this.avatarControl.startTurning(-50.0f)
-                        }
                     }
                 }
-                }
+            }
             92 -> {
                 if (this.avatarControl != null) {
-                    if (keyEvent.getAction() != 0) {
-                        if (keyEvent.getAction() == 1) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
                             this.avatarControl.StopAgentMotion()
-                            }
                         }
                     } else {
                         this.avatarControl.stopCamming()
                         this.avatarControl.StartAgentMotion(8)
-                        }
                     }
                 }
-                }
+            }
             93 -> {
                 if (this.avatarControl != null) {
-                    if (keyEvent.getAction() != 0) {
-                        if (keyEvent.getAction() == 1) {
+                    if (keyEvent.action != 0) {
+                        if (keyEvent.action == 1) {
                             this.avatarControl.StopAgentMotion()
-                            }
                         }
                     } else {
                         this.avatarControl.stopCamming()
                         this.avatarControl.StartAgentMotion(16)
-                        }
                     }
                 }
-                }
+            }
         }
         return super.dispatchKeyEvent(keyEvent)
     }
