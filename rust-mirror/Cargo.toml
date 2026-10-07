@@ -5,10 +5,15 @@ edition = "2021"
 publish = false
 
 [lib]
+name = "rust_mirror"
 path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+jni = "0.21"
 
 [lints.rust]
-unsafe_code = "forbid"
+unsafe_code = "warn"
 
 [lints.clippy]
 all = "deny"

@@ -53,7 +53,21 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
     private var unackedQueue: ConcurrentLinkedQueue<SLMessage>
     @Volatile var isBackgroundState: Boolean = false
 
+    private external fun nativeProcessReceive(rxBuffer: ByteBuffer, length: Int, outMeta: IntArray, outAcks: IntArray): Int
+
     companion object {
+        private var isNativeLoaded: Boolean = false
+
+        init {
+            try {
+                System.loadLibrary("rust_mirror")
+                isNativeLoaded = true
+            } catch (e: Throwable) {
+                Debug.Log("SLCircuit: librust_mirror.so not loaded, using JVM fallback")
+                isNativeLoaded = false
+            }
+        }
+
         private const val DEFAULT_IDLE_INTERVAL = 1000
         private const val FAST_IDLE_INTERVAL = 100
         private const val BACKGROUND_IDLE_INTERVAL = 10000
@@ -102,9 +116,9 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
             this.handledPackets = LinkedList()
             this.lastReceivedSeqnum = 0
             this.receivedAcks = ArrayList()
-            this.txBuffer = ByteBuffer.allocate(65536)
-            this.tempBuffer = ByteBuffer.allocate(65536)
-            this.rxBuffer = ByteBuffer.allocate(65536)
+            this.txBuffer = ByteBuffer.allocateDirect(65536)
+            this.tempBuffer = ByteBuffer.allocateDirect(65536)
+            this.rxBuffer = ByteBuffer.allocateDirect(65536)
             this.datagramChannel = DatagramChannel.open()
             this.datagramChannel.configureBlocking(false)
             this.datagramChannel.connect(circuitInfo.socketAddress)
@@ -206,72 +220,123 @@ open class SLCircuit internal constructor(gridConnection: SLGridConnection, circ
     fun ProcessReceive(): Boolean {
         this.rxBuffer.clear()
         this.rxBuffer.order(ByteOrder.BIG_ENDIAN)
-        if (this.datagramChannel.read(this.rxBuffer) == 0) {
+        val bytesRead = this.datagramChannel.read(this.rxBuffer)
+        if (bytesRead <= 0) {
             return false
-        } else {
-            this.rxBuffer.flip()
-            this.receivedAcks.clear()
-            val message: SLMessage? = SLMessage.Unpack(this.rxBuffer, this.tempBuffer, this.receivedAcks)
-            var message2: SLMessage? = null
-            if (message != null) {
-                var var1: Boolean
-                run {
-                    this.lastReceivedPacketMillis = SystemClock.elapsedRealtime()
-                    this.pingSentCount = 0
-                    if (message.seqNum - this.lastReceivedSeqnum <= 0) {
-                        Debug.Printf("Detected incoming out of order: seqNum = %d", message.seqNum)
-                        if (message is PacketAck || message is StartPingCheck) {
-                            var1 = false
-                            return@run
-                        }
-                        if (message !is CompletePingCheck && this.handledPackets.contains(message.seqNum)) {
-                            Debug.Printf("Detected incoming duplicate: seqNum = %d", message.seqNum)
-                            var1 = true
-                            return@run
-                        }
-                    }
-                    var1 = false
-                }
-                if (var1) {
-                    message2 = null
-                } else {
-                    while (this.handledPackets.size >= 1024 && this.handledPackets.poll() != null) {
-                    }
-                    this.handledPackets.add(message.seqNum)
-                    this.lastReceivedSeqnum = message.seqNum
-                    if (message !is PacketAck && message !is StartPingCheck) {
-                        message2 = message
-                    } else {
-                        message.Handle(this)
-                        message2 = null
-                    }
-                }
-            } else {
-                Debug.Log("message discarded!")
-                message2 = null
-            }
-            var iterator = this.receivedAcks.iterator()
-            while (iterator.hasNext()) {
-                this.ProcessReceivedAck(iterator.next())
-            }
-            if (message != null && message.isReliable) {
-                iterator = this.pendingAcks.iterator()
-                var var5 = false
-                while (iterator.hasNext()) {
-                    if (iterator.next() == message.seqNum) {
-                        var5 = true
-                        break
-                    }
-                }
-                if (!var5) {
-                    this.pendingAcks.add(message.seqNum)
-                }
-            }
-            if (message2 != null) {
-                this.HandleMessage(message2)
-            }
-            return true
         }
+        this.rxBuffer.flip()
+        this.receivedAcks.clear()
+
+        if (isNativeLoaded) {
+            val outMeta = IntArray(7)
+            val outAcks = IntArray(256)
+            val result = nativeProcessReceive(this.rxBuffer, bytesRead, outMeta, outAcks)
+            if (result == 1) {
+                val seqNum = outMeta[0]
+                val isReliable = outMeta[1] != 0
+                val isResent = outMeta[2] != 0
+                val zeroCoded = outMeta[3] != 0
+                val hasAcks = outMeta[4] != 0
+                val bodyOffset = outMeta[5]
+                val bodyLen = outMeta[6]
+
+                if (hasAcks) {
+                    var i = 0
+                    while (i < outAcks.size && outAcks[i] != 0) {
+                        val ackSeq = outAcks[i]
+                        this.receivedAcks.add(ackSeq)
+                        this.ProcessReceivedAck(ackSeq)
+                        i++
+                    }
+                }
+
+                this.lastReceivedPacketMillis = SystemClock.elapsedRealtime()
+                this.pingSentCount = 0
+                this.lastReceivedSeqnum = seqNum
+                while (this.handledPackets.size >= 1024 && this.handledPackets.poll() != null) {}
+                this.handledPackets.add(seqNum)
+
+                val msgBuffer = this.rxBuffer.duplicate().order(ByteOrder.BIG_ENDIAN)
+                msgBuffer.position(bodyOffset)
+                msgBuffer.limit(bodyOffset + bodyLen)
+
+                val message = SLMessage.Unpack(msgBuffer, this.tempBuffer, this.receivedAcks)
+                if (message != null) {
+                    message.seqNum = seqNum
+                    message.isReliable = isReliable
+                    message.isResent = isResent
+                    message.zeroCoded = zeroCoded
+                    if (isReliable && !this.pendingAcks.contains(seqNum)) {
+                        this.pendingAcks.add(seqNum)
+                    }
+                    this.HandleMessage(message)
+                }
+                return true
+            } else if (result == 0) {
+                return true // Duplicate packet filtered natively
+            }
+        }
+
+        val message: SLMessage? = SLMessage.Unpack(this.rxBuffer, this.tempBuffer, this.receivedAcks)
+        var message2: SLMessage? = null
+        if (message != null) {
+            var var1: Boolean
+            run {
+                this.lastReceivedPacketMillis = SystemClock.elapsedRealtime()
+                this.pingSentCount = 0
+                if (message.seqNum - this.lastReceivedSeqnum <= 0) {
+                    Debug.Printf("Detected incoming out of order: seqNum = %d", message.seqNum)
+                    if (message is PacketAck || message is StartPingCheck) {
+                        var1 = false
+                        return@run
+                    }
+                    if (message !is CompletePingCheck && this.handledPackets.contains(message.seqNum)) {
+                        Debug.Printf("Detected incoming duplicate: seqNum = %d", message.seqNum)
+                        var1 = true
+                        return@run
+                    }
+                }
+                var1 = false
+            }
+            if (var1) {
+                message2 = null
+            } else {
+                while (this.handledPackets.size >= 1024 && this.handledPackets.poll() != null) {
+                }
+                this.handledPackets.add(message.seqNum)
+                this.lastReceivedSeqnum = message.seqNum
+                if (message !is PacketAck && message !is StartPingCheck) {
+                    message2 = message
+                } else {
+                    message.Handle(this)
+                    message2 = null
+                }
+            }
+        } else {
+            Debug.Log("message discarded!")
+            message2 = null
+        }
+        var iterator = this.receivedAcks.iterator()
+        while (iterator.hasNext()) {
+            this.ProcessReceivedAck(iterator.next())
+        }
+        if (message != null && message.isReliable) {
+            iterator = this.pendingAcks.iterator()
+            var var5 = false
+            while (iterator.hasNext()) {
+                if (iterator.next() == message.seqNum) {
+                    var5 = true
+                    break
+                }
+            }
+            if (!var5) {
+                this.pendingAcks.add(message.seqNum)
+            }
+        }
+        if (message2 != null) {
+            this.HandleMessage(message2)
+        }
+        return true
     }
 
     fun ProcessReceivedAck(var1: Int) {
