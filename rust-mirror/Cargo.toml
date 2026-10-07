@@ -18,4 +18,3 @@ unsafe_code = "warn"
 [lints.clippy]
 all = "deny"
 pedantic = "warn"
-
