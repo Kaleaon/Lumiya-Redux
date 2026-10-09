@@ -242,7 +242,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
         }
     }
 
-    private fun ForceUpdateAppearance(z: Boolean) {
+    open fun ForceUpdateAppearance(z: Boolean) {
         this.needUpdateAppearance = true
         if (this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance) == null) {
             this.eventBus.publish(SLBakingProgressEvent(true, false, 0))
@@ -260,7 +260,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
         }
     }
 
-    private fun RequestServerRebake() {
+    open fun RequestServerRebake() {
         var folder: SLInventoryEntry? = null
         var capability: String? = this.caps?.getCapability(SLCaps.SLCapability.UpdateAvatarAppearance)
         var data: InventoryEntryList = this.currentOutfitFolder.getData()
@@ -887,7 +887,7 @@ open class SLAvatarAppearance : SLModule(), SLWearable.OnWearableStatusChangeLis
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    fun ChangeOutfit(list: MutableList<SLInventoryEntry>, z: Boolean, wantedOutfitFolder: SLInventoryEntry) {
+    fun ChangeOutfit(list: MutableList<SLInventoryEntry>, z: Boolean, wantedOutfitFolder: SLInventoryEntry?) {
         var z2: Boolean = false
         var z3: Boolean = false
         var z4: Boolean = false
