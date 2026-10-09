@@ -624,7 +624,7 @@ open class SLInventory : SLModule() {
         SendMessage(removeInventoryObjects)
     }
 
-    fun DoCreateNewFolder(sLInventoryEntry: final SLInventoryEntry, str: String, z: Boolean, function: Function<UUID, Void>): UUID {
+    fun DoCreateNewFolder(sLInventoryEntry: SLInventoryEntry, str: String, z: Boolean, function: Function<UUID, Void>?): UUID {
         var randomUUID: UUID = UUID.randomUUID()
         if (z) {
             try {
@@ -882,7 +882,7 @@ open class SLInventory : SLModule() {
         this.eventBus.publish(sLInventoryNewContentsEvent)
     }
 
-    fun LinkInventoryItem(sLInventoryEntry: final SLInventoryEntry, uuid: UUID, i: Int, i2: Int, str: String, str2: String) {
+    fun LinkInventoryItem(sLInventoryEntry: SLInventoryEntry, uuid: UUID, i: Int, i2: Int, str: String, str2: String) {
         var linkInventoryItem: LinkInventoryItem = LinkInventoryItem()
         linkInventoryItem.AgentData_Field.AgentID = this.circuitInfo.agentID
         linkInventoryItem.AgentData_Field.SessionID = this.circuitInfo.sessionID
