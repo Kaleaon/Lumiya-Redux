@@ -5,11 +5,11 @@
         <TextView android:layout_gravity="right" android:id="@id/whatsnewText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="10.0dip" android:layout_weight="1.0" />
         <LinearLayout android:orientation="vertical" android:id="@id/linearLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10.0dip" android:layout_weight="1.0">
             <TextView android:textAppearance="?android:textAppearanceLarge" android:gravity="center" android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/login_caption" />
-            <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/login_user_name" />
-            <EditText android:id="@id/editUserName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:autoText="false" android:inputType="none" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_password" />
-            <EditText android:id="@id/editPassword" android:layout_width="fill_parent" android:layout_height="wrap_content" android:password="true" android:singleLine="true" android:capitalize="none" android:autoText="false" android:inputType="textPassword" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_grid" />
+            <TextView android:id="@+id/loginUserNameLabel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/login_user_name" android:labelFor="@+id/editUserName" />
+            <EditText android:id="@id/editUserName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:autoText="false" android:inputType="none" android:hint="@string/login_user_name" />
+            <TextView android:id="@+id/loginPasswordLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_password" android:labelFor="@+id/editPassword" />
+            <EditText android:id="@id/editPassword" android:layout_width="fill_parent" android:layout_height="wrap_content" android:password="true" android:singleLine="true" android:capitalize="none" android:autoText="false" android:inputType="textPassword" android:hint="@string/login_password" />
+            <TextView android:id="@+id/loginGridLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_grid" android:labelFor="@+id/spinnerGrid" />
             <Spinner android:id="@id/spinnerGrid" android:layout_width="fill_parent" android:layout_height="wrap_content" />
             <LinearLayout android:orientation="horizontal" android:id="@id/linearLayout2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
                 <CheckBox android:layout_gravity="center_vertical" android:id="@id/savePassword" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_save_password" android:layout_weight="1.0" />
