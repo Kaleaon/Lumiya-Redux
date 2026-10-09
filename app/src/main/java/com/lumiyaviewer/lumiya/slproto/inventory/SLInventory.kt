@@ -684,59 +684,72 @@ open class SLInventory : SLModule() {
     fun HandleBulkUpdateInventory(lLSDNode: LLSDNode) {
         Debug.Printf("BulkUpdateInventory: EventQueue event", arrayOfNulls<Object>(0))
         var sLInventoryNewContentsEvent: SLInventoryNewContentsEvent = SLInventoryNewContentsEvent()
-        var hashSet: HashSet = HashSet()
+        var hashSet: HashSet<UUID> = HashSet()
+        val localDb = this.db ?: return
+        localDb.beginTransaction()
         try {
+            var yieldCounter = 0
             if (lLSDNode.keyExists("FolderData")) {
                 var byKey: LLSDNode = lLSDNode.byKey("FolderData")
-                for (int i = 0; i < byKey.getCount(); i++) {
+                for (i in 0 until byKey.getCount()) {
                     var byIndex: LLSDNode = byKey.byIndex(i)
                     var asUUID: UUID = byIndex.byKey("FolderID").asUUID()
-                    if (asUUID.getLeastSignificantBits() != 0 || asUUID.getMostSignificantBits() != 0) {
+                    if (asUUID.getLeastSignificantBits() != 0L || asUUID.getMostSignificantBits() != 0L) {
                         Debug.Printf("Inventory: BulkUpdateInventory got folder %s", asUUID.toString())
                         var onInventoryCallbackListener: OnInventoryCallbackListener? = null
                         if (byIndex.keyExists("CallbackID")) {
-                            Debug.Printf("Inventory: got callback id %d", byIndex.byKey("CallbackID".asInt()))
-                            onInventoryCallbackListener = this.callbacks.remove(byIndex.byKey("CallbackID".asInt()))
+                            Debug.Printf("Inventory: got callback id %d", byIndex.byKey("CallbackID").asInt())
+                            onInventoryCallbackListener = this.callbacks.remove(byIndex.byKey("CallbackID").asInt())
                         }
-                        var findEntryOrCreate: SLInventoryEntry = this.db.findEntryOrCreate(asUUID)
+                        var findEntryOrCreate: SLInventoryEntry = localDb.findEntryOrCreate(asUUID)
                         var asUUID2: UUID = byIndex.byKey("ParentID").asUUID()
-                        var findEntry: SLInventoryEntry = this.db.findEntry(asUUID2)
+                        var findEntry: SLInventoryEntry? = localDb.findEntry(asUUID2)
                         if (findEntry != null) {
                             findEntryOrCreate.parent_id = findEntry.getId()
                             findEntryOrCreate.parentUUID = asUUID2
                             findEntryOrCreate.name = byIndex.byKey("Name").asString()
                             findEntryOrCreate.typeDefault = byIndex.byKey("Type").asInt()
                             findEntryOrCreate.isFolder = true
-                            if (findEntryOrCreate.getId() == 0 && onInventoryCallbackListener == null) {
+                            if (findEntryOrCreate.getId() == 0L && onInventoryCallbackListener == null) {
                                 sLInventoryNewContentsEvent.AddItem(true, asUUID, findEntryOrCreate.name)
                             }
-                            this.db.saveEntryhashSet as findEntryOrCreate.addhashSet as asUUID.add(asUUID2)
+                            localDb.saveEntry(findEntryOrCreate)
+                            hashSet.add(asUUID)
+                            hashSet.add(asUUID2)
                         } else {
                             hashSet.add(asUUID2)
-                            if (findEntryOrCreate.getId() != 0) {
-                                this.db.deleteEntry(findEntryOrCreate)
+                            if (findEntryOrCreate.getId() != 0L) {
+                                localDb.deleteEntry(findEntryOrCreate)
                             }
                         }
                         if (onInventoryCallbackListener != null) {
                             onInventoryCallbackListener.onInventoryCallback(findEntryOrCreate)
+                        }
+                        yieldCounter++
+                        if (yieldCounter >= 16) {
+                            localDb.yieldIfContendedSafely()
+                            yieldCounter = 0
                         }
                     }
                 }
             }
             if (lLSDNode.keyExists("ItemData")) {
                 var byKey2: LLSDNode = lLSDNode.byKey("ItemData")
-                for (int i2 = 0; i2 < byKey2.getCount(); i2++) {
+                for (i2 in 0 until byKey2.getCount()) {
                     var byIndex2: LLSDNode = byKey2.byIndex(i2)
                     var asUUID3: UUID = byIndex2.byKey("ItemID").asUUID()
-                    if (asUUID3.getLeastSignificantBits() != 0 || asUUID3.getMostSignificantBits() != 0) {
+                    if (asUUID3.getLeastSignificantBits() != 0L || asUUID3.getMostSignificantBits() != 0L) {
                         Debug.Printf("Inventory: BulkUpdateInventory got item %s", asUUID3.toString())
                         var asUUID4: UUID = byIndex2.byKey("FolderID").asUUID()
                         var onInventoryCallbackListener2: OnInventoryCallbackListener? = null
                         if (byIndex2.keyExists("CallbackID")) {
-                            Debug.Printf("Inventory: got callback id %d", byIndex2.byKey("CallbackID".asInt()))
-                            onInventoryCallbackListener2 = this.callbacks.remove(byIndex2.byKey("CallbackID".asInt()))
+                            Debug.Printf("Inventory: got callback id %d", byIndex2.byKey("CallbackID").asInt())
+                            onInventoryCallbackListener2 = this.callbacks.remove(byIndex2.byKey("CallbackID").asInt())
                         }
-                        var findEntryOrCreate2: SLInventoryEntry = this.db.findEntryOrCreatehashSet as asUUID3.addfindEntryOrCreate2 as asUUID4.groupMask = byIndex2.byKey("GroupMask").asInt()
+                        var findEntryOrCreate2: SLInventoryEntry = localDb.findEntryOrCreate(asUUID3)
+                        hashSet.add(asUUID3)
+                        hashSet.add(asUUID4)
+                        findEntryOrCreate2.groupMask = byIndex2.byKey("GroupMask").asInt()
                         findEntryOrCreate2.description = byIndex2.byKey("Description").asString()
                         findEntryOrCreate2.isGroupOwned = byIndex2.byKey("GroupOwned").asBoolean()
                         findEntryOrCreate2.everyoneMask = byIndex2.byKey("EveryoneMask").asInt()
@@ -754,31 +767,39 @@ open class SLInventory : SLModule() {
                         findEntryOrCreate2.assetUUID = byIndex2.byKey("AssetID").asUUID()
                         findEntryOrCreate2.creationDate = byIndex2.byKey("CreationDate").asInt()
                         findEntryOrCreate2.parentUUID = asUUID4
-                        var findEntry2: SLInventoryEntry = this.db.findEntry(asUUID4)
+                        var findEntry2: SLInventoryEntry? = localDb.findEntry(asUUID4)
                         if (findEntry2 != null) {
-                            if (findEntryOrCreate2.getId() == 0 && onInventoryCallbackListener2 == null && findEntry2.typeDefault != 14 && findEntry2.typeDefault != 2) {
+                            if (findEntryOrCreate2.getId() == 0L && onInventoryCallbackListener2 == null && findEntry2.typeDefault != 14 && findEntry2.typeDefault != 2) {
                                 sLInventoryNewContentsEvent.AddItem(false, asUUID4, findEntryOrCreate2.name)
                             }
                             findEntryOrCreate2.parent_id = findEntry2.getId()
-                            this.db.saveEntry(findEntryOrCreate2)
-                        } else if (findEntryOrCreate2.getId() != 0) {
-                            this.db.deleteEntry(findEntryOrCreate2)
+                            localDb.saveEntry(findEntryOrCreate2)
+                        } else if (findEntryOrCreate2.getId() != 0L) {
+                            localDb.deleteEntry(findEntryOrCreate2)
                         }
                         if (onInventoryCallbackListener2 != null) {
                             onInventoryCallbackListener2.onInventoryCallback(findEntryOrCreate2)
                         }
+                        yieldCounter++
+                        if (yieldCounter >= 16) {
+                            localDb.yieldIfContendedSafely()
+                            yieldCounter = 0
+                        }
                     }
                 }
             }
+            localDb.setTransactionSuccessful()
         } catch (e: DBObject.DatabaseBindingException) {
             Debug.Warning(e)
         } catch (e2: LLSDException) {
             Debug.Warning(e2)
+        } finally {
+            localDb.endTransaction()
         }
         if (this.userManager != null) {
-            var it: Iterator = hashSet.iterator()
+            var it: Iterator<UUID> = hashSet.iterator()
             while (it.hasNext()) {
-                this.userManager.getInventoryManager().requestFolderUpdate(it as UUID.next())
+                this.userManager.getInventoryManager().requestFolderUpdate(it.next())
             }
         }
         if (sLInventoryNewContentsEvent.isEmpty()) {
@@ -826,54 +847,68 @@ open class SLInventory : SLModule() {
     @SLMessageHandler
     fun HandleUpdateCreateInventoryItem(updateCreateInventoryItem: UpdateCreateInventoryItem) {
         var sLInventoryNewContentsEvent: SLInventoryNewContentsEvent = SLInventoryNewContentsEvent()
-        var hashSet: HashSet = HashSet()
-        for (inventoryData in updateCreateInventoryItem.InventoryData_Fields) {
-            var uuid: UUID = inventoryData.ItemID
-            var uuid2: UUID = inventoryData.FolderID
-            Debug.Printf("Inventory: UpdateCreateInventoryItem got folder %s item %s, callback %d", uuid2.toString(), uuid.toString(), inventoryData.CallbackID)
-            hashSet.add(uuid2)
-            var remove: OnInventoryCallbackListener = this.callbacks.remove(inventoryData.CallbackID)
-            try {
-                var findEntryOrCreate: SLInventoryEntry = this.db.findEntryOrCreatefindEntryOrCreate as uuid.groupMask = inventoryData.GroupMask
-                findEntryOrCreate.description = SLMessage.stringFromVariableUTF(inventoryData.Description)
-                findEntryOrCreate.isGroupOwned = inventoryData.GroupOwned
-                findEntryOrCreate.everyoneMask = inventoryData.EveryoneMask
-                findEntryOrCreate.assetType = inventoryData.Type
-                findEntryOrCreate.invType = inventoryData.InvType
-                findEntryOrCreate.groupUUID = inventoryData.GroupID
-                findEntryOrCreate.name = SLMessage.stringFromVariableOEM(inventoryData.Name)
-                findEntryOrCreate.baseMask = inventoryData.BaseMask
-                findEntryOrCreate.saleType = inventoryData.SaleType
-                findEntryOrCreate.salePrice = inventoryData.SalePrice
-                findEntryOrCreate.ownerUUID = inventoryData.OwnerID
-                findEntryOrCreate.flags = inventoryData.Flags
-                findEntryOrCreate.ownerMask = inventoryData.OwnerMask
-                findEntryOrCreate.nextOwnerMask = inventoryData.NextOwnerMask
-                findEntryOrCreate.assetUUID = inventoryData.AssetID
-                findEntryOrCreate.creationDate = inventoryData.CreationDate
-                findEntryOrCreate.creatorUUID = inventoryData.CreatorID
-                findEntryOrCreate.parentUUID = uuid2
-                var findEntry: SLInventoryEntry = this.db.findEntry(uuid2)
-                if (findEntry != null) {
-                    if (findEntryOrCreate.getId() == 0 && remove == null && findEntry.typeDefault != 14 && findEntry.typeDefault != 2) {
-                        sLInventoryNewContentsEvent.AddItem(false, uuid2, findEntryOrCreate.name)
+        var hashSet: HashSet<UUID> = HashSet()
+        val localDb = this.db ?: return
+        localDb.beginTransaction()
+        try {
+            var yieldCounter = 0
+            for (inventoryData in updateCreateInventoryItem.InventoryData_Fields) {
+                var uuid: UUID = inventoryData.ItemID
+                var uuid2: UUID = inventoryData.FolderID
+                Debug.Printf("Inventory: UpdateCreateInventoryItem got folder %s item %s, callback %d", uuid2.toString(), uuid.toString(), inventoryData.CallbackID)
+                hashSet.add(uuid2)
+                var remove: OnInventoryCallbackListener? = this.callbacks.remove(inventoryData.CallbackID)
+                try {
+                    var findEntryOrCreate: SLInventoryEntry = localDb.findEntryOrCreate(uuid)
+                    findEntryOrCreate.groupMask = inventoryData.GroupMask
+                    findEntryOrCreate.description = SLMessage.stringFromVariableUTF(inventoryData.Description)
+                    findEntryOrCreate.isGroupOwned = inventoryData.GroupOwned
+                    findEntryOrCreate.everyoneMask = inventoryData.EveryoneMask
+                    findEntryOrCreate.assetType = inventoryData.Type
+                    findEntryOrCreate.invType = inventoryData.InvType
+                    findEntryOrCreate.groupUUID = inventoryData.GroupID
+                    findEntryOrCreate.name = SLMessage.stringFromVariableOEM(inventoryData.Name)
+                    findEntryOrCreate.baseMask = inventoryData.BaseMask
+                    findEntryOrCreate.saleType = inventoryData.SaleType
+                    findEntryOrCreate.salePrice = inventoryData.SalePrice
+                    findEntryOrCreate.ownerUUID = inventoryData.OwnerID
+                    findEntryOrCreate.flags = inventoryData.Flags
+                    findEntryOrCreate.ownerMask = inventoryData.OwnerMask
+                    findEntryOrCreate.nextOwnerMask = inventoryData.NextOwnerMask
+                    findEntryOrCreate.assetUUID = inventoryData.AssetID
+                    findEntryOrCreate.creationDate = inventoryData.CreationDate
+                    findEntryOrCreate.creatorUUID = inventoryData.CreatorID
+                    findEntryOrCreate.parentUUID = uuid2
+                    var findEntry: SLInventoryEntry? = localDb.findEntry(uuid2)
+                    if (findEntry != null) {
+                        if (findEntryOrCreate.getId() == 0L && remove == null && findEntry.typeDefault != 14 && findEntry.typeDefault != 2) {
+                            sLInventoryNewContentsEvent.AddItem(false, uuid2, findEntryOrCreate.name)
+                        }
+                        findEntryOrCreate.parent_id = findEntry.getId()
+                        localDb.saveEntry(findEntryOrCreate)
+                    } else if (findEntryOrCreate.getId() != 0L) {
+                        localDb.deleteEntry(findEntryOrCreate)
                     }
-                    findEntryOrCreate.parent_id = findEntry.getId()
-                    this.db.saveEntry(findEntryOrCreate)
-                } else if (findEntryOrCreate.getId() != 0) {
-                    this.db.deleteEntry(findEntryOrCreate)
+                    if (remove != null) {
+                        remove.onInventoryCallback(findEntryOrCreate)
+                    }
+                } catch (e: DBObject.DatabaseBindingException) {
+                    e.printStackTrace()
                 }
-                if (remove != null) {
-                    remove.onInventoryCallback(findEntryOrCreate)
+                yieldCounter++
+                if (yieldCounter >= 16) {
+                    localDb.yieldIfContendedSafely()
+                    yieldCounter = 0
                 }
-            } catch (e: DBObject.DatabaseBindingException) {
-                e.printStackTrace()
             }
+            localDb.setTransactionSuccessful()
+        } finally {
+            localDb.endTransaction()
         }
         if (this.userManager != null) {
-            var it: Iterator = hashSet.iterator()
+            var it: Iterator<UUID> = hashSet.iterator()
             while (it.hasNext()) {
-                this.userManager.getInventoryManager().requestFolderUpdate(it as UUID.next())
+                this.userManager.getInventoryManager().requestFolderUpdate(it.next())
             }
         }
         if (sLInventoryNewContentsEvent.isEmpty()) {
