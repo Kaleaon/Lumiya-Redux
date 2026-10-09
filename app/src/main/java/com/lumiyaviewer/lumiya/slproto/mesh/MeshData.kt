@@ -53,48 +53,55 @@ open class MeshData {
             var dataInputStream: DataInputStream = DataInputStream(fileInputStream)
             try {
                 var fromBinary: LLSDNode = LLSDNode.fromBinary(dataInputStream)
-                var position: Long = fileInputStream.getChannel().position()
-                var lsdNode: LLSDNode? = null
-                if (fromBinary.keyExists(meshRendering.getLODName())) {
-                    lsdNode = fromBinary.byKey(meshRendering.getLODName())
+                if (fromBinary.keyExists("submeshes") || fromBinary.keyExists("submesh_materials")) {
+                    var subNode = if (fromBinary.keyExists("submeshes")) fromBinary.byKey("submeshes") else fromBinary.byKey("submesh_materials")
+                    var count = subNode.getCount()
+                    this.faces = arrayOfNulls<MeshFace>(count)
+                    for (j in 0 until count) {
+                        this.faces!![j] = MeshFace(subNode.byIndex(j))
+                    }
                 } else {
-                    var valuesCustom: Array<GlobalOptions.MeshRendering> = GlobalOptions.MeshRendering.values()
-                    var ordinal: Int = meshRendering.ordinal() + 1
-                    while (true) {
-                        if (ordinal >= valuesCustom.length) {
-
+                    var position: Long = fileInputStream.getChannel().position()
+                    var lsdNode: LLSDNode? = null
+                    if (fromBinary.keyExists(meshRendering.getLODName())) {
+                        lsdNode = fromBinary.byKey(meshRendering.getLODName())
+                    } else {
+                        var valuesCustom: Array<GlobalOptions.MeshRendering> = GlobalOptions.MeshRendering.values()
+                        var ordinal: Int = meshRendering.ordinal() + 1
+                        while (true) {
+                            if (ordinal >= valuesCustom.length) break
+                            var lodName: String = valuesCustom[ordinal].getLODName() ?: ""
+                            if (lodName.isNotEmpty() && fromBinary.keyExists(lodName)) {
+                                lsdNode = fromBinary.byKey(lodName)
+                                break
+                            }
+                            ordinal++
                         }
-                        var lodName: String = valuesCustom[ordinal].getLODName()
-                        if (lodName != null && fromBinary.keyExists(lodName)) {
-                            lsdNode = fromBinary.byKeybreak as lodName
+                        if (lsdNode == null) {
+                            var ordinal2: Int = meshRendering.ordinal() - 1
+                            while (true) {
+                                if (ordinal2 < 0) break
+                                var lodName2: String = valuesCustom[ordinal2].getLODName() ?: ""
+                                if (lodName2.isNotEmpty() && fromBinary.keyExists(lodName2)) {
+                                    lsdNode = fromBinary.byKey(lodName2)
+                                    break
+                                }
+                                ordinal2--
+                            }
                         }
-                        ordinal++
                     }
                     if (lsdNode == null) {
-                        var ordinal2: Int = meshRendering.ordinal() - 1
-                        while (true) {
-                            if (ordinal2 < 0) {
-
-                            }
-                            var lodName2: String = valuesCustom[ordinal2].getLODName()
-                            if (lodName2 != null && fromBinary.keyExists(lodName2)) {
-                                lsdNode = fromBinary.byKeybreak as lodName2
-                            }
-                            ordinal2--
-                        }
+                        throw IOException("Mesh LOD not found")
                     }
-                }
-                if (lsdNode == null) {
-                    throw IOException("Mesh LOD not found")
-                }
-                fileInputStream.getChannel().position(lsdNode.byKey("offset").asInt() + position)
-                var inflaterInputStream: InflaterInputStream = InflaterInputStream(dataInputStream)
-                var dataInputStream2: DataInputStream = DataInputStream(inflaterInputStream)
-                var fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
-                var count: Int = fromBinary2.getCount()
-                this.faces = arrayOfNulls<MeshFace>(count)
-                for (int j = 0; j < count; j++) {
-                    this.faces[j] = MeshFace(fromBinary2.byIndex(j))
+                    fileInputStream.getChannel().position(lsdNode.byKey("offset").asInt() + position)
+                    var inflaterInputStream: InflaterInputStream = InflaterInputStream(dataInputStream)
+                    var dataInputStream2: DataInputStream = DataInputStream(inflaterInputStream)
+                    var fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
+                    var count: Int = fromBinary2.getCount()
+                    this.faces = arrayOfNulls<MeshFace>(count)
+                    for (j in 0 until count) {
+                        this.faces!![j] = MeshFace(fromBinary2.byIndex(j))
+                    }
                 }
                 if (fromBinary.keyExists("skin")) {
                     fileInputStream.getChannel().position(fromBinary.byKey("skin").byKey("offset").asInt() + position)
