@@ -685,8 +685,8 @@ open class SLInventory : SLModule() {
         Debug.Printf("BulkUpdateInventory: EventQueue event", arrayOfNulls<Object>(0))
         var sLInventoryNewContentsEvent: SLInventoryNewContentsEvent = SLInventoryNewContentsEvent()
         var hashSet: HashSet<UUID> = HashSet()
-        val localDb = this.db
-        localDb?.beginTransaction()
+        val localDb = this.db ?: return
+        localDb.beginTransaction()
         try {
             var yieldCounter = 0
             if (lLSDNode.keyExists("FolderData")) {
@@ -848,8 +848,8 @@ open class SLInventory : SLModule() {
     fun HandleUpdateCreateInventoryItem(updateCreateInventoryItem: UpdateCreateInventoryItem) {
         var sLInventoryNewContentsEvent: SLInventoryNewContentsEvent = SLInventoryNewContentsEvent()
         var hashSet: HashSet<UUID> = HashSet()
-        val localDb = this.db
-        localDb?.beginTransaction()
+        val localDb = this.db ?: return
+        localDb.beginTransaction()
         try {
             var yieldCounter = 0
             for (inventoryData in updateCreateInventoryItem.InventoryData_Fields) {
@@ -901,9 +901,9 @@ open class SLInventory : SLModule() {
                     yieldCounter = 0
                 }
             }
-            localDb?.setTransactionSuccessful()
+            localDb.setTransactionSuccessful()
         } finally {
-            localDb?.endTransaction()
+            localDb.endTransaction()
         }
         if (this.userManager != null) {
             var it: Iterator<UUID> = hashSet.iterator()
