@@ -86,7 +86,9 @@ open class SLInventory : SLModule() {
     private var dbExecutor: Executor? = null
     private var executor: ExecutorService? = null
 
-    private var fetchCap: String = ""
+    private var ais3Cap: String? = null
+    private var libraryAis3Cap: String? = null
+    private var fetchCap: String? = null
     private var fetchEntireInventoryRequested: AtomicBoolean? = null
     private var fetchRequests: MutableMap<UUID, SLInventoryFetchRequest>? = null
     private var folderEntryResultHandler: ResultHandler<UUID, SLInventoryEntry>? = null
@@ -155,17 +157,26 @@ open class SLInventory : SLModule() {
             fun onRequest(uuid: UUID) {
                 try {
                     Debug.Printf("Inventory: folderRequestHandler: folderId = '%s'", uuid)
-                    var sLInventoryHTTPFetchRequest: SLInventoryFetchRequest = if (SLInventory.this.fetchCap != null) SLInventoryHTTPFetchRequest(SLInventory.this, uuid, SLInventory.this.fetchCap) else SLInventoryUDPFetchRequest(SLInventory.this, uuid)
-                    SLInventory.this.fetchRequests.put(uuid, sLInventoryHTTPFetchRequest)
-                    SLInventory.this.updateFolderLoadingStatussLInventoryHTTPFetchRequest as uuid.start()
+                    var capURL: String? = SLInventory.this.getCapURLForFolder(uuid)
+                    var fetchRequest: SLInventoryFetchRequest = if (!capURL.isNullOrEmpty()) {
+                        SLAIS3FetchRequest(SLInventory.this, uuid, capURL)
+                    } else if (!SLInventory.this.fetchCap.isNullOrEmpty()) {
+                        SLInventoryHTTPFetchRequest(SLInventory.this, uuid, SLInventory.this.fetchCap)
+                    } else {
+                        SLInventoryUDPFetchRequest(SLInventory.this, uuid)
+                    }
+                    SLInventory.this.fetchRequests.put(uuid, fetchRequest)
+                    SLInventory.this.updateFolderLoadingStatus(uuid)
+                    fetchRequest.start()
                 } catch (e: NoInventoryItemException) {
                     Debug.Warning(e)
                 }
             }
             fun onRequestCancelled(uuid: UUID) {
-                var sLInventoryFetchRequest: SLInventoryFetchRequest = SLInventory as SLInventoryFetchRequest.this.fetchRequests.removeSLInventory as uuid.this.updateFolderLoadingStatus(uuid)
-                if (sLInventoryFetchRequest != null) {
-                    sLInventoryFetchRequest.cancel()
+                var fetchRequest: SLInventoryFetchRequest = SLInventory.this.fetchRequests.remove(uuid)
+                SLInventory.this.updateFolderLoadingStatus(uuid)
+                if (fetchRequest != null) {
+                    fetchRequest.cancel()
                 }
             }
         }
@@ -187,6 +198,8 @@ open class SLInventory : SLModule() {
         this.userManager = UserManager.getUserManager(sLAgentCircuit.getAgentUUID())
         this.db = if (this.userManager != null) this.userManager.getInventoryManager().getDatabase() else null
         this.caps = sLCaps
+        this.ais3Cap = sLCaps.getCapability(SLCaps.SLCapability.InventoryAPIv3)
+        this.libraryAis3Cap = sLCaps.getCapability(SLCaps.SLCapability.LibraryAPIv3)
         this.fetchCap = sLCaps.getCapability(SLCaps.SLCapability.FetchInventoryDescendents2)
         this.dbExecutor = if (this.userManager != null) this.userManager.getInventoryManager().getExecutor() else null
         if (this.userManager != null) {
@@ -1099,9 +1112,50 @@ open class SLInventory : SLModule() {
         return this.executor
     }
 
+    fun getCapURLForFolder(uuid: UUID): String? {
+        if (this.db == null) return if (!this.ais3Cap.isNullOrEmpty()) this.ais3Cap else this.libraryAis3Cap
+        var entry: SLInventoryEntry = this.db.findEntry(uuid)
+        var isLibrary: Boolean = entry != null && entry.agentUUID != null &&
+                (entry.agentUUID.equals(UUID(0L, 0L)) ||
+                 (this.circuitInfo != null && entry.agentUUID.equals(this.circuitInfo.agentID) == false))
+        return if (isLibrary) {
+            if (!this.libraryAis3Cap.isNullOrEmpty()) this.libraryAis3Cap else this.ais3Cap
+        } else {
+            if (!this.ais3Cap.isNullOrEmpty()) this.ais3Cap else this.libraryAis3Cap
+        }
+    }
+
     /* renamed from: lambda$-com_lumiyaviewer_lumiya_slproto_inventory_SLInventory_10310, reason: not valid java name */
-    /* synthetic */ void m187x8264e904(long j, UUID uuid, boolean z, boolean z2) {
-        Debug.Printf("Inventory: onFetchComplete: folderId = '%s'", j)
+    /* synthetic */ void m187x8264e904(SLInventoryFetchRequest sLInventoryFetchRequest, long j, UUID uuid, boolean z, boolean z2) {
+        Debug.Printf("Inventory: onFetchComplete: folderId = '%s', success=%b, cancelled=%b, reqType=%s", j, z, z2, if (sLInventoryFetchRequest != null) sLInventoryFetchRequest.javaClass.simpleName else "null")
+
+        if (!z && !z2 && sLInventoryFetchRequest != null) {
+            var nextRequest: SLInventoryFetchRequest? = null
+            try {
+                if (sLInventoryFetchRequest is SLAIS3FetchRequest) {
+                    if (!this.fetchCap.isNullOrEmpty()) {
+                        Debug.Printf("Inventory: SLAIS3FetchRequest failed for folder %s, falling back to SLInventoryHTTPFetchRequest", uuid)
+                        nextRequest = SLInventoryHTTPFetchRequest(this, uuid, this.fetchCap)
+                    } else {
+                        Debug.Printf("Inventory: SLAIS3FetchRequest failed for folder %s, falling back to SLInventoryUDPFetchRequest", uuid)
+                        nextRequest = SLInventoryUDPFetchRequest(this, uuid)
+                    }
+                } else if (sLInventoryFetchRequest is SLInventoryHTTPFetchRequest) {
+                    Debug.Printf("Inventory: SLInventoryHTTPFetchRequest failed for folder %s, falling back to SLInventoryUDPFetchRequest", uuid)
+                    nextRequest = SLInventoryUDPFetchRequest(this, uuid)
+                }
+            } catch (e: NoInventoryItemException) {
+                Debug.Warning(e)
+            }
+
+            if (nextRequest != null) {
+                this.fetchRequests.put(uuid, nextRequest)
+                updateFolderLoadingStatus(uuid)
+                nextRequest.start()
+                return
+            }
+        }
+
         this.fetchRequests.remove(uuid)
         var findEntry: SLInventoryEntry = this.db.findEntry(uuid)
         if (findEntry != null) {
@@ -1192,7 +1246,7 @@ open class SLInventory : SLModule() {
         if (this.dbExecutor != null) {
             this.dbExecutor.execute(Runnable() {
                 private /* synthetic */ void $m$0() {
-                    SLInventory.this.m187x8264e904(j, uuid as UUID, z, z2)
+                    SLInventory.this.m187x8264e904(sLInventoryFetchRequest as SLInventoryFetchRequest, j, uuid as UUID, z, z2)
                 }
                 fun run() {
                     $m$0()
