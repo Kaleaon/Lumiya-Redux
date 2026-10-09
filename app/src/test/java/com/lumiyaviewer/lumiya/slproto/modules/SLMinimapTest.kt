@@ -14,7 +14,10 @@ import com.lumiyaviewer.lumiya.slproto.messages.CoarseLocationUpdate
 import com.lumiyaviewer.lumiya.slproto.types.ImmutableVector
 import com.lumiyaviewer.lumiya.slproto.users.ChatterID
 import com.lumiyaviewer.lumiya.utils.UUIDPool
+import com.lumiyaviewer.lumiya.slproto.messages.ParcelOverlay
+import com.lumiyaviewer.lumiya.slproto.users.manager.UserManager
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -146,5 +149,50 @@ class SLMinimapTest {
         minimap.HandleParcelProperties(eventMap)
 
         assertTrue(true)
+    }
+
+    @Test
+    fun testHandleParcelOverlay_publishesMapLoadingProgress() {
+        val userManager = UserManager.getUserManager(circuit.circuitInfo.agentID)
+        var lastProgress: SLMinimap.MapLoadingProgress? = null
+
+        val subscriptionData = com.lumiyaviewer.lumiya.react.SubscriptionData<SubscriptionSingleKey, SLMinimap.MapLoadingProgress>(
+            com.lumiyaviewer.lumiya.react.UIThreadExecutor.getInstance(),
+            com.lumiyaviewer.lumiya.react.Subscription.OnData { obj ->
+                if (obj is SLMinimap.MapLoadingProgress) {
+                    lastProgress = obj
+                }
+            }
+        )
+        subscriptionData.subscribe(userManager.getMapLoadingProgressPool(), SubscriptionSingleKey.Value)
+
+        // Send sequence block 0
+        val po0 = ParcelOverlay().apply {
+            ParcelData_Field.SequenceID = 0
+            ParcelData_Field.Data = ByteArray(64 * 16)
+        }
+        minimap.HandleParcelOverlay(po0)
+
+        assertNotNull(lastProgress)
+        assertEquals(1, lastProgress?.sequenceCount)
+        assertEquals(0, lastProgress?.lastSequenceId)
+        assertTrue(lastProgress?.receivedSequences?.contains(0) == true)
+        assertFalse(lastProgress?.isComplete == true)
+
+        // Send sequence blocks 1, 2, 3
+        for (seq in 1..3) {
+            val po = ParcelOverlay().apply {
+                ParcelData_Field.SequenceID = seq
+                ParcelData_Field.Data = ByteArray(64 * 16)
+            }
+            minimap.HandleParcelOverlay(po)
+        }
+
+        assertEquals(4, lastProgress?.sequenceCount)
+        assertEquals(3, lastProgress?.lastSequenceId)
+        assertTrue(lastProgress?.isComplete == true)
+        assertEquals(setOf(0, 1, 2, 3), lastProgress?.receivedSequences)
+
+        subscriptionData.unsubscribe()
     }
 }
