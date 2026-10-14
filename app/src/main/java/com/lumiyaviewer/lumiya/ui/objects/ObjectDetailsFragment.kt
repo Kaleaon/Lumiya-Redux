@@ -50,6 +50,33 @@ import com.lumiyaviewer.lumiya.ui.objects.ObjectDerezDialog
 import java.util.UUID
 
 open class ObjectDetailsFragment : FragmentWithTitle(), ReloadableFragment, View.OnClickListener, LoadableMonitor.OnLoadableDataChangedListener {
+    private val buildToolController = com.firestorm.build.BuildToolController()
+
+    fun getBuildToolController(): com.firestorm.build.BuildToolController = buildToolController
+
+    fun rezPrimitive(shapeType: Int, x: Float = 0f, y: Float = 0f, z: Float = 0f): com.firestorm.build.BuildPrimitiveState {
+        return buildToolController.createPrim(shapeType, x, y, z)
+    }
+
+    fun applyGizmoTransform(mode: Int, dx: Float, dy: Float, dz: Float) {
+        buildToolController.onGizmoTransform(mode, dx, dy, dz)
+    }
+
+    fun updateTexture(faceIndex: Int, textureId: String, colorHex: String = "#FFFFFFFF",
+                       scaleU: Float = 1f, scaleV: Float = 1f, offsetU: Float = 0f, offsetV: Float = 0f,
+                       rotationDeg: Float = 0f, glow: Float = 0f, fullbright: Boolean = false) {
+        buildToolController.updateTextureParameters(faceIndex, textureId, colorHex, scaleU, scaleV, offsetU, offsetV, rotationDeg, glow, fullbright)
+    }
+
+    fun selectTextureFromInventory(faceIndex: Int, inventoryItemId: String) {
+        buildToolController.pickTextureFromInventory(faceIndex, inventoryItemId)
+    }
+
+    fun updateShapeParameters(cutStart: Float, cutEnd: Float, twistStart: Float, twistEnd: Float,
+                               hollow: Float, taperX: Float, taperY: Float, shearX: Float, shearY: Float) {
+        buildToolController.updateShapeParameters(cutStart, cutEnd, twistStart, twistEnd, hollow, taperX, taperY, shearX, shearY)
+    }
+
     private static String LOCAL_ID_KEY = "localID"
     private static int[] objectPayButtons = {R.id.object_pay_button1, R.id.object_pay_button2, R.id.object_pay_button3, R.id.object_pay_button4}
 
