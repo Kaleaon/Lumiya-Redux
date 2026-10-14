@@ -18,4 +18,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'Lumiya-Redux'
+include ':abuse-report'
 include ':app'
