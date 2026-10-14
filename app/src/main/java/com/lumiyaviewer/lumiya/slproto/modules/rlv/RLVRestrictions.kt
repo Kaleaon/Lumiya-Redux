@@ -47,56 +47,14 @@ open class RLVRestrictions {
          * @param objectID  object the action concerns (TargetSpecifiesRestriction)
          * @param sourceID  object asking, for "secure" behaviours (TargetNoExceptions)
          */
-        fun isAllowed(matchType: RLVRestrictionType.RLVRuleMatchType, option: String, objectID: UUID?, sourceID: UUID?): Boolean {
-            if (matchType == RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance) {
-                if (this.restMap.containsKey("")) {
-                    return true
-                }
-                return option != "" && this.restMap.containsKey(option)
-            }
-            if (this.restMap.isEmpty()) {
-                return true
-            }
-            return when (matchType) {
-                RLVRestrictionType.RLVRuleMatchType.TargetNoExceptions -> {
-                    // Secure variant: only allowed when every restriction was set
-                    // by the asking object alone.
-                    if (this.restMap.isEmpty()) {
-                        return true
-                    }
-                    if (sourceID == null) {
-                        return false
-                    }
-                    for (sources in this.restMap.values) {
-                        if (sources.size != 1 || !sources.contains(sourceID)) {
-                            return false
-                        }
-                    }
-                    true
-                }
-                RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesException -> {
-                    // "" restricts; an option lists an exception to it.
-                    if (!this.restMap.containsKey("")) {
-                        return true
-                    }
-                    option != "" && this.restMap.containsKey(option)
-                }
-                RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesRestriction -> {
-                    // An option restricts that target; "" restricts all but the
-                    // objects that set it.
-                    if (this.restMap.containsKey(option)) {
-                        return false
-                    }
-                    if (!this.restMap.containsKey("")) {
-                        return true
-                    }
-                    if (objectID == null) {
-                        return false
-                    }
-                    !(this.restMap[""]?.contains(objectID) ?: false)
-                }
-                else -> true
-            }
+        fun isAllowed(matchType: RLVRestrictionType.RLVRuleMatchType?, option: String?, objectID: UUID?, sourceID: UUID?): Boolean {
+            return RLVRestrictionEvaluator.evaluate(
+                matchType,
+                this.restMap,
+                option,
+                sourceID,
+                objectID
+            )
         }
 
         fun isEmpty(): Boolean {
@@ -157,18 +115,25 @@ open class RLVRestrictions {
     }
 
     @Synchronized
-    fun isAllowed(rlvRestrictionType: RLVRestrictionType, str: String?, uuid: UUID?): Boolean {
+    fun isAllowed(rlvRestrictionType: RLVRestrictionType?, str: String?, uuid: UUID?): Boolean {
         return isAllowed(rlvRestrictionType, str, uuid, null)
     }
 
     @Synchronized
-    fun isAllowed(rlvRestrictionType: RLVRestrictionType, str: String?, uuid: UUID?, uuid2: UUID?): Boolean {
+    fun isAllowed(rlvRestrictionType: RLVRestrictionType?, str: String?, uuid: UUID?, uuid2: UUID?): Boolean {
+        if (rlvRestrictionType == null) return true
         val target = str ?: ""
         val rlvRestrictionList = this.restrictions[rlvRestrictionType]
         if (rlvRestrictionList != null) {
             return rlvRestrictionList.isAllowed(rlvRestrictionType.getRuleMatchType(), target.lowercase(), uuid, uuid2)
         }
-        return rlvRestrictionType.getRuleMatchType() != RLVRestrictionType.RLVRuleMatchType.TargetSpecifiesAllowance
+        return RLVRestrictionEvaluator.evaluate(
+            rlvRestrictionType.getRuleMatchType(),
+            null,
+            target.lowercase(),
+            uuid,
+            uuid2
+        )
     }
 
     @Synchronized

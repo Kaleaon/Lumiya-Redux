@@ -46,7 +46,7 @@ open class ParcelInfoFragment : FragmentWithTitle(),
     private fun showParcelInfo(uuid: UUID) {
         val userManager = ActivityUtils.getUserManager(arguments) ?: return
         Debug.Printf("ParcelInfo: subscribing for UUID %s", uuid)
-        this.parcelInfoReply.subscribe(userManager.parcelInfoData(), uuid)
+        this.parcelInfoReply.subscribe(userManager.parcelInfoData()?.getPool(), uuid)
     }
 
     override fun onChatterNameUpdated(chatterNameRetriever: ChatterNameRetriever) {
@@ -107,17 +107,18 @@ open class ParcelInfoFragment : FragmentWithTitle(),
         }
         currentBinding.parcelDetailsDesc.text = desc
 
-        if (UUIDPool.ZeroUUID == data.Data_Field.OwnerID) {
+        val ownerId = data.Data_Field.OwnerID
+        if (UUIDPool.ZeroUUID == ownerId || ownerId == null) {
             currentBinding.parcelOwnerName.setText(R.string.group_owned)
             currentBinding.parcelOwnerPic.visibility = View.GONE
         } else {
             ownerNameRetriever = ChatterNameRetriever(
-                ChatterID.getUserChatterID(activeAgentID, data.Data_Field.OwnerID),
+                ChatterID.getUserChatterID(activeAgentID, ownerId),
                 this,
                 UIThreadExecutor.getSerialInstance()
             )
             ownerGroupNameRetriever = ChatterNameRetriever(
-                ChatterID.getGroupChatterID(activeAgentID, data.Data_Field.OwnerID),
+                ChatterID.getGroupChatterID(activeAgentID, ownerId),
                 this,
                 UIThreadExecutor.getSerialInstance()
             )
@@ -147,10 +148,11 @@ open class ParcelInfoFragment : FragmentWithTitle(),
                 GroupProfileFragment.makeSelection(gRetriever.chatterID)
             )
         } else if (uRetriever == null || uRetriever.getResolvedName() == null) {
+            val ownerId = data.Data_Field.OwnerID ?: return
             DetailsActivity.showEmbeddedDetails(
                 currentActivity,
                 UserProfileFragment::class.java,
-                UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, data.Data_Field.OwnerID))
+                UserProfileFragment.makeSelection(ChatterID.getUserChatterID(activeAgentID, ownerId))
             )
         } else {
             DetailsActivity.showEmbeddedDetails(
@@ -173,7 +175,7 @@ open class ParcelInfoFragment : FragmentWithTitle(),
             .setMessage(getString(R.string.teleport_parcel_confirm_title))
             .setCancelable(true)
             .setPositiveButton("Yes") { _, _ ->
-                userManager.userCircuit?.teleportToLocation(
+                userManager.getActiveAgentCircuit()?.teleportToLocation(
                     SLMessage.stringFromVariableOEM(data.Data_Field.SimName),
                     pos
                 )

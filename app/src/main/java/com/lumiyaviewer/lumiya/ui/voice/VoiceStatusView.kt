@@ -145,10 +145,14 @@ class VoiceStatusView @JvmOverloads constructor(
                     (binding.voiceSpeakIndicatorRight.drawable as? AnimationDrawable)?.start()
                 }
                 if (data.numActiveSpeakers == 1 && data.activeSpeakerID != null && chatterID != null) {
-                    newActiveChatterID = ChatterID.getUserChatterID(chatterID!!.agentUUID, data.activeSpeakerID!!)
-                    statusText = if (speakerNameRetriever != null && Objects.equal(newActiveChatterID, speakerNameRetriever!!.chatterID)) {
-                        speakerNameRetriever!!.getResolvedName()
-                    } else null
+                    val agentUuid = chatterID?.agentUUID
+                    val activeSpeaker = data.activeSpeakerID
+                    if (agentUuid != null && activeSpeaker != null) {
+                        newActiveChatterID = ChatterID.getUserChatterID(agentUuid, activeSpeaker)
+                        statusText = if (speakerNameRetriever != null && Objects.equal(newActiveChatterID, speakerNameRetriever!!.chatterID)) {
+                            speakerNameRetriever!!.getResolvedName()
+                        } else null
+                    }
                 }
                 Debug.Printf("Voice: numActiveSpeakers %d, speakerName %s, activeChatterID %s (view chatterID %s)",
                     data.numActiveSpeakers, statusText, newActiveChatterID, chatterID)
@@ -321,8 +325,8 @@ class VoiceStatusView @JvmOverloads constructor(
         if (chatterID != null) {
             val userManager = chatterID.getUserManager()
             if (userManager != null) {
-                voiceAudioProperties.subscribe(userManager.voiceAudioProperties, SubscriptionSingleKey.Value)
-                voiceChatInfo.subscribe(userManager.voiceChatInfo, chatterID)
+                voiceAudioProperties.subscribe(userManager.getVoiceAudioProperties(), SubscriptionSingleKey.Value)
+                voiceChatInfo.subscribe(userManager.getVoiceChatInfo(), chatterID)
                 if (activeChatterNameRetriever != null && !Objects.equal(activeChatterNameRetriever!!.chatterID, chatterID)) {
                     activeChatterNameRetriever!!.dispose()
                     activeChatterNameRetriever = null

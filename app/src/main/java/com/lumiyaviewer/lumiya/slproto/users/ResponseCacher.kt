@@ -54,11 +54,11 @@ abstract class ResponseCacher<KeyType, MessageType> : Refreshable<KeyType> {
         return this.keyPrefix + ":" + keytype.toString()
     }
 
-    public Subscribable<KeyType, MessageType> getPool() {
+    open fun getPool(): Subscribable<KeyType, MessageType> {
         return this.pool
     }
 
-    public RequestSource<KeyType, MessageType> getRequestSource() {
+    open fun getRequestSource(): RequestSource<KeyType, MessageType>? {
         return this.requestHandler
     }
 
