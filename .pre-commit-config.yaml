@@ -17,3 +17,11 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
+
+  - repo: local
+    hooks:
+      - id: check-action-pinning
+        name: Check GitHub Actions SHA Pinning
+        entry: python3 -c "import json, subprocess, sys; res = subprocess.run(['zizmor', '--format', 'json', '.'], capture_output=True, text=True); findings = json.loads(res.stdout); unpinned = [f for f in findings if f.get('ident') == 'unpinned-uses']; sys.exit(1 if unpinned else 0)"
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
