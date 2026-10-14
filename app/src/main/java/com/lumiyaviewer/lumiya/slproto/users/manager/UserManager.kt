@@ -459,19 +459,19 @@ open class UserManager {
         return this.userPicBitmapCache
     }
 
-    public Subscribable<SubscriptionSingleKey, ChatterID> getVoiceActiveChatter() {
+    open fun getVoiceActiveChatter(): Subscribable<SubscriptionSingleKey, ChatterID> {
         return this.voiceActiveChatterPool
     }
 
-    public Subscribable<SubscriptionSingleKey, VoiceAudioProperties> getVoiceAudioProperties() {
+    open fun getVoiceAudioProperties(): Subscribable<SubscriptionSingleKey, VoiceAudioProperties> {
         return this.voiceAudioPropertiesPool
     }
 
-    public Subscribable<ChatterID, VoiceChatInfo> getVoiceChatInfo() {
+    open fun getVoiceChatInfo(): Subscribable<ChatterID, VoiceChatInfo> {
         return this.voiceChatInfoPool
     }
 
-    public Subscribable<SubscriptionSingleKey, Boolean> getVoiceLoggedIn() {
+    open fun getVoiceLoggedIn(): Subscribable<SubscriptionSingleKey, Boolean> {
         return this.voiceLoggedInPool
     }
 

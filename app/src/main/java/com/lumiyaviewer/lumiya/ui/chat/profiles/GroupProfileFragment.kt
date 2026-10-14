@@ -213,4 +213,11 @@ open class GroupProfileFragment : ChatterReloadableFragment(), LoadableMonitor.O
             }
         }
     }
+
+    companion object {
+        @JvmStatic
+        fun makeSelection(chatterID: ChatterID?): Bundle {
+            return ChatterReloadableFragment.makeSelection(chatterID)
+        }
+    }
 }

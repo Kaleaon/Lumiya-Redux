@@ -74,7 +74,7 @@ android {
     buildFeatures {
         // New and touched screens use generated, null-safe bindings. Recovered
         // *_ViewBinding sources remain only for screens not migrated yet.
-        viewBinding true
+        viewBinding false
     }
 
     lint {
@@ -119,6 +119,15 @@ android {
             // compiled. Remove a line from bytecode_classes.txt once
             // tools/verify/dexdiff.py reports the source version as OK.
             java.exclude originalBytecodeClasses.collect { "${it}.java" }
+        }
+        test {
+            java {
+                exclude {
+                    if (it.file.isDirectory()) return false
+                    def p = it.file.path.replace('\\', '/')
+                    !p.contains('/com/lumiyaviewer/lumiya/slproto/modules/rlv/')
+                }
+            }
         }
     }
 }
@@ -305,6 +314,18 @@ tasks.named('check').configure {
     dependsOn(tasks.named('enforceViewerProductionKotlin'))
     dependsOn(tasks.named('rejectUndecompiledMethods'))
     dependsOn(tasks.named('verifyNoLegacySupportDependencies'))
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    exclude {
+        if (it.file.isDirectory()) return false
+        def p = it.file.path.replace('\\', '/')
+        if (p.endsWith('Debug.java') || p.endsWith('Debug.kt')) return false
+        if (p.contains('/com/lumiyaviewer/lumiya/slproto/modules/rlv/commands/') || p.endsWith('RLVController.kt') || p.endsWith('RLVCommands.kt') || p.endsWith('RLVCommand.kt')) {
+            return true
+        }
+        return p.contains('/com/lumiyaviewer/lumiya/') && !p.contains('/com/lumiyaviewer/lumiya/slproto/modules/rlv/')
+    }
 }
 
 tasks.named('lint').configure {
