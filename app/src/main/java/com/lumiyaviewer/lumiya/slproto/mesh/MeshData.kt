@@ -13,19 +13,17 @@ import com.lumiyaviewer.lumiya.slproto.avatar.SLSkeletonBoneID
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDException
 import com.lumiyaviewer.lumiya.slproto.llsd.LLSDNode
 import com.lumiyaviewer.rawbuffers.DirectByteBuffer
+import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import java.util.EnumMap
-import java.util.Map
 import java.util.zip.InflaterInputStream
 
-open class MeshData {
-    @JvmStatic var MAX_RIGGED_MESH_JOINTS: Int = 256
+open class MeshData(file: File) {
 
     private var bindShapeMatrix: FloatArray? = null
-    private var faces: Array<MeshFace>? = null
+    private var faces: Array<MeshFace?>? = null
     private var glJointIndexBuffer: GLLoadableBuffer? = null
     private var glWeightsBuffer: GLLoadableBuffer? = null
 
@@ -35,194 +33,207 @@ open class MeshData {
     private var riggingData: MeshRiggingData? = null
     private var weightsBuffer: MeshWeightsBuffer? = null
 
-    public MeshData(File file) throws IOException {
+    init {
         var floats: FloatArray? = null
         var ints: IntArray? = null
         var floats2: FloatArray? = null
-        var i: Int = 0
-        var meshRendering: GlobalOptions.MeshRendering = GlobalOptions.getInstance().getMeshRendering()
+        var boneIndex: Int = 0
+        val meshRendering: GlobalOptions.MeshRendering = GlobalOptions.getInstance().meshRendering
         if (meshRendering == GlobalOptions.MeshRendering.disabled) {
             throw IOException("Mesh rendering is disabled")
         }
         Debug.Printf("loading file '%s'", file.toString())
-        var z: Boolean = false
-        var enumMap: EnumMap? = null
-        var f: Float = 0.0f
+        var hasExtendedBonesFlag = false
+        var enumMap: EnumMap<SLSkeletonBoneID, FloatArray>? = null
+        var pelvisOff = 0.0f
+
         try {
-            var fileInputStream: FileInputStream = FileInputStream(file)
-            var dataInputStream: DataInputStream = DataInputStream(fileInputStream)
-            try {
-                var fromBinary: LLSDNode = LLSDNode.fromBinary(dataInputStream)
-                var position: Long = fileInputStream.getChannel().position()
-                var lsdNode: LLSDNode? = null
-                if (fromBinary.keyExists(meshRendering.getLODName())) {
-                    lsdNode = fromBinary.byKey(meshRendering.getLODName())
-                } else {
-                    var valuesCustom: Array<GlobalOptions.MeshRendering> = GlobalOptions.MeshRendering.values()
-                    var ordinal: Int = meshRendering.ordinal() + 1
-                    while (true) {
-                        if (ordinal >= valuesCustom.length) {
+            val bytes = file.readBytes()
+            val bais = ByteArrayInputStream(bytes)
+            val dataInputStream = DataInputStream(bais)
 
-                        }
-                        var lodName: String = valuesCustom[ordinal].getLODName()
-                        if (lodName != null && fromBinary.keyExists(lodName)) {
-                            lsdNode = fromBinary.byKeybreak as lodName
-                        }
-                        ordinal++
-                    }
-                    if (lsdNode == null) {
-                        var ordinal2: Int = meshRendering.ordinal() - 1
-                        while (true) {
-                            if (ordinal2 < 0) {
+            val fromBinary: LLSDNode = LLSDNode.fromBinary(dataInputStream)
+            val headerOffset = (bytes.size - bais.available()).toLong()
 
-                            }
-                            var lodName2: String = valuesCustom[ordinal2].getLODName()
-                            if (lodName2 != null && fromBinary.keyExists(lodName2)) {
-                                lsdNode = fromBinary.byKeybreak as lodName2
-                            }
-                            ordinal2--
-                        }
+            var lsdNode: LLSDNode? = null
+            if (fromBinary.keyExists(meshRendering.getLODName())) {
+                lsdNode = fromBinary.byKey(meshRendering.getLODName())
+            } else {
+                val valuesCustom = GlobalOptions.MeshRendering.values()
+                var ordinal = meshRendering.ordinal + 1
+                while (ordinal < valuesCustom.size) {
+                    val lodName = valuesCustom[ordinal].getLODName()
+                    if (lodName != null && fromBinary.keyExists(lodName)) {
+                        lsdNode = fromBinary.byKey(lodName)
+                        break
                     }
+                    ordinal++
                 }
                 if (lsdNode == null) {
-                    throw IOException("Mesh LOD not found")
+                    var ordinal2 = meshRendering.ordinal - 1
+                    while (ordinal2 >= 0) {
+                        val lodName2 = valuesCustom[ordinal2].getLODName()
+                        if (lodName2 != null && fromBinary.keyExists(lodName2)) {
+                            lsdNode = fromBinary.byKey(lodName2)
+                            break
+                        }
+                        ordinal2--
+                    }
                 }
-                fileInputStream.getChannel().position(lsdNode.byKey("offset").asInt() + position)
-                var inflaterInputStream: InflaterInputStream = InflaterInputStream(dataInputStream)
-                var dataInputStream2: DataInputStream = DataInputStream(inflaterInputStream)
-                var fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
-                var count: Int = fromBinary2.getCount()
-                this.faces = arrayOfNulls<MeshFace>(count)
-                for (int j = 0; j < count; j++) {
-                    this.faces[j] = MeshFace(fromBinary2.byIndex(j))
-                }
-                if (fromBinary.keyExists("skin")) {
-                    fileInputStream.getChannel().position(fromBinary.byKey("skin").byKey("offset").asInt() + position)
-                    var inflaterInputStream2: InflaterInputStream = InflaterInputStream(dataInputStream)
-                    var dataInputStream3: DataInputStream = DataInputStream(inflaterInputStream2)
-                    var fromBinary3: LLSDNode = LLSDNode.fromBinarydataInputStream3 as dataInputStream3.close()
-                    inflaterInputStream2.close()
-                    if (fromBinary3.keyExists("bind_shape_matrix")) {
-                        floats = FloatArray(16)
-                        for (int k = 0; k < 16; k++) {
-                            floats[k] = fromBinary3 as float.byKey("bind_shape_matrix").byIndex(k).asDouble()
-                        }
-                    } else {
-                        floats = null
+            }
+
+            if (lsdNode == null) {
+                throw IOException("Mesh LOD not found")
+            }
+
+            val lodOffset = (lsdNode.byKey("offset").asInt() + headerOffset).toInt()
+            val lodBais = ByteArrayInputStream(bytes, lodOffset, bytes.size - lodOffset)
+            val inflaterInputStream = InflaterInputStream(lodBais)
+            val dataInputStream2 = DataInputStream(inflaterInputStream)
+            val fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
+            val count = fromBinary2.getCount()
+            val faceArr = arrayOfNulls<MeshFace>(count)
+            for (j in 0 until count) {
+                faceArr[j] = MeshFace(fromBinary2.byIndex(j))
+            }
+            this.faces = faceArr
+            dataInputStream2.close()
+            inflaterInputStream.close()
+
+            if (fromBinary.keyExists("skin")) {
+                val skinOffset = (fromBinary.byKey("skin").byKey("offset").asInt() + headerOffset).toInt()
+                val skinBais = ByteArrayInputStream(bytes, skinOffset, bytes.size - skinOffset)
+                val inflaterInputStream2 = InflaterInputStream(skinBais)
+                val dataInputStream3 = DataInputStream(inflaterInputStream2)
+                val fromBinary3: LLSDNode = LLSDNode.fromBinary(dataInputStream3)
+                dataInputStream3.close()
+                inflaterInputStream2.close()
+
+                if (fromBinary3.keyExists("bind_shape_matrix")) {
+                    val bsmNode = fromBinary3.byKey("bind_shape_matrix")
+                    val bsmFloats = FloatArray(16)
+                    for (k in 0 until 16) {
+                        bsmFloats[k] = bsmNode.byIndex(k).asDouble().toFloat()
                     }
-                    if (fromBinary3.keyExists("joint_names")) {
-                        var byKey: LLSDNode = fromBinary3.byKey("joint_names")
-                        var min: Int = Math.min(byKey.getCount(), MAX_RIGGED_MESH_JOINTS)
-                        var ints2: IntArray = IntArray(min)
-                        for (int m = 0; m < min; m++) {
-                            var asString: String = byKey.byIndex(m).asString()
-                            var skeletonBoneID: SLSkeletonBoneID = SLSkeletonBoneID.bones.get(asString)
-                            var ordinal3: Int = if (skeletonBoneID != null) skeletonBoneID.ordinal() else -1
-                            if (skeletonBoneID == null || ordinal3 == -1) {
-                                var attachmentPoint: SLAttachmentPoint = SLAttachmentPoint.pointsByName.get(asString)
-                                if (attachmentPoint != null) {
-                                    skeletonBoneID = attachmentPoint.bone
-                                    i = attachmentPoint.nonHUDindex + SLSkeletonBoneID.VALUES.length
-                                } else {
-                                    i = ordinal3
-                                }
-                            } else {
-                                i = ordinal3
-                            }
-                            if (skeletonBoneID != null && skeletonBoneID.isExtended) {
-                                z = true
-                            }
-                            ints2[m] = i
-                        }
-                        ints = ints2
-                    } else {
-                        ints = null
-                    }
-                    if (!fromBinary3.keyExists("inverse_bind_matrix")) {
-                        floats2 = null
-                    } else if (ints != null) {
-                        var byKey2: LLSDNode = fromBinary3.byKey("inverse_bind_matrix")
-                        floats2 = FloatArray(ints.length * 16)
-                        for (int n = 0; n < byKey2.getCount(); n++) {
-                            if (n < ints.length) {
-                                var byIndex: LLSDNode = byKey2.byIndex(n)
-                                for (int i6 = 0; i6 < 16; i6++) {
-                                    floats2[(n * 16) + i6] = byIndex as float.byIndex(i6).asDouble()
-                                }
-                            }
-                        }
-                        Debug.Printf("inverseBindMatrix count %d", byKey2.getCount())
-                    } else {
-                        floats2 = null
-                    }
-                    if (fromBinary3.keyExists("alt_inverse_bind_matrix")) {
-                        var byKey3: LLSDNode = fromBinary3.byKey("alt_inverse_bind_matrix")
-                        var floats3: FloatArray = FloatArray(byKey3.getCount() * 16)
-                        for (int i7 = 0; i7 < byKey3.getCount(); i7++) {
-                            var byIndex2: LLSDNode = byKey3.byIndex(i7)
-                            for (int i8 = 0; i8 < 16; i8++) {
-                                floats3[(i7 * 16) + i8] = byIndex2 as float.byIndex(i8).asDouble()
-                            }
-                        }
-                        if (ints != null) {
-                            enumMap = EnumMap(SLSkeletonBoneID.class)
-                            for (int i9 = 0; i9 < ints.length; i9++) {
-                                var i10: Int = ints[i9]
-                                if (i10 >= 0 && i10 < SLSkeletonBoneID.VALUES.length) {
-                                    var skeletonBoneID2: SLSkeletonBoneID = SLSkeletonBoneID.VALUES[i10]
-                                    var floats4: FloatArray = FloatArray(3)
-                                    for (int i11 = 0; i11 < 3; i11++) {
-                                        floats4[i11] = floats3[(i9 * 16) + 12 + i11]
-                                    }
-                                    enumMap.put(skeletonBoneID2, floats4)
-                                }
-                            }
-                        }
-                        Debug.Printf("alt_inverse_bind_matrix count %d", byKey3.getCount())
-                    }
-                    if (fromBinary3.keyExists("pelvis_offset")) {
-                        f = fromBinary3 as float.byKey("pelvis_offset").asDouble()
-                        Debug.Printf("Pelvis offset: %f", f)
-                    }
-                    dataInputStream2.close()
-                    inflaterInputStream.close()
+                    floats = bsmFloats
                 } else {
                     floats = null
+                }
+
+                if (fromBinary3.keyExists("joint_names")) {
+                    val jointNamesNode = fromBinary3.byKey("joint_names")
+                    val min = Math.min(jointNamesNode.getCount(), MAX_RIGGED_MESH_JOINTS)
+                    val ints2 = IntArray(min)
+                    for (m in 0 until min) {
+                        val jointName = jointNamesNode.byIndex(m).asString()
+                        var boneId = SLSkeletonBoneID.bones[jointName]
+                        val ordinal3 = boneId?.ordinal ?: -1
+                        if (boneId == null || ordinal3 == -1) {
+                            val attachmentPoint = SLAttachmentPoint.pointsByName[jointName]
+                            if (attachmentPoint != null) {
+                                boneId = attachmentPoint.bone
+                                boneIndex = attachmentPoint.nonHUDindex + SLSkeletonBoneID.VALUES.size
+                            } else {
+                                boneIndex = ordinal3
+                            }
+                        } else {
+                            boneIndex = ordinal3
+                        }
+                        if (boneId != null && boneId.isExtended) {
+                            hasExtendedBonesFlag = true
+                        }
+                        ints2[m] = boneIndex
+                    }
+                    ints = ints2
+                } else {
                     ints = null
+                }
+
+                if (!fromBinary3.keyExists("inverse_bind_matrix")) {
+                    floats2 = null
+                } else if (ints != null) {
+                    val ibmNode = fromBinary3.byKey("inverse_bind_matrix")
+                    val ibmFloats = FloatArray(ints.size * 16)
+                    for (n in 0 until ibmNode.getCount()) {
+                        if (n < ints.size) {
+                            val matrixNode = ibmNode.byIndex(n)
+                            for (i6 in 0 until 16) {
+                                ibmFloats[n * 16 + i6] = matrixNode.byIndex(i6).asDouble().toFloat()
+                            }
+                        }
+                    }
+                    floats2 = ibmFloats
+                    Debug.Printf("inverseBindMatrix count %d", ibmNode.getCount())
+                } else {
                     floats2 = null
                 }
-                if (ints == null || floats == null || floats2 == null) {
-                    this.riggingData = null
-                    this.bindShapeMatrix = null
-                    this.jointTranslations = null
-                } else {
-                    this.riggingData = MeshRiggingData.create(ints, floats2, z)
-                    this.bindShapeMatrix = floats
-                    this.jointTranslations = if (enumMap != null) Maps.immutableEnumMap(enumMap) else null
+
+                if (fromBinary3.keyExists("alt_inverse_bind_matrix")) {
+                    val altIbmNode = fromBinary3.byKey("alt_inverse_bind_matrix")
+                    val floats3 = FloatArray(altIbmNode.getCount() * 16)
+                    for (i7 in 0 until altIbmNode.getCount()) {
+                        val matrixNode = altIbmNode.byIndex(i7)
+                        for (i8 in 0 until 16) {
+                            floats3[i7 * 16 + i8] = matrixNode.byIndex(i8).asDouble().toFloat()
+                        }
+                    }
+                    if (ints != null) {
+                        val map = EnumMap<SLSkeletonBoneID, FloatArray>(SLSkeletonBoneID::class.java)
+                        for (i9 in ints.indices) {
+                            val idx = ints[i9]
+                            if (idx >= 0 && idx < SLSkeletonBoneID.VALUES.size) {
+                                val bone = SLSkeletonBoneID.VALUES[idx]
+                                val floats4 = FloatArray(3)
+                                for (i11 in 0 until 3) {
+                                    floats4[i11] = floats3[i9 * 16 + 12 + i11]
+                                }
+                                map[bone] = floats4
+                            }
+                        }
+                        enumMap = map
+                    }
+                    Debug.Printf("alt_inverse_bind_matrix count %d", altIbmNode.getCount())
                 }
-                this.pelvisOffset = f
-            } finally {
-                dataInputStream.close()
-                fileInputStream.close()
+
+                if (fromBinary3.keyExists("pelvis_offset")) {
+                    pelvisOff = fromBinary3.byKey("pelvis_offset").asDouble().toFloat()
+                    Debug.Printf("Pelvis offset: %f", pelvisOff)
+                }
+            } else {
+                floats = null
+                ints = null
+                floats2 = null
             }
+
+            if (ints == null || floats == null || floats2 == null) {
+                this.riggingData = null
+                this.bindShapeMatrix = null
+                this.jointTranslations = null
+            } else {
+                this.riggingData = MeshRiggingData.create(ints, floats2, hasExtendedBonesFlag)
+                this.bindShapeMatrix = floats
+                this.jointTranslations = if (enumMap != null) Maps.immutableEnumMap(enumMap) else null
+            }
+            this.pelvisOffset = pelvisOff
         } catch (e: LLSDException) {
-            throw IOException(e.getMessage(), e)
+            throw IOException(e.message, e)
         }
     }
 
     private fun makeInfluenceBuffers(): MeshWeightsBuffer {
-        var i: Int = 0
-        for (meshFace in this.faces) {
+        var count = 0
+        val faceList = this.faces ?: return MeshWeightsBuffer(0)
+        for (meshFace in faceList) {
             if (meshFace != null) {
-                i += meshFace.getNumVertices()
+                count += meshFace.getNumVertices()
             }
         }
-        var meshWeightsBuffer: MeshWeightsBuffer = MeshWeightsBuffer(i)
-        var i2: Int = 0
-        for (meshFace2 in this.faces) {
-            if (meshFace2 != null) {
-                meshFace2.PrepareInfluenceBuffer(meshWeightsBuffer, i2)
-                i2 += meshFace2.getNumVertices()
+        val meshWeightsBuffer = MeshWeightsBuffer(count)
+        var offset = 0
+        for (meshFace in faceList) {
+            if (meshFace != null) {
+                meshFace.PrepareInfluenceBuffer(meshWeightsBuffer, offset)
+                offset += meshFace.getNumVertices()
             }
         }
         return meshWeightsBuffer
@@ -230,37 +241,42 @@ open class MeshData {
 
     fun ApplyJointTranslations(meshJointTranslations: MeshJointTranslations) {
         meshJointTranslations.pelvisOffset += this.pelvisOffset
-        if (this.jointTranslations != null) {
-            var enumMap: EnumMap<SLSkeletonBoneID, FloatArray> = meshJointTranslations.jointTranslations
-            for (entry in this.jointTranslations.entrySet()) {
-                enumMap.put(entry.getKey(), entry.getValue())
+        val translations = this.jointTranslations
+        if (translations != null) {
+            val enumMap = meshJointTranslations.jointTranslations
+            for ((key, value) in translations.entries) {
+                enumMap[key] = value
             }
         }
     }
 
     fun PrepareInfluenceBuffers(renderContext: RenderContext) {
-        if (this.riggingData != null) {
+        val rigging = this.riggingData
+        if (rigging != null) {
             if (this.glJointIndexBuffer == null || this.glWeightsBuffer == null) {
                 if (this.weightsBuffer == null) {
                     this.weightsBuffer = makeInfluenceBuffers()
                 }
-                if (this.glJointIndexBuffer == null) {
-                    this.glJointIndexBuffer = GLLoadableBuffer(this.weightsBuffer.jointIndexBuffer)
+                val weights = this.weightsBuffer
+                if (this.glJointIndexBuffer == null && weights != null) {
+                    this.glJointIndexBuffer = GLLoadableBuffer(weights.jointIndexBuffer)
                 }
-                if (this.glWeightsBuffer == null) {
-                    this.glWeightsBuffer = GLLoadableBuffer(this.weightsBuffer.weightsBuffer)
+                if (this.glWeightsBuffer == null && weights != null) {
+                    this.glWeightsBuffer = GLLoadableBuffer(weights.weightsBuffer)
                 }
             }
-            this.riggingData.PrepareInfluenceBuffers(renderContext, this.bindShapeMatrix)
+            rigging.PrepareInfluenceBuffers(renderContext, this.bindShapeMatrix)
         }
     }
 
     fun PrepareInfluencesForFace(renderContext: RenderContext, i: Int) {
-        if (this.glJointIndexBuffer != null) {
-            this.glJointIndexBuffer.Bind20(renderContext, renderContext.riggedMeshProgram.vJoint, 4, 5121, 4, i * 4)
+        val jointBuf = this.glJointIndexBuffer
+        if (jointBuf != null) {
+            jointBuf.Bind20(renderContext, renderContext.riggedMeshProgram.vJoint, 4, 5121, 4, i * 4)
         }
-        if (this.glWeightsBuffer != null) {
-            this.glWeightsBuffer.Bind20(renderContext, renderContext.riggedMeshProgram.vWeight, 4, 5126, 16, i * 4 * 4)
+        val weightsBuf = this.glWeightsBuffer
+        if (weightsBuf != null) {
+            weightsBuf.Bind20(renderContext, renderContext.riggedMeshProgram.vWeight, 4, 5126, 16, i * 4 * 4)
         }
     }
 
@@ -274,42 +290,53 @@ open class MeshData {
             if (this.weightsBuffer == null) {
                 this.weightsBuffer = makeInfluenceBuffers()
             }
-            if (this.glJointIndexBuffer == null) {
-                this.glJointIndexBuffer = GLLoadableBuffer(this.weightsBuffer.jointIndexBuffer)
+            val weights = this.weightsBuffer
+            if (this.glJointIndexBuffer == null && weights != null) {
+                this.glJointIndexBuffer = GLLoadableBuffer(weights.jointIndexBuffer)
             }
-            if (this.glWeightsBuffer == null) {
-                this.glWeightsBuffer = GLLoadableBuffer(this.weightsBuffer.weightsBuffer)
+            if (this.glWeightsBuffer == null && weights != null) {
+                this.glWeightsBuffer = GLLoadableBuffer(weights.weightsBuffer)
             }
         }
-        this.glJointIndexBuffer.Bind30Integer(renderContext, renderContext.currentRiggedMeshProgram.vJoint, 4, 5121, 0, i * 4)
-        this.glWeightsBuffer.Bind20(renderContext, renderContext.currentRiggedMeshProgram.vWeight, 4, 5126, 16, i * 4 * 4)
+        val jointBuf = this.glJointIndexBuffer
+        if (jointBuf != null) {
+            jointBuf.Bind30Integer(renderContext, renderContext.currentRiggedMeshProgram.vJoint, 4, 5121, 0, i * 4)
+        }
+        val weightsBuf = this.glWeightsBuffer
+        if (weightsBuf != null) {
+            weightsBuf.Bind20(renderContext, renderContext.currentRiggedMeshProgram.vWeight, 4, 5126, 16, i * 4 * 4)
+        }
     }
 
     fun UpdateRigged(i: Int, directByteBuffer: DirectByteBuffer, i2: Int) {
-        if (this.riggingData != null) {
-            this.riggingData.UpdateRigged(this.faces[i], this.bindShapeMatrix, directByteBuffer, i2)
+        val rigging = this.riggingData
+        val faceList = this.faces
+        if (rigging != null && faceList != null && i in faceList.indices) {
+            val face = faceList[i]
+            if (face != null) {
+                rigging.UpdateRigged(face, this.bindShapeMatrix, directByteBuffer, i2)
+            }
         }
     }
 
     fun UpdateRiggedMatrices(avatarSkeleton: AvatarSkeleton) {
-        if (this.riggingData != null) {
-            this.riggingData.UpdateRiggedMatrices(avatarSkeleton)
+        val rigging = this.riggingData
+        if (rigging != null) {
+            rigging.UpdateRiggedMatrices(avatarSkeleton)
         }
     }
 
-    fun getFace(i: Int): MeshFace {
-        return this.faces[i]
+    fun getFace(i: Int): MeshFace? {
+        val faceList = this.faces
+        return if (faceList != null && i in faceList.indices) faceList[i] else null
     }
 
     fun getFaceCount(): Int {
-        return this.faces.length
+        return this.faces?.size ?: 0
     }
 
     fun hasExtendedBones(): Boolean {
-        if (this.riggingData != null) {
-            return this.riggingData.hasExtendedBones()
-        }
-        return false
+        return this.riggingData?.hasExtendedBones() ?: false
     }
 
     fun isRiggedMesh(): Boolean {
@@ -317,9 +344,11 @@ open class MeshData {
     }
 
     fun riggingFitsGL20(): Boolean {
-        if (this.riggingData != null) {
-            return this.riggingData.fitsGL20()
-        }
-        return false
+        return this.riggingData?.fitsGL20() ?: false
+    }
+
+    companion object {
+        @JvmStatic
+        var MAX_RIGGED_MESH_JOINTS: Int = 256
     }
 }
