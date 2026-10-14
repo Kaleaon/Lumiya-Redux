@@ -2,12 +2,12 @@
 <LinearLayout android:orientation="vertical" android:fitsSystemWindows="true" android:layout_width="fill_parent" android:layout_height="fill_parent"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_margin="5.0dip" android:layout_weight="1.0">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/notecard_edit_title" />
-        <EditText android:id="@id/notecardEditTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:inputType="textAutoCorrect" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5.0dip" android:text="@string/notecard_edit_description" />
-        <EditText android:id="@id/notecardEditDescription" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:inputType="textAutoCorrect" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:text="@string/notecard_edit_contents" />
-        <EditText android:gravity="top" android:id="@id/notecardEditContents" android:layout_width="fill_parent" android:layout_height="fill_parent" android:singleLine="false" android:layout_weight="1.0" android:inputType="textMultiLine" />
+        <TextView android:id="@+id/notecard_edit_title_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/notecard_edit_title" />
+        <EditText android:id="@id/notecardEditTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:inputType="textAutoCorrect" android:labelFor="@id/notecard_edit_title_label" android:hint="@string/notecard_edit_title" />
+        <TextView android:id="@+id/notecard_edit_desc_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5.0dip" android:text="@string/notecard_edit_description" />
+        <EditText android:id="@id/notecardEditDescription" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:inputType="textAutoCorrect" android:labelFor="@id/notecard_edit_desc_label" android:hint="@string/notecard_edit_description" />
+        <TextView android:id="@+id/notecard_edit_contents_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:text="@string/notecard_edit_contents" />
+        <EditText android:gravity="top" android:id="@id/notecardEditContents" android:layout_width="fill_parent" android:layout_height="fill_parent" android:singleLine="false" android:layout_weight="1.0" android:inputType="textMultiLine" android:labelFor="@id/notecard_edit_contents_label" android:hint="@string/notecard_edit_contents" />
     </LinearLayout>
     <LinearLayout android:orientation="horizontal" android:id="@id/notecard_error_layout" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" android:layout_marginRight="10.0dip">
         <TextView android:layout_gravity="center_vertical" android:id="@id/notecardErrorMessage" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:layout_weight="1.0" />
