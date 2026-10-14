@@ -329,6 +329,7 @@ tasks.withType(JavaCompile).configureEach {
 //  for Jetifier.
 // -------------------------------------------------------------------------
 dependencies {
+    implementation project(':abuse-report')
     if (!originalBytecodeClasses.isEmpty()) {
         implementation files('libs/lumiya-original-classes.jar')
     }
