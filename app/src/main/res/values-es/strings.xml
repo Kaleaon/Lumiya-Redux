@@ -21,4 +21,12 @@
     <string name="abc_toolbar_collapse_description">Contraer</string>
     <string name="search_menu_title">Buscar</string>
     <string name="status_bar_notification_info_overflow">+999</string>
+    <string name="accept_teleport_prompt">¿Aceptar teletransporte?</string>
+    <string name="pref_notify_always_status_bar">Siempre en la barra de estado</string>
+    <string name="pref_notify_always_status_bar_summary">Mostrar icono de estado en línea en la barra de estado</string>
+    <string name="pref_notify_message_sounds">Sonidos de mensaje</string>
+    <string name="pref_notify_message_sounds_summary">Habilitar sonidos de mensaje</string>
+    <string name="notify_local_chat_name">Mensajes del chat local</string>
+    <string name="notify_im_name">Mensajes privados</string>
+    <string name="notify_group_chat_name">Mensajes de grupo</string>
 </resources>
