@@ -112,6 +112,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
+            java.srcDirs += '../../Unified-LLSD/kotlin/src/main/kotlin'
             // Classes whose recovered source does not yet reproduce the
             // original bytecode ship as that original bytecode instead
             // (tools/recover/legacy/build_legacy_jar.sh). Their .java files
