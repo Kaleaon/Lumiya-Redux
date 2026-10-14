@@ -164,7 +164,7 @@ public abstract class LLSDNode {
         DataInputStream dataInputStream;
         try {
             try {
-                dataInputStream = new DataInputStream(new FileInputStream(file));
+                dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
             } catch (Throwable th) {
                 th = th;
                 dataInputStream = null;

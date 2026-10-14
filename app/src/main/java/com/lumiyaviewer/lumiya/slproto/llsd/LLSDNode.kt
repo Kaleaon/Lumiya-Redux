@@ -515,7 +515,7 @@ abstract class LLSDNode {
         @JvmStatic
         fun fromBinaryFile(file: File): LLSDNode {
             try {
-                DataInputStream(FileInputStream(file)).use { dataInputStream ->
+                DataInputStream(BufferedInputStream(FileInputStream(file))).use { dataInputStream ->
                     return fromBinary(dataInputStream)
                 }
             } catch (e: IOException) {
