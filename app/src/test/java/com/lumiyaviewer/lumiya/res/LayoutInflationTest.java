@@ -83,6 +83,17 @@ public class LayoutInflationTest {
         }
     }
 
+    @Test
+    public void contributeLandDialogLayoutHasAccessibilityAttributes() {
+        Context app = ApplicationProvider.getApplicationContext();
+        Context themed = new ContextThemeWrapper(app, R.style.Theme_Lumiya);
+        android.view.View view = LayoutInflater.from(themed).inflate(R.layout.contribute_land_dialog_box_layout, null);
+        android.widget.EditText input = view.findViewById(R.id.land_contribution_value);
+        org.junit.Assert.assertNotNull(input);
+        org.junit.Assert.assertEquals("Land contribution in square meters", input.getHint().toString());
+        org.junit.Assert.assertEquals("Land contribution in square meters", input.getContentDescription().toString());
+    }
+
     private static String rootCause(Throwable t) {
         Throwable cause = t;
         while (cause.getCause() != null && cause.getCause() != cause) {
