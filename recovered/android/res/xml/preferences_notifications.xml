@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:title="@string/prefs_category_notifications"
   xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <CheckBoxPreference android:title="Always in status bar" android:key="onlineNotify" android:summary="Show online status icon in status bar" android:defaultValue="true" />
-    <CheckBoxPreference android:title="Message sounds" android:key="soundOnNotify" android:summary="Enable message sounds" android:defaultValue="true" />
-    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="Local chat messages" app:pageResource="@xml/preferences_notifications_local" app:pageNotificationDetails="true" app:notificationType="LocalChat" />
-    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="Private messages" app:pageResource="@xml/preferences_notifications_im" app:pageNotificationDetails="true" app:notificationType="Private" />
-    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="Group messages" app:pageResource="@xml/preferences_notifications_group" app:pageNotificationDetails="true" app:notificationType="Group" />
+    <CheckBoxPreference android:title="@string/pref_notify_always_status_bar" android:key="onlineNotify" android:summary="@string/pref_notify_always_status_bar_summary" android:defaultValue="true" />
+    <CheckBoxPreference android:title="@string/pref_notify_message_sounds" android:key="soundOnNotify" android:summary="@string/pref_notify_message_sounds_summary" android:defaultValue="true" />
+    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="@string/notify_local_chat_name" app:pageResource="@xml/preferences_notifications_local" app:pageNotificationDetails="true" app:notificationType="LocalChat" />
+    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="@string/notify_im_name" app:pageResource="@xml/preferences_notifications_im" app:pageNotificationDetails="true" app:notificationType="Private" />
+    <com.lumiyaviewer.lumiya.ui.settings.PreferenceSubPage android:title="@string/notify_group_chat_name" app:pageResource="@xml/preferences_notifications_group" app:pageNotificationDetails="true" app:notificationType="Group" />
 </PreferenceScreen>

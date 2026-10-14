@@ -7,28 +7,28 @@
             <TextView android:textSize="16.0sp" android:textColor="@color/primary_material_dark" android:autoLink="web|email" android:id="@id/chatMessageTextView" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" />
             <Button android:layout_gravity="right|top" android:id="@id/buttonDialogIgnore" android:paddingLeft="10.0dip" android:paddingRight="10.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="8.0dip" android:text="✕" android:layout_weight="0.0" style="@style/BorderlessButton" />
         </LinearLayout>
-        <TextView android:textSize="16.0sp" android:textColor="@color/primary_material_dark" android:gravity="right" android:id="@id/dialogResultTextView" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Accept teleport?" android:layout_weight="1.0" />
+        <TextView android:textSize="16.0sp" android:textColor="@color/primary_material_dark" android:gravity="right" android:id="@id/dialogResultTextView" android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/accept_teleport_prompt" android:layout_weight="1.0" />
         <LinearLayout android:layout_gravity="right" android:orientation="vertical" android:id="@id/dialogButtonsLayout" android:paddingLeft="10.0dip" android:paddingRight="10.0dip" android:paddingBottom="10.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content">
             <TableLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
                 <TableRow>
-                    <Button android:id="@id/buttonDialog10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button10" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button11" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog12" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button12" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_10" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_11" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog12" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_12" android:layout_weight="0.0" style="@style/BorderlessButton" />
                 </TableRow>
                 <TableRow>
-                    <Button android:id="@id/buttonDialog7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button7" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button8" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog9" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button9" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_7" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_8" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog9" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_9" android:layout_weight="0.0" style="@style/BorderlessButton" />
                 </TableRow>
                 <TableRow>
-                    <Button android:id="@id/buttonDialog4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button4" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button5" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button6" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_4" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_5" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_6" android:layout_weight="0.0" style="@style/BorderlessButton" />
                 </TableRow>
                 <TableRow>
-                    <Button android:id="@id/buttonDialog1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button1" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button2" android:layout_weight="0.0" style="@style/BorderlessButton" />
-                    <Button android:id="@id/buttonDialog3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Button3" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_1" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_2" android:layout_weight="0.0" style="@style/BorderlessButton" />
+                    <Button android:id="@id/buttonDialog3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dialog_button_3" android:layout_weight="0.0" style="@style/BorderlessButton" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>

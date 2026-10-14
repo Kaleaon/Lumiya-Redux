@@ -928,4 +928,21 @@ Second Life® is a registered trademark or Linden Research, Inc."</string>
     <string name="you_were_paid">You were paid L$ %1$d. Your account balance is now L$ %2$d.</string>
     <string name="you_were_paid_by_agent">has paid you L$ %1$d. Your account balance is now L$ %2$d.</string>
     <string name="your_account_balance_is_now">Your account balance is now L$ %d.</string>
+    <string name="accept_teleport_prompt">Accept teleport?</string>
+    <string name="dialog_button_1">Button1</string>
+    <string name="dialog_button_2">Button2</string>
+    <string name="dialog_button_3">Button3</string>
+    <string name="dialog_button_4">Button4</string>
+    <string name="dialog_button_5">Button5</string>
+    <string name="dialog_button_6">Button6</string>
+    <string name="dialog_button_7">Button7</string>
+    <string name="dialog_button_8">Button8</string>
+    <string name="dialog_button_9">Button9</string>
+    <string name="dialog_button_10">Button10</string>
+    <string name="dialog_button_11">Button11</string>
+    <string name="dialog_button_12">Button12</string>
+    <string name="pref_notify_always_status_bar">Always in status bar</string>
+    <string name="pref_notify_always_status_bar_summary">Show online status icon in status bar</string>
+    <string name="pref_notify_message_sounds">Message sounds</string>
+    <string name="pref_notify_message_sounds_summary">Enable message sounds</string>
 </resources>
