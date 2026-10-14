@@ -230,6 +230,7 @@ View"</string>
     <string name="derez_confirm_delete">Delete this object?</string>
     <string name="derez_confirm_take">Take this object into your inventory?</string>
     <string name="derez_confirm_take_copy">Take a copy of this object into your inventory?</string>
+    <string name="description_aim_controls">Aim controls</string>
     <string name="description_answer_call">Answer call</string>
     <string name="description_camera_mode">Camera mode</string>
     <string name="description_caption">Description</string>
@@ -244,6 +245,7 @@ View"</string>
     <string name="description_move_forward">Move forward</string>
     <string name="description_move_left">Move left</string>
     <string name="description_move_right">Move right</string>
+    <string name="description_movement_controls">Movement controls</string>
     <string name="description_no">No</string>
     <string name="description_pay">Pay or purchase object</string>
     <string name="description_send">Send</string>
