@@ -94,25 +94,27 @@ import java.util.NoSuchElementException
 import java.util.UUID
 
 open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMapper, ScriptDialogHandler, UnreadNotificationManager.NotifyCapture {
-    private static long BUTTONS_FADE_TIMEOUT_MILLIS = 7500
-    private static String FROM_NOTIFICATION_TAG = "fromNotification"
-    private static long OBJECT_DESELECT_TIMEOUT_MILLIS = 6000
-    private static int PERMISSION_AUDIO_REQUEST_CODE = 100
-    private static float TURNING_SPEED = 50.0f
+    companion object {
+        private const val BUTTONS_FADE_TIMEOUT_MILLIS: Long = 7500
+        private const val FROM_NOTIFICATION_TAG: String = "fromNotification"
+        private const val OBJECT_DESELECT_TIMEOUT_MILLIS: Long = 6000
+        private const val PERMISSION_AUDIO_REQUEST_CODE: Int = 100
+        private const val TURNING_SPEED: Float = 50.0f
+    }
 
-    private SLAvatarControl avatarControl
-    private WorldViewBinding binding
+    private var avatarControl: SLAvatarControl? = null
+    private var binding: WorldViewBinding? = null
 
-    private SLDrawDistance drawDistance
-    private FadingTextViewLog fadingTextViewLog
-    private GestureDetectorCompat gestureDetector
-    private boolean isSplitScreen
-    private WorldSurfaceView mGLView
-    private ScaleGestureDetector scaleGestureDetector
-    private UserManager userManager
-    private SLObjectInfo pickedObject = null
-    private ObjectIntersectInfo pickedIntersectInfo = null
-    private ChatterNameRetriever pickedAvatarNameRetriever = null
+    private var drawDistance: SLDrawDistance? = null
+    private var fadingTextViewLog: FadingTextViewLog? = null
+    private var gestureDetector: GestureDetectorCompat? = null
+    private var isSplitScreen: Boolean = false
+    private var mGLView: WorldSurfaceView? = null
+    private var scaleGestureDetector: ScaleGestureDetector? = null
+    private var userManager: UserManager? = null
+    private var pickedObject: SLObjectInfo? = null
+    private var pickedIntersectInfo: ObjectIntersectInfo? = null
+    private var pickedAvatarNameRetriever: ChatterNameRetriever? = null
     private Handler mHandler = Handler(Looper.getMainLooper())
     private int prefDrawDistance = 20
     private boolean chatOver3D = false
@@ -579,74 +581,75 @@ open class WorldViewActivity : DetailsActivity(), View.OnTouchListener, ThemeMap
         if (this.detailsContainer.visibility == View.VISIBLE) {
             return super.dispatchKeyEvent(keyEvent)
         }
+        val ctrl = this.avatarControl
         when (keyEvent.keyCode) {
             19 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.StopAgentMotion()
+                            ctrl.StopAgentMotion()
                         }
                     } else {
-                        this.avatarControl.stopCamming()
-                        this.avatarControl.StartAgentMotion(2)
+                        ctrl.stopCamming()
+                        ctrl.StartAgentMotion(2)
                     }
                 }
             }
             20 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.StopAgentMotion()
+                            ctrl.StopAgentMotion()
                         }
                     } else {
-                        this.avatarControl.stopCamming()
-                        this.avatarControl.StartAgentMotion(4)
+                        ctrl.stopCamming()
+                        ctrl.StartAgentMotion(4)
                     }
                 }
             }
             21 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.stopTurning()
+                            ctrl.stopTurning()
                         }
                     } else {
-                        this.avatarControl.startTurning(TURNING_SPEED)
+                        ctrl.startTurning(TURNING_SPEED)
                     }
                 }
             }
             22 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.stopTurning()
+                            ctrl.stopTurning()
                         }
                     } else {
-                        this.avatarControl.startTurning(-50.0f)
+                        ctrl.startTurning(-50.0f)
                     }
                 }
             }
             92 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.StopAgentMotion()
+                            ctrl.StopAgentMotion()
                         }
                     } else {
-                        this.avatarControl.stopCamming()
-                        this.avatarControl.StartAgentMotion(8)
+                        ctrl.stopCamming()
+                        ctrl.StartAgentMotion(8)
                     }
                 }
             }
             93 -> {
-                if (this.avatarControl != null) {
+                if (ctrl != null) {
                     if (keyEvent.action != 0) {
                         if (keyEvent.action == 1) {
-                            this.avatarControl.StopAgentMotion()
+                            ctrl.StopAgentMotion()
                         }
                     } else {
-                        this.avatarControl.stopCamming()
-                        this.avatarControl.StartAgentMotion(16)
+                        ctrl.stopCamming()
+                        ctrl.StartAgentMotion(16)
                     }
                 }
             }

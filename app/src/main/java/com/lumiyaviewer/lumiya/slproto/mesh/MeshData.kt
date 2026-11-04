@@ -55,50 +55,61 @@ open class MeshData(file: File) {
             val fromBinary: LLSDNode = LLSDNode.fromBinary(dataInputStream)
             val headerOffset = (bytes.size - bais.available()).toLong()
 
-            var lsdNode: LLSDNode? = null
-            if (fromBinary.keyExists(meshRendering.getLODName())) {
-                lsdNode = fromBinary.byKey(meshRendering.getLODName())
-            } else {
-                val valuesCustom = GlobalOptions.MeshRendering.values()
-                var ordinal = meshRendering.ordinal + 1
-                while (ordinal < valuesCustom.size) {
-                    val lodName = valuesCustom[ordinal].getLODName()
-                    if (lodName != null && fromBinary.keyExists(lodName)) {
-                        lsdNode = fromBinary.byKey(lodName)
-                        break
-                    }
-                    ordinal++
+            if (fromBinary.keyExists("submeshes") || fromBinary.keyExists("submesh_materials")) {
+                val subNode = if (fromBinary.keyExists("submeshes")) fromBinary.byKey("submeshes") else fromBinary.byKey("submesh_materials")
+                val count = subNode.getCount()
+                val faceArr = arrayOfNulls<MeshFace>(count)
+                for (j in 0 until count) {
+                    faceArr[j] = MeshFace(subNode.byIndex(j))
                 }
-                if (lsdNode == null) {
-                    var ordinal2 = meshRendering.ordinal - 1
-                    while (ordinal2 >= 0) {
-                        val lodName2 = valuesCustom[ordinal2].getLODName()
-                        if (lodName2 != null && fromBinary.keyExists(lodName2)) {
-                            lsdNode = fromBinary.byKey(lodName2)
+                this.faces = faceArr
+            } else {
+                var lsdNode: LLSDNode? = null
+                val lodNameVal = meshRendering.getLODName()
+                if (lodNameVal != null && fromBinary.keyExists(lodNameVal)) {
+                    lsdNode = fromBinary.byKey(lodNameVal)
+                } else {
+                    val valuesCustom = GlobalOptions.MeshRendering.values()
+                    var ordinal = meshRendering.ordinal + 1
+                    while (ordinal < valuesCustom.size) {
+                        val lodName = valuesCustom[ordinal].getLODName()
+                        if (lodName != null && fromBinary.keyExists(lodName)) {
+                            lsdNode = fromBinary.byKey(lodName)
                             break
                         }
-                        ordinal2--
+                        ordinal++
+                    }
+                    if (lsdNode == null) {
+                        var ordinal2 = meshRendering.ordinal - 1
+                        while (ordinal2 >= 0) {
+                            val lodName2 = valuesCustom[ordinal2].getLODName()
+                            if (lodName2 != null && fromBinary.keyExists(lodName2)) {
+                                lsdNode = fromBinary.byKey(lodName2)
+                                break
+                            }
+                            ordinal2--
+                        }
                     }
                 }
-            }
 
-            if (lsdNode == null) {
-                throw IOException("Mesh LOD not found")
-            }
+                if (lsdNode == null) {
+                    throw IOException("Mesh LOD not found")
+                }
 
-            val lodOffset = (lsdNode.byKey("offset").asInt() + headerOffset).toInt()
-            val lodBais = ByteArrayInputStream(bytes, lodOffset, bytes.size - lodOffset)
-            val inflaterInputStream = InflaterInputStream(lodBais)
-            val dataInputStream2 = DataInputStream(inflaterInputStream)
-            val fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
-            val count = fromBinary2.getCount()
-            val faceArr = arrayOfNulls<MeshFace>(count)
-            for (j in 0 until count) {
-                faceArr[j] = MeshFace(fromBinary2.byIndex(j))
+                val lodOffset = (lsdNode.byKey("offset").asInt() + headerOffset).toInt()
+                val lodBais = ByteArrayInputStream(bytes, lodOffset, bytes.size - lodOffset)
+                val inflaterInputStream = InflaterInputStream(lodBais)
+                val dataInputStream2 = DataInputStream(inflaterInputStream)
+                val fromBinary2: LLSDNode = LLSDNode.fromBinary(dataInputStream2)
+                val count = fromBinary2.getCount()
+                val faceArr = arrayOfNulls<MeshFace>(count)
+                for (j in 0 until count) {
+                    faceArr[j] = MeshFace(fromBinary2.byIndex(j))
+                }
+                this.faces = faceArr
+                dataInputStream2.close()
+                inflaterInputStream.close()
             }
-            this.faces = faceArr
-            dataInputStream2.close()
-            inflaterInputStream.close()
 
             if (fromBinary.keyExists("skin")) {
                 val skinOffset = (fromBinary.byKey("skin").byKey("offset").asInt() + headerOffset).toInt()
