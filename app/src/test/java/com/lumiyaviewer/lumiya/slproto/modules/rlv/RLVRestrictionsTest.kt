@@ -1,6 +1,5 @@
 package com.lumiyaviewer.lumiya.slproto.modules.rlv
 
-import com.lumiyaviewer.lumiya.slproto.assets.SLWearableType
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -41,27 +40,27 @@ class RLVRestrictionsTest {
 
     @Test
     fun testTargetNoExceptions() {
-        // Secure variant (e.g., sendim, recvim in secure mode)
+        // Secure variant (e.g., sendchat, tplm in secure mode)
         // Empty restrictions -> allowed
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, objectA))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, objectA))
 
         // Restricted by Object A
-        restrictions.addRestriction(RLVRestrictionType.sendim, objectA, "")
+        restrictions.addRestriction(RLVRestrictionType.sendchat, objectA, "")
         // Asking object is Object A -> allowed
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, objectA))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, objectA))
         // Asking object is Object B or null -> restricted
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, objectB))
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, null))
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, objectB))
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, null))
 
         // Restricted by both Object A and Object B -> no single object owns all restrictions
-        restrictions.addRestriction(RLVRestrictionType.sendim, objectB, "")
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, objectA))
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendim, targetUUID, null, objectB))
+        restrictions.addRestriction(RLVRestrictionType.sendchat, objectB, "")
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, objectA))
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.sendchat, targetUUID, null, objectB))
     }
 
     @Test
     fun testTargetSpecifiesException() {
-        // e.g. recvchat, sendchat
+        // e.g. recvchat, sendim
         // Empty restrictions -> allowed
         assertTrue(restrictions.isAllowed(RLVRestrictionType.recvchat, targetUUID, null))
 
@@ -79,52 +78,52 @@ class RLVRestrictionsTest {
 
     @Test
     fun testTargetSpecifiesRestriction() {
-        // e.g. tploc, detach, sit
+        // e.g. detach, remoutfit, addoutfit, redirchat
         // Empty restrictions -> allowed
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.tploc, "", objectA))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "", objectA))
 
         // Restrict specific target
-        restrictions.addRestriction(RLVRestrictionType.tploc, objectA, "specific_loc")
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.tploc, "specific_loc", objectA))
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.tploc, "other_loc", objectA))
+        restrictions.addRestriction(RLVRestrictionType.detach, objectA, "specific_loc")
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.detach, "specific_loc", objectA))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "other_loc", objectA))
 
         // Add blanket restriction "" by Object A
-        restrictions.addRestriction(RLVRestrictionType.tploc, objectA, "")
+        restrictions.addRestriction(RLVRestrictionType.detach, objectA, "")
         // Object A is the setter -> allowed
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.tploc, "other_loc", objectA))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "other_loc", objectA))
         // Object B or null -> restricted
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.tploc, "other_loc", objectB))
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.tploc, "other_loc", null))
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.detach, "other_loc", objectB))
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.detach, "other_loc", null))
     }
 
     @Test
     fun testDefensiveNullAndEmptyHandling() {
         // Null option string
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sit, null, null))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, null, null))
 
         // Null object UUID
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sit, "", null))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "", null))
 
         // Adding restriction with null string (should default to "")
-        restrictions.addRestriction(RLVRestrictionType.sit, objectA, null)
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sit, "", null))
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sit, "", objectA))
+        restrictions.addRestriction(RLVRestrictionType.detach, objectA, null)
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.detach, "", null))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "", objectA))
 
         // Removing restriction with null string
-        restrictions.removeRestriction(RLVRestrictionType.sit, objectA, null)
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sit, "", null))
+        restrictions.removeRestriction(RLVRestrictionType.detach, objectA, null)
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "", null))
     }
 
     @Test
     fun testRemoveRestrictionsByObject() {
-        restrictions.addRestriction(RLVRestrictionType.sit, objectA, "")
-        restrictions.addRestriction(RLVRestrictionType.tploc, objectA, "loc")
-        assertFalse(restrictions.isAllowed(RLVRestrictionType.sit, "", null))
+        restrictions.addRestriction(RLVRestrictionType.detach, objectA, "")
+        restrictions.addRestriction(RLVRestrictionType.redirchat, objectA, "loc")
+        assertFalse(restrictions.isAllowed(RLVRestrictionType.detach, "", null))
 
-        val set = mutableSetOf(RLVRestrictionType.sit, RLVRestrictionType.tploc)
+        val set = mutableSetOf(RLVRestrictionType.detach, RLVRestrictionType.redirchat)
         restrictions.removeRestrictions(objectA, set)
 
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.sit, "", null))
-        assertTrue(restrictions.isAllowed(RLVRestrictionType.tploc, "loc", null))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.detach, "", null))
+        assertTrue(restrictions.isAllowed(RLVRestrictionType.redirchat, "loc", null))
     }
 }
