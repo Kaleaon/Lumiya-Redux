@@ -10,12 +10,12 @@
             <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:stretchColumns="0,1" android:shrinkColumns="0,1">
                 <TableRow>
                     <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content">
-                        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/login_user_name" />
-                        <EditText android:id="@id/editUserName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:autoText="false" android:inputType="none" />
+                        <TextView android:id="@+id/loginUserNameLabel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/login_user_name" android:labelFor="@+id/editUserName" />
+                        <EditText android:id="@id/editUserName" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" android:autoText="false" android:inputType="none" android:hint="@string/login_user_name" />
                     </LinearLayout>
                     <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_password" />
-                        <EditText android:id="@id/editPassword" android:layout_width="fill_parent" android:layout_height="wrap_content" android:password="true" android:singleLine="true" android:capitalize="none" android:autoText="false" android:inputType="textPassword" />
+                        <TextView android:id="@+id/loginPasswordLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/login_password" android:labelFor="@+id/editPassword" />
+                        <EditText android:id="@id/editPassword" android:layout_width="fill_parent" android:layout_height="wrap_content" android:password="true" android:singleLine="true" android:capitalize="none" android:autoText="false" android:inputType="textPassword" android:hint="@string/login_password" />
                     </LinearLayout>
                 </TableRow>
                 <TableRow>

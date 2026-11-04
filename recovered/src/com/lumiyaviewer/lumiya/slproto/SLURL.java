@@ -34,7 +34,7 @@ public class SLURL implements Parcelable {
         this.locationZ = 0;
         Uri data = intent.getData();
         if (data != null && data.getScheme() != null && data.getHost() != null) {
-            if (data.getScheme().equalsIgnoreCase("http")) {
+            if (data.getScheme().equalsIgnoreCase("http") || data.getScheme().equalsIgnoreCase("https")) {
                 if (data.getHost().equalsIgnoreCase("maps.secondlife.com") && (pathSegments = data.getPathSegments()) != null && pathSegments.size() >= 2 && pathSegments.get(0).equalsIgnoreCase("secondlife")) {
                     this.locationName = pathSegments.get(1);
                     if (this.locationName.equals("")) {

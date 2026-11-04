@@ -1,6 +1,5 @@
 package com.google.vr.ndk.base;
 
-import com.lumiyaviewer.lumiya.compat.PlatformCompat;
 import android.database.Cursor;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -403,7 +402,7 @@ public class DaydreamApi implements AutoCloseable {
         }
         Intent createVrIntent = createVrIntent(componentName);
         checkIntent(createVrIntent);
-        launchInVr(PlatformCompat.getActivity(this.context, 0, createVrIntent, PendingIntent.FLAG_ONE_SHOT), createVrIntent.getComponent());
+        launchInVr(PendingIntent.getActivity(this.context, 0, createVrIntent, PendingIntent.FLAG_ONE_SHOT), createVrIntent.getComponent());
     }
 
     @UsedByReflection("IAP")
@@ -413,7 +412,7 @@ public class DaydreamApi implements AutoCloseable {
             throw new IllegalArgumentException("Null argument 'intent' passed to launchInVr");
         }
         checkIntent(intent);
-        launchInVr(PlatformCompat.getActivity(this.context, 0, intent, 1207959552), intent.getComponent());
+        launchInVr(PendingIntent.getActivity(this.context, 0, intent, 1207959552), intent.getComponent());
     }
 
     @UsedByReflection("IAP")

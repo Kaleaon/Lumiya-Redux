@@ -102,15 +102,13 @@ class InventoryDB(private val db: SQLiteDatabase) {
                 try {
                     beginTransaction()
                     try {
-                        var yieldCounter = 0
-                        for (id in toDelete) {
-                            db.delete(InventoryEntryDBObject.tableName, "_id = ?", arrayOf(id.toString()))
-                            deleteCount++
-                            yieldCounter++
-                            if (yieldCounter >= MAX_UPDATES_PER_TRANSACTION) {
-                                yieldCounter = 0
-                                db.yieldIfContendedSafely()
-                            }
+                        val chunkSize = BATCH_CHUNK_SIZE
+                        for (i in toDelete.indices step chunkSize) {
+                            val chunk = toDelete.subList(i, minOf(i + chunkSize, toDelete.size))
+                            val placeholders = chunk.joinToString(",") { "?" }
+                            val whereArgs = chunk.map { it.toString() }.toTypedArray()
+                            deleteCount += db.delete(InventoryEntryDBObject.tableName, "_id IN ($placeholders)", whereArgs)
+                            db.yieldIfContendedSafely()
                         }
                         setTransactionSuccessful()
                         break
@@ -143,5 +141,6 @@ class InventoryDB(private val db: SQLiteDatabase) {
 
     companion object {
         const val MAX_UPDATES_PER_TRANSACTION = 16
+        const val BATCH_CHUNK_SIZE = 500
     }
 }

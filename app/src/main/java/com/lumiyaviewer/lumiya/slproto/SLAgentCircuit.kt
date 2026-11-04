@@ -1525,8 +1525,10 @@ open class SLAgentCircuit @Throws(IOException::class) constructor(
         var i: Int = 0
         if (str.startsWith("/")) {
             var i2: Int = 0
-            for (int i3 = 1; i3 < str.length && Character.isDigit(str.charAt(i3)); i3++) {
+            var i3 = 1
+            while (i3 < str.length && Character.isDigit(str[i3])) {
                 i2++
+                i3++
             }
             if (i2 >= 0) {
                 try {
@@ -1831,7 +1833,7 @@ open class SLAgentCircuit @Throws(IOException::class) constructor(
         }
         var position: LLVector3 = this.modules!!.avatarControl.getAgentPosition().getPosition()
         try {
-            return String.format("https://maps.secondlife.com/secondlife/%s/%d/%d/%d", URLEncoder.encode(this.regionName, "UTF-8"), (int position.x), (int position.y), (int position.z))
+            return String.format("https://maps.secondlife.com/secondlife/%s/%d/%d/%d", URLEncoder.encode(this.regionName, "UTF-8"), position.x.toInt(), position.y.toInt(), position.z.toInt())
         } catch (e: UnsupportedEncodingException) {
         return null
         }
