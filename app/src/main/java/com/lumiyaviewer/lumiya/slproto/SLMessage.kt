@@ -455,7 +455,8 @@ abstract class SLMessage : Parcelable {
         }
 
         @JvmStatic
-        fun stringFromVariableOEM(bytes: ByteArray): String {
+        fun stringFromVariableOEM(bytes: ByteArray?): String {
+            if (bytes == null) return ""
             val str = try {
                 String(bytes, charset("ISO-8859-1"))
             } catch (e: UnsupportedEncodingException) {
@@ -465,7 +466,8 @@ abstract class SLMessage : Parcelable {
         }
 
         @JvmStatic
-        fun stringFromVariableUTF(bytes: ByteArray): String {
+        fun stringFromVariableUTF(bytes: ByteArray?): String {
+            if (bytes == null) return ""
             val str = try {
                 String(bytes, charset("UTF-8"))
             } catch (e: UnsupportedEncodingException) {

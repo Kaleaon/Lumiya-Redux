@@ -17,3 +17,31 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
+
+  - repo: local
+    hooks:
+      - id: check-action-pinning
+        name: Check GitHub Actions SHA Pinning
+        entry: |-
+          python3 -c "
+          import glob, json, re, shutil, subprocess, sys
+          if shutil.which('zizmor'):
+              res = subprocess.run(['zizmor', '--format', 'json', '.'], capture_output=True, text=True)
+              findings = json.loads(res.stdout) if res and res.stdout else []
+              unpinned = [f for f in findings if f.get('ident') == 'unpinned-uses']
+          else:
+              unpinned = []
+              pattern = re.compile(r'^\s*uses:\s*[\"\']?([^@\s]+)@([^\s#\"\']+)')
+              for fn in glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml'):
+                  with open(fn) as f:
+                      for i, line in enumerate(f, 1):
+                          m = pattern.search(line)
+                          if m and not re.match(r'^[0-9a-fA-F]{40}$', m.group(2)):
+                              unpinned.append(f'{fn}:{i}: {m.group(1)}@{m.group(2)}')
+          if unpinned:
+              print('Unpinned action uses found:', unpinned)
+              sys.exit(1)
+          sys.exit(0)
+          "
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
