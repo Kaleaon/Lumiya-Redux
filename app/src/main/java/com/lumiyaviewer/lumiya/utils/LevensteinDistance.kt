@@ -5,31 +5,44 @@ import kotlin.math.min
 object LevensteinDistance {
     @JvmStatic
     fun computeLevensteinDistance(charSequence: CharSequence, charSequence2: CharSequence): Int {
-        val intsList = Array(charSequence.length + 1) { IntArray(charSequence2.length + 1) }
-        var i = 0
-        while (i <= charSequence.length) {
-            intsList[i][0] = i
-            i++
-        }
-        var j = 1
-        while (j <= charSequence2.length) {
-            intsList[0][j] = j
-            j++
-        }
-        for (var11 in 1..charSequence.length) {
-            for (var3 in 1..charSequence2.length) {
-                val ints = intsList[var11]
-                val var7 = intsList[var11 - 1][var3]
-                val var5 = intsList[var11][var3 - 1]
-                val var6 = intsList[var11 - 1][var3 - 1]
-                val var4 = if (charSequence[var11 - 1] == charSequence2[var3 - 1]) 0 else 1
-                ints[var3] = minimum(var7 + 1, var5 + 1, var4 + var6)
-            }
-        }
-        return intsList[charSequence.length][charSequence2.length]
-    }
+        var s1 = charSequence
+        var s2 = charSequence2
 
-    private fun minimum(var0: Int, var1: Int, var2: Int): Int {
-        return min(min(var0, var1), var2)
+        if (s1 == s2) return 0
+        if (s1.isEmpty()) return s2.length
+        if (s2.isEmpty()) return s1.length
+
+        if (s1.length < s2.length) {
+            val temp = s1
+            s1 = s2
+            s2 = temp
+        }
+
+        val m = s1.length
+        val n = s2.length
+
+        var v0 = IntArray(n + 1)
+        var v1 = IntArray(n + 1)
+
+        for (j in 0..n) {
+            v0[j] = j
+        }
+
+        for (i in 1..m) {
+            v1[0] = i
+            val char1 = s1[i - 1]
+            for (j in 1..n) {
+                val cost = if (char1 == s2[j - 1]) 0 else 1
+                val deletion = v0[j] + 1
+                val insertion = v1[j - 1] + 1
+                val substitution = v0[j - 1] + cost
+                v1[j] = min(min(deletion, insertion), substitution)
+            }
+            val temp = v0
+            v0 = v1
+            v1 = temp
+        }
+
+        return v0[n]
     }
 }
