@@ -206,6 +206,7 @@ View"</string>
     <string name="concurrent_texture_download_format">Download %s textures at once</string>
     <string name="connecting_message">Connecting...</string>
     <string name="contribute_land_button_title">Contribute land</string>
+    <string name="contribute_land_hint">Land contribution in square meters</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="copy_agent_key">Copy to clipboard</string>
     <string name="copy_all_to_inventory">Copy all to inventory</string>
