@@ -384,7 +384,14 @@ class ChatFragment : UserFunctionsFragment(), View.OnClickListener, View.OnKeyLi
         val view = view
         if (view != null) {
             val resolvedName = if (this.chatterID is ChatterID.ChatterIDLocal) "local chat" else chatterNameRetriever.getResolvedName()
-            view.findViewById<EditText>(R.id.sendMessageText).hint = if (resolvedName != null) getString(R.string.chat_hint_message_format, resolvedName) else null
+            val messageHint = if (resolvedName != null) {
+                getString(R.string.chat_hint_message_format, resolvedName)
+            } else {
+                getString(R.string.default_chat_hint_message)
+            }
+            val editText = view.findViewById<EditText>(R.id.sendMessageText)
+            editText.hint = messageHint
+            editText.contentDescription = messageHint
         }
     }
 
