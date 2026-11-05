@@ -69,6 +69,15 @@ open class SLMinimap(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) {
     private val userLocationsResultHandler: ResultHandler<SubscriptionSingleKey, UserLocations>?
     private val userManager: UserManager?
     private val userPositions: MutableMap<UUID, UserLocation> = ConcurrentHashMap(1, 0.75f, 2)
+    private val receivedSequences: MutableSet<Int> = ConcurrentHashMap.newKeySet()
+
+    data class MapLoadingProgress(
+        val sequenceCount: Int = 0,
+        val lastSequenceId: Int = -1,
+        val receivedSequences: Set<Int> = emptySet(),
+        val isComplete: Boolean = false,
+        val isError: Boolean = false
+    )
 
     open class MinimapBitmap {
         val bitmapWidth: Int
@@ -129,6 +138,7 @@ open class SLMinimap(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) {
 
         val authReply = agentCircuit.getAuthReply()
         this.afterTeleport = if (authReply != null && authReply.fromTeleport) !authReply.isTemporary else false
+        this.userManager?.getMapLoadingProgressPool()?.setData(SubscriptionSingleKey.Value, MapLoadingProgress(0, -1, emptySet(), false, false))
     }
 
     fun getMyAvatarHeading(): Float {
@@ -366,8 +376,19 @@ open class SLMinimap(agentCircuit: SLAgentCircuit) : SLModule(agentCircuit) {
                 i2 = i + 1
             }
         }
-        minimapBitmap = MinimapBitmap(minimapBitmap, 0, (3 - parcelOverlay.ParcelData_Field.SequenceID) * 64, ints)
+        val sequenceID = parcelOverlay.ParcelData_Field.SequenceID
+        minimapBitmap = MinimapBitmap(minimapBitmap, 0, (3 - sequenceID) * 64, ints)
         userManager?.getMinimapBitmapPool()?.setData(SubscriptionSingleKey.Value, minimapBitmap)
+
+        receivedSequences.add(sequenceID)
+        val progress = MapLoadingProgress(
+            sequenceCount = receivedSequences.size,
+            lastSequenceId = sequenceID,
+            receivedSequences = HashSet(receivedSequences),
+            isComplete = receivedSequences.size >= 4,
+            isError = false
+        )
+        userManager?.getMapLoadingProgressPool()?.setData(SubscriptionSingleKey.Value, progress)
     }
 
     @SLEventQueueMessageHandler(eventName = SLCapEventQueue.CapsEventType.ParcelProperties)

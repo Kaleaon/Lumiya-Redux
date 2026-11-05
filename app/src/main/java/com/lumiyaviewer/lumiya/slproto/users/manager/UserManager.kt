@@ -130,6 +130,7 @@ open class UserManager {
     private var userNameRequests: WeakPriorityRequestSet<UUID> = WeakPriorityRequestSet<>()
     private var activeAgentCircuit: AtomicReference<SLAgentCircuit> = AtomicReference<>()
     private var minimapBitmapPool: SubscriptionSingleDataPool<SLMinimap.MinimapBitmap> = SubscriptionSingleDataPool<>()
+    private var mapLoadingProgressPool: SubscriptionSingleDataPool<SLMinimap.MapLoadingProgress> = SubscriptionSingleDataPool<>()
     private var userLocationsPool: SubscriptionPool<SubscriptionSingleKey, SLMinimap.UserLocations> = SubscriptionPool<>()
     private SubscriptionSingleDataPool<ImmutableMap<UUID, String>> wornAttachmentsPool = SubscriptionSingleDataPool<>()
     private SubscriptionSingleDataPool<Table<SLWearableType, UUID, SLWearable>> wornWearablesPool = SubscriptionSingleDataPool<>()
@@ -370,6 +371,10 @@ open class UserManager {
 
     fun getMinimapBitmapPool(): SubscriptionSingleDataPool<SLMinimap.MinimapBitmap> {
         return this.minimapBitmapPool
+    }
+
+    fun getMapLoadingProgressPool(): SubscriptionSingleDataPool<SLMinimap.MapLoadingProgress> {
+        return this.mapLoadingProgressPool
     }
 
     fun getObjectPopupsManager(): ObjectPopupsManager {
