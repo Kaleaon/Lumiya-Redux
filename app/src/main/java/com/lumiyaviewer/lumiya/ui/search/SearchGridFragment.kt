@@ -37,6 +37,8 @@ open class SearchGridFragment : FragmentWithTitle(),
         val searchText = currentBinding.searchString.text.toString().trim()
         if (searchText.isEmpty()) return
 
+        adapter?.setLoading(true)
+
         val searchType = when (currentBinding.radiogroupSearchType.checkedRadioButtonId) {
             R.id.radio_places -> SearchGridQuery.SearchType.Places
             R.id.radio_groups -> SearchGridQuery.SearchType.Groups
@@ -61,6 +63,12 @@ open class SearchGridFragment : FragmentWithTitle(),
             onSearchTextAction(actionId, event)
         }
         currentBinding.startSearchButton.setOnClickListener { onSearchButtonClicked() }
+        searchResults.addLoadableStatusListener { _, status ->
+            if (status == com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable.Status.Error ||
+                status == com.lumiyaviewer.lumiya.ui.common.loadmon.Loadable.Status.Idle) {
+                adapter?.setLoading(false)
+            }
+        }
         loadableMonitor.setLoadingLayout(
             currentBinding.root.findViewById<LoadingLayout>(R.id.loading_layout),
             getString(R.string.enter_text_to_search),
@@ -76,9 +84,13 @@ open class SearchGridFragment : FragmentWithTitle(),
     }
 
     override fun onLoadableDataChanged() {
-        val data = searchResults.getData() ?: return
-        adapter?.setData(data)
-        loadableMonitor.setEmptyMessage(data.size == 0, getString(R.string.nothing_found))
+        val data = searchResults.getData()
+        if (data != null) {
+            adapter?.setData(data)
+            loadableMonitor.setEmptyMessage(data.size == 0, getString(R.string.nothing_found))
+        } else {
+            adapter?.setLoading(false)
+        }
     }
 
     open fun onSearchButtonClicked() = beginSearch()

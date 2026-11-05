@@ -21,10 +21,17 @@ internal open class SearchGridAdapter(
     private val context: Context,
     private val agentUUID: UUID,
     private val onSearchResultClickListener: OnSearchResultClickListener?
-) : RecyclerView.Adapter<SearchGridAdapter.SearchViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        const val VIEW_TYPE_ITEM = 0
+        const val VIEW_TYPE_SKELETON = 1
+    }
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var data: LazyList<SearchGridResult>? = null
+    private var isLoading: Boolean = false
+    private var skeletonCount: Int = 6
 
     init {
         setHasStableIds(true)
@@ -32,6 +39,27 @@ internal open class SearchGridAdapter(
 
     internal interface OnSearchResultClickListener {
         fun onSearchResultClicked(searchGridResult: SearchGridResult)
+    }
+
+    open fun setLoading(loading: Boolean) {
+        if (this.isLoading != loading) {
+            this.isLoading = loading
+            notifyDataSetChanged()
+        }
+    }
+
+    internal inner class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val resultItemName: TextView = view.findViewById(R.id.result_item_name)
+        val resultMemberCount: TextView = view.findViewById(R.id.result_member_count)
+        val userPicView: ChatterPicView = view.findViewById(R.id.userPicView)
+
+        fun bindSkeleton() {
+            resultItemName.text = "░░░░░░░░░░░░"
+            resultItemName.alpha = 0.4f
+            resultMemberCount.visibility = View.GONE
+            userPicView.visibility = View.VISIBLE
+            userPicView.alpha = 0.3f
+        }
     }
 
     internal inner class SearchViewHolder(view: View) :
@@ -51,6 +79,8 @@ internal open class SearchGridAdapter(
 
         @SuppressLint("DefaultLocale", "SetTextI18n")
         internal fun bindToData(searchGridResult: SearchGridResult) {
+            this.resultItemName.alpha = 1.0f
+            this.userPicView.alpha = 1.0f
             this.searchGridResult = searchGridResult
             val itemName = searchGridResult.itemName
             this.resultItemName.text = itemName
@@ -104,9 +134,17 @@ internal open class SearchGridAdapter(
         }
     }
 
-    override fun getItemCount(): Int = data?.size ?: 0
+    override fun getItemCount(): Int {
+        if (isLoading) return skeletonCount
+        return data?.size ?: 0
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (isLoading) VIEW_TYPE_SKELETON else VIEW_TYPE_ITEM
+    }
 
     override fun getItemId(position: Int): Long {
+        if (isLoading) return -100L - position
         val currentData = data
         if (currentData == null || position < 0 || position >= currentData.size) {
             return -1L
@@ -114,23 +152,34 @@ internal open class SearchGridAdapter(
         return currentData[position].id ?: -1L
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is SkeletonViewHolder) {
+            holder.bindSkeleton()
+            return
+        }
         val currentData = data
         if (currentData == null || position < 0 || position >= currentData.size) {
             return
         }
-        holder.bindToData(currentData[position])
+        (holder as SearchViewHolder).bindToData(currentData[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == VIEW_TYPE_SKELETON) {
+            val view = inflater.inflate(R.layout.search_result_item, parent, false)
+            return SkeletonViewHolder(view)
+        }
         return SearchViewHolder(inflater.inflate(R.layout.search_result_item, parent, false))
     }
 
-    override fun onViewRecycled(holder: SearchViewHolder) {
-        holder.onRecycled()
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if (holder is SearchViewHolder) {
+            holder.onRecycled()
+        }
     }
 
     open fun setData(lazyList: LazyList<SearchGridResult>) {
+        this.isLoading = false
         this.data = lazyList
         notifyDataSetChanged()
     }
